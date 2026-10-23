@@ -88,10 +88,10 @@ class _Guard extends StatelessWidget {
 /// Colour + icon for each game, used on the wheel and intro cards.
 extension GameModeStyle on GameModeId {
   Color get color => switch (this) {
-        GameModeId.clubConnections => Palette.lime,
-        GameModeId.careerPath => const Color(0xFF3DA5FF),
+        GameModeId.clubConnections => Palette.yellow,
+        GameModeId.careerPath => Palette.blueBright,
         GameModeId.startingXi => const Color(0xFFFF4B6E),
-        GameModeId.wildcard => Palette.gold,
+        GameModeId.wildcard => Colors.white,
         GameModeId.whoAmI => const Color(0xFFB57CFF),
         GameModeId.headsUp => const Color(0xFF3DFFB0),
         GameModeId.taboo => const Color(0xFFFF8A3D),

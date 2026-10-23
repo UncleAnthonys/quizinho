@@ -196,7 +196,7 @@ class _SetupScreenState extends State<SetupScreen> {
 
   Widget _section(String title) => Padding(
         padding: const EdgeInsets.only(bottom: 8),
-        child: Text(title, style: AppText.label(14, color: Palette.lime)),
+        child: Text(title, style: AppText.label(14, color: Palette.yellow)),
       );
 
   Widget _teamRow(int i) => Padding(
@@ -333,7 +333,7 @@ class _PlayerNamesState extends State<_PlayerNames> {
                 isDense: true,
                 hintText: '+ Add player (optional)',
                 contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-                suffixIcon: IconButton(icon: const Icon(Icons.add, color: Palette.lime), onPressed: _add),
+                suffixIcon: IconButton(icon: const Icon(Icons.add, color: Palette.yellow), onPressed: _add),
               ),
               onSubmitted: (_) => _add(),
             ),

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-/// Broadcast-pitch look: deep greens, floodlight lime, trophy gold.
+/// Quizinho look: pitch greens underneath, Brazil canary yellow and flag blue on top.
 abstract final class Palette {
   static const pitchDeep = Color(0xFF051F15);
   static const pitch = Color(0xFF0A3A28);
@@ -8,16 +8,23 @@ abstract final class Palette {
   static const card = Color(0xFF0E4631);
   static const cardHigh = Color(0xFF165C41);
   static const line = Color(0x33FFFFFF);
-  static const lime = Color(0xFFC8F04A);
-  static const gold = Color(0xFFFFC23D);
+  /// Brazil canary yellow — the main accent (buttons, highlights, timers).
+  static const yellow = Color(0xFFFFDF00);
+
+  /// Deeper trophy yellow for bonuses, wildcards and celebrations.
+  static const gold = Color(0xFFFFC400);
+
+  /// Brazil flag blue (logo, Career Path) and a brighter blue for text on green.
+  static const blue = Color(0xFF002776);
+  static const blueBright = Color(0xFF3B7BFF);
   static const danger = Color(0xFFFF4B4B);
   static const text = Color(0xFFF4FAF6);
   static const muted = Color(0xFFA3C4B4);
 
   static const teams = <Color>[
-    Color(0xFF3DA5FF), // sky
+    Color(0xFF3B7BFF), // Brazil blue (bright)
     Color(0xFFFF4B6E), // red
-    Color(0xFFFFC23D), // gold
+    Color(0xFFFFFFFF), // white
     Color(0xFFB57CFF), // purple
     Color(0xFF3DFFB0), // mint
     Color(0xFFFF8A3D), // orange
@@ -43,9 +50,9 @@ abstract final class AppText {
 
 ThemeData buildTheme() {
   final scheme = ColorScheme.fromSeed(
-    seedColor: Palette.lime,
+    seedColor: Palette.yellow,
     brightness: Brightness.dark,
-    primary: Palette.lime,
+    primary: Palette.yellow,
     onPrimary: Palette.pitchDeep,
     secondary: Palette.gold,
     surface: Palette.pitch,
@@ -68,7 +75,7 @@ ThemeData buildTheme() {
       border: OutlineInputBorder(borderRadius: BorderRadius.circular(14), borderSide: BorderSide.none),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(14),
-        borderSide: const BorderSide(color: Palette.lime, width: 2),
+        borderSide: const BorderSide(color: Palette.yellow, width: 2),
       ),
       hintStyle: const TextStyle(color: Palette.muted),
     ),
@@ -79,7 +86,7 @@ ThemeData buildTheme() {
     ),
     switchTheme: SwitchThemeData(
       thumbColor: WidgetStateProperty.resolveWith((s) => s.contains(WidgetState.selected) ? Palette.pitchDeep : Palette.muted),
-      trackColor: WidgetStateProperty.resolveWith((s) => s.contains(WidgetState.selected) ? Palette.lime : Palette.card),
+      trackColor: WidgetStateProperty.resolveWith((s) => s.contains(WidgetState.selected) ? Palette.yellow : Palette.card),
     ),
   );
 }

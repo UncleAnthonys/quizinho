@@ -51,7 +51,7 @@ class BigButton extends StatelessWidget {
     super.key,
     required this.label,
     required this.onPressed,
-    this.color = Palette.lime,
+    this.color = Palette.yellow,
     this.textColor = Palette.pitchDeep,
     this.icon,
     this.height = 64,
@@ -172,7 +172,7 @@ class TimerBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final f = fraction.clamp(0.0, 1.0);
-    final color = Color.lerp(Palette.danger, Palette.lime, f)!;
+    final color = Color.lerp(Palette.danger, Palette.yellow, f)!;
     return Row(children: [
       Expanded(
         child: ClipRRect(

@@ -16,7 +16,7 @@ class PlayerPicker extends StatefulWidget {
     required this.onPick,
     this.onPass,
     this.onDisputed,
-    this.accent = Palette.lime,
+    this.accent = Palette.yellow,
     this.hint = 'Start typing a player…',
   });
 
@@ -137,7 +137,7 @@ class _PlayerPickerState extends State<PlayerPicker> {
             const SizedBox(width: 12),
             Expanded(
               child: FilledButton(
-                style: FilledButton.styleFrom(backgroundColor: Palette.lime, minimumSize: const Size(0, 56)),
+                style: FilledButton.styleFrom(backgroundColor: Palette.yellow, minimumSize: const Size(0, 56)),
                 onPressed: () => widget.onDisputed!(typed, true),
                 child: Text('ALLOW IT', style: AppText.headline(24, color: Palette.pitchDeep)),
               ),

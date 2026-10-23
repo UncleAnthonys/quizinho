@@ -27,7 +27,7 @@ class _WinnerScreenState extends State<WinnerScreen> with SingleTickerProviderSt
   void initState() {
     super.initState();
     final rnd = Random();
-    final colours = [Palette.gold, Palette.lime, Colors.white, ...Palette.teams];
+    final colours = [Palette.gold, Palette.yellow, Colors.white, ...Palette.teams];
     _bits = List.generate(90, (_) => _Bit(rnd.nextDouble(), rnd.nextDouble(), 0.5 + rnd.nextDouble(),
         colours[rnd.nextInt(colours.length)], rnd.nextDouble() * pi));
     WidgetsBinding.instance.addPostFrameCallback((_) {

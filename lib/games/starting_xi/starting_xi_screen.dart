@@ -148,7 +148,7 @@ class _StartingXiScreenState extends State<StartingXiScreen>
                 padding: const EdgeInsets.fromLTRB(16, 4, 16, 0),
                 child: Column(children: [
                   Row(children: [
-                    Text('STARTING XI BOMB', style: AppText.label(15, color: Palette.lime)),
+                    Text('STARTING XI BOMB', style: AppText.label(15, color: Palette.yellow)),
                     const Spacer(),
                     if (widget.round.multiplier > 1)
                       Text('x${widget.round.multiplier} POINTS', style: AppText.label(15, color: Palette.gold)),
@@ -254,7 +254,7 @@ class _StartingXiScreenState extends State<StartingXiScreen>
         return SingleChildScrollView(
           padding: const EdgeInsets.all(16),
           child: Column(children: [
-            Text(c.isComplete ? 'FULL XI NAMED!' : 'LAST TEAM STANDING', style: AppText.headline(34, color: Palette.lime)),
+            Text(c.isComplete ? 'FULL XI NAMED!' : 'LAST TEAM STANDING', style: AppText.headline(34, color: Palette.yellow)),
             const SizedBox(height: 8),
             if (bonus.isNotEmpty)
               Wrap(spacing: 8, runSpacing: 8, alignment: WrapAlignment.center, children: [

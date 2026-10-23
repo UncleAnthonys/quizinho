@@ -108,7 +108,7 @@ class _ClubConnectionsScreenState extends State<ClubConnectionsScreen>
         else
           TextButton(
             onPressed: () => setState(() => _showAll = true),
-            child: Text('SHOW ALL ANSWERS', style: AppText.label(15, color: Palette.lime)),
+            child: Text('SHOW ALL ANSWERS', style: AppText.label(15, color: Palette.yellow)),
           ),
       ]),
     );
@@ -136,7 +136,7 @@ class _ClubsCard extends StatelessWidget {
             FittedBox(fit: BoxFit.scaleDown, child: Text(a.toUpperCase(), style: AppText.headline(46))),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 2),
-              child: Icon(Icons.swap_vert_rounded, color: Palette.lime, size: 34),
+              child: Icon(Icons.swap_vert_rounded, color: Palette.yellow, size: 34),
             ),
             FittedBox(fit: BoxFit.scaleDown, child: Text(b.toUpperCase(), style: AppText.headline(46))),
           ]),

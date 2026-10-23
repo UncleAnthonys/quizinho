@@ -130,7 +130,7 @@ class _CareerTrail extends StatelessWidget {
               decoration: BoxDecoration(
                 color: newest ? Palette.cardHigh : Colors.black.withValues(alpha: 0.25),
                 borderRadius: BorderRadius.circular(12),
-                border: newest ? Border.all(color: Palette.lime, width: 2) : null,
+                border: newest ? Border.all(color: Palette.yellow, width: 2) : null,
               ),
               child: Row(children: [
                 Text('${idx + 1}', style: AppText.label(14)),

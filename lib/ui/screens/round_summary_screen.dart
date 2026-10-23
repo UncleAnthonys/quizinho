@@ -45,7 +45,7 @@ class RoundSummaryScreen extends StatelessWidget {
                         if ((last.points[team] ?? 0) > 0)
                           Padding(
                             padding: const EdgeInsets.only(right: 12),
-                            child: Text('+${last.points[team]}', style: AppText.headline(24, color: Palette.lime)),
+                            child: Text('+${last.points[team]}', style: AppText.headline(24, color: Palette.yellow)),
                           ),
                         Text('${t.scores[team]}', style: AppText.headline(36)),
                       ]),
@@ -55,7 +55,7 @@ class RoundSummaryScreen extends StatelessWidget {
               BigButton(
                 label: t.isFinished ? 'Final whistle' : 'Next challenge',
                 icon: t.isFinished ? Icons.emoji_events : Icons.casino,
-                color: t.isFinished ? Palette.gold : Palette.lime,
+                color: t.isFinished ? Palette.gold : Palette.yellow,
                 onPressed: () => t.isFinished ? MatchFlow.toWinner(context, t) : MatchFlow.toWheel(context, t),
               ),
             ]),

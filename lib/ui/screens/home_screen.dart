@@ -5,6 +5,7 @@ import '../../core/theme.dart';
 import '../../domain/game_mode.dart';
 import '../match_flow.dart';
 import '../widgets/common.dart';
+import '../widgets/logo.dart';
 import 'settings_screen.dart';
 import 'setup_screen.dart';
 
@@ -29,10 +30,10 @@ class HomeScreen extends StatelessWidget {
                 ),
               ),
               const Spacer(flex: 2),
-              const Icon(Icons.sports_soccer, color: Palette.lime, size: 72),
-              const SizedBox(height: 8),
-              FittedBox(fit: BoxFit.scaleDown, child: Text('QUIZINHO', style: AppText.headline(76))),
-              Text('THE FOOTBALL PARTY GAME', style: AppText.label(18, color: Palette.lime)),
+              const QuizinhoBadge(size: 110),
+              const SizedBox(height: 16),
+              const QuizinhoWordmark(),
+              Text('THE FOOTBALL PARTY GAME', style: AppText.label(18, color: Palette.yellow)),
               const SizedBox(height: 20),
               const Text(
                 'Split into teams. Spin the wheel. Shout, steal, argue — the app keeps score.',

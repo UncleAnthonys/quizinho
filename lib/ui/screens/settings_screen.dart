@@ -37,7 +37,7 @@ class SettingsScreen extends StatelessWidget {
               onChanged: (v) => s.settings.hapticsOn = v,
             ),
             const Divider(color: Palette.line, height: 32),
-            Text('FOOTBALL DATA', style: AppText.label(14, color: Palette.lime)),
+            Text('FOOTBALL DATA', style: AppText.label(14, color: Palette.yellow)),
             const SizedBox(height: 8),
             Text('${s.repo.players.length} players in the offline database.'),
             const SizedBox(height: 4),

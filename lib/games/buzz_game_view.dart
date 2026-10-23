@@ -52,7 +52,7 @@ class BuzzGameView extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.fromLTRB(18, 6, 18, 0),
               child: Row(children: [
-                Text(c.mode.title.toUpperCase(), style: AppText.label(16, color: Palette.lime)),
+                Text(c.mode.title.toUpperCase(), style: AppText.label(16, color: Palette.yellow)),
                 const SizedBox(width: 10),
                 Text('Q ${c.questionIndex + 1}/${c.questions.length}', style: AppText.label(16)),
                 const Spacer(),
@@ -143,7 +143,7 @@ class BuzzGameView extends StatelessWidget {
                 size: 22,
               ),
               const SizedBox(height: 8),
-              Text('+${o.points * round.multiplier}', style: AppText.headline(64, color: Palette.lime)),
+              Text('+${o.points * round.multiplier}', style: AppText.headline(64, color: Palette.yellow)),
               Text(
                 o.disputed ? 'Room-approved answer' : o.player!.name,
                 textAlign: TextAlign.center,
@@ -269,6 +269,6 @@ class LoadingRound extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => const Scaffold(
-        body: PitchBackground(child: Center(child: CircularProgressIndicator(color: Palette.lime))),
+        body: PitchBackground(child: Center(child: CircularProgressIndicator(color: Palette.yellow))),
       );
 }
