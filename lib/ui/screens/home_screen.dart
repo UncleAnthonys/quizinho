@@ -29,18 +29,31 @@ class HomeScreen extends StatelessWidget {
                   onPressed: () => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const SettingsScreen())),
                 ),
               ),
-              const Spacer(flex: 2),
-              const QuizinhoBadge(size: 130),
-              const SizedBox(height: 18),
-              const QuizinhoWordmark(),
-              Text('THE FOOTBALL PARTY GAME', style: AppText.label(18, color: Palette.yellow)),
-              const SizedBox(height: 20),
-              const Text(
-                'Split into teams. Spin the wheel. Shout, steal, argue — the app keeps score.',
-                textAlign: TextAlign.center,
-                style: TextStyle(color: Palette.muted, fontSize: 16, height: 1.4),
+              const Spacer(flex: 1),
+              // Logo block shrinks to fit short screens rather than overflowing.
+              Flexible(
+                flex: 12,
+                child: FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: SizedBox(
+                    width: 360,
+                    child: Column(mainAxisSize: MainAxisSize.min, children: [
+                      const QuizinhoBadge(size: 140),
+                      const SizedBox(height: 18),
+                      const QuizinhoWordmark(),
+                      const SizedBox(height: 6),
+                      Text('THE FOOTBALL PARTY GAME', style: AppText.label(18, color: Palette.yellow)),
+                      const SizedBox(height: 18),
+                      const Text(
+                        'Split into teams. Spin the wheel. Shout, steal, argue — the app keeps score.',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(color: Palette.muted, fontSize: 16, height: 1.4),
+                      ),
+                    ]),
+                  ),
+                ),
               ),
-              const Spacer(flex: 3),
+              const Spacer(flex: 2),
               BigButton(
                 label: 'New match',
                 icon: Icons.sports_soccer,
