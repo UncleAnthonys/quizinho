@@ -53,7 +53,10 @@ class _HeadsUpScreenState extends State<HeadsUpScreen>
   }
 
   Future<void> _load() async {
-    final packs = parseHeadsUpPacks(await rootBundle.loadString('assets/packs/heads_up.json'));
+    final all = parseHeadsUpPacks(await rootBundle.loadString('assets/packs/heads_up.json'));
+    // Only packs from the group's chosen eras (all of them if none match).
+    final inEra = all.where((p) => (p.eras & _t.config.eraMask) != 0).toList();
+    final packs = inEra.isEmpty ? all : inEra;
     if (!mounted) return;
     final c = HeadsUpController(
       teamCount: _t.teamCount,

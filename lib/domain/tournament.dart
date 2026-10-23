@@ -56,7 +56,9 @@ class TournamentConfig {
     this.bombSeconds = 20,
     this.bombLives = 3,
     this.headsUpSeconds = 60,
-  }) : modes = modes ?? {...GameModeId.concreteGames, GameModeId.wildcard};
+    Set<Era>? eras,
+  })  : modes = modes ?? {...GameModeId.concreteGames, GameModeId.wildcard},
+        eras = (eras == null || eras.isEmpty) ? Era.values.toSet() : eras;
 
   final List<TeamSetup> teams;
   final MatchLength length;
@@ -69,6 +71,10 @@ class TournamentConfig {
   final int bombSeconds;
   final int bombLives;
   final int headsUpSeconds;
+
+  /// Eras the group wants questions from (all by default).
+  final Set<Era> eras;
+  int get eraMask => Era.maskOf(eras);
 
   List<GameModeId> get enabledGames =>
       GameModeId.concreteGames.where(modes.contains).toList();

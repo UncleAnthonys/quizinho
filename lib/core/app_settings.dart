@@ -60,6 +60,7 @@ class AppSettings extends ChangeNotifier {
       bombSeconds: _prefs.getInt('bombSeconds') ?? 20,
       bombLives: _prefs.getInt('bombLives') ?? 3,
       headsUpSeconds: _prefs.getInt('headsUpSeconds') ?? 60,
+      eras: Era.fromMask(_prefs.getInt('eras') ?? Era.allMask),
     );
   }
 
@@ -74,6 +75,7 @@ class AppSettings extends ChangeNotifier {
     await _prefs.setInt('bombSeconds', c.bombSeconds);
     await _prefs.setInt('bombLives', c.bombLives);
     await _prefs.setInt('headsUpSeconds', c.headsUpSeconds);
+    await _prefs.setInt('eras', c.eraMask);
     await _prefs.setStringList('knownModes', [for (final m in GameModeId.values) if (m.playable) m.name]);
   }
 }

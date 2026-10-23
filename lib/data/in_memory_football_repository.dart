@@ -26,23 +26,30 @@ class InMemoryFootballRepository implements FootballRepository {
   final List<HistoricMatch> matches;
   final Random _random;
 
-  T? _pick<T>(List<T> pool, String Function(T) id, int Function(T) level, Set<int>? levels, Set<String> exclude) {
+  T? _pick<T>(List<T> pool, String Function(T) id, int Function(T) level, int Function(T) era, Set<int>? levels,
+      Set<String> exclude, int eras) {
     final options = pool
-        .where((x) => !exclude.contains(id(x)) && (levels == null || levels.contains(level(x))))
+        .where((x) =>
+            !exclude.contains(id(x)) && (levels == null || levels.contains(level(x))) && (era(x) & eras) != 0)
         .toList();
     if (options.isEmpty) return null;
     return options[_random.nextInt(options.length)];
   }
 
   @override
-  Future<ClubConnection?> pickClubConnection({Set<int>? levels, Set<String> exclude = const {}}) async =>
-      _pick(connections, (c) => c.id, (c) => c.difficulty, levels, exclude);
+  Future<ClubConnection?> pickClubConnection(
+          {Set<int>? levels, Set<String> exclude = const {}, int eras = Era.allMask}) async =>
+      _pick(connections, (c) => c.id, (c) => c.difficulty, (c) => c.eras, levels, exclude, eras);
 
   @override
-  Future<CareerPath?> pickCareerPath({Set<int>? levels, Set<String> exclude = const {}}) async =>
-      _pick(careers, (c) => c.id, (c) => c.difficulty, levels, exclude);
+  Future<CareerPath?> pickCareerPath({Set<int>? levels, Set<String> exclude = const {}, int eras = Era.allMask}) async =>
+      _pick(careers, (c) => c.id, (c) => c.difficulty, (c) => c.eras, levels, exclude, eras);
 
   @override
-  Future<HistoricMatch?> pickMatch({Set<int>? levels, Set<String> exclude = const {}}) async =>
-      _pick(matches, (m) => m.id, (m) => m.difficulty, levels, exclude);
+  Future<HistoricMatch?> pickMatch({Set<int>? levels, Set<String> exclude = const {}, int eras = Era.allMask}) async =>
+      _pick(matches, (m) => m.id, (m) => m.difficulty, (m) => m.eras, levels, exclude, eras);
+
+  @override
+  Future<List<ClubConnection>> allClubConnections({int eras = Era.allMask}) async =>
+      [for (final c in connections) if ((c.eras & eras) != 0) c];
 }

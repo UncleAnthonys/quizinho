@@ -41,6 +41,17 @@ enum GameModeId {
     rules: ['A random game, worth DOUBLE points.'],
     whoPlays: 'Whatever the wildcard decides.',
   ),
+  ticTacToe(
+    title: 'Tic-Tac-Toe',
+    tagline: 'Name a player for both clubs to claim the square',
+    playable: true,
+    rules: [
+      'Three clubs across, three down. Pick a square, then name a player who played for both clubs.',
+      'Right: the square is yours. Wrong or too slow: your turn’s over.',
+      'Three in a row = 3 bonus points. Every square you own is worth 1. Each player once per grid.',
+    ],
+    whoPlays: 'Teams take turns — the named player picks the square and answers.',
+  ),
   whoAmI(title: 'Who Am I?', tagline: 'Coming soon', playable: false),
   headsUp(
     title: 'Football Heads Up',

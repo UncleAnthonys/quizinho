@@ -1,9 +1,10 @@
 {
-  "_note": "Quizinho Heads Up packs. Original lists written for this app. Each card is just a name to describe — no descriptions stored.",
+  "_note": "Quizinho Heads Up packs. eras = bit flags (1 pre-92, 2 92-99, 4 2000s, 8 2010s, 16 2020s), as in build_db.py. Original lists written for this app. Each card is just a name to describe — no descriptions stored.",
   "packs": [
     {
       "id": "pl-legends",
       "title": "Premier League Legends",
+      "eras": 14,
       "cards": [
         "Alan Shearer", "Thierry Henry", "Steven Gerrard", "Frank Lampard", "Paul Scholes", "Ryan Giggs",
         "Roy Keane", "Patrick Vieira", "Dennis Bergkamp", "Eric Cantona", "Gianfranco Zola", "Didier Drogba",
@@ -18,6 +19,7 @@
     {
       "id": "modern-stars",
       "title": "Modern Stars",
+      "eras": 24,
       "cards": [
         "Erling Haaland", "Mohamed Salah", "Bukayo Saka", "Cole Palmer", "Jude Bellingham", "Harry Kane",
         "Kylian Mbappé", "Declan Rice", "Martin Ødegaard", "Phil Foden", "Son Heung-min", "Virgil van Dijk",
@@ -32,6 +34,7 @@
     {
       "id": "managers",
       "title": "Managers",
+      "eras": 31,
       "cards": [
         "Sir Alex Ferguson", "Arsène Wenger", "José Mourinho", "Pep Guardiola", "Jürgen Klopp", "Carlo Ancelotti",
         "Rafael Benítez", "Harry Redknapp", "Sam Allardyce", "Mauricio Pochettino", "Antonio Conte", "Mikel Arteta",
@@ -46,6 +49,7 @@
     {
       "id": "cult-heroes",
       "title": "Cult Heroes",
+      "eras": 14,
       "cards": [
         "Jay-Jay Okocha", "Faustino Asprilla", "Paolo Di Canio", "Benjani", "Robbie Savage", "Dimitar Berbatov",
         "Nwankwo Kanu", "Jimmy Bullard", "Rory Delap", "Titus Bramble", "Djibril Cissé", "El Hadji Diouf",
@@ -60,6 +64,7 @@
     {
       "id": "world-cup",
       "title": "World Cup Heroes",
+      "eras": 31,
       "cards": [
         "Pelé", "Diego Maradona", "Zinedine Zidane", "Ronaldo Nazário", "Miroslav Klose", "Thomas Müller",
         "Lionel Messi", "Kylian Mbappé", "Andrés Iniesta", "Geoff Hurst", "Gordon Banks", "Bobby Moore",
@@ -74,6 +79,7 @@
     {
       "id": "clubs-grounds",
       "title": "Clubs & Grounds",
+      "eras": 31,
       "cards": [
         "Arsenal", "Chelsea", "Liverpool", "Manchester United", "Manchester City", "Tottenham Hotspur",
         "Newcastle United", "Aston Villa", "Everton", "West Ham United", "Leeds United", "Nottingham Forest",

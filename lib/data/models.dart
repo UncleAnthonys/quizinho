@@ -26,6 +26,25 @@ enum Difficulty {
       Difficulty.values.firstWhere((d) => d.name == name, orElse: () => Difficulty.medium);
 }
 
+/// Football eras the group can include or leave out. Bit values must match
+/// ERAS in data_pipeline/build_db.py.
+enum Era {
+  classic(1, 'Pre-92'),
+  nineties(2, '92–99'),
+  noughties(4, '2000s'),
+  tens(8, '2010s'),
+  twenties(16, '2020s');
+
+  const Era(this.bit, this.label);
+  final int bit;
+  final String label;
+
+  static const int allMask = 31;
+
+  static int maskOf(Iterable<Era> eras) => eras.fold(0, (m, e) => m | e.bit);
+  static Set<Era> fromMask(int mask) => {for (final e in values) if (mask & e.bit != 0) e};
+}
+
 class Club {
   const Club({required this.id, required this.name, required this.fame, this.country});
   final String id;
@@ -83,6 +102,7 @@ class ClubConnection {
     required this.clubB,
     required this.answerIds,
     required this.difficulty,
+    this.eras = Era.allMask,
   });
 
   final String id;
@@ -93,14 +113,20 @@ class ClubConnection {
   /// Never empty — the pipeline refuses to generate a pair without one.
   final Set<String> answerIds;
   final int difficulty;
+
+  /// Era bit flags in which a valid answer was at one of these clubs.
+  final int eras;
 }
 
 /// "Who's this? Ajax → Juventus → Inter…"
 class CareerPath {
-  const CareerPath({required this.player, required this.spells, required this.difficulty});
+  const CareerPath({required this.player, required this.spells, required this.difficulty, this.eras = Era.allMask});
   final Player player;
   final List<CareerSpell> spells;
   final int difficulty;
+
+  /// Era bit flags the career touches.
+  final int eras;
 
   String get id => player.id;
 }
@@ -134,6 +160,7 @@ class HistoricMatch {
     required this.lineup,
     required this.difficulty,
     this.verified = false,
+    this.eras = Era.allMask,
   });
 
   final String id;
@@ -149,6 +176,9 @@ class HistoricMatch {
   final List<LineupSlot> lineup;
   final int difficulty;
   final bool verified;
+
+  /// Era bit flag of the match date.
+  final int eras;
 
   int get year => int.tryParse(date.split('-').first) ?? 0;
 }

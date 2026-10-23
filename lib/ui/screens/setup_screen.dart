@@ -32,6 +32,7 @@ class _SetupScreenState extends State<SetupScreen> {
   int _bombSeconds = 20;
   int _lives = 3;
   int _headsUpSeconds = 60;
+  final Set<Era> _eras = {};
   bool _loaded = false;
 
   @override
@@ -55,6 +56,7 @@ class _SetupScreenState extends State<SetupScreen> {
     _bombSeconds = c.bombSeconds;
     _lives = c.bombLives;
     _headsUpSeconds = c.headsUpSeconds;
+    _eras.addAll(c.eras);
   }
 
   @override
@@ -95,6 +97,7 @@ class _SetupScreenState extends State<SetupScreen> {
       bombSeconds: _bombSeconds,
       bombLives: _lives,
       headsUpSeconds: _headsUpSeconds,
+      eras: Set.of(_eras),
     );
     await services.settings.saveConfig(config);
     if (!mounted) return;
@@ -153,6 +156,32 @@ class _SetupScreenState extends State<SetupScreen> {
                   selected: {_difficulty},
                   onSelectionChanged: (s) => setState(() => _difficulty = s.first),
                   showSelectedIcon: false,
+                ),
+                const SizedBox(height: 18),
+                _section('ERAS'),
+                Wrap(spacing: 8, runSpacing: 8, children: [
+                  for (final e in Era.values)
+                    FilterChip(
+                      label: Text(e.label),
+                      selected: _eras.contains(e),
+                      // at least one era must stay on
+                      onSelected: (on) => setState(() {
+                        if (on) {
+                          _eras.add(e);
+                        } else if (_eras.length > 1) {
+                          _eras.remove(e);
+                        }
+                      }),
+                    ),
+                ]),
+                Padding(
+                  padding: const EdgeInsets.only(top: 6, left: 4),
+                  child: Text(
+                    _eras.length == Era.values.length
+                        ? 'All eras. Untick any your group doesn’t know.'
+                        : 'Questions from: ${[for (final e in Era.values) if (_eras.contains(e)) e.label].join(', ')}',
+                    style: const TextStyle(color: Palette.muted),
+                  ),
                 ),
                 const SizedBox(height: 18),
                 _section('GAMES ON THE WHEEL'),

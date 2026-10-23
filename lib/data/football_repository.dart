@@ -11,29 +11,37 @@ abstract class FootballRepository {
   /// e.g. "demo_unverified" until the verified pipeline lands.
   String get dataStatus;
 
-  /// Random challenge at one of [levels] (null = any level) whose ID is not in
-  /// [exclude]. Returns null when the pool is exhausted.
-  Future<ClubConnection?> pickClubConnection({Set<int>? levels, Set<String> exclude = const {}});
-  Future<CareerPath?> pickCareerPath({Set<int>? levels, Set<String> exclude = const {}});
-  Future<HistoricMatch?> pickMatch({Set<int>? levels, Set<String> exclude = const {}});
+  /// Random challenge at one of [levels] (null = any level), from at least one
+  /// of the [eras] (bit flags), whose ID is not in [exclude]. Null when the
+  /// pool is exhausted.
+  Future<ClubConnection?> pickClubConnection(
+      {Set<int>? levels, Set<String> exclude = const {}, int eras = Era.allMask});
+  Future<CareerPath?> pickCareerPath({Set<int>? levels, Set<String> exclude = const {}, int eras = Era.allMask});
+  Future<HistoricMatch?> pickMatch({Set<int>? levels, Set<String> exclude = const {}, int eras = Era.allMask});
+
+  /// Every club pairing with its answers (for grid games like Tic-Tac-Toe).
+  Future<List<ClubConnection>> allClubConnections({int eras = Era.allMask});
 }
 
-/// Applies difficulty with a graceful fallback: if nothing fresh is left at the
-/// chosen difficulty, serve something fresh at any difficulty rather than
-/// repeating or stalling the game.
+/// Applies difficulty and eras with a graceful fallback, so a game never
+/// stalls or repeats: chosen eras + difficulty → chosen eras, any difficulty →
+/// any era at the difficulty → anything fresh.
 class ChallengeSource {
   ChallengeSource(this.repo);
   final FootballRepository repo;
 
-  Future<ClubConnection?> clubConnection(Difficulty d, Set<String> used) async =>
-      await repo.pickClubConnection(levels: d.allowedLevels, exclude: used) ??
-      await repo.pickClubConnection(exclude: used);
+  Future<T?> _widen<T>(Difficulty d, int eras, Future<T?> Function(Set<int>? levels, int eras) pick) async =>
+      await pick(d.allowedLevels, eras) ??
+      await pick(null, eras) ??
+      await pick(d.allowedLevels, Era.allMask) ??
+      await pick(null, Era.allMask);
 
-  Future<CareerPath?> careerPath(Difficulty d, Set<String> used) async =>
-      await repo.pickCareerPath(levels: d.allowedLevels, exclude: used) ??
-      await repo.pickCareerPath(exclude: used);
+  Future<ClubConnection?> clubConnection(Difficulty d, Set<String> used, {int eras = Era.allMask}) =>
+      _widen(d, eras, (l, e) => repo.pickClubConnection(levels: l, exclude: used, eras: e));
 
-  Future<HistoricMatch?> match(Difficulty d, Set<String> used) async =>
-      await repo.pickMatch(levels: d.allowedLevels, exclude: used) ??
-      await repo.pickMatch(exclude: used);
+  Future<CareerPath?> careerPath(Difficulty d, Set<String> used, {int eras = Era.allMask}) =>
+      _widen(d, eras, (l, e) => repo.pickCareerPath(levels: l, exclude: used, eras: e));
+
+  Future<HistoricMatch?> match(Difficulty d, Set<String> used, {int eras = Era.allMask}) =>
+      _widen(d, eras, (l, e) => repo.pickMatch(levels: l, exclude: used, eras: e));
 }

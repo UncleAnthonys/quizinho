@@ -81,9 +81,13 @@ class SqliteFootballRepository implements FootballRepository {
   }
 
   /// Builds "WHERE difficulty IN (?,?) AND id NOT IN (?,?)".
-  (String, List<Object?>) _filter(String idCol, Set<int>? levels, Set<String> exclude) {
+  (String, List<Object?>) _filter(String idCol, Set<int>? levels, Set<String> exclude, int eras) {
     final clauses = <String>[];
     final args = <Object?>[];
+    if (eras != Era.allMask) {
+      clauses.add('(eras & ?) != 0');
+      args.add(eras);
+    }
     if (levels != null && levels.isNotEmpty) {
       clauses.add('difficulty IN (${List.filled(levels.length, '?').join(',')})');
       args.addAll(levels);
@@ -98,10 +102,11 @@ class SqliteFootballRepository implements FootballRepository {
   Club _club(String id) => _clubs[id] ?? Club(id: id, name: id, fame: 1);
 
   @override
-  Future<ClubConnection?> pickClubConnection({Set<int>? levels, Set<String> exclude = const {}}) async {
-    final (where, args) = _filter('id', levels, exclude);
+  Future<ClubConnection?> pickClubConnection(
+      {Set<int>? levels, Set<String> exclude = const {}, int eras = Era.allMask}) async {
+    final (where, args) = _filter('id', levels, exclude, eras);
     final rows = await _db.rawQuery(
-      'SELECT id, club_a, club_b, difficulty FROM club_connections $where ORDER BY RANDOM() LIMIT 1',
+      'SELECT id, club_a, club_b, difficulty, eras FROM club_connections $where ORDER BY RANDOM() LIMIT 1',
       args,
     );
     if (rows.isEmpty) return null;
@@ -114,14 +119,36 @@ class SqliteFootballRepository implements FootballRepository {
       clubB: _club(r['club_b'] as String),
       answerIds: {for (final a in answers) a['player_id'] as String},
       difficulty: r['difficulty'] as int,
+      eras: r['eras'] as int,
     );
   }
 
   @override
-  Future<CareerPath?> pickCareerPath({Set<int>? levels, Set<String> exclude = const {}}) async {
-    final (where, args) = _filter('player_id', levels, exclude);
+  Future<List<ClubConnection>> allClubConnections({int eras = Era.allMask}) async {
+    final (where, args) = _filter('id', null, const {}, eras);
+    final rows = await _db.rawQuery('SELECT id, club_a, club_b, difficulty, eras FROM club_connections $where', args);
+    final answers = <String, Set<String>>{};
+    for (final a in await _db.rawQuery('SELECT connection_id, player_id FROM connection_answers')) {
+      answers.putIfAbsent(a['connection_id'] as String, () => {}).add(a['player_id'] as String);
+    }
+    return [
+      for (final r in rows)
+        ClubConnection(
+          id: r['id'] as String,
+          clubA: _club(r['club_a'] as String),
+          clubB: _club(r['club_b'] as String),
+          answerIds: answers[r['id']] ?? const {},
+          difficulty: r['difficulty'] as int,
+          eras: r['eras'] as int,
+        ),
+    ];
+  }
+
+  @override
+  Future<CareerPath?> pickCareerPath({Set<int>? levels, Set<String> exclude = const {}, int eras = Era.allMask}) async {
+    final (where, args) = _filter('player_id', levels, exclude, eras);
     final rows = await _db.rawQuery(
-      'SELECT player_id, difficulty FROM career_challenges $where ORDER BY RANDOM() LIMIT 1',
+      'SELECT player_id, difficulty, eras FROM career_challenges $where ORDER BY RANDOM() LIMIT 1',
       args,
     );
     if (rows.isEmpty) return null;
@@ -135,6 +162,7 @@ class SqliteFootballRepository implements FootballRepository {
     return CareerPath(
       player: player,
       difficulty: rows.first['difficulty'] as int,
+      eras: rows.first['eras'] as int,
       spells: [
         for (final s in spells)
           CareerSpell(
@@ -148,8 +176,8 @@ class SqliteFootballRepository implements FootballRepository {
   }
 
   @override
-  Future<HistoricMatch?> pickMatch({Set<int>? levels, Set<String> exclude = const {}}) async {
-    final (where, args) = _filter('id', levels, exclude);
+  Future<HistoricMatch?> pickMatch({Set<int>? levels, Set<String> exclude = const {}, int eras = Era.allMask}) async {
+    final (where, args) = _filter('id', levels, exclude, eras);
     final rows = await _db.rawQuery('SELECT * FROM matches $where ORDER BY RANDOM() LIMIT 1', args);
     if (rows.isEmpty) return null;
     final m = rows.first;
@@ -169,6 +197,7 @@ class SqliteFootballRepository implements FootballRepository {
       targetTeam: m['target_team'] as String,
       difficulty: m['difficulty'] as int,
       verified: (m['verified'] as int) == 1,
+      eras: m['eras'] as int,
       lineup: [
         for (final s in slots)
           LineupSlot(

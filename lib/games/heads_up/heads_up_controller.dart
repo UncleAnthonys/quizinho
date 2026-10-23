@@ -6,10 +6,13 @@ import '../../domain/game_mode.dart';
 import '../../domain/tournament.dart';
 
 class HeadsUpPack {
-  const HeadsUpPack({required this.id, required this.title, required this.cards});
+  const HeadsUpPack({required this.id, required this.title, required this.cards, this.eras = 31});
   final String id;
   final String title;
   final List<String> cards;
+
+  /// Era bit flags the pack belongs to (see Era in models.dart).
+  final int eras;
 }
 
 List<HeadsUpPack> parseHeadsUpPacks(String source) {
@@ -19,6 +22,7 @@ List<HeadsUpPack> parseHeadsUpPacks(String source) {
       HeadsUpPack(
         id: p['id'] as String,
         title: p['title'] as String,
+        eras: (p['eras'] as int?) ?? 31,
         cards: [for (final c in p['cards'] as List) c as String],
       ),
   ];

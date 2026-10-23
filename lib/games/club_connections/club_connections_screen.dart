@@ -36,7 +36,7 @@ class _ClubConnectionsScreenState extends State<ClubConnectionsScreen>
     final source = services.challenges;
     final qs = <ClubConnection>[];
     for (var i = 0; i < t.config.questionsPerRound; i++) {
-      final q = await source.clubConnection(t.config.difficulty, t.usedIds(_mode));
+      final q = await source.clubConnection(t.config.difficulty, t.usedIds(_mode), eras: t.config.eraMask);
       if (q == null) break;
       t.markUsed(_mode, q.id);
       qs.add(q);

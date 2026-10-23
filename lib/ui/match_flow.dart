@@ -8,6 +8,7 @@ import '../games/club_connections/club_connections_screen.dart';
 import '../games/game_screen_support.dart';
 import '../games/heads_up/heads_up_screen.dart';
 import '../games/starting_xi/starting_xi_screen.dart';
+import '../games/tic_tac_toe/tic_tac_toe_screen.dart';
 import 'screens/round_intro_screen.dart';
 import 'screens/round_summary_screen.dart';
 import 'screens/wheel_screen.dart';
@@ -51,6 +52,7 @@ abstract final class MatchFlow {
         GameModeId.careerPath => CareerPathScreen(round: round),
         GameModeId.startingXi => StartingXiScreen(round: round),
         GameModeId.headsUp => HeadsUpScreen(round: round),
+        GameModeId.ticTacToe => TicTacToeScreen(round: round),
         _ => throw ArgumentError('${mode.title} is not playable yet'),
       };
 }
@@ -94,7 +96,8 @@ extension GameModeStyle on GameModeId {
         GameModeId.careerPath => Palette.blueBright,
         GameModeId.startingXi => const Color(0xFFFF4B6E),
         GameModeId.wildcard => Colors.white,
-        GameModeId.whoAmI => const Color(0xFFB57CFF),
+        GameModeId.ticTacToe => const Color(0xFFB57CFF), // purple
+        GameModeId.whoAmI => const Color(0xFF9AA5B1),
         GameModeId.headsUp => const Color(0xFF3DFFB0), // mint
         GameModeId.taboo => const Color(0xFFFF8A3D),
       };
@@ -104,6 +107,7 @@ extension GameModeStyle on GameModeId {
         GameModeId.careerPath => Icons.timeline_rounded,
         GameModeId.startingXi => Icons.groups_rounded,
         GameModeId.wildcard => Icons.auto_awesome_rounded,
+        GameModeId.ticTacToe => Icons.grid_3x3_rounded,
         GameModeId.whoAmI => Icons.help_outline_rounded,
         GameModeId.headsUp => Icons.screen_rotation_rounded,
         GameModeId.taboo => Icons.block_rounded,
@@ -115,6 +119,7 @@ extension GameModeStyle on GameModeId {
         GameModeId.careerPath => 'CAREER PATH',
         GameModeId.startingXi => 'XI BOMB',
         GameModeId.wildcard => 'WILDCARD',
+        GameModeId.ticTacToe => 'TIC-TAC-TOE',
         GameModeId.whoAmI => 'WHO AM I',
         GameModeId.headsUp => 'HEADS UP',
         GameModeId.taboo => 'TABOO',

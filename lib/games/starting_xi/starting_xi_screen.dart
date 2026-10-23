@@ -51,7 +51,7 @@ class _StartingXiScreenState extends State<StartingXiScreen>
 
   Future<void> _load() async {
     final t = widget.round.tournament;
-    final m = await services.challenges.match(t.config.difficulty, t.usedIds(_mode));
+    final m = await services.challenges.match(t.config.difficulty, t.usedIds(_mode), eras: t.config.eraMask);
     if (!mounted) return;
     if (m == null) {
       setState(() => _empty = true);

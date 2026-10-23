@@ -73,7 +73,11 @@ mixin GameScreenSupport<W extends StatefulWidget> on State<W>, TickerProviderSta
         s.sound.play(Sfx.whistle);
         s.sound.play(Sfx.cheer);
     }
-    if (event != GameEvent.buzz && event != GameEvent.reveal) say(s.commentary.lineFor(event));
+    if (event == GameEvent.buzz) {
+      say(s.commentary.maybeBuzzLine());
+    } else if (event != GameEvent.reveal) {
+      say(s.commentary.lineFor(event));
+    }
   }
 
   void say(String? line) {

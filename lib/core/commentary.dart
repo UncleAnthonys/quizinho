@@ -10,6 +10,21 @@ class Commentary {
   final Random _random;
   final Map<GameEvent, int> _last = {};
 
+  /// Buzz-in reactions — shown on roughly a third of buzzes so they stay fun.
+  static const _buzzLines = [
+    'Oh, I’d LOVE it if they got this!',
+    'They’ve gone early! Brave, brave stuff.',
+    'Confidence! I like it.',
+    'Here we go… don’t bottle it!',
+    'Fortune favours the brave!',
+    'Big moment. BIG moment.',
+  ];
+
+  String? maybeBuzzLine() {
+    if (_random.nextDouble() > 0.35) return null;
+    return _buzzLines[_random.nextInt(_buzzLines.length)];
+  }
+
   static const Map<GameEvent, List<String>> _lines = {
     GameEvent.correct: [
       'Lovely stuff.',

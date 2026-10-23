@@ -42,6 +42,7 @@ InMemoryFootballRepository parseFootballJson(String source) {
           clubB: club(c[2] as String),
           difficulty: c[3] as int,
           answerIds: {for (final a in c[4] as List) a as String},
+          eras: (c as List).length > 5 ? c[5] as int : Era.allMask,
         ),
     ],
     careers: [
@@ -50,6 +51,7 @@ InMemoryFootballRepository parseFootballJson(String source) {
           CareerPath(
             player: players[c['player']]!,
             difficulty: c['difficulty'] as int,
+            eras: (c['eras'] as int?) ?? Era.allMask,
             spells: [
               for (final s in c['spells'] as List)
                 CareerSpell(
@@ -73,6 +75,7 @@ InMemoryFootballRepository parseFootballJson(String source) {
           score: (m['score'] as String?) ?? '',
           targetTeam: m['target'] as String,
           difficulty: m['difficulty'] as int,
+          eras: (m['eras'] as int?) ?? Era.allMask,
           lineup: [
             for (final (i, s) in (m['xi'] as List).indexed)
               LineupSlot(

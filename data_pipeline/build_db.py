@@ -54,7 +54,8 @@ CREATE TABLE matches (
   id TEXT PRIMARY KEY, title TEXT NOT NULL, competition TEXT, match_date TEXT,
   home TEXT NOT NULL, away TEXT NOT NULL, score TEXT, target_team TEXT NOT NULL,
   fame INTEGER NOT NULL, difficulty INTEGER NOT NULL,
-  verified INTEGER NOT NULL DEFAULT 0, source TEXT NOT NULL
+  verified INTEGER NOT NULL DEFAULT 0, source TEXT NOT NULL,
+  eras INTEGER NOT NULL
 );
 CREATE TABLE lineup_slots (
   match_id TEXT NOT NULL REFERENCES matches(id), slot INTEGER NOT NULL,
@@ -63,7 +64,8 @@ CREATE TABLE lineup_slots (
 );
 CREATE TABLE club_connections (
   id TEXT PRIMARY KEY, club_a TEXT NOT NULL, club_b TEXT NOT NULL,
-  answer_count INTEGER NOT NULL, best_fame INTEGER NOT NULL, difficulty INTEGER NOT NULL
+  answer_count INTEGER NOT NULL, best_fame INTEGER NOT NULL, difficulty INTEGER NOT NULL,
+  eras INTEGER NOT NULL
 );
 CREATE TABLE connection_answers (
   connection_id TEXT NOT NULL REFERENCES club_connections(id),
@@ -71,7 +73,7 @@ CREATE TABLE connection_answers (
 );
 CREATE TABLE career_challenges (
   player_id TEXT PRIMARY KEY REFERENCES players(id), clue_count INTEGER NOT NULL,
-  difficulty INTEGER NOT NULL
+  difficulty INTEGER NOT NULL, eras INTEGER NOT NULL
 );
 CREATE INDEX idx_conn_diff ON club_connections(difficulty);
 CREATE INDEX idx_ans_conn ON connection_answers(connection_id);
@@ -189,6 +191,26 @@ def validate_and_collect(problems: Problems):
     return clubs, players, matches
 
 
+# Era bit flags — must match lib/domain/era.dart.
+ERAS = [(1, 0, 1991), (2, 1992, 1999), (4, 2000, 2009), (8, 2010, 2019), (16, 2020, 9999)]
+CURRENT_YEAR = dt.date.today().year
+
+
+def era_mask(start: int | None, end: int | None) -> int:
+    """Bit flags of every era the years [start, end] touch (end None = still going)."""
+    if start is None:
+        return 0
+    end = CURRENT_YEAR if end is None else end
+    return sum(bit for bit, lo, hi in ERAS if start <= hi and end >= lo)
+
+
+def spells_mask(spells) -> int:
+    m = 0
+    for s in spells:
+        m |= era_mask(s["start"], s["end"])
+    return m
+
+
 def generate_connections(clubs, players):
     by_club: dict[str, set[str]] = {}
     for pid, p in players.items():
@@ -201,7 +223,12 @@ def generate_connections(clubs, players):
             continue  # never generate a pair without a valid answer
         best = max(players[pid]["fame"] for pid in shared)
         diff = connection_difficulty(best, clubs[a]["fame"], clubs[b]["fame"])
-        out.append({"id": f"{a}|{b}", "a": a, "b": b, "answers": sorted(shared), "best": best, "difficulty": diff})
+        # Eras in which a valid answer was at one of the two clubs.
+        eras = 0
+        for pid in shared:
+            eras |= spells_mask([s for s in players[pid]["spells"] if s["club"] in (a, b)])
+        out.append({"id": f"{a}|{b}", "a": a, "b": b, "answers": sorted(shared), "best": best,
+                    "difficulty": diff, "eras": eras or 31})
     return out
 
 
@@ -210,8 +237,14 @@ def generate_career_challenges(players):
     for pid, p in players.items():
         distinct = {s["club"] for s in p["spells"]}
         if len(p["spells"]) >= 3 and len(distinct) >= 3:
-            out.append({"player": pid, "clues": len(p["spells"]), "difficulty": career_difficulty(p["fame"])})
+            out.append({"player": pid, "clues": len(p["spells"]), "difficulty": career_difficulty(p["fame"]),
+                        "eras": spells_mask(p["spells"]) or 31})
     return out
+
+
+def match_eras(m) -> int:
+    year = int(m["date"][:4])
+    return era_mask(year, year)
 
 
 def write_db(path: pathlib.Path, version: int, clubs, players, matches, connections, careers):
@@ -237,17 +270,17 @@ def write_db(path: pathlib.Path, version: int, clubs, players, matches, connecti
         con.executemany("INSERT INTO career_spells VALUES (?,?,?,?,?,?)",
                         [(pid, s["seq"], s["club"], s["start"], s["end"], int(s["loan"])) for s in p["spells"]])
     for m in matches:
-        con.execute("INSERT INTO matches VALUES (?,?,?,?,?,?,?,?,?,?,0,'demo_seed')",
+        con.execute("INSERT INTO matches VALUES (?,?,?,?,?,?,?,?,?,?,0,'demo_seed',?)",
                     (m["id"], m["title"], m["competition"], m["date"], m["home"], m["away"],
-                     m["score"], m["target"], m["fame"], match_difficulty(m["fame"])))
+                     m["score"], m["target"], m["fame"], match_difficulty(m["fame"]), match_eras(m)))
         con.executemany("INSERT INTO lineup_slots VALUES (?,?,?,?)",
                         [(m["id"], i, pid, pos) for i, (pid, _n, pos) in enumerate(m["xi"])])
     for c in connections:
-        con.execute("INSERT INTO club_connections VALUES (?,?,?,?,?,?)",
-                    (c["id"], c["a"], c["b"], len(c["answers"]), c["best"], c["difficulty"]))
+        con.execute("INSERT INTO club_connections VALUES (?,?,?,?,?,?,?)",
+                    (c["id"], c["a"], c["b"], len(c["answers"]), c["best"], c["difficulty"], c["eras"]))
         con.executemany("INSERT INTO connection_answers VALUES (?,?)", [(c["id"], pid) for pid in c["answers"]])
-    con.executemany("INSERT INTO career_challenges VALUES (?,?,?)",
-                    [(c["player"], c["clues"], c["difficulty"]) for c in careers])
+    con.executemany("INSERT INTO career_challenges VALUES (?,?,?,?)",
+                    [(c["player"], c["clues"], c["difficulty"], c["eras"]) for c in careers])
     con.commit()
     con.execute("VACUUM")
     con.close()
@@ -264,15 +297,15 @@ def write_json(path: pathlib.Path, version: int, clubs, players, matches, connec
             for pid, p in players.items()
         ],
         "careers": [
-            {"player": c["player"], "difficulty": c["difficulty"],
+            {"player": c["player"], "difficulty": c["difficulty"], "eras": c["eras"],
              "spells": [[s["club"], s["start"], s["end"], int(s["loan"])] for s in players[c["player"]]["spells"]]}
             for c in careers
         ],
-        "connections": [[c["id"], c["a"], c["b"], c["difficulty"], c["answers"]] for c in connections],
+        "connections": [[c["id"], c["a"], c["b"], c["difficulty"], c["answers"], c["eras"]] for c in connections],
         "matches": [
             {"id": m["id"], "title": m["title"], "competition": m["competition"], "date": m["date"],
              "home": m["home"], "away": m["away"], "score": m["score"], "target": m["target"],
-             "difficulty": match_difficulty(m["fame"]), "xi": m["xi"]}
+             "difficulty": match_difficulty(m["fame"]), "eras": match_eras(m), "xi": m["xi"]}
             for m in matches
         ],
     }
@@ -282,7 +315,8 @@ def write_json(path: pathlib.Path, version: int, clubs, players, matches, connec
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--check", action="store_true", help="validate only, write nothing")
-    ap.add_argument("--version", type=int, default=int(dt.date.today().strftime("%Y%m%d")) * 100 + 1)
+    # Unique per build (YYYYMMDDHHMM) so installed apps always re-copy an updated database.
+    ap.add_argument("--version", type=int, default=int(dt.datetime.now().strftime("%Y%m%d%H%M")))
     args = ap.parse_args()
 
     problems = Problems()
