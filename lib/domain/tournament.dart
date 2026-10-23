@@ -116,6 +116,15 @@ class Tournament extends ChangeNotifier {
   final Map<GameModeId, Set<String>> _used = {};
   GameModeId? _lastGame;
 
+  /// Phone lying flat between players: buzzer games draw sideways with a
+  /// buzzer at each end. Chosen once, sticks for the match.
+  bool _tableMode = false;
+  bool get tableMode => _tableMode;
+  set tableMode(bool on) {
+    _tableMode = on;
+    notifyListeners();
+  }
+
   /// "team|name" → points scored personally (face-offs, bomb turns).
   final Map<String, int> _playerPoints = {};
 

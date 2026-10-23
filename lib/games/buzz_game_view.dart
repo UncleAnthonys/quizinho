@@ -50,12 +50,30 @@ class BuzzGameView extends StatelessWidget {
   final VoidCallback? onFaceOffReady;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) =>
+      ListenableBuilder(listenable: round.tournament, builder: (context, _) => _build(context));
+
+  Widget _build(BuildContext context) {
     final c = controller;
     final t = round.tournament;
     final services = AppScope.of(context);
     final size = MediaQuery.sizeOf(context);
-    if (size.width > size.height) return _tableMode(context, services);
+    final deviceSideways = size.width > size.height;
+    if (deviceSideways || t.tableMode) {
+      // Phone turned sideways: draw as-is. Table mode chosen on an upright
+      // phone (rotation lock, browser tab): draw it turned for them.
+      return Scaffold(
+        resizeToAvoidBottomInset: true,
+        body: PitchBackground(
+          child: SafeArea(
+            child: RotatedBox(
+              quarterTurns: deviceSideways ? 0 : 1,
+              child: _tableMode(context, services, canExit: !deviceSideways),
+            ),
+          ),
+        ),
+      );
+    }
     return Scaffold(
       resizeToAvoidBottomInset: true,
       body: PitchBackground(
@@ -69,6 +87,11 @@ class BuzzGameView extends StatelessWidget {
                 const SizedBox(width: 10),
                 Text('Q ${c.questionIndex + 1}/${c.questions.length}', style: AppText.label(16)),
                 const Spacer(),
+                TextButton.icon(
+                  onPressed: () => t.tableMode = true,
+                  icon: const Icon(Icons.table_restaurant_rounded, color: Palette.yellow, size: 20),
+                  label: Text('TABLE MODE', style: AppText.label(13, color: Palette.yellow)),
+                ),
                 if (round.multiplier > 1)
                   Container(
                     padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
@@ -109,7 +132,7 @@ class BuzzGameView extends StatelessWidget {
   }
 
   /// Landscape: buzzers down both short ends, everything else in the middle.
-  Widget _tableMode(BuildContext context, AppServices services) {
+  Widget _tableMode(BuildContext context, AppServices services, {required bool canExit}) {
     final c = controller;
     final t = round.tournament;
     final left = [for (var i = 0; i < t.teamCount; i += 2) i];
@@ -149,6 +172,13 @@ class BuzzGameView extends StatelessWidget {
             Text(c.mode.title.toUpperCase(), style: AppText.label(13, color: Palette.yellow)),
             const SizedBox(width: 8),
             Text('Q ${c.questionIndex + 1}/${c.questions.length}', style: AppText.label(13)),
+            if (canExit)
+              IconButton(
+                tooltip: 'Leave table mode',
+                visualDensity: VisualDensity.compact,
+                onPressed: () => t.tableMode = false,
+                icon: const Icon(Icons.stay_current_portrait_rounded, color: Palette.muted, size: 20),
+              ),
             if (round.multiplier > 1) ...[
               const SizedBox(width: 8),
               Text('x${round.multiplier}', style: AppText.label(13, color: Palette.gold)),
@@ -188,18 +218,11 @@ class BuzzGameView extends StatelessWidget {
       ]);
     }
 
-    return Scaffold(
-      resizeToAvoidBottomInset: true,
-      body: PitchBackground(
-        child: SafeArea(
-          child: Row(children: [
-            side(left, 1),
-            Expanded(child: centre()),
-            if (right.isNotEmpty) side(right, 3),
-          ]),
-        ),
-      ),
-    );
+    return Row(children: [
+      side(left, 1),
+      Expanded(child: centre()),
+      if (right.isNotEmpty) side(right, 3),
+    ]);
   }
 
   Widget _bottom(BuildContext context, AppServices services) {
