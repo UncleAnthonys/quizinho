@@ -9,12 +9,12 @@ import '../../core/theme.dart';
 class QuizinhoBadge extends StatelessWidget {
   const QuizinhoBadge({super.key, this.size = 150});
 
-  /// Badge height. Width is 260/320 of the height.
+  /// Badge height including the stars. Width is 260/370 of the height.
   final double size;
 
   @override
   Widget build(BuildContext context) =>
-      CustomPaint(size: Size(size * 260 / 320, size), painter: _BadgePainter());
+      CustomPaint(size: Size(size * 260 / 370, size), painter: _BadgePainter());
 }
 
 class _BadgePainter extends CustomPainter {
@@ -24,8 +24,8 @@ class _BadgePainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    final k = size.height / 320; // design units → pixels
-    final c = size.center(Offset.zero);
+    final k = size.height / 370; // design units → pixels
+    final c = Offset(size.width / 2, size.height / 2 + 25 * k); // oval sits below the stars
     Rect oval(double rx, double ry) => Rect.fromCenter(center: c, width: 2 * rx * k, height: 2 * ry * k);
 
     canvas.drawShadow(Path()..addOval(oval(122, 152)), Colors.black, 10, false);
@@ -59,6 +59,12 @@ class _BadgePainter extends CustomPainter {
     canvas.drawRect(Rect.fromLTRB(c.dx - 2 * k, field.top, c.dx + 2 * k, field.bottom), Paint()..color = Palette.yellow);
     canvas.restore();
 
+    // Three champion stars arched over the top, middle one biggest.
+    for (final (deg, r) in const [(-114.0, 13.0), (-90.0, 16.0), (-66.0, 13.0)]) {
+      final a = deg * math.pi / 180;
+      _star(canvas, c + Offset(142.5 * k * math.cos(a), 174 * k * math.sin(a)), r * k);
+    }
+
     _arcText(canvas, c, k, 'QUIZINHO', centerDeg: -90, spreadDeg: 92, size: 30, top: true);
     _arcText(canvas, c, k, '2026', centerDeg: 90, spreadDeg: 40, size: 32, top: false);
   }
@@ -85,6 +91,17 @@ class _BadgePainter extends CustomPainter {
       tp.paint(canvas, Offset(-tp.width / 2, -tp.height / 2));
       canvas.restore();
     }
+  }
+
+  void _star(Canvas canvas, Offset at, double radius) {
+    final path = Path();
+    for (var i = 0; i < 10; i++) {
+      final r = i.isEven ? radius : radius * 0.45;
+      final a = (-90 + i * 36) * math.pi / 180;
+      final p = at + Offset(r * math.cos(a), r * math.sin(a));
+      i == 0 ? path.moveTo(p.dx, p.dy) : path.lineTo(p.dx, p.dy);
+    }
+    canvas.drawPath(path..close(), Paint()..color = Palette.yellow);
   }
 
   static double _sin(double r) => math.sin(r);
