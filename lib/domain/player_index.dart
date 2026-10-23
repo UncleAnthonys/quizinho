@@ -114,21 +114,20 @@ class PlayerIndex {
   /// [partial] = words still coming in: only a complete name (full name,
   /// alias, or a full-name sound match) counts — never a first name alone.
   Player? resolveSpoken(List<String> alternatives, {bool partial = false}) {
-    final best = <String, PlayerMatch>{};
+    // Recognisers list their guesses best first; the first clear-cut one wins.
+    // Each guess is judged on its own so a vague one ("ronaldo") can't block a
+    // clear one ("cristiano ronaldo").
     for (final alt in alternatives) {
-      for (final m in searchSpoken(alt, limit: 3)) {
-        final prev = best[m.player.id];
-        if (prev == null || m.score > prev.score) best[m.player.id] = m;
-      }
+      final ranked = searchSpoken(alt, limit: 2);
+      if (ranked.isEmpty) continue;
+      final top = ranked.first;
+      // fame adds up to +10, so thresholds sit on the base score
+      final base = top.score - top.player.fame * 2;
+      if (base < (partial ? 95 : 88)) continue;
+      if (ranked.length > 1 && ranked[1].score >= top.score - 6) continue;
+      return top.player;
     }
-    if (best.isEmpty) return null;
-    final ranked = best.values.toList()..sort((a, b) => b.score.compareTo(a.score));
-    final top = ranked.first;
-    // fame adds up to +10, so thresholds sit on the base score
-    final base = top.score - top.player.fame * 2;
-    if (base < (partial ? 95 : 88)) return null;
-    if (ranked.length > 1 && ranked[1].score >= top.score - 6) return null;
-    return top.player;
+    return null;
   }
 
   double _score(_Entry e, String q) {
