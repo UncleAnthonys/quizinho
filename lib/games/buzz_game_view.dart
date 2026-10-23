@@ -162,7 +162,14 @@ class BuzzGameView extends StatelessWidget {
 
     Widget centre() {
       if (awaitingFaceOff && faceOff != null) {
-        return _FaceOffIntro(faceOff: faceOff!, tournament: t, questionNumber: c.questionIndex + 1, onReady: onFaceOffReady);
+        return _TableFaceOffIntro(
+          faceOff: faceOff!,
+          tournament: t,
+          left: left,
+          right: right,
+          questionNumber: c.questionIndex + 1,
+          onReady: onFaceOffReady,
+        );
       }
       return Column(children: [
         // compact score line
@@ -415,6 +422,79 @@ class _FaceOffIntro extends StatelessWidget {
       ]),
     );
   }
+}
+
+/// Table-mode face-off: each named player's name sits big beside their own
+/// buzzer, turned to face them; FACE-OFF and Ready fill the middle.
+class _TableFaceOffIntro extends StatelessWidget {
+  const _TableFaceOffIntro({
+    required this.faceOff,
+    required this.tournament,
+    required this.left,
+    required this.right,
+    required this.questionNumber,
+    required this.onReady,
+  });
+  final FaceOff faceOff;
+  final Tournament tournament;
+  final List<int> left;
+  final List<int> right;
+  final int questionNumber;
+  final VoidCallback? onReady;
+
+  Widget _names(List<int> teams, int quarterTurns) => SizedBox(
+        width: 96,
+        child: Column(children: [
+          for (final team in teams)
+            if (faceOff.players.containsKey(team))
+              Expanded(
+                child: Center(
+                  child: RotatedBox(
+                    quarterTurns: quarterTurns,
+                    child: FittedBox(
+                      fit: BoxFit.scaleDown,
+                      child: Column(mainAxisSize: MainAxisSize.min, children: [
+                        TeamChip(
+                          name: faceOff.nameFor(team),
+                          colorIndex: tournament.config.teams[team].colorIndex,
+                          size: 46,
+                        ),
+                        const SizedBox(height: 4),
+                        Text(tournament.teamName(team).toUpperCase(), style: AppText.label(18)),
+                      ]),
+                    ),
+                  ),
+                ),
+              ),
+        ]),
+      );
+
+  @override
+  Widget build(BuildContext context) => Row(children: [
+        _names(left, 1),
+        Expanded(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 10),
+            child: Column(children: [
+              Expanded(
+                child: FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: Column(mainAxisSize: MainAxisSize.min, children: [
+                    const Icon(Icons.flash_on_rounded, color: Palette.danger, size: 64),
+                    Text('FACE-OFF', style: AppText.headline(96, color: Palette.danger)),
+                    Text('QUESTION $questionNumber', style: AppText.label(22)),
+                    const SizedBox(height: 10),
+                    Text('Everyone else — hands off!', style: AppText.headline(30, weight: FontWeight.w700)),
+                  ]),
+                ),
+              ),
+              const SizedBox(height: 10),
+              BigButton(label: 'Ready — show question', icon: Icons.visibility_rounded, onPressed: onReady, height: 72),
+            ]),
+          ),
+        ),
+        if (right.isNotEmpty) _names(right, 3),
+      ]);
 }
 
 /// Per-question face-off state for buzzer games: rolls a face-off when a new
