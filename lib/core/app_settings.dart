@@ -22,10 +22,12 @@ class AppSettings extends ChangeNotifier {
   bool get soundOn => _prefs.getBool('soundOn') ?? true;
   bool get commentaryOn => _prefs.getBool('commentaryOn') ?? true;
   bool get hapticsOn => _prefs.getBool('hapticsOn') ?? true;
+  bool get voiceOn => _prefs.getBool('voiceOn') ?? true;
 
   set soundOn(bool v) => _setBool('soundOn', v);
   set commentaryOn(bool v) => _setBool('commentaryOn', v);
   set hapticsOn(bool v) => _setBool('hapticsOn', v);
+  set voiceOn(bool v) => _setBool('voiceOn', v);
 
   void _setBool(String key, bool v) {
     _prefs.setBool(key, v);

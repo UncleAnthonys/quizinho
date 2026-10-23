@@ -224,6 +224,7 @@ class _StartingXiScreenState extends State<StartingXiScreen>
             PlayerPicker(
               key: ValueKey('xi-$_turn'),
               index: services.repo.players,
+              voice: services.voice,
               accent: Palette.team(colour),
               hint: 'Name a starter…',
               onPick: (p) => _submit(c, p),

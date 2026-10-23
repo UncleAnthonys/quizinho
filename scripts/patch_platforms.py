@@ -44,6 +44,12 @@ def patch_android() -> None:
         return
     s = manifest.read_text(encoding="utf-8")
     s = re.sub(r'android:label="[^"]*"', f'android:label="{DISPLAY_NAME}"', s, count=1)
+    # Microphone + speech recogniser (voice answers)
+    if 'android.permission.RECORD_AUDIO' not in s:
+        s = s.replace('<application', '<uses-permission android:name="android.permission.RECORD_AUDIO"/>\n    <application', 1)
+    if 'android.speech.RecognitionService' not in s:
+        q = '    <queries>\n        <intent>\n            <action android:name="android.speech.RecognitionService" />\n        </intent>\n'
+        s = s.replace('    <queries>\n', q, 1) if '    <queries>\n' in s else s.replace('</manifest>', q + '    </queries>\n</manifest>', 1)
     if 'android:screenOrientation' not in s:
         s = s.replace('<activity\n', '<activity\n            android:screenOrientation="portrait"\n', 1)
     manifest.write_text(s, encoding="utf-8")

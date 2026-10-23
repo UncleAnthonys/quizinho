@@ -140,6 +140,7 @@ class BuzzGameView extends StatelessWidget {
             PlayerPicker(
               key: ValueKey('pick-${c.questionIndex}-$team-${c.lockedOut.length}'),
               index: services.repo.players,
+              voice: services.voice,
               accent: Palette.team(colour),
               onPick: c.submit,
               onPass: c.pass,

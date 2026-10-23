@@ -5,15 +5,19 @@ import '../data/football_repository.dart';
 import 'app_settings.dart';
 import 'commentary.dart';
 import 'sound_service.dart';
+import 'voice_service.dart';
 
 /// Everything screens need, created once at startup.
 class AppServices {
-  AppServices({required this.repo, required this.settings, required this.sound, Commentary? commentary})
+  AppServices({required this.repo, required this.settings, required this.sound, this.voice, Commentary? commentary})
       : commentary = commentary ?? Commentary();
 
   final FootballRepository repo;
   final AppSettings settings;
   final SoundService sound;
+
+  /// Spoken answers. Null in tests.
+  final VoiceService? voice;
   final Commentary commentary;
 
   late final ChallengeSource challenges = ChallengeSource(repo);

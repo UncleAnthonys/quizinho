@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
 
 import '../../core/theme.dart';
+import '../../core/voice_service.dart';
 import '../../data/models.dart';
 import '../../domain/player_index.dart';
 
-/// Fast answer entry: type 2–3 letters, tap the name.
+/// Answer entry: say the name, or type 2–3 letters and tap it.
 ///
-/// This is the always-available fallback for speech recognition (Phase 2).
-/// If the player isn't in the database the room can vote, so a gap in our
-/// data never costs a team a correct answer.
+/// With [voice], the mic opens straight away. A clear match is accepted
+/// automatically; an unclear one ("Ronaldo") shows the likely players to tap.
+/// A mishearing never counts as a wrong answer — it just falls back to the
+/// list. If the player isn't in the database the room can vote, so a gap in
+/// our data never costs a team a correct answer.
 class PlayerPicker extends StatefulWidget {
   const PlayerPicker({
     super.key,
@@ -18,6 +21,7 @@ class PlayerPicker extends StatefulWidget {
     this.onDisputed,
     this.accent = Palette.yellow,
     this.hint = 'Start typing a player…',
+    this.voice,
   });
 
   final PlayerIndex index;
@@ -29,6 +33,9 @@ class PlayerPicker extends StatefulWidget {
   final Color accent;
   final String hint;
 
+  /// Spoken answers; null or disabled = typing only.
+  final VoiceService? voice;
+
   @override
   State<PlayerPicker> createState() => _PlayerPickerState();
 }
@@ -37,11 +44,67 @@ class _PlayerPickerState extends State<PlayerPicker> {
   final _controller = TextEditingController();
   List<PlayerMatch> _results = const [];
   bool _voting = false;
+  bool _listening = false;
+  String? _voiceNote;
+
+  bool get _voiceOn => widget.voice?.enabled ?? false;
+
+  @override
+  void initState() {
+    super.initState();
+    if (_voiceOn) WidgetsBinding.instance.addPostFrameCallback((_) => _listen());
+  }
 
   @override
   void dispose() {
+    widget.voice?.stop();
     _controller.dispose();
     super.dispose();
+  }
+
+  Future<void> _listen() async {
+    final voice = widget.voice;
+    if (voice == null || !mounted) return;
+    setState(() {
+      _listening = true;
+      _voiceNote = 'Listening… say the player';
+    });
+    final started = await voice.listen(
+      onWords: (words) {
+        if (!mounted || words.trim().isEmpty) return;
+        _controller.text = words;
+        _onChanged(words);
+      },
+      onDone: _heard,
+    );
+    if (!started && mounted) {
+      setState(() {
+        _listening = false;
+        _voiceNote = 'Mic not available — type the name';
+      });
+    }
+  }
+
+  void _heard(List<String> alternatives) {
+    if (!mounted) return;
+    setState(() => _listening = false);
+    // Accept automatically only when one transcript points clearly at one player.
+    for (final alt in alternatives) {
+      final p = widget.index.resolveConfidently(alt);
+      if (p != null) {
+        widget.onPick(p);
+        return;
+      }
+    }
+    if (alternatives.isEmpty) {
+      setState(() => _voiceNote = 'Didn’t catch that — tap the mic or type');
+      return;
+    }
+    _controller.text = alternatives.first;
+    _onChanged(alternatives.first);
+    setState(() => _voiceNote = _results.isEmpty
+        ? 'Heard “${alternatives.first}” — no match. Try again or type'
+        : 'Heard “${alternatives.first}” — tap the right player');
   }
 
   void _onChanged(String q) => setState(() => _results = widget.index.search(q, limit: 6));
@@ -53,14 +116,19 @@ class _PlayerPickerState extends State<PlayerPicker> {
     return Column(mainAxisSize: MainAxisSize.min, children: [
       TextField(
         controller: _controller,
-        autofocus: true,
+        autofocus: !_voiceOn, // keyboard would cover the screen while speaking
         autocorrect: false,
         enableSuggestions: false,
         textCapitalization: TextCapitalization.words,
         style: AppText.headline(26, weight: FontWeight.w800),
         decoration: InputDecoration(
           hintText: widget.hint,
-          prefixIcon: Icon(Icons.search, color: widget.accent),
+          prefixIcon: _voiceOn
+              ? IconButton(
+                  icon: Icon(_listening ? Icons.graphic_eq_rounded : Icons.mic_rounded, color: widget.accent),
+                  onPressed: _listening ? null : _listen,
+                )
+              : Icon(Icons.search, color: widget.accent),
           suffixIcon: typed.isEmpty
               ? null
               : IconButton(
@@ -76,6 +144,16 @@ class _PlayerPickerState extends State<PlayerPicker> {
           if (_results.isNotEmpty) widget.onPick(_results.first.player);
         },
       ),
+      if (_voiceNote != null && _voiceOn)
+        Padding(
+          padding: const EdgeInsets.only(top: 6),
+          child: Row(children: [
+            Icon(_listening ? Icons.mic_rounded : Icons.mic_none_rounded,
+                size: 18, color: _listening ? Palette.danger : Palette.muted),
+            const SizedBox(width: 6),
+            Expanded(child: Text(_voiceNote!, style: AppText.label(14, color: _listening ? Palette.text : Palette.muted))),
+          ]),
+        ),
       const SizedBox(height: 8),
       for (final r in _results)
         Padding(

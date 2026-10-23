@@ -6,6 +6,7 @@ import 'core/app_services.dart';
 import 'core/app_settings.dart';
 import 'core/sound_service.dart';
 import 'core/theme.dart';
+import 'core/voice_service.dart';
 import 'data/open_repository.dart';
 import 'ui/screens/home_screen.dart';
 
@@ -18,7 +19,7 @@ Future<void> main() async {
     final repo = await openFootballRepository();
     final sound = SoundService(settings);
     await sound.init();
-    runApp(QuizinhoApp(services: AppServices(repo: repo, settings: settings, sound: sound)));
+    runApp(QuizinhoApp(services: AppServices(repo: repo, settings: settings, sound: sound, voice: VoiceService(settings))));
   } catch (e, st) {
     debugPrint('Startup failed: $e\n$st');
     runApp(_StartupError(error: '$e'));

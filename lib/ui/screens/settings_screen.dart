@@ -32,6 +32,12 @@ class SettingsScreen extends StatelessWidget {
               onChanged: (v) => s.settings.commentaryOn = v,
             ),
             SwitchListTile(
+              title: const Text('Voice answers'),
+              subtitle: const Text('Say the player’s name after buzzing. You can always type instead.'),
+              value: s.settings.voiceOn,
+              onChanged: (v) => s.settings.voiceOn = v,
+            ),
+            SwitchListTile(
               title: const Text('Haptics'),
               value: s.settings.hapticsOn,
               onChanged: (v) => s.settings.hapticsOn = v,
