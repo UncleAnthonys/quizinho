@@ -424,8 +424,9 @@ class _FaceOffIntro extends StatelessWidget {
   }
 }
 
-/// Table-mode face-off: each named player's name sits big beside their own
-/// buzzer, turned to face them; FACE-OFF and Ready fill the middle.
+/// Table-mode face-off: each named player's name sits big on their own
+/// team's side (next to their buzzer), same way up as everything else so the
+/// group can read it; FACE-OFF and Ready fill the middle.
 class _TableFaceOffIntro extends StatelessWidget {
   const _TableFaceOffIntro({
     required this.faceOff,
@@ -442,22 +443,22 @@ class _TableFaceOffIntro extends StatelessWidget {
   final int questionNumber;
   final VoidCallback? onReady;
 
-  Widget _names(List<int> teams, int quarterTurns) => SizedBox(
-        width: 96,
+  Widget _names(List<int> teams) => Expanded(
+        flex: 2,
         child: Column(children: [
           for (final team in teams)
             if (faceOff.players.containsKey(team))
               Expanded(
                 child: Center(
-                  child: RotatedBox(
-                    quarterTurns: quarterTurns,
+                  child: Padding(
+                    padding: const EdgeInsets.all(6),
                     child: FittedBox(
                       fit: BoxFit.scaleDown,
                       child: Column(mainAxisSize: MainAxisSize.min, children: [
                         TeamChip(
                           name: faceOff.nameFor(team),
                           colorIndex: tournament.config.teams[team].colorIndex,
-                          size: 46,
+                          size: 56,
                         ),
                         const SizedBox(height: 4),
                         Text(tournament.teamName(team).toUpperCase(), style: AppText.label(18)),
@@ -471,8 +472,9 @@ class _TableFaceOffIntro extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Row(children: [
-        _names(left, 1),
+        _names(left),
         Expanded(
+          flex: 3,
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 10),
             child: Column(children: [
@@ -493,7 +495,7 @@ class _TableFaceOffIntro extends StatelessWidget {
             ]),
           ),
         ),
-        if (right.isNotEmpty) _names(right, 3),
+        if (right.isNotEmpty) _names(right),
       ]);
 }
 
