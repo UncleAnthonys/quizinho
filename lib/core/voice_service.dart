@@ -67,8 +67,9 @@ class VoiceService {
             finish(alts.isEmpty && last.trim().isNotEmpty ? [last] : alts);
           }
         },
-        listenFor: const Duration(seconds: 8),
-        pauseFor: const Duration(seconds: 2),
+        // Long windows; the answer box restarts listening whenever it stops.
+        listenFor: const Duration(seconds: 30),
+        pauseFor: const Duration(seconds: 5),
         listenOptions: SpeechListenOptions(
           partialResults: true,
           cancelOnError: true,

@@ -112,9 +112,8 @@ class _StartingXiScreenState extends State<StartingXiScreen>
           content: Text('${p.name} is already on the board — someone else!'),
           duration: const Duration(milliseconds: 1400),
         ));
-    } else {
-      _turn++;
     }
+    _turn++; // fresh answer box (and mic) every time
   }
 
   @override

@@ -32,7 +32,13 @@ class PlayerIndex {
           if (t.length >= 3) tokens.add(t);
         }
       }
-      _entries.add(_Entry(p, keys.toList(), tokens.toList()));
+      _entries.add(_Entry(
+        p,
+        keys.toList(),
+        tokens.toList(),
+        {for (final k in keys) soundKey(k)}..removeWhere((k) => k.length < 3),
+        {for (final t in tokens) soundKey(t)}..removeWhere((k) => k.length < 2),
+      ));
       _byId[p.id] = p;
     }
   }
@@ -69,6 +75,61 @@ class PlayerIndex {
     return best.player;
   }
 
+  /// Words people say around a name: "it's… um… David Luiz".
+  static const _filler = {
+    'its', 'it', 'is', 'um', 'uh', 'er', 'erm', 'umm', 'the', 'i', 'think', 'maybe', 'was', 'that',
+    'player', 'oh', 'ah', 'yeah', 'yes', 'no', 'wait', 'a', 'and', 'like',
+  };
+
+  static String _cleanSpoken(String text) =>
+      normaliseName(text).split(' ').where((w) => w.isNotEmpty && !_filler.contains(w)).join(' ');
+
+  /// Search tuned for speech: spelling-based matching plus sound-alike matching.
+  List<PlayerMatch> searchSpoken(String transcript, {int limit = 6}) {
+    final q = _cleanSpoken(transcript);
+    if (q.isEmpty) return const [];
+    final words = q.split(' ');
+    final whole = soundKey(q);
+    final wordKeys = [for (final w in words) soundKey(w)];
+    final hits = <PlayerMatch>[];
+    for (final e in _entries) {
+      var s = _score(e, q);
+      if (whole.length >= 3 && e.sounds.contains(whole)) {
+        s = s < 95 ? 95 : s; // whole name sounds right: "david louise" = David Luiz
+      } else if (words.length >= 2 && wordKeys.every((k) => k.length >= 2 && e.tokenSounds.contains(k))) {
+        s = s < 93 ? 93 : s; // every word sounds like part of the name
+      } else if (words.length == 1 && whole.length >= 3 && e.tokenSounds.contains(whole)) {
+        s = s < 90 ? 90 : s; // surname alone sounds right
+      }
+      if (s > 0) hits.add(PlayerMatch(e.player, s + e.player.fame * 2));
+    }
+    hits.sort((a, b) {
+      final c = b.score.compareTo(a.score);
+      return c != 0 ? c : a.player.name.compareTo(b.player.name);
+    });
+    return hits.length > limit ? hits.sublist(0, limit) : hits;
+  }
+
+  /// Best player across speech alternatives, or null if it isn't clear-cut.
+  /// [partial] = words still coming in, so demand a stronger match.
+  Player? resolveSpoken(List<String> alternatives, {bool partial = false}) {
+    final best = <String, PlayerMatch>{};
+    for (final alt in alternatives) {
+      for (final m in searchSpoken(alt, limit: 3)) {
+        final prev = best[m.player.id];
+        if (prev == null || m.score > prev.score) best[m.player.id] = m;
+      }
+    }
+    if (best.isEmpty) return null;
+    final ranked = best.values.toList()..sort((a, b) => b.score.compareTo(a.score));
+    final top = ranked.first;
+    // fame adds up to +10, so thresholds sit on the base score
+    final base = top.score - top.player.fame * 2;
+    if (base < (partial ? 92 : 88)) return null;
+    if (ranked.length > 1 && ranked[1].score >= top.score - 6) return null;
+    return top.player;
+  }
+
   double _score(_Entry e, String q) {
     var best = 0.0;
     for (final k in e.keys) {
@@ -95,8 +156,12 @@ class PlayerIndex {
 }
 
 class _Entry {
-  _Entry(this.player, this.keys, this.tokens);
+  _Entry(this.player, this.keys, this.tokens, this.sounds, this.tokenSounds);
   final Player player;
   final List<String> keys;
   final List<String> tokens;
+
+  /// Sound keys of full names/aliases, and of individual name words.
+  final Set<String> sounds;
+  final Set<String> tokenSounds;
 }

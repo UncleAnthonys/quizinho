@@ -47,7 +47,17 @@ class _PlayerPickerState extends State<PlayerPicker> {
   bool _listening = false;
   String? _voiceNote;
 
+  /// Answer already chosen — ignore any further speech.
+  bool _picked = false;
+
+  /// The player started typing — stop listening and leave the box to them.
+  bool _typing = false;
+
+  /// Back-to-back listens that heard nothing; stops a broken mic looping forever.
+  int _silentRestarts = 0;
+
   bool get _voiceOn => widget.voice?.enabled ?? false;
+  bool get _keepListening => mounted && _voiceOn && !_picked && !_typing && !_voting;
 
   @override
   void initState() {
@@ -57,23 +67,36 @@ class _PlayerPickerState extends State<PlayerPicker> {
 
   @override
   void dispose() {
+    _picked = true;
     widget.voice?.stop();
     _controller.dispose();
     super.dispose();
   }
 
+  void _pick(Player p) {
+    if (_picked) return;
+    _picked = true;
+    widget.voice?.stop();
+    widget.onPick(p);
+  }
+
+  /// Listens continuously until an answer is picked, the player types, or
+  /// this box goes away (answer clock ran out). Speech recognisers stop after
+  /// a pause, so each time one stops we simply start another.
   Future<void> _listen() async {
     final voice = widget.voice;
-    if (voice == null || !mounted) return;
+    if (voice == null || !_keepListening) return;
     setState(() {
       _listening = true;
-      _voiceNote = 'Listening… say the player';
+      _voiceNote ??= 'Listening… say the player';
     });
     final started = await voice.listen(
       onWords: (words) {
-        if (!mounted || words.trim().isEmpty) return;
-        _controller.text = words;
-        _onChanged(words);
+        if (!_keepListening || words.trim().isEmpty) return;
+        _showSpoken(words);
+        // Names are checked as the words arrive — a clear match goes straight in.
+        final p = widget.index.resolveSpoken([words], partial: true);
+        if (p != null) _pick(p);
       },
       onDone: _heard,
     );
@@ -85,26 +108,48 @@ class _PlayerPickerState extends State<PlayerPicker> {
     }
   }
 
+  void _showSpoken(String words) {
+    _controller.text = words;
+    setState(() => _results = widget.index.searchSpoken(words));
+  }
+
   void _heard(List<String> alternatives) {
-    if (!mounted) return;
-    setState(() => _listening = false);
-    // Accept automatically only when one transcript points clearly at one player.
-    for (final alt in alternatives) {
-      final p = widget.index.resolveConfidently(alt);
-      if (p != null) {
-        widget.onPick(p);
-        return;
-      }
-    }
-    if (alternatives.isEmpty) {
-      setState(() => _voiceNote = 'Didn’t catch that — tap the mic or type');
+    if (!mounted || _picked) return;
+    final p = widget.index.resolveSpoken(alternatives);
+    if (p != null) {
+      _pick(p);
       return;
     }
-    _controller.text = alternatives.first;
-    _onChanged(alternatives.first);
-    setState(() => _voiceNote = _results.isEmpty
-        ? 'Heard “${alternatives.first}” — no match. Try again or type'
-        : 'Heard “${alternatives.first}” — tap the right player');
+    _silentRestarts = alternatives.isEmpty ? _silentRestarts + 1 : 0;
+    if (_silentRestarts >= 10) {
+      setState(() {
+        _listening = false;
+        _voiceNote = 'Mic not hearing anything — tap it to retry, or type';
+      });
+      return;
+    }
+    if (alternatives.isNotEmpty) {
+      _showSpoken(alternatives.first);
+      _voiceNote = _results.isEmpty
+          ? 'Heard “${alternatives.first}” — still listening…'
+          : 'Tap the right player — or say it again';
+    }
+    setState(() => _listening = false);
+    // Keep the mic open for the whole answer clock.
+    Future.delayed(const Duration(milliseconds: 250), () {
+      if (_keepListening) _listen();
+    });
+  }
+
+  /// Typing in the box takes over from the mic.
+  void _onTyped(String q) {
+    if (!_typing && _voiceOn) {
+      _typing = true;
+      widget.voice?.stop();
+      _listening = false;
+      _voiceNote = 'Typing — tap the mic to talk instead';
+    }
+    _onChanged(q);
   }
 
   void _onChanged(String q) => setState(() => _results = widget.index.search(q, limit: 6));
@@ -126,7 +171,14 @@ class _PlayerPickerState extends State<PlayerPicker> {
           prefixIcon: _voiceOn
               ? IconButton(
                   icon: Icon(_listening ? Icons.graphic_eq_rounded : Icons.mic_rounded, color: widget.accent),
-                  onPressed: _listening ? null : _listen,
+                  onPressed: _listening
+                      ? null
+                      : () {
+                          _typing = false;
+                          _silentRestarts = 0;
+                          _voiceNote = null;
+                          _listen();
+                        },
                 )
               : Icon(Icons.search, color: widget.accent),
           suffixIcon: typed.isEmpty
@@ -139,9 +191,9 @@ class _PlayerPickerState extends State<PlayerPicker> {
                   },
                 ),
         ),
-        onChanged: _onChanged,
+        onChanged: _onTyped,
         onSubmitted: (_) {
-          if (_results.isNotEmpty) widget.onPick(_results.first.player);
+          if (_results.isNotEmpty) _pick(_results.first.player);
         },
       ),
       if (_voiceNote != null && _voiceOn)
@@ -163,7 +215,7 @@ class _PlayerPickerState extends State<PlayerPicker> {
             borderRadius: BorderRadius.circular(12),
             child: InkWell(
               borderRadius: BorderRadius.circular(12),
-              onTap: () => widget.onPick(r.player),
+              onTap: () => _pick(r.player),
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
                 child: Row(children: [

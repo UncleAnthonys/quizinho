@@ -74,3 +74,36 @@ double similarity(String a, String b) {
   if (longest == 0) return 1;
   return 1 - levenshtein(a, b) / longest;
 }
+
+/// A rough "how it sounds" key for matching speech-to-text output against
+/// footballer names: "luiz" and "louise" → "ls"; "van dijk" and "van dyke"
+/// → "vndk"; "mbappe" and "embappe" → "mbp". Input must already be
+/// [normaliseName]d. Consonant skeleton only — vowels are what speech
+/// recognisers get wrong most often.
+String soundKey(String normalised) {
+  var s = normalised.replaceAll(' ', '');
+  const rules = [
+    ('sch', 'sh'), ('sz', 's'), ('cz', 'ch'), ('ph', 'f'), ('ck', 'k'), ('qu', 'k'),
+    ('q', 'k'), ('x', 'ks'), ('th', 't'), ('ij', 'i'), ('gh', 'g'), ('dj', 'j'), ('kh', 'k'),
+  ];
+  for (final (from, to) in rules) {
+    s = s.replaceAll(from, to);
+  }
+  s = s.replaceAllMapped(RegExp(r'c(?=[eiy])'), (_) => 's');
+  final buf = StringBuffer();
+  String? prev;
+  for (final ch in s.split('')) {
+    var c = ch;
+    if (c == 'c') c = 'k';
+    if (c == 'z') c = 's';
+    if (c == 'w') c = 'v';
+    if ('aeiouyh'.contains(c)) {
+      prev = null; // vowels separate doubled consonants ("anna" vs "ana" still collapse below)
+      continue;
+    }
+    if (c == prev) continue;
+    buf.write(c);
+    prev = c;
+  }
+  return buf.toString();
+}
