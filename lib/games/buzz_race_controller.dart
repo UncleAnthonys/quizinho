@@ -206,7 +206,8 @@ abstract class BuzzRaceController<Q> extends ChangeNotifier {
     }
     phase = BuzzPhase.open;
     // resume the open clock where it was paused at the buzz
-    (secondsLeft, phaseSeconds) = _pausedOpen;
+    secondsLeft = _pausedOpen.$1;
+    phaseSeconds = _pausedOpen.$2;
     onReopen();
     emit(timeout ? GameEvent.timeUp : GameEvent.wrong);
     notifyListeners();
