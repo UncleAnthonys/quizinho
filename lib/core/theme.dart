@@ -18,6 +18,9 @@ abstract final class Palette {
   /// Royal blue (crest, Career Path) and a brighter blue that reads on green.
   static const blue = Color(0xFF1F4FBF);
   static const blueBright = Color(0xFF4C8BFF);
+
+  /// Brazil flag green — "correct" actions. Brighter than the pitch so it pops.
+  static const green = Color(0xFF00B140);
   static const danger = Color(0xFFFF4B4B);
   static const text = Color(0xFFF4FAF6);
   static const muted = Color(0xFFA3C4B4);

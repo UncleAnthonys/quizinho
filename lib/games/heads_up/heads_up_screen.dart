@@ -104,7 +104,7 @@ class _HeadsUpScreenState extends State<HeadsUpScreen>
     c.correct();
     services.sound.play(Sfx.correct);
     services.haptic(HapticStrength.medium);
-    _showFlash(Palette.yellow);
+    _showFlash(Palette.green);
   }
 
   void _pass() {
@@ -217,7 +217,6 @@ class _HeadsUpScreenState extends State<HeadsUpScreen>
 
   /// Countdown and cards, rotated to read sideways on a forehead.
   Widget _fullScreen(HeadsUpController c) {
-    final colour = Palette.team(_t.config.teams[c.currentTeam].colorIndex);
     final counting = c.phase == HeadsUpPhase.countdown;
     return RotatedBox(
       quarterTurns: _quarterTurns,
@@ -266,8 +265,8 @@ class _HeadsUpScreenState extends State<HeadsUpScreen>
                     child: BigButton(
                       label: 'Correct',
                       icon: Icons.check_rounded,
-                      color: colour,
-                      textColor: Palette.pitchDeep,
+                      color: Palette.green,
+                      textColor: Colors.white,
                       onPressed: _correct,
                     ),
                   ),
@@ -296,7 +295,7 @@ class _HeadsUpScreenState extends State<HeadsUpScreen>
                 padding: const EdgeInsets.symmetric(vertical: 3),
                 child: Row(children: [
                   Icon(r.correct ? Icons.check_circle_rounded : Icons.cancel_rounded,
-                      color: r.correct ? Palette.yellow : Palette.danger),
+                      color: r.correct ? Palette.green : Palette.danger),
                   const SizedBox(width: 10),
                   Expanded(
                     child: Text(r.card,
