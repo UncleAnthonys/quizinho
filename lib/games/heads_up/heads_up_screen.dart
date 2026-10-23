@@ -104,7 +104,7 @@ class _HeadsUpScreenState extends State<HeadsUpScreen>
     c.correct();
     services.sound.play(Sfx.correct);
     services.haptic(HapticStrength.medium);
-    _showFlash(Palette.green);
+    _showFlash(Palette.yellow);
   }
 
   void _pass() {
