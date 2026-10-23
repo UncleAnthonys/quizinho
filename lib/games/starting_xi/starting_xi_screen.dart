@@ -29,6 +29,20 @@ class _StartingXiScreenState extends State<StartingXiScreen>
   int _lastSecond = -1;
   int _turn = 0;
 
+  /// Named player for the current turn (null when teams have no names).
+  String? _turnPlayer;
+  bool _turnAssigned = false;
+
+  void _assignTurnPlayer(StartingXiController c) {
+    if (c.phase != BombPhase.handover) {
+      _turnAssigned = false;
+      return;
+    }
+    if (_turnAssigned) return;
+    _turnAssigned = true;
+    _turnPlayer = widget.round.tournament.nextTurnPlayer(c.currentTeam);
+  }
+
   @override
   void initState() {
     super.initState();
@@ -52,12 +66,14 @@ class _StartingXiScreenState extends State<StartingXiScreen>
       // trailing team starts, to keep it competitive
       startTeam: t.standings.last,
     );
+    _assignTurnPlayer(c);
     c.addListener(() => _onChange(c));
     setState(() => _c = c);
     startClock(c.advance);
   }
 
   void _onChange(StartingXiController c) {
+    _assignTurnPlayer(c);
     handleEvent(c.eventSerial, c.lastEvent);
     if (c.phase == BombPhase.ticking) {
       final sec = c.secondsLeft.ceil();
@@ -83,7 +99,12 @@ class _StartingXiScreenState extends State<StartingXiScreen>
   }
 
   void _submit(StartingXiController c, Player p) {
+    final team = c.currentTeam;
+    final who = _turnPlayer;
     final r = c.submit(p);
+    if (r == SubmitResult.correct && who != null) {
+      widget.round.tournament.creditPlayer(team, who, widget.round.multiplier);
+    }
     if (r == SubmitResult.alreadyNamed) {
       ScaffoldMessenger.of(context)
         ..hideCurrentSnackBar()
@@ -171,8 +192,11 @@ class _StartingXiScreenState extends State<StartingXiScreen>
                 Text('PASS TO', style: AppText.label(18, color: Palette.onTeam(colour))),
                 FittedBox(
                   fit: BoxFit.scaleDown,
-                  child: Text(t.teamName(team).toUpperCase(), style: AppText.headline(54, color: Palette.onTeam(colour))),
+                  child: Text((_turnPlayer ?? t.teamName(team)).toUpperCase(),
+                      style: AppText.headline(54, color: Palette.onTeam(colour))),
                 ),
+                if (_turnPlayer != null)
+                  Text(t.teamName(team).toUpperCase(), style: AppText.label(18, color: Palette.onTeam(colour))),
                 const SizedBox(height: 6),
                 Text('TAP WHEN READY — ${c.turnSeconds}s ON THE CLOCK',
                     style: AppText.label(15, color: Palette.onTeam(colour))),
@@ -190,7 +214,7 @@ class _StartingXiScreenState extends State<StartingXiScreen>
               const SizedBox(width: 12),
               Expanded(
                 child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                  TeamChip(name: t.teamName(team), colorIndex: colour),
+                  TeamChip(name: _turnPlayer ?? t.teamName(team), colorIndex: colour),
                   const SizedBox(height: 6),
                   TimerBar(fraction: c.fractionLeft, seconds: c.secondsLeft),
                 ]),

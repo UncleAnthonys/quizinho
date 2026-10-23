@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../core/app_services.dart';
 import '../core/theme.dart';
 import '../domain/game_mode.dart';
+import '../domain/tournament.dart';
 import '../ui/widgets/buzzer_pad.dart';
 import '../ui/widgets/common.dart';
 import '../ui/widgets/player_picker.dart';
@@ -22,6 +23,7 @@ class BuzzGameView extends StatelessWidget {
     required this.commentary,
     required this.onFinished,
     this.allowDispute = false,
+    this.faceOff,
   });
 
   final RoundContext round;
@@ -32,6 +34,9 @@ class BuzzGameView extends StatelessWidget {
   final String? commentary;
   final VoidCallback onFinished;
   final bool allowDispute;
+
+  /// Set when this question is a head-to-head between named players.
+  final FaceOff? faceOff;
 
   @override
   Widget build(BuildContext context) {
@@ -60,6 +65,8 @@ class BuzzGameView extends StatelessWidget {
               ]),
             ),
             CommentaryBanner(text: commentary),
+            if (faceOff != null && (c.phase == BuzzPhase.open || c.phase == BuzzPhase.answering))
+              _FaceOffBanner(faceOff: faceOff!, tournament: t),
             question,
             if (c.phase == BuzzPhase.open || c.phase == BuzzPhase.answering)
               Padding(
@@ -85,7 +92,13 @@ class BuzzGameView extends StatelessWidget {
           Expanded(
             child: Padding(
               padding: const EdgeInsets.fromLTRB(8, 4, 8, 0),
-              child: BuzzerPad(tournament: t, canBuzz: c.canBuzz, onBuzz: c.buzz, lockedOut: c.lockedOut),
+              child: BuzzerPad(
+                tournament: t,
+                canBuzz: c.canBuzz,
+                onBuzz: c.buzz,
+                lockedOut: c.lockedOut,
+                faceOff: faceOff,
+              ),
             ),
           ),
           TextButton(onPressed: c.giveUp, child: Text('NOBODY KNOWS — SKIP', style: AppText.label(14))),
@@ -98,7 +111,11 @@ class BuzzGameView extends StatelessWidget {
           padding: const EdgeInsets.fromLTRB(16, 6, 16, 16),
           child: Column(children: [
             Row(children: [
-              TeamChip(name: t.teamName(team), colorIndex: colour, size: 20),
+              TeamChip(
+                name: faceOff == null ? t.teamName(team) : faceOff!.nameFor(team),
+                colorIndex: colour,
+                size: 20,
+              ),
               const SizedBox(width: 10),
               Text('YOUR ANSWER', style: AppText.headline(22)),
             ]),
@@ -120,7 +137,11 @@ class BuzzGameView extends StatelessWidget {
           padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
           child: Column(children: [
             if (o != null && o.scored) ...[
-              TeamChip(name: t.teamName(o.team!), colorIndex: t.config.teams[o.team!].colorIndex, size: 22),
+              TeamChip(
+                name: faceOff == null ? t.teamName(o.team!) : '${faceOff!.nameFor(o.team!)} · ${t.teamName(o.team!)}',
+                colorIndex: t.config.teams[o.team!].colorIndex,
+                size: 22,
+              ),
               const SizedBox(height: 8),
               Text('+${o.points * round.multiplier}', style: AppText.headline(64, color: Palette.lime)),
               Text(
@@ -148,6 +169,68 @@ class BuzzGameView extends StatelessWidget {
             ),
           ]),
         );
+    }
+  }
+}
+
+/// "FACE-OFF: SAM v JORDAN — only you two".
+class _FaceOffBanner extends StatelessWidget {
+  const _FaceOffBanner({required this.faceOff, required this.tournament});
+  final FaceOff faceOff;
+  final Tournament tournament;
+
+  @override
+  Widget build(BuildContext context) {
+    final teams = faceOff.players.keys.toList()..sort();
+    return Container(
+      width: double.infinity,
+      margin: const EdgeInsets.fromLTRB(16, 4, 16, 2),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+      decoration: BoxDecoration(
+        color: Palette.danger.withValues(alpha: 0.9),
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Column(children: [
+        Text('FACE-OFF', style: AppText.label(13, color: Colors.white)),
+        FittedBox(
+          fit: BoxFit.scaleDown,
+          child: Row(mainAxisSize: MainAxisSize.min, children: [
+            for (final (i, team) in teams.indexed) ...[
+              if (i > 0)
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                  child: Text('v', style: AppText.headline(20, color: Colors.white)),
+                ),
+              TeamChip(name: faceOff.nameFor(team), colorIndex: tournament.config.teams[team].colorIndex, size: 20),
+            ],
+          ]),
+        ),
+        Text('Only these players can answer', style: AppText.label(12, color: Colors.white)),
+      ]),
+    );
+  }
+}
+
+/// Per-question face-off state for buzzer games: rolls a face-off when a new
+/// question starts and credits the named player who scores.
+class FaceOffTracker {
+  FaceOffTracker(this.round);
+  final RoundContext round;
+  FaceOff? current;
+  int _question = -1;
+  int _credited = -1;
+
+  /// Call once after creating the controller, then on every change.
+  void sync(BuzzRaceController c) {
+    if (c.questionIndex != _question) {
+      _question = c.questionIndex;
+      current = round.tournament.maybeFaceOff();
+    }
+    final o = c.outcome;
+    final f = current;
+    if (f != null && o != null && o.scored && c.eventSerial != _credited) {
+      _credited = c.eventSerial;
+      round.tournament.creditPlayer(o.team!, f.nameFor(o.team!), o.points * round.multiplier);
     }
   }
 }

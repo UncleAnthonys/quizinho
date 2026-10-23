@@ -22,6 +22,9 @@ class _SetupScreenState extends State<SetupScreen> {
 
   final List<TextEditingController> _names = [];
   final List<int> _colours = [];
+
+  /// Optional player names per team (parallel to [_names]).
+  final List<List<String>> _players = [];
   MatchLength _length = MatchLength.medium;
   Difficulty _difficulty = Difficulty.medium;
   final Set<GameModeId> _modes = {};
@@ -39,6 +42,7 @@ class _SetupScreenState extends State<SetupScreen> {
     for (final t in c.teams) {
       _names.add(TextEditingController(text: t.name));
       _colours.add(t.colorIndex);
+      _players.add([...t.players]);
     }
     while (_names.length < 2) {
       _addTeam();
@@ -68,6 +72,7 @@ class _SetupScreenState extends State<SetupScreen> {
     }
     _names.add(TextEditingController(text: _defaultNames[i % _defaultNames.length]));
     _colours.add(colour);
+    _players.add([]);
   }
 
   bool get _valid =>
@@ -78,7 +83,8 @@ class _SetupScreenState extends State<SetupScreen> {
     final services = AppScope.read(context);
     final config = TournamentConfig(
       teams: [
-        for (var i = 0; i < _names.length; i++) TeamSetup(name: _names[i].text.trim(), colorIndex: _colours[i]),
+        for (var i = 0; i < _names.length; i++)
+          TeamSetup(name: _names[i].text.trim(), colorIndex: _colours[i], players: [..._players[i]]),
       ],
       length: _length,
       difficulty: _difficulty,
@@ -106,6 +112,15 @@ class _SetupScreenState extends State<SetupScreen> {
             Expanded(
               child: ListView(padding: const EdgeInsets.fromLTRB(16, 16, 16, 24), children: [
                 _section('TEAMS'),
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 10),
+                  child: Text(
+                    _players.every((p) => p.isNotEmpty)
+                        ? 'Face-offs ON: some questions pit one named player against another.'
+                        : 'Optional: add player names to every team to unlock head-to-head face-offs.',
+                    style: const TextStyle(color: Palette.muted, fontSize: 13),
+                  ),
+                ),
                 for (var i = 0; i < _names.length; i++) _teamRow(i),
                 if (_names.length < _maxTeams)
                   Align(
@@ -186,7 +201,22 @@ class _SetupScreenState extends State<SetupScreen> {
 
   Widget _teamRow(int i) => Padding(
         key: ObjectKey(_names[i]),
-        padding: const EdgeInsets.only(bottom: 10),
+        padding: const EdgeInsets.only(bottom: 14),
+        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          _teamNameRow(i),
+          Padding(
+            padding: const EdgeInsets.only(left: 58, top: 6),
+            child: _PlayerNames(
+              names: _players[i],
+              colorIndex: _colours[i],
+              onChanged: () => setState(() {}),
+            ),
+          ),
+        ]),
+      );
+
+  Widget _teamNameRow(int i) => Padding(
+        padding: EdgeInsets.zero,
         child: Row(children: [
           GestureDetector(
             onTap: () => setState(() => _colours[i] = (_colours[i] + 1) % Palette.teams.length),
@@ -217,7 +247,10 @@ class _SetupScreenState extends State<SetupScreen> {
               icon: const Icon(Icons.close, color: Palette.muted),
               onPressed: () {
                 final removed = _names.removeAt(i);
-                setState(() => _colours.removeAt(i));
+                setState(() {
+                  _colours.removeAt(i);
+                  _players.removeAt(i);
+                });
                 WidgetsBinding.instance.addPostFrameCallback((_) => removed.dispose());
               },
             ),
@@ -240,4 +273,70 @@ class _SetupScreenState extends State<SetupScreen> {
           ),
         ]),
       );
+}
+
+/// Chips for a team's players plus a quick "add player" field.
+class _PlayerNames extends StatefulWidget {
+  const _PlayerNames({required this.names, required this.colorIndex, required this.onChanged});
+  final List<String> names;
+  final int colorIndex;
+  final VoidCallback onChanged;
+
+  @override
+  State<_PlayerNames> createState() => _PlayerNamesState();
+}
+
+class _PlayerNamesState extends State<_PlayerNames> {
+  static const _maxPlayers = 10;
+  final _field = TextEditingController();
+
+  @override
+  void dispose() {
+    _field.dispose();
+    super.dispose();
+  }
+
+  void _add() {
+    final name = _field.text.trim();
+    _field.clear();
+    if (name.isEmpty || widget.names.length >= _maxPlayers) return;
+    if (widget.names.any((n) => n.toLowerCase() == name.toLowerCase())) return;
+    widget.names.add(name);
+    widget.onChanged();
+  }
+
+  @override
+  Widget build(BuildContext context) => Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        if (widget.names.isNotEmpty)
+          Wrap(spacing: 6, runSpacing: 6, children: [
+            for (final n in widget.names)
+              InputChip(
+                label: Text(n),
+                backgroundColor: Palette.team(widget.colorIndex).withValues(alpha: 0.25),
+                side: BorderSide(color: Palette.team(widget.colorIndex)),
+                onDeleted: () {
+                  widget.names.remove(n);
+                  widget.onChanged();
+                },
+              ),
+          ]),
+        if (widget.names.length < _maxPlayers)
+          SizedBox(
+            height: 44,
+            child: TextField(
+              controller: _field,
+              textCapitalization: TextCapitalization.words,
+              maxLength: 14,
+              textInputAction: TextInputAction.done,
+              decoration: InputDecoration(
+                counterText: '',
+                isDense: true,
+                hintText: '+ Add player (optional)',
+                contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                suffixIcon: IconButton(icon: const Icon(Icons.add, color: Palette.lime), onPressed: _add),
+              ),
+              onSubmitted: (_) => _add(),
+            ),
+          ),
+      ]);
 }

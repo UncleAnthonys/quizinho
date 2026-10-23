@@ -81,7 +81,9 @@ class _WinnerScreenState extends State<WinnerScreen> with SingleTickerProviderSt
                 const SizedBox(height: 10),
                 if (_line.isNotEmpty)
                   Text(_line, textAlign: TextAlign.center, style: AppText.headline(22, color: Palette.text, weight: FontWeight.w700)),
-                const SizedBox(height: 16),
+                const SizedBox(height: 12),
+                if (t.playerTable.isNotEmpty) _PlayerOfTheMatch(tournament: t),
+                const SizedBox(height: 8),
                 Expanded(
                   child: ListView(children: [
                     for (final (pos, team) in t.standings.indexed)
@@ -138,4 +140,46 @@ class _ConfettiPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(covariant _ConfettiPainter old) => old.t != t;
+}
+
+/// Top individual scorer from face-offs and bomb turns.
+class _PlayerOfTheMatch extends StatelessWidget {
+  const _PlayerOfTheMatch({required this.tournament});
+  final Tournament tournament;
+
+  @override
+  Widget build(BuildContext context) {
+    final table = tournament.playerTable;
+    final best = table.first;
+    final colour = tournament.config.teams[best.team].colorIndex;
+    final others = table.skip(1).take(3).toList();
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+      decoration: BoxDecoration(
+        color: Colors.black.withValues(alpha: 0.35),
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(color: Palette.gold),
+      ),
+      child: Column(children: [
+        Text('PLAYER OF THE MATCH', style: AppText.label(13, color: Palette.gold)),
+        const SizedBox(height: 4),
+        Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+          const Icon(Icons.star_rounded, color: Palette.gold),
+          const SizedBox(width: 6),
+          Flexible(child: TeamChip(name: best.name, colorIndex: colour, size: 24)),
+          const SizedBox(width: 8),
+          Text('${best.points} PTS', style: AppText.headline(24, color: Palette.gold)),
+        ]),
+        if (others.isNotEmpty) ...[
+          const SizedBox(height: 6),
+          Text(
+            others.map((p) => '${p.name} ${p.points}').join('  ·  '),
+            textAlign: TextAlign.center,
+            style: AppText.label(13),
+          ),
+        ],
+      ]),
+    );
+  }
 }

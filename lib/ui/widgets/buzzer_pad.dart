@@ -11,9 +11,13 @@ class BuzzerPad extends StatelessWidget {
     required this.canBuzz,
     required this.onBuzz,
     this.lockedOut = const {},
+    this.faceOff,
   });
 
   final Tournament tournament;
+
+  /// When set, buzzers show the named player instead of just the team.
+  final FaceOff? faceOff;
   final bool Function(int team) canBuzz;
   final void Function(int team) onBuzz;
   final Set<int> lockedOut;
@@ -36,7 +40,9 @@ class BuzzerPad extends StatelessWidget {
                   child: Padding(
                     padding: const EdgeInsets.all(6),
                     child: _Buzzer(
-                      name: tournament.teamName(team),
+                      name: faceOff == null
+                          ? tournament.teamName(team)
+                          : '${faceOff!.nameFor(team)} · ${tournament.teamName(team)}',
                       colorIndex: tournament.config.teams[team].colorIndex,
                       enabled: canBuzz(team),
                       locked: lockedOut.contains(team),

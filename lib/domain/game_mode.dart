@@ -10,7 +10,7 @@ enum GameModeId {
       'Get it right: 2 points. Get it wrong: you’re locked out and the others can steal.',
       'Name a deep cut nobody expected for a bonus point.',
     ],
-    whoPlays: 'One player from each team on the buzzers. Swap players each question.',
+    whoPlays: 'Anyone can buzz — unless it says FACE-OFF, then only the two named players.',
   ),
   careerPath(
     title: 'Career Path',
@@ -21,7 +21,7 @@ enum GameModeId {
       'Buzz as early as you dare: 5 points on the first clue, dropping each reveal.',
       'Wrong answers lock your team out of that player.',
     ],
-    whoPlays: 'Whole teams can confer — but only the buzzer counts.',
+    whoPlays: 'Teams can confer — except on FACE-OFF questions, where it’s just the named players.',
   ),
   startingXi(
     title: 'Starting XI Bomb',
@@ -32,7 +32,7 @@ enum GameModeId {
       'Wrong answer or time up: the bomb goes off and you lose a life.',
       '1 point per player named. Last team standing (or most named) takes a 3-point bonus.',
     ],
-    whoPlays: 'Teams take turns. Pass the phone when told.',
+    whoPlays: 'Teams take turns. Pass the phone to whoever is named.',
   ),
   wildcard(
     title: 'Wildcard',

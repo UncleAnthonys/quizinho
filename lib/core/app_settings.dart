@@ -11,6 +11,9 @@ class AppSettings extends ChangeNotifier {
 
   final SharedPreferences _prefs;
 
+  /// Separator for storing a team's player names in one string.
+  static const _sep = '\u001F';
+
   static Future<AppSettings> load() async => AppSettings._(await SharedPreferences.getInstance());
 
   bool get soundOn => _prefs.getBool('soundOn') ?? true;
@@ -30,12 +33,17 @@ class AppSettings extends ChangeNotifier {
   TournamentConfig lastConfig() {
     final names = _prefs.getStringList('teamNames') ?? const ['Home', 'Away'];
     final colours = _prefs.getStringList('teamColours') ?? const ['0', '1'];
+    final players = _prefs.getStringList('teamPlayers') ?? const [];
     final modeNames = _prefs.getStringList('modes');
     final modes = modeNames?.map(GameModeId.fromName).whereType<GameModeId>().where((m) => m.playable).toSet();
     return TournamentConfig(
       teams: [
         for (var i = 0; i < names.length; i++)
-          TeamSetup(name: names[i], colorIndex: i < colours.length ? int.tryParse(colours[i]) ?? i : i),
+          TeamSetup(
+            name: names[i],
+            colorIndex: i < colours.length ? int.tryParse(colours[i]) ?? i : i,
+            players: i < players.length && players[i].isNotEmpty ? players[i].split(_sep) : null,
+          ),
       ],
       length: MatchLength.fromName(_prefs.getString('length')),
       difficulty: Difficulty.fromName(_prefs.getString('difficulty')),
@@ -49,6 +57,7 @@ class AppSettings extends ChangeNotifier {
   Future<void> saveConfig(TournamentConfig c) async {
     await _prefs.setStringList('teamNames', [for (final t in c.teams) t.name]);
     await _prefs.setStringList('teamColours', [for (final t in c.teams) '${t.colorIndex}']);
+    await _prefs.setStringList('teamPlayers', [for (final t in c.teams) t.players.join(_sep)]);
     await _prefs.setStringList('modes', [for (final m in c.modes) m.name]);
     await _prefs.setString('length', c.length.name);
     await _prefs.setString('difficulty', c.difficulty.name);

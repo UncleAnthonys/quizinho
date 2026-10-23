@@ -20,9 +20,29 @@ enum MatchLength {
 }
 
 class TeamSetup {
-  TeamSetup({required this.name, required this.colorIndex});
+  TeamSetup({required this.name, required this.colorIndex, List<String>? players})
+      : players = players ?? [];
   String name;
   int colorIndex;
+
+  /// Optional individual names. Enables face-offs and Player of the Match.
+  final List<String> players;
+}
+
+/// Two (or more) named players going head to head, one per team.
+class FaceOff {
+  const FaceOff(this.players);
+
+  /// team index → player name
+  final Map<int, String> players;
+  String nameFor(int team) => players[team] ?? '';
+}
+
+class PlayerScore {
+  const PlayerScore(this.team, this.name, this.points);
+  final int team;
+  final String name;
+  final int points;
 }
 
 class TournamentConfig {
@@ -88,6 +108,16 @@ class Tournament extends ChangeNotifier {
   final Map<GameModeId, Set<String>> _used = {};
   GameModeId? _lastGame;
 
+  /// "team|name" → points scored personally (face-offs, bomb turns).
+  final Map<String, int> _playerPoints = {};
+
+  /// "team|name" → times picked, so face-offs rotate fairly.
+  final Map<String, int> _picks = {};
+  final Map<int, int> _turnIndex = {};
+
+  /// Share of buzzer questions played as face-offs when names are set.
+  static const double faceOffChance = 0.5;
+
   int get teamCount => config.teams.length;
   String teamName(int i) => config.teams[i].name;
   int get roundNumber => rounds.length + 1;
@@ -97,6 +127,50 @@ class Tournament extends ChangeNotifier {
 
   Set<String> usedIds(GameModeId mode) => _used.putIfAbsent(mode, () => <String>{});
   void markUsed(GameModeId mode, String id) => usedIds(mode).add(id);
+
+  /// Face-offs need at least one named player in every team.
+  bool get hasPlayerNames => config.teams.every((t) => t.players.isNotEmpty);
+
+  static String _key(int team, String name) => '$team|$name';
+
+  /// Least-picked player in [team] (random among ties); records the pick.
+  String _pickPlayer(int team) {
+    final names = config.teams[team].players;
+    final fewest = names.map((n) => _picks[_key(team, n)] ?? 0).reduce(min);
+    final options = names.where((n) => (_picks[_key(team, n)] ?? 0) == fewest).toList();
+    final name = options[_random.nextInt(options.length)];
+    _picks[_key(team, name)] = fewest + 1;
+    return name;
+  }
+
+  /// Roll for a face-off on the next buzzer question. Null = whole-team question.
+  FaceOff? maybeFaceOff() {
+    if (!hasPlayerNames || _random.nextDouble() >= faceOffChance) return null;
+    return FaceOff({for (var t = 0; t < teamCount; t++) t: _pickPlayer(t)});
+  }
+
+  /// Next player in [team] for turn-based games, cycling in order. Null if no names.
+  String? nextTurnPlayer(int team) {
+    final names = config.teams[team].players;
+    if (names.isEmpty) return null;
+    final i = _turnIndex[team] ?? 0;
+    _turnIndex[team] = i + 1;
+    return names[i % names.length];
+  }
+
+  void creditPlayer(int team, String name, int points) {
+    if (name.isEmpty || points <= 0) return;
+    _playerPoints[_key(team, name)] = (_playerPoints[_key(team, name)] ?? 0) + points;
+  }
+
+  /// Individual scores, best first.
+  List<PlayerScore> get playerTable {
+    final list = [
+      for (final e in _playerPoints.entries)
+        PlayerScore(int.parse(e.key.split('|').first), e.key.substring(e.key.indexOf('|') + 1), e.value),
+    ]..sort((a, b) => b.points.compareTo(a.points));
+    return list;
+  }
 
   /// Wheel segments shown to players (enabled games, plus wildcard if on).
   List<GameModeId> get wheelSegments {

@@ -17,6 +17,8 @@ TournamentConfig config({int teams = 2, Set<GameModeId>? modes, MatchLength leng
     );
 
 void main() {
+  group('face-offs and players', faceOffTests);
+
   test('round results add up, wildcard doubles', () {
     final t = Tournament(config());
     t.recordRound(RoundResult(mode: GameModeId.careerPath, points: {0: 5, 1: 2}));
@@ -83,5 +85,59 @@ void main() {
     final repo = InMemoryFootballRepository(players: allPlayers, connections: [arsenalBarca()]); // level 1 only
     final q = await ChallengeSource(repo).clubConnection(Difficulty.expert, {});
     expect(q?.id, arsenalBarca().id);
+  });
+}
+
+TournamentConfig namedConfig() => TournamentConfig(teams: [
+      TeamSetup(name: 'Home', colorIndex: 0, players: ['Sam', 'Ali', 'Jo']),
+      TeamSetup(name: 'Away', colorIndex: 1, players: ['Kim', 'Raj']),
+    ]);
+
+void faceOffTests() {
+  test('no names → never a face-off, no turn players', () {
+    final t = Tournament(config(), random: Random(1));
+    expect(t.hasPlayerNames, isFalse);
+    for (var i = 0; i < 20; i++) {
+      expect(t.maybeFaceOff(), isNull);
+    }
+    expect(t.nextTurnPlayer(0), isNull);
+  });
+
+  test('face-offs happen sometimes and pick one named player per team', () {
+    final t = Tournament(namedConfig(), random: Random(2));
+    final rolls = [for (var i = 0; i < 40; i++) t.maybeFaceOff()];
+    final faceOffs = rolls.whereType<FaceOff>().toList();
+    expect(faceOffs.length, inInclusiveRange(8, 32));
+    for (final f in faceOffs) {
+      expect(['Sam', 'Ali', 'Jo'], contains(f.nameFor(0)));
+      expect(['Kim', 'Raj'], contains(f.nameFor(1)));
+    }
+  });
+
+  test('face-off picks rotate fairly through each team', () {
+    final t = Tournament(namedConfig(), random: Random(3));
+    final picked = <String, int>{};
+    var n = 0;
+    while (n < 6) {
+      final f = t.maybeFaceOff();
+      if (f == null) continue;
+      n++;
+      picked.update(f.nameFor(0), (v) => v + 1, ifAbsent: () => 1);
+    }
+    expect(picked, {'Sam': 2, 'Ali': 2, 'Jo': 2});
+  });
+
+  test('turn players cycle in order', () {
+    final t = Tournament(namedConfig());
+    expect([for (var i = 0; i < 4; i++) t.nextTurnPlayer(1)], ['Kim', 'Raj', 'Kim', 'Raj']);
+  });
+
+  test('player table sums credits, best first', () {
+    final t = Tournament(namedConfig());
+    t.creditPlayer(0, 'Sam', 2);
+    t.creditPlayer(1, 'Kim', 3);
+    t.creditPlayer(0, 'Sam', 2);
+    t.creditPlayer(0, 'Ali', 0); // ignored
+    expect([for (final p in t.playerTable) '${p.name}:${p.points}'], ['Sam:4', 'Kim:3']);
   });
 }

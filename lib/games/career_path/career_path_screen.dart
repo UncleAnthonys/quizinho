@@ -21,6 +21,7 @@ class _CareerPathScreenState extends State<CareerPathScreen>
     with TickerProviderStateMixin<CareerPathScreen>, GameScreenSupport<CareerPathScreen> {
   static const _mode = GameModeId.careerPath;
   CareerPathController? _c;
+  late final FaceOffTracker _faces = FaceOffTracker(widget.round);
   bool _empty = false;
 
   @override
@@ -45,7 +46,9 @@ class _CareerPathScreenState extends State<CareerPathScreen>
       return;
     }
     final c = CareerPathController(teamCount: t.teamCount, questions: qs, answerSeconds: t.config.answerSeconds);
+    _faces.sync(c);
     c.addListener(() {
+      _faces.sync(c);
       handleEvent(c.eventSerial, c.lastEvent);
       if (mounted) setState(() {});
     });
@@ -79,6 +82,7 @@ class _CareerPathScreenState extends State<CareerPathScreen>
       commentary: commentaryText,
       timerLabel: c.allRevealed ? 'FINAL CHANCE' : 'NEXT CLUB IN',
       onFinished: () => widget.round.onComplete(c.result()),
+      faceOff: _faces.current,
       question: Column(children: [
         if (!resolved)
           Text(

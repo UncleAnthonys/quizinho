@@ -20,6 +20,7 @@ class _ClubConnectionsScreenState extends State<ClubConnectionsScreen>
     with TickerProviderStateMixin<ClubConnectionsScreen>, GameScreenSupport<ClubConnectionsScreen> {
   static const _mode = GameModeId.clubConnections;
   ClubConnectionsController? _c;
+  late final FaceOffTracker _faces = FaceOffTracker(widget.round);
   bool _empty = false;
   bool _showAll = false;
 
@@ -45,7 +46,9 @@ class _ClubConnectionsScreenState extends State<ClubConnectionsScreen>
       return;
     }
     final c = ClubConnectionsController(teamCount: t.teamCount, questions: qs, answerSeconds: t.config.answerSeconds);
+    _faces.sync(c);
     c.addListener(() {
+      _faces.sync(c);
       handleEvent(c.eventSerial, c.lastEvent);
       if (c.questionIndex != _lastQuestion) {
         _lastQuestion = c.questionIndex;
@@ -87,6 +90,7 @@ class _ClubConnectionsScreenState extends State<ClubConnectionsScreen>
       timerLabel: c.lockedOut.isEmpty ? 'BUZZ IN' : 'STEAL IT',
       allowDispute: true,
       onFinished: () => widget.round.onComplete(c.result()),
+      faceOff: _faces.current,
       question: _ClubsCard(a: q.clubA.name, b: q.clubB.name),
       resolvedDetail: Column(children: [
         Text(
