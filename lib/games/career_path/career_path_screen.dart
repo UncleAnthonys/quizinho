@@ -144,11 +144,10 @@ class _CareerTrail extends StatelessWidget {
                 Text('${idx + 1}', style: AppText.label(14)),
                 const SizedBox(width: 12),
                 Expanded(
-                  child: Text(
-                    s.club.name.toUpperCase(),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: AppText.headline(newest ? 32 : 22),
+                  child: FittedBox(
+                    fit: BoxFit.scaleDown,
+                    alignment: Alignment.centerLeft,
+                    child: Text(s.club.name.toUpperCase(), style: AppText.headline(newest ? 32 : 22)),
                   ),
                 ),
                 if (s.isLoan)

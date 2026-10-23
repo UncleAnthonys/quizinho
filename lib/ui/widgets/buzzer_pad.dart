@@ -115,10 +115,10 @@ class _BuzzerState extends State<_Buzzer> {
                   style: AppText.headline(34, color: active ? on : Palette.muted)),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8),
-                child: Text(widget.name.toUpperCase(),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: AppText.label(15, color: active ? on : Palette.muted)),
+                child: FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: Text(widget.name.toUpperCase(), style: AppText.label(15, color: active ? on : Palette.muted)),
+                ),
               ),
             ]),
           ),

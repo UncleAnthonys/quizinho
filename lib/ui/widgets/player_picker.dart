@@ -93,7 +93,7 @@ class _PlayerPickerState extends State<PlayerPicker> {
     final started = await voice.listen(
       onWords: (words) {
         if (!_keepListening || words.trim().isEmpty) return;
-        _showSpoken(words);
+        if (_voiceNote != 'Hearing you…') setState(() => _voiceNote = 'Hearing you…');
         // Names are checked as the words arrive — a clear match goes straight in.
         final p = widget.index.resolveSpoken([words], partial: true);
         if (p != null) _pick(p);
@@ -108,10 +108,18 @@ class _PlayerPickerState extends State<PlayerPicker> {
     }
   }
 
-  /// Mid-speech: show the words only. Suggestions appear once they pause.
-  void _showSpoken(String words, {bool suggest = false}) {
-    _controller.text = words;
-    setState(() => _results = suggest ? widget.index.searchSpoken(words) : const []);
+  /// After a pause: offer real player names only (never the raw transcript,
+  /// which is often nonsense for unusual names), merged across alternatives.
+  void _suggestFrom(List<String> alternatives) {
+    final seen = <String>{};
+    final merged = <PlayerMatch>[];
+    for (final alt in alternatives) {
+      for (final m in widget.index.searchSpoken(alt, limit: 4)) {
+        if (seen.add(m.player.id)) merged.add(m);
+      }
+    }
+    merged.sort((a, b) => b.score.compareTo(a.score));
+    setState(() => _results = merged.take(4).toList());
   }
 
   void _heard(List<String> alternatives) {
@@ -130,10 +138,8 @@ class _PlayerPickerState extends State<PlayerPicker> {
       return;
     }
     if (alternatives.isNotEmpty) {
-      _showSpoken(alternatives.first, suggest: true);
-      _voiceNote = _results.isEmpty
-          ? 'Heard “${alternatives.first}” — still listening…'
-          : 'Tap the right player — or say it again';
+      _suggestFrom(alternatives);
+      _voiceNote = _results.isEmpty ? 'Didn’t recognise that — say it again or type' : 'Did you mean…? Tap it, or say it again';
     }
     setState(() => _listening = false);
     // Keep the mic open for the whole answer clock.

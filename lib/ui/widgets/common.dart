@@ -146,11 +146,9 @@ class Scoreboard extends StatelessWidget {
                 ),
               ),
               child: Column(mainAxisSize: MainAxisSize.min, children: [
-                Text(
-                  t.teamName(i).toUpperCase(),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: AppText.label(13, color: Palette.text),
+                FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: Text(t.teamName(i).toUpperCase(), style: AppText.label(13, color: Palette.text)),
                 ),
                 Text('${t.scores[i]}', style: AppText.headline(26)),
                 if (extra != null) Text(extra!(i), style: AppText.label(11)),

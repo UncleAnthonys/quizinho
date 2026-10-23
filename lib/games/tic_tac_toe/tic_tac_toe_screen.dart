@@ -251,12 +251,19 @@ class _Board extends StatelessWidget {
             borderRadius: BorderRadius.circular(10),
             border: Border.all(color: Palette.line),
           ),
-          child: Text(
-            club.name.toUpperCase(),
-            textAlign: TextAlign.center,
-            maxLines: 3,
-            overflow: TextOverflow.ellipsis,
-            style: AppText.headline(15, weight: FontWeight.w800),
+          // Wraps onto extra lines, then shrinks if it still won't fit — never cut off.
+          child: LayoutBuilder(
+            builder: (context, box) => FittedBox(
+              fit: BoxFit.scaleDown,
+              child: SizedBox(
+                width: box.maxWidth,
+                child: Text(
+                  club.name.toUpperCase(),
+                  textAlign: TextAlign.center,
+                  style: AppText.headline(15, weight: FontWeight.w800),
+                ),
+              ),
+            ),
           ),
         );
 
