@@ -8,21 +8,22 @@ abstract final class Palette {
   static const card = Color(0xFF0E4631);
   static const cardHigh = Color(0xFF165C41);
   static const line = Color(0x33FFFFFF);
-  /// Brazil canary yellow — the main accent (buttons, highlights, timers).
-  static const yellow = Color(0xFFFFDF00);
+  /// Brazil-shirt gold-yellow — the main accent. Warmer than flag canary so it
+  /// sits on the green pitch instead of fighting it.
+  static const yellow = Color(0xFFFFCC29);
 
-  /// Deeper trophy yellow for bonuses, wildcards and celebrations.
-  static const gold = Color(0xFFFFC400);
+  /// Deeper amber for bonuses, wildcards and celebrations.
+  static const gold = Color(0xFFFFAA00);
 
-  /// Brazil flag blue (logo, Career Path) and a brighter blue for text on green.
-  static const blue = Color(0xFF002776);
-  static const blueBright = Color(0xFF3B7BFF);
+  /// Royal blue (crest, Career Path) and a brighter blue that reads on green.
+  static const blue = Color(0xFF1F4FBF);
+  static const blueBright = Color(0xFF4C8BFF);
   static const danger = Color(0xFFFF4B4B);
   static const text = Color(0xFFF4FAF6);
   static const muted = Color(0xFFA3C4B4);
 
   static const teams = <Color>[
-    Color(0xFF3B7BFF), // Brazil blue (bright)
+    Color(0xFF4C8BFF), // royal blue (bright)
     Color(0xFFFF4B6E), // red
     Color(0xFFFFFFFF), // white
     Color(0xFFB57CFF), // purple
