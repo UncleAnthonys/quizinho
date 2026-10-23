@@ -1,76 +1,94 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 
 import '../../core/theme.dart';
 
-/// Quizinho crest: royal-blue shield with a gold rim, the white band from the
-/// Brazil flag sweeping across, and a gold "Q".
+/// Quizinho club badge: oval crest with the name arched over the top, 2026
+/// underneath, and a split field — Brazil on the left, England on the right.
 class QuizinhoBadge extends StatelessWidget {
   const QuizinhoBadge({super.key, this.size = 150});
 
-  /// Crest height. Width is ~0.88 × height.
+  /// Badge height. Width is 260/320 of the height.
   final double size;
 
   @override
   Widget build(BuildContext context) =>
-      CustomPaint(size: Size(size * 150 / 170, size), painter: _CrestPainter());
+      CustomPaint(size: Size(size * 260 / 320, size), painter: _BadgePainter());
 }
 
-class _CrestPainter extends CustomPainter {
-  static Path _shield(Rect r) {
-    final x = r.left, y = r.top, w = r.width, h = r.height, c = 0.06 * w;
-    return Path()
-      ..moveTo(x, y + c)
-      ..quadraticBezierTo(x, y, x + c, y)
-      ..lineTo(x + w - c, y)
-      ..quadraticBezierTo(x + w, y, x + w, y + c)
-      ..lineTo(x + w, y + 0.56 * h)
-      ..quadraticBezierTo(x + w, y + 0.86 * h, x + w / 2, y + h)
-      ..quadraticBezierTo(x, y + 0.86 * h, x, y + 0.56 * h)
-      ..close();
-  }
+class _BadgePainter extends CustomPainter {
+  static const _navy = Color(0xFF0F235A);
+  static const _green = Color(0xFF009C3B);
+  static const _red = Color(0xFFCE1124);
 
   @override
   void paint(Canvas canvas, Size size) {
-    final w = size.width, h = size.height;
-    final outer = _shield(Offset.zero & size);
-    final b = 0.055 * w;
-    final inner = _shield(Rect.fromLTWH(b, b, w - 2 * b, h - 2 * b * 1.15));
+    final k = size.height / 320; // design units → pixels
+    final c = size.center(Offset.zero);
+    Rect oval(double rx, double ry) => Rect.fromCenter(center: c, width: 2 * rx * k, height: 2 * ry * k);
 
-    canvas.drawShadow(outer, Colors.black, 10, false);
-    canvas.drawPath(outer, Paint()..color = Palette.yellow);
-    canvas.drawPath(inner, Paint()..color = Palette.blue);
+    canvas.drawShadow(Path()..addOval(oval(122, 152)), Colors.black, 10, false);
+    canvas.drawOval(oval(122, 152), Paint()..color = Palette.yellow); // gold rim
+    canvas.drawOval(oval(116, 146), Paint()..color = _navy); // name ring
+    canvas.drawOval(oval(84, 112), Paint()..color = Palette.yellow); // inner rim
 
-    // White band, clipped to the blue field.
-    final band = Path()
-      ..moveTo(b, 0.58 * h)
-      ..quadraticBezierTo(w / 2, 0.38 * h, w - b, 0.50 * h)
-      ..lineTo(w - b, 0.58 * h)
-      ..quadraticBezierTo(w / 2, 0.46 * h, b, 0.66 * h)
-      ..close();
+    // Split field, clipped to the inner oval.
+    final field = oval(80, 108);
     canvas.save();
-    canvas.clipPath(inner);
-    canvas.drawPath(band, Paint()..color = Colors.white);
+    canvas.clipPath(Path()..addOval(field));
+    // Left: Brazil
+    canvas.drawRect(Rect.fromLTRB(field.left, field.top, c.dx, field.bottom), Paint()..color = _green);
+    final lx = c.dx - field.width / 4 - 2 * k;
+    canvas.drawPath(
+      Path()
+        ..moveTo(lx, c.dy - 62 * k)
+        ..lineTo(lx + 34 * k, c.dy)
+        ..lineTo(lx, c.dy + 62 * k)
+        ..lineTo(lx - 34 * k, c.dy)
+        ..close(),
+      Paint()..color = Palette.yellow,
+    );
+    canvas.drawCircle(Offset(lx, c.dy), 20 * k, Paint()..color = Palette.blue);
+    // Right: England (St George's cross)
+    canvas.drawRect(Rect.fromLTRB(c.dx, field.top, field.right, field.bottom), Paint()..color = Colors.white);
+    final rx = c.dx + field.width / 4;
+    canvas.drawRect(Rect.fromLTRB(rx - 9 * k, field.top, rx + 9 * k, field.bottom), Paint()..color = _red);
+    canvas.drawRect(Rect.fromLTRB(c.dx, c.dy - 9 * k, field.right, c.dy + 9 * k), Paint()..color = _red);
+    // Gold divider
+    canvas.drawRect(Rect.fromLTRB(c.dx - 2 * k, field.top, c.dx + 2 * k, field.bottom), Paint()..color = Palette.yellow);
     canvas.restore();
 
-    // Gold Q with a blue keyline so it cuts cleanly over the band.
-    final fontSize = 0.54 * h;
-    TextPainter q(Paint fg) => TextPainter(
-          text: TextSpan(
-            text: 'Q',
-            style: TextStyle(fontFamily: AppText.body, fontWeight: FontWeight.w800, fontSize: fontSize, height: 1, foreground: fg),
-          ),
-          textDirection: TextDirection.ltr,
-        )..layout();
-    final stroke = q(Paint()
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 0.035 * h
-      ..strokeJoin = StrokeJoin.round
-      ..color = Palette.blue);
-    final fill = q(Paint()..color = Palette.yellow);
-    final at = Offset((w - fill.width) / 2 + 0.01 * w, 0.17 * h);
-    stroke.paint(canvas, at);
-    fill.paint(canvas, at);
+    _arcText(canvas, c, k, 'QUIZINHO', centerDeg: -90, spreadDeg: 92, size: 30, top: true);
+    _arcText(canvas, c, k, '2026', centerDeg: 90, spreadDeg: 40, size: 32, top: false);
   }
+
+  /// Letters placed one by one around the ring, upright to the reader.
+  void _arcText(Canvas canvas, Offset c, double k, String text,
+      {required double centerDeg, required double spreadDeg, required double size, required bool top}) {
+    final n = text.length;
+    for (var i = 0; i < n; i++) {
+      final t = n == 1 ? 0.0 : i / (n - 1) - 0.5;
+      final deg = centerDeg + spreadDeg * t * (top ? 1 : -1);
+      final rad = deg * 3.141592653589793 / 180;
+      final pos = c + Offset(100 * k * _cos(rad), (top ? 128 : 129) * k * _sin(rad));
+      final tp = TextPainter(
+        text: TextSpan(
+          text: text[i],
+          style: TextStyle(fontFamily: AppText.display, fontWeight: FontWeight.w900, fontSize: size * k, color: Colors.white, height: 1),
+        ),
+        textDirection: TextDirection.ltr,
+      )..layout();
+      canvas.save();
+      canvas.translate(pos.dx, pos.dy);
+      canvas.rotate((top ? deg + 90 : deg - 90) * 3.141592653589793 / 180);
+      tp.paint(canvas, Offset(-tp.width / 2, -tp.height / 2));
+      canvas.restore();
+    }
+  }
+
+  static double _sin(double r) => math.sin(r);
+  static double _cos(double r) => math.cos(r);
 
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
