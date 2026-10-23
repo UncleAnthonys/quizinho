@@ -54,6 +54,20 @@ class RoundIntroScreen extends StatelessWidget {
                       Expanded(child: Text(rule, style: const TextStyle(fontSize: 18, height: 1.35))),
                     ]),
                   ),
+                if (mode == GameModeId.clubConnections || mode == GameModeId.careerPath)
+                  const Padding(
+                    padding: EdgeInsets.only(bottom: 10),
+                    child: Row(children: [
+                      Icon(Icons.screen_rotation_rounded, color: Palette.yellow),
+                      SizedBox(width: 10),
+                      Expanded(
+                        child: Text(
+                          'Sat opposite each other? Turn the phone sideways and lay it flat — a buzzer at each end.',
+                          style: TextStyle(fontSize: 15, color: Palette.muted, height: 1.35),
+                        ),
+                      ),
+                    ]),
+                  ),
                 const SizedBox(height: 6),
                 Container(
                   padding: const EdgeInsets.all(14),

@@ -28,6 +28,7 @@ class _ClubConnectionsScreenState extends State<ClubConnectionsScreen>
   @override
   void initState() {
     super.initState();
+    allowTableMode();
     _load();
   }
 
@@ -99,7 +100,7 @@ class _ClubConnectionsScreenState extends State<ClubConnectionsScreen>
         services.sound.play(Sfx.whistle);
         setState(_faces.ready);
       },
-      question: _ClubsCard(a: q.clubA.name, b: q.clubB.name),
+      question: (compact) => _ClubsCard(a: q.clubA.name, b: q.clubB.name, compact: compact),
       resolvedDetail: Column(children: [
         Text(
           answers.length == 1 ? 'THE ONLY ANSWER IN OUR DATABASE' : '${answers.length} ANSWERS IN OUR DATABASE',
@@ -125,12 +126,39 @@ class _ClubConnectionsScreenState extends State<ClubConnectionsScreen>
 }
 
 class _ClubsCard extends StatelessWidget {
-  const _ClubsCard({required this.a, required this.b});
+  const _ClubsCard({required this.a, required this.b, this.compact = false});
   final String a;
   final String b;
 
+  /// Table mode: both clubs on one line.
+  final bool compact;
+
   @override
-  Widget build(BuildContext context) => Padding(
+  Widget build(BuildContext context) => compact
+      ? Padding(
+          padding: const EdgeInsets.fromLTRB(8, 4, 8, 4),
+          child: Container(
+            width: double.infinity,
+            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+            decoration: BoxDecoration(
+              color: Colors.black.withValues(alpha: 0.3),
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(color: Palette.line),
+            ),
+            child: FittedBox(
+              fit: BoxFit.scaleDown,
+              child: Row(mainAxisSize: MainAxisSize.min, children: [
+                Text(a.toUpperCase(), style: AppText.headline(40)),
+                const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 12),
+                  child: Icon(Icons.swap_horiz_rounded, color: Palette.yellow, size: 36),
+                ),
+                Text(b.toUpperCase(), style: AppText.headline(40)),
+              ]),
+            ),
+          ),
+        )
+      : Padding(
         padding: const EdgeInsets.fromLTRB(16, 6, 16, 8),
         child: Container(
           width: double.infinity,

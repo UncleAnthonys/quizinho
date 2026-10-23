@@ -28,6 +28,7 @@ class _CareerPathScreenState extends State<CareerPathScreen>
   @override
   void initState() {
     super.initState();
+    allowTableMode();
     _load();
   }
 
@@ -91,13 +92,13 @@ class _CareerPathScreenState extends State<CareerPathScreen>
         services.sound.play(Sfx.whistle);
         setState(_faces.ready);
       },
-      question: Column(children: [
+      question: (compact) => Column(children: [
         if (!resolved)
           Text(
             'WORTH ${c.pointsAvailable * widget.round.multiplier} ${c.pointsAvailable * widget.round.multiplier == 1 ? 'POINT' : 'POINTS'}',
-            style: AppText.headline(24, color: Palette.gold),
+            style: AppText.headline(compact ? 18 : 24, color: Palette.gold),
           ),
-        _CareerTrail(spells: c.current.spells, shown: shown, maxHeight: resolved ? 170 : 210),
+        _CareerTrail(spells: c.current.spells, shown: shown, maxHeight: compact ? 130 : (resolved ? 170 : 210)),
       ]),
       resolvedDetail: Text(
         'It was ${c.current.player.name}.',

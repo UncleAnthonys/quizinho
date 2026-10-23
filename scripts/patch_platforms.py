@@ -20,8 +20,13 @@ def patch_ios() -> None:
     with plist_path.open("rb") as f:
         p = plistlib.load(f)
     p["CFBundleDisplayName"] = DISPLAY_NAME
-    # Portrait-only party game. UIRequiresFullScreen lets iPad accept that.
-    p["UISupportedInterfaceOrientations"] = ["UIInterfaceOrientationPortrait"]
+    # Portrait app; buzzer games unlock landscape ("table mode") from Dart.
+    # UIRequiresFullScreen lets iPad accept the restricted set.
+    p["UISupportedInterfaceOrientations"] = [
+        "UIInterfaceOrientationPortrait",
+        "UIInterfaceOrientationLandscapeLeft",
+        "UIInterfaceOrientationLandscapeRight",
+    ]
     p["UISupportedInterfaceOrientations~ipad"] = [
         "UIInterfaceOrientationPortrait",
         "UIInterfaceOrientationPortraitUpsideDown",
@@ -50,8 +55,8 @@ def patch_android() -> None:
     if 'android.speech.RecognitionService' not in s:
         q = '    <queries>\n        <intent>\n            <action android:name="android.speech.RecognitionService" />\n        </intent>\n'
         s = s.replace('    <queries>\n', q, 1) if '    <queries>\n' in s else s.replace('</manifest>', q + '    </queries>\n</manifest>', 1)
-    if 'android:screenOrientation' not in s:
-        s = s.replace('<activity\n', '<activity\n            android:screenOrientation="portrait"\n', 1)
+    # Orientation is controlled from Dart (portrait, plus landscape in buzzer games).
+    s = s.replace('            android:screenOrientation="portrait"\n', '')
     manifest.write_text(s, encoding="utf-8")
     print("patched", manifest.relative_to(ROOT))
 

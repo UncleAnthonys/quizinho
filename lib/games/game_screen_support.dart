@@ -1,6 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter/scheduler.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:flutter/services.dart' show DeviceOrientation, SystemChrome;
 import 'package:flutter/widgets.dart';
 
 import '../core/app_services.dart';
@@ -89,7 +91,23 @@ mixin GameScreenSupport<W extends StatefulWidget> on State<W>, TickerProviderSta
     });
   }
 
+  bool _tableMode = false;
+
+  /// Buzzer games: let the phone turn sideways for table mode (the rest of
+  /// the app stays portrait). Browsers rotate on their own.
+  void allowTableMode() {
+    _tableMode = true;
+    if (!kIsWeb) {
+      SystemChrome.setPreferredOrientations([
+        DeviceOrientation.portraitUp,
+        DeviceOrientation.landscapeLeft,
+        DeviceOrientation.landscapeRight,
+      ]);
+    }
+  }
+
   void disposeGameSupport() {
+    if (_tableMode && !kIsWeb) SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
     _ticker?.dispose();
     _commentaryTimer?.cancel();
   }

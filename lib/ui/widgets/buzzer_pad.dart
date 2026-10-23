@@ -39,7 +39,7 @@ class BuzzerPad extends StatelessWidget {
                 Expanded(
                   child: Padding(
                     padding: const EdgeInsets.all(6),
-                    child: _Buzzer(
+                    child: TeamBuzzer(
                       name: faceOff == null
                           ? tournament.teamName(team)
                           : '${faceOff!.nameFor(team)} · ${tournament.teamName(team)}',
@@ -57,15 +57,20 @@ class BuzzerPad extends StatelessWidget {
   }
 }
 
-class _Buzzer extends StatefulWidget {
-  const _Buzzer({
+/// One team's buzzer. Fires on touch-down for zero-lag racing.
+class TeamBuzzer extends StatefulWidget {
+  const TeamBuzzer({
+    super.key,
     required this.name,
     required this.colorIndex,
     required this.enabled,
     required this.locked,
     required this.onBuzz,
+    this.quarterTurns = 0,
   });
 
+  /// Rotates the label to face a player sitting at the end of the table.
+  final int quarterTurns;
   final String name;
   final int colorIndex;
   final bool enabled;
@@ -73,10 +78,10 @@ class _Buzzer extends StatefulWidget {
   final VoidCallback onBuzz;
 
   @override
-  State<_Buzzer> createState() => _BuzzerState();
+  State<TeamBuzzer> createState() => TeamBuzzerState();
 }
 
-class _BuzzerState extends State<_Buzzer> {
+class TeamBuzzerState extends State<TeamBuzzer> {
   bool _down = false;
 
   @override
@@ -108,7 +113,11 @@ class _BuzzerState extends State<_Buzzer> {
             border: Border.all(color: Colors.white.withValues(alpha: active ? 0.5 : 0.1), width: 3),
           ),
           child: Center(
-            child: Column(mainAxisSize: MainAxisSize.min, children: [
+            child: RotatedBox(
+              quarterTurns: widget.quarterTurns,
+              child: FittedBox(
+                fit: BoxFit.scaleDown,
+                child: Column(mainAxisSize: MainAxisSize.min, children: [
               Icon(widget.locked ? Icons.lock : Icons.touch_app, color: active ? on : Palette.muted, size: 34),
               const SizedBox(height: 4),
               Text(widget.locked ? 'LOCKED OUT' : 'BUZZ',
@@ -120,7 +129,9 @@ class _BuzzerState extends State<_Buzzer> {
                   child: Text(widget.name.toUpperCase(), style: AppText.label(15, color: active ? on : Palette.muted)),
                 ),
               ),
-            ]),
+                ]),
+              ),
+            ),
           ),
         ),
       ),

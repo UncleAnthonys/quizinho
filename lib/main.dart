@@ -70,7 +70,8 @@ class _PhoneFrame extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.sizeOf(context);
-    if (size.width <= 520) return child;
+    // Phones (either way up) fill the screen; only a laptop-sized window gets the frame.
+    if (size.width <= 520 || size.height < 600) return child;
     final width = 430.0;
     final height = size.height > 940 ? 900.0 : size.height - 24;
     return ColoredBox(

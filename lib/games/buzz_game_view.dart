@@ -10,8 +10,12 @@ import '../ui/widgets/player_picker.dart';
 import 'buzz_race_controller.dart';
 import 'game_screen_support.dart';
 
-/// Layout shared by buzzer games (Club Connections, Career Path):
-/// scoreboard → question → timer → buzzers / answer box / result.
+/// Layout shared by buzzer games (Club Connections, Career Path).
+///
+/// Portrait: scoreboard → question → timer → buzzers / answer box / result.
+/// Landscape ("table mode"): phone flat between two players — each team's
+/// buzzer runs down a short end facing its player, the question sits in the
+/// middle. Switches automatically when the phone is turned.
 class BuzzGameView extends StatelessWidget {
   const BuzzGameView({
     super.key,
@@ -30,7 +34,8 @@ class BuzzGameView extends StatelessWidget {
 
   final RoundContext round;
   final BuzzRaceController controller;
-  final Widget question;
+  /// The question, drawn [compact] in table mode where height is tight.
+  final Widget Function(bool compact) question;
   final Widget resolvedDetail;
   final String timerLabel;
   final String? commentary;
@@ -49,6 +54,8 @@ class BuzzGameView extends StatelessWidget {
     final c = controller;
     final t = round.tournament;
     final services = AppScope.of(context);
+    final size = MediaQuery.sizeOf(context);
+    if (size.width > size.height) return _tableMode(context, services);
     return Scaffold(
       resizeToAvoidBottomInset: true,
       body: PitchBackground(
@@ -83,7 +90,7 @@ class BuzzGameView extends StatelessWidget {
             CommentaryBanner(text: commentary),
             if (faceOff != null && (c.phase == BuzzPhase.open || c.phase == BuzzPhase.answering))
               _FaceOffBanner(faceOff: faceOff!, tournament: t),
-            question,
+            question(false),
             if (c.phase == BuzzPhase.open || c.phase == BuzzPhase.answering)
               Padding(
                 padding: const EdgeInsets.fromLTRB(18, 4, 18, 4),
@@ -95,6 +102,100 @@ class BuzzGameView extends StatelessWidget {
               ),
             Expanded(child: _bottom(context, services)),
             ],
+          ]),
+        ),
+      ),
+    );
+  }
+
+  /// Landscape: buzzers down both short ends, everything else in the middle.
+  Widget _tableMode(BuildContext context, AppServices services) {
+    final c = controller;
+    final t = round.tournament;
+    final left = [for (var i = 0; i < t.teamCount; i += 2) i];
+    final right = [for (var i = 1; i < t.teamCount; i += 2) i];
+
+    Widget side(List<int> teams, int quarterTurns) => SizedBox(
+          width: 118,
+          child: Column(children: [
+            for (final team in teams)
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.all(5),
+                  child: TeamBuzzer(
+                    name: faceOff == null
+                        ? t.teamName(team)
+                        : '${faceOff!.nameFor(team)} · ${t.teamName(team)}',
+                    colorIndex: t.config.teams[team].colorIndex,
+                    enabled: c.canBuzz(team) && !awaitingFaceOff,
+                    locked: c.lockedOut.contains(team),
+                    onBuzz: () => c.buzz(team),
+                    quarterTurns: quarterTurns,
+                  ),
+                ),
+              ),
+          ]),
+        );
+
+    Widget centre() {
+      if (awaitingFaceOff && faceOff != null) {
+        return _FaceOffIntro(faceOff: faceOff!, tournament: t, questionNumber: c.questionIndex + 1, onReady: onFaceOffReady);
+      }
+      return Column(children: [
+        // compact score line
+        Padding(
+          padding: const EdgeInsets.fromLTRB(4, 4, 4, 2),
+          child: Row(children: [
+            Text(c.mode.title.toUpperCase(), style: AppText.label(13, color: Palette.yellow)),
+            const SizedBox(width: 8),
+            Text('Q ${c.questionIndex + 1}/${c.questions.length}', style: AppText.label(13)),
+            if (round.multiplier > 1) ...[
+              const SizedBox(width: 8),
+              Text('x${round.multiplier}', style: AppText.label(13, color: Palette.gold)),
+            ],
+            const Spacer(),
+            for (var i = 0; i < t.teamCount; i++)
+              Padding(
+                padding: const EdgeInsets.only(left: 6),
+                child: TeamChip(name: '${t.teamName(i)} ${t.scores[i]}', colorIndex: t.config.teams[i].colorIndex, size: 13),
+              ),
+          ]),
+        ),
+        CommentaryBanner(text: commentary),
+        if (faceOff != null && (c.phase == BuzzPhase.open || c.phase == BuzzPhase.answering))
+          _FaceOffBanner(faceOff: faceOff!, tournament: t),
+        Expanded(
+          child: c.phase == BuzzPhase.open
+              ? SingleChildScrollView(
+                  child: Column(children: [
+                    question(true),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(12, 2, 12, 0),
+                      child: TimerBar(fraction: c.secondsLeft / c.phaseSeconds, seconds: c.secondsLeft, height: 10),
+                    ),
+                    TextButton(onPressed: c.giveUp, child: Text('NOBODY KNOWS — SKIP', style: AppText.label(13))),
+                  ]),
+                )
+              : Column(children: [
+                  if (c.phase == BuzzPhase.answering)
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(12, 2, 12, 0),
+                      child: TimerBar(fraction: c.secondsLeft / c.phaseSeconds, seconds: c.secondsLeft, height: 10),
+                    ),
+                  Expanded(child: _bottom(context, services)),
+                ]),
+        ),
+      ]);
+    }
+
+    return Scaffold(
+      resizeToAvoidBottomInset: true,
+      body: PitchBackground(
+        child: SafeArea(
+          child: Row(children: [
+            side(left, 1),
+            Expanded(child: centre()),
+            if (right.isNotEmpty) side(right, 3),
           ]),
         ),
       ),
