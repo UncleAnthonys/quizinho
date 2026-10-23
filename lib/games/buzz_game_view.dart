@@ -24,6 +24,8 @@ class BuzzGameView extends StatelessWidget {
     required this.onFinished,
     this.allowDispute = false,
     this.faceOff,
+    this.awaitingFaceOff = false,
+    this.onFaceOffReady,
   });
 
   final RoundContext round;
@@ -37,6 +39,10 @@ class BuzzGameView extends StatelessWidget {
 
   /// Set when this question is a head-to-head between named players.
   final FaceOff? faceOff;
+
+  /// Show the face-off intro instead of the question until [onFaceOffReady].
+  final bool awaitingFaceOff;
+  final VoidCallback? onFaceOffReady;
 
   @override
   Widget build(BuildContext context) {
@@ -64,6 +70,16 @@ class BuzzGameView extends StatelessWidget {
                   ),
               ]),
             ),
+            if (awaitingFaceOff && faceOff != null)
+              Expanded(
+                child: _FaceOffIntro(
+                  faceOff: faceOff!,
+                  tournament: t,
+                  questionNumber: c.questionIndex + 1,
+                  onReady: onFaceOffReady,
+                ),
+              )
+            else ...[
             CommentaryBanner(text: commentary),
             if (faceOff != null && (c.phase == BuzzPhase.open || c.phase == BuzzPhase.answering))
               _FaceOffBanner(faceOff: faceOff!, tournament: t),
@@ -78,6 +94,7 @@ class BuzzGameView extends StatelessWidget {
                 ]),
               ),
             Expanded(child: _bottom(context, services)),
+            ],
           ]),
         ),
       ),
@@ -211,6 +228,70 @@ class _FaceOffBanner extends StatelessWidget {
   }
 }
 
+/// Full-screen warning before a face-off question, so the two named players
+/// can step up before anything is revealed.
+class _FaceOffIntro extends StatelessWidget {
+  const _FaceOffIntro({
+    required this.faceOff,
+    required this.tournament,
+    required this.questionNumber,
+    required this.onReady,
+  });
+  final FaceOff faceOff;
+  final Tournament tournament;
+  final int questionNumber;
+  final VoidCallback? onReady;
+
+  @override
+  Widget build(BuildContext context) {
+    final teams = faceOff.players.keys.toList()..sort();
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(20, 8, 20, 20),
+      child: Column(children: [
+        const Spacer(),
+        Flexible(
+          flex: 8,
+          child: FittedBox(
+            fit: BoxFit.scaleDown,
+            child: Column(mainAxisSize: MainAxisSize.min, children: [
+        TweenAnimationBuilder<double>(
+          tween: Tween(begin: 0.6, end: 1),
+          duration: const Duration(milliseconds: 600),
+          curve: Curves.elasticOut,
+          builder: (context, v, child) => Transform.scale(scale: v, child: child),
+          child: Column(children: [
+            const Icon(Icons.flash_on_rounded, color: Palette.danger, size: 56),
+            Text('FACE-OFF', style: AppText.headline(64, color: Palette.danger)),
+          ]),
+        ),
+        Text('QUESTION $questionNumber', style: AppText.label(15)),
+        const SizedBox(height: 24),
+        for (final (i, team) in teams.indexed) ...[
+          if (i > 0)
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8),
+              child: Text('V', style: AppText.headline(34, color: Palette.muted)),
+            ),
+          TeamChip(name: faceOff.nameFor(team), colorIndex: tournament.config.teams[team].colorIndex, size: 40),
+          const SizedBox(height: 4),
+          Text(tournament.teamName(team).toUpperCase(), style: AppText.label(14)),
+        ],
+        const SizedBox(height: 24),
+        const Text(
+          'Step up to the phone.\nEveryone else — hands off, no helping!',
+          textAlign: TextAlign.center,
+          style: TextStyle(fontSize: 17, height: 1.4, color: Palette.text),
+        ),
+            ]),
+          ),
+        ),
+        const Spacer(),
+        BigButton(label: 'Ready — show question', icon: Icons.visibility_rounded, onPressed: onReady),
+      ]),
+    );
+  }
+}
+
 /// Per-question face-off state for buzzer games: rolls a face-off when a new
 /// question starts and credits the named player who scores.
 class FaceOffTracker {
@@ -220,11 +301,17 @@ class FaceOffTracker {
   int _question = -1;
   int _credited = -1;
 
+  /// True while the face-off intro is showing: question hidden, clock frozen.
+  bool awaitingReady = false;
+
+  void ready() => awaitingReady = false;
+
   /// Call once after creating the controller, then on every change.
   void sync(BuzzRaceController c) {
     if (c.questionIndex != _question) {
       _question = c.questionIndex;
       current = round.tournament.maybeFaceOff();
+      awaitingReady = current != null;
     }
     final o = c.outcome;
     final f = current;

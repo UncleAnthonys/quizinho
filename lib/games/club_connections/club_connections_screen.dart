@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../core/sound_service.dart';
 import '../../core/theme.dart';
 import '../../data/models.dart';
 import '../../domain/game_mode.dart';
@@ -57,7 +58,9 @@ class _ClubConnectionsScreenState extends State<ClubConnectionsScreen>
       if (mounted) setState(() {});
     });
     setState(() => _c = c);
-    startClock(c.advance);
+    startClock((dt) {
+      if (!_faces.awaitingReady) c.advance(dt);
+    });
   }
 
   int _lastQuestion = 0;
@@ -91,6 +94,11 @@ class _ClubConnectionsScreenState extends State<ClubConnectionsScreen>
       allowDispute: true,
       onFinished: () => widget.round.onComplete(c.result()),
       faceOff: _faces.current,
+      awaitingFaceOff: _faces.awaitingReady,
+      onFaceOffReady: () {
+        services.sound.play(Sfx.whistle);
+        setState(_faces.ready);
+      },
       question: _ClubsCard(a: q.clubA.name, b: q.clubB.name),
       resolvedDetail: Column(children: [
         Text(

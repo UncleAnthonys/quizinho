@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../core/sound_service.dart';
 import '../../core/theme.dart';
 import '../../data/models.dart';
 import '../../domain/game_mode.dart';
@@ -53,7 +54,9 @@ class _CareerPathScreenState extends State<CareerPathScreen>
       if (mounted) setState(() {});
     });
     setState(() => _c = c);
-    startClock(c.advance);
+    startClock((dt) {
+      if (!_faces.awaitingReady) c.advance(dt);
+    });
   }
 
   @override
@@ -83,6 +86,11 @@ class _CareerPathScreenState extends State<CareerPathScreen>
       timerLabel: c.allRevealed ? 'FINAL CHANCE' : 'NEXT CLUB IN',
       onFinished: () => widget.round.onComplete(c.result()),
       faceOff: _faces.current,
+      awaitingFaceOff: _faces.awaitingReady,
+      onFaceOffReady: () {
+        services.sound.play(Sfx.whistle);
+        setState(_faces.ready);
+      },
       question: Column(children: [
         if (!resolved)
           Text(
