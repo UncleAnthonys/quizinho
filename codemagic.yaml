@@ -1,0 +1,55 @@
+# Cloud iOS build → TestFlight. No local Xcode needed.
+#
+# Before the first build (see docs/SETUP_IPHONE.md):
+#   1. In Codemagic, add an App Store Connect API key named exactly
+#      "Quizinho ASC key" (Team/Personal settings → Integrations → Developer Portal).
+#   2. Replace APP_STORE_APPLE_ID below with your app's numeric Apple ID.
+#   3. If you change bundle_identifier, change ORG in scripts/bootstrap_platforms.sh to match.
+
+workflows:
+  ios-testflight:
+    name: iOS → TestFlight
+    max_build_duration: 45
+    instance_type: mac_mini_m2
+    integrations:
+      app_store_connect: Quizinho ASC key
+    environment:
+      ios_signing:
+        distribution_type: app_store
+        bundle_identifier: com.littlefortstudios.quizinho
+      vars:
+        APP_STORE_APPLE_ID: "0000000000" # ← replace with the number from App Store Connect → App Information
+      flutter: stable
+      xcode: latest
+      cocoapods: default
+    triggering:
+      events:
+        - push
+      branch_patterns:
+        - pattern: main
+          include: true
+    scripts:
+      - name: Platform folders (if missing)
+        script: bash scripts/bootstrap_platforms.sh
+      - name: Get packages
+        script: flutter pub get
+      - name: Analyze and test
+        script: |
+          flutter analyze --no-fatal-infos
+          flutter test
+      - name: Set up code signing
+        script: xcode-project use-profiles
+      - name: Build IPA
+        script: |
+          LATEST=$(app-store-connect get-latest-testflight-build-number "$APP_STORE_APPLE_ID" 2>/dev/null || echo 0)
+          echo "Latest TestFlight build: $LATEST"
+          flutter build ipa --release \
+            --build-number=$((LATEST + 1)) \
+            --export-options-plist=/Users/builder/export_options.plist
+    artifacts:
+      - build/ios/ipa/*.ipa
+      - /tmp/xcodebuild_logs/*.log
+    publishing:
+      app_store_connect:
+        auth: integration
+        submit_to_testflight: true

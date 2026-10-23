@@ -1,0 +1,50 @@
+# Free checks on every push: data validation, analyzer, unit/widget tests,
+# and a real Android compile (catches build errors without a Mac).
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Validate football data
+        run: python3 data_pipeline/build_db.py --check
+
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - name: Platform folders (if not committed yet)
+        run: bash scripts/bootstrap_platforms.sh
+
+      - run: flutter pub get
+
+      - name: Analyze
+        run: flutter analyze --no-fatal-infos
+
+      - name: Test
+        run: flutter test
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Build Android APK (compile check + installable artifact)
+        run: flutter build apk --debug
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: quizinho-debug-apk
+          path: build/app/outputs/flutter-apk/app-debug.apk
+          retention-days: 7

@@ -1,0 +1,72 @@
+/// Every game the wheel can land on. Adding a game = add a value here, a
+/// controller + screen under lib/games/, and a case in GameLauncher.
+enum GameModeId {
+  clubConnections(
+    title: 'Club Connections',
+    tagline: 'Name a player who played for both clubs',
+    playable: true,
+    rules: [
+      'Two clubs appear. Hit your buzzer as soon as you know a player who played for both.',
+      'Get it right: 2 points. Get it wrong: you’re locked out and the others can steal.',
+      'Name a deep cut nobody expected for a bonus point.',
+    ],
+    whoPlays: 'One player from each team on the buzzers. Swap players each question.',
+  ),
+  careerPath(
+    title: 'Career Path',
+    tagline: 'Guess the player from their clubs',
+    playable: true,
+    rules: [
+      'Clubs appear one at a time, in career order.',
+      'Buzz as early as you dare: 5 points on the first clue, dropping each reveal.',
+      'Wrong answers lock your team out of that player.',
+    ],
+    whoPlays: 'Whole teams can confer — but only the buzzer counts.',
+  ),
+  startingXi(
+    title: 'Starting XI Bomb',
+    tagline: 'Name the line-up before the bomb goes off',
+    playable: true,
+    rules: [
+      'Name one player from the starting XI, then pass the phone.',
+      'Wrong answer or time up: the bomb goes off and you lose a life.',
+      '1 point per player named. Last team standing (or most named) takes a 3-point bonus.',
+    ],
+    whoPlays: 'Teams take turns. Pass the phone when told.',
+  ),
+  wildcard(
+    title: 'Wildcard',
+    tagline: 'Random game. Double points.',
+    playable: true,
+    rules: ['A random game, worth DOUBLE points.'],
+    whoPlays: 'Whatever the wildcard decides.',
+  ),
+  whoAmI(title: 'Who Am I?', tagline: 'Coming soon', playable: false),
+  headsUp(title: 'Football Heads Up', tagline: 'Coming soon', playable: false),
+  taboo(title: 'Football Taboo', tagline: 'Coming soon', playable: false);
+
+  const GameModeId({
+    required this.title,
+    required this.tagline,
+    required this.playable,
+    this.rules = const [],
+    this.whoPlays = '',
+  });
+
+  final String title;
+  final String tagline;
+  final bool playable;
+  final List<String> rules;
+  final String whoPlays;
+
+  /// Real games (not the wildcard wrapper) available today.
+  static List<GameModeId> get concreteGames =>
+      values.where((m) => m.playable && m != GameModeId.wildcard).toList();
+
+  static GameModeId? fromName(String name) {
+    for (final m in values) {
+      if (m.name == name) return m;
+    }
+    return null;
+  }
+}

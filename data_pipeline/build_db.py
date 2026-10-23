@@ -1,0 +1,314 @@
+"""Build Quizinho's bundled football database.
+
+    python3 data_pipeline/build_db.py            # build from seed/
+    python3 data_pipeline/build_db.py --check    # validate only
+
+Reads data_pipeline/seed/*.json, validates it, generates Club Connections
+and Career Path challenges, and writes:
+
+    assets/db/football.db               SQLite, opened read-only by the app
+    assets/db/football_db_version.txt   integer; app re-copies the DB when it changes
+
+Rules for "played for a club" (applied here, so every game mode agrees):
+  * Only senior first-team spells are stored. Youth, academy and B teams
+    are never entered, so they can never count.
+  * Loan spells count (they are real first-team football) and are flagged.
+  * Signed-but-never-played transfers must not be entered.
+  * A spell is game-eligible only if its source is verified, OR the build is
+    run with --allow-unverified (the default while we are on demo data).
+"""
+
+from __future__ import annotations
+
+import argparse
+import datetime as dt
+import itertools
+import json
+import pathlib
+import sqlite3
+import sys
+
+ROOT = pathlib.Path(__file__).resolve().parent
+SEED = ROOT / "seed"
+ASSETS = ROOT.parent / "assets" / "db"
+
+SCHEMA = """
+CREATE TABLE meta (key TEXT PRIMARY KEY, value TEXT NOT NULL);
+CREATE TABLE clubs (
+  id TEXT PRIMARY KEY, name TEXT NOT NULL, country TEXT, fame INTEGER NOT NULL,
+  wikidata_id TEXT
+);
+CREATE TABLE club_aliases (club_id TEXT NOT NULL REFERENCES clubs(id), alias TEXT NOT NULL);
+CREATE TABLE players (
+  id TEXT PRIMARY KEY, name TEXT NOT NULL, nationality TEXT, position TEXT,
+  fame INTEGER NOT NULL, verified INTEGER NOT NULL DEFAULT 0, source TEXT NOT NULL,
+  wikidata_id TEXT
+);
+CREATE TABLE player_aliases (player_id TEXT NOT NULL REFERENCES players(id), alias TEXT NOT NULL);
+CREATE TABLE career_spells (
+  player_id TEXT NOT NULL REFERENCES players(id), seq INTEGER NOT NULL,
+  club_id TEXT NOT NULL REFERENCES clubs(id), start_year INTEGER, end_year INTEGER,
+  is_loan INTEGER NOT NULL DEFAULT 0, PRIMARY KEY (player_id, seq)
+);
+CREATE TABLE matches (
+  id TEXT PRIMARY KEY, title TEXT NOT NULL, competition TEXT, match_date TEXT,
+  home TEXT NOT NULL, away TEXT NOT NULL, score TEXT, target_team TEXT NOT NULL,
+  fame INTEGER NOT NULL, difficulty INTEGER NOT NULL,
+  verified INTEGER NOT NULL DEFAULT 0, source TEXT NOT NULL
+);
+CREATE TABLE lineup_slots (
+  match_id TEXT NOT NULL REFERENCES matches(id), slot INTEGER NOT NULL,
+  player_id TEXT NOT NULL REFERENCES players(id), position TEXT NOT NULL,
+  PRIMARY KEY (match_id, slot)
+);
+CREATE TABLE club_connections (
+  id TEXT PRIMARY KEY, club_a TEXT NOT NULL, club_b TEXT NOT NULL,
+  answer_count INTEGER NOT NULL, best_fame INTEGER NOT NULL, difficulty INTEGER NOT NULL
+);
+CREATE TABLE connection_answers (
+  connection_id TEXT NOT NULL REFERENCES club_connections(id),
+  player_id TEXT NOT NULL REFERENCES players(id)
+);
+CREATE TABLE career_challenges (
+  player_id TEXT PRIMARY KEY REFERENCES players(id), clue_count INTEGER NOT NULL,
+  difficulty INTEGER NOT NULL
+);
+CREATE INDEX idx_conn_diff ON club_connections(difficulty);
+CREATE INDEX idx_ans_conn ON connection_answers(connection_id);
+CREATE INDEX idx_career_diff ON career_challenges(difficulty);
+CREATE INDEX idx_match_diff ON matches(difficulty);
+"""
+
+POSITIONS = {"GK", "RB", "CB", "LB", "RWB", "LWB", "DM", "CM", "AM", "RM", "LM", "RW", "LW", "ST"}
+
+
+def load(name: str) -> dict:
+    return json.loads((SEED / name).read_text(encoding="utf-8"))
+
+
+def connection_difficulty(best_fame: int, club_fame_a: int, club_fame_b: int) -> int:
+    """1 easy .. 4 expert. Driven by how famous the best answer is, then the clubs."""
+    score = best_fame * 0.6 + (club_fame_a + club_fame_b) / 2 * 0.4
+    if score >= 4.6:
+        return 1
+    if score >= 3.8:
+        return 2
+    if score >= 3.0:
+        return 3
+    return 4
+
+
+def career_difficulty(fame: int) -> int:
+    return {5: 1, 4: 2, 3: 3}.get(fame, 4)
+
+
+def match_difficulty(fame: int) -> int:
+    return {5: 1, 4: 2, 3: 3}.get(fame, 4)
+
+
+class Problems:
+    def __init__(self) -> None:
+        self.errors: list[str] = []
+        self.warnings: list[str] = []
+
+    def error(self, msg: str) -> None:
+        self.errors.append(msg)
+
+    def warn(self, msg: str) -> None:
+        self.warnings.append(msg)
+
+
+def validate_and_collect(problems: Problems):
+    clubs_raw = load("clubs.json")["clubs"]
+    players_raw = load("players.json")["players"]
+    matches_doc = load("matches.json")
+
+    clubs = {}
+    for cid, name, country, fame, aliases in clubs_raw:
+        if cid in clubs:
+            problems.error(f"duplicate club id {cid}")
+        if not 1 <= fame <= 5:
+            problems.error(f"club {cid} fame out of range")
+        clubs[cid] = {"name": name, "country": country, "fame": fame, "aliases": aliases}
+
+    players = {}
+    for p in players_raw:
+        pid = p["id"]
+        if pid in players:
+            problems.error(f"duplicate player id {pid}")
+        spells = []
+        for i, entry in enumerate(p.get("career", [])):
+            club_id, start, end = entry[0], entry[1], entry[2]
+            loan = len(entry) > 3 and entry[3] == "loan"
+            if club_id not in clubs:
+                problems.error(f"{pid}: unknown club '{club_id}'")
+            if start and end and end < start:
+                problems.error(f"{pid}: spell at {club_id} ends before it starts")
+            spells.append({"seq": i, "club": club_id, "start": start, "end": end, "loan": loan})
+        # chronology sanity: permanent spells should not start before the previous permanent one
+        last = None
+        for s in spells:
+            if s["loan"] or not s["start"]:
+                continue
+            if last and s["start"] < last:
+                problems.warn(f"{pid}: {s['club']} starts {s['start']} before previous permanent spell ({last})")
+            last = s["start"]
+        players[pid] = {
+            "name": p["name"], "nat": p.get("nat"), "pos": p.get("pos"), "fame": p["fame"],
+            "aliases": p.get("aliases", []), "spells": spells,
+        }
+
+    extra_aliases = matches_doc.get("extra_aliases", {})
+    matches = []
+    for m in matches_doc["matches"]:
+        xi = m["xi"]
+        ids = [s[0] for s in xi]
+        if len(xi) != 11:
+            problems.error(f"match {m['id']}: {len(xi)} players, need 11")
+        if len(set(ids)) != len(ids):
+            problems.error(f"match {m['id']}: duplicate player in XI")
+        if sum(1 for s in xi if s[2] == "GK") != 1:
+            problems.error(f"match {m['id']}: needs exactly one GK")
+        for pid, name, pos in xi:
+            if pos not in POSITIONS:
+                problems.error(f"match {m['id']}: bad position {pos}")
+            if pid not in players:
+                # lineup-only player: create with no career
+                players[pid] = {"name": name, "nat": None, "pos": pos, "fame": 3,
+                                "aliases": [], "spells": []}
+            elif players[pid]["name"] != name:
+                problems.warn(f"match {m['id']}: '{name}' differs from player name '{players[pid]['name']}'")
+        matches.append(m)
+
+    for pid, aliases in extra_aliases.items():
+        if pid not in players:
+            problems.error(f"extra_aliases: unknown player {pid}")
+        else:
+            players[pid]["aliases"] = list(dict.fromkeys(players[pid]["aliases"] + aliases))
+
+    return clubs, players, matches
+
+
+def generate_connections(clubs, players):
+    by_club: dict[str, set[str]] = {}
+    for pid, p in players.items():
+        for s in p["spells"]:
+            by_club.setdefault(s["club"], set()).add(pid)
+    out = []
+    for a, b in itertools.combinations(sorted(by_club), 2):
+        shared = by_club[a] & by_club[b]
+        if not shared:
+            continue  # never generate a pair without a valid answer
+        best = max(players[pid]["fame"] for pid in shared)
+        diff = connection_difficulty(best, clubs[a]["fame"], clubs[b]["fame"])
+        out.append({"id": f"{a}|{b}", "a": a, "b": b, "answers": sorted(shared), "best": best, "difficulty": diff})
+    return out
+
+
+def generate_career_challenges(players):
+    out = []
+    for pid, p in players.items():
+        distinct = {s["club"] for s in p["spells"]}
+        if len(p["spells"]) >= 3 and len(distinct) >= 3:
+            out.append({"player": pid, "clues": len(p["spells"]), "difficulty": career_difficulty(p["fame"])})
+    return out
+
+
+def write_db(path: pathlib.Path, version: int, clubs, players, matches, connections, careers):
+    if path.exists():
+        path.unlink()
+    con = sqlite3.connect(path)
+    con.executescript(SCHEMA)
+    meta = {
+        "db_version": str(version),
+        "built_at": dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds"),
+        "data_status": "demo_unverified",
+        "players": str(len(players)),
+        "connections": str(len(connections)),
+    }
+    con.executemany("INSERT INTO meta VALUES (?,?)", meta.items())
+    for cid, c in clubs.items():
+        con.execute("INSERT INTO clubs VALUES (?,?,?,?,NULL)", (cid, c["name"], c["country"], c["fame"]))
+        con.executemany("INSERT INTO club_aliases VALUES (?,?)", [(cid, a) for a in c["aliases"]])
+    for pid, p in players.items():
+        con.execute("INSERT INTO players VALUES (?,?,?,?,?,0,'demo_seed',NULL)",
+                    (pid, p["name"], p["nat"], p["pos"], p["fame"]))
+        con.executemany("INSERT INTO player_aliases VALUES (?,?)", [(pid, a) for a in p["aliases"]])
+        con.executemany("INSERT INTO career_spells VALUES (?,?,?,?,?,?)",
+                        [(pid, s["seq"], s["club"], s["start"], s["end"], int(s["loan"])) for s in p["spells"]])
+    for m in matches:
+        con.execute("INSERT INTO matches VALUES (?,?,?,?,?,?,?,?,?,?,0,'demo_seed')",
+                    (m["id"], m["title"], m["competition"], m["date"], m["home"], m["away"],
+                     m["score"], m["target"], m["fame"], match_difficulty(m["fame"])))
+        con.executemany("INSERT INTO lineup_slots VALUES (?,?,?,?)",
+                        [(m["id"], i, pid, pos) for i, (pid, _n, pos) in enumerate(m["xi"])])
+    for c in connections:
+        con.execute("INSERT INTO club_connections VALUES (?,?,?,?,?,?)",
+                    (c["id"], c["a"], c["b"], len(c["answers"]), c["best"], c["difficulty"]))
+        con.executemany("INSERT INTO connection_answers VALUES (?,?)", [(c["id"], pid) for pid in c["answers"]])
+    con.executemany("INSERT INTO career_challenges VALUES (?,?,?)",
+                    [(c["player"], c["clues"], c["difficulty"]) for c in careers])
+    con.commit()
+    con.execute("VACUUM")
+    con.close()
+
+
+def write_json(path: pathlib.Path, version: int, clubs, players, matches, connections, careers):
+    """Same content as the SQLite file, for the web build (no SQLite plugin in browsers)."""
+    doc = {
+        "db_version": version,
+        "data_status": "demo_unverified",
+        "clubs": [[cid, c["name"], c["country"], c["fame"]] for cid, c in clubs.items()],
+        "players": [
+            {"id": pid, "name": p["name"], "nat": p["nat"], "pos": p["pos"], "fame": p["fame"], "aliases": p["aliases"]}
+            for pid, p in players.items()
+        ],
+        "careers": [
+            {"player": c["player"], "difficulty": c["difficulty"],
+             "spells": [[s["club"], s["start"], s["end"], int(s["loan"])] for s in players[c["player"]]["spells"]]}
+            for c in careers
+        ],
+        "connections": [[c["id"], c["a"], c["b"], c["difficulty"], c["answers"]] for c in connections],
+        "matches": [
+            {"id": m["id"], "title": m["title"], "competition": m["competition"], "date": m["date"],
+             "home": m["home"], "away": m["away"], "score": m["score"], "target": m["target"],
+             "difficulty": match_difficulty(m["fame"]), "xi": m["xi"]}
+            for m in matches
+        ],
+    }
+    path.write_text(json.dumps(doc, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
+
+
+def main() -> int:
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--check", action="store_true", help="validate only, write nothing")
+    ap.add_argument("--version", type=int, default=int(dt.date.today().strftime("%Y%m%d")) * 100 + 1)
+    args = ap.parse_args()
+
+    problems = Problems()
+    clubs, players, matches = validate_and_collect(problems)
+    for w in problems.warnings:
+        print("WARN ", w)
+    for e in problems.errors:
+        print("ERROR", e)
+    if problems.errors:
+        return 1
+
+    connections = generate_connections(clubs, players)
+    careers = generate_career_challenges(players)
+    by_diff = {d: sum(1 for c in connections if c["difficulty"] == d) for d in (1, 2, 3, 4)}
+    print(f"players={len(players)} clubs={len(clubs)} matches={len(matches)} "
+          f"connections={len(connections)} {by_diff} careers={len(careers)}")
+    if args.check:
+        return 0
+
+    ASSETS.mkdir(parents=True, exist_ok=True)
+    write_db(ASSETS / "football.db", args.version, clubs, players, matches, connections, careers)
+    write_json(ASSETS / "football.json", args.version, clubs, players, matches, connections, careers)
+    (ASSETS / "football_db_version.txt").write_text(str(args.version), encoding="utf-8")
+    print("wrote", ASSETS / "football.db", "version", args.version)
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

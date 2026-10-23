@@ -1,0 +1,243 @@
+import 'package:flutter/material.dart';
+
+import '../../core/app_services.dart';
+import '../../core/theme.dart';
+import '../../data/models.dart';
+import '../../domain/game_mode.dart';
+import '../../domain/tournament.dart';
+import '../match_flow.dart';
+import '../widgets/common.dart';
+
+/// Teams, length, difficulty, games — then kick off. Prefilled from last time.
+class SetupScreen extends StatefulWidget {
+  const SetupScreen({super.key});
+
+  @override
+  State<SetupScreen> createState() => _SetupScreenState();
+}
+
+class _SetupScreenState extends State<SetupScreen> {
+  static const _maxTeams = 6;
+  static const _defaultNames = ['Home', 'Away', 'Neutrals', 'Ultras', 'Away End', 'Family Stand'];
+
+  final List<TextEditingController> _names = [];
+  final List<int> _colours = [];
+  MatchLength _length = MatchLength.medium;
+  Difficulty _difficulty = Difficulty.medium;
+  final Set<GameModeId> _modes = {};
+  int _answerSeconds = 15;
+  int _bombSeconds = 20;
+  int _lives = 3;
+  bool _loaded = false;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (_loaded) return;
+    _loaded = true;
+    final c = AppScope.of(context).settings.lastConfig();
+    for (final t in c.teams) {
+      _names.add(TextEditingController(text: t.name));
+      _colours.add(t.colorIndex);
+    }
+    while (_names.length < 2) {
+      _addTeam();
+    }
+    _length = c.length;
+    _difficulty = c.difficulty;
+    _modes.addAll(c.modes);
+    _answerSeconds = c.answerSeconds;
+    _bombSeconds = c.bombSeconds;
+    _lives = c.bombLives;
+  }
+
+  @override
+  void dispose() {
+    for (final n in _names) {
+      n.dispose();
+    }
+    super.dispose();
+  }
+
+  void _addTeam() {
+    final i = _names.length;
+    final used = _colours.toSet();
+    var colour = 0;
+    while (used.contains(colour) && colour < Palette.teams.length - 1) {
+      colour++;
+    }
+    _names.add(TextEditingController(text: _defaultNames[i % _defaultNames.length]));
+    _colours.add(colour);
+  }
+
+  bool get _valid =>
+      _names.every((n) => n.text.trim().isNotEmpty) &&
+      _modes.any((m) => m != GameModeId.wildcard);
+
+  Future<void> _start() async {
+    final services = AppScope.read(context);
+    final config = TournamentConfig(
+      teams: [
+        for (var i = 0; i < _names.length; i++) TeamSetup(name: _names[i].text.trim(), colorIndex: _colours[i]),
+      ],
+      length: _length,
+      difficulty: _difficulty,
+      modes: Set.of(_modes),
+      answerSeconds: _answerSeconds,
+      bombSeconds: _bombSeconds,
+      bombLives: _lives,
+    );
+    await services.settings.saveConfig(config);
+    if (!mounted) return;
+    MatchFlow.toWheel(context, Tournament(config));
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Palette.pitch,
+        title: Text('NEW MATCH', style: AppText.headline(26)),
+      ),
+      body: PitchBackground(
+        child: SafeArea(
+          top: false,
+          child: Column(children: [
+            Expanded(
+              child: ListView(padding: const EdgeInsets.fromLTRB(16, 16, 16, 24), children: [
+                _section('TEAMS'),
+                for (var i = 0; i < _names.length; i++) _teamRow(i),
+                if (_names.length < _maxTeams)
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: GhostButton(
+                      label: 'Add team',
+                      icon: Icons.add,
+                      onPressed: () => setState(_addTeam),
+                    ),
+                  ),
+                const SizedBox(height: 12),
+                _section('MATCH LENGTH'),
+                SegmentedButton<MatchLength>(
+                  segments: [for (final m in MatchLength.values) ButtonSegment(value: m, label: Text(m.label))],
+                  selected: {_length},
+                  onSelectionChanged: (s) => setState(() => _length = s.first),
+                  showSelectedIcon: false,
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 6, left: 4),
+                  child: Text(_length.description, style: const TextStyle(color: Palette.muted)),
+                ),
+                const SizedBox(height: 18),
+                _section('DIFFICULTY'),
+                SegmentedButton<Difficulty>(
+                  segments: [for (final d in Difficulty.values) ButtonSegment(value: d, label: Text(d.label))],
+                  selected: {_difficulty},
+                  onSelectionChanged: (s) => setState(() => _difficulty = s.first),
+                  showSelectedIcon: false,
+                ),
+                const SizedBox(height: 18),
+                _section('GAMES ON THE WHEEL'),
+                Wrap(spacing: 8, runSpacing: 8, children: [
+                  for (final m in GameModeId.values)
+                    FilterChip(
+                      avatar: Icon(m.icon, size: 18, color: m.playable ? m.color : Palette.muted),
+                      label: Text(m.playable ? m.title : '${m.title} · soon'),
+                      selected: _modes.contains(m),
+                      onSelected: m.playable
+                          ? (on) => setState(() => on ? _modes.add(m) : _modes.remove(m))
+                          : null,
+                    ),
+                ]),
+                if (!_modes.any((m) => m != GameModeId.wildcard))
+                  const Padding(
+                    padding: EdgeInsets.only(top: 8),
+                    child: Text('Pick at least one game.', style: TextStyle(color: Palette.danger)),
+                  ),
+                const SizedBox(height: 8),
+                Theme(
+                  data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+                  child: ExpansionTile(
+                    tilePadding: EdgeInsets.zero,
+                    title: Text('TIMERS & RULES', style: AppText.label(15)),
+                    children: [
+                      _choice('Answer time', [10, 15, 20], _answerSeconds, (v) => _answerSeconds = v, suffix: 's'),
+                      _choice('Bomb timer', [10, 20, 30], _bombSeconds, (v) => _bombSeconds = v, suffix: 's'),
+                      _choice('Bomb lives', [1, 3], _lives, (v) => _lives = v, labels: {1: 'Sudden death', 3: 'Three lives'}),
+                    ],
+                  ),
+                ),
+              ]),
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+              child: BigButton(label: 'Kick off', icon: Icons.sports_soccer, onPressed: _valid ? _start : null),
+            ),
+          ]),
+        ),
+      ),
+    );
+  }
+
+  Widget _section(String title) => Padding(
+        padding: const EdgeInsets.only(bottom: 8),
+        child: Text(title, style: AppText.label(14, color: Palette.lime)),
+      );
+
+  Widget _teamRow(int i) => Padding(
+        key: ObjectKey(_names[i]),
+        padding: const EdgeInsets.only(bottom: 10),
+        child: Row(children: [
+          GestureDetector(
+            onTap: () => setState(() => _colours[i] = (_colours[i] + 1) % Palette.teams.length),
+            child: Container(
+              width: 46,
+              height: 46,
+              decoration: BoxDecoration(
+                color: Palette.team(_colours[i]),
+                shape: BoxShape.circle,
+                border: Border.all(color: Colors.white, width: 3),
+              ),
+              child: Icon(Icons.palette, size: 20, color: Palette.onTeam(_colours[i])),
+            ),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: TextField(
+              controller: _names[i],
+              textCapitalization: TextCapitalization.words,
+              maxLength: 16,
+              style: AppText.headline(24, weight: FontWeight.w800),
+              decoration: const InputDecoration(counterText: '', hintText: 'Team name'),
+              onChanged: (_) => setState(() {}),
+            ),
+          ),
+          if (_names.length > 2)
+            IconButton(
+              icon: const Icon(Icons.close, color: Palette.muted),
+              onPressed: () {
+                final removed = _names.removeAt(i);
+                setState(() => _colours.removeAt(i));
+                WidgetsBinding.instance.addPostFrameCallback((_) => removed.dispose());
+              },
+            ),
+        ]),
+      );
+
+  Widget _choice(String label, List<int> options, int value, void Function(int) set,
+          {String suffix = '', Map<int, String>? labels}) =>
+      Padding(
+        padding: const EdgeInsets.only(bottom: 12),
+        child: Row(children: [
+          Expanded(child: Text(label, style: const TextStyle(fontSize: 16))),
+          SegmentedButton<int>(
+            segments: [
+              for (final o in options) ButtonSegment(value: o, label: Text(labels?[o] ?? '$o$suffix')),
+            ],
+            selected: {value},
+            onSelectionChanged: (s) => setState(() => set(s.first)),
+            showSelectedIcon: false,
+          ),
+        ]),
+      );
+}

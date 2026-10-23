@@ -1,0 +1,30 @@
+# Run ONCE from the Actions tab ("Run workflow"). Generates ios/ and android/
+# with flutter create and commits them, so native settings live in the repo.
+name: Bootstrap platform folders
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  bootstrap:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+      - run: bash scripts/bootstrap_platforms.sh
+      - name: Commit generated folders
+        run: |
+          git config user.name "quizinho-bot"
+          git config user.email "quizinho-bot@users.noreply.github.com"
+          git add ios android web .metadata || true
+          if git diff --cached --quiet; then
+            echo "Nothing to commit."
+          else
+            git commit -m "Generate iOS, Android and web platform folders"
+            git push
+          fi

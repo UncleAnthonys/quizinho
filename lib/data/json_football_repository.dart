@@ -1,0 +1,88 @@
+import 'dart:convert';
+
+import 'package:flutter/services.dart' show rootBundle;
+
+import 'in_memory_football_repository.dart';
+import 'models.dart';
+
+/// Loads assets/db/football.json (same data as the SQLite file) into memory.
+/// Used by the web build, where the SQLite plugin isn't available.
+Future<InMemoryFootballRepository> loadJsonFootballRepository() async =>
+    parseFootballJson(await rootBundle.loadString('assets/db/football.json'));
+
+InMemoryFootballRepository parseFootballJson(String source) {
+  final doc = jsonDecode(source) as Map<String, dynamic>;
+
+  final clubs = <String, Club>{
+    for (final c in doc['clubs'] as List)
+      c[0] as String: Club(id: c[0] as String, name: c[1] as String, country: c[2] as String?, fame: c[3] as int),
+  };
+  Club club(String id) => clubs[id] ?? Club(id: id, name: id, fame: 1);
+
+  final players = <String, Player>{
+    for (final p in doc['players'] as List)
+      p['id'] as String: Player(
+        id: p['id'] as String,
+        name: p['name'] as String,
+        fame: p['fame'] as int,
+        position: p['pos'] as String?,
+        nationality: p['nat'] as String?,
+        aliases: [for (final a in p['aliases'] as List) a as String],
+      ),
+  };
+
+  return InMemoryFootballRepository(
+    players: players.values.toList(),
+    dataStatus: (doc['data_status'] as String?) ?? 'unknown',
+    connections: [
+      for (final c in doc['connections'] as List)
+        ClubConnection(
+          id: c[0] as String,
+          clubA: club(c[1] as String),
+          clubB: club(c[2] as String),
+          difficulty: c[3] as int,
+          answerIds: {for (final a in c[4] as List) a as String},
+        ),
+    ],
+    careers: [
+      for (final c in doc['careers'] as List)
+        if (players[c['player']] != null)
+          CareerPath(
+            player: players[c['player']]!,
+            difficulty: c['difficulty'] as int,
+            spells: [
+              for (final s in c['spells'] as List)
+                CareerSpell(
+                  club: club(s[0] as String),
+                  startYear: s[1] as int?,
+                  endYear: s[2] as int?,
+                  isLoan: s[3] == 1,
+                ),
+            ],
+          ),
+    ],
+    matches: [
+      for (final m in doc['matches'] as List)
+        HistoricMatch(
+          id: m['id'] as String,
+          title: m['title'] as String,
+          competition: (m['competition'] as String?) ?? '',
+          date: (m['date'] as String?) ?? '',
+          home: m['home'] as String,
+          away: m['away'] as String,
+          score: (m['score'] as String?) ?? '',
+          targetTeam: m['target'] as String,
+          difficulty: m['difficulty'] as int,
+          lineup: [
+            for (final (i, s) in (m['xi'] as List).indexed)
+              LineupSlot(
+                index: i,
+                playerId: s[0] as String,
+                playerName: players[s[0]]?.name ?? s[1] as String,
+                position: s[2] as String,
+              ),
+          ],
+        ),
+    ],
+  );
+}
