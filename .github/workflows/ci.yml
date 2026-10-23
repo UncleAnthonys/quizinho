@@ -30,10 +30,10 @@ jobs:
       - run: flutter pub get
 
       - name: Analyze
-        run: flutter analyze --no-fatal-infos
+        run: bash scripts/ci_run.sh Analyze flutter analyze --no-fatal-infos
 
       - name: Test
-        run: flutter test
+        run: bash scripts/ci_run.sh Test flutter test
 
       - uses: actions/setup-java@v4
         with:
@@ -41,7 +41,7 @@ jobs:
           java-version: '17'
 
       - name: Build Android APK (compile check + installable artifact)
-        run: flutter build apk --debug
+        run: bash scripts/ci_run.sh "Android build" flutter build apk --debug
 
       - uses: actions/upload-artifact@v4
         with:

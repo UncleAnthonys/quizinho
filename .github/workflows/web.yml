@@ -30,7 +30,7 @@ jobs:
         run: bash scripts/bootstrap_platforms.sh
       - run: flutter pub get
       - name: Build web
-        run: flutter build web --release --base-href "/${{ github.event.repository.name }}/"
+        run: bash scripts/ci_run.sh "Web build" flutter build web --release --base-href "/${{ github.event.repository.name }}/"
       - uses: actions/upload-pages-artifact@v3
         with:
           path: build/web
