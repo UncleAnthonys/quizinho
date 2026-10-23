@@ -27,9 +27,17 @@ class PlayerIndex {
       add(p.name);
       p.aliases.forEach(add);
       final tokens = <String>{};
+      // Surnames: everything after the first name ("van dijk", "alexander arnold")
+      // and the final word ("dijk", "arnold"). A first name alone is never one.
+      final surnames = <String>{};
       for (final k in keys) {
-        for (final t in k.split(' ')) {
+        final parts = k.split(' ');
+        for (final t in parts) {
           if (t.length >= 3) tokens.add(t);
+        }
+        if (parts.length >= 2) {
+          surnames.add(parts.sublist(1).join(' '));
+          if (parts.last.length >= 3) surnames.add(parts.last);
         }
       }
       _entries.add(_Entry(
@@ -38,6 +46,8 @@ class PlayerIndex {
         tokens.toList(),
         {for (final k in keys) soundKey(k)}..removeWhere((k) => k.length < 3),
         {for (final t in tokens) soundKey(t)}..removeWhere((k) => k.length < 2),
+        surnames,
+        {for (final s in surnames) soundKey(s)}..removeWhere((k) => k.length < 3),
       ));
       _byId[p.id] = p;
     }
@@ -62,6 +72,36 @@ class PlayerIndex {
       return c != 0 ? c : a.player.name.compareTo(b.player.name);
     });
     return hits.length > limit ? hits.sublist(0, limit) : hits;
+  }
+
+  /// Judges a typed answer without giving anything away: it must be a full
+  /// name, a known nickname or a surname — spelling slips allowed, partial
+  /// words and first names never. Returns every player it could mean (one =
+  /// accept, several = "which one?", none = not recognised).
+  List<Player> matchTyped(String text) {
+    final q = normaliseName(text);
+    if (q.length < 2) return const [];
+    final qs = soundKey(q);
+    final exact = <Player>[];
+    final close = <Player>[];
+    for (final e in _entries) {
+      if (e.keys.contains(q) || e.surnames.contains(q)) {
+        exact.add(e.player);
+        continue;
+      }
+      if (q.length < 4) continue;
+      final nearSpelling = [...e.keys, ...e.surnames].any((k) => similarity(q, k) >= 0.8);
+      final soundsRight = qs.length >= 3 && (e.sounds.contains(qs) || e.surnameSounds.contains(qs));
+      if (nearSpelling || soundsRight) close.add(e.player);
+    }
+    final out = exact.isNotEmpty ? exact : close;
+    return out..sort((a, b) => b.fame.compareTo(a.fame));
+  }
+
+  /// True when the text is only someone's first name ("thierry").
+  bool isFirstNameOnly(String text) {
+    final q = normaliseName(text);
+    return q.isNotEmpty && !q.contains(' ') && _entries.any((e) => e.tokens.contains(q) && !e.surnames.contains(q));
   }
 
   /// For free text (typed or spoken): the single best player if the match is
@@ -98,7 +138,7 @@ class PlayerIndex {
         s = s < 95 ? 95 : s; // whole name sounds right: "david louise" = David Luiz
       } else if (words.length >= 2 && wordKeys.every((k) => k.length >= 2 && e.tokenSounds.contains(k))) {
         s = s < 93 ? 93 : s; // every word sounds like part of the name
-      } else if (words.length == 1 && whole.length >= 3 && e.tokenSounds.contains(whole)) {
+      } else if (words.length == 1 && whole.length >= 3 && e.surnameSounds.contains(whole)) {
         s = s < 90 ? 90 : s; // surname alone sounds right
       }
       if (s > 0) hits.add(PlayerMatch(e.player, s + e.player.fame * 2));
@@ -139,7 +179,11 @@ class PlayerIndex {
       if (q.contains(' ') && k.contains(' $q')) best = best < 75 ? 75 : best;
     }
     for (final t in e.tokens) {
-      if (t == q) best = best < 92 ? 92 : best; // surname typed in full
+      if (t == q) {
+        // A surname in full is a real answer; a first name alone is not.
+        final s = e.surnames.contains(q) ? 92.0 : 60.0;
+        if (s > best) best = s;
+      }
       if (t.startsWith(q)) best = best < 70 ? 70 : best;
     }
     if (best == 0 && q.length >= 4) {
@@ -156,7 +200,7 @@ class PlayerIndex {
 }
 
 class _Entry {
-  _Entry(this.player, this.keys, this.tokens, this.sounds, this.tokenSounds);
+  _Entry(this.player, this.keys, this.tokens, this.sounds, this.tokenSounds, this.surnames, this.surnameSounds);
   final Player player;
   final List<String> keys;
   final List<String> tokens;
@@ -164,4 +208,6 @@ class _Entry {
   /// Sound keys of full names/aliases, and of individual name words.
   final Set<String> sounds;
   final Set<String> tokenSounds;
+  final Set<String> surnames;
+  final Set<String> surnameSounds;
 }

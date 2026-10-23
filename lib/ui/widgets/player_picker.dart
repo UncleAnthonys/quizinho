@@ -5,7 +5,8 @@ import '../../core/voice_service.dart';
 import '../../data/models.dart';
 import '../../domain/player_index.dart';
 
-/// Answer entry: say the name, or type 2–3 letters and tap it.
+/// Answer entry: say the name, or type the full name and press Go.
+/// No suggestions while typing, so it never gives the answer away.
 ///
 /// With [voice], the mic opens straight away. A clear match is accepted
 /// automatically; an unclear one ("Ronaldo") shows the likely players to tap.
@@ -20,7 +21,7 @@ class PlayerPicker extends StatefulWidget {
     this.onPass,
     this.onDisputed,
     this.accent = Palette.yellow,
-    this.hint = 'Start typing a player…',
+    this.hint = 'Type the full name…',
     this.voice,
   });
 
@@ -118,6 +119,8 @@ class _PlayerPickerState extends State<PlayerPicker> {
         if (seen.add(m.player.id)) merged.add(m);
       }
     }
+    // Only players that fully match what was said — never hints from a fragment.
+    merged.removeWhere((m) => m.score - m.player.fame * 2 < 88);
     merged.sort((a, b) => b.score.compareTo(a.score));
     setState(() => _results = merged.take(4).toList());
   }
@@ -148,18 +151,41 @@ class _PlayerPickerState extends State<PlayerPicker> {
     });
   }
 
-  /// Typing in the box takes over from the mic.
+  /// Typing in the box takes over from the mic. Nothing is suggested while
+  /// typing — that would hand the answer to someone who only half knows it.
   void _onTyped(String q) {
     if (!_typing && _voiceOn) {
       _typing = true;
       widget.voice?.stop();
       _listening = false;
-      _voiceNote = 'Typing — tap the mic to talk instead';
+      _voiceNote = null;
     }
-    _onChanged(q);
+    setState(() {
+      _results = const [];
+      _typedNote = null;
+    });
   }
 
-  void _onChanged(String q) => setState(() => _results = widget.index.search(q, limit: 6));
+  /// Enter / Go: judge the full answer.
+  void _submitTyped() {
+    final text = _controller.text.trim();
+    if (text.isEmpty) return;
+    final matches = widget.index.matchTyped(text);
+    if (matches.length == 1) {
+      _pick(matches.first);
+      return;
+    }
+    setState(() {
+      _results = [for (final p in matches.take(4)) PlayerMatch(p, 0)];
+      _typedNote = matches.isNotEmpty
+          ? 'More than one “$text” — which one?'
+          : widget.index.isFirstNameOnly(text)
+              ? 'Surname needed — first names don’t count'
+              : 'Not recognised — check the spelling, or use “Not listed?”';
+    });
+  }
+
+  String? _typedNote;
 
   @override
   Widget build(BuildContext context) {
@@ -190,19 +216,27 @@ class _PlayerPickerState extends State<PlayerPicker> {
               : Icon(Icons.search, color: widget.accent),
           suffixIcon: typed.isEmpty
               ? null
-              : IconButton(
-                  icon: const Icon(Icons.close, color: Palette.muted),
-                  onPressed: () {
-                    _controller.clear();
-                    _onChanged('');
-                  },
+              : Padding(
+                  padding: const EdgeInsets.all(6),
+                  child: FilledButton(
+                    style: FilledButton.styleFrom(backgroundColor: widget.accent, minimumSize: const Size(56, 40)),
+                    onPressed: _submitTyped,
+                    child: Text('GO', style: AppText.headline(18, color: Palette.pitchDeep)),
+                  ),
                 ),
         ),
         onChanged: _onTyped,
-        onSubmitted: (_) {
-          if (_results.isNotEmpty) _pick(_results.first.player);
-        },
+        onSubmitted: (_) => _submitTyped(),
       ),
+      if (_typedNote != null)
+        Padding(
+          padding: const EdgeInsets.only(top: 6),
+          child: Row(children: [
+            const Icon(Icons.info_outline_rounded, size: 18, color: Palette.gold),
+            const SizedBox(width: 6),
+            Expanded(child: Text(_typedNote!, style: AppText.label(14, color: Palette.gold))),
+          ]),
+        ),
       if (_voiceNote != null && _voiceOn)
         Padding(
           padding: const EdgeInsets.only(top: 6),

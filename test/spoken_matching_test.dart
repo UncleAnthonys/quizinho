@@ -52,6 +52,36 @@ void main() {
     expect(index.resolveSpoken(['ronaldo', 'cristiano ronaldo'])?.id, 'cristiano-ronaldo');
   });
 
+  group('typed answers give nothing away', () {
+    test('full name, nickname or surname is accepted', () {
+      expect(index.matchTyped('Thierry Henry').map((p) => p.id), ['thierry-henry']);
+      expect(index.matchTyped('henry').map((p) => p.id), ['thierry-henry']);
+      expect(index.matchTyped('Zlatan').map((p) => p.id), ['zlatan']);
+      expect(index.matchTyped('van dijk').map((p) => p.id), ['virgil-van-dijk']);
+    });
+
+    test('small spelling slips are fine', () {
+      expect(index.matchTyped('ibrahimovich').map((p) => p.id), ['zlatan']);
+      expect(index.matchTyped('kante').map((p) => p.id), ['ngolo-kante']);
+    });
+
+    test('partial words and first names get nothing', () {
+      expect(index.matchTyped('sa'), isEmpty);
+      expect(index.matchTyped('hen'), isEmpty);
+      expect(index.matchTyped('thierry'), isEmpty);
+      expect(index.isFirstNameOnly('thierry'), isTrue);
+      expect(index.matchTyped('david'), isEmpty);
+    });
+
+    test('an ambiguous full answer lists only exact namesakes', () {
+      expect(index.matchTyped('ronaldo').map((p) => p.id).toSet(), {'cristiano-ronaldo', 'ronaldo-nazario'});
+    });
+  });
+
+  test('a first name alone is never accepted by voice either', () {
+    expect(index.resolveSpoken(['thierry']), isNull);
+  });
+
   test('spoken search lists the likely players for tapping', () {
     final ids = index.searchSpoken('ronaldo').map((m) => m.player.id).toSet();
     expect(ids, containsAll(['cristiano-ronaldo', 'ronaldo-nazario']));
