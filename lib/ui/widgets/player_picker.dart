@@ -108,9 +108,10 @@ class _PlayerPickerState extends State<PlayerPicker> {
     }
   }
 
-  void _showSpoken(String words) {
+  /// Mid-speech: show the words only. Suggestions appear once they pause.
+  void _showSpoken(String words, {bool suggest = false}) {
     _controller.text = words;
-    setState(() => _results = widget.index.searchSpoken(words));
+    setState(() => _results = suggest ? widget.index.searchSpoken(words) : const []);
   }
 
   void _heard(List<String> alternatives) {
@@ -129,7 +130,7 @@ class _PlayerPickerState extends State<PlayerPicker> {
       return;
     }
     if (alternatives.isNotEmpty) {
-      _showSpoken(alternatives.first);
+      _showSpoken(alternatives.first, suggest: true);
       _voiceNote = _results.isEmpty
           ? 'Heard “${alternatives.first}” — still listening…'
           : 'Tap the right player — or say it again';

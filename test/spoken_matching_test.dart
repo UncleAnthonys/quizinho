@@ -37,6 +37,12 @@ void main() {
     expect(index.resolveSpoken(["um it's thierry henry"])?.id, 'thierry-henry');
   });
 
+  test('mid-speech, only a complete name is accepted', () {
+    expect(index.resolveSpoken(['thierry'], partial: true), isNull);
+    expect(index.resolveSpoken(['thierry henry'], partial: true)?.id, 'thierry-henry');
+    expect(index.resolveSpoken(['david louise'], partial: true)?.id, 'david-luiz');
+  });
+
   test('ambiguous names are never auto-accepted', () {
     expect(index.resolveSpoken(['ronaldo']), isNull);
     expect(index.resolveSpoken(['david'], partial: true), isNull);

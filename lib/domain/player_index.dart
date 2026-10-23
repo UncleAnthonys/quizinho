@@ -111,7 +111,8 @@ class PlayerIndex {
   }
 
   /// Best player across speech alternatives, or null if it isn't clear-cut.
-  /// [partial] = words still coming in, so demand a stronger match.
+  /// [partial] = words still coming in: only a complete name (full name,
+  /// alias, or a full-name sound match) counts — never a first name alone.
   Player? resolveSpoken(List<String> alternatives, {bool partial = false}) {
     final best = <String, PlayerMatch>{};
     for (final alt in alternatives) {
@@ -125,7 +126,7 @@ class PlayerIndex {
     final top = ranked.first;
     // fame adds up to +10, so thresholds sit on the base score
     final base = top.score - top.player.fame * 2;
-    if (base < (partial ? 92 : 88)) return null;
+    if (base < (partial ? 95 : 88)) return null;
     if (ranked.length > 1 && ranked[1].score >= top.score - 6) return null;
     return top.player;
   }
