@@ -42,7 +42,17 @@ enum GameModeId {
     whoPlays: 'Whatever the wildcard decides.',
   ),
   whoAmI(title: 'Who Am I?', tagline: 'Coming soon', playable: false),
-  headsUp(title: 'Football Heads Up', tagline: 'Coming soon', playable: false),
+  headsUp(
+    title: 'Football Heads Up',
+    tagline: 'Phone on your forehead — your team describes',
+    playable: true,
+    rules: [
+      'One player holds the phone to their forehead. Their team describes the name on screen.',
+      'Tilt DOWN when you get it, UP to pass. Or use the buttons.',
+      '1 point per correct card. Every team gets one go.',
+    ],
+    whoPlays: 'The named player guesses; their teammates describe. Other teams keep quiet!',
+  ),
   taboo(title: 'Football Taboo', tagline: 'Coming soon', playable: false);
 
   const GameModeId({

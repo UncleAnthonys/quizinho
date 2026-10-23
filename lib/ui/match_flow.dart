@@ -6,6 +6,7 @@ import '../domain/tournament.dart';
 import '../games/career_path/career_path_screen.dart';
 import '../games/club_connections/club_connections_screen.dart';
 import '../games/game_screen_support.dart';
+import '../games/heads_up/heads_up_screen.dart';
 import '../games/starting_xi/starting_xi_screen.dart';
 import 'screens/round_intro_screen.dart';
 import 'screens/round_summary_screen.dart';
@@ -49,6 +50,7 @@ abstract final class MatchFlow {
         GameModeId.clubConnections => ClubConnectionsScreen(round: round),
         GameModeId.careerPath => CareerPathScreen(round: round),
         GameModeId.startingXi => StartingXiScreen(round: round),
+        GameModeId.headsUp => HeadsUpScreen(round: round),
         _ => throw ArgumentError('${mode.title} is not playable yet'),
       };
 }
@@ -93,7 +95,7 @@ extension GameModeStyle on GameModeId {
         GameModeId.startingXi => const Color(0xFFFF4B6E),
         GameModeId.wildcard => Colors.white,
         GameModeId.whoAmI => const Color(0xFFB57CFF),
-        GameModeId.headsUp => const Color(0xFF3DFFB0),
+        GameModeId.headsUp => const Color(0xFF3DFFB0), // mint
         GameModeId.taboo => const Color(0xFFFF8A3D),
       };
 

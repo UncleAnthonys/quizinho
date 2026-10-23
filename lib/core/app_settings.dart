@@ -14,6 +14,9 @@ class AppSettings extends ChangeNotifier {
   /// Separator for storing a team's player names in one string.
   static const _sep = '\u001F';
 
+  /// Games that existed before new-game tracking was added.
+  static const _modesBeforeTracking = ['clubConnections', 'careerPath', 'startingXi', 'wildcard'];
+
   static Future<AppSettings> load() async => AppSettings._(await SharedPreferences.getInstance());
 
   bool get soundOn => _prefs.getBool('soundOn') ?? true;
@@ -36,6 +39,9 @@ class AppSettings extends ChangeNotifier {
     final players = _prefs.getStringList('teamPlayers') ?? const [];
     final modeNames = _prefs.getStringList('modes');
     final modes = modeNames?.map(GameModeId.fromName).whereType<GameModeId>().where((m) => m.playable).toSet();
+    // Games added since the last save are switched on automatically.
+    final known = (_prefs.getStringList('knownModes') ?? _modesBeforeTracking).toSet();
+    modes?.addAll(GameModeId.values.where((m) => m.playable && !known.contains(m.name)));
     return TournamentConfig(
       teams: [
         for (var i = 0; i < names.length; i++)
@@ -51,6 +57,7 @@ class AppSettings extends ChangeNotifier {
       answerSeconds: _prefs.getInt('answerSeconds') ?? 15,
       bombSeconds: _prefs.getInt('bombSeconds') ?? 20,
       bombLives: _prefs.getInt('bombLives') ?? 3,
+      headsUpSeconds: _prefs.getInt('headsUpSeconds') ?? 60,
     );
   }
 
@@ -64,5 +71,7 @@ class AppSettings extends ChangeNotifier {
     await _prefs.setInt('answerSeconds', c.answerSeconds);
     await _prefs.setInt('bombSeconds', c.bombSeconds);
     await _prefs.setInt('bombLives', c.bombLives);
+    await _prefs.setInt('headsUpSeconds', c.headsUpSeconds);
+    await _prefs.setStringList('knownModes', [for (final m in GameModeId.values) if (m.playable) m.name]);
   }
 }

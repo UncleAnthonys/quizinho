@@ -55,6 +55,7 @@ class TournamentConfig {
     this.answerSeconds = 15,
     this.bombSeconds = 20,
     this.bombLives = 3,
+    this.headsUpSeconds = 60,
   }) : modes = modes ?? {...GameModeId.concreteGames, GameModeId.wildcard};
 
   final List<TeamSetup> teams;
@@ -67,6 +68,7 @@ class TournamentConfig {
   final int answerSeconds;
   final int bombSeconds;
   final int bombLives;
+  final int headsUpSeconds;
 
   List<GameModeId> get enabledGames =>
       GameModeId.concreteGames.where(modes.contains).toList();

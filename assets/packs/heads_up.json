@@ -1,0 +1,88 @@
+{
+  "_note": "Quizinho Heads Up packs. Original lists written for this app. Each card is just a name to describe — no descriptions stored.",
+  "packs": [
+    {
+      "id": "pl-legends",
+      "title": "Premier League Legends",
+      "cards": [
+        "Alan Shearer", "Thierry Henry", "Steven Gerrard", "Frank Lampard", "Paul Scholes", "Ryan Giggs",
+        "Roy Keane", "Patrick Vieira", "Dennis Bergkamp", "Eric Cantona", "Gianfranco Zola", "Didier Drogba",
+        "John Terry", "Rio Ferdinand", "Michael Owen", "Robbie Fowler", "Matt Le Tissier", "Wayne Rooney",
+        "Cristiano Ronaldo", "David Beckham", "Peter Schmeichel", "David Seaman", "Tony Adams", "Ashley Cole",
+        "Fernando Torres", "Luis Suárez", "Sergio Agüero", "Vincent Kompany", "David Silva", "Yaya Touré",
+        "Eden Hazard", "Robin van Persie", "Jermain Defoe", "Peter Crouch", "Teddy Sheringham", "Dwight Yorke",
+        "Andy Cole", "Ian Wright", "Jamie Carragher", "Gary Neville", "Petr Čech", "Nemanja Vidić",
+        "Sol Campbell", "Les Ferdinand", "Jimmy Floyd Hasselbaink", "Robert Pirès", "Cesc Fàbregas", "Xabi Alonso"
+      ]
+    },
+    {
+      "id": "modern-stars",
+      "title": "Modern Stars",
+      "cards": [
+        "Erling Haaland", "Mohamed Salah", "Bukayo Saka", "Cole Palmer", "Jude Bellingham", "Harry Kane",
+        "Kylian Mbappé", "Declan Rice", "Martin Ødegaard", "Phil Foden", "Son Heung-min", "Virgil van Dijk",
+        "Rodri", "Kevin De Bruyne", "Bruno Fernandes", "Alexander Isak", "Ollie Watkins", "Marcus Rashford",
+        "Trent Alexander-Arnold", "Vinícius Júnior", "Lamine Yamal", "Pedri", "Jamal Musiala", "Florian Wirtz",
+        "William Saliba", "Joško Gvardiol", "Alexis Mac Allister", "Dominik Szoboszlai", "Jarrod Bowen",
+        "James Maddison", "Anthony Gordon", "Kaoru Mitoma", "Kobbie Mainoo", "Alisson", "Ederson",
+        "Jordan Pickford", "Bernardo Silva", "Gabriel Martinelli", "Moisés Caicedo", "Enzo Fernández",
+        "Bruno Guimarães", "Luis Díaz", "Dejan Kulusevski", "Lisandro Martínez", "Kai Havertz", "Robert Lewandowski"
+      ]
+    },
+    {
+      "id": "managers",
+      "title": "Managers",
+      "cards": [
+        "Sir Alex Ferguson", "Arsène Wenger", "José Mourinho", "Pep Guardiola", "Jürgen Klopp", "Carlo Ancelotti",
+        "Rafael Benítez", "Harry Redknapp", "Sam Allardyce", "Mauricio Pochettino", "Antonio Conte", "Mikel Arteta",
+        "Erik ten Hag", "Ange Postecoglou", "Eddie Howe", "David Moyes", "Tony Pulis", "Claudio Ranieri",
+        "Diego Simeone", "Zinedine Zidane", "Kevin Keegan", "Brian Clough", "Bill Shankly", "Sir Bobby Robson",
+        "Roy Hodgson", "Gareth Southgate", "Sven-Göran Eriksson", "Fabio Capello", "Steve McClaren",
+        "Thomas Tuchel", "Unai Emery", "Brendan Rodgers", "Sean Dyche", "Neil Warnock", "Ian Holloway",
+        "Martin O'Neill", "Gérard Houllier", "Roberto Mancini", "Manuel Pellegrini", "Louis van Gaal",
+        "Ole Gunnar Solskjær", "Frank Lampard", "Steven Gerrard", "Marco Silva", "Luis Enrique", "Xabi Alonso"
+      ]
+    },
+    {
+      "id": "cult-heroes",
+      "title": "Cult Heroes",
+      "cards": [
+        "Jay-Jay Okocha", "Faustino Asprilla", "Paolo Di Canio", "Benjani", "Robbie Savage", "Dimitar Berbatov",
+        "Nwankwo Kanu", "Jimmy Bullard", "Rory Delap", "Titus Bramble", "Djibril Cissé", "El Hadji Diouf",
+        "Neil Ruddock", "Carlton Palmer", "Mark Viduka", "Juninho", "Fabrizio Ravanelli", "Ali Dia",
+        "Emile Heskey", "Kevin Phillips", "Andy Carroll", "Bobby Zamora", "Obafemi Martins", "Papiss Cissé",
+        "Hatem Ben Arfa", "Yakubu", "Kevin Davies", "Georgi Kinkladze", "David Ginola", "Paul Gascoigne",
+        "Vinnie Jones", "Julian Dicks", "Joey Barton", "Mario Balotelli", "Adel Taarabt", "Nicklas Bendtner",
+        "Roque Santa Cruz", "Dean Ashton", "Peter Odemwingie", "Charlie Adam", "Grant Holt", "Rickie Lambert",
+        "Glenn Murray", "Jamie Vardy", "Riyad Mahrez", "Wes Morgan", "Danny Drinkwater", "Robert Huth"
+      ]
+    },
+    {
+      "id": "world-cup",
+      "title": "World Cup Heroes",
+      "cards": [
+        "Pelé", "Diego Maradona", "Zinedine Zidane", "Ronaldo Nazário", "Miroslav Klose", "Thomas Müller",
+        "Lionel Messi", "Kylian Mbappé", "Andrés Iniesta", "Geoff Hurst", "Gordon Banks", "Bobby Moore",
+        "Paul Gascoigne", "David Platt", "Roger Milla", "Salvatore Schillaci", "Hristo Stoichkov", "Roberto Baggio",
+        "Davor Šuker", "Diego Forlán", "Gary Lineker", "Paolo Rossi", "Rivaldo", "Ronaldinho",
+        "Cafu", "Fabio Cannavaro", "James Rodríguez", "Luka Modrić", "Emiliano Martínez", "Gianluigi Buffon",
+        "Franz Beckenbauer", "Johan Cruyff", "Eusébio", "Garrincha", "Gerd Müller", "Michael Owen",
+        "Oleg Salenko", "Siphiwe Tshabalala", "Landon Donovan", "Tim Cahill", "Lothar Matthäus", "Andrea Pirlo",
+        "Antoine Griezmann", "Harry Kane", "Neymar", "Luis Suárez", "Arjen Robben", "Wesley Sneijder"
+      ]
+    },
+    {
+      "id": "clubs-grounds",
+      "title": "Clubs & Grounds",
+      "cards": [
+        "Arsenal", "Chelsea", "Liverpool", "Manchester United", "Manchester City", "Tottenham Hotspur",
+        "Newcastle United", "Aston Villa", "Everton", "West Ham United", "Leeds United", "Nottingham Forest",
+        "Real Madrid", "Barcelona", "Bayern Munich", "Juventus", "AC Milan", "Inter Milan",
+        "Paris Saint-Germain", "Borussia Dortmund", "Ajax", "Celtic", "Rangers", "Benfica",
+        "Anfield", "Old Trafford", "Wembley", "Camp Nou", "Santiago Bernabéu", "San Siro",
+        "Stamford Bridge", "St James' Park", "The Emirates", "Villa Park", "Goodison Park", "Highbury",
+        "Maracanã", "Wrexham", "Leicester City", "Blackburn Rovers", "Sunderland", "Wimbledon (Crazy Gang)"
+      ]
+    }
+  ]
+}

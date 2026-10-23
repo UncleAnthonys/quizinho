@@ -31,6 +31,7 @@ class _SetupScreenState extends State<SetupScreen> {
   int _answerSeconds = 15;
   int _bombSeconds = 20;
   int _lives = 3;
+  int _headsUpSeconds = 60;
   bool _loaded = false;
 
   @override
@@ -53,6 +54,7 @@ class _SetupScreenState extends State<SetupScreen> {
     _answerSeconds = c.answerSeconds;
     _bombSeconds = c.bombSeconds;
     _lives = c.bombLives;
+    _headsUpSeconds = c.headsUpSeconds;
   }
 
   @override
@@ -92,6 +94,7 @@ class _SetupScreenState extends State<SetupScreen> {
       answerSeconds: _answerSeconds,
       bombSeconds: _bombSeconds,
       bombLives: _lives,
+      headsUpSeconds: _headsUpSeconds,
     );
     await services.settings.saveConfig(config);
     if (!mounted) return;
@@ -178,6 +181,7 @@ class _SetupScreenState extends State<SetupScreen> {
                     children: [
                       _choice('Answer time', [10, 15, 20], _answerSeconds, (v) => _answerSeconds = v, suffix: 's'),
                       _choice('Bomb timer', [10, 20, 30], _bombSeconds, (v) => _bombSeconds = v, suffix: 's'),
+                      _choice('Heads Up turn', [30, 60, 90], _headsUpSeconds, (v) => _headsUpSeconds = v, suffix: 's'),
                       _choice('Bomb lives', [1, 3], _lives, (v) => _lives = v, labels: {1: 'Sudden death', 3: 'Three lives'}),
                     ],
                   ),

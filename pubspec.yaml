@@ -13,6 +13,7 @@ dependencies:
   path: ^1.9.0
   audioplayers: ^6.1.0
   shared_preferences: ^2.3.2
+  sensors_plus: ^6.1.0
 
 dev_dependencies:
   flutter_test:
@@ -25,6 +26,7 @@ flutter:
   assets:
     - assets/db/
     - assets/sounds/
+    - assets/packs/
 
   fonts:
     - family: BarlowCondensed
