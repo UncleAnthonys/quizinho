@@ -118,7 +118,7 @@ class BuzzGameView extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.fromLTRB(18, 4, 18, 4),
                 child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                  Text(c.phase == BuzzPhase.answering ? 'ANSWER CLOCK' : timerLabel, style: AppText.label(12)),
+                  Text(c.phase == BuzzPhase.answering ? 'ANSWER CLOCK' : timerLabel, style: AppText.label(15)),
                   const SizedBox(height: 4),
                   TimerBar(fraction: c.secondsLeft / c.phaseSeconds, seconds: c.secondsLeft),
                 ]),
@@ -340,7 +340,7 @@ class _FaceOffBanner extends StatelessWidget {
         borderRadius: BorderRadius.circular(12),
       ),
       child: Column(children: [
-        Text('FACE-OFF', style: AppText.label(13, color: Colors.white)),
+        Text('FACE-OFF', style: AppText.label(16, color: Colors.white)),
         FittedBox(
           fit: BoxFit.scaleDown,
           child: Row(mainAxisSize: MainAxisSize.min, children: [
@@ -350,11 +350,11 @@ class _FaceOffBanner extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(horizontal: 8),
                   child: Text('v', style: AppText.headline(20, color: Colors.white)),
                 ),
-              TeamChip(name: faceOff.nameFor(team), colorIndex: tournament.config.teams[team].colorIndex, size: 20),
+              TeamChip(name: faceOff.nameFor(team), colorIndex: tournament.config.teams[team].colorIndex, size: 26),
             ],
           ]),
         ),
-        Text('Only these players can answer', style: AppText.label(12, color: Colors.white)),
+        Text('Only these players can answer', style: AppText.label(15, color: Colors.white)),
       ]),
     );
   }
@@ -396,7 +396,7 @@ class _FaceOffIntro extends StatelessWidget {
             Text('FACE-OFF', style: AppText.headline(64, color: Palette.danger)),
           ]),
         ),
-        Text('QUESTION $questionNumber', style: AppText.label(15)),
+        Text('QUESTION $questionNumber', style: AppText.label(20)),
         const SizedBox(height: 24),
         for (final (i, team) in teams.indexed) ...[
           if (i > 0)
@@ -404,15 +404,15 @@ class _FaceOffIntro extends StatelessWidget {
               padding: const EdgeInsets.symmetric(vertical: 8),
               child: Text('V', style: AppText.headline(34, color: Palette.muted)),
             ),
-          TeamChip(name: faceOff.nameFor(team), colorIndex: tournament.config.teams[team].colorIndex, size: 40),
+          TeamChip(name: faceOff.nameFor(team), colorIndex: tournament.config.teams[team].colorIndex, size: 54),
           const SizedBox(height: 4),
-          Text(tournament.teamName(team).toUpperCase(), style: AppText.label(14)),
+          Text(tournament.teamName(team).toUpperCase(), style: AppText.label(20)),
         ],
         const SizedBox(height: 24),
         const Text(
           'Step up to the phone.\nEveryone else — hands off, no helping!',
           textAlign: TextAlign.center,
-          style: TextStyle(fontSize: 17, height: 1.4, color: Palette.text),
+          style: TextStyle(fontSize: 23, height: 1.35, color: Palette.text, fontWeight: FontWeight.w600),
         ),
             ]),
           ),

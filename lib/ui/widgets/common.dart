@@ -76,11 +76,18 @@ class BigButton extends StatelessWidget {
         child: InkWell(
           borderRadius: BorderRadius.circular(18),
           onTap: onPressed,
-          child: Center(
-            child: Row(mainAxisSize: MainAxisSize.min, children: [
-              if (icon != null) ...[Icon(icon, color: textColor, size: 26), const SizedBox(width: 10)],
-              Text(label.toUpperCase(), style: AppText.headline(26, color: textColor)),
-            ]),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12),
+            child: Center(
+              // shrinks to fit narrow buttons instead of spilling out
+              child: FittedBox(
+                fit: BoxFit.scaleDown,
+                child: Row(mainAxisSize: MainAxisSize.min, children: [
+                  if (icon != null) ...[Icon(icon, color: textColor, size: 26), const SizedBox(width: 10)],
+                  Text(label.toUpperCase(), style: AppText.headline(26, color: textColor)),
+                ]),
+              ),
+            ),
           ),
         ),
       ),
