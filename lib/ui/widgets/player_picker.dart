@@ -5,8 +5,9 @@ import '../../core/voice_service.dart';
 import '../../data/models.dart';
 import '../../domain/player_index.dart';
 
-/// Answer entry: say the name, or type the full name and press Go.
-/// No suggestions while typing, so it never gives the answer away.
+/// Answer entry: say the name, or type it. Like 501: no suggestions for a
+/// fragment, so it never gives the answer away — once a full surname is typed,
+/// the players it could mean drop down to tap.
 ///
 /// With [voice], the mic opens straight away. A clear match is accepted
 /// automatically; an unclear one ("Ronaldo") shows the likely players to tap.
@@ -183,8 +184,11 @@ class _PlayerPickerState extends State<PlayerPicker> {
       _listening = false;
       _voiceNote = null;
     }
+    // 501-style: nothing shows for a fragment, but once a full surname, full
+    // name or nickname is typed, every player it could mean drops down.
+    final matches = widget.index.matchTyped(q);
     setState(() {
-      _results = const [];
+      _results = [for (final p in matches.take(5)) PlayerMatch(p, 0)];
       _typedNote = null;
     });
   }
@@ -285,8 +289,19 @@ class _PlayerPickerState extends State<PlayerPicker> {
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
                 child: Row(children: [
-                  Expanded(child: Text(r.player.name, style: AppText.headline(24, weight: FontWeight.w800))),
-                  if (r.player.position != null) Text(r.player.position!, style: AppText.label(14)),
+                  Expanded(
+                    child: FittedBox(
+                      fit: BoxFit.scaleDown,
+                      alignment: Alignment.centerLeft,
+                      child: Text(r.player.name, style: AppText.headline(24, weight: FontWeight.w800)),
+                    ),
+                  ),
+                  // Tells namesakes apart (Luis Suárez URU · ST vs Denis Suárez ESP · CM).
+                  Text(
+                    [if (r.player.nationality != null) r.player.nationality!, if (r.player.position != null) r.player.position!]
+                        .join(' · '),
+                    style: AppText.label(14),
+                  ),
                 ]),
               ),
             ),
