@@ -13,6 +13,11 @@ import '../../domain/player_index.dart';
 /// A mishearing never counts as a wrong answer — it just falls back to the
 /// list. If the player isn't in the database the room can vote, so a gap in
 /// our data never costs a team a correct answer.
+/// True while someone is typing an answer. Game screens listen to this and
+/// collapse to a compact layout so the question stays visible above the
+/// keyboard (the answer box sits near the top, not behind the keyboard).
+final ValueNotifier<bool> answerTyping = ValueNotifier(false);
+
 class PlayerPicker extends StatefulWidget {
   const PlayerPicker({
     super.key,
@@ -43,6 +48,7 @@ class PlayerPicker extends StatefulWidget {
 
 class _PlayerPickerState extends State<PlayerPicker> {
   final _controller = TextEditingController();
+  final _focus = FocusNode();
   List<PlayerMatch> _results = const [];
   bool _voting = false;
   bool _listening = false;
@@ -63,13 +69,30 @@ class _PlayerPickerState extends State<PlayerPicker> {
   @override
   void initState() {
     super.initState();
+    _focus.addListener(_onFocus);
     if (_voiceOn) WidgetsBinding.instance.addPostFrameCallback((_) => _listen());
+  }
+
+  /// Tapping the box = typing: the mic stops at once so it can't fight the keyboard.
+  void _onFocus() {
+    answerTyping.value = _focus.hasFocus;
+    if (_focus.hasFocus && !_typing) {
+      _typing = true;
+      widget.voice?.stop();
+      setState(() {
+        _listening = false;
+        _voiceNote = null;
+      });
+    }
   }
 
   @override
   void dispose() {
     _picked = true;
     widget.voice?.stop();
+    _focus.removeListener(_onFocus);
+    _focus.dispose();
+    answerTyping.value = false;
     _controller.dispose();
     super.dispose();
   }
@@ -194,6 +217,7 @@ class _PlayerPickerState extends State<PlayerPicker> {
     return Column(mainAxisSize: MainAxisSize.min, children: [
       TextField(
         controller: _controller,
+        focusNode: _focus,
         autofocus: !_voiceOn, // keyboard would cover the screen while speaking
         autocorrect: false,
         enableSuggestions: false,
@@ -207,6 +231,7 @@ class _PlayerPickerState extends State<PlayerPicker> {
                   onPressed: _listening
                       ? null
                       : () {
+                          _focus.unfocus();
                           _typing = false;
                           _silentRestarts = 0;
                           _voiceNote = null;

@@ -51,7 +51,10 @@ class BuzzGameView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) =>
-      ListenableBuilder(listenable: round.tournament, builder: (context, _) => _build(context));
+      ListenableBuilder(
+        listenable: Listenable.merge([round.tournament, answerTyping]),
+        builder: (context, _) => _build(context),
+      );
 
   Widget _build(BuildContext context) {
     final c = controller;
@@ -59,6 +62,25 @@ class BuzzGameView extends StatelessWidget {
     final services = AppScope.of(context);
     final size = MediaQuery.sizeOf(context);
     final deviceSideways = size.width > size.height;
+    // Typing: the keyboard takes half the screen, so show just the clock, the
+    // question and the answer box — upright, even in table mode.
+    if (answerTyping.value && c.phase == BuzzPhase.answering) {
+      return Scaffold(
+        resizeToAvoidBottomInset: true,
+        body: PitchBackground(
+          child: SafeArea(
+            child: Column(children: [
+              Padding(
+                padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
+                child: TimerBar(fraction: c.secondsLeft / c.phaseSeconds, seconds: c.secondsLeft, height: 10),
+              ),
+              question(true),
+              Expanded(child: _bottom(context, services)),
+            ]),
+          ),
+        ),
+      );
+    }
     if (deviceSideways || t.tableMode) {
       // Phone turned sideways: draw as-is. Table mode chosen on an upright
       // phone (rotation lock, browser tab): draw it turned for them.

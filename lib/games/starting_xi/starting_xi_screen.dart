@@ -117,7 +117,11 @@ class _StartingXiScreenState extends State<StartingXiScreen>
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) =>
+      ValueListenableBuilder<bool>(valueListenable: answerTyping, builder: (context, typing, _) => _build(typing));
+
+  /// [typingNow]: an answer is being typed — keyboard up, so the pitch gives way.
+  Widget _build(bool typingNow) {
     final t = widget.round.tournament;
     if (_empty) {
       return OutOfChallenges(
@@ -130,14 +134,17 @@ class _StartingXiScreenState extends State<StartingXiScreen>
     final m = c.match;
     final finished = c.phase == BombPhase.finished;
     final exploded = c.phase == BombPhase.exploded;
+    final typing = typingNow && c.phase == BombPhase.ticking;
 
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       body: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
         foregroundDecoration: BoxDecoration(color: exploded ? Palette.danger.withValues(alpha: 0.18) : Colors.transparent),
         child: PitchBackground(
           child: SafeArea(
             child: Column(children: [
+              if (!typing)
               Scoreboard(
                 tournament: t,
                 highlightTeam: finished ? null : c.currentTeam,
@@ -165,7 +172,19 @@ class _StartingXiScreenState extends State<StartingXiScreen>
                 ]),
               ),
               CommentaryBanner(text: commentaryText),
-              Flexible(flex: 5, child: _Formation(match: m, named: c.namedBy, revealAll: finished, tournament: t)),
+              // Keyboard up: swap the pitch for a one-line list of who's been named.
+              if (typing)
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                  child: Text(
+                    c.namedBy.isEmpty
+                        ? 'Nobody named yet'
+                        : 'Named: ${[for (final s in m.lineup) if (c.namedBy.containsKey(s.playerId)) s.playerName.split(' ').last].join(', ')}',
+                    style: AppText.label(14, color: Palette.text),
+                  ),
+                )
+              else
+                Flexible(flex: 5, child: _Formation(match: m, named: c.namedBy, revealAll: finished, tournament: t)),
               Flexible(flex: 6, child: _bottom(c, t)),
             ]),
           ),

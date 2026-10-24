@@ -125,10 +125,20 @@ class _TicTacToeScreenState extends State<TicTacToeScreen>
     }
     final c = _c;
     if (c == null) return const LoadingRound();
+    return ValueListenableBuilder<bool>(
+      valueListenable: answerTyping,
+      builder: (context, typing, _) => _scaffold(c, typing && c.phase == TttPhase.answering),
+    );
+  }
+
+  /// [typing]: keyboard is up — hide the board, keep the two clubs + answer box.
+  Widget _scaffold(TicTacToeController c, bool typing) {
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       body: PitchBackground(
         child: SafeArea(
           child: Column(children: [
+            if (!typing)
             Scoreboard(
               tournament: _t,
               highlightTeam: c.phase == TttPhase.finished ? null : c.currentTeam,
@@ -143,13 +153,15 @@ class _TicTacToeScreenState extends State<TicTacToeScreen>
                   Text('x${widget.round.multiplier} POINTS', style: AppText.label(15, color: Palette.gold)),
               ]),
             ),
-            CommentaryBanner(text: commentaryText),
+            if (!typing) CommentaryBanner(text: commentaryText),
             Expanded(
               child: ListView(padding: const EdgeInsets.fromLTRB(12, 4, 12, 16), children: [
-                _turnBanner(c),
-                const SizedBox(height: 8),
-                _Board(controller: c, tournament: _t, onTap: c.choose),
-                const SizedBox(height: 12),
+                if (!typing) ...[
+                  _turnBanner(c),
+                  const SizedBox(height: 8),
+                  _Board(controller: c, tournament: _t, onTap: c.choose),
+                  const SizedBox(height: 12),
+                ],
                 _bottom(c),
               ]),
             ),
@@ -251,18 +263,14 @@ class _Board extends StatelessWidget {
             borderRadius: BorderRadius.circular(10),
             border: Border.all(color: Palette.line),
           ),
-          // Wraps onto extra lines, then shrinks if it still won't fit — never cut off.
-          child: LayoutBuilder(
-            builder: (context, box) => FittedBox(
-              fit: BoxFit.scaleDown,
-              child: SizedBox(
-                width: box.maxWidth,
-                child: Text(
-                  club.name.toUpperCase(),
-                  textAlign: TextAlign.center,
-                  style: AppText.headline(15, weight: FontWeight.w800),
-                ),
-              ),
+          // One word per line for multi-word names, then the whole label shrinks
+          // to fit — words are never split ("MANCHESTE / R UNITED").
+          child: FittedBox(
+            fit: BoxFit.scaleDown,
+            child: Text(
+              club.name.toUpperCase().split(' ').join('\n'),
+              textAlign: TextAlign.center,
+              style: AppText.headline(17, weight: FontWeight.w800).copyWith(height: 1.05),
             ),
           ),
         );
