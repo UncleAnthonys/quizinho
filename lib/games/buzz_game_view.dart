@@ -69,13 +69,15 @@ class BuzzGameView extends StatelessWidget {
         resizeToAvoidBottomInset: true,
         body: PitchBackground(
           child: SafeArea(
+            // Answer box and its drop-down go first, right under the clock, so
+            // the keyboard can only ever cover the question, never what you type.
             child: Column(children: [
               Padding(
                 padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
                 child: TimerBar(fraction: c.secondsLeft / c.phaseSeconds, seconds: c.secondsLeft, height: 10),
               ),
-              question(true),
-              Expanded(child: _bottom(context, services)),
+              Flexible(fit: FlexFit.loose, child: _bottom(context, services)),
+              Expanded(child: SingleChildScrollView(child: question(true))),
             ]),
           ),
         ),

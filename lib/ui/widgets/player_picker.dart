@@ -225,6 +225,8 @@ class _PlayerPickerState extends State<PlayerPicker> {
         autofocus: !_voiceOn, // keyboard would cover the screen while speaking
         autocorrect: false,
         enableSuggestions: false,
+        autofillHints: const <String>[], // stops Safari offering contacts
+        keyboardType: TextInputType.visiblePassword, // no predictive bar on phones
         textCapitalization: TextCapitalization.words,
         style: AppText.headline(26, weight: FontWeight.w800),
         decoration: InputDecoration(
