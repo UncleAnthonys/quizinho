@@ -62,9 +62,12 @@ class BuzzGameView extends StatelessWidget {
     final services = AppScope.of(context);
     final size = MediaQuery.sizeOf(context);
     final deviceSideways = size.width > size.height;
-    // Typing: the keyboard takes half the screen, so show just the clock, the
-    // question and the answer box — upright, even in table mode.
-    if (answerTyping.value && c.phase == BuzzPhase.answering) {
+    // Answering: the clock, the answer box and the question — always upright.
+    // In table mode the answer box must not be drawn sideways: phone browsers
+    // can't type into a rotated box (keyboard glitches), so the answering
+    // player gets an upright screen, then it flips back to table mode.
+    final answeringUpright = c.phase == BuzzPhase.answering && (answerTyping.value || t.tableMode || deviceSideways);
+    if (answeringUpright) {
       return Scaffold(
         resizeToAvoidBottomInset: true,
         body: PitchBackground(
