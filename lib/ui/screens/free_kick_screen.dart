@@ -12,7 +12,8 @@ import '../widgets/common.dart';
 
 /// "NEXT CHALLENGE": the games stand in a free-kick wall, one per shirt.
 /// The taker runs up, the ball smacks one of them, he goes down and that's the
-/// next game. The pick itself comes from [Tournament.spin], and the animation
+/// next game. The wildcard isn't in the wall: when it comes up the shot flies
+/// way wide and clatters a fan in the crowd. The pick itself comes from [Tournament.spin], and the animation
 /// just aims at it.
 class FreeKickScreen extends StatefulWidget {
   const FreeKickScreen({super.key, required this.tournament});
@@ -36,11 +37,13 @@ class _FreeKickScreenState extends State<FreeKickScreen> with TickerProviderStat
       AnimationController(vsync: this, duration: const Duration(milliseconds: 1800))..repeat();
   late final AnimationController _reveal =
       AnimationController(vsync: this, duration: const Duration(milliseconds: 600));
-  late final List<GameModeId> _segments = widget.tournament.wheelSegments;
-  late final _ShirtLabels _labels = _ShirtLabels(_segments);
+  late final List<GameModeId> _wall =
+      widget.tournament.wheelSegments.where((m) => m != GameModeId.wildcard).toList();
+  late final _ShirtLabels _labels = _ShirtLabels(_wall);
   final _rnd = Random();
 
-  int? _target;
+  int? _target; // wall index hit; null when it goes in the crowd
+  bool _crowd = false;
   double _curl = 1;
   bool _struck = false;
   bool _hit = false;
@@ -84,7 +87,8 @@ class _FreeKickScreenState extends State<FreeKickScreen> with TickerProviderStat
     final target = widget.tournament.spin();
     setState(() {
       _running = true;
-      _target = _segments.indexOf(target);
+      _crowd = target == GameModeId.wildcard;
+      _target = _crowd ? null : _wall.indexOf(target);
       _curl = _rnd.nextBool() ? 1 : -1;
     });
     _s.sound.play(Sfx.whistle, volume: 0.6);
@@ -126,11 +130,13 @@ class _FreeKickScreenState extends State<FreeKickScreen> with TickerProviderStat
                 child: CustomPaint(
                   size: Size.infinite,
                   painter: _FreeKickPainter(
-                    segments: _segments,
+                    segments: _wall,
                     labels: _labels,
                     kick: _kick,
                     idle: _idle,
+                    going: _running || _landed != null,
                     target: _target,
+                    crowd: _crowd,
                     curl: _curl,
                   ),
                 ),
@@ -229,7 +235,9 @@ class _FreeKickPainter extends CustomPainter {
     required this.labels,
     required this.kick,
     required this.idle,
+    required this.going,
     required this.target,
+    required this.crowd,
     required this.curl,
   }) : super(repaint: Listenable.merge([kick, idle]));
 
@@ -237,7 +245,9 @@ class _FreeKickPainter extends CustomPainter {
   final _ShirtLabels labels;
   final Animation<double> kick;
   final Animation<double> idle;
-  final int? target;
+  final bool going; // kick under way (or done)
+  final int? target; // wall player hit, null before the kick or for the crowd
+  final bool crowd; // wildcard: the shot goes in the stands
   final double curl;
 
   static const _skins = [
@@ -269,20 +279,27 @@ class _FreeKickPainter extends CustomPainter {
 
     final spot = Offset(w * 0.5, h * 0.86);
     final ballR = max(7.0, min(w, h) * 0.03);
-    final chest = tgt == null ? spot : Offset(px(tgt), feetY - figH * 0.58);
-    // Fall away from where the shot came from.
-    final dir = tgt == null ? 1.0 : (px(tgt) >= spot.dx ? 1.0 : -1.0);
+    // The unlucky fan sits in the front row, out by the corner flag.
+    final fan = Offset(curl > 0 ? w * 0.92 : w * 0.08, h * 0.098);
+    final chest = tgt != null ? Offset(px(tgt), feetY - figH * 0.58) : (crowd ? fan : spot);
+    // Fall away from where the shot came from, but never off the screen.
+    var dir = tgt == null ? 1.0 : (px(tgt) >= spot.dx ? 1.0 : -1.0);
+    if (tgt != null) {
+      final reach = px(tgt) + dir * figH * 0.95;
+      if (reach > w || reach < 0) dir = -dir;
+    }
 
+    _stands(canvas, w, h, t, fan);
     _goal(canvas, w, h);
 
     // Everyone hops as the ball is struck.
     double hop() {
       const end = _Beat.impact + 0.12;
-      if (tgt == null || t < _Beat.strike || t > end) return 0;
+      if (!going || t < _Beat.strike || t > end) return 0;
       return sin((t - _Beat.strike) / (end - _Beat.strike) * pi) * slot * 0.32;
     }
 
-    final idleOn = tgt == null;
+    final idleOn = !going;
     for (var i = 0; i < n; i++) {
       if (i == tgt) continue;
       final bob = idleOn ? sin((idle.value + i * 0.17) * 2 * pi) * slot * 0.025 : 0.0;
@@ -295,13 +312,61 @@ class _FreeKickPainter extends CustomPainter {
       _player(canvas, Offset(px(tgt), feetY - (down ? 0 : hop())), slot, tgt, angle, down);
       if (down && t < _Beat.impact + 0.12) _burst(canvas, chest, slot, (t - _Beat.impact) / 0.12);
     }
+    if (crowd && going && t >= _Beat.impact && t < _Beat.impact + 0.12) {
+      _burst(canvas, fan, h * 0.05, (t - _Beat.impact) / 0.12);
+    }
 
     _ball(canvas, t, spot, chest, ballR, feetY, slot, dir, w, h);
-    _takerFigure(canvas, t, w, h, tgt != null);
+    _takerFigure(canvas, t, w, h, going);
+  }
+
+  /// Two rows of fans behind the goal, with advertising boards in front.
+  void _stands(Canvas canvas, double w, double h, double t, Offset fan) {
+    final bottom = h * 0.14;
+    canvas.drawRect(Rect.fromLTRB(0, 0, w, bottom), Paint()..color = const Color(0xFF0A1F16));
+    final r = h * 0.017;
+    final rnd = Random(11); // same crowd every frame
+    final jump = going && t >= _Beat.impact ? sin(((t - _Beat.impact) / 0.3).clamp(0.0, 1.0) * pi) * r * 0.9 : 0.0;
+    for (final (row, y) in [(0, h * 0.045), (1, h * 0.098)]) {
+      for (var x = r * (row == 0 ? 1.2 : 2.3); x < w; x += r * 2.3) {
+        final skin = _skins[rnd.nextInt(_skins.length)];
+        final top = Palette.teams[rnd.nextInt(Palette.teams.length)];
+        final phase = rnd.nextDouble();
+        if (crowd && row == 1 && (x - fan.dx).abs() < r * 1.6) continue; // drawn on their own below
+        final bob = going ? -jump * phase : sin((idle.value + phase) * 2 * pi) * r * 0.12;
+        _fan(canvas, Offset(x, y + bob), r, skin, top, 0);
+      }
+    }
+    if (crowd) {
+      final f = going && t >= _Beat.impact ? ((t - _Beat.impact) / 0.35).clamp(0.0, 1.0) : 0.0;
+      _fan(canvas, fan, r, _skins[1], Palette.teams[3], -curl * 0.75 * Curves.elasticOut.transform(f));
+    }
+    // advertising boards
+    final boardTop = h * 0.12;
+    const segs = 6;
+    for (var k = 0; k < segs; k++) {
+      canvas.drawRect(Rect.fromLTRB(w * k / segs, boardTop, w * (k + 1) / segs, bottom),
+          Paint()..color = k.isEven ? const Color(0xFF123F2D) : const Color(0xFF0D3122));
+    }
+    canvas.drawLine(Offset(0, boardTop), Offset(w, boardTop),
+        Paint()
+          ..color = Palette.yellow.withValues(alpha: 0.7)
+          ..strokeWidth = 1.5);
+  }
+
+  /// A fan: head and shoulders, tipped back by [tilt] radians when hit.
+  void _fan(Canvas canvas, Offset head, double r, Color skin, Color top, double tilt) {
+    canvas.save();
+    canvas.translate(head.dx, head.dy + r * 1.8);
+    canvas.rotate(tilt);
+    canvas.drawRRect(RRect.fromLTRBR(-r * 1.1, -r * 1.0, r * 1.1, r * 0.6, Radius.circular(r * 0.6)),
+        Paint()..color = top);
+    canvas.drawCircle(Offset(0, -r * 1.8), r, Paint()..color = skin);
+    canvas.restore();
   }
 
   void _goal(Canvas canvas, double w, double h) {
-    final l = w * 0.08, r = w * 0.92, top = h * 0.05, bottom = h * 0.36;
+    final l = w * 0.08, r = w * 0.92, top = h * 0.17, bottom = h * 0.38;
     final net = Paint()
       ..color = Colors.white.withValues(alpha: 0.16)
       ..strokeWidth = 1;
@@ -392,21 +457,34 @@ class _FreeKickPainter extends CustomPainter {
     double r;
     double groundY;
     double spin = 0;
-    if (target == null || t < _Beat.strike) {
+    var opacity = 1.0;
+    if (!going || t < _Beat.strike) {
       pos = spot;
       r = r0;
       groundY = spot.dy;
     } else if (t < _Beat.impact) {
       final u = Curves.easeIn.transform((t - _Beat.strike) / (_Beat.impact - _Beat.strike)) * 0.85 +
           (t - _Beat.strike) / (_Beat.impact - _Beat.strike) * 0.15;
-      final ctrl = Offset((spot.dx + chest.dx) / 2 + curl * w * 0.30, (spot.dy + chest.dy) / 2 - h * 0.04);
+      // Wall: bends round and back in. Crowd: slices away towards the corner flag.
+      final ctrl = crowd
+          ? Offset(spot.dx + (chest.dx - spot.dx) * 0.2, (spot.dy + chest.dy) / 2)
+          : Offset((spot.dx + chest.dx) / 2 + curl * w * 0.30, (spot.dy + chest.dy) / 2 - h * 0.04);
       pos = Offset(
         (1 - u) * (1 - u) * spot.dx + 2 * (1 - u) * u * ctrl.dx + u * u * chest.dx,
         (1 - u) * (1 - u) * spot.dy + 2 * (1 - u) * u * ctrl.dy + u * u * chest.dy,
       );
-      r = _lerp(r0, r0 * 0.72, u);
-      groundY = _lerp(spot.dy, feetY, u);
+      r = _lerp(r0, r0 * (crowd ? 0.5 : 0.72), u);
+      groundY = crowd ? pos.dy + h * 0.08 * (1 - u) : _lerp(spot.dy, feetY, u);
       spin = u * 12;
+    } else if (crowd) {
+      // Pops up off the fan's head and disappears into the stand.
+      final u = ((t - _Beat.impact) / 0.3).clamp(0.0, 1.0);
+      pos = chest + Offset(-curl * w * 0.06 * u, -sin(u * pi) * h * 0.05 + u * h * 0.03);
+      r = r0 * 0.5;
+      groundY = pos.dy;
+      spin = 12 + u * 6;
+      opacity = 1 - u;
+      if (opacity <= 0) return;
     } else {
       // Rebound: drops in front of the wall, bounces once, rolls off.
       final u = ((t - _Beat.impact) / (1 - _Beat.impact)).clamp(0.0, 1.0);
@@ -419,15 +497,17 @@ class _FreeKickPainter extends CustomPainter {
       groundY = ground;
       spin = 12 + u * 6;
     }
-    // shadow
-    canvas.drawOval(Rect.fromCenter(center: Offset(pos.dx, groundY + r * 0.9), width: r * 2, height: r * 0.6),
-        Paint()..color = Colors.black.withValues(alpha: 0.3));
-    canvas.drawCircle(pos, r, Paint()..color = Colors.white);
+    // shadow (not once it's up in the stands)
+    if (!(crowd && t >= _Beat.impact)) {
+      canvas.drawOval(Rect.fromCenter(center: Offset(pos.dx, groundY + r * 0.9), width: r * 2, height: r * 0.6),
+          Paint()..color = Colors.black.withValues(alpha: 0.3 * opacity));
+    }
+    canvas.drawCircle(pos, r, Paint()..color = Colors.white.withValues(alpha: opacity));
     canvas.drawCircle(pos, r,
         Paint()
           ..style = PaintingStyle.stroke
           ..strokeWidth = max(1, r * 0.12)
-          ..color = Colors.black87);
+          ..color = Colors.black.withValues(alpha: 0.87 * opacity));
     final patch = Path();
     for (var k = 0; k < 5; k++) {
       final a = spin + k * 2 * pi / 5;
@@ -438,7 +518,7 @@ class _FreeKickPainter extends CustomPainter {
         patch.lineTo(p.dx, p.dy);
       }
     }
-    canvas.drawPath(patch..close(), Paint()..color = Colors.black87);
+    canvas.drawPath(patch..close(), Paint()..color = Colors.black.withValues(alpha: 0.87 * opacity));
   }
 
   /// The taker, seen from behind: runs in from bottom-left, strikes, follows through.
@@ -493,5 +573,9 @@ class _FreeKickPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(covariant _FreeKickPainter old) =>
-      old.target != target || old.curl != curl || old.segments != segments;
+      old.going != going ||
+      old.target != target ||
+      old.crowd != crowd ||
+      old.curl != curl ||
+      old.segments != segments;
 }

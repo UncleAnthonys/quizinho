@@ -406,47 +406,49 @@ class _FaceOffIntro extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final teams = faceOff.players.keys.toList()..sort();
+    // Only the headline block scales to fit, using all the height there is;
+    // the instructions and button keep their fixed size below it.
     return Padding(
       padding: const EdgeInsets.fromLTRB(20, 8, 20, 20),
       child: Column(children: [
-        const Spacer(),
-        Flexible(
-          flex: 8,
-          child: FittedBox(
-            fit: BoxFit.scaleDown,
-            child: Column(mainAxisSize: MainAxisSize.min, children: [
-        TweenAnimationBuilder<double>(
-          tween: Tween(begin: 0.6, end: 1),
-          duration: const Duration(milliseconds: 600),
-          curve: Curves.elasticOut,
-          builder: (context, v, child) => Transform.scale(scale: v, child: child),
-          child: Column(children: [
-            const Icon(Icons.flash_on_rounded, color: Palette.danger, size: 56),
-            Text('FACE-OFF', style: AppText.headline(84, color: Palette.danger)),
-          ]),
-        ),
-        Text('QUESTION $questionNumber', style: AppText.label(20)),
-        const SizedBox(height: 24),
-        for (final (i, team) in teams.indexed) ...[
-          if (i > 0)
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8),
-              child: Text('V', style: AppText.headline(48, color: Palette.muted)),
+        Expanded(
+          child: Center(
+            child: FittedBox(
+              fit: BoxFit.scaleDown,
+              child: Column(mainAxisSize: MainAxisSize.min, children: [
+                TweenAnimationBuilder<double>(
+                  tween: Tween(begin: 0.6, end: 1),
+                  duration: const Duration(milliseconds: 600),
+                  curve: Curves.elasticOut,
+                  builder: (context, v, child) => Transform.scale(scale: v, child: child),
+                  child: Row(mainAxisSize: MainAxisSize.min, children: [
+                    const Icon(Icons.flash_on_rounded, color: Palette.danger, size: 80),
+                    Text('FACE-OFF', style: AppText.headline(96, color: Palette.danger).copyWith(height: 1.0)),
+                  ]),
+                ),
+                Text('QUESTION $questionNumber', style: AppText.label(22)),
+                const SizedBox(height: 16),
+                for (final (i, team) in teams.indexed) ...[
+                  if (i > 0)
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 4),
+                      child: Text('V', style: AppText.headline(52, color: Palette.muted).copyWith(height: 1.0)),
+                    ),
+                  TeamChip(name: faceOff.nameFor(team), colorIndex: tournament.config.teams[team].colorIndex, size: 88),
+                  const SizedBox(height: 2),
+                  Text(tournament.teamName(team).toUpperCase(), style: AppText.label(26)),
+                ],
+              ]),
             ),
-          TeamChip(name: faceOff.nameFor(team), colorIndex: tournament.config.teams[team].colorIndex, size: 76),
-          const SizedBox(height: 4),
-          Text(tournament.teamName(team).toUpperCase(), style: AppText.label(24)),
-        ],
-        const SizedBox(height: 24),
+          ),
+        ),
+        const SizedBox(height: 12),
         const Text(
           'Step up to the phone.\nEveryone else — hands off, no helping!',
           textAlign: TextAlign.center,
-          style: TextStyle(fontSize: 23, height: 1.35, color: Palette.text, fontWeight: FontWeight.w600),
+          style: TextStyle(fontSize: 20, height: 1.35, color: Palette.text, fontWeight: FontWeight.w600),
         ),
-            ]),
-          ),
-        ),
-        const Spacer(),
+        const SizedBox(height: 16),
         BigButton(label: 'Ready — show question', icon: Icons.visibility_rounded, onPressed: onReady),
       ]),
     );
