@@ -7,7 +7,7 @@ import '../../domain/tournament.dart';
 enum CoPhase { answering, reveal, finished }
 
 /// What one "dart" did.
-enum CoOutcome { scored, checkout, bust, overshoot, wrong, timeUp }
+enum CoOutcome { scored, checkout, bust, bogey, overshoot, wrong, timeUp }
 
 enum CoEvent { thrown, duplicate, noStats }
 
@@ -36,7 +36,10 @@ class CoThrow {
 /// player; their league apps + goals for the club come off the score.
 /// Over 180 is a bust (score stays). Finish between 0 and −10 to check out —
 /// further below is a bust. A player named by anyone is gone for everyone.
-/// First to check out wins; if nobody does in [maxTurns] each, closest wins.
+/// The nine bogey numbers (impossible with three real darts) score nothing.
+/// When a team checks out, the rest of that lap still throws: everyone who
+/// checks out on the same dart is compared, closest to zero wins.
+/// If nobody checks out in [maxTurns] each, closest wins.
 class CheckoutController extends ChangeNotifier {
   CheckoutController({
     required this.category,
@@ -58,6 +61,7 @@ class CheckoutController extends ChangeNotifier {
   static const int maxDart = 180;
   static const int checkoutWindow = 10; // 0 to −10 counts
   static const int winPoints = 3;
+  static const Set<int> bogeys = {163, 166, 169, 172, 173, 175, 176, 178, 179};
 
   late final List<int> remaining = List.filled(teamCount, start);
   final List<CoThrow> throws = [];
@@ -66,7 +70,7 @@ class CheckoutController extends ChangeNotifier {
   CoPhase phase = CoPhase.answering;
   int turn = 0;
   double secondsLeft = 0;
-  int? checkedOut;
+  final Set<int> checkedOut = {};
 
   CoEvent? lastEvent;
   int eventSerial = 0;
@@ -127,6 +131,8 @@ class CheckoutController extends ChangeNotifier {
     final CoOutcome outcome;
     if (value > maxDart) {
       outcome = CoOutcome.bust;
+    } else if (bogeys.contains(value)) {
+      outcome = CoOutcome.bogey;
     } else if (after < -checkoutWindow) {
       outcome = CoOutcome.overshoot;
     } else if (after <= 0) {
@@ -136,7 +142,7 @@ class CheckoutController extends ChangeNotifier {
     }
     final counts = outcome == CoOutcome.scored || outcome == CoOutcome.checkout;
     if (counts) remaining[team] = after;
-    if (outcome == CoOutcome.checkout) checkedOut = team;
+    if (outcome == CoOutcome.checkout) checkedOut.add(team);
     _record(CoThrow(
       team: team,
       label: p.name,
@@ -158,7 +164,10 @@ class CheckoutController extends ChangeNotifier {
   void next() {
     if (phase != CoPhase.reveal) return;
     turn++;
-    if (checkedOut != null || turn >= maxTurns * teamCount) {
+    // A checkout ends the game at the end of that lap, so every team gets
+    // the same number of darts.
+    final lapDone = turn % teamCount == 0;
+    if ((checkedOut.isNotEmpty && lapDone) || turn >= maxTurns * teamCount) {
       phase = CoPhase.finished;
     } else {
       phase = CoPhase.answering;
@@ -169,7 +178,10 @@ class CheckoutController extends ChangeNotifier {
 
   /// The team that checked out — or, if nobody did, the closest to zero.
   Set<int> get winners {
-    if (checkedOut != null) return {checkedOut!};
+    if (checkedOut.isNotEmpty) {
+      final best = checkedOut.map((t) => remaining[t]).reduce((a, b) => a > b ? a : b);
+      return {for (final t in checkedOut) if (remaining[t] == best) t};
+    }
     final best = remaining.reduce((a, b) => a < b ? a : b);
     return {for (var t = 0; t < teamCount; t++) if (remaining[t] == best) t};
   }

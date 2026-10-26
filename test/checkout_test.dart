@@ -98,8 +98,44 @@ void main() {
     c.submit(pl('z')); // 141 - 141 = 0 → checkout
     expect(c.lastThrow!.outcome, CoOutcome.checkout);
     c.next();
+    expect(c.phase, CoPhase.answering); // B still gets the same dart
+    expect(c.currentTeam, 1);
+    c.pass();
+    c.next();
     expect(c.phase, CoPhase.finished);
     expect(c.result().points, {0: 3, 1: 0});
+  });
+
+  test('bogey numbers score nothing and use the player up', () {
+    final c = CheckoutController(
+      category: const CheckoutCategory(id: 't', prompt: 'T', difficulty: 1, values: {'bog': (150, 13)}),
+      teamCount: 2,
+    )..begin();
+    c.submit(pl('bog')); // 163
+    expect(c.lastThrow!.outcome, CoOutcome.bogey);
+    expect(c.remaining[0], 501);
+    c.next();
+    c.submit(pl('bog'));
+    expect(c.lastEvent, CoEvent.duplicate);
+  });
+
+  test('both check out on the same dart: closest to zero wins', () {
+    final c = CheckoutController(
+      category: const CheckoutCategory(id: 't', prompt: 'T', difficulty: 1, values: {
+        'a1': (150, 30), 'b1': (150, 30), 'a2': (150, 30), 'b2': (150, 30),
+        'a3': (140, 5), 'b3': (140, 1), // A 141-145 = -4, B 141-141 = 0
+      }),
+      teamCount: 2,
+    )..begin();
+    for (final id in ['a1', 'b1', 'a2', 'b2', 'a3']) {
+      throwAndNext(c, id);
+    }
+    expect(c.phase, CoPhase.answering);
+    c.submit(pl('b3'));
+    expect(c.lastThrow!.outcome, CoOutcome.checkout);
+    c.next();
+    expect(c.phase, CoPhase.finished);
+    expect(c.winners, {1});
   });
 
   test('wrong player, no-stats player and time up', () {

@@ -81,7 +81,7 @@ class _CheckoutScreenState extends State<CheckoutScreen>
               s.sound.play(Sfx.kick);
               s.haptic(HapticStrength.medium);
               if (t.value == 180) say('ONE HUNDRED AND EIGHTYYYY!');
-            case CoOutcome.bust || CoOutcome.overshoot:
+            case CoOutcome.bust || CoOutcome.bogey || CoOutcome.overshoot:
               s.sound.play(Sfx.boom, volume: 0.7);
               s.sound.play(Sfx.groan, volume: 0.6);
               s.haptic(HapticStrength.heavy);
@@ -213,6 +213,7 @@ class _CheckoutScreenState extends State<CheckoutScreen>
   String _tag(CoThrow t) => switch (t.outcome) {
         CoOutcome.scored || CoOutcome.checkout => '−${t.value}',
         CoOutcome.bust || CoOutcome.overshoot => 'BUST',
+        CoOutcome.bogey => 'BOGEY',
         CoOutcome.wrong || CoOutcome.timeUp => '✗',
       };
 
@@ -231,11 +232,14 @@ class _CheckoutScreenState extends State<CheckoutScreen>
         ),
       ]),
       Text(
-        c.remaining[team] <= CheckoutController.maxDart
-            ? 'Finish between 0 and −${CheckoutController.checkoutWindow} to check out!'
-            : 'Over ${CheckoutController.maxDart} = bust. Players named are gone for everyone.',
+        c.checkedOut.isNotEmpty
+            ? 'LAST DART! They’ve checked out — finish closer to 0 to win it.'
+            : c.remaining[team] <= CheckoutController.maxDart
+                ? 'Finish between 0 and −${CheckoutController.checkoutWindow} to check out!'
+                : 'Over ${CheckoutController.maxDart} or a bogey number = no score.',
         textAlign: TextAlign.center,
-        style: AppText.label(13, color: c.remaining[team] <= CheckoutController.maxDart ? Palette.gold : Palette.muted),
+        style: AppText.label(13,
+            color: c.checkedOut.isNotEmpty || c.remaining[team] <= CheckoutController.maxDart ? Palette.gold : Palette.muted),
       ),
       const SizedBox(height: 8),
       TimerBar(fraction: c.fractionLeft, seconds: c.secondsLeft),
@@ -258,6 +262,7 @@ class _CheckoutScreenState extends State<CheckoutScreen>
       CoOutcome.checkout => ('CHECKED OUT!', Palette.yellow),
       CoOutcome.scored => ('${t.before} → ${t.after}', _oche),
       CoOutcome.bust => ('BUST — OVER 180', Palette.danger),
+      CoOutcome.bogey => ('BOGEY NUMBER — SCORES 0', Palette.danger),
       CoOutcome.overshoot => ('BUST — TOO FAR (${t.before - t.value})', Palette.danger),
       CoOutcome.wrong => (t.label == 'Passed' ? 'PASSED' : 'NEVER PLAYED FOR THEM', Palette.danger),
       CoOutcome.timeUp => ('OUT OF TIME', Palette.danger),
@@ -298,7 +303,7 @@ class _CheckoutScreenState extends State<CheckoutScreen>
         .toList()
       ..sort((a, b) => a.$2.compareTo(b.$2));
     return ListView(padding: const EdgeInsets.fromLTRB(14, 6, 14, 16), children: [
-      Text(c.checkedOut != null ? 'GAME SHOT!' : 'CLOSEST TO ZERO WINS', textAlign: TextAlign.center,
+      Text(c.checkedOut.isNotEmpty ? 'GAME SHOT!' : 'CLOSEST TO ZERO WINS', textAlign: TextAlign.center,
           style: AppText.headline(34, color: _oche)),
       const SizedBox(height: 6),
       for (final w in winners)
@@ -309,14 +314,14 @@ class _CheckoutScreenState extends State<CheckoutScreen>
         ]),
       const SizedBox(height: 12),
       Text('WHO ELSE WAS ON THE BOARD', style: AppText.label(13)),
-      Text('Red = over ${CheckoutController.maxDart}, a bust', style: AppText.label(12, color: Palette.danger)),
+      Text('Red = no score (over ${CheckoutController.maxDart} or a bogey)', style: AppText.label(12, color: Palette.danger)),
       const SizedBox(height: 6),
       Wrap(spacing: 6, runSpacing: 6, children: [
         for (final (p, v) in unused)
           Chip(
             label: Text('${p.name}  $v'),
             backgroundColor: Palette.card,
-            side: v > CheckoutController.maxDart
+            side: v > CheckoutController.maxDart || CheckoutController.bogeys.contains(v)
                 ? const BorderSide(color: Palette.danger, width: 2)
                 : const BorderSide(color: Palette.line),
           ),
