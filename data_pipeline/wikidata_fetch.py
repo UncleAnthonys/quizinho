@@ -37,6 +37,10 @@ OUT = pathlib.Path(__file__).resolve().parent / "raw"
 
 # Sitelinks bands queried separately so each list query stays fast.
 BANDS = [(15, 19), (20, 29), (30, 49), (50, 99), (100, 10_000)]
+# Women's players have far fewer Wikipedia pages than men of the same standing
+# (a WSL regular may have 8), so they get a lower cut-off and extra bands.
+WOMEN_BANDS = [(5, 7), (8, 10), (11, 14)]
+FEMALE = "Q6581072"
 BATCH = 150
 
 
@@ -87,10 +91,12 @@ def values(ids: list[str]) -> str:
     return " ".join(f"wd:{i}" for i in ids)
 
 
-def list_players(lo: int, hi: int) -> dict[str, dict]:
+def list_players(lo: int, hi: int, women_only: bool = False) -> dict[str, dict]:
+    women = f"?p wdt:P21 wd:{FEMALE} ." if women_only else ""
     rows = sparql(f"""
 SELECT ?p ?pLabel ?sl WHERE {{
   ?p wdt:P106 wd:Q937857 ; wikibase:sitelinks ?sl .
+  {women}
   FILTER(?sl >= {lo} && ?sl <= {hi})
   SERVICE wikibase:label {{ bd:serviceParam wikibase:language "en,mul,es,pt,fr,de,it". }}
 }}""")
@@ -102,9 +108,10 @@ def player_details(players: dict[str, dict]) -> None:
     ids = list(players)
     for n, batch in enumerate(chunks(ids, BATCH)):
         rows = sparql(f"""
-SELECT ?p ?dob ?nat ?pos ?posLabel ?famLabel ?alias ?ipa WHERE {{
+SELECT ?p ?dob ?nat ?pos ?posLabel ?famLabel ?alias ?ipa ?sex WHERE {{
   VALUES ?p {{ {values(batch)} }}
   OPTIONAL {{ ?p wdt:P569 ?dob }}
+  OPTIONAL {{ ?p wdt:P21 ?sex }}
   OPTIONAL {{ ?p wdt:P1532 ?nat }}
   OPTIONAL {{ ?p wdt:P413 ?pos }}
   OPTIONAL {{ ?p wdt:P734 ?fam }}
@@ -116,6 +123,8 @@ SELECT ?p ?dob ?nat ?pos ?posLabel ?famLabel ?alias ?ipa WHERE {{
             p = players[qid(r["p"]["value"])]
             if (d := val(r, "dob")):
                 p["dob"] = d[:10]
+            if (sx := val(r, "sex")):
+                p["sex"] = "f" if qid(sx) == FEMALE else "m"
             for key, field in (("nat", "nationalities"), ("posLabel", "positions"),
                                ("famLabel", "family_names"), ("alias", "aliases"), ("ipa", "ipa")):
                 v = val(r, key)
@@ -232,6 +241,8 @@ def save(name: str, obj) -> None:
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--min-sitelinks", type=int, default=15)
+    ap.add_argument("--min-sitelinks-women", type=int, default=5,
+                    help="lower cut-off for women's players (0 = no extra women's pass)")
     ap.add_argument("--countries-only", action="store_true", help="only (re)fetch countries for an existing dump")
     args = ap.parse_args()
     t0 = time.time()
@@ -249,6 +260,13 @@ def main() -> int:
         got = list_players(max(lo, args.min_sitelinks), hi)
         print(f"players with {lo}-{hi} sitelinks: {len(got)}", flush=True)
         players.update(got)
+    if args.min_sitelinks_women:
+        for lo, hi in WOMEN_BANDS:
+            if hi < args.min_sitelinks_women or lo >= args.min_sitelinks:
+                continue
+            got = list_players(max(lo, args.min_sitelinks_women), min(hi, args.min_sitelinks - 1), women_only=True)
+            print(f"women's players with {lo}-{hi} sitelinks: {len(got)}", flush=True)
+            players.update(got)
     print(f"total players: {len(players)}", flush=True)
 
     player_details(players)
@@ -266,7 +284,8 @@ def main() -> int:
     (OUT / "FETCHED.txt").write_text(
         f"fetched {time.strftime('%Y-%m-%d %H:%M UTC', time.gmtime())}; "
         f"players={len(players)} spells={len(spells)} teams={len(clubs)} "
-        f"min_sitelinks={args.min_sitelinks} took={int(time.time() - t0)}s\n"
+        f"min_sitelinks={args.min_sitelinks} min_sitelinks_women={args.min_sitelinks_women} "
+        f"women={sum(1 for p in players.values() if p.get('sex') == 'f')} took={int(time.time() - t0)}s\n"
     )
     return 0
 

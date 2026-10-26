@@ -8,6 +8,9 @@ on:
       min_sitelinks:
         description: "Only players covered by at least this many Wikipedias (fame cut-off)"
         default: "15"
+      min_sitelinks_women:
+        description: "Lower cut-off for women's players"
+        default: "5"
       countries_only:
         description: "Only refetch countries (fast)"
         default: "no"
@@ -35,7 +38,7 @@ jobs:
           if [ "${{ github.event.inputs.countries_only }}" = "yes" ]; then
             bash scripts/ci_run.sh "Countries fetch" python3 data_pipeline/wikidata_fetch.py --countries-only
           else
-            bash scripts/ci_run.sh "Wikidata fetch" python3 data_pipeline/wikidata_fetch.py --min-sitelinks "${{ github.event.inputs.min_sitelinks || '15' }}"
+            bash scripts/ci_run.sh "Wikidata fetch" python3 data_pipeline/wikidata_fetch.py --min-sitelinks "${{ github.event.inputs.min_sitelinks || '15' }}" --min-sitelinks-women "${{ github.event.inputs.min_sitelinks_women || '5' }}"
           fi
       - name: Report
         run: echo "::notice title=Fetched::$(cat data_pipeline/raw/FETCHED.txt 2>/dev/null || echo countries only)"
