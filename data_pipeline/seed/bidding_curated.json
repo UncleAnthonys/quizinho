@@ -119,6 +119,7 @@
       "prompt": "Ballon d'Or winners since 2000",
       "difficulty": 1, "eras": 28,
       "source": "Sports Illustrated: Men's Ballon d'Or full list of winners", "as_of": "2025 award",
+      "record": {"Luís Figo": [1, 2000], "Michael Owen": [1, 2001], "Ronaldo|ronaldo": [1, 2002], "Pavel Nedvěd": [1, 2003], "Andriy Shevchenko": [1, 2004], "Ronaldinho": [1, 2005], "Fabio Cannavaro": [1, 2006], "Kaká": [1, 2007], "Cristiano Ronaldo": [5, 2017], "Lionel Messi": [8, 2023], "Luka Modrić": [1, 2018], "Karim Benzema": [1, 2022], "Rodri|rodri": [1, 2024], "Ousmane Dembélé": [1, 2025]},
       "answers": ["Luís Figo", "Michael Owen", "Ronaldo|ronaldo", "Pavel Nedvěd", "Andriy Shevchenko", "Ronaldinho", "Fabio Cannavaro", "Kaká", "Cristiano Ronaldo", "Lionel Messi", "Luka Modrić", "Karim Benzema", "Rodri|rodri", "Ousmane Dembélé"]
     },
     {
@@ -126,6 +127,7 @@
       "prompt": "Premier League Golden Boot winners since 2009-10 (incl. joint)",
       "difficulty": 2, "eras": 28,
       "source": "Wikipedia: Premier League Golden Boot", "as_of": "2025-26 season",
+      "record": {"Didier Drogba": [1, 2010], "Carlos Tevez": [1, 2011], "Dimitar Berbatov": [1, 2011], "Robin van Persie": [2, 2013], "Luis Suárez": [1, 2014], "Sergio Agüero": [1, 2015], "Harry Kane": [3, 2021], "Mohamed Salah": [4, 2025], "Pierre-Emerick Aubameyang": [1, 2019], "Sadio Mané": [1, 2019], "Jamie Vardy": [1, 2020], "Son Heung-min": [1, 2022], "Erling Haaland": [3, 2026]},
       "answers": ["Didier Drogba", "Carlos Tevez", "Dimitar Berbatov", "Robin van Persie", "Luis Suárez", "Sergio Agüero", "Harry Kane", "Mohamed Salah", "Pierre-Emerick Aubameyang", "Sadio Mané", "Jamie Vardy", "Son Heung-min", "Erling Haaland"]
     },
     {
@@ -133,6 +135,7 @@
       "prompt": "Premier League Player of the Season winners since 2010-11",
       "difficulty": 2, "eras": 24,
       "source": "Wikipedia: Premier League Player of the Season", "as_of": "2025-26 season",
+      "record": {"Nemanja Vidić": [1, 2011], "Vincent Kompany": [1, 2012], "Gareth Bale": [1, 2013], "Luis Suárez": [1, 2014], "Eden Hazard": [1, 2015], "Jamie Vardy": [1, 2016], "N'Golo Kanté": [1, 2017], "Mohamed Salah": [2, 2025], "Virgil van Dijk": [1, 2019], "Kevin De Bruyne": [2, 2022], "Rúben Dias": [1, 2021], "Erling Haaland": [1, 2023], "Phil Foden": [1, 2024], "Bruno Fernandes": [1, 2026]},
       "answers": ["Nemanja Vidić", "Vincent Kompany", "Gareth Bale", "Luis Suárez", "Eden Hazard", "Jamie Vardy", "N'Golo Kanté", "Mohamed Salah", "Virgil van Dijk", "Kevin De Bruyne", "Rúben Dias", "Erling Haaland", "Phil Foden", "Bruno Fernandes"]
     },
     {
@@ -168,6 +171,7 @@
       "prompt": "Managers who've won the Premier League",
       "difficulty": 1, "eras": 30,
       "source": "Wikipedia: List of Premier League managers", "as_of": "2025-26 season",
+      "record": {"Alex Ferguson": [13, 2013], "Kenny Dalglish": [1, 1995], "Arsène Wenger|new:5": [3, 2004], "José Mourinho": [3, 2015], "Carlo Ancelotti": [1, 2010], "Roberto Mancini": [1, 2012], "Manuel Pellegrini": [1, 2014], "Claudio Ranieri": [1, 2016], "Antonio Conte": [1, 2017], "Pep Guardiola": [6, 2024], "Jürgen Klopp": [1, 2020], "Arne Slot": [1, 2025], "Mikel Arteta": [1, 2026]},
       "answers": ["Alex Ferguson", "Kenny Dalglish", "Arsène Wenger|new:5", "José Mourinho", "Carlo Ancelotti", "Roberto Mancini", "Manuel Pellegrini", "Claudio Ranieri", "Antonio Conte", "Pep Guardiola", "Jürgen Klopp", "Arne Slot", "Mikel Arteta"]
     },
     {
@@ -175,6 +179,7 @@
       "prompt": "Managers who've won the Champions League (since 1993)",
       "difficulty": 2, "eras": 30,
       "source": "Wikipedia: List of European Cup and UEFA Champions League winning managers", "as_of": "2026 final",
+      "record": {"Raymond Goethals": [1, 1993], "Fabio Capello": [1, 1994], "Louis van Gaal": [1, 1995], "Marcello Lippi": [1, 1996], "Ottmar Hitzfeld": [2, 2001], "Jupp Heynckes": [2, 2013], "Alex Ferguson": [2, 2008], "Vicente del Bosque": [2, 2002], "Carlo Ancelotti": [5, 2024], "José Mourinho": [2, 2010], "Rafael Benítez|new:4": [1, 2005], "Frank Rijkaard": [1, 2006], "Pep Guardiola": [3, 2023], "Roberto Di Matteo": [1, 2012], "Luis Enrique": [3, 2026], "Zinedine Zidane": [3, 2018], "Jürgen Klopp": [1, 2019], "Hansi Flick": [1, 2020], "Thomas Tuchel": [1, 2021]},
       "answers": ["Raymond Goethals", "Fabio Capello", "Louis van Gaal", "Marcello Lippi", "Ottmar Hitzfeld", "Jupp Heynckes", "Alex Ferguson", "Vicente del Bosque", "Carlo Ancelotti", "José Mourinho", "Rafael Benítez|new:4", "Frank Rijkaard", "Pep Guardiola", "Roberto Di Matteo", "Luis Enrique", "Zinedine Zidane", "Jürgen Klopp", "Hansi Flick", "Thomas Tuchel"]
     },
     {
@@ -182,6 +187,7 @@
       "prompt": "Permanent England managers since 1982",
       "difficulty": 2, "eras": 31,
       "source": "Wikipedia: England national football team manager", "as_of": "2026",
+      "record": {"Bobby Robson": [1, 1990], "Graham Taylor": [1, 1993], "Terry Venables": [1, 1996], "Glenn Hoddle": [1, 1999], "Kevin Keegan": [1, 2000], "Sven-Göran Eriksson": [1, 2006], "Steve McClaren": [1, 2007], "Fabio Capello": [1, 2012], "Roy Hodgson": [1, 2016], "Sam Allardyce": [1, 2016], "Gareth Southgate": [1, 2024], "Thomas Tuchel": [1, 2026]},
       "answers": ["Bobby Robson", "Graham Taylor", "Terry Venables", "Glenn Hoddle", "Kevin Keegan", "Sven-Göran Eriksson", "Steve McClaren", "Fabio Capello", "Roy Hodgson", "Sam Allardyce", "Gareth Southgate", "Thomas Tuchel"]
     },
     {
@@ -190,6 +196,7 @@
       "answers_are": "clubs",
       "difficulty": 1, "eras": 30,
       "source": "Wikipedia: List of Premier League managers (title winners)", "as_of": "2025-26 season",
+      "record": {"Manchester United": [13, 2013], "Blackburn Rovers": [1, 1995], "Arsenal": [4, 2026], "Chelsea": [5, 2017], "Manchester City": [8, 2024], "Leicester City": [1, 2016], "Liverpool": [2, 2025]},
       "answers": ["Manchester United", "Blackburn Rovers", "Arsenal", "Chelsea", "Manchester City", "Leicester City", "Liverpool"]
     },
     {
@@ -198,6 +205,7 @@
       "answers_are": "clubs",
       "difficulty": 2, "eras": 30,
       "source": "Wikipedia: List of European Cup and UEFA Champions League finals", "as_of": "2026 final",
+      "record": {"Olympique de Marseille": [1, 1993], "AC Milan": [3, 2007], "Ajax": [1, 1995], "Juventus": [1, 1996], "Borussia Dortmund": [1, 1997], "Real Madrid": [9, 2024], "Manchester United": [2, 2008], "Bayern Munich": [3, 2020], "Porto": [1, 2004], "Liverpool": [2, 2019], "Barcelona": [4, 2015], "Inter Milan": [1, 2010], "Chelsea": [2, 2021], "Manchester City": [1, 2023], "Paris Saint-Germain": [2, 2026]},
       "answers": ["Olympique de Marseille", "AC Milan", "Ajax", "Juventus", "Borussia Dortmund", "Real Madrid", "Manchester United", "Bayern Munich", "Porto", "Liverpool", "Barcelona", "Inter Milan", "Chelsea", "Manchester City", "Paris Saint-Germain"]
     },
     {
@@ -206,6 +214,7 @@
       "answers_are": "clubs",
       "difficulty": 1, "eras": 30,
       "source": "Wikipedia: List of European Cup and UEFA Champions League finals (since 1993)", "as_of": "2026 final",
+      "record": {"Manchester United": [4, 2011], "Arsenal": [2, 2026], "Liverpool": [5, 2022], "Chelsea": [3, 2021], "Tottenham Hotspur": [1, 2019], "Manchester City": [2, 2023]},
       "answers": ["Manchester United", "Arsenal", "Liverpool", "Chelsea", "Tottenham Hotspur", "Manchester City"]
     },
     {
@@ -245,14 +254,22 @@
     },
     {"id": "pl-never-relegated", "prompt": "Premier League clubs that have never been relegated from it", "answers_are": "clubs", "difficulty": 2, "eras": 30, "source": "RSSSF England 2025/26 final table (Spurs 17th; West Ham, Burnley, Wolves down) + Premier League history", "as_of": "2025-26 season", "answers": ["Arsenal", "Chelsea", "Everton", "Liverpool", "Manchester United", "Tottenham Hotspur"]},
     {"id": "pl-clubs-2026-27", "prompt": "Clubs in the 2026-27 Premier League", "answers_are": "clubs", "difficulty": 1, "eras": 16, "source": "RSSSF England 2025/26: final table, relegated (West Ham, Burnley, Wolves) and promoted (Coventry, Ipswich, Hull)", "as_of": "2026-27 season", "answers": ["Arsenal", "Manchester City", "Manchester United", "Aston Villa", "Liverpool", "AFC Bournemouth", "Sunderland", "Brighton & Hove Albion", "Brentford", "Chelsea", "Fulham", "Newcastle United", "Everton", "Leeds United", "Crystal Palace", "Nottingham Forest", "Tottenham Hotspur", "Coventry City", "Ipswich Town", "Hull City"]},
-    {"id": "fa-cup-winners-1990", "prompt": "FA Cup winners since 1990", "answers_are": "clubs", "difficulty": 2, "eras": 31, "source": "Wikipedia: List of FA Cup finals", "as_of": "2026 final", "answers": ["Manchester United", "Tottenham Hotspur", "Liverpool", "Arsenal", "Everton", "Chelsea", "Portsmouth", "Manchester City", "Wigan Athletic", "Leicester City", "Crystal Palace"]},
-    {"id": "league-cup-winners-2000", "prompt": "League Cup winners since 2000", "answers_are": "clubs", "difficulty": 3, "eras": 28, "source": "Wikipedia: List of EFL Cup finals", "as_of": "2026 final", "answers": ["Leicester City", "Liverpool", "Blackburn Rovers", "Middlesbrough", "Chelsea", "Manchester United", "Tottenham Hotspur", "Birmingham City", "Swansea City", "Manchester City", "Newcastle United"]},
-    {"id": "uefa-cup-europa-winners-2000", "prompt": "UEFA Cup / Europa League winners since 2000", "answers_are": "clubs", "difficulty": 3, "eras": 28, "source": "Wikipedia: List of UEFA Cup and Europa League finals", "as_of": "2026 final", "answers": ["Galatasaray S.K.", "Liverpool", "Feyenoord Rotterdam", "Porto", "Valencia", "CSKA Moscow", "Sevilla", "Zenit Saint Petersburg", "Shakhtar Donetsk", "Atlético Madrid", "Chelsea", "Manchester United", "Villarreal", "Eintracht Frankfurt", "Atalanta BC", "Tottenham Hotspur", "Aston Villa"]},
-    {"id": "english-european-winners-2000", "prompt": "English clubs that have won the Champions League, Europa League or Conference League since 2000", "answers_are": "clubs", "difficulty": 2, "eras": 28, "source": "Wikipedia: Champions League, UEFA Cup/Europa League and Conference League finals lists", "as_of": "2026 finals", "answers": ["Liverpool", "Chelsea", "Manchester United", "Manchester City", "Tottenham Hotspur", "Aston Villa", "West Ham United", "Crystal Palace"]},
-    {"id": "bundesliga-winners-1990", "prompt": "Bundesliga champions since 1990-91", "answers_are": "clubs", "difficulty": 2, "eras": 31, "source": "Bundesliga.com: list of German champions", "as_of": "2025-26 season", "answers": ["1. FC Kaiserslautern", "VfB Stuttgart", "Werder Bremen", "Bayern Munich", "Borussia Dortmund", "VfL Wolfsburg", "Bayer 04 Leverkusen"]},
-    {"id": "la-liga-winners", "prompt": "Clubs that have won La Liga", "answers_are": "clubs", "difficulty": 2, "eras": 31, "source": "Wikipedia: List of Spanish football champions", "as_of": "2025-26 season", "answers": ["Real Madrid", "Barcelona", "Atlético Madrid", "Athletic Bilbao", "Valencia", "Real Sociedad", "Deportivo de A Coruña", "Sevilla", "Real Betis Balompié"]},
-    {"id": "serie-a-winners-1990", "prompt": "Serie A champions since 1990-91", "answers_are": "clubs", "difficulty": 2, "eras": 31, "source": "Wikipedia: List of Italian football champions", "as_of": "2025-26 season", "answers": ["U.C. Sampdoria", "AC Milan", "Juventus", "SS Lazio", "AS Roma", "Inter Milan", "Napoli"]},
-    {"id": "ligue-1-winners-2000", "prompt": "Ligue 1 champions since 2000", "answers_are": "clubs", "difficulty": 3, "eras": 28, "source": "Wikipedia: List of French football champions", "as_of": "2025-26 season", "answers": ["AS Monaco", "Nantes", "Olympique Lyonnais", "Girondins de Bordeaux", "Olympique de Marseille", "Lille OSC", "Montpellier HSC", "Paris Saint-Germain"]},
+    {"id": "fa-cup-winners-1990", "prompt": "FA Cup winners since 1990", "answers_are": "clubs", "difficulty": 2, "eras": 31, "source": "Wikipedia: List of FA Cup finals", "as_of": "2026 final", "record": {"Manchester United": [7, 2024], "Tottenham Hotspur": [1, 1991], "Liverpool": [4, 2022], "Arsenal": [9, 2020], "Everton": [1, 1995], "Chelsea": [7, 2018], "Portsmouth": [1, 2008], "Manchester City": [4, 2026], "Wigan Athletic": [1, 2013], "Leicester City": [1, 2021], "Crystal Palace": [1, 2025]},
+      "answers": ["Manchester United", "Tottenham Hotspur", "Liverpool", "Arsenal", "Everton", "Chelsea", "Portsmouth", "Manchester City", "Wigan Athletic", "Leicester City", "Crystal Palace"]},
+    {"id": "league-cup-winners-2000", "prompt": "League Cup winners since 2000", "answers_are": "clubs", "difficulty": 3, "eras": 28, "source": "Wikipedia: List of EFL Cup finals", "as_of": "2026 final", "record": {"Leicester City": [1, 2000], "Liverpool": [5, 2024], "Blackburn Rovers": [1, 2002], "Middlesbrough": [1, 2004], "Chelsea": [3, 2015], "Manchester United": [5, 2023], "Tottenham Hotspur": [1, 2008], "Birmingham City": [1, 2011], "Swansea City": [1, 2013], "Manchester City": [7, 2026], "Newcastle United": [1, 2025]},
+      "answers": ["Leicester City", "Liverpool", "Blackburn Rovers", "Middlesbrough", "Chelsea", "Manchester United", "Tottenham Hotspur", "Birmingham City", "Swansea City", "Manchester City", "Newcastle United"]},
+    {"id": "uefa-cup-europa-winners-2000", "prompt": "UEFA Cup / Europa League winners since 2000", "answers_are": "clubs", "difficulty": 3, "eras": 28, "source": "Wikipedia: List of UEFA Cup and Europa League finals", "as_of": "2026 final", "record": {"Galatasaray S.K.": [1, 2000], "Liverpool": [1, 2001], "Feyenoord Rotterdam": [1, 2002], "Porto": [2, 2011], "Valencia": [1, 2004], "CSKA Moscow": [1, 2005], "Sevilla": [7, 2023], "Zenit Saint Petersburg": [1, 2008], "Shakhtar Donetsk": [1, 2009], "Atlético Madrid": [3, 2018], "Chelsea": [2, 2019], "Manchester United": [1, 2017], "Villarreal": [1, 2021], "Eintracht Frankfurt": [1, 2022], "Atalanta BC": [1, 2024], "Tottenham Hotspur": [1, 2025], "Aston Villa": [1, 2026]},
+      "answers": ["Galatasaray S.K.", "Liverpool", "Feyenoord Rotterdam", "Porto", "Valencia", "CSKA Moscow", "Sevilla", "Zenit Saint Petersburg", "Shakhtar Donetsk", "Atlético Madrid", "Chelsea", "Manchester United", "Villarreal", "Eintracht Frankfurt", "Atalanta BC", "Tottenham Hotspur", "Aston Villa"]},
+    {"id": "english-european-winners-2000", "prompt": "English clubs that have won the Champions League, Europa League or Conference League since 2000", "answers_are": "clubs", "difficulty": 2, "eras": 28, "source": "Wikipedia: Champions League, UEFA Cup/Europa League and Conference League finals lists", "as_of": "2026 finals", "record": {"Liverpool": [3, 2019], "Chelsea": [5, 2025], "Manchester United": [2, 2017], "Manchester City": [1, 2023], "Tottenham Hotspur": [1, 2025], "Aston Villa": [1, 2026], "West Ham United": [1, 2023], "Crystal Palace": [1, 2026]},
+      "answers": ["Liverpool", "Chelsea", "Manchester United", "Manchester City", "Tottenham Hotspur", "Aston Villa", "West Ham United", "Crystal Palace"]},
+    {"id": "bundesliga-winners-1990", "prompt": "Bundesliga champions since 1990-91", "answers_are": "clubs", "difficulty": 2, "eras": 31, "source": "Bundesliga.com: list of German champions", "as_of": "2025-26 season", "record": {"1. FC Kaiserslautern": [2, 1998], "VfB Stuttgart": [2, 2007], "Werder Bremen": [2, 2004], "Bayern Munich": [25, 2026], "Borussia Dortmund": [5, 2012], "VfL Wolfsburg": [1, 2009], "Bayer 04 Leverkusen": [1, 2024]},
+      "answers": ["1. FC Kaiserslautern", "VfB Stuttgart", "Werder Bremen", "Bayern Munich", "Borussia Dortmund", "VfL Wolfsburg", "Bayer 04 Leverkusen"]},
+    {"id": "la-liga-winners", "prompt": "Clubs that have won La Liga", "answers_are": "clubs", "difficulty": 2, "eras": 31, "source": "Wikipedia: List of Spanish football champions", "as_of": "2025-26 season", "record": {"Real Madrid": [36, 2024], "Barcelona": [29, 2026], "Atlético Madrid": [11, 2021], "Athletic Bilbao": [8, 1984], "Valencia": [6, 2004], "Real Sociedad": [2, 1982], "Deportivo de A Coruña": [1, 2000], "Sevilla": [1, 1946], "Real Betis Balompié": [1, 1935]},
+      "answers": ["Real Madrid", "Barcelona", "Atlético Madrid", "Athletic Bilbao", "Valencia", "Real Sociedad", "Deportivo de A Coruña", "Sevilla", "Real Betis Balompié"]},
+    {"id": "serie-a-winners-1990", "prompt": "Serie A champions since 1990-91", "answers_are": "clubs", "difficulty": 2, "eras": 31, "source": "Wikipedia: List of Italian football champions", "as_of": "2025-26 season", "record": {"U.C. Sampdoria": [1, 1991], "AC Milan": [8, 2022], "Juventus": [14, 2020], "SS Lazio": [1, 2000], "AS Roma": [1, 2001], "Inter Milan": [8, 2026], "Napoli": [2, 2025]},
+      "answers": ["U.C. Sampdoria", "AC Milan", "Juventus", "SS Lazio", "AS Roma", "Inter Milan", "Napoli"]},
+    {"id": "ligue-1-winners-2000", "prompt": "Ligue 1 champions since 2000", "answers_are": "clubs", "difficulty": 3, "eras": 28, "source": "Wikipedia: List of French football champions", "as_of": "2025-26 season", "record": {"AS Monaco": [2, 2017], "Nantes": [1, 2001], "Olympique Lyonnais": [7, 2008], "Girondins de Bordeaux": [1, 2009], "Olympique de Marseille": [1, 2010], "Lille OSC": [2, 2021], "Montpellier HSC": [1, 2012], "Paris Saint-Germain": [12, 2026]},
+      "answers": ["AS Monaco", "Nantes", "Olympique Lyonnais", "Girondins de Bordeaux", "Olympique de Marseille", "Lille OSC", "Montpellier HSC", "Paris Saint-Germain"]},
     {"id": "clubs-zlatan", "prompt": "Clubs Zlatan Ibrahimović played for", "answers_are": "clubs", "difficulty": 2, "eras": 28, "source": "Career data (Wikidata), checked by hand", "as_of": "retired 2023", "answers": ["Malmö FF", "Ajax", "Juventus", "Inter Milan", "Barcelona", "AC Milan", "Paris Saint-Germain", "Manchester United", "LA Galaxy"]},
     {"id": "clubs-anelka", "prompt": "Clubs Nicolas Anelka played for", "answers_are": "clubs", "difficulty": 3, "eras": 14, "source": "Career data (Wikidata), checked by hand", "as_of": "retired 2015", "answers": ["Paris Saint-Germain", "Arsenal", "Real Madrid", "Liverpool", "Manchester City", "Fenerbahçe Istanbul", "Bolton Wanderers", "Chelsea", "Shanghai Shenhua", "Juventus", "West Bromwich Albion", "Mumbai City"]},
     {"id": "clubs-bellamy", "prompt": "Clubs Craig Bellamy played for (incl. loans)", "answers_are": "clubs", "difficulty": 3, "eras": 14, "source": "Career data (Wikidata), checked by hand", "as_of": "retired 2014", "answers": ["Norwich City", "Coventry City", "Newcastle United", "Celtic", "Blackburn Rovers", "Liverpool", "West Ham United", "Manchester City", "Cardiff City"]},

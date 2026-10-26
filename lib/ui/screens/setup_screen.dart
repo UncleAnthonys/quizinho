@@ -33,6 +33,7 @@ class _SetupScreenState extends State<SetupScreen> {
   int _lives = 3;
   int _headsUpSeconds = 60;
   final Set<Era> _eras = {};
+  FootballGender _gender = FootballGender.men;
   bool _loaded = false;
 
   @override
@@ -57,6 +58,7 @@ class _SetupScreenState extends State<SetupScreen> {
     _lives = c.bombLives;
     _headsUpSeconds = c.headsUpSeconds;
     _eras.addAll(c.eras);
+    _gender = c.gender;
   }
 
   @override
@@ -98,8 +100,9 @@ class _SetupScreenState extends State<SetupScreen> {
       bombLives: _lives,
       headsUpSeconds: _headsUpSeconds,
       eras: Set.of(_eras),
-      gender: services.settings.gender,
+      gender: _gender,
     );
+    services.settings.gender = _gender;
     await services.settings.saveConfig(config);
     if (!mounted) return;
     MatchFlow.toWheel(context, Tournament(config));
@@ -159,6 +162,20 @@ class _SetupScreenState extends State<SetupScreen> {
                   showSelectedIcon: false,
                 ),
                 const SizedBox(height: 18),
+                _section('FOOTBALL'),
+                SegmentedButton<FootballGender>(
+                  segments: [for (final g in FootballGender.values) ButtonSegment(value: g, label: Text(g.label))],
+                  selected: {_gender},
+                  onSelectionChanged: (s) => setState(() => _gender = s.first),
+                  showSelectedIcon: false,
+                ),
+                if (_gender == FootballGender.women)
+                  const Padding(
+                    padding: EdgeInsets.only(top: 6, left: 4),
+                    child: Text('Starting XI and Heads Up are men’s only for now, so they’re left out.',
+                        style: TextStyle(color: Palette.muted)),
+                  ),
+                const SizedBox(height: 18),
                 _section('ERAS'),
                 Wrap(spacing: 8, runSpacing: 8, children: [
                   for (final e in Era.values)
@@ -185,7 +202,7 @@ class _SetupScreenState extends State<SetupScreen> {
                   ),
                 ),
                 const SizedBox(height: 18),
-                _section('GAMES ON THE WHEEL'),
+                _section('GAMES'),
                 Wrap(spacing: 8, runSpacing: 8, children: [
                   for (final m in GameModeId.values)
                     FilterChip(

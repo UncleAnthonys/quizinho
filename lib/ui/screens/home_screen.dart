@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import '../../core/app_services.dart';
 import '../../core/theme.dart';
-import '../../data/models.dart';
 import '../../domain/game_mode.dart';
 import '../match_flow.dart';
 import '../widgets/common.dart';
@@ -46,7 +45,7 @@ class HomeScreen extends StatelessWidget {
                       Text('THE FOOTBALL PARTY GAME', style: AppText.label(18, color: Palette.yellow)),
                       const SizedBox(height: 18),
                       const Text(
-                        'Split into teams. Spin the wheel. Shout, steal, argue — the app keeps score.',
+                        'Split into teams. A new game every round. Shout, steal, argue — the app keeps score.',
                         textAlign: TextAlign.center,
                         style: TextStyle(color: Palette.muted, fontSize: 16, height: 1.4),
                       ),
@@ -55,14 +54,6 @@ class HomeScreen extends StatelessWidget {
                 ),
               ),
               const Spacer(flex: 2),
-              ListenableBuilder(
-                listenable: services.settings,
-                builder: (context, _) => _GenderSwitch(
-                  value: services.settings.gender,
-                  onChanged: (g) => services.settings.gender = g,
-                ),
-              ),
-              const SizedBox(height: 14),
               BigButton(
                 label: 'New match',
                 icon: Icons.sports_soccer,
@@ -101,7 +92,7 @@ class HomeScreen extends StatelessWidget {
             const SizedBox(height: 8),
             const Text(
               '1. Split into 2–6 teams and name them.\n'
-              '2. Spin the wheel to pick each game.\n'
+              '2. Each round, the app picks a game at random.\n'
               '3. The app explains the rules, runs the clock and keeps score.\n'
               '4. Most points after the last round lifts the trophy.',
               style: TextStyle(fontSize: 16, height: 1.5),
@@ -122,46 +113,3 @@ class HomeScreen extends StatelessWidget {
       );
 }
 
-/// Men's / Both / Women's — which football the questions come from.
-class _GenderSwitch extends StatelessWidget {
-  const _GenderSwitch({required this.value, required this.onChanged});
-  final FootballGender value;
-  final ValueChanged<FootballGender> onChanged;
-
-  @override
-  Widget build(BuildContext context) => Container(
-        padding: const EdgeInsets.all(4),
-        decoration: BoxDecoration(
-          color: Colors.black.withValues(alpha: 0.35),
-          borderRadius: BorderRadius.circular(30),
-          border: Border.all(color: Palette.line),
-        ),
-        child: Row(children: [
-          for (final g in FootballGender.values)
-            Expanded(
-              child: GestureDetector(
-                onTap: () => onChanged(g),
-                child: AnimatedContainer(
-                  duration: const Duration(milliseconds: 200),
-                  height: 44,
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    color: g == value ? Palette.yellow : Colors.transparent,
-                    borderRadius: BorderRadius.circular(26),
-                  ),
-                  child: FittedBox(
-                    fit: BoxFit.scaleDown,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8),
-                      child: Text(
-                        g == FootballGender.both ? 'BOTH' : '${g.label.toUpperCase()} FOOTBALL',
-                        style: AppText.label(15, color: g == value ? Palette.pitchDeep : Palette.muted),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ),
-        ]),
-      );
-}

@@ -410,6 +410,7 @@ def load_curated_bidding(players, clubs, problems: Problems) -> list[dict]:
     for c in doc["categories"]:
         is_clubs = c.get("answers_are") == "clubs"
         answers = []
+        record: dict[str, list[int]] = {}  # answer -> [times won, most recent year]
         for raw in c["answers"]:
             name, _, pin = raw.partition("|")
             if is_clubs:
@@ -431,13 +432,15 @@ def load_curated_bidding(players, clubs, problems: Problems) -> list[dict]:
             if norm(name) != norm(table[key]["name"]) and name not in table[key]["aliases"]:
                 table[key]["aliases"].append(name)
             answers.append(key)
+            if raw in c.get("record", {}):
+                record[key] = c["record"][raw]
         if len(set(answers)) != len(answers):
             problems.error(f"curated bidding {c['id']}: same answer twice")
         if not BID_MIN_ANSWERS <= len(answers) <= CURATED_MAX_ANSWERS:
             problems.error(f"curated bidding {c['id']}: {len(answers)} answers, need {BID_MIN_ANSWERS}-{CURATED_MAX_ANSWERS}")
         prefix = "clubs" if is_clubs else "stat"
         out.append({"id": f"{prefix}:{c['id']}", "prompt": c["prompt"], "kind": "curated", "answers": sorted(set(answers)),
-                    "difficulty": c["difficulty"], "eras": c["eras"]})
+                    "difficulty": c["difficulty"], "eras": c["eras"], "record": record})
     return out
 
 
@@ -456,20 +459,34 @@ def known_ness(item: dict) -> float:
     return FAME_REACH.get(item.get("fame", 1), 0.15)
 
 
-def pointless_scores(answers: list[str], table: dict) -> dict[str, int]:
+# For winners lists, how memorable an answer is for THAT question: times won
+# and how recently (PSG's back-to-back titles beat Marseille's one in 1993).
+THIS_YEAR = 2026
+
+
+def memorable(times: int, last: int) -> float:
+    recency = max(0.0, 1 - (THIS_YEAR - last) / 40)
+    return 0.4 * recency + 0.6 * min(1.0, times / 5) ** 0.5
+
+
+def pointless_scores(answers: list[str], table: dict, record: dict | None = None) -> dict[str, int]:
     """Half how famous the answer is overall, half where it ranks in its own
     list — so a list of all-famous names doesn't hand out zeros, but the
-    genuinely obscure ones still go pointless."""
+    genuinely obscure ones still go pointless. Where the list has a record of
+    wins, that counts for more than general fame."""
     k = {a: known_ness(table[a]) for a in answers}
+    if record:
+        k = {a: 0.55 * x + 0.45 * memorable(*record[a]) if a in record else x for a, x in k.items()}
     lo, hi = min(k.values()), max(k.values())
     top = max(30, min(90, round(260 / math.sqrt(len(answers)))))
     out = {}
+    least = min(k, key=lambda a: (k[a], a))
     for a, x in k.items():
         rel = (x - lo) / (hi - lo) if hi > lo else 0.5
         blend = 0.5 * x + 0.5 * rel
-        # The least-known answer in the list is pointless (as on the show,
-        # nearly every question has one) — unless it's a genuine star.
-        pointless = blend < 0.12 or (rel < 0.06 and x < 0.6)
+        # The single least-known answer in the list is pointless (as on the
+        # show, nearly every question has one) — unless it's a genuine star.
+        pointless = blend < 0.12 or (a == least and x < 0.6)
         out[a] = 0 if pointless else max(1, round(top * blend ** 1.6))
     return out
 
@@ -477,7 +494,7 @@ def pointless_scores(answers: list[str], table: dict) -> dict[str, int]:
 def add_pointless_scores(bidding: list[dict], players, clubs) -> None:
     for b in bidding:
         table = clubs if b["id"].startswith("clubs:") else players
-        b["scores"] = pointless_scores(b["answers"], table)
+        b["scores"] = pointless_scores(b["answers"], table, b.get("record"))
         b["women"] = all(table[a].get("women") for a in b["answers"])
 
 
