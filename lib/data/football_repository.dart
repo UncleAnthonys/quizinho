@@ -29,6 +29,9 @@ abstract class FootballRepository {
   Future<BiddingCategory?> pickBiddingCategory(
       {Set<int>? levels, Set<String> exclude = const {}, int eras = Era.allMask, int genders = 1});
 
+  Future<CheckoutCategory?> pickCheckout(
+      {Set<int>? levels, Set<String> exclude = const {}, int eras = Era.allMask, int genders = 1});
+
   /// Every club pairing with its answers (for grid games like Tic-Tac-Toe).
   Future<List<ClubConnection>> allClubConnections({int eras = Era.allMask, int genders = 1});
 }
@@ -69,6 +72,15 @@ class ChallengeSource {
     }
     return null;
   }
+
+  /// Football 501 has 2 levels: the giants (1) and other big clubs (2).
+  Future<CheckoutCategory?> checkout(Difficulty d, Set<String> used, {int eras = Era.allMask, int genders = 1}) =>
+      _widen(
+        d,
+        eras,
+        (l, e) => repo.pickCheckout(
+            levels: l == null ? null : {for (final x in l) x > 2 ? 2 : x}, exclude: used, eras: e, genders: genders),
+      );
 
   /// Bidding War has 3 levels; expert plays hard.
   Future<BiddingCategory?> bidding(Difficulty d, Set<String> used, {int eras = Era.allMask, int genders = 1}) =>

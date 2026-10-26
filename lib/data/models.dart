@@ -181,6 +181,32 @@ class BiddingCategory {
   bool get answersAreClubs => id.startsWith('clubs:');
 }
 
+/// Football 501: a club, and every player's league apps + goals for it.
+class CheckoutCategory {
+  const CheckoutCategory({
+    required this.id,
+    required this.prompt,
+    required this.values,
+    this.noStats = const {},
+    required this.difficulty,
+    this.eras = Era.allMask,
+    this.women = false,
+  });
+  final String id;
+
+  /// "League apps + goals for Everton".
+  final String prompt;
+
+  /// Player id -> (league apps, league goals) at the club.
+  final Map<String, (int, int)> values;
+
+  /// Played for the club, but no numbers on record.
+  final Set<String> noStats;
+  final int difficulty;
+  final int eras;
+  final bool women;
+}
+
 /// Men's football, women's, or both — bit flags like eras (1 men, 2 women).
 enum FootballGender {
   men(1, "Men's"),

@@ -87,6 +87,18 @@ InMemoryFootballRepository parseFootballJson(String source) {
           women: b.length > 6 && b[6] == 1,
         ),
     ],
+    checkouts: [
+      for (final c in (doc['checkouts'] as List?) ?? const [])
+        CheckoutCategory(
+          id: c[0] as String,
+          prompt: c[1] as String,
+          difficulty: c[2] as int,
+          eras: c[3] as int,
+          women: c[4] == 1,
+          values: {for (final v in c[5] as List) v[0] as String: (v[1] as int, v[2] as int)},
+          noStats: {for (final id in c[6] as List) id as String},
+        ),
+    ],
     matches: [
       for (final m in doc['matches'] as List)
         HistoricMatch(

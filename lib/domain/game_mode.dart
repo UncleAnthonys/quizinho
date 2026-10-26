@@ -74,6 +74,17 @@ enum GameModeId {
     ],
     whoPlays: 'Each team confers, then one person types or says the answer.',
   ),
+  checkout501(
+    title: 'Football 501',
+    tagline: 'Check out from 501 with players’ apps + goals',
+    playable: true,
+    rules: [
+      'Every team starts on 501. Take turns naming a player — their league apps + goals for the club come off your score.',
+      'Over 180 is a BUST: your score stays. Finish anywhere from 0 to −10 to check out; further below is a bust.',
+      'Once a player is named they’re gone for everyone — steal the one they wanted! First to check out wins +3.',
+    ],
+    whoPlays: 'Each team confers, then names one player per turn.',
+  ),
   whoAmI(title: 'Who Am I?', tagline: 'Coming soon', playable: false),
   headsUp(
     title: 'Football Heads Up',

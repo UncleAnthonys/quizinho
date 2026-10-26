@@ -223,6 +223,7 @@ def main() -> int:
         by_player[s["player"]].append({
             "club": s["team"], "start": start, "end": end,
             "loan": bool(set(s.get("acq", [])) & LOAN), "raw_start": s.get("start") or "",
+            "apps": s.get("apps"), "goals": s.get("goals"),
         })
 
     # ---- players ----------------------------------------------------------
@@ -269,12 +270,20 @@ def main() -> int:
             if fam and fam not in aliases and fam.lower() not in name.lower().split()[-1:]:
                 aliases.append(fam)
         used_clubs.update(s["club"] for s in career)
+        # League apps + goals per club (Football 501), summed over every spell
+        # there — only when every spell has numbers, so a total never undercounts.
+        club_stats: dict[str, list[int]] = {}
+        for cid in {s["club"] for s in spells}:
+            at = [s for s in spells if s["club"] == cid]
+            if all(s["apps"] is not None and s["goals"] is not None for s in at):
+                club_stats[cid] = [sum(s["apps"] for s in at), sum(s["goals"] for s in at)]
         out_players.append({
             "id": pid, "wikidata": p["id"], "name": name, "nat": nat,
             "pos": position_code(p.get("positions", [])), "fame": player_fame(p.get("sitelinks", 0), women),
             "reach": p.get("sitelinks", 0), **({"g": "w"} if women else {}),
             "aliases": aliases,
             "career": [[s["club"], s["start"], s["end"]] + (["loan"] if s["loan"] else []) for s in career],
+            **({"stats": club_stats} if club_stats else {}),
         })
 
     # Club fame = how many well-known players played there (Wikipedia coverage

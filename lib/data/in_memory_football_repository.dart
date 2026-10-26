@@ -12,6 +12,7 @@ class InMemoryFootballRepository implements FootballRepository {
     this.careers = const [],
     this.matches = const [],
     this.bidding = const [],
+    this.checkouts = const [],
     List<Club> clubs = const [],
     Random? random,
     this.dataStatus = 'test',
@@ -28,6 +29,7 @@ class InMemoryFootballRepository implements FootballRepository {
   final List<CareerPath> careers;
   final List<HistoricMatch> matches;
   final List<BiddingCategory> bidding;
+  final List<CheckoutCategory> checkouts;
   final List<Club> _clubs;
   final Random _random;
 
@@ -76,6 +78,11 @@ class InMemoryFootballRepository implements FootballRepository {
     final options = [for (final b in bidding) if (b.kind == kind && fits(b)) b];
     return options[_random.nextInt(options.length)];
   }
+
+  @override
+  Future<CheckoutCategory?> pickCheckout(
+          {Set<int>? levels, Set<String> exclude = const {}, int eras = Era.allMask, int genders = 1}) async =>
+      _pick(checkouts, (c) => c.id, (c) => c.difficulty, (c) => c.eras, levels, exclude, eras, (c) => c.women, genders);
 
   @override
   Future<List<ClubConnection>> allClubConnections({int eras = Era.allMask, int genders = 1}) async =>

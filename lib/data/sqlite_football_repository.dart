@@ -172,6 +172,30 @@ class SqliteFootballRepository implements FootballRepository {
   }
 
   @override
+  Future<CheckoutCategory?> pickCheckout(
+      {Set<int>? levels, Set<String> exclude = const {}, int eras = Era.allMask, int genders = 1}) async {
+    final (where, args) = _filter('id', levels, exclude, eras, genders: genders, womenCol: 'women');
+    final rows = await _db.rawQuery(
+        'SELECT id, prompt, difficulty, eras, women FROM checkout_categories $where ORDER BY RANDOM() LIMIT 1', args);
+    if (rows.isEmpty) return null;
+    final r = rows.first;
+    final answers =
+        await _db.rawQuery('SELECT player_id, apps, goals FROM checkout_answers WHERE category_id = ?', [r['id']]);
+    return CheckoutCategory(
+      id: r['id'] as String,
+      prompt: r['prompt'] as String,
+      difficulty: r['difficulty'] as int,
+      eras: r['eras'] as int,
+      women: r['women'] == 1,
+      values: {
+        for (final a in answers)
+          if (a['apps'] != null) a['player_id'] as String: (a['apps'] as int, (a['goals'] as int?) ?? 0),
+      },
+      noStats: {for (final a in answers) if (a['apps'] == null) a['player_id'] as String},
+    );
+  }
+
+  @override
   Future<List<ClubConnection>> allClubConnections({int eras = Era.allMask, int genders = 1}) async {
     final (where, args) = _filter('id', null, const {}, eras, genders: genders, womenCol: _connWomen);
     final rows = await _db.rawQuery('SELECT id, club_a, club_b, difficulty, eras FROM club_connections $where', args);

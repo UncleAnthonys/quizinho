@@ -92,6 +92,16 @@ CREATE TABLE bidding_answers (
 );
 CREATE INDEX idx_match_diff ON matches(difficulty);
 CREATE INDEX idx_bid_ans ON bidding_answers(category_id);
+CREATE TABLE checkout_categories (
+  id TEXT PRIMARY KEY, prompt TEXT NOT NULL, club_id TEXT NOT NULL,
+  difficulty INTEGER NOT NULL, eras INTEGER NOT NULL, women INTEGER NOT NULL DEFAULT 0
+);
+CREATE TABLE checkout_answers (
+  category_id TEXT NOT NULL REFERENCES checkout_categories(id),
+  player_id TEXT NOT NULL,
+  apps INTEGER, goals INTEGER  -- NULL = played there, but no numbers on record
+);
+CREATE INDEX idx_co_ans ON checkout_answers(category_id);
 """
 
 POSITIONS = {"GK", "RB", "CB", "LB", "RWB", "LWB", "DM", "CM", "AM", "RM", "LM", "RW", "LW", "ST"}
@@ -171,7 +181,7 @@ def validate_and_collect(problems: Problems):
             spells.append({"seq": i, "club": club_id, "start": start, "end": end, "loan": loan})
         players[pid] = {
             "name": p["name"], "nat": p.get("nat"), "pos": p.get("pos"), "fame": p["fame"], "reach": p.get("reach"),
-            "women": p.get("g") == "w",
+            "women": p.get("g") == "w", "stats": p.get("stats", {}),
             "aliases": p.get("aliases", []), "spells": spells,
         }
 
@@ -471,12 +481,49 @@ def add_pointless_scores(bidding: list[dict], players, clubs) -> None:
         b["women"] = all(table[a].get("women") for a in b["answers"])
 
 
+# Football 501: name players, their league apps + goals for a club come off
+# 501. A club makes a category when enough players have numbers, and enough of
+# them score 180 or less (a "dart") for two teams to share without running dry.
+CHECKOUT_MIN_PLAYERS = 40
+CHECKOUT_MIN_DARTS = 30
+CHECKOUT_MIN_KNOWN = 15
+
+
+def generate_checkouts(clubs, players) -> list[dict]:
+    played: dict[str, set[str]] = {}
+    with_stats: dict[str, dict[str, list[int]]] = {}
+    for pid, p in players.items():
+        for sp in p["spells"]:
+            played.setdefault(sp["club"], set()).add(pid)
+        for cid, ag in p.get("stats", {}).items():
+            if cid in clubs and ag[0] > 0:
+                with_stats.setdefault(cid, {})[pid] = ag
+    out = []
+    for cid, values in with_stats.items():
+        c = clubs[cid]
+        if c["fame"] < 4 or c["country"] not in KNOWN_LEAGUES:
+            continue
+        darts = sum(1 for a, g in values.values() if a + g <= 180)
+        known = sum(1 for pid in values if players[pid]["fame"] >= 2)
+        if len(values) < CHECKOUT_MIN_PLAYERS or darts < CHECKOUT_MIN_DARTS or known < CHECKOUT_MIN_KNOWN:
+            continue
+        eras = 0
+        for pid in values:
+            eras |= spells_mask([sp for sp in players[pid]["spells"] if sp["club"] == cid])
+        out.append({
+            "id": f"501:{cid}", "club": cid, "prompt": f"League apps + goals for {c['name']}",
+            "values": values, "no_stats": sorted(played.get(cid, set()) - set(values)),
+            "difficulty": 1 if c["fame"] == 5 and not c["women"] else 2, "eras": eras or 31, "women": c["women"],
+        })
+    return out
+
+
 def match_eras(m) -> int:
     year = int(m["date"][:4])
     return era_mask(year, year)
 
 
-def write_db(path: pathlib.Path, version: int, clubs, players, matches, connections, careers, bidding):
+def write_db(path: pathlib.Path, version: int, clubs, players, matches, connections, careers, bidding, checkouts):
     if path.exists():
         path.unlink()
     con = sqlite3.connect(path)
@@ -515,12 +562,18 @@ def write_db(path: pathlib.Path, version: int, clubs, players, matches, connecti
                     (b["id"], b["prompt"], b["kind"], len(b["answers"]), b["difficulty"], b["eras"], int(b["women"])))
         con.executemany("INSERT INTO bidding_answers VALUES (?,?,?)",
                         [(b["id"], pid, b["scores"][pid]) for pid in b["answers"]])
+    for c in checkouts:
+        con.execute("INSERT INTO checkout_categories VALUES (?,?,?,?,?,?)",
+                    (c["id"], c["prompt"], c["club"], c["difficulty"], c["eras"], int(c["women"])))
+        con.executemany("INSERT INTO checkout_answers VALUES (?,?,?,?)",
+                        [(c["id"], pid, a, g) for pid, (a, g) in c["values"].items()]
+                        + [(c["id"], pid, None, None) for pid in c["no_stats"]])
     con.commit()
     con.execute("VACUUM")
     con.close()
 
 
-def write_json(path: pathlib.Path, version: int, clubs, players, matches, connections, careers, bidding):
+def write_json(path: pathlib.Path, version: int, clubs, players, matches, connections, careers, bidding, checkouts):
     """Same content as the SQLite file, for the web build (no SQLite plugin in browsers)."""
     doc = {
         "db_version": version,
@@ -542,6 +595,9 @@ def write_json(path: pathlib.Path, version: int, clubs, players, matches, connec
         # bidding: [id, prompt, difficulty, answers, eras, pointless scores, 1 if women's]
         "bidding": [[b["id"], b["prompt"], b["difficulty"], b["answers"], b["eras"],
                      [b["scores"][a] for a in b["answers"]], int(b["women"])] for b in bidding],
+        # 501: [id, prompt, difficulty, eras, 1 if women's, [[player, apps, goals]...], [played, no numbers]]
+        "checkouts": [[c["id"], c["prompt"], c["difficulty"], c["eras"], int(c["women"]),
+                       [[pid, a, g] for pid, (a, g) in sorted(c["values"].items())], c["no_stats"]] for c in checkouts],
         "matches": [
             {"id": m["id"], "title": m["title"], "competition": m["competition"], "date": m["date"],
              "home": m["home"], "away": m["away"], "score": m["score"], "target": m["target"],
@@ -575,16 +631,18 @@ def main() -> int:
     countries = json.loads(countries_path.read_text(encoding="utf-8"))["countries"] if countries_path.exists() else {}
     bidding = generate_bidding(clubs, players, connections, countries) + curated
     add_pointless_scores(bidding, players, clubs)
+    checkouts = generate_checkouts(clubs, players)
     by_diff = {d: sum(1 for c in connections if c["difficulty"] == d) for d in (1, 2, 3, 4)}
     print(f"players={len(players)} clubs={len(clubs)} matches={len(matches)} "
           f"connections={len(connections)} {by_diff} careers={len(careers)} bidding={len(bidding)} "
-          f"{ {d: sum(1 for b in bidding if b['difficulty'] == d) for d in (1, 2, 3)} } curated={len(curated)}")
+          f"{ {d: sum(1 for b in bidding if b['difficulty'] == d) for d in (1, 2, 3)} } curated={len(curated)} "
+          f"checkouts={len(checkouts)} (women {sum(1 for c in checkouts if c['women'])})")
     if args.check:
         return 0
 
     ASSETS.mkdir(parents=True, exist_ok=True)
-    write_db(ASSETS / "football.db", args.version, clubs, players, matches, connections, careers, bidding)
-    write_json(ASSETS / "football.json", args.version, clubs, players, matches, connections, careers, bidding)
+    write_db(ASSETS / "football.db", args.version, clubs, players, matches, connections, careers, bidding, checkouts)
+    write_json(ASSETS / "football.json", args.version, clubs, players, matches, connections, careers, bidding, checkouts)
     (ASSETS / "football_db_version.txt").write_text(str(args.version), encoding="utf-8")
     print("wrote", ASSETS / "football.db", "version", args.version)
     return 0
