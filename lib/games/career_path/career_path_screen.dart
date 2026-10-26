@@ -98,7 +98,14 @@ class _CareerPathScreenState extends State<CareerPathScreen>
             'WORTH ${c.pointsAvailable * widget.round.multiplier} ${c.pointsAvailable * widget.round.multiplier == 1 ? 'POINT' : 'POINTS'}',
             style: AppText.headline(compact ? 18 : 24, color: Palette.gold),
           ),
-        _CareerTrail(spells: c.current.spells, shown: shown, maxHeight: compact ? 190 : (resolved ? 200 : 250)),
+        // Once answered, the ring stays on the club that was showing when they
+        // got it (revealing stops at that moment), not the last club.
+        _CareerTrail(
+          spells: c.current.spells,
+          shown: shown,
+          highlight: c.revealed - 1,
+          maxHeight: compact ? 190 : (resolved ? 200 : 250),
+        ),
       ]),
       resolvedDetail: Text(
         'It was ${c.current.player.name}.',
@@ -109,11 +116,14 @@ class _CareerPathScreenState extends State<CareerPathScreen>
   }
 }
 
-/// The clubs revealed so far, newest at the bottom and highlighted.
+/// The clubs revealed so far, newest at the bottom; [highlight] is ringed.
 class _CareerTrail extends StatelessWidget {
-  const _CareerTrail({required this.spells, required this.shown, required this.maxHeight});
+  const _CareerTrail({required this.spells, required this.shown, required this.highlight, required this.maxHeight});
   final List<CareerSpell> spells;
   final int shown;
+
+  /// Index of the ringed club: the newest while revealing, the answered one after.
+  final int highlight;
   final double maxHeight;
 
   /// Every club revealed so far stays on screen — earlier clubs jog the
@@ -153,7 +163,7 @@ class _CareerTrail extends StatelessWidget {
 
   Widget _tile(int idx, List<CareerSpell> visible, {required bool compact}) {
     final s = visible[idx];
-    final newest = idx == visible.length - 1;
+    final newest = idx == highlight;
     final name = FittedBox(
       fit: BoxFit.scaleDown,
       alignment: Alignment.centerLeft,
