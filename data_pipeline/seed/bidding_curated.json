@@ -15,7 +15,12 @@
     "Juventus": ["Juve"],
     "Real Madrid": ["Real"],
     "Olympique de Marseille": ["Marseille"],
-    "Porto": ["FC Porto"]
+    "Porto": ["FC Porto"],
+    "Middlesbrough": ["Boro"],
+    "Malmö FF": ["Malmö", "Malmo"],
+    "Montpellier Hérault Sport Club": ["Montpellier"],
+    "Zenit Saint Petersburg": ["Zenit"],
+    "Athletic Club": ["Athletic Bilbao", "Bilbao"]
   },
   "categories": [
     {
@@ -237,6 +242,21 @@
       "difficulty": 1, "eras": 16,
       "source": "Wikipedia: 2023 UEFA Champions League final (players named in report); line-up as widely recorded", "as_of": "2023",
       "answers": ["Ederson", "Manuel Akanji", "Rúben Dias", "Nathan Aké", "John Stones", "Rodri|rodri", "Kevin De Bruyne", "İlkay Gündoğan", "Bernardo Silva", "Jack Grealish", "Erling Haaland", "Phil Foden", "Kyle Walker"]
-    }
+    },
+    {"id": "pl-never-relegated", "prompt": "Premier League clubs that have never been relegated from it", "answers_are": "clubs", "difficulty": 2, "eras": 30, "source": "RSSSF England 2025/26 final table (Spurs 17th; West Ham, Burnley, Wolves down) + Premier League history", "as_of": "2025-26 season", "answers": ["Arsenal", "Chelsea", "Everton", "Liverpool", "Manchester United", "Tottenham Hotspur"]},
+    {"id": "pl-clubs-2026-27", "prompt": "Clubs in the 2026-27 Premier League", "answers_are": "clubs", "difficulty": 1, "eras": 16, "source": "RSSSF England 2025/26: final table, relegated (West Ham, Burnley, Wolves) and promoted (Coventry, Ipswich, Hull)", "as_of": "2026-27 season", "answers": ["Arsenal", "Manchester City", "Manchester United", "Aston Villa", "Liverpool", "AFC Bournemouth", "Sunderland", "Brighton & Hove Albion", "Brentford", "Chelsea", "Fulham", "Newcastle United", "Everton", "Leeds United", "Crystal Palace", "Nottingham Forest", "Tottenham Hotspur", "Coventry City", "Ipswich Town", "Hull City"]},
+    {"id": "fa-cup-winners-1990", "prompt": "FA Cup winners since 1990", "answers_are": "clubs", "difficulty": 2, "eras": 31, "source": "Wikipedia: List of FA Cup finals", "as_of": "2026 final", "answers": ["Manchester United", "Tottenham Hotspur", "Liverpool", "Arsenal", "Everton", "Chelsea", "Portsmouth", "Manchester City", "Wigan Athletic", "Leicester City", "Crystal Palace"]},
+    {"id": "league-cup-winners-2000", "prompt": "League Cup winners since 2000", "answers_are": "clubs", "difficulty": 3, "eras": 28, "source": "Wikipedia: List of EFL Cup finals", "as_of": "2026 final", "answers": ["Leicester City", "Liverpool", "Blackburn Rovers", "Middlesbrough", "Chelsea", "Manchester United", "Tottenham Hotspur", "Birmingham City", "Swansea City", "Manchester City", "Newcastle United"]},
+    {"id": "uefa-cup-europa-winners-2000", "prompt": "UEFA Cup / Europa League winners since 2000", "answers_are": "clubs", "difficulty": 3, "eras": 28, "source": "Wikipedia: List of UEFA Cup and Europa League finals", "as_of": "2026 final", "answers": ["Galatasaray S.K.", "Liverpool", "Feyenoord Rotterdam", "Porto", "Valencia", "CSKA Moscow", "Sevilla", "Zenit Saint Petersburg", "Shakhtar Donetsk", "Atlético Madrid", "Chelsea", "Manchester United", "Villarreal", "Eintracht Frankfurt", "Atalanta BC", "Tottenham Hotspur", "Aston Villa"]},
+    {"id": "english-european-winners-2000", "prompt": "English clubs that have won the Champions League, Europa League or Conference League since 2000", "answers_are": "clubs", "difficulty": 2, "eras": 28, "source": "Wikipedia: Champions League, UEFA Cup/Europa League and Conference League finals lists", "as_of": "2026 finals", "answers": ["Liverpool", "Chelsea", "Manchester United", "Manchester City", "Tottenham Hotspur", "Aston Villa", "West Ham United", "Crystal Palace"]},
+    {"id": "bundesliga-winners-1990", "prompt": "Bundesliga champions since 1990-91", "answers_are": "clubs", "difficulty": 2, "eras": 31, "source": "Bundesliga.com: list of German champions", "as_of": "2025-26 season", "answers": ["1. FC Kaiserslautern", "VfB Stuttgart", "Werder Bremen", "Bayern Munich", "Borussia Dortmund", "VfL Wolfsburg", "Bayer 04 Leverkusen"]},
+    {"id": "la-liga-winners", "prompt": "Clubs that have won La Liga", "answers_are": "clubs", "difficulty": 2, "eras": 31, "source": "Wikipedia: List of Spanish football champions", "as_of": "2025-26 season", "answers": ["Real Madrid", "Barcelona", "Atlético Madrid", "Athletic Bilbao", "Valencia", "Real Sociedad", "Deportivo de A Coruña", "Sevilla", "Real Betis Balompié"]},
+    {"id": "serie-a-winners-1990", "prompt": "Serie A champions since 1990-91", "answers_are": "clubs", "difficulty": 2, "eras": 31, "source": "Wikipedia: List of Italian football champions", "as_of": "2025-26 season", "answers": ["U.C. Sampdoria", "AC Milan", "Juventus", "SS Lazio", "AS Roma", "Inter Milan", "Napoli"]},
+    {"id": "ligue-1-winners-2000", "prompt": "Ligue 1 champions since 2000", "answers_are": "clubs", "difficulty": 3, "eras": 28, "source": "Wikipedia: List of French football champions", "as_of": "2025-26 season", "answers": ["AS Monaco", "Nantes", "Olympique Lyonnais", "Girondins de Bordeaux", "Olympique de Marseille", "Lille OSC", "Montpellier HSC", "Paris Saint-Germain"]},
+    {"id": "clubs-zlatan", "prompt": "Clubs Zlatan Ibrahimović played for", "answers_are": "clubs", "difficulty": 2, "eras": 28, "source": "Career data (Wikidata), checked by hand", "as_of": "retired 2023", "answers": ["Malmö FF", "Ajax", "Juventus", "Inter Milan", "Barcelona", "AC Milan", "Paris Saint-Germain", "Manchester United", "LA Galaxy"]},
+    {"id": "clubs-anelka", "prompt": "Clubs Nicolas Anelka played for", "answers_are": "clubs", "difficulty": 3, "eras": 14, "source": "Career data (Wikidata), checked by hand", "as_of": "retired 2015", "answers": ["Paris Saint-Germain", "Arsenal", "Real Madrid", "Liverpool", "Manchester City", "Fenerbahçe Istanbul", "Bolton Wanderers", "Chelsea", "Shanghai Shenhua", "Juventus", "West Bromwich Albion", "Mumbai City"]},
+    {"id": "clubs-bellamy", "prompt": "Clubs Craig Bellamy played for (incl. loans)", "answers_are": "clubs", "difficulty": 3, "eras": 14, "source": "Career data (Wikidata), checked by hand", "as_of": "retired 2014", "answers": ["Norwich City", "Coventry City", "Newcastle United", "Celtic", "Blackburn Rovers", "Liverpool", "West Ham United", "Manchester City", "Cardiff City"]},
+    {"id": "clubs-beckham", "prompt": "Clubs David Beckham played for (incl. loans)", "answers_are": "clubs", "difficulty": 2, "eras": 14, "source": "Career data (Wikidata), checked by hand", "as_of": "retired 2013", "answers": ["Manchester United", "Preston North End", "Real Madrid", "LA Galaxy", "AC Milan", "Paris Saint-Germain"]},
+    {"id": "clubs-ronaldo-nazario", "prompt": "Clubs Ronaldo (the Brazilian one) played for", "answers_are": "clubs", "difficulty": 2, "eras": 14, "source": "Career data (Wikidata), checked by hand", "as_of": "retired 2011", "answers": ["Cruzeiro", "PSV Eindhoven", "Barcelona", "Inter Milan", "Real Madrid", "AC Milan", "Corinthians Paulista"]}
   ]
 }
