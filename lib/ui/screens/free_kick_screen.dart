@@ -261,7 +261,7 @@ class _FreeKickPainter extends CustomPainter {
     final n = segments.length;
 
     // Wall geometry: one slot per game, as wide as fits.
-    final slot = min(w * 0.94 / n, h * 0.17);
+    final slot = min(w * 0.97 / n, h * 0.17);
     final feetY = h * 0.60;
     final figH = slot * 2.25;
     final x0 = (w - slot * n) / 2;
@@ -335,7 +335,7 @@ class _FreeKickPainter extends CustomPainter {
   void _player(Canvas canvas, Offset feet, double s, int i, double fall, bool hit) {
     final mode = segments[i];
     final skin = Paint()..color = _skins[i % _skins.length];
-    final sw = s * 0.80;
+    final sw = s * 0.94; // shoulder to shoulder, like a real wall
     RRect box(double l, double t, double r, double b, double rad) =>
         RRect.fromLTRBR(l * s, t * s, r * s, b * s, Radius.circular(rad * s));
 
@@ -355,7 +355,7 @@ class _FreeKickPainter extends CustomPainter {
     // shirt: sleeves, then body
     final shirt = Paint()..color = mode.color;
     canvas.drawRRect(
-        RRect.fromLTRBR(-sw / 2 - 0.09 * s, -1.80 * s, sw / 2 + 0.09 * s, -1.46 * s, Radius.circular(0.12 * s)), shirt);
+        RRect.fromLTRBR(-sw / 2 - 0.03 * s, -1.80 * s, sw / 2 + 0.03 * s, -1.46 * s, Radius.circular(0.12 * s)), shirt);
     final body = RRect.fromLTRBR(-sw / 2, -1.80 * s, sw / 2, -0.86 * s, Radius.circular(0.14 * s));
     if (hit) {
       canvas.drawRRect(body.inflate(0.07 * s), Paint()..color = Palette.text);
@@ -364,7 +364,7 @@ class _FreeKickPainter extends CustomPainter {
     // hands together in front, the classic wall pose
     canvas.drawRRect(box(-0.20, -1.02, 0.20, -0.82, 0.10), skin);
     // name on the shirt
-    labels.paint(canvas, mode, Offset(0, -1.37 * s), Size(sw * 0.88, 0.58 * s), maxFont: 0.30 * s);
+    labels.paint(canvas, mode, Offset(0, -1.37 * s), Size(sw * 0.92, 0.58 * s), maxFont: 0.30 * s);
     // neck and head
     canvas.drawRect(Rect.fromLTRB(-0.08 * s, -1.92 * s, 0.08 * s, -1.76 * s), skin);
     final head = Offset(0, -2.02 * s);
