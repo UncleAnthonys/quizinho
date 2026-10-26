@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import '../../core/app_services.dart';
 import '../../core/sound_service.dart';
 import '../../core/theme.dart';
-import '../../data/models.dart';
 import '../../domain/game_mode.dart';
 import '../../domain/tournament.dart';
 import '../../ui/widgets/common.dart';
@@ -177,7 +176,7 @@ class _BiddingWarScreenState extends State<BiddingWarScreen>
   Widget _bidding(BiddingWarController c) {
     final team = c.currentTeam;
     final colour = _t.config.teams[team].colorIndex;
-    final pending = _pending.clamp(c.minRaise, max(c.minRaise, c.maxBid));
+    final pending = _pending.clamp(c.minRaise, max(c.minRaise, c.maxBid)).toInt();
     return ListView(padding: const EdgeInsets.fromLTRB(16, 4, 16, 16), children: [
       // Current bid
       Container(
