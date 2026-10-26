@@ -31,6 +31,10 @@ class _CheckoutScreenState extends State<CheckoutScreen>
   int _seen = 0;
   int _lastSecond = -1;
 
+  /// Bumped when an answer is turned away without using the turn, so the
+  /// answer box resets and can be used again.
+  int _pickerKey = 0;
+
   Tournament get _t => widget.round.tournament;
 
   @override
@@ -60,9 +64,11 @@ class _CheckoutScreenState extends State<CheckoutScreen>
       final s = services;
       switch (c.lastEvent) {
         case CoEvent.duplicate:
-          _toast('Already used — that player’s gone!');
+          _toast('Already used — that player’s gone! Pick another.');
+          _pickerKey++;
         case CoEvent.noStats:
-          _toast('No numbers on record for them here — pick another.');
+          _toast('No league numbers on record for them at this club yet — pick another.');
+          _pickerKey++;
         case CoEvent.thrown:
           final t = c.lastThrow!;
           switch (t.outcome) {
@@ -186,7 +192,7 @@ class _CheckoutScreenState extends State<CheckoutScreen>
                     FittedBox(
                       fit: BoxFit.scaleDown,
                       child: Text(
-                        '${_short(th.label)} ${_tag(th)}',
+                        '${_short(th)} ${_tag(th)}',
                         style: AppText.label(11, color: th.outcome == CoOutcome.scored || th.outcome == CoOutcome.checkout
                             ? Palette.text
                             : Palette.danger),
@@ -198,7 +204,11 @@ class _CheckoutScreenState extends State<CheckoutScreen>
         ]),
       );
 
-  String _short(String name) => name.split(' ').last;
+  String _short(CoThrow t) => switch (t.outcome) {
+        CoOutcome.timeUp => 'Time',
+        CoOutcome.wrong when t.label == 'Passed' => 'Pass',
+        _ => t.label.split(' ').last,
+      };
 
   String _tag(CoThrow t) => switch (t.outcome) {
         CoOutcome.scored || CoOutcome.checkout => '−${t.value}',
@@ -231,7 +241,7 @@ class _CheckoutScreenState extends State<CheckoutScreen>
       TimerBar(fraction: c.fractionLeft, seconds: c.secondsLeft),
       const SizedBox(height: 8),
       PlayerPicker(
-        key: ValueKey('co-${c.turn}'),
+        key: ValueKey('co-${c.turn}-$_pickerKey'),
         index: services.repo.players,
         voice: services.voice,
         accent: Palette.team(colour),
@@ -278,11 +288,15 @@ class _CheckoutScreenState extends State<CheckoutScreen>
   Widget _finished(CheckoutController c) {
     final winners = c.winners;
     final players = services.repo.players;
-    // Players nobody named, most famous first — what you could have had.
-    final unused = [
+    // Players nobody named: the best-known 24, lowest score first, so you
+    // can see what would have finished it — and who'd have been a bust.
+    final unused = ([
       for (final e in c.category.values.entries)
         if (!c.used.contains(e.key) && players.byId(e.key) != null) (players.byId(e.key)!, e.value.$1 + e.value.$2),
-    ]..sort((a, b) => b.$1.fame.compareTo(a.$1.fame));
+    ]..sort((a, b) => b.$1.fame.compareTo(a.$1.fame)))
+        .take(24)
+        .toList()
+      ..sort((a, b) => a.$2.compareTo(b.$2));
     return ListView(padding: const EdgeInsets.fromLTRB(14, 6, 14, 16), children: [
       Text(c.checkedOut != null ? 'GAME SHOT!' : 'CLOSEST TO ZERO WINS', textAlign: TextAlign.center,
           style: AppText.headline(34, color: _oche)),
@@ -294,10 +308,18 @@ class _CheckoutScreenState extends State<CheckoutScreen>
           Text('+${CheckoutController.winPoints * widget.round.multiplier}', style: AppText.headline(40, color: Palette.yellow)),
         ]),
       const SizedBox(height: 12),
-      Text('SOME YOU COULD HAVE HAD', style: AppText.label(13)),
+      Text('WHO ELSE WAS ON THE BOARD', style: AppText.label(13)),
+      Text('Red = over ${CheckoutController.maxDart}, a bust', style: AppText.label(12, color: Palette.danger)),
       const SizedBox(height: 6),
       Wrap(spacing: 6, runSpacing: 6, children: [
-        for (final (p, v) in unused.take(16)) Chip(label: Text('${p.name}  $v'), backgroundColor: Palette.card),
+        for (final (p, v) in unused)
+          Chip(
+            label: Text('${p.name}  $v'),
+            backgroundColor: Palette.card,
+            side: v > CheckoutController.maxDart
+                ? const BorderSide(color: Palette.danger, width: 2)
+                : const BorderSide(color: Palette.line),
+          ),
       ]),
       const SizedBox(height: 16),
       BigButton(label: 'Finish round', icon: Icons.flag, onPressed: () => widget.round.onComplete(c.result())),

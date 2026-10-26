@@ -31,6 +31,10 @@ class _PointlessScreenState extends State<PointlessScreen>
   int _seen = 0;
   int _lastSecond = -1;
 
+  /// Bumped when an answer is turned away without using the turn (already
+  /// said), so the answer box resets and can be used again.
+  int _pickerKey = 0;
+
   Tournament get _t => widget.round.tournament;
 
   @override
@@ -64,6 +68,7 @@ class _PointlessScreenState extends State<PointlessScreen>
           say(_pick(const ['Not on the list — that’s the full 100.', 'Ouch. 100 points.', 'Wrong! Maximum score.']));
         case PtEvent.duplicate:
           _toast('Already said — pick another!');
+          _pickerKey++;
         case PtEvent.scored || PtEvent.pointless:
           s.haptic(HapticStrength.light); // the column does the rest
         case null:
@@ -198,7 +203,7 @@ class _PointlessScreenState extends State<PointlessScreen>
       TimerBar(fraction: c.fractionLeft, seconds: c.secondsLeft),
       const SizedBox(height: 8),
       PlayerPicker(
-        key: ValueKey('pt-${c.turn}'),
+        key: ValueKey('pt-${c.turn}-$_pickerKey'),
         index: clubs ? services.repo.clubIndex : services.repo.players,
         voice: services.voice,
         accent: Palette.team(colour),
