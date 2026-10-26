@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:math';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:quizinho/data/json_football_repository.dart';
@@ -143,6 +144,50 @@ void main() {
       final c = two()..raise(1);
       expect(c.canPass, isFalse);
     });
+  });
+
+  group('category mix', () {
+    test('kinds come up roughly 40 / 40 / 20', () {
+      final r = Random(3);
+      final counts = <BiddingKind, int>{};
+      for (var i = 0; i < 10000; i++) {
+        final k = BiddingKind.choose(BiddingKind.values.toSet(), r)!;
+        counts[k] = (counts[k] ?? 0) + 1;
+      }
+      expect(counts[BiddingKind.curated]! / 10000, closeTo(0.4, 0.03));
+      expect(counts[BiddingKind.pair]! / 10000, closeTo(0.4, 0.03));
+      expect(counts[BiddingKind.nationality]! / 10000, closeTo(0.2, 0.03));
+    });
+
+    test('a kind with nothing left is never chosen', () {
+      final r = Random(4);
+      for (var i = 0; i < 200; i++) {
+        expect(BiddingKind.choose({BiddingKind.pair, BiddingKind.nationality}, r), isNot(BiddingKind.curated));
+      }
+      expect(BiddingKind.choose({}, r), isNull);
+    });
+
+    test('kind is read from the id', () {
+      expect(BiddingKind.ofId('stat:pl-100-goals'), BiddingKind.curated);
+      expect(BiddingKind.ofId('nat:Q9616:BRA'), BiddingKind.nationality);
+      expect(BiddingKind.ofId('pair:Q1|Q2'), BiddingKind.pair);
+    });
+  });
+
+  test('bundled data has hand-made categories, every answer a real player', () async {
+    final repo = parseFootballJson(File('assets/db/football.json').readAsStringSync());
+    final curated = repo.bidding.where((b) => b.kind == BiddingKind.curated).toList();
+    expect(curated.length, greaterThanOrEqualTo(30));
+    for (final b in curated) {
+      expect(b.answerIds.length, inInclusiveRange(5, 35), reason: b.id);
+      for (final id in b.answerIds) {
+        expect(repo.players.byId(id), isNotNull, reason: '${b.id}: $id');
+      }
+    }
+    final hundred = curated.firstWhere((b) => b.id == 'stat:pl-100-goals');
+    expect(hundred.answerIds, containsAll(['alan-shearer', 'harry-kane', 'mohamed-salah']));
+    // Common spellings type in even where the data's name differs.
+    expect(repo.players.matchTyped('Juan Mata').map((p) => p.id), contains('juan-mata-pata'));
   });
 
   test('bundled data has playable Bidding War categories', () async {

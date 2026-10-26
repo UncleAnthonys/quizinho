@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:math';
 
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:path/path.dart' as p;
@@ -17,6 +18,8 @@ import 'models.dart';
 /// updates never wipe it.
 class SqliteFootballRepository implements FootballRepository {
   SqliteFootballRepository._(this._db, this._clubs, this.players, this.dataStatus);
+
+  final _random = Random();
 
   final Database _db;
   final Map<String, Club> _clubs;
@@ -126,10 +129,20 @@ class SqliteFootballRepository implements FootballRepository {
   @override
   Future<BiddingCategory?> pickBiddingCategory(
       {Set<int>? levels, Set<String> exclude = const {}, int eras = Era.allMask}) async {
+    // Choose the kind of category by weight first, then one of that kind.
     final (where, args) = _filter('id', levels, exclude, eras);
+    final counts = await _db.rawQuery('SELECT id FROM bidding_categories $where', args);
+    final kind = BiddingKind.choose({for (final r in counts) BiddingKind.ofId(r['id'] as String)}, _random);
+    if (kind == null) return null;
+    final prefix = switch (kind) {
+      BiddingKind.curated => 'stat:%',
+      BiddingKind.nationality => 'nat:%',
+      BiddingKind.pair => 'pair:%',
+    };
     final rows = await _db.rawQuery(
-      'SELECT id, prompt, difficulty, eras FROM bidding_categories $where ORDER BY RANDOM() LIMIT 1',
-      args,
+      'SELECT id, prompt, difficulty, eras FROM bidding_categories '
+      '${where.isEmpty ? 'WHERE' : '$where AND'} id LIKE ? ORDER BY RANDOM() LIMIT 1',
+      [...args, prefix],
     );
     if (rows.isEmpty) return null;
     final r = rows.first;

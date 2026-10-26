@@ -345,6 +345,46 @@ def generate_bidding(clubs, players, connections, countries):
     return out
 
 
+def load_curated_bidding(players, problems: Problems) -> list[dict]:
+    """Hand-made categories (records, awards, famous squads) from
+    seed/bidding_curated.json. Answers are names, pinned with 'Name|id' where a
+    name is ambiguous; 'Name|new' adds a player the career data lacks. Every
+    answer must resolve, so the answer set stays complete. The curated name
+    becomes an alias, so the common spelling can be typed ("Juan Mata")."""
+    path = SEED / "bidding_curated.json"
+    if not path.exists():
+        return []
+    by_name: dict[str, str] = {}
+    for pid, p in sorted(players.items(), key=lambda kv: kv[1]["fame"]):  # most famous wins
+        for n in [p["name"], *p["aliases"]]:
+            by_name[norm(n)] = pid
+    out = []
+    for c in json.loads(path.read_text(encoding="utf-8"))["categories"]:
+        answers = []
+        for raw in c["answers"]:
+            name, _, pin = raw.partition("|")
+            if pin == "new":
+                pid = "curated-" + norm(name).replace(" ", "-")
+                players.setdefault(pid, {"name": name, "nat": None, "pos": None, "fame": 3, "aliases": [], "spells": []})
+            elif pin:
+                pid = pin if pin in players else None
+            else:
+                pid = by_name.get(norm(name))
+            if pid is None:
+                problems.error(f"curated bidding {c['id']}: can't resolve '{raw}'")
+                continue
+            if norm(name) != norm(players[pid]["name"]) and name not in players[pid]["aliases"]:
+                players[pid]["aliases"].append(name)
+            answers.append(pid)
+        if len(set(answers)) != len(answers):
+            problems.error(f"curated bidding {c['id']}: same player twice")
+        if not BID_MIN_ANSWERS <= len(answers) <= BID_MAX_ANSWERS:
+            problems.error(f"curated bidding {c['id']}: {len(answers)} answers, need {BID_MIN_ANSWERS}-{BID_MAX_ANSWERS}")
+        out.append({"id": f"stat:{c['id']}", "prompt": c["prompt"], "kind": "curated", "answers": sorted(set(answers)),
+                    "difficulty": c["difficulty"], "eras": c["eras"]})
+    return out
+
+
 def match_eras(m) -> int:
     year = int(m["date"][:4])
     return era_mask(year, year)
@@ -429,6 +469,7 @@ def main() -> int:
 
     problems = Problems()
     clubs, players, matches = validate_and_collect(problems)
+    curated = load_curated_bidding(players, problems)
     for w in problems.warnings:
         print("WARN ", w)
     for e in problems.errors:
@@ -440,11 +481,11 @@ def main() -> int:
     careers = generate_career_challenges(players, clubs)
     countries_path = SEED / "countries.json"
     countries = json.loads(countries_path.read_text(encoding="utf-8"))["countries"] if countries_path.exists() else {}
-    bidding = generate_bidding(clubs, players, connections, countries)
+    bidding = generate_bidding(clubs, players, connections, countries) + curated
     by_diff = {d: sum(1 for c in connections if c["difficulty"] == d) for d in (1, 2, 3, 4)}
     print(f"players={len(players)} clubs={len(clubs)} matches={len(matches)} "
           f"connections={len(connections)} {by_diff} careers={len(careers)} bidding={len(bidding)} "
-          f"{ {d: sum(1 for b in bidding if b['difficulty'] == d) for d in (1, 2, 3)} }")
+          f"{ {d: sum(1 for b in bidding if b['difficulty'] == d) for d in (1, 2, 3)} } curated={len(curated)}")
     if args.check:
         return 0
 

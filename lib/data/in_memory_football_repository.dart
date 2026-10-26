@@ -53,8 +53,15 @@ class InMemoryFootballRepository implements FootballRepository {
 
   @override
   Future<BiddingCategory?> pickBiddingCategory(
-          {Set<int>? levels, Set<String> exclude = const {}, int eras = Era.allMask}) async =>
-      _pick(bidding, (b) => b.id, (b) => b.difficulty, (b) => b.eras, levels, exclude, eras);
+      {Set<int>? levels, Set<String> exclude = const {}, int eras = Era.allMask}) async {
+    // Choose the kind of category by weight first, then one of that kind.
+    bool fits(BiddingCategory b) =>
+        !exclude.contains(b.id) && (levels == null || levels.contains(b.difficulty)) && (b.eras & eras) != 0;
+    final kind = BiddingKind.choose({for (final b in bidding) if (fits(b)) b.kind}, _random);
+    if (kind == null) return null;
+    final options = [for (final b in bidding) if (b.kind == kind && fits(b)) b];
+    return options[_random.nextInt(options.length)];
+  }
 
   @override
   Future<List<ClubConnection>> allClubConnections({int eras = Era.allMask}) async =>

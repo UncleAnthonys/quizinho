@@ -2,6 +2,8 @@
 /// game logic built on them is unit-testable.
 library;
 
+import 'dart:math';
+
 /// 1 = easy, 4 = expert. Stored as an int in the database.
 enum Difficulty {
   easy(1, 'Easy'),
@@ -139,6 +141,39 @@ class BiddingCategory {
 
   /// Nobody can bid more answers than exist.
   int get maxBid => answerIds.length;
+
+  /// Which family the category comes from, told by its id prefix.
+  BiddingKind get kind => BiddingKind.ofId(id);
+}
+
+/// Bidding War category families, and how often each comes up. The pipeline
+/// makes 1,000+ club pairs but only a few dozen hand-made records/squads, so
+/// picking uniformly would almost never show the hand-made ones.
+enum BiddingKind {
+  curated(40), // records, awards, famous squads ("100+ Premier League goals")
+  pair(40), // "Played for both Arsenal and Barcelona"
+  nationality(20); // "Brazilians who played for Chelsea"
+
+  const BiddingKind(this.weight);
+  final int weight;
+
+  static BiddingKind ofId(String id) => id.startsWith('stat:')
+      ? curated
+      : id.startsWith('nat:')
+          ? nationality
+          : pair;
+
+  /// Picks a kind by weight among those that have something on offer.
+  static BiddingKind? choose(Set<BiddingKind> available, Random random) {
+    final kinds = [for (final k in values) if (available.contains(k)) k];
+    if (kinds.isEmpty) return null;
+    var roll = random.nextInt(kinds.fold(0, (sum, k) => sum + k.weight));
+    for (final k in kinds) {
+      roll -= k.weight;
+      if (roll < 0) return k;
+    }
+    return kinds.last;
+  }
 }
 
 /// "Who's this? Ajax → Juventus → Inter…"
