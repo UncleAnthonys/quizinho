@@ -15,7 +15,7 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final services = AppScope.of(context);
-    final demo = services.repo.dataStatus != 'verified';
+    final demo = services.repo.dataStatus == 'demo_unverified';
     return Scaffold(
       body: PitchBackground(
         child: SafeArea(

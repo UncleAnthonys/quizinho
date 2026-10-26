@@ -27,6 +27,7 @@ import json
 import pathlib
 import sqlite3
 import sys
+import unicodedata
 
 ROOT = pathlib.Path(__file__).resolve().parent
 SEED = ROOT / "seed"
@@ -120,6 +121,11 @@ class Problems:
         self.warnings.append(msg)
 
 
+def norm(text: str) -> str:
+    t = unicodedata.normalize("NFKD", text.replace("'", "").replace("’", "")).lower()
+    return " ".join("".join(c if c.isalnum() else " " for c in t if not unicodedata.combining(c)).split())
+
+
 def validate_and_collect(problems: Problems):
     clubs_raw = load("clubs.json")["clubs"]
     players_raw = load("players.json")["players"]
@@ -147,18 +153,22 @@ def validate_and_collect(problems: Problems):
             if start and end and end < start:
                 problems.error(f"{pid}: spell at {club_id} ends before it starts")
             spells.append({"seq": i, "club": club_id, "start": start, "end": end, "loan": loan})
-        # chronology sanity: permanent spells should not start before the previous permanent one
-        last = None
-        for s in spells:
-            if s["loan"] or not s["start"]:
-                continue
-            if last and s["start"] < last:
-                problems.warn(f"{pid}: {s['club']} starts {s['start']} before previous permanent spell ({last})")
-            last = s["start"]
         players[pid] = {
             "name": p["name"], "nat": p.get("nat"), "pos": p.get("pos"), "fame": p["fame"],
             "aliases": p.get("aliases", []), "spells": spells,
         }
+
+    # Line-ups name players by hand-written ids ("xavi"); the generated seed uses
+    # Wikidata names ("xavi-hernandez"). Resolve by id, then by name/alias.
+    by_name: dict[str, str] = {}
+    for pid, p in sorted(players.items(), key=lambda kv: kv[1]["fame"]):  # most famous wins
+        for n in [p["name"], *p["aliases"]]:
+            by_name[norm(n)] = pid
+
+    def resolve(pid: str, name: str) -> str | None:
+        if pid in players:
+            return pid
+        return by_name.get(norm(name)) or by_name.get(norm(pid.replace("-", " ")))
 
     extra_aliases = matches_doc.get("extra_aliases", {})
     matches = []
@@ -171,22 +181,27 @@ def validate_and_collect(problems: Problems):
             problems.error(f"match {m['id']}: duplicate player in XI")
         if sum(1 for s in xi if s[2] == "GK") != 1:
             problems.error(f"match {m['id']}: needs exactly one GK")
+        resolved_xi = []
         for pid, name, pos in xi:
             if pos not in POSITIONS:
                 problems.error(f"match {m['id']}: bad position {pos}")
-            if pid not in players:
-                # lineup-only player: create with no career
-                players[pid] = {"name": name, "nat": None, "pos": pos, "fame": 3,
-                                "aliases": [], "spells": []}
-            elif players[pid]["name"] != name:
-                problems.warn(f"match {m['id']}: '{name}' differs from player name '{players[pid]['name']}'")
-        matches.append(m)
+            real = resolve(pid, name)
+            if real is None:
+                # not in the career data: create a line-up-only player
+                real = pid
+                players[pid] = {"name": name, "nat": None, "pos": pos, "fame": 3, "aliases": [], "spells": []}
+                by_name[norm(name)] = pid
+            resolved_xi.append([real, players[real]["name"], pos])
+        if len({r[0] for r in resolved_xi}) != 11:
+            problems.error(f"match {m['id']}: two line-up names resolved to the same player")
+        matches.append({**m, "xi": resolved_xi})
 
     for pid, aliases in extra_aliases.items():
-        if pid not in players:
-            problems.error(f"extra_aliases: unknown player {pid}")
+        real = resolve(pid, pid.replace("-", " "))
+        if real is None:
+            problems.warn(f"extra_aliases: unknown player {pid}")
         else:
-            players[pid]["aliases"] = list(dict.fromkeys(players[pid]["aliases"] + aliases))
+            players[real]["aliases"] = list(dict.fromkeys(players[real]["aliases"] + aliases))
 
     return clubs, players, matches
 
@@ -211,19 +226,29 @@ def spells_mask(spells) -> int:
     return m
 
 
+# Club Connections / Tic-Tac-Toe only use clubs at least this well known, and
+# a pair needs at least one answer at least this famous — technically valid but
+# unguessable pairs ("Kauno Žalgiris + Vegalta Sendai") are no fun.
+CONNECTION_MIN_CLUB_FAME = 3
+# Generated from Wikidata by normalise.py, or the old hand-written demo seed.
+DATA_STATUS = "wikidata" if "GENERATED" in (SEED / "players.json").read_text(encoding="utf-8")[:300] else "demo_unverified"
+CONNECTION_MIN_ANSWER_FAME = 2
+CAREER_MIN_FAME = 2
+
+
 def generate_connections(clubs, players):
-    by_club: dict[str, set[str]] = {}
+    """Pairs built from each player's own clubs (fast at 20k+ players)."""
+    pairs: dict[tuple[str, str], set[str]] = {}
     for pid, p in players.items():
-        for s in p["spells"]:
-            by_club.setdefault(s["club"], set()).add(pid)
+        own = sorted({s["club"] for s in p["spells"] if clubs[s["club"]]["fame"] >= CONNECTION_MIN_CLUB_FAME})
+        for a, b in itertools.combinations(own, 2):
+            pairs.setdefault((a, b), set()).add(pid)
     out = []
-    for a, b in itertools.combinations(sorted(by_club), 2):
-        shared = by_club[a] & by_club[b]
-        if not shared:
-            continue  # never generate a pair without a valid answer
+    for (a, b), shared in sorted(pairs.items()):
         best = max(players[pid]["fame"] for pid in shared)
+        if best < CONNECTION_MIN_ANSWER_FAME:
+            continue  # nobody guessable
         diff = connection_difficulty(best, clubs[a]["fame"], clubs[b]["fame"])
-        # Eras in which a valid answer was at one of the two clubs.
         eras = 0
         for pid in shared:
             eras |= spells_mask([s for s in players[pid]["spells"] if s["club"] in (a, b)])
@@ -236,7 +261,7 @@ def generate_career_challenges(players):
     out = []
     for pid, p in players.items():
         distinct = {s["club"] for s in p["spells"]}
-        if len(p["spells"]) >= 3 and len(distinct) >= 3:
+        if p["fame"] >= CAREER_MIN_FAME and len(p["spells"]) >= 3 and len(distinct) >= 3:
             out.append({"player": pid, "clues": len(p["spells"]), "difficulty": career_difficulty(p["fame"]),
                         "eras": spells_mask(p["spells"]) or 31})
     return out
@@ -255,7 +280,7 @@ def write_db(path: pathlib.Path, version: int, clubs, players, matches, connecti
     meta = {
         "db_version": str(version),
         "built_at": dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds"),
-        "data_status": "demo_unverified",
+        "data_status": DATA_STATUS,
         "players": str(len(players)),
         "connections": str(len(connections)),
     }
@@ -290,7 +315,7 @@ def write_json(path: pathlib.Path, version: int, clubs, players, matches, connec
     """Same content as the SQLite file, for the web build (no SQLite plugin in browsers)."""
     doc = {
         "db_version": version,
-        "data_status": "demo_unverified",
+        "data_status": DATA_STATUS,
         "clubs": [[cid, c["name"], c["country"], c["fame"]] for cid, c in clubs.items()],
         "players": [
             {"id": pid, "name": p["name"], "nat": p["nat"], "pos": p["pos"], "fame": p["fame"], "aliases": p["aliases"]}
