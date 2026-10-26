@@ -50,7 +50,8 @@ def sparql(query: str, tries: int = 6) -> list[dict]:
         )
         try:
             with urllib.request.urlopen(req, timeout=120) as r:
-                return json.load(r)["results"]["bindings"]
+                # strict=False: some labels contain raw control characters
+                return json.loads(r.read().decode("utf-8"), strict=False)["results"]["bindings"]
         except urllib.error.HTTPError as e:
             wait = int(e.headers.get("Retry-After", 0) or 0) or 5 * (attempt + 1)
             print(f"  HTTP {e.code}, retry in {wait}s", flush=True)
@@ -69,6 +70,14 @@ def val(b: dict, key: str) -> str | None:
     return b[key]["value"] if key in b else None
 
 
+def num(v: str | None) -> int | None:
+    """Integer qualifier value, or None for 'unknown value' blank nodes and junk."""
+    try:
+        return int(float(v)) if v is not None else None
+    except ValueError:
+        return None
+
+
 def chunks(xs: list, n: int):
     for i in range(0, len(xs), n):
         yield xs[i:i + n]
@@ -85,7 +94,7 @@ SELECT ?p ?pLabel ?sl WHERE {{
   FILTER(?sl >= {lo} && ?sl <= {hi})
   SERVICE wikibase:label {{ bd:serviceParam wikibase:language "en,mul,es,pt,fr,de,it". }}
 }}""")
-    return {qid(r["p"]["value"]): {"id": qid(r["p"]["value"]), "name": val(r, "pLabel"), "sitelinks": int(val(r, "sl"))}
+    return {qid(r["p"]["value"]): {"id": qid(r["p"]["value"]), "name": val(r, "pLabel"), "sitelinks": num(val(r, "sl")) or 0}
             for r in rows}
 
 
@@ -143,10 +152,10 @@ SELECT ?p ?st ?team ?start ?end ?apps ?goals ?acq WHERE {{
                 s["start"] = s["start"] or v[:10]
             if (v := val(r, "end")):
                 s["end"] = s["end"] or v[:10]
-            if (v := val(r, "apps")) and s["apps"] is None:
-                s["apps"] = int(float(v))
-            if (v := val(r, "goals")) and s["goals"] is None:
-                s["goals"] = int(float(v))
+            if s["apps"] is None:
+                s["apps"] = num(val(r, "apps"))
+            if s["goals"] is None:
+                s["goals"] = num(val(r, "goals"))
             if (v := val(r, "acq")) and qid(v) not in s["acq"]:
                 s["acq"].append(qid(v))
         if n % 20 == 0:
@@ -172,8 +181,8 @@ SELECT ?t ?tLabel ?sl ?type ?country ?alias WHERE {{
                 "id": qid(r["t"]["value"]), "name": val(r, "tLabel"), "sitelinks": 0,
                 "types": [], "country": None, "aliases": [],
             })
-            if (v := val(r, "sl")):
-                t["sitelinks"] = int(v)
+            if (v := num(val(r, "sl"))) is not None:
+                t["sitelinks"] = v
             if (v := val(r, "type")) and qid(v) not in t["types"]:
                 t["types"].append(qid(v))
             if (v := val(r, "country")):
