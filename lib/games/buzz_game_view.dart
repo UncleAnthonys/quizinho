@@ -82,7 +82,12 @@ class BuzzGameView extends StatelessWidget {
                 child: TimerBar(fraction: c.secondsLeft / c.phaseSeconds, seconds: c.secondsLeft, height: 10),
               ),
               Flexible(fit: FlexFit.loose, child: _bottom(context, services)),
-              Expanded(child: SingleChildScrollView(child: question(true))),
+              // Typing: the question steps aside so the suggestions get the room.
+              // Only this sibling changes; the answer box above isn't rebuilt,
+              // so the keyboard stays up.
+              answerTyping.value
+                  ? const SizedBox.shrink()
+                  : Expanded(child: SingleChildScrollView(child: question(true))),
             ]),
           ),
         ),
