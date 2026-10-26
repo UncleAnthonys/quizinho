@@ -10,9 +10,9 @@ import '../games/game_screen_support.dart';
 import '../games/heads_up/heads_up_screen.dart';
 import '../games/starting_xi/starting_xi_screen.dart';
 import '../games/tic_tac_toe/tic_tac_toe_screen.dart';
+import 'screens/free_kick_screen.dart';
 import 'screens/round_intro_screen.dart';
 import 'screens/round_summary_screen.dart';
-import 'screens/wheel_screen.dart';
 import 'screens/winner_screen.dart';
 
 /// Moves a match through: wheel → intro → game → summary → … → winner.
@@ -26,7 +26,7 @@ abstract final class MatchFlow {
       );
 
   static void toWheel(BuildContext context, Tournament t) =>
-      Navigator.of(context).pushReplacement(_route(_Guard(child: WheelScreen(tournament: t))));
+      Navigator.of(context).pushReplacement(_route(_Guard(child: FreeKickScreen(tournament: t))));
 
   static void toIntro(BuildContext context, Tournament t, GameModeId mode, int multiplier) =>
       Navigator.of(context).pushReplacement(

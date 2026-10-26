@@ -18,7 +18,9 @@ enum Sfx {
   cheer('cheer'),
   groan('groan'),
   reveal('reveal'),
-  fanfare('fanfare');
+  fanfare('fanfare'),
+  kick('kick'),
+  ooh('ooh');
 
   const Sfx(this.file);
   final String file;

@@ -144,6 +144,22 @@ def main() -> None:
     parts.append(lowpass(chord, 2600) * env(int(SR * 1.1), 0.02, 0.5))
     save("fanfare", np.concatenate(parts), 0.85)
 
+    # Kick: leather thwack — short noise crack over a low thump
+    n = int(SR * 0.22)
+    crack = bandpass(rng.normal(size=n), 600, 5000) * np.exp(-np.linspace(0, 40, n))
+    thud = np.sin(2 * np.pi * np.cumsum(np.linspace(160, 60, n)) / SR) * np.exp(-np.linspace(0, 14, n))
+    save("kick", crack * 0.9 + thud, 0.9)
+
+    # Crowd "ooooh": swelling then falling vowel-ish band noise with low voices
+    n = int(SR * 1.5)
+    crowd = bandpass(rng.normal(size=n), 250, 1400)
+    voices = sum(
+        tone(np.linspace(f * 0.92, f * 1.08, n) * (1 - 0.12 * np.linspace(0, 1, n) ** 2), 1.5, "saw") * 0.05
+        for f in (190, 230, 280, 330)
+    )
+    shape = np.sin(np.linspace(0, np.pi, n)) ** 1.2
+    save("ooh", (crowd + lowpass(voices, 800)) * shape, 0.75)
+
     print("Wrote", sorted(p.name for p in OUT.glob("*.wav")))
 
 
