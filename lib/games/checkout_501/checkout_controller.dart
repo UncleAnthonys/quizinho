@@ -7,7 +7,7 @@ import '../../domain/tournament.dart';
 enum CoPhase { answering, reveal, finished }
 
 /// What one "dart" did.
-enum CoOutcome { scored, checkout, bust, bogey, overshoot, wrong, timeUp }
+enum CoOutcome { scored, checkout, bust, overshoot, wrong, timeUp }
 
 enum CoEvent { thrown, duplicate, noStats }
 
@@ -36,7 +36,6 @@ class CoThrow {
 /// player; their league apps + goals for the club come off the score.
 /// Over 180 is a bust (score stays). Finish between 0 and −10 to check out —
 /// further below is a bust. A player named by anyone is gone for everyone.
-/// The nine bogey numbers (impossible with three real darts) score nothing.
 /// When a team checks out, the rest of that lap still throws: everyone who
 /// checks out on the same dart is compared, closest to zero wins.
 /// If nobody checks out in [maxTurns] each, closest wins.
@@ -61,7 +60,6 @@ class CheckoutController extends ChangeNotifier {
   static const int maxDart = 180;
   static const int checkoutWindow = 10; // 0 to −10 counts
   static const int winPoints = 3;
-  static const Set<int> bogeys = {163, 166, 169, 172, 173, 175, 176, 178, 179};
 
   late final List<int> remaining = List.filled(teamCount, start);
   final List<CoThrow> throws = [];
@@ -131,8 +129,6 @@ class CheckoutController extends ChangeNotifier {
     final CoOutcome outcome;
     if (value > maxDart) {
       outcome = CoOutcome.bust;
-    } else if (bogeys.contains(value)) {
-      outcome = CoOutcome.bogey;
     } else if (after < -checkoutWindow) {
       outcome = CoOutcome.overshoot;
     } else if (after <= 0) {

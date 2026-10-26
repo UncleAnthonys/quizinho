@@ -106,19 +106,6 @@ void main() {
     expect(c.result().points, {0: 3, 1: 0});
   });
 
-  test('bogey numbers score nothing and use the player up', () {
-    final c = CheckoutController(
-      category: const CheckoutCategory(id: 't', prompt: 'T', difficulty: 1, values: {'bog': (150, 13)}),
-      teamCount: 2,
-    )..begin();
-    c.submit(pl('bog')); // 163
-    expect(c.lastThrow!.outcome, CoOutcome.bogey);
-    expect(c.remaining[0], 501);
-    c.next();
-    c.submit(pl('bog'));
-    expect(c.lastEvent, CoEvent.duplicate);
-  });
-
   test('both check out on the same dart: closest to zero wins', () {
     final c = CheckoutController(
       category: const CheckoutCategory(id: 't', prompt: 'T', difficulty: 1, values: {
