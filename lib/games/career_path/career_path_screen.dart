@@ -195,7 +195,15 @@ class _CareerTrail extends StatelessWidget {
               ? Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [Flexible(child: name), FittedBox(fit: BoxFit.scaleDown, child: years)],
+                  // Two columns (lots of clubs): club name gets most of the
+                  // height, years sit small underneath.
+                  children: [
+                    Expanded(flex: 5, child: name),
+                    Expanded(
+                      flex: 3,
+                      child: FittedBox(fit: BoxFit.scaleDown, alignment: Alignment.centerLeft, child: years),
+                    ),
+                  ],
                 )
               : name,
         ),

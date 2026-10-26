@@ -279,8 +279,10 @@ class _FreeKickPainter extends CustomPainter {
     final spot = Offset(w * 0.5, h * 0.86);
     final ballR = max(7.0, min(w, h) * 0.03);
     // The draft excluder lies just behind the middle of the wall.
-    final lie = Offset(w / 2, feetY - slot * 0.12);
-    final excluderShirt = lie + Offset(slot * 0.25, -slot * 0.23);
+    // Lying on his side (a wall player turned 90°), feet left, head right,
+    // centred behind the wall with his lower side resting on the grass.
+    final lie = Offset(w / 2 - slot * 1.1, feetY - slot * 0.62);
+    final excluderShirt = lie + Offset(slot * 1.37, 0);
     final chest = tgt != null ? Offset(px(tgt), feetY - figH * 0.58) : (under ? excluderShirt : spot);
     // Fall away from where the shot came from.
     final dir = tgt == null ? 1.0 : (px(tgt) >= spot.dx ? 1.0 : -1.0);
@@ -291,7 +293,7 @@ class _FreeKickPainter extends CustomPainter {
     double hop() {
       const end = _Beat.impact + 0.12;
       if (!going || t < _Beat.strike || t > end) return 0;
-      return sin((t - _Beat.strike) / (end - _Beat.strike) * pi) * slot * (under ? 0.62 : 0.32);
+      return sin((t - _Beat.strike) / (end - _Beat.strike) * pi) * slot * (under ? 0.8 : 0.32);
     }
 
     // After the wildcard hit the wall steps apart to show who got it.
@@ -302,7 +304,12 @@ class _FreeKickPainter extends CustomPainter {
       return (px(i) >= w / 2 ? 1 : -1) * slot * (n.isOdd ? 1.15 : 0.7) * u;
     }
 
-    if (under && going && t >= _Beat.strike) _excluder(canvas, lie, slot, t);
+    if (under && going && t >= _Beat.strike) {
+      final hit = t >= _Beat.impact;
+      final jolt = hit ? sin(((t - _Beat.impact) / 0.25).clamp(0.0, 1.0) * pi) : 0.0;
+      _player(canvas, lie - Offset(0, jolt * slot * 0.2), slot, 3, pi / 2 - jolt * 0.08, hit,
+          mode: GameModeId.wildcard, uprightLabel: true);
+    }
     _ball(canvas, t, spot, chest, ballR, feetY, slot, dir, w, h, behindWall: true);
 
     final idleOn = !going;
@@ -355,8 +362,12 @@ class _FreeKickPainter extends CustomPainter {
 
   /// A wall player standing with feet at [feet], [s] = slot width, rotated
   /// [fall] radians about the feet when going down.
-  void _player(Canvas canvas, Offset feet, double s, int i, double fall, bool hit) {
-    final mode = segments[i];
+  ///
+  /// [mode] overrides the shirt (the wildcard isn't in [segments]);
+  /// [uprightLabel] keeps the shirt name level when he's lying down.
+  void _player(Canvas canvas, Offset feet, double s, int i, double fall, bool hit,
+      {GameModeId? mode, bool uprightLabel = false}) {
+    mode ??= segments[i];
     final skin = Paint()..color = _skins[i % _skins.length];
     final sw = s * 0.94; // shoulder to shoulder, like a real wall
     RRect box(double l, double t, double r, double b, double rad) =>
@@ -381,13 +392,17 @@ class _FreeKickPainter extends CustomPainter {
         RRect.fromLTRBR(-sw / 2 - 0.03 * s, -1.80 * s, sw / 2 + 0.03 * s, -1.46 * s, Radius.circular(0.12 * s)), shirt);
     final body = RRect.fromLTRBR(-sw / 2, -1.80 * s, sw / 2, -0.86 * s, Radius.circular(0.14 * s));
     if (hit) {
-      canvas.drawRRect(body.inflate(0.07 * s), Paint()..color = Palette.text);
+      // white shirts (the wildcard) glow yellow so the ring shows
+      canvas.drawRRect(body.inflate(0.07 * s),
+          Paint()..color = mode == GameModeId.wildcard ? Palette.yellow : Palette.text);
     }
     canvas.drawRRect(body, shirt);
     // hands together in front, the classic wall pose
     canvas.drawRRect(box(-0.20, -1.02, 0.20, -0.82, 0.10), skin);
     // name on the shirt
-    labels.paint(canvas, mode, Offset(0, -1.37 * s), Size(sw * 0.92, 0.58 * s), maxFont: 0.30 * s);
+    if (!uprightLabel) {
+      labels.paint(canvas, mode, Offset(0, -1.37 * s), Size(sw * 0.92, 0.58 * s), maxFont: 0.30 * s);
+    }
     // neck and head
     canvas.drawRect(Rect.fromLTRB(-0.08 * s, -1.92 * s, 0.08 * s, -1.76 * s), skin);
     final head = Offset(0, -2.02 * s);
@@ -395,36 +410,11 @@ class _FreeKickPainter extends CustomPainter {
     canvas.drawArc(Rect.fromCircle(center: head + Offset(0, -0.02 * s), radius: 0.255 * s), pi, pi, true,
         Paint()..color = _hair[i % _hair.length]);
     canvas.restore();
-  }
-
-  /// The wildcard: lying on his side behind the wall, head propped on a hand,
-  /// WILDCARD across his shirt. Jolts and glows when the ball hits him.
-  void _excluder(Canvas canvas, Offset at, double s, double t) {
-    final hit = t >= _Beat.impact;
-    final jolt = hit ? sin(((t - _Beat.impact) / 0.25).clamp(0.0, 1.0) * pi) : 0.0;
-    final skin = Paint()..color = _skins[3];
-    RRect box(double l, double tp, double r, double b, double rad) =>
-        RRect.fromLTRBR(l * s, tp * s, r * s, b * s, Radius.circular(rad * s));
-
-    canvas.save();
-    canvas.translate(at.dx, at.dy - jolt * s * 0.2);
-    canvas.rotate(-jolt * 0.08);
-    // legs (stacked, side-on), socks, boots
-    canvas.drawRect(Rect.fromLTRB(-0.86 * s, -0.32 * s, -0.56 * s, -0.08 * s), skin);
-    canvas.drawRect(Rect.fromLTRB(-1.22 * s, -0.32 * s, -0.84 * s, -0.08 * s), Paint()..color = Colors.white);
-    canvas.drawRRect(box(-1.36, -0.36, -1.18, -0.04, 0.05), Paint()..color = const Color(0xFF111111));
-    canvas.drawRRect(box(-0.62, -0.40, -0.22, -0.04, 0.06), Paint()..color = _shorts);
-    final shirt = box(-0.28, -0.46, 0.80, 0, 0.12);
-    if (hit) canvas.drawRRect(shirt.inflate(0.06 * s), Paint()..color = Palette.yellow);
-    canvas.drawRRect(shirt, Paint()..color = GameModeId.wildcard.color);
-    labels.paint(canvas, GameModeId.wildcard, Offset(0.25 * s, -0.23 * s), Size(0.96 * s, 0.36 * s), maxFont: 0.3 * s);
-    // forearm up, head resting on the hand
-    canvas.drawRRect(box(0.74, -0.78, 0.94, -0.06, 0.08), skin);
-    final head = Offset(1.04 * s, -0.66 * s);
-    canvas.drawCircle(head, 0.22 * s, skin);
-    canvas.drawArc(Rect.fromCircle(center: head + Offset(0, -0.02 * s), radius: 0.235 * s), pi * 0.75, pi, true,
-        Paint()..color = _hair[1]);
-    canvas.restore();
+    if (uprightLabel) {
+      // shirt centre (0, -1.37s) after turning by [fall]
+      final centre = feet + Offset(1.37 * s * sin(fall), -1.37 * s * cos(fall));
+      labels.paint(canvas, mode, centre, Size(0.84 * s, 0.5 * s), maxFont: 0.30 * s);
+    }
   }
 
   void _burst(Canvas canvas, Offset at, double s, double u) {
