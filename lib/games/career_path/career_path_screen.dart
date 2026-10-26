@@ -37,7 +37,7 @@ class _CareerPathScreenState extends State<CareerPathScreen>
     final source = services.challenges;
     final qs = <CareerPath>[];
     for (var i = 0; i < t.config.questionsPerRound; i++) {
-      final q = await source.careerPath(t.config.difficulty, t.usedIds(_mode), eras: t.config.eraMask);
+      final q = await source.careerPath(t.config.difficulty, t.usedIds(_mode), eras: t.config.eraMask, genders: t.config.genderMask);
       if (q == null) break;
       t.markUsed(_mode, q.id);
       qs.add(q);

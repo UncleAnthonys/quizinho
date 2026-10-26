@@ -24,6 +24,7 @@ import argparse
 import datetime as dt
 import itertools
 import json
+import math
 import pathlib
 import sqlite3
 import sys
@@ -37,13 +38,13 @@ SCHEMA = """
 CREATE TABLE meta (key TEXT PRIMARY KEY, value TEXT NOT NULL);
 CREATE TABLE clubs (
   id TEXT PRIMARY KEY, name TEXT NOT NULL, country TEXT, fame INTEGER NOT NULL,
-  wikidata_id TEXT
+  wikidata_id TEXT, women INTEGER NOT NULL DEFAULT 0
 );
 CREATE TABLE club_aliases (club_id TEXT NOT NULL REFERENCES clubs(id), alias TEXT NOT NULL);
 CREATE TABLE players (
   id TEXT PRIMARY KEY, name TEXT NOT NULL, nationality TEXT, position TEXT,
   fame INTEGER NOT NULL, verified INTEGER NOT NULL DEFAULT 0, source TEXT NOT NULL,
-  wikidata_id TEXT
+  wikidata_id TEXT, women INTEGER NOT NULL DEFAULT 0
 );
 CREATE TABLE player_aliases (player_id TEXT NOT NULL REFERENCES players(id), alias TEXT NOT NULL);
 CREATE TABLE career_spells (
@@ -81,11 +82,13 @@ CREATE INDEX idx_ans_conn ON connection_answers(connection_id);
 CREATE INDEX idx_career_diff ON career_challenges(difficulty);
 CREATE TABLE bidding_categories (
   id TEXT PRIMARY KEY, prompt TEXT NOT NULL, kind TEXT NOT NULL,
-  answer_count INTEGER NOT NULL, difficulty INTEGER NOT NULL, eras INTEGER NOT NULL
+  answer_count INTEGER NOT NULL, difficulty INTEGER NOT NULL, eras INTEGER NOT NULL,
+  women INTEGER NOT NULL DEFAULT 0
 );
 CREATE TABLE bidding_answers (
   category_id TEXT NOT NULL REFERENCES bidding_categories(id),
-  player_id TEXT NOT NULL REFERENCES players(id)
+  player_id TEXT NOT NULL,
+  score INTEGER NOT NULL DEFAULT 50
 );
 CREATE INDEX idx_match_diff ON matches(difficulty);
 CREATE INDEX idx_bid_ans ON bidding_answers(category_id);
@@ -141,12 +144,16 @@ def validate_and_collect(problems: Problems):
     matches_doc = load("matches.json")
 
     clubs = {}
-    for cid, name, country, fame, aliases in clubs_raw:
+    for row in clubs_raw:
+        # [id, name, country, fame, aliases, reach?, "w"/"m"?] — later fields optional
+        cid, name, country, fame, aliases = row[:5]
+        reach = row[5] if len(row) > 5 else None
+        women = len(row) > 6 and row[6] == "w"
         if cid in clubs:
             problems.error(f"duplicate club id {cid}")
         if not 1 <= fame <= 5:
             problems.error(f"club {cid} fame out of range")
-        clubs[cid] = {"name": name, "country": country, "fame": fame, "aliases": aliases}
+        clubs[cid] = {"name": name, "country": country, "fame": fame, "aliases": aliases, "reach": reach, "women": women}
 
     players = {}
     for p in players_raw:
@@ -163,7 +170,8 @@ def validate_and_collect(problems: Problems):
                 problems.error(f"{pid}: spell at {club_id} ends before it starts")
             spells.append({"seq": i, "club": club_id, "start": start, "end": end, "loan": loan})
         players[pid] = {
-            "name": p["name"], "nat": p.get("nat"), "pos": p.get("pos"), "fame": p["fame"],
+            "name": p["name"], "nat": p.get("nat"), "pos": p.get("pos"), "fame": p["fame"], "reach": p.get("reach"),
+            "women": p.get("g") == "w",
             "aliases": p.get("aliases", []), "spells": spells,
         }
 
@@ -198,7 +206,7 @@ def validate_and_collect(problems: Problems):
             if real is None:
                 # not in the career data: create a line-up-only player
                 real = pid
-                players[pid] = {"name": name, "nat": None, "pos": pos, "fame": 3, "aliases": [], "spells": []}
+                players[pid] = {"name": name, "nat": None, "pos": pos, "fame": 3, "aliases": [], "spells": [], "women": False}
                 by_name[norm(name)] = pid
             resolved_xi.append([real, players[real]["name"], pos])
         if len({r[0] for r in resolved_xi}) != 11:
@@ -392,9 +400,12 @@ def load_curated_bidding(players, clubs, problems: Problems) -> list[dict]:
             if is_clubs:
                 key = resolve_club(raw)
                 table = clubs
-            elif pin == "new":
+            elif pin == "new" or pin.startswith("new:"):
+                # 'Name|new:5' sets how well known they are (1-5), for Pointless scores
                 key = "curated-" + norm(name).replace(" ", "-")
-                players.setdefault(key, {"name": name, "nat": None, "pos": None, "fame": 3, "aliases": [], "spells": []})
+                fame = int(pin[4:]) if pin.startswith("new:") else 3
+                players.setdefault(key, {"name": name, "nat": None, "pos": None, "fame": fame, "aliases": [],
+                                         "spells": [], "women": False})
                 table = players
             else:
                 key = (pin if pin in players else None) if pin else player_names.get(norm(name))
@@ -413,6 +424,43 @@ def load_curated_bidding(players, clubs, problems: Problems) -> list[dict]:
         out.append({"id": f"{prefix}:{c['id']}", "prompt": c["prompt"], "kind": "curated", "answers": sorted(set(answers)),
                     "difficulty": c["difficulty"], "eras": c["eras"]})
     return out
+
+
+# Pointless: an answer's score stands in for "how many of 100 people would
+# say it". Real survey data doesn't exist for free, so it comes from how well
+# known each answer is (Wikipedia reach) RELATIVE to the rest of its list: the
+# best-known answer scores high, the least-known scores 0 — every list has a
+# pointless answer. Bigger lists spread the votes, so their top score is lower.
+FAME_REACH = {5: 0.85, 4: 0.62, 3: 0.45, 2: 0.3, 1: 0.15}
+
+
+def known_ness(item: dict) -> float:
+    reach = item.get("reach")
+    if reach:
+        return max(0.0, min(1.0, (math.log(reach) - math.log(4)) / (math.log(250) - math.log(4))))
+    return FAME_REACH.get(item.get("fame", 1), 0.15)
+
+
+def pointless_scores(answers: list[str], table: dict) -> dict[str, int]:
+    """Half how famous the answer is overall, half where it ranks in its own
+    list — so a list of all-famous names doesn't hand out zeros, but the
+    genuinely obscure ones still go pointless."""
+    k = {a: known_ness(table[a]) for a in answers}
+    lo, hi = min(k.values()), max(k.values())
+    top = max(30, min(90, round(260 / math.sqrt(len(answers)))))
+    out = {}
+    for a, x in k.items():
+        rel = (x - lo) / (hi - lo) if hi > lo else 0.5
+        blend = 0.5 * x + 0.5 * rel
+        out[a] = 0 if blend < 0.12 else max(1, round(top * blend ** 1.6))
+    return out
+
+
+def add_pointless_scores(bidding: list[dict], players, clubs) -> None:
+    for b in bidding:
+        table = clubs if b["id"].startswith("clubs:") else players
+        b["scores"] = pointless_scores(b["answers"], table)
+        b["women"] = all(table[a].get("women") for a in b["answers"])
 
 
 def match_eras(m) -> int:
@@ -434,11 +482,11 @@ def write_db(path: pathlib.Path, version: int, clubs, players, matches, connecti
     }
     con.executemany("INSERT INTO meta VALUES (?,?)", meta.items())
     for cid, c in clubs.items():
-        con.execute("INSERT INTO clubs VALUES (?,?,?,?,NULL)", (cid, c["name"], c["country"], c["fame"]))
+        con.execute("INSERT INTO clubs VALUES (?,?,?,?,NULL,?)", (cid, c["name"], c["country"], c["fame"], int(c["women"])))
         con.executemany("INSERT INTO club_aliases VALUES (?,?)", [(cid, a) for a in c["aliases"]])
     for pid, p in players.items():
-        con.execute("INSERT INTO players VALUES (?,?,?,?,?,0,'demo_seed',NULL)",
-                    (pid, p["name"], p["nat"], p["pos"], p["fame"]))
+        con.execute("INSERT INTO players VALUES (?,?,?,?,?,0,'demo_seed',NULL,?)",
+                    (pid, p["name"], p["nat"], p["pos"], p["fame"], int(p.get("women", False))))
         con.executemany("INSERT INTO player_aliases VALUES (?,?)", [(pid, a) for a in p["aliases"]])
         con.executemany("INSERT INTO career_spells VALUES (?,?,?,?,?,?)",
                         [(pid, s["seq"], s["club"], s["start"], s["end"], int(s["loan"])) for s in p["spells"]])
@@ -455,9 +503,10 @@ def write_db(path: pathlib.Path, version: int, clubs, players, matches, connecti
     con.executemany("INSERT INTO career_challenges VALUES (?,?,?,?)",
                     [(c["player"], c["clues"], c["difficulty"], c["eras"]) for c in careers])
     for b in bidding:
-        con.execute("INSERT INTO bidding_categories VALUES (?,?,?,?,?,?)",
-                    (b["id"], b["prompt"], b["kind"], len(b["answers"]), b["difficulty"], b["eras"]))
-        con.executemany("INSERT INTO bidding_answers VALUES (?,?)", [(b["id"], pid) for pid in b["answers"]])
+        con.execute("INSERT INTO bidding_categories VALUES (?,?,?,?,?,?,?)",
+                    (b["id"], b["prompt"], b["kind"], len(b["answers"]), b["difficulty"], b["eras"], int(b["women"])))
+        con.executemany("INSERT INTO bidding_answers VALUES (?,?,?)",
+                        [(b["id"], pid, b["scores"][pid]) for pid in b["answers"]])
     con.commit()
     con.execute("VACUUM")
     con.close()
@@ -468,10 +517,12 @@ def write_json(path: pathlib.Path, version: int, clubs, players, matches, connec
     doc = {
         "db_version": version,
         "data_status": DATA_STATUS,
-        "clubs": [[cid, c["name"], c["country"], c["fame"], *([c["aliases"]] if c["aliases"] else [])]
+        # clubs: [id, name, country, fame, aliases, "w" for a women's club]
+        "clubs": [[cid, c["name"], c["country"], c["fame"], c["aliases"], *(["w"] if c["women"] else [])]
                   for cid, c in clubs.items()],
         "players": [
-            {"id": pid, "name": p["name"], "nat": p["nat"], "pos": p["pos"], "fame": p["fame"], "aliases": p["aliases"]}
+            {"id": pid, "name": p["name"], "nat": p["nat"], "pos": p["pos"], "fame": p["fame"], "aliases": p["aliases"],
+             **({"g": "w"} if p.get("women") else {})}
             for pid, p in players.items()
         ],
         "careers": [
@@ -480,7 +531,9 @@ def write_json(path: pathlib.Path, version: int, clubs, players, matches, connec
             for c in careers
         ],
         "connections": [[c["id"], c["a"], c["b"], c["difficulty"], c["answers"], c["eras"]] for c in connections],
-        "bidding": [[b["id"], b["prompt"], b["difficulty"], b["answers"], b["eras"]] for b in bidding],
+        # bidding: [id, prompt, difficulty, answers, eras, pointless scores, 1 if women's]
+        "bidding": [[b["id"], b["prompt"], b["difficulty"], b["answers"], b["eras"],
+                     [b["scores"][a] for a in b["answers"]], int(b["women"])] for b in bidding],
         "matches": [
             {"id": m["id"], "title": m["title"], "competition": m["competition"], "date": m["date"],
              "home": m["home"], "away": m["away"], "score": m["score"], "target": m["target"],
@@ -513,6 +566,7 @@ def main() -> int:
     countries_path = SEED / "countries.json"
     countries = json.loads(countries_path.read_text(encoding="utf-8"))["countries"] if countries_path.exists() else {}
     bidding = generate_bidding(clubs, players, connections, countries) + curated
+    add_pointless_scores(bidding, players, clubs)
     by_diff = {d: sum(1 for c in connections if c["difficulty"] == d) for d in (1, 2, 3, 4)}
     print(f"players={len(players)} clubs={len(clubs)} matches={len(matches)} "
           f"connections={len(connections)} {by_diff} careers={len(careers)} bidding={len(bidding)} "

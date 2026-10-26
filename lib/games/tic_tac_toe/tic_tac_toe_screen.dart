@@ -53,7 +53,8 @@ class _TicTacToeScreenState extends State<TicTacToeScreen>
     final rnd = Random();
     final (minFame, maxLevel, known) = _settings(_t.config.difficulty);
     int fame(String id) => repo.players.byId(id)?.fame ?? 0;
-    final inEras = await repo.allClubConnections(eras: _t.config.eraMask);
+    final genders = _t.config.genderMask;
+    final inEras = await repo.allClubConnections(eras: _t.config.eraMask, genders: genders);
     TicTacToeGrid? make(List<ClubConnection> conns, {bool strict = true}) => generateTicTacToeGrid(conns,
         random: rnd,
         minFame: minFame,
@@ -64,7 +65,7 @@ class _TicTacToeScreenState extends State<TicTacToeScreen>
     // Not enough in the chosen eras at this difficulty — widen rather than stall.
     var grid = make(inEras);
     if (grid == null) {
-      final all = await repo.allClubConnections();
+      final all = await repo.allClubConnections(genders: genders);
       grid = make(all) ?? make(inEras, strict: false) ?? make(all, strict: false);
     }
     if (!mounted) return;

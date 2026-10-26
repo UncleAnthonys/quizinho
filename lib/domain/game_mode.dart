@@ -63,6 +63,17 @@ enum GameModeId {
     ],
     whoPlays: 'Bid out loud as a team. When challenged, the whole team can shout answers.',
   ),
+  pointless(
+    title: 'Pointless',
+    tagline: 'Think of the answers nobody else would',
+    playable: true,
+    rules: [
+      'A category appears. Teams take turns — confer, then give ONE answer.',
+      'A right answer scores how many of 100 people would have said it. The more obscure, the lower.',
+      'A wrong answer or running out of time scores 100. Two answers each — lowest total wins +3, and every POINTLESS answer is +1.',
+    ],
+    whoPlays: 'Each team confers, then one person types or says the answer.',
+  ),
   whoAmI(title: 'Who Am I?', tagline: 'Coming soon', playable: false),
   headsUp(
     title: 'Football Heads Up',
@@ -90,6 +101,9 @@ enum GameModeId {
   final bool playable;
   final List<String> rules;
   final String whoPlays;
+
+  /// Has women's questions. Line-ups and Heads Up packs are men's only so far.
+  bool get hasWomensGame => this != GameModeId.startingXi && this != GameModeId.headsUp;
 
   /// Real games (not the wildcard wrapper) available today.
   static List<GameModeId> get concreteGames =>

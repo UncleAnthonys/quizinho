@@ -57,6 +57,7 @@ class TournamentConfig {
     this.bombLives = 3,
     this.headsUpSeconds = 60,
     Set<Era>? eras,
+    this.gender = FootballGender.men,
   })  : modes = modes ?? {...GameModeId.concreteGames, GameModeId.wildcard},
         eras = (eras == null || eras.isEmpty) ? Era.values.toSet() : eras;
 
@@ -76,8 +77,15 @@ class TournamentConfig {
   final Set<Era> eras;
   int get eraMask => Era.maskOf(eras);
 
-  List<GameModeId> get enabledGames =>
-      GameModeId.concreteGames.where(modes.contains).toList();
+  /// Men's, women's or both — chosen on the home screen.
+  final FootballGender gender;
+  int get genderMask => gender.mask;
+
+  /// Women's-only drops games that have no women's questions yet.
+  List<GameModeId> get enabledGames => GameModeId.concreteGames
+      .where(modes.contains)
+      .where((m) => gender != FootballGender.women || m.hasWomensGame)
+      .toList();
 }
 
 /// Points a single round awarded, before any wildcard multiplier.

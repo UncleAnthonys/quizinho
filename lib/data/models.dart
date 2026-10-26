@@ -48,7 +48,17 @@ enum Era {
 }
 
 class Club {
-  const Club({required this.id, required this.name, required this.fame, this.country, this.aliases = const []});
+  const Club({
+    required this.id,
+    required this.name,
+    required this.fame,
+    this.country,
+    this.aliases = const [],
+    this.women = false,
+  });
+
+  /// A women's team ("Arsenal Women").
+  final bool women;
   final String id;
   final String name;
   final String? country;
@@ -70,6 +80,7 @@ class Player {
     this.position,
     this.nationality,
     this.verified = false,
+    this.women = false,
   });
 
   final String id;
@@ -79,6 +90,9 @@ class Player {
   final String? position;
   final String? nationality;
   final bool verified;
+
+  /// Plays in the women's game.
+  final bool women;
 }
 
 class CareerSpell {
@@ -122,6 +136,9 @@ class ClubConnection {
   final Set<String> answerIds;
   final int difficulty;
 
+  /// Women's clubs (a pair is never mixed).
+  bool get women => clubA.women;
+
   /// Era bit flags in which a valid answer was at one of these clubs.
   final int eras;
 }
@@ -134,8 +151,17 @@ class BiddingCategory {
     required this.answerIds,
     required this.difficulty,
     this.eras = Era.allMask,
+    this.scores = const {},
+    this.women = false,
   });
   final String id;
+
+  /// Pointless: 0-100 per answer — how many of 100 people would say it,
+  /// estimated from how well known each answer is (0 = pointless).
+  final Map<String, int> scores;
+
+  /// Answers are from the women's game.
+  final bool women;
 
   /// e.g. "Players who played for both Arsenal and Barcelona".
   final String prompt;
@@ -153,6 +179,25 @@ class BiddingCategory {
 
   /// Answers are clubs ("Clubs that have won the Premier League"), not people.
   bool get answersAreClubs => id.startsWith('clubs:');
+}
+
+/// Men's football, women's, or both — bit flags like eras (1 men, 2 women).
+enum FootballGender {
+  men(1, "Men's"),
+  both(3, 'Both'),
+  women(2, "Women's");
+
+  const FootballGender(this.mask, this.label);
+  final int mask;
+  final String label;
+
+  static const int menBit = 1, womenBit = 2;
+
+  /// Does a challenge from the women's (or men's) game fit [mask]?
+  static bool allows(int mask, bool women) => (mask & (women ? womenBit : menBit)) != 0;
+
+  static FootballGender fromName(String? name) =>
+      values.firstWhere((g) => g.name == name, orElse: () => FootballGender.men);
 }
 
 /// Bidding War category families, and how often each comes up. The pipeline
@@ -196,6 +241,7 @@ class CareerPath {
   final int eras;
 
   String get id => player.id;
+  bool get women => player.women;
 }
 
 class LineupSlot {

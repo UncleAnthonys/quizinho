@@ -98,6 +98,7 @@ class _SetupScreenState extends State<SetupScreen> {
       bombLives: _lives,
       headsUpSeconds: _headsUpSeconds,
       eras: Set.of(_eras),
+      gender: services.settings.gender,
     );
     await services.settings.saveConfig(config);
     if (!mounted) return;

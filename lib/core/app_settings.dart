@@ -29,6 +29,13 @@ class AppSettings extends ChangeNotifier {
   set hapticsOn(bool v) => _setBool('hapticsOn', v);
   set voiceOn(bool v) => _setBool('voiceOn', v);
 
+  /// Men's / both / women's football — the switch on the home screen.
+  FootballGender get gender => FootballGender.fromName(_prefs.getString('gender'));
+  set gender(FootballGender g) {
+    _prefs.setString('gender', g.name);
+    notifyListeners();
+  }
+
   void _setBool(String key, bool v) {
     _prefs.setBool(key, v);
     notifyListeners();
@@ -61,6 +68,7 @@ class AppSettings extends ChangeNotifier {
       bombLives: _prefs.getInt('bombLives') ?? 3,
       headsUpSeconds: _prefs.getInt('headsUpSeconds') ?? 60,
       eras: Era.fromMask(_prefs.getInt('eras') ?? Era.allMask),
+      gender: gender,
     );
   }
 

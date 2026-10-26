@@ -21,6 +21,9 @@ class SqliteFootballRepository implements FootballRepository {
 
   final _random = Random();
 
+  /// A connection is from the women's game when its clubs are.
+  static const _connWomen = '(SELECT women FROM clubs WHERE clubs.id = club_a)';
+
   @override
   late final PlayerIndex clubIndex = PlayerIndex([for (final c in _clubs.values) c.asAnswer]);
 
@@ -57,13 +60,14 @@ class SqliteFootballRepository implements FootballRepository {
       clubAliases.putIfAbsent(r['club_id'] as String, () => []).add(r['alias'] as String);
     }
     final clubs = <String, Club>{};
-    for (final r in await db.rawQuery('SELECT id, name, country, fame FROM clubs')) {
+    for (final r in await db.rawQuery('SELECT id, name, country, fame, women FROM clubs')) {
       final c = Club(
         id: r['id'] as String,
         name: r['name'] as String,
         country: r['country'] as String?,
         fame: r['fame'] as int,
         aliases: clubAliases[r['id']] ?? const [],
+        women: r['women'] == 1,
       );
       clubs[c.id] = c;
     }
@@ -73,7 +77,7 @@ class SqliteFootballRepository implements FootballRepository {
       aliases.putIfAbsent(r['player_id'] as String, () => []).add(r['alias'] as String);
     }
     final playerList = <Player>[
-      for (final r in await db.rawQuery('SELECT id, name, nationality, position, fame, verified FROM players'))
+      for (final r in await db.rawQuery('SELECT id, name, nationality, position, fame, verified, women FROM players'))
         Player(
           id: r['id'] as String,
           name: r['name'] as String,
@@ -81,6 +85,7 @@ class SqliteFootballRepository implements FootballRepository {
           position: r['position'] as String?,
           fame: r['fame'] as int,
           verified: (r['verified'] as int) == 1,
+          women: r['women'] == 1,
           aliases: aliases[r['id'] as String] ?? const [],
         ),
     ];
@@ -92,9 +97,15 @@ class SqliteFootballRepository implements FootballRepository {
   }
 
   /// Builds "WHERE difficulty IN (?,?) AND id NOT IN (?,?)".
-  (String, List<Object?>) _filter(String idCol, Set<int>? levels, Set<String> exclude, int eras) {
+  /// [womenCol]: SQL giving 1 for a women's challenge; filtered by [genders].
+  (String, List<Object?>) _filter(String idCol, Set<int>? levels, Set<String> exclude, int eras,
+      {int genders = 3, String? womenCol}) {
     final clauses = <String>[];
     final args = <Object?>[];
+    if (womenCol != null && genders != 3) {
+      clauses.add('$womenCol = ?');
+      args.add(genders == FootballGender.womenBit ? 1 : 0);
+    }
     if (eras != Era.allMask) {
       clauses.add('(eras & ?) != 0');
       args.add(eras);
@@ -114,8 +125,8 @@ class SqliteFootballRepository implements FootballRepository {
 
   @override
   Future<ClubConnection?> pickClubConnection(
-      {Set<int>? levels, Set<String> exclude = const {}, int eras = Era.allMask}) async {
-    final (where, args) = _filter('id', levels, exclude, eras);
+      {Set<int>? levels, Set<String> exclude = const {}, int eras = Era.allMask, int genders = 1}) async {
+    final (where, args) = _filter('id', levels, exclude, eras, genders: genders, womenCol: _connWomen);
     final rows = await _db.rawQuery(
       'SELECT id, club_a, club_b, difficulty, eras FROM club_connections $where ORDER BY RANDOM() LIMIT 1',
       args,
@@ -136,30 +147,33 @@ class SqliteFootballRepository implements FootballRepository {
 
   @override
   Future<BiddingCategory?> pickBiddingCategory(
-      {Set<int>? levels, Set<String> exclude = const {}, int eras = Era.allMask}) async {
+      {Set<int>? levels, Set<String> exclude = const {}, int eras = Era.allMask, int genders = 1}) async {
     // Choose the kind of category by weight first, then one of that kind.
-    final (where, args) = _filter('id', levels, exclude, eras);
+    final (where, args) = _filter('id', levels, exclude, eras, genders: genders, womenCol: 'women');
     final counts = await _db.rawQuery('SELECT id FROM bidding_categories $where', args);
     final kind = BiddingKind.choose({for (final r in counts) BiddingKind.ofId(r['id'] as String)}, _random);
     if (kind == null) return null;
     final ofKind = [for (final r in counts) if (BiddingKind.ofId(r['id'] as String) == kind) r['id'] as String];
     final pickedId = ofKind[_random.nextInt(ofKind.length)];
-    final rows = await _db.rawQuery('SELECT id, prompt, difficulty, eras FROM bidding_categories WHERE id = ?', [pickedId]);
+    final rows = await _db.rawQuery(
+        'SELECT id, prompt, difficulty, eras, women FROM bidding_categories WHERE id = ?', [pickedId]);
     if (rows.isEmpty) return null;
     final r = rows.first;
-    final answers = await _db.rawQuery('SELECT player_id FROM bidding_answers WHERE category_id = ?', [r['id']]);
+    final answers = await _db.rawQuery('SELECT player_id, score FROM bidding_answers WHERE category_id = ?', [r['id']]);
     return BiddingCategory(
       id: r['id'] as String,
       prompt: r['prompt'] as String,
       difficulty: r['difficulty'] as int,
       eras: r['eras'] as int,
       answerIds: {for (final a in answers) a['player_id'] as String},
+      scores: {for (final a in answers) a['player_id'] as String: a['score'] as int},
+      women: r['women'] == 1,
     );
   }
 
   @override
-  Future<List<ClubConnection>> allClubConnections({int eras = Era.allMask}) async {
-    final (where, args) = _filter('id', null, const {}, eras);
+  Future<List<ClubConnection>> allClubConnections({int eras = Era.allMask, int genders = 1}) async {
+    final (where, args) = _filter('id', null, const {}, eras, genders: genders, womenCol: _connWomen);
     final rows = await _db.rawQuery('SELECT id, club_a, club_b, difficulty, eras FROM club_connections $where', args);
     final answers = <String, Set<String>>{};
     for (final a in await _db.rawQuery('SELECT connection_id, player_id FROM connection_answers')) {
@@ -179,8 +193,10 @@ class SqliteFootballRepository implements FootballRepository {
   }
 
   @override
-  Future<CareerPath?> pickCareerPath({Set<int>? levels, Set<String> exclude = const {}, int eras = Era.allMask}) async {
-    final (where, args) = _filter('player_id', levels, exclude, eras);
+  Future<CareerPath?> pickCareerPath(
+      {Set<int>? levels, Set<String> exclude = const {}, int eras = Era.allMask, int genders = 1}) async {
+    final (where, args) = _filter('player_id', levels, exclude, eras,
+        genders: genders, womenCol: '(SELECT women FROM players WHERE players.id = player_id)');
     final rows = await _db.rawQuery(
       'SELECT player_id, difficulty, eras FROM career_challenges $where ORDER BY RANDOM() LIMIT 1',
       args,
@@ -210,7 +226,9 @@ class SqliteFootballRepository implements FootballRepository {
   }
 
   @override
-  Future<HistoricMatch?> pickMatch({Set<int>? levels, Set<String> exclude = const {}, int eras = Era.allMask}) async {
+  Future<HistoricMatch?> pickMatch(
+      {Set<int>? levels, Set<String> exclude = const {}, int eras = Era.allMask, int genders = 1}) async {
+    if (!FootballGender.allows(genders, false)) return null; // line-ups are men's only so far
     final (where, args) = _filter('id', levels, exclude, eras);
     final rows = await _db.rawQuery('SELECT * FROM matches $where ORDER BY RANDOM() LIMIT 1', args);
     if (rows.isEmpty) return null;

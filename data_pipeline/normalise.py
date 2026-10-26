@@ -41,10 +41,24 @@ EXCLUDE_TYPES = {
 }
 NON_SENIOR_LABEL = re.compile(
     r"(\bU-?\d{2}\b|\bunder[- ]?\d{2}\b|\byouth\b|\bacademy\b|\breserves?\b|\bjuvenil\b|\bprimavera\b"
-    r"|\bjong\b|\bcastilla\b|\batl[eè]tic\b|\bwomen\b|\bladies\b|\bfemen[ií]\w*|\bf[ée]minine\b|\bW\.?F\.?C\.?$"
+    r"|\bjong\b|\bcastilla\b|\batl[eè]tic\b"
     r"|\bfutsal\b|\bnational\b|\bolympic\b|\bstatistics\b| B$| II$| III$| C$|\bB team\b| Sub-\d\d\b)",
     re.IGNORECASE,
 )
+# Women's teams are kept (the women's game is its own pool, never mixed into
+# men's questions). Known by type, or by the label when the type is missing.
+WOMEN_TYPES = {"Q28140340", "Q51481377"}  # women's association football club / team
+WOMEN_LABEL = re.compile(
+    r"(\bwomen\b|\bladies\b|\bfemen[ií]\w*|\bf[ée]minin\w*|\bfrauen\b|\bdamen\b|\bvrouwen\b"
+    r"|\bkvinner\b|\bdam\b|\bW\.?F\.?C\.?$)",
+    re.IGNORECASE,
+)
+
+
+def womens_club(c: dict) -> bool:
+    return bool(set(c.get("types", [])) & WOMEN_TYPES) or bool(WOMEN_LABEL.search(c.get("name") or ""))
+
+
 # A team must carry at least one of these types — this is what keeps out the
 # cities and countries that bad P54 statements point at ("Brazil", "Messina").
 CLUB_TYPES = {
@@ -91,7 +105,9 @@ def year(date: str | None) -> int | None:
     return int(m.group(1)) if m else None
 
 
-def player_fame(sitelinks: int) -> int:
+def player_fame(sitelinks: int, women: bool = False) -> int:
+    if women:  # women's players have far fewer Wikipedia pages at the same standing
+        return 5 if sitelinks >= 45 else 4 if sitelinks >= 32 else 3 if sitelinks >= 20 else 2 if sitelinks >= 11 else 1
     # calibrated on the dump: ~90 at 5, ~450 at 4+, ~2,500 at 3+
     return 5 if sitelinks >= 85 else 4 if sitelinks >= 60 else 3 if sitelinks >= 42 else 2 if sitelinks >= 28 else 1
 
@@ -180,9 +196,13 @@ def main() -> int:
         if c.get("sitelinks", 0) < args.min_club_sitelinks:
             stats["club_too_obscure"] += 1
             continue
+        women = womens_club({**c, "name": name})
+        base = WOMEN_LABEL.sub("", name).strip(" -–,") if women else name
         # US/Canadian club names are mostly city + FC ("Los Angeles FC") — keep them whole
-        short = name if c.get("country") in ("Q30", "Q16") else display_club_name(name, c.get("aliases", []))
-        keep_clubs[cid] = {**c, "name": short, "formal": name}
+        short = base if c.get("country") in ("Q30", "Q16") else display_club_name(base, c.get("aliases", []))
+        if women:
+            short = f"{short} Women"  # "Arsenal W.F.C." -> "Arsenal Women", never just "Arsenal"
+        keep_clubs[cid] = {**c, "name": short, "formal": name, "women": women}
 
     # ---- spells -----------------------------------------------------------
     by_player: dict[str, list[dict]] = defaultdict(list)
@@ -212,7 +232,14 @@ def main() -> int:
     # most famous first, so they get the plain slug ("pedro" = the famous Pedro)
     for p in sorted(players_raw, key=lambda p: -p.get("sitelinks", 0)):
         name = clean_name(p.get("name"))
-        spells = sorted(by_player.get(p["id"], []), key=lambda s: (s["raw_start"], s["loan"]))
+        spells = by_player.get(p["id"], [])
+        # Gender from Wikidata; if missing, from the clubs played for.
+        women = p.get("sex") == "f" if p.get("sex") else bool(spells) and all(keep_clubs[s["club"]]["women"] for s in spells)
+        # never mix: a men's player's stray women's-team spell (data error) and vice versa
+        spells = [s for s in spells if keep_clubs[s["club"]]["women"] == women]
+        if not spells:
+            stats["spell_wrong_gender"] += len(by_player.get(p["id"], []))
+        spells = sorted(spells, key=lambda s: (s["raw_start"], s["loan"]))
         if not name or not spells:
             stats["player_no_career" if name else "player_no_name"] += 1
             continue
@@ -240,30 +267,39 @@ def main() -> int:
         used_clubs.update(s["club"] for s in career)
         out_players.append({
             "id": pid, "wikidata": p["id"], "name": name, "nat": nat,
-            "pos": position_code(p.get("positions", [])), "fame": player_fame(p.get("sitelinks", 0)),
+            "pos": position_code(p.get("positions", [])), "fame": player_fame(p.get("sitelinks", 0), women),
+            "reach": p.get("sitelinks", 0), **({"g": "w"} if women else {}),
             "aliases": aliases,
             "career": [[s["club"], s["start"], s["end"]] + (["loan"] if s["loan"] else []) for s in career],
         })
 
     # Club fame = how many well-known players played there (Wikipedia coverage
     # alone ranks Kuban Krasnodar above Arsenal). Ranked into 5 bands.
+    # Women's clubs are ranked among women's clubs (a far smaller pool).
     weight = {5: 8, 4: 4, 3: 2, 2: 1}
     score: Counter = Counter()
     for p in out_players:
         for cid in {c[0] for c in p["career"]}:
             score[cid] += weight.get(p["fame"], 0)
-    ranked = [cid for cid, _ in score.most_common()]
-    band = {cid: 5 if i < 40 else 4 if i < 150 else 3 if i < 450 else 2 if i < 1200 else 1 for i, cid in enumerate(ranked)}
+    band: dict[str, int] = {}
+    cuts = {False: (40, 150, 450, 1200), True: (12, 40, 100, 250)}
+    for women in (False, True):
+        ranked = [cid for cid, _ in score.most_common() if keep_clubs[cid]["women"] == women]
+        c5, c4, c3, c2 = cuts[women]
+        band.update({cid: 5 if i < c5 else 4 if i < c4 else 3 if i < c3 else 2 if i < c2 else 1
+                     for i, cid in enumerate(ranked)})
 
     out_clubs = []
     for cid in sorted(used_clubs):
         c = keep_clubs[cid]
         country_qid = c.get("country") or ""
         aliases = [a for a in [c["formal"], *c.get("aliases", [])] if good_alias(a, c["name"])][:6]
-        out_clubs.append([cid, c["name"], country_code(country_qid, countries), band.get(cid, 1), aliases])
+        out_clubs.append([cid, c["name"], country_code(country_qid, countries), band.get(cid, 1), aliases,
+                          c.get("sitelinks", 0), "w" if c["women"] else "m"])
 
     fame = Counter(p["fame"] for p in out_players)
-    print(f"players kept: {len(out_players)} of {len(players_raw)}  fame: {dict(sorted(fame.items()))}")
+    print(f"players kept: {len(out_players)} of {len(players_raw)}  fame: {dict(sorted(fame.items()))}"
+          f"  women: {sum(1 for p in out_players if p.get('g') == 'w')}")
     print(f"clubs kept: {len(out_clubs)} of {len(clubs_raw)}")
     print("dropped:", dict(stats))
     if args.report:

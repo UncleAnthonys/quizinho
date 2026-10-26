@@ -17,21 +17,26 @@ abstract class FootballRepository {
   /// Random challenge at one of [levels] (null = any level), from at least one
   /// of the [eras] (bit flags), whose ID is not in [exclude]. Null when the
   /// pool is exhausted.
+  ///
+  /// [genders]: men's (1), women's (2) or both (3) — see [FootballGender].
   Future<ClubConnection?> pickClubConnection(
-      {Set<int>? levels, Set<String> exclude = const {}, int eras = Era.allMask});
-  Future<CareerPath?> pickCareerPath({Set<int>? levels, Set<String> exclude = const {}, int eras = Era.allMask});
-  Future<HistoricMatch?> pickMatch({Set<int>? levels, Set<String> exclude = const {}, int eras = Era.allMask});
+      {Set<int>? levels, Set<String> exclude = const {}, int eras = Era.allMask, int genders = 1});
+  Future<CareerPath?> pickCareerPath(
+      {Set<int>? levels, Set<String> exclude = const {}, int eras = Era.allMask, int genders = 1});
+  Future<HistoricMatch?> pickMatch(
+      {Set<int>? levels, Set<String> exclude = const {}, int eras = Era.allMask, int genders = 1});
 
   Future<BiddingCategory?> pickBiddingCategory(
-      {Set<int>? levels, Set<String> exclude = const {}, int eras = Era.allMask});
+      {Set<int>? levels, Set<String> exclude = const {}, int eras = Era.allMask, int genders = 1});
 
   /// Every club pairing with its answers (for grid games like Tic-Tac-Toe).
-  Future<List<ClubConnection>> allClubConnections({int eras = Era.allMask});
+  Future<List<ClubConnection>> allClubConnections({int eras = Era.allMask, int genders = 1});
 }
 
 /// Applies difficulty and eras with a graceful fallback, so a game never
 /// stalls or repeats: chosen eras + difficulty → chosen eras, any difficulty →
-/// any era at the difficulty → anything fresh.
+/// any era at the difficulty → anything fresh. The men's/women's choice is
+/// never widened: women's-only never serves a men's question.
 class ChallengeSource {
   ChallengeSource(this.repo);
   final FootballRepository repo;
@@ -42,19 +47,35 @@ class ChallengeSource {
       await pick(d.allowedLevels, Era.allMask) ??
       await pick(null, Era.allMask);
 
-  Future<ClubConnection?> clubConnection(Difficulty d, Set<String> used, {int eras = Era.allMask}) =>
-      _widen(d, eras, (l, e) => repo.pickClubConnection(levels: l, exclude: used, eras: e));
+  Future<ClubConnection?> clubConnection(Difficulty d, Set<String> used, {int eras = Era.allMask, int genders = 1}) =>
+      _widen(d, eras, (l, e) => repo.pickClubConnection(levels: l, exclude: used, eras: e, genders: genders));
 
-  Future<CareerPath?> careerPath(Difficulty d, Set<String> used, {int eras = Era.allMask}) =>
-      _widen(d, eras, (l, e) => repo.pickCareerPath(levels: l, exclude: used, eras: e));
+  Future<CareerPath?> careerPath(Difficulty d, Set<String> used, {int eras = Era.allMask, int genders = 1}) =>
+      _widen(d, eras, (l, e) => repo.pickCareerPath(levels: l, exclude: used, eras: e, genders: genders));
 
-  Future<HistoricMatch?> match(Difficulty d, Set<String> used, {int eras = Era.allMask}) =>
-      _widen(d, eras, (l, e) => repo.pickMatch(levels: l, exclude: used, eras: e));
+  Future<HistoricMatch?> match(Difficulty d, Set<String> used, {int eras = Era.allMask, int genders = 1}) =>
+      _widen(d, eras, (l, e) => repo.pickMatch(levels: l, exclude: used, eras: e, genders: genders));
+
+  /// Pointless uses Bidding War's categories — ones with enough answers to
+  /// spread the scores (6+), and that carry scores.
+  Future<BiddingCategory?> pointless(Difficulty d, Set<String> used,
+      {int eras = Era.allMask, int genders = 1}) async {
+    final skip = {...used};
+    for (var i = 0; i < 25; i++) {
+      final b = await bidding(d, skip, eras: eras, genders: genders);
+      if (b == null) return null;
+      if (b.answerIds.length >= 6 && b.scores.isNotEmpty) return b;
+      skip.add(b.id);
+    }
+    return null;
+  }
 
   /// Bidding War has 3 levels; expert plays hard.
-  Future<BiddingCategory?> bidding(Difficulty d, Set<String> used, {int eras = Era.allMask}) => _widen(
+  Future<BiddingCategory?> bidding(Difficulty d, Set<String> used, {int eras = Era.allMask, int genders = 1}) =>
+      _widen(
         d,
         eras,
-        (l, e) => repo.pickBiddingCategory(levels: l == null ? null : {for (final x in l) x > 3 ? 3 : x}, exclude: used, eras: e),
+        (l, e) => repo.pickBiddingCategory(
+            levels: l == null ? null : {for (final x in l) x > 3 ? 3 : x}, exclude: used, eras: e, genders: genders),
       );
 }

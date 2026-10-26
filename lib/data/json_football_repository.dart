@@ -21,6 +21,7 @@ InMemoryFootballRepository parseFootballJson(String source) {
         country: c[2] as String?,
         fame: c[3] as int,
         aliases: (c as List).length > 4 ? [for (final a in c[4] as List) a as String] : const [],
+        women: c.length > 5 && c[5] == 'w',
       ),
   };
   Club club(String id) => clubs[id] ?? Club(id: id, name: id, fame: 1);
@@ -34,6 +35,7 @@ InMemoryFootballRepository parseFootballJson(String source) {
         position: p['pos'] as String?,
         nationality: p['nat'] as String?,
         aliases: [for (final a in p['aliases'] as List) a as String],
+        women: p['g'] == 'w',
       ),
   };
 
@@ -78,6 +80,11 @@ InMemoryFootballRepository parseFootballJson(String source) {
           difficulty: b[2] as int,
           answerIds: {for (final a in b[3] as List) a as String},
           eras: b[4] as int,
+          // [5] Pointless scores, aligned with the answers; [6] 1 = women's
+          scores: (b as List).length > 5
+              ? {for (var i = 0; i < (b[3] as List).length; i++) b[3][i] as String: (b[5] as List)[i] as int}
+              : const {},
+          women: b.length > 6 && b[6] == 1,
         ),
     ],
     matches: [

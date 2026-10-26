@@ -168,14 +168,14 @@
       "prompt": "Managers who've won the Premier League",
       "difficulty": 1, "eras": 30,
       "source": "Wikipedia: List of Premier League managers", "as_of": "2025-26 season",
-      "answers": ["Alex Ferguson", "Kenny Dalglish", "Arsène Wenger|new", "José Mourinho", "Carlo Ancelotti", "Roberto Mancini", "Manuel Pellegrini", "Claudio Ranieri", "Antonio Conte", "Pep Guardiola", "Jürgen Klopp", "Arne Slot", "Mikel Arteta"]
+      "answers": ["Alex Ferguson", "Kenny Dalglish", "Arsène Wenger|new:5", "José Mourinho", "Carlo Ancelotti", "Roberto Mancini", "Manuel Pellegrini", "Claudio Ranieri", "Antonio Conte", "Pep Guardiola", "Jürgen Klopp", "Arne Slot", "Mikel Arteta"]
     },
     {
       "id": "ucl-winning-managers",
       "prompt": "Managers who've won the Champions League (since 1993)",
       "difficulty": 2, "eras": 30,
       "source": "Wikipedia: List of European Cup and UEFA Champions League winning managers", "as_of": "2026 final",
-      "answers": ["Raymond Goethals", "Fabio Capello", "Louis van Gaal", "Marcello Lippi", "Ottmar Hitzfeld", "Jupp Heynckes", "Alex Ferguson", "Vicente del Bosque", "Carlo Ancelotti", "José Mourinho", "Rafael Benítez|new", "Frank Rijkaard", "Pep Guardiola", "Roberto Di Matteo", "Luis Enrique", "Zinedine Zidane", "Jürgen Klopp", "Hansi Flick", "Thomas Tuchel"]
+      "answers": ["Raymond Goethals", "Fabio Capello", "Louis van Gaal", "Marcello Lippi", "Ottmar Hitzfeld", "Jupp Heynckes", "Alex Ferguson", "Vicente del Bosque", "Carlo Ancelotti", "José Mourinho", "Rafael Benítez|new:4", "Frank Rijkaard", "Pep Guardiola", "Roberto Di Matteo", "Luis Enrique", "Zinedine Zidane", "Jürgen Klopp", "Hansi Flick", "Thomas Tuchel"]
     },
     {
       "id": "england-managers",
