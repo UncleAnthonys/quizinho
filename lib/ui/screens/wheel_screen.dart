@@ -204,19 +204,26 @@ class _WheelPainter extends CustomPainter {
       canvas.save();
       canvas.translate(c.dx, c.dy);
       canvas.rotate(mid);
-      final tp = TextPainter(
-        text: TextSpan(
-          text: m.wheelLabel,
-          style: TextStyle(
-            fontFamily: AppText.display,
-            fontWeight: FontWeight.w900,
-            fontSize: r * (segments.length > 4 ? 0.11 : 0.13),
-            color: Palette.pitchDeep,
-            letterSpacing: 1,
-          ),
-        ),
-        textDirection: TextDirection.ltr,
-      )..layout(maxWidth: r * 0.62);
+      // One line always: measure unconstrained, then shrink to fit the space
+      // between the hub and the rim (never wraps "CONNECTIO / NS").
+      TextPainter label(double size) => TextPainter(
+            text: TextSpan(
+              text: m.wheelLabel,
+              style: TextStyle(
+                fontFamily: AppText.display,
+                fontWeight: FontWeight.w900,
+                fontSize: size,
+                color: Palette.pitchDeep,
+                letterSpacing: 1,
+              ),
+            ),
+            maxLines: 1,
+            textDirection: TextDirection.ltr,
+          )..layout();
+      final room = r * 0.66;
+      var size = r * (segments.length > 4 ? 0.11 : 0.13);
+      var tp = label(size);
+      if (tp.width > room) tp = label(size * room / tp.width);
       tp.paint(canvas, Offset(r * 0.95 - tp.width, -tp.height / 2));
       canvas.restore();
     }
