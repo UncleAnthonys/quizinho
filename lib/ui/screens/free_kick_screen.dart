@@ -12,7 +12,9 @@ import '../widgets/common.dart';
 
 /// Picks the next game: the games stand in a free-kick wall, one per shirt.
 /// The taker runs up, the ball smacks one of them, he goes down and that's the
-/// next game. The pick itself comes from [Tournament.spin], and the animation
+/// next game. The wildcard is never on show: when it's picked the wall jumps,
+/// the shot skids underneath and hits a WILDCARD player lying behind the wall
+/// (the "draft excluder"), and the wall steps apart so his shirt can be read. The pick itself comes from [Tournament.spin], and the animation
 /// just aims at it.
 class FreeKickScreen extends StatefulWidget {
   const FreeKickScreen({super.key, required this.tournament});
@@ -36,11 +38,13 @@ class _FreeKickScreenState extends State<FreeKickScreen> with TickerProviderStat
       AnimationController(vsync: this, duration: const Duration(milliseconds: 1800))..repeat();
   late final AnimationController _reveal =
       AnimationController(vsync: this, duration: const Duration(milliseconds: 600));
-  late final List<GameModeId> _segments = widget.tournament.wheelSegments;
-  late final _ShirtLabels _labels = _ShirtLabels(_segments);
+  late final List<GameModeId> _wall =
+      widget.tournament.wheelSegments.where((m) => m != GameModeId.wildcard).toList();
+  late final _ShirtLabels _labels = _ShirtLabels([..._wall, GameModeId.wildcard]);
   final _rnd = Random();
 
-  int? _target;
+  int? _target; // wall index hit; null for the wildcard
+  bool _under = false; // wildcard: low shot under the wall
   double _curl = 1;
   bool _struck = false;
   bool _hit = false;
@@ -84,7 +88,8 @@ class _FreeKickScreenState extends State<FreeKickScreen> with TickerProviderStat
     final target = widget.tournament.spin();
     setState(() {
       _running = true;
-      _target = _segments.indexOf(target);
+      _under = target == GameModeId.wildcard;
+      _target = _under ? null : _wall.indexOf(target);
       _curl = _rnd.nextBool() ? 1 : -1;
     });
     _s.sound.play(Sfx.whistle, volume: 0.6);
@@ -124,11 +129,13 @@ class _FreeKickScreenState extends State<FreeKickScreen> with TickerProviderStat
                 child: CustomPaint(
                   size: Size.infinite,
                   painter: _FreeKickPainter(
-                    segments: _segments,
+                    segments: _wall,
                     labels: _labels,
                     kick: _kick,
                     idle: _idle,
+                    going: _running || _landed != null,
                     target: _target,
+                    under: _under,
                     curl: _curl,
                   ),
                 ),
@@ -227,7 +234,9 @@ class _FreeKickPainter extends CustomPainter {
     required this.labels,
     required this.kick,
     required this.idle,
+    required this.going,
     required this.target,
+    required this.under,
     required this.curl,
   }) : super(repaint: Listenable.merge([kick, idle]));
 
@@ -235,7 +244,9 @@ class _FreeKickPainter extends CustomPainter {
   final _ShirtLabels labels;
   final Animation<double> kick;
   final Animation<double> idle;
-  final int? target;
+  final bool going; // kick under way (or done)
+  final int? target; // wall player hit; null before the kick or for the wildcard
+  final bool under; // wildcard: low shot under the wall into the draft excluder
   final double curl;
 
   static const _skins = [
@@ -267,24 +278,38 @@ class _FreeKickPainter extends CustomPainter {
 
     final spot = Offset(w * 0.5, h * 0.86);
     final ballR = max(7.0, min(w, h) * 0.03);
-    final chest = tgt == null ? spot : Offset(px(tgt), feetY - figH * 0.58);
+    // The draft excluder lies just behind the middle of the wall.
+    final lie = Offset(w / 2, feetY - slot * 0.12);
+    final excluderShirt = lie + Offset(slot * 0.25, -slot * 0.23);
+    final chest = tgt != null ? Offset(px(tgt), feetY - figH * 0.58) : (under ? excluderShirt : spot);
     // Fall away from where the shot came from.
     final dir = tgt == null ? 1.0 : (px(tgt) >= spot.dx ? 1.0 : -1.0);
 
     _goal(canvas, w, h);
 
-    // Everyone hops as the ball is struck.
+    // Everyone hops as the ball is struck — properly high for the low shot.
     double hop() {
       const end = _Beat.impact + 0.12;
-      if (tgt == null || t < _Beat.strike || t > end) return 0;
-      return sin((t - _Beat.strike) / (end - _Beat.strike) * pi) * slot * 0.32;
+      if (!going || t < _Beat.strike || t > end) return 0;
+      return sin((t - _Beat.strike) / (end - _Beat.strike) * pi) * slot * (under ? 0.62 : 0.32);
     }
 
-    final idleOn = tgt == null;
+    // After the wildcard hit the wall steps apart to show who got it.
+    double part(int i) {
+      const from = _Beat.impact + 0.12;
+      if (!under || !going || t < from) return 0;
+      final u = Curves.easeInOut.transform(((t - from) / 0.2).clamp(0.0, 1.0));
+      return (px(i) >= w / 2 ? 1 : -1) * slot * (n.isOdd ? 1.15 : 0.7) * u;
+    }
+
+    if (under && going && t >= _Beat.strike) _excluder(canvas, lie, slot, t);
+    _ball(canvas, t, spot, chest, ballR, feetY, slot, dir, w, h, behindWall: true);
+
+    final idleOn = !going;
     for (var i = 0; i < n; i++) {
       if (i == tgt) continue;
       final bob = idleOn ? sin((idle.value + i * 0.17) * 2 * pi) * slot * 0.025 : 0.0;
-      _player(canvas, Offset(px(i), feetY - hop() + bob), slot, i, 0, false);
+      _player(canvas, Offset(px(i) + part(i), feetY - hop() + bob), slot, i, 0, false);
     }
     if (tgt != null) {
       final down = t >= _Beat.impact;
@@ -294,8 +319,8 @@ class _FreeKickPainter extends CustomPainter {
       if (down && t < _Beat.impact + 0.12) _burst(canvas, chest, slot, (t - _Beat.impact) / 0.12);
     }
 
-    _ball(canvas, t, spot, chest, ballR, feetY, slot, dir, w, h);
-    _takerFigure(canvas, t, w, h, tgt != null);
+    _ball(canvas, t, spot, chest, ballR, feetY, slot, dir, w, h, behindWall: false);
+    _takerFigure(canvas, t, w, h, going);
   }
 
   void _goal(Canvas canvas, double w, double h) {
@@ -372,6 +397,36 @@ class _FreeKickPainter extends CustomPainter {
     canvas.restore();
   }
 
+  /// The wildcard: lying on his side behind the wall, head propped on a hand,
+  /// WILDCARD across his shirt. Jolts and glows when the ball hits him.
+  void _excluder(Canvas canvas, Offset at, double s, double t) {
+    final hit = t >= _Beat.impact;
+    final jolt = hit ? sin(((t - _Beat.impact) / 0.25).clamp(0.0, 1.0) * pi) : 0.0;
+    final skin = Paint()..color = _skins[3];
+    RRect box(double l, double tp, double r, double b, double rad) =>
+        RRect.fromLTRBR(l * s, tp * s, r * s, b * s, Radius.circular(rad * s));
+
+    canvas.save();
+    canvas.translate(at.dx, at.dy - jolt * s * 0.2);
+    canvas.rotate(-jolt * 0.08);
+    // legs (stacked, side-on), socks, boots
+    canvas.drawRect(Rect.fromLTRB(-0.86 * s, -0.32 * s, -0.56 * s, -0.08 * s), skin);
+    canvas.drawRect(Rect.fromLTRB(-1.22 * s, -0.32 * s, -0.84 * s, -0.08 * s), Paint()..color = Colors.white);
+    canvas.drawRRect(box(-1.36, -0.36, -1.18, -0.04, 0.05), Paint()..color = const Color(0xFF111111));
+    canvas.drawRRect(box(-0.62, -0.40, -0.22, -0.04, 0.06), Paint()..color = _shorts);
+    final shirt = box(-0.28, -0.46, 0.80, 0, 0.12);
+    if (hit) canvas.drawRRect(shirt.inflate(0.06 * s), Paint()..color = Palette.yellow);
+    canvas.drawRRect(shirt, Paint()..color = GameModeId.wildcard.color);
+    labels.paint(canvas, GameModeId.wildcard, Offset(0.25 * s, -0.23 * s), Size(0.96 * s, 0.36 * s), maxFont: 0.3 * s);
+    // forearm up, head resting on the hand
+    canvas.drawRRect(box(0.74, -0.78, 0.94, -0.06, 0.08), skin);
+    final head = Offset(1.04 * s, -0.66 * s);
+    canvas.drawCircle(head, 0.22 * s, skin);
+    canvas.drawArc(Rect.fromCircle(center: head + Offset(0, -0.02 * s), radius: 0.235 * s), pi * 0.75, pi, true,
+        Paint()..color = _hair[1]);
+    canvas.restore();
+  }
+
   void _burst(Canvas canvas, Offset at, double s, double u) {
     final p = Paint()
       ..color = Palette.yellow.withValues(alpha: 1 - u)
@@ -384,16 +439,32 @@ class _FreeKickPainter extends CustomPainter {
     }
   }
 
+  /// Drawn in two passes so it can pass under the wall: [behindWall] draws it
+  /// only while it's further away than the wall's feet, otherwise only in front.
   void _ball(Canvas canvas, double t, Offset spot, Offset chest, double r0, double feetY, double s, double dir,
-      double w, double h) {
+      double w, double h, {required bool behindWall}) {
     Offset pos;
     double r;
     double groundY;
     double spin = 0;
-    if (target == null || t < _Beat.strike) {
+    if (!going || t < _Beat.strike) {
       pos = spot;
       r = r0;
       groundY = spot.dy;
+    } else if (under && t < _Beat.impact) {
+      // Low and hard along the grass, under the jumping wall.
+      final u = (t - _Beat.strike) / (_Beat.impact - _Beat.strike);
+      pos = Offset.lerp(spot, chest, u)! + Offset(curl * w * 0.05 * sin(u * pi), 0);
+      r = _lerp(r0, r0 * 0.75, u);
+      groundY = pos.dy;
+      spin = u * 14;
+    } else if (under) {
+      // Cannons off him back towards the wall's feet and stops.
+      final u = Curves.easeOut.transform(((t - _Beat.impact) / 0.3).clamp(0.0, 1.0));
+      pos = chest + Offset(-curl * s * 0.5 * u, s * 0.62 * u);
+      r = r0 * 0.75;
+      groundY = pos.dy;
+      spin = 14 + u * 3;
     } else if (t < _Beat.impact) {
       final u = Curves.easeIn.transform((t - _Beat.strike) / (_Beat.impact - _Beat.strike)) * 0.85 +
           (t - _Beat.strike) / (_Beat.impact - _Beat.strike) * 0.15;
@@ -417,6 +488,8 @@ class _FreeKickPainter extends CustomPainter {
       groundY = ground;
       spin = 12 + u * 6;
     }
+    // Only the low shot ever goes behind the wall; a normal shot stays in front.
+    if (under ? (pos.dy < feetY) != behindWall : behindWall) return;
     // shadow
     canvas.drawOval(Rect.fromCenter(center: Offset(pos.dx, groundY + r * 0.9), width: r * 2, height: r * 0.6),
         Paint()..color = Colors.black.withValues(alpha: 0.3));
@@ -491,5 +564,9 @@ class _FreeKickPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(covariant _FreeKickPainter old) =>
-      old.target != target || old.curl != curl || old.segments != segments;
+      old.going != going ||
+      old.target != target ||
+      old.under != under ||
+      old.curl != curl ||
+      old.segments != segments;
 }
