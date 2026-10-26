@@ -118,6 +118,29 @@ class ClubConnection {
   final int eras;
 }
 
+/// Bidding War: a category with its complete, verified answer set.
+class BiddingCategory {
+  const BiddingCategory({
+    required this.id,
+    required this.prompt,
+    required this.answerIds,
+    required this.difficulty,
+    this.eras = Era.allMask,
+  });
+  final String id;
+
+  /// e.g. "Players who played for both Arsenal and Barcelona".
+  final String prompt;
+  final Set<String> answerIds;
+
+  /// 1 easy … 3 hard (by how many answers fans would recognise).
+  final int difficulty;
+  final int eras;
+
+  /// Nobody can bid more answers than exist.
+  int get maxBid => answerIds.length;
+}
+
 /// "Who's this? Ajax → Juventus → Inter…"
 class CareerPath {
   const CareerPath({required this.player, required this.spells, required this.difficulty, this.eras = Era.allMask});

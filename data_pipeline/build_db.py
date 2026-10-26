@@ -79,7 +79,16 @@ CREATE TABLE career_challenges (
 CREATE INDEX idx_conn_diff ON club_connections(difficulty);
 CREATE INDEX idx_ans_conn ON connection_answers(connection_id);
 CREATE INDEX idx_career_diff ON career_challenges(difficulty);
+CREATE TABLE bidding_categories (
+  id TEXT PRIMARY KEY, prompt TEXT NOT NULL, kind TEXT NOT NULL,
+  answer_count INTEGER NOT NULL, difficulty INTEGER NOT NULL, eras INTEGER NOT NULL
+);
+CREATE TABLE bidding_answers (
+  category_id TEXT NOT NULL REFERENCES bidding_categories(id),
+  player_id TEXT NOT NULL REFERENCES players(id)
+);
 CREATE INDEX idx_match_diff ON matches(difficulty);
+CREATE INDEX idx_bid_ans ON bidding_answers(category_id);
 """
 
 POSITIONS = {"GK", "RB", "CB", "LB", "RWB", "LWB", "DM", "CM", "AM", "RM", "LM", "RW", "LW", "ST"}
@@ -267,12 +276,68 @@ def generate_career_challenges(players):
     return out
 
 
+# Bidding War: categories whose COMPLETE answer set is known from the data.
+BID_MIN_ANSWERS = 5
+BID_MAX_ANSWERS = 35
+BID_MIN_CLUB_FAME = 4
+# Leagues a UK group will know; keeps out e.g. J-League pairs.
+BID_COUNTRIES = {"GBR", "ENG", "SCO", "ESP", "ITA", "GER", "FRA", "NED", "POR", "TUR", "BEL", "MCO"}
+
+
+def bidding_difficulty(answers: list[str], players) -> int | None:
+    """Easy needs lots of recognisable answers; a category with 25 valid
+    answers that nobody would know is rejected rather than called 'hard'."""
+    known = sum(1 for pid in answers if players[pid]["fame"] >= 3)
+    guessable = sum(1 for pid in answers if players[pid]["fame"] >= 2)
+    if guessable < BID_MIN_ANSWERS or known < 2:
+        return None
+    return 1 if known >= 10 else 2 if known >= 5 else 3
+
+
+def generate_bidding(clubs, players, connections, countries):
+    out = []
+
+    def add(cid, prompt, kind, answers, club_ids):
+        if any(clubs[c]["country"] not in BID_COUNTRIES for c in club_ids):
+            return
+        answers = sorted(answers)
+        if not BID_MIN_ANSWERS <= len(answers) <= BID_MAX_ANSWERS:
+            return
+        diff = bidding_difficulty(answers, players)
+        if diff is None:
+            return
+        eras = 0
+        for pid in answers:
+            eras |= spells_mask([s for s in players[pid]["spells"] if s["club"] in club_ids])
+        out.append({"id": cid, "prompt": prompt, "kind": kind, "answers": answers, "difficulty": diff, "eras": eras or 31})
+
+    # 1. Played for both clubs
+    for c in connections:
+        if clubs[c["a"]]["fame"] >= BID_MIN_CLUB_FAME and clubs[c["b"]]["fame"] >= BID_MIN_CLUB_FAME:
+            add(f"pair:{c['id']}", f"Players who played for both {clubs[c['a']]['name']} and {clubs[c['b']]['name']}",
+                "pair", c["answers"], {c["a"], c["b"]})
+
+    # 2. Nationality at a club ("Brazilians who played for Chelsea")
+    by_club_nat: dict[tuple[str, str], set[str]] = {}
+    for pid, p in players.items():
+        if not p["nat"]:
+            continue
+        for cid in {s["club"] for s in p["spells"]}:
+            if clubs[cid]["fame"] >= BID_MIN_CLUB_FAME and p["nat"] != clubs[cid]["country"]:
+                by_club_nat.setdefault((cid, p["nat"]), set()).add(pid)
+    for (cid, nat), answers in sorted(by_club_nat.items()):
+        country = countries.get(nat)
+        if country:
+            add(f"nat:{cid}:{nat}", f"Players from {country} who played for {clubs[cid]['name']}", "nationality", answers, {cid})
+    return out
+
+
 def match_eras(m) -> int:
     year = int(m["date"][:4])
     return era_mask(year, year)
 
 
-def write_db(path: pathlib.Path, version: int, clubs, players, matches, connections, careers):
+def write_db(path: pathlib.Path, version: int, clubs, players, matches, connections, careers, bidding):
     if path.exists():
         path.unlink()
     con = sqlite3.connect(path)
@@ -306,12 +371,16 @@ def write_db(path: pathlib.Path, version: int, clubs, players, matches, connecti
         con.executemany("INSERT INTO connection_answers VALUES (?,?)", [(c["id"], pid) for pid in c["answers"]])
     con.executemany("INSERT INTO career_challenges VALUES (?,?,?,?)",
                     [(c["player"], c["clues"], c["difficulty"], c["eras"]) for c in careers])
+    for b in bidding:
+        con.execute("INSERT INTO bidding_categories VALUES (?,?,?,?,?,?)",
+                    (b["id"], b["prompt"], b["kind"], len(b["answers"]), b["difficulty"], b["eras"]))
+        con.executemany("INSERT INTO bidding_answers VALUES (?,?)", [(b["id"], pid) for pid in b["answers"]])
     con.commit()
     con.execute("VACUUM")
     con.close()
 
 
-def write_json(path: pathlib.Path, version: int, clubs, players, matches, connections, careers):
+def write_json(path: pathlib.Path, version: int, clubs, players, matches, connections, careers, bidding):
     """Same content as the SQLite file, for the web build (no SQLite plugin in browsers)."""
     doc = {
         "db_version": version,
@@ -327,6 +396,7 @@ def write_json(path: pathlib.Path, version: int, clubs, players, matches, connec
             for c in careers
         ],
         "connections": [[c["id"], c["a"], c["b"], c["difficulty"], c["answers"], c["eras"]] for c in connections],
+        "bidding": [[b["id"], b["prompt"], b["difficulty"], b["answers"], b["eras"]] for b in bidding],
         "matches": [
             {"id": m["id"], "title": m["title"], "competition": m["competition"], "date": m["date"],
              "home": m["home"], "away": m["away"], "score": m["score"], "target": m["target"],
@@ -355,15 +425,19 @@ def main() -> int:
 
     connections = generate_connections(clubs, players)
     careers = generate_career_challenges(players)
+    countries_path = SEED / "countries.json"
+    countries = json.loads(countries_path.read_text(encoding="utf-8"))["countries"] if countries_path.exists() else {}
+    bidding = generate_bidding(clubs, players, connections, countries)
     by_diff = {d: sum(1 for c in connections if c["difficulty"] == d) for d in (1, 2, 3, 4)}
     print(f"players={len(players)} clubs={len(clubs)} matches={len(matches)} "
-          f"connections={len(connections)} {by_diff} careers={len(careers)}")
+          f"connections={len(connections)} {by_diff} careers={len(careers)} bidding={len(bidding)} "
+          f"{ {d: sum(1 for b in bidding if b['difficulty'] == d) for d in (1, 2, 3)} }")
     if args.check:
         return 0
 
     ASSETS.mkdir(parents=True, exist_ok=True)
-    write_db(ASSETS / "football.db", args.version, clubs, players, matches, connections, careers)
-    write_json(ASSETS / "football.json", args.version, clubs, players, matches, connections, careers)
+    write_db(ASSETS / "football.db", args.version, clubs, players, matches, connections, careers, bidding)
+    write_json(ASSETS / "football.json", args.version, clubs, players, matches, connections, careers, bidding)
     (ASSETS / "football_db_version.txt").write_text(str(args.version), encoding="utf-8")
     print("wrote", ASSETS / "football.db", "version", args.version)
     return 0

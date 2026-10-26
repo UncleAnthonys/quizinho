@@ -63,6 +63,16 @@ InMemoryFootballRepository parseFootballJson(String source) {
             ],
           ),
     ],
+    bidding: [
+      for (final b in (doc['bidding'] as List?) ?? const [])
+        BiddingCategory(
+          id: b[0] as String,
+          prompt: b[1] as String,
+          difficulty: b[2] as int,
+          answerIds: {for (final a in b[3] as List) a as String},
+          eras: b[4] as int,
+        ),
+    ],
     matches: [
       for (final m in doc['matches'] as List)
         HistoricMatch(

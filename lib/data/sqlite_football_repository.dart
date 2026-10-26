@@ -124,6 +124,26 @@ class SqliteFootballRepository implements FootballRepository {
   }
 
   @override
+  Future<BiddingCategory?> pickBiddingCategory(
+      {Set<int>? levels, Set<String> exclude = const {}, int eras = Era.allMask}) async {
+    final (where, args) = _filter('id', levels, exclude, eras);
+    final rows = await _db.rawQuery(
+      'SELECT id, prompt, difficulty, eras FROM bidding_categories $where ORDER BY RANDOM() LIMIT 1',
+      args,
+    );
+    if (rows.isEmpty) return null;
+    final r = rows.first;
+    final answers = await _db.rawQuery('SELECT player_id FROM bidding_answers WHERE category_id = ?', [r['id']]);
+    return BiddingCategory(
+      id: r['id'] as String,
+      prompt: r['prompt'] as String,
+      difficulty: r['difficulty'] as int,
+      eras: r['eras'] as int,
+      answerIds: {for (final a in answers) a['player_id'] as String},
+    );
+  }
+
+  @override
   Future<List<ClubConnection>> allClubConnections({int eras = Era.allMask}) async {
     final (where, args) = _filter('id', null, const {}, eras);
     final rows = await _db.rawQuery('SELECT id, club_a, club_b, difficulty, eras FROM club_connections $where', args);

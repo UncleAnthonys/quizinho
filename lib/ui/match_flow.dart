@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../core/theme.dart';
 import '../domain/game_mode.dart';
 import '../domain/tournament.dart';
+import '../games/bidding_war/bidding_war_screen.dart';
 import '../games/career_path/career_path_screen.dart';
 import '../games/club_connections/club_connections_screen.dart';
 import '../games/game_screen_support.dart';
@@ -53,6 +54,7 @@ abstract final class MatchFlow {
         GameModeId.startingXi => StartingXiScreen(round: round),
         GameModeId.headsUp => HeadsUpScreen(round: round),
         GameModeId.ticTacToe => TicTacToeScreen(round: round),
+        GameModeId.biddingWar => BiddingWarScreen(round: round),
         _ => throw ArgumentError('${mode.title} is not playable yet'),
       };
 }
@@ -97,9 +99,10 @@ extension GameModeStyle on GameModeId {
         GameModeId.startingXi => const Color(0xFFFF4B6E),
         GameModeId.wildcard => Colors.white,
         GameModeId.ticTacToe => const Color(0xFFB57CFF), // purple
+        GameModeId.biddingWar => const Color(0xFFFF8A3D), // orange
         GameModeId.whoAmI => const Color(0xFF9AA5B1),
         GameModeId.headsUp => const Color(0xFF3DFFB0), // mint
-        GameModeId.taboo => const Color(0xFFFF8A3D),
+        GameModeId.taboo => const Color(0xFFE0A0FF),
       };
 
   IconData get icon => switch (this) {
@@ -108,6 +111,7 @@ extension GameModeStyle on GameModeId {
         GameModeId.startingXi => Icons.groups_rounded,
         GameModeId.wildcard => Icons.auto_awesome_rounded,
         GameModeId.ticTacToe => Icons.grid_3x3_rounded,
+        GameModeId.biddingWar => Icons.gavel_rounded,
         GameModeId.whoAmI => Icons.help_outline_rounded,
         GameModeId.headsUp => Icons.screen_rotation_rounded,
         GameModeId.taboo => Icons.block_rounded,
@@ -120,6 +124,7 @@ extension GameModeStyle on GameModeId {
         GameModeId.startingXi => 'XI BOMB',
         GameModeId.wildcard => 'WILDCARD',
         GameModeId.ticTacToe => 'TIC-TAC-TOE',
+        GameModeId.biddingWar => 'BIDDING WAR',
         GameModeId.whoAmI => 'WHO AM I',
         GameModeId.headsUp => 'HEADS UP',
         GameModeId.taboo => 'TABOO',

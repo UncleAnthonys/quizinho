@@ -52,6 +52,17 @@ enum GameModeId {
     ],
     whoPlays: 'Teams take turns — the named player picks the square and answers.',
   ),
+  biddingWar(
+    title: 'Bidding War',
+    tagline: 'How many can you name? Prove it.',
+    playable: true,
+    rules: [
+      'A category appears. Teams take turns bidding how many answers they can name.',
+      'Raise the bid — or think they’re bluffing? Hit CHALLENGE.',
+      'The top bidder gets 60 seconds to name that many. Do it: +3. Fail: +3 to the challenger.',
+    ],
+    whoPlays: 'Bid out loud as a team. When challenged, the whole team can shout answers.',
+  ),
   whoAmI(title: 'Who Am I?', tagline: 'Coming soon', playable: false),
   headsUp(
     title: 'Football Heads Up',

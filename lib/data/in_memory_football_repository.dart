@@ -11,6 +11,7 @@ class InMemoryFootballRepository implements FootballRepository {
     this.connections = const [],
     this.careers = const [],
     this.matches = const [],
+    this.bidding = const [],
     Random? random,
     this.dataStatus = 'test',
   })  : players = PlayerIndex(players),
@@ -24,6 +25,7 @@ class InMemoryFootballRepository implements FootballRepository {
   final List<ClubConnection> connections;
   final List<CareerPath> careers;
   final List<HistoricMatch> matches;
+  final List<BiddingCategory> bidding;
   final Random _random;
 
   T? _pick<T>(List<T> pool, String Function(T) id, int Function(T) level, int Function(T) era, Set<int>? levels,
@@ -48,6 +50,11 @@ class InMemoryFootballRepository implements FootballRepository {
   @override
   Future<HistoricMatch?> pickMatch({Set<int>? levels, Set<String> exclude = const {}, int eras = Era.allMask}) async =>
       _pick(matches, (m) => m.id, (m) => m.difficulty, (m) => m.eras, levels, exclude, eras);
+
+  @override
+  Future<BiddingCategory?> pickBiddingCategory(
+          {Set<int>? levels, Set<String> exclude = const {}, int eras = Era.allMask}) async =>
+      _pick(bidding, (b) => b.id, (b) => b.difficulty, (b) => b.eras, levels, exclude, eras);
 
   @override
   Future<List<ClubConnection>> allClubConnections({int eras = Era.allMask}) async =>
