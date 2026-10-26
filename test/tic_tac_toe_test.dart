@@ -42,6 +42,18 @@ void main() {
       final second = generateTicTacToeGrid(conns, random: Random(5), avoid: {first.id});
       expect(second?.id, isNot(first.id));
     });
+
+    test('easier settings skip obscure-league pairs and need well-known answers', () async {
+      final conns = await repo.allClubConnections();
+      int fame(String id) => repo.players.byId(id)?.fame ?? 0;
+      for (var seed = 0; seed < 10; seed++) {
+        final g = generateTicTacToeGrid(conns,
+            random: Random(seed), minFame: 4, maxLevel: 2, minKnownAnswers: 2, answerFame: fame)!;
+        for (final a in g.answers) {
+          expect(a.where((id) => fame(id) >= 3).length, greaterThanOrEqualTo(2));
+        }
+      }
+    });
   });
 
   group('rules', () {
@@ -91,8 +103,8 @@ void main() {
       expect(c.result().points, {0: 3 + TicTacToeController.lineBonus, 1: 2});
     });
 
-    test('turn limit ends a stalemate', () {
-      final c = TicTacToeController(grid: grid(), teamCount: 2, maxTurns: 4);
+    test('turn limit ends a long game', () {
+      final c = TicTacToeController(grid: grid(), teamCount: 2, maxTurns: 4, stallLaps: 99);
       for (var i = 0; i < 4; i++) {
         c.choose(0);
         c.pass();
@@ -101,11 +113,27 @@ void main() {
       expect(c.winner, isNull);
     });
 
-    test('changing square before answering costs nothing', () {
-      final c = make()..choose(0);
-      c.unchoose();
+    test('a team can pass without picking a square', () {
+      final c = make()..pass();
       expect(c.phase, TttPhase.choosing);
-      expect(c.currentTeam, 0);
+      expect(c.currentTeam, 1);
+    });
+
+    test('two laps with nobody claiming ends it; a claim resets the count', () {
+      final c = make(); // 2 teams, stallLaps 2 → 4 dry turns
+      c.pass();
+      c.choose(0);
+      c.submit(player('nobody'));
+      c.pass();
+      expect(c.turnsUntilStall, 1);
+      c.choose(5);
+      c.submit(player('p5')); // claim resets
+      expect(c.turnsUntilStall, 4);
+      for (var i = 0; i < 4; i++) {
+        c.pass();
+      }
+      expect(c.phase, TttPhase.finished);
+      expect(c.result().points, {0: 0, 1: 1});
     });
   });
 }

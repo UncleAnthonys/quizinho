@@ -33,11 +33,12 @@ class _TicTacToeScreenState extends State<TicTacToeScreen>
 
   Tournament get _t => widget.round.tournament;
 
-  static int _minFame(Difficulty d) => switch (d) {
-        Difficulty.easy => 5,
-        Difficulty.medium => 4,
-        Difficulty.hard => 3,
-        Difficulty.expert => 2,
+  /// (club fame floor, hardest club-pair level, well-known answers per square)
+  static (int, int, int) _settings(Difficulty d) => switch (d) {
+        Difficulty.easy => (5, 1, 3),
+        Difficulty.medium => (4, 2, 2),
+        Difficulty.hard => (4, 3, 1),
+        Difficulty.expert => (2, 4, 0),
       };
 
   @override
@@ -50,11 +51,22 @@ class _TicTacToeScreenState extends State<TicTacToeScreen>
     final repo = services.repo;
     final used = _t.usedIds(_mode);
     final rnd = Random();
-    final minFame = _minFame(_t.config.difficulty);
-    var grid = generateTicTacToeGrid(await repo.allClubConnections(eras: _t.config.eraMask),
-        random: rnd, minFame: minFame, avoid: used);
-    // Not enough in the chosen eras — widen rather than stall.
-    grid ??= generateTicTacToeGrid(await repo.allClubConnections(), random: rnd, minFame: minFame, avoid: used);
+    final (minFame, maxLevel, known) = _settings(_t.config.difficulty);
+    int fame(String id) => repo.players.byId(id)?.fame ?? 0;
+    final inEras = await repo.allClubConnections(eras: _t.config.eraMask);
+    TicTacToeGrid? make(List<ClubConnection> conns, {bool strict = true}) => generateTicTacToeGrid(conns,
+        random: rnd,
+        minFame: minFame,
+        maxLevel: strict ? maxLevel : 4,
+        minKnownAnswers: strict ? known : 0,
+        answerFame: fame,
+        avoid: used);
+    // Not enough in the chosen eras at this difficulty — widen rather than stall.
+    var grid = make(inEras);
+    if (grid == null) {
+      final all = await repo.allClubConnections();
+      grid = make(all) ?? make(inEras, strict: false) ?? make(all, strict: false);
+    }
     if (!mounted) return;
     if (grid == null) {
       setState(() => _empty = true);
@@ -191,11 +203,34 @@ class _TicTacToeScreenState extends State<TicTacToeScreen>
 
   Widget _bottom(TicTacToeController c) {
     if (c.phase == TttPhase.choosing) {
-      return const Text(
-        'Tap an empty square. You need a player who played for both clubs.\nEach player can only be used once per grid.',
-        textAlign: TextAlign.center,
-        style: TextStyle(color: Palette.muted, height: 1.4),
-      );
+      final left = c.turnsUntilStall;
+      return Column(children: [
+        const Text(
+          'Tap an empty square, then name a player who played for both clubs.\n'
+          'Once you pick a square you\'re locked in. Each player once per grid.',
+          textAlign: TextAlign.center,
+          style: TextStyle(color: Palette.muted, height: 1.4),
+        ),
+        if (c.dryTurns > 0) ...[
+          const SizedBox(height: 8),
+          Text(
+            left == 1 ? 'NO SQUARE THIS TURN AND THE GAME ENDS' : '$left MORE TURNS WITHOUT A SQUARE ENDS THE GAME',
+            textAlign: TextAlign.center,
+            style: AppText.label(14, color: Palette.gold),
+          ),
+        ],
+        const SizedBox(height: 10),
+        OutlinedButton.icon(
+          onPressed: c.pass,
+          icon: const Icon(Icons.skip_next_rounded),
+          label: Text("DON'T KNOW ANY — PASS", style: AppText.label(15, color: Palette.text)),
+          style: OutlinedButton.styleFrom(
+            foregroundColor: Palette.text,
+            side: const BorderSide(color: Palette.line),
+            padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
+          ),
+        ),
+      ]);
     }
     if (c.phase == TttPhase.answering) {
       final sq = c.selected!;
@@ -217,10 +252,6 @@ class _TicTacToeScreenState extends State<TicTacToeScreen>
           onPick: (p) => _submit(c, p),
           onPass: c.pass,
           onDisputed: (_, allowed) => c.submitDisputed(allowed: allowed),
-        ),
-        TextButton(
-          onPressed: c.unchoose,
-          child: Text('CHANGE SQUARE', style: AppText.label(14)),
         ),
       ]);
     }

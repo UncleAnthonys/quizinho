@@ -23,17 +23,27 @@ class TicTacToeGrid {
 /// Builds a grid where every square has at least one valid answer.
 /// [minFame] keeps clubs recognisable (5 = only giants). Lowers itself if
 /// nothing fits. Returns null only if the data can't support a grid at all.
+///
+/// [maxLevel] drops club pairs harder than that (level 4 = obscure leagues).
+/// With [answerFame], every square must also have at least [minKnownAnswers]
+/// well-known answers (fame 3+), so it's gettable rather than a trivia wall.
 TicTacToeGrid? generateTicTacToeGrid(
   List<ClubConnection> connections, {
   required Random random,
   int minFame = 4,
+  int maxLevel = 4,
+  int minKnownAnswers = 0,
+  int Function(String playerId)? answerFame,
   Set<String> avoid = const {},
   int attempts = 300,
 }) {
   final clubs = <String, Club>{};
   final links = <String, Map<String, ClubConnection>>{};
   for (final c in connections) {
-    if (c.answerIds.isEmpty) continue;
+    if (c.answerIds.isEmpty || c.difficulty > maxLevel) continue;
+    if (minKnownAnswers > 0 && answerFame != null) {
+      if (c.answerIds.where((id) => answerFame(id) >= 3).length < minKnownAnswers) continue;
+    }
     clubs[c.clubA.id] = c.clubA;
     clubs[c.clubB.id] = c.clubB;
     links.putIfAbsent(c.clubA.id, () => {})[c.clubB.id] = c;
@@ -78,6 +88,7 @@ class TicTacToeController extends ChangeNotifier {
     int startTeam = 0,
     this.answerSeconds = 20,
     this.maxTurns = 18,
+    this.stallLaps = 2,
   }) : currentTeam = startTeam % teamCount;
 
   final TicTacToeGrid grid;
@@ -86,6 +97,10 @@ class TicTacToeController extends ChangeNotifier {
 
   /// Stops a stalemate dragging on: after this many turns, most squares wins.
   final int maxTurns;
+
+  /// Game also ends when every team has gone this many times in a row
+  /// without claiming a square — nobody knows the rest, so move on.
+  final int stallLaps;
 
   static const int lineBonus = 3;
   static const List<List<int>> lines = [
@@ -103,6 +118,9 @@ class TicTacToeController extends ChangeNotifier {
   int? selected;
   double secondsLeft = 0;
   int turns = 0;
+
+  /// Turns in a row that claimed nothing (misses, timeouts and passes).
+  int dryTurns = 0;
 
   /// Bumps every time a new team's turn starts.
   int turnSerial = 0;
@@ -124,13 +142,8 @@ class TicTacToeController extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// Changed their mind before answering — no penalty, clock keeps its time.
-  void unchoose() {
-    if (phase != TttPhase.answering) return;
-    selected = null;
-    phase = TttPhase.choosing;
-    notifyListeners();
-  }
+  /// Turns left before a run of no claims ends the game.
+  int get turnsUntilStall => stallLaps * teamCount - dryTurns;
 
   void advance(Duration elapsed) {
     if (phase != TttPhase.answering) return;
@@ -163,8 +176,16 @@ class TicTacToeController extends ChangeNotifier {
     allowed ? _claim(sq, 'Room vote') : _miss();
   }
 
+  /// Gives up the turn: from a picked square, or without picking one at all.
+  /// Once a square is picked the team is committed to it — no switching.
   void pass() {
-    if (phase == TttPhase.answering) _miss();
+    if (phase == TttPhase.answering) {
+      _miss();
+    } else if (phase == TttPhase.choosing) {
+      _emit(GameEvent.nobodyGotIt);
+      dryTurns++;
+      _nextTurn();
+    }
   }
 
   RoundResult result() => RoundResult(
@@ -175,6 +196,7 @@ class TicTacToeController extends ChangeNotifier {
       );
 
   void _claim(int sq, String name) {
+    dryTurns = 0;
     owner[sq] = currentTeam;
     claimedWith[sq] = name;
     _emit(GameEvent.correct);
@@ -195,13 +217,14 @@ class TicTacToeController extends ChangeNotifier {
 
   void _miss({bool timeout = false}) {
     _emit(timeout ? GameEvent.timeUp : GameEvent.wrong);
+    dryTurns++;
     _nextTurn();
   }
 
   void _nextTurn() {
     turns++;
     selected = null;
-    if (turns >= maxTurns) {
+    if (turns >= maxTurns || dryTurns >= stallLaps * teamCount) {
       _finish();
       return;
     }
