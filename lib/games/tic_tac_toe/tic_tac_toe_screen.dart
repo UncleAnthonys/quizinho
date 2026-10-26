@@ -138,12 +138,13 @@ class _TicTacToeScreenState extends State<TicTacToeScreen>
       body: PitchBackground(
         child: SafeArea(
           child: Column(children: [
-            if (!typing)
-            Scoreboard(
-              tournament: _t,
-              highlightTeam: c.phase == TttPhase.finished ? null : c.currentTeam,
-              extra: (i) => '${c.squaresOf(i)} ▢',
-            ),
+            typing
+                ? const SizedBox.shrink()
+                : Scoreboard(
+                    tournament: _t,
+                    highlightTeam: c.phase == TttPhase.finished ? null : c.currentTeam,
+                    extra: (i) => '${c.squaresOf(i)} ▢',
+                  ),
             Padding(
               padding: const EdgeInsets.fromLTRB(16, 4, 16, 0),
               child: Row(children: [
@@ -153,15 +154,13 @@ class _TicTacToeScreenState extends State<TicTacToeScreen>
                   Text('x${widget.round.multiplier} POINTS', style: AppText.label(15, color: Palette.gold)),
               ]),
             ),
-            if (!typing) CommentaryBanner(text: commentaryText),
+            typing ? const SizedBox.shrink() : CommentaryBanner(text: commentaryText),
             Expanded(
               child: ListView(padding: const EdgeInsets.fromLTRB(12, 4, 12, 16), children: [
-                if (!typing) ...[
-                  _turnBanner(c),
-                  const SizedBox(height: 8),
-                  _Board(controller: c, tournament: _t, onTap: c.choose),
-                  const SizedBox(height: 12),
-                ],
+                typing ? const SizedBox.shrink() : _turnBanner(c),
+                typing ? const SizedBox.shrink() : const SizedBox(height: 8),
+                typing ? const SizedBox.shrink() : _Board(controller: c, tournament: _t, onTap: c.choose),
+                typing ? const SizedBox.shrink() : const SizedBox(height: 12),
                 _bottom(c),
               ]),
             ),

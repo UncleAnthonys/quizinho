@@ -144,12 +144,13 @@ class _StartingXiScreenState extends State<StartingXiScreen>
         child: PitchBackground(
           child: SafeArea(
             child: Column(children: [
-              if (!typing)
-              Scoreboard(
-                tournament: t,
-                highlightTeam: finished ? null : c.currentTeam,
-                extra: (i) => c.livesLeft[i]! > 0 ? '${'♥' * c.livesLeft[i]!}  ${c.correctByTeam[i]} named' : 'OUT',
-              ),
+              typing
+                  ? const SizedBox.shrink()
+                  : Scoreboard(
+                      tournament: t,
+                      highlightTeam: finished ? null : c.currentTeam,
+                      extra: (i) => c.livesLeft[i]! > 0 ? '${'♥' * c.livesLeft[i]!}  ${c.correctByTeam[i]} named' : 'OUT',
+                    ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(16, 4, 16, 0),
                 child: Column(children: [

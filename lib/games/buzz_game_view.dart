@@ -66,7 +66,9 @@ class BuzzGameView extends StatelessWidget {
     // In table mode the answer box must not be drawn sideways: phone browsers
     // can't type into a rotated box (keyboard glitches), so the answering
     // player gets an upright screen, then it flips back to table mode.
-    final answeringUpright = c.phase == BuzzPhase.answering && (answerTyping.value || t.tableMode || deviceSideways);
+    // Depends on the phase only — switching layout when the keyboard opens
+    // rebuilt the answer box, which closed the keyboard again (typing loop bug).
+    final answeringUpright = c.phase == BuzzPhase.answering;
     if (answeringUpright) {
       return Scaffold(
         resizeToAvoidBottomInset: true,
@@ -420,7 +422,7 @@ class _FaceOffIntro extends StatelessWidget {
           builder: (context, v, child) => Transform.scale(scale: v, child: child),
           child: Column(children: [
             const Icon(Icons.flash_on_rounded, color: Palette.danger, size: 56),
-            Text('FACE-OFF', style: AppText.headline(64, color: Palette.danger)),
+            Text('FACE-OFF', style: AppText.headline(84, color: Palette.danger)),
           ]),
         ),
         Text('QUESTION $questionNumber', style: AppText.label(20)),
@@ -429,11 +431,11 @@ class _FaceOffIntro extends StatelessWidget {
           if (i > 0)
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 8),
-              child: Text('V', style: AppText.headline(34, color: Palette.muted)),
+              child: Text('V', style: AppText.headline(48, color: Palette.muted)),
             ),
-          TeamChip(name: faceOff.nameFor(team), colorIndex: tournament.config.teams[team].colorIndex, size: 54),
+          TeamChip(name: faceOff.nameFor(team), colorIndex: tournament.config.teams[team].colorIndex, size: 76),
           const SizedBox(height: 4),
-          Text(tournament.teamName(team).toUpperCase(), style: AppText.label(20)),
+          Text(tournament.teamName(team).toUpperCase(), style: AppText.label(24)),
         ],
         const SizedBox(height: 24),
         const Text(

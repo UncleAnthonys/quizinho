@@ -180,7 +180,9 @@ def main() -> int:
         if c.get("sitelinks", 0) < args.min_club_sitelinks:
             stats["club_too_obscure"] += 1
             continue
-        keep_clubs[cid] = {**c, "name": display_club_name(name, c.get("aliases", [])), "formal": name}
+        # US/Canadian club names are mostly city + FC ("Los Angeles FC") — keep them whole
+        short = name if c.get("country") in ("Q30", "Q16") else display_club_name(name, c.get("aliases", []))
+        keep_clubs[cid] = {**c, "name": short, "formal": name}
 
     # ---- spells -----------------------------------------------------------
     by_player: dict[str, list[dict]] = defaultdict(list)

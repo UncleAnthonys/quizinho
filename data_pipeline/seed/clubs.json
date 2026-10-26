@@ -715,11 +715,10 @@
 ],
 [
 "Q1044425",
-"North Carolina",
+"North Carolina FC",
 "USA",
 1,
 [
-"North Carolina FC",
 "Carolina RailHawks",
 "NCFC",
 "RailHawks"
@@ -1435,18 +1434,17 @@
 ],
 [
 "Q1071986",
-"Chicago Stars",
+"Chicago Stars FC",
 "USA",
 2,
 [
-"Chicago Stars FC",
 "Chicago Red Stars",
 "Red Stars"
 ]
 ],
 [
 "Q107324446",
-"San Diego Wave",
+"San Diego Wave FC",
 "USA",
 2,
 [
@@ -1550,7 +1548,7 @@
 "Q1089889",
 "Churchill Brothers",
 "IND",
-1,
+2,
 [
 "Churchill Brothers S.C.",
 "Churchill Brothers SC"
@@ -1813,11 +1811,11 @@
 ],
 [
 "Q111516",
-"Phoenix Rising",
+"Phoenix Rising FC",
 "USA",
 2,
 [
-"Phoenix Rising FC",
+"Phoenix Rising",
 "Arizona United",
 "Arizona United SC",
 "AZ United",
@@ -2635,11 +2633,10 @@
 ],
 [
 "Q118945347",
-"San Diego",
+"San Diego FC",
 "USA",
 1,
 [
-"San Diego FC",
 "San Diego F.C.",
 "SDFC"
 ]
@@ -2655,11 +2652,10 @@
 ],
 [
 "Q119010920",
-"Bay",
+"Bay FC",
 "USA",
 1,
 [
-"Bay FC",
 "Bay Football Club"
 ]
 ],
@@ -2961,11 +2957,10 @@
 ],
 [
 "Q1207755",
-"Edmonton",
+"FC Edmonton",
 "CAN",
 1,
 [
-"FC Edmonton",
 "Football Club Edmonton"
 ]
 ],
@@ -4212,7 +4207,7 @@
 ],
 [
 "Q13361030",
-"New York City",
+"New York City FC",
 "USA",
 3,
 [
@@ -4590,11 +4585,10 @@
 ],
 [
 "Q1357111",
-"Seattle Reign",
+"Seattle Reign FC",
 "USA",
 2,
 [
-"Seattle Reign FC",
 "OL Reign",
 "Reign FC"
 ]
@@ -6061,22 +6055,21 @@
 ],
 [
 "Q1446672",
-"Portland Thorns",
+"Portland Thorns FC",
 "USA",
 2,
 [
-"Portland Thorns FC",
+"Portland Thorns",
 "PTFC",
 "Thorns FC"
 ]
 ],
 [
 "Q1447181",
-"Gotham",
+"Gotham FC",
 "USA",
 2,
 [
-"Gotham FC",
 "Gotham Football Club",
 "Jersey Sky Blue",
 "SBFC",
@@ -6680,12 +6673,12 @@
 ],
 [
 "Q15214308",
-"Orlando City",
+"Orlando City SC",
 "USA",
 3,
 [
-"Orlando City SC",
-"OCSC"
+"OCSC",
+"Orlando City"
 ]
 ],
 [
@@ -6717,11 +6710,11 @@
 ],
 [
 "Q15256873",
-"OKC Energy",
+"OKC Energy FC",
 "USA",
 1,
 [
-"OKC Energy FC",
+"OKC Energy",
 "Oklahoma City Energy"
 ]
 ],
@@ -8167,16 +8160,16 @@ null,
 ],
 [
 "Q167615",
-"Montréal",
+"CF Montréal",
 "CAN",
 3,
 [
-"CF Montréal",
 "CFM",
 "Montreal Impact",
 "CF Montreal",
 "CF of Montreal",
-"CFM Montreal"
+"CFM Montreal",
+"CFMTL"
 ]
 ],
 [
@@ -8233,15 +8226,15 @@ null,
 ],
 [
 "Q16836317",
-"Atlanta United",
+"Atlanta United FC",
 "USA",
 2,
 [
-"Atlanta United FC",
 "ATL United",
 "ATL United FC",
 "ATL UTD",
-"ATL UTD FC"
+"ATL UTD FC",
+"Atlanta United"
 ]
 ],
 [
@@ -8268,11 +8261,12 @@ null,
 ],
 [
 "Q16837600",
-"Switchbacks",
+"Colorado Springs Switchbacks FC",
 "USA",
 1,
 [
 "CSS",
+"Switchbacks",
 "Switchbacks FC"
 ]
 ],
@@ -8358,12 +8352,12 @@ null,
 ],
 [
 "Q16844931",
-"Inter Miami",
+"Inter Miami CF",
 "USA",
 3,
 [
-"Inter Miami CF",
 "Vice City",
+"Inter Miami",
 "Inter Miami FC",
 "Internacional de Miami",
 "Internacional of Miami",
@@ -8402,22 +8396,20 @@ null,
 ],
 [
 "Q16850747",
-"Saint Louis",
+"Saint Louis FC",
 "USA",
 1,
 [
-"Saint Louis FC",
 "St. Louis FC",
 "St Louis FC"
 ]
 ],
 [
 "Q16858470",
-"Tulsa",
+"FC Tulsa",
 "USA",
 1,
 [
-"FC Tulsa",
 "Roughnecks",
 "Tulsa Roughnecks",
 "Tulsa Roughnecks FC"
@@ -8643,13 +8635,13 @@ null,
 ],
 [
 "Q17182219",
-"Louisville City",
+"Louisville City FC",
 "USA",
 1,
 [
-"Louisville City FC",
 "Lou City",
-"LouCity"
+"LouCity",
+"Louisville City"
 ]
 ],
 [
@@ -9832,11 +9824,10 @@ null,
 ],
 [
 "Q18380286",
-"Los Angeles",
+"Los Angeles FC",
 "USA",
 3,
 [
-"Los Angeles FC",
 "LA FC",
 "LA Football Club",
 "LAFC"
@@ -12032,12 +12023,12 @@ null,
 ],
 [
 "Q196107",
-"Vancouver Whitecaps",
+"Vancouver Whitecaps FC",
 "CAN",
 2,
 [
-"Vancouver Whitecaps FC",
 "Caps",
+"Vancouver Whitecaps",
 "Whitecaps",
 "Vancouver Caps",
 "Vancouver Caps FC",
@@ -12445,12 +12436,12 @@ null,
 ],
 [
 "Q19828435",
-"Minnesota United",
+"Minnesota United FC",
 "USA",
 2,
 [
-"Minnesota United FC",
 "MNU",
+"Minnesota United",
 "MN United FC",
 "MNU FC",
 "MNUFC",
@@ -12536,11 +12527,10 @@ null,
 ],
 [
 "Q19984972",
-"Miami",
+"Miami FC",
 "USA",
 1,
 [
-"Miami FC",
 "Miami Football Club",
 "The Miami FC"
 ]
@@ -12763,12 +12753,12 @@ null,
 ],
 [
 "Q201675",
-"Wilmington Hammerheads",
+"Wilmington Hammerheads FC",
 "USA",
 1,
 [
-"Wilmington Hammerheads FC",
-"Hammerheads"
+"Hammerheads",
+"Wilmington Hammerheads"
 ]
 ],
 [
@@ -13560,16 +13550,16 @@ null,
 ],
 [
 "Q20855983",
-"Cincinnati",
+"FC Cincinnati",
 "USA",
 2,
 [
-"FC Cincinnati",
 "CIN",
 "FCC",
 "Orange and Blue",
 "FC Cincy",
-"Football Club Cincinnati"
+"Football Club Cincinnati",
+"Futbol Club Cincinnati"
 ]
 ],
 [
@@ -13828,7 +13818,7 @@ null,
 ],
 [
 "Q21071146",
-"Reno 1868",
+"Reno 1868 FC",
 "USA",
 1,
 []
@@ -14676,12 +14666,10 @@ null,
 ],
 [
 "Q22025437",
-"San Antonio",
+"San Antonio FC",
 "USA",
 1,
-[
-"San Antonio FC"
-]
+[]
 ],
 [
 "Q2205558",
@@ -19872,12 +19860,10 @@ null,
 ],
 [
 "Q2893906",
-"Galt",
+"Galt F.C.",
 "CAN",
 1,
-[
-"Galt F.C."
-]
+[]
 ],
 [
 "Q289407",
@@ -21573,12 +21559,12 @@ null,
 ],
 [
 "Q308683",
-"Chicago Fire",
+"Chicago Fire FC",
 "USA",
 3,
 [
-"Chicago Fire FC",
 "CHI",
+"Chicago Fire",
 "Chicago Fire F.C.",
 "Chicago Fire S.C.",
 "Chicago Fire SC",
@@ -22286,11 +22272,10 @@ null,
 ],
 [
 "Q327238",
-"Toronto",
+"Toronto FC",
 "CAN",
 3,
 [
-"Toronto FC",
 "Toronto F.C.",
 "Toronto Football Club",
 "Toronto Soccer",
@@ -22318,11 +22303,10 @@ null,
 ],
 [
 "Q3276051",
-"Kansas City",
+"FC Kansas City",
 "USA",
 1,
 [
-"FC Kansas City",
 "FCKC"
 ]
 ],
@@ -22365,16 +22349,16 @@ null,
 ],
 [
 "Q328313",
-"Houston Dynamo",
+"Houston Dynamo FC",
 "USA",
 2,
 [
-"Houston Dynamo FC",
 "Dynamo",
 "The Orange",
 "Orange Crush",
 "La Naranja",
-"Dynamo FC"
+"Dynamo FC",
+"Die Oranje"
 ]
 ],
 [
@@ -23663,10 +23647,11 @@ null,
 ],
 [
 "Q38221432",
-"Las Vegas Lights",
+"Las Vegas Lights FC",
 "USA",
 1,
 [
+"Las Vegas Lights",
 "LV Lights",
 "LV Lights FC",
 "LVFC"
@@ -25419,11 +25404,11 @@ null,
 ],
 [
 "Q47005781",
-"Utah Royals",
+"Utah Royals FC",
 "USA",
 1,
 [
-"Utah Royals FC"
+"Utah Royals"
 ]
 ],
 [
@@ -25515,11 +25500,10 @@ null,
 ],
 [
 "Q47518754",
-"Nashville",
+"Nashville SC",
 "USA",
 1,
 [
-"Nashville SC",
 "Nashville S.C.",
 "Nashville Soccer Club"
 ]
@@ -27282,11 +27266,10 @@ null,
 ],
 [
 "Q53795705",
-"Cavalry",
+"Cavalry FC",
 "CAN",
 1,
 [
-"Cavalry FC",
 "Cavalry Football Club"
 ]
 ],
@@ -27673,11 +27656,10 @@ null,
 ],
 [
 "Q55075000",
-"Valour",
+"Valour FC",
 "CAN",
 1,
 [
-"Valour FC",
 "Valour Football Club"
 ]
 ],
@@ -27820,21 +27802,20 @@ null,
 ],
 [
 "Q56062930",
-"Austin Bold",
+"Austin Bold FC",
 "USA",
 1,
 [
-"Austin Bold FC",
-"USL Austin"
+"USL Austin",
+"Austin Bold"
 ]
 ],
 [
 "Q56063575",
-"Pacific",
+"Pacific FC",
 "CAN",
 1,
 [
-"Pacific FC",
 "Pacific Football Club"
 ]
 ],
@@ -27989,12 +27970,12 @@ null,
 ],
 [
 "Q570256",
-"Pittsburgh Riverhounds",
+"Pittsburgh Riverhounds SC",
 "USA",
 1,
 [
-"Pittsburgh Riverhounds SC",
 "Pittsburgh Hounds",
+"Pittsburgh Riverhounds",
 "Riverhounds"
 ]
 ],
@@ -28272,7 +28253,7 @@ null,
 ],
 [
 "Q58236450",
-"Memphis 901",
+"Memphis 901 FC",
 "USA",
 1,
 [
@@ -29158,11 +29139,10 @@ null,
 ],
 [
 "Q60643348",
-"Austin",
+"Austin FC",
 "USA",
 1,
 [
-"Austin FC",
 "Austin Football Club"
 ]
 ],
@@ -29417,12 +29397,10 @@ null,
 ],
 [
 "Q612387",
-"Gold Pride",
+"FC Gold Pride",
 "USA",
 2,
-[
-"FC Gold Pride"
-]
+[]
 ],
 [
 "Q6130810",
@@ -29642,11 +29620,10 @@ null,
 ],
 [
 "Q620722",
-"Bethlehem Steel",
+"Bethlehem Steel F.C.",
 "USA",
 1,
 [
-"Bethlehem Steel F.C.",
 "Bethlehem Steel FC"
 ]
 ],
@@ -29877,11 +29854,11 @@ null,
 ],
 [
 "Q632511",
-"Seattle Sounders",
+"Seattle Sounders FC",
 "USA",
 2,
 [
-"Seattle Sounders FC",
+"Seattle Sounders",
 "Sounders FC",
 "Sounders Football Club"
 ]
@@ -29928,11 +29905,11 @@ null,
 ],
 [
 "Q6334727",
-"Ottawa Fury",
+"Ottawa Fury FC",
 "CAN",
 1,
 [
-"Ottawa Fury FC"
+"Ottawa Fury"
 ]
 ],
 [
@@ -30245,16 +30222,16 @@ null,
 ],
 [
 "Q642291",
-"Dallas",
+"FC Dallas",
 "USA",
 2,
 [
-"FC Dallas",
 "Burn",
 "Hoops",
 "Toros",
 "FCD",
-"Dallas Burn"
+"Dallas Burn",
+"Dallas FC"
 ]
 ],
 [
@@ -30554,11 +30531,10 @@ null,
 ],
 [
 "Q64884",
-"Orange County",
+"Orange County SC",
 "USA",
 1,
 [
-"Orange County SC",
 "OCSC",
 "LA Blues",
 "LA Blues SC",
@@ -31122,7 +31098,7 @@ null,
 ],
 [
 "Q66642491",
-"St. Louis City",
+"St. Louis City SC",
 "USA",
 1,
 [
@@ -33207,11 +33183,11 @@ null,
 ],
 [
 "Q7397036",
-"Sacramento Republic",
+"Sacramento Republic FC",
 "USA",
 1,
 [
-"Sacramento Republic FC"
+"Sacramento Republic"
 ]
 ],
 [
@@ -34110,11 +34086,11 @@ null,
 ],
 [
 "Q771228",
-"City Islanders",
+"Harrisburg City Islanders",
 "USA",
 1,
 [
-"Harrisburg City Islanders",
+"City Islanders",
 "Penn FC"
 ]
 ],
@@ -34268,11 +34244,11 @@ null,
 ],
 [
 "Q781046",
-"Austin Aztex",
+"Austin Aztex FC",
 "USA",
 1,
 [
-"Austin Aztex FC"
+"Austin Aztex"
 ]
 ],
 [
@@ -34391,11 +34367,10 @@ null,
 ],
 [
 "Q78944434",
-"Charlotte",
+"Charlotte FC",
 "USA",
 1,
 [
-"Charlotte FC",
 "Charlotte F.C.",
 "Charlotte Football Club",
 "Charlotte MLS"
@@ -37400,7 +37375,7 @@ null,
 "Q935022",
 "Mohun Bagan AC",
 "IND",
-2,
+1,
 [
 "Mohun Bagan",
 "Mohun Bagan SC"
@@ -37930,12 +37905,12 @@ null,
 ],
 [
 "Q97079547",
-"Racing Louisville",
+"Racing Louisville FC",
 "USA",
 1,
 [
-"Racing Louisville FC",
-"Racing Lou FC"
+"Racing Lou FC",
+"Racing Louisville"
 ]
 ],
 [
@@ -37965,11 +37940,11 @@ null,
 ],
 [
 "Q972741",
-"Strikers",
+"Fort Lauderdale Strikers",
 "USA",
 2,
 [
-"Fort Lauderdale Strikers",
+"Strikers",
 "Miami FC",
 "Ft. Lauderdale Strikers",
 "Miami FC Blues"
@@ -37993,11 +37968,10 @@ null,
 ],
 [
 "Q97609993",
-"Angel City",
+"Angel City FC",
 "USA",
 1,
 [
-"Angel City FC",
 "ACFC"
 ]
 ],

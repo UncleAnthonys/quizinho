@@ -239,6 +239,10 @@ def spells_mask(spells) -> int:
 # a pair needs at least one answer at least this famous — technically valid but
 # unguessable pairs ("Kauno Žalgiris + Vegalta Sendai") are no fun.
 CONNECTION_MIN_CLUB_FAME = 3
+# Leagues normal play sticks to. Anything outside is Expert-only (difficulty 4),
+# so a random Peruvian or youth-era Brazilian club never turns up on Medium.
+TOP5 = {"GBR", "ENG", "ESP", "ITA", "GER", "FRA", "MCO"}
+KNOWN_LEAGUES = TOP5 | {"NED", "POR", "SCO", "TUR", "BEL", "USA", "KSA"}
 # Generated from Wikidata by normalise.py, or the old hand-written demo seed.
 DATA_STATUS = "wikidata" if "GENERATED" in (SEED / "players.json").read_text(encoding="utf-8")[:300] else "demo_unverified"
 CONNECTION_MIN_ANSWER_FAME = 2
@@ -258,6 +262,8 @@ def generate_connections(clubs, players):
         if best < CONNECTION_MIN_ANSWER_FAME:
             continue  # nobody guessable
         diff = connection_difficulty(best, clubs[a]["fame"], clubs[b]["fame"])
+        if clubs[a]["country"] not in KNOWN_LEAGUES or clubs[b]["country"] not in KNOWN_LEAGUES:
+            diff = 4
         eras = 0
         for pid in shared:
             eras |= spells_mask([s for s in players[pid]["spells"] if s["club"] in (a, b)])
@@ -266,12 +272,19 @@ def generate_connections(clubs, players):
     return out
 
 
-def generate_career_challenges(players):
+def generate_career_challenges(players, clubs):
     out = []
     for pid, p in players.items():
         distinct = {s["club"] for s in p["spells"]}
         if p["fame"] >= CAREER_MIN_FAME and len(p["spells"]) >= 3 and len(distinct) >= 3:
-            out.append({"player": pid, "clues": len(p["spells"]), "difficulty": career_difficulty(p["fame"]),
+            diff = career_difficulty(p["fame"])
+            # normal play needs a career mostly in leagues people watch:
+            # at least two top-five-league clubs (Kanté: Caen, Leicester, Chelsea ✓)
+            top5_clubs = {s["club"] for s in p["spells"] if clubs[s["club"]]["country"] in TOP5}
+            known = sum(1 for s in p["spells"] if clubs[s["club"]]["country"] in KNOWN_LEAGUES)
+            if len(top5_clubs) < 2 or known * 2 < len(p["spells"]):  # and most of the career
+                diff = 4
+            out.append({"player": pid, "clues": len(p["spells"]), "difficulty": diff,
                         "eras": spells_mask(p["spells"]) or 31})
     return out
 
@@ -424,7 +437,7 @@ def main() -> int:
         return 1
 
     connections = generate_connections(clubs, players)
-    careers = generate_career_challenges(players)
+    careers = generate_career_challenges(players, clubs)
     countries_path = SEED / "countries.json"
     countries = json.loads(countries_path.read_text(encoding="utf-8"))["countries"] if countries_path.exists() else {}
     bidding = generate_bidding(clubs, players, connections, countries)

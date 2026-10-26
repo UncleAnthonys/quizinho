@@ -27,7 +27,10 @@ class CareerPathController extends BuzzRaceController<CareerPath> {
   bool get allRevealed => revealed >= clueCount;
 
   /// Points on offer if someone answers correctly right now.
-  int get pointsAvailable => max(1, maxPoints - (revealed - 1));
+  /// 5 on the first club, falling evenly to 1 by the last, whatever the career
+  /// length (10 clubs: 5-5-4-4-3-3-2-2-1-1; 4 clubs: 5-4-3-2).
+  int get pointsAvailable =>
+      max(1, maxPoints - ((revealed - 1) * maxPoints / max(1, clueCount)).floor());
 
   @override
   void onQuestionStart() {
