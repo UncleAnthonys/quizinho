@@ -233,8 +233,12 @@ def main() -> int:
     for p in sorted(players_raw, key=lambda p: -p.get("sitelinks", 0)):
         name = clean_name(p.get("name"))
         spells = by_player.get(p["id"], [])
-        # Gender from Wikidata; if missing, from the clubs played for.
-        women = p.get("sex") == "f" if p.get("sex") else bool(spells) and all(keep_clubs[s["club"]]["women"] for s in spells)
+        # Women's game if recorded female, or if the career was mostly at
+        # women's clubs (covers players whose recorded gender isn't female but
+        # who played in the women's game). A woman's spell logged against a
+        # men's club item is a data slip, and dropped below.
+        in_womens = sum(1 for s in spells if keep_clubs[s["club"]]["women"])
+        women = p.get("sex") == "f" or (bool(spells) and in_womens * 2 > len(spells))
         # never mix: a men's player's stray women's-team spell (data error) and vice versa
         spells = [s for s in spells if keep_clubs[s["club"]]["women"] == women]
         if not spells:
