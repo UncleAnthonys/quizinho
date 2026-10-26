@@ -377,7 +377,12 @@ def load_curated_bidding(players, clubs, problems: Problems) -> list[dict]:
                 by_name[norm(n)] = key
         return by_name
 
-    player_names, club_names = index(players), index(clubs)
+    # Hand-made categories are men's football: never resolve a name to the
+    # women's side ("VfL Wolfsburg" must be the men's club, not Wolfsburg Women).
+    def mens(items):
+        return {k: v for k, v in items.items() if not v.get("women")}
+
+    player_names, club_names = index(mens(players)), index(mens(clubs))
 
     def resolve_club(raw: str) -> str | None:
         name, _, pin = raw.partition("|")
@@ -389,7 +394,7 @@ def load_curated_bidding(players, clubs, problems: Problems) -> list[dict]:
             problems.error(f"club_aliases: unknown club '{name}'")
             continue
         clubs[cid]["aliases"] = list(dict.fromkeys(clubs[cid]["aliases"] + aliases))
-    club_names = index(clubs)
+    club_names = index(mens(clubs))
 
     out = []
     for c in doc["categories"]:
@@ -452,7 +457,10 @@ def pointless_scores(answers: list[str], table: dict) -> dict[str, int]:
     for a, x in k.items():
         rel = (x - lo) / (hi - lo) if hi > lo else 0.5
         blend = 0.5 * x + 0.5 * rel
-        out[a] = 0 if blend < 0.12 else max(1, round(top * blend ** 1.6))
+        # The least-known answer in the list is pointless (as on the show,
+        # nearly every question has one) — unless it's a genuine star.
+        pointless = blend < 0.12 or (rel < 0.06 and x < 0.6)
+        out[a] = 0 if pointless else max(1, round(top * blend ** 1.6))
     return out
 
 

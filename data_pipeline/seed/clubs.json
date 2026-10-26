@@ -1081,12 +1081,7 @@
 "Kansas City Current Women",
 "USA",
 2,
-[
-"Kansas City Current",
-"Kansas City NWSL",
-"KC Current",
-"KC NWSL"
-],
+[],
 16,
 "w"
 ],
@@ -1095,9 +1090,7 @@
 "Eskilstuna United DFF Women",
 "SWE",
 3,
-[
-"Eskilstuna United DFF"
-],
+[],
 13,
 "w"
 ],
@@ -1624,9 +1617,7 @@
 "Villarreal Women",
 "ESP",
 2,
-[
-"Villarreal CF"
-],
+[],
 12,
 "w"
 ],
@@ -1778,11 +1769,7 @@
 "Chicago Stars FC Women",
 "USA",
 5,
-[
-"Chicago Stars FC",
-"Chicago Red Stars",
-"Red Stars"
-],
+[],
 21,
 "w"
 ],
@@ -1791,9 +1778,7 @@
 "San Diego Wave FC Women",
 "USA",
 3,
-[
-"San Diego NWSL"
-],
+[],
 18,
 "w"
 ],
@@ -2024,8 +2009,7 @@
 "NOR",
 2,
 [
-"SK Brann Kvinner",
-"IL Sandviken Toppfotball"
+"SK Brann Kvinner"
 ],
 11,
 "w"
@@ -3076,9 +3060,7 @@
 "Torres Calcio Femminile Women",
 "ITA",
 3,
-[
-"Torres Calcio Femminile"
-],
+[],
 13,
 "w"
 ],
@@ -3742,9 +3724,7 @@
 "SGS Essen Women",
 "GER",
 3,
-[
-"SGS Essen"
-],
+[],
 19,
 "w"
 ],
@@ -4388,10 +4368,7 @@
 "Kristianstads DFF Women",
 "SWE",
 3,
-[
-"Kristianstads DFF",
-"KDFF"
-],
+[],
 14,
 "w"
 ],
@@ -4491,12 +4468,12 @@
 "FRA",
 5,
 [
-"OL Lyonnes",
-"Olympique Lyonnais",
-"Les Fenottes",
 "OL Féminin",
 "OL Women",
-"Olympique Lyon"
+"Olympique Lyon Women",
+"Olympique Lyonnais féminin",
+"Olympique Lyonnais Féminin",
+"Olympique Lyonnais Women"
 ],
 33,
 "w"
@@ -4506,9 +4483,7 @@
 "Standard Fémina de Liège Women",
 "BEL",
 2,
-[
-"Standard Liege"
-],
+[],
 11,
 "w"
 ],
@@ -4897,9 +4872,7 @@
 "Eintracht Frankfurt Women",
 "GER",
 2,
-[
-"Eintracht Frankfurt"
-],
+[],
 24,
 "w"
 ],
@@ -4991,9 +4964,7 @@
 "Santos Women",
 "BRA",
 3,
-[
-"Santos FC"
-],
+[],
 13,
 "w"
 ],
@@ -5144,9 +5115,7 @@
 "WFC Rossiyanka Women",
 "RUS",
 3,
-[
-"WFC Rossiyanka"
-],
+[],
 19,
 "w"
 ],
@@ -5207,12 +5176,8 @@
 "SWE",
 4,
 [
-"BK Häcken FF",
-"Kopparberg",
-"Getingarna",
-"Landvetters IF",
-"Landvetter",
-"BK Häcken"
+"Häcken Dam",
+"Häcken Women"
 ],
 25,
 "w"
@@ -5648,11 +5613,7 @@
 "Seattle Reign FC Women",
 "USA",
 4,
-[
-"Seattle Reign FC",
-"OL Reign",
-"Reign FC"
-],
+[],
 21,
 "w"
 ],
@@ -6481,7 +6442,6 @@
 "NED",
 3,
 [
-"FC Twente",
 "FC Twente Vrouwen"
 ],
 17,
@@ -6798,9 +6758,7 @@
 "KIF Örebro DFF Women",
 "SWE",
 3,
-[
-"KIF Örebro DFF"
-],
+[],
 15,
 "w"
 ],
@@ -7386,9 +7344,7 @@
 "Fortuna Hjørring Women",
 "DEN",
 3,
-[
-"Fortuna Hjørring"
-],
+[],
 19,
 "w"
 ],
@@ -7472,9 +7428,7 @@
 "Washington Spirit Women",
 "USA",
 4,
-[
-"Washington Spirit"
-],
+[],
 19,
 "w"
 ],
@@ -7483,12 +7437,7 @@
 "Portland Thorns FC Women",
 "USA",
 4,
-[
-"Portland Thorns FC",
-"Portland Thorns",
-"PTFC",
-"Thorns FC"
-],
+[],
 23,
 "w"
 ],
@@ -7497,13 +7446,7 @@
 "Gotham FC Women",
 "USA",
 5,
-[
-"Gotham FC",
-"Gotham Football Club",
-"Jersey Sky Blue",
-"SBFC",
-"Sky Blue FC"
-],
+[],
 24,
 "w"
 ],
@@ -8352,9 +8295,7 @@
 "Glasgow City Women",
 "GBR",
 3,
-[
-"Glasgow City F.C."
-],
+[],
 16,
 "w"
 ],
@@ -8374,9 +8315,7 @@
 "Houston Dash Women",
 "USA",
 4,
-[
-"Houston Dash"
-],
+[],
 16,
 "w"
 ],
@@ -8602,9 +8541,7 @@
 "MSV Duisburg Women",
 "GER",
 2,
-[
-"MSV Duisburg"
-],
+[],
 12,
 "w"
 ],
@@ -8732,9 +8669,6 @@
 "AUS",
 3,
 [
-"Brisbane Roar FC",
-"Roar",
-"Brisbane Roar",
 "Roar Women"
 ],
 12,
@@ -9432,11 +9366,7 @@ null,
 "1. FFC Turbine Potsdam Women",
 "GER",
 5,
-[
-"FFC Potsdam",
-"FFC Turbine Potsdam",
-"Turbine Potsdam"
-],
+[],
 27,
 "w"
 ],
@@ -9917,11 +9847,7 @@ null,
 "Madrid C.F.F. Women",
 "ESP",
 3,
-[
-"Madrid C.F.F.",
-"Madrid CFF",
-"MCFF"
-],
+[],
 21,
 "w"
 ],
@@ -10256,9 +10182,7 @@ null,
 "Granada Women",
 "ESP",
 2,
-[
-"Granada CF"
-],
+[],
 10,
 "w"
 ],
@@ -11160,9 +11084,6 @@ null,
 "ITA",
 4,
 [
-"Juventus FC",
-"Juventus Femminile",
-"JWFC",
 "Juve Women"
 ],
 24,
@@ -11252,8 +11173,7 @@ null,
 "Arsenal W.F.C.",
 "A.W.F.C.",
 "Arsenal Women F.C.",
-"Arsenal Women FC",
-"AWFC"
+"Arsenal Women FC"
 ],
 44,
 "w"
@@ -11424,10 +11344,7 @@ null,
 "KÍ Klaksvík Women",
 "DEN",
 2,
-[
-"KÍ Klaksvík",
-"KI Klaksvik"
-],
+[],
 12,
 "w"
 ],
@@ -11514,10 +11431,7 @@ null,
 "Rosengård Women",
 "SWE",
 4,
-[
-"FC Rosengård",
-"FCR"
-],
+[],
 28,
 "w"
 ],
@@ -11849,10 +11763,7 @@ null,
 "Linköpings Women",
 "SWE",
 4,
-[
-"Linköpings FC",
-"LFC"
-],
+[],
 28,
 "w"
 ],
@@ -14990,9 +14901,7 @@ null,
 "Minsk Women",
 "BLR",
 2,
-[
-"FC Minsk"
-],
+[],
 13,
 "w"
 ],
@@ -15094,9 +15003,7 @@ null,
 "Philadelphia Independence Women",
 "USA",
 4,
-[
-"Philadelphia Independence"
-],
+[],
 13,
 "w"
 ],
@@ -15106,8 +15013,7 @@ null,
 "NOR",
 3,
 [
-"Rosenborg BK Kvinner",
-"SK Trondheims-Ørn"
+"Rosenborg BK Kvinner"
 ],
 14,
 "w"
@@ -15139,9 +15045,7 @@ null,
 "Energy Voronezh Women",
 "RUS",
 2,
-[
-"FC Energy Voronezh"
-],
+[],
 10,
 "w"
 ],
@@ -15313,9 +15217,7 @@ null,
 "ZFK CSKA Moscow Women",
 "RUS",
 2,
-[
-"ZFK CSKA Moscow"
-],
+[],
 12,
 "w"
 ],
@@ -15372,9 +15274,7 @@ null,
 "Tyresö FF Women",
 "SWE",
 4,
-[
-"Tyresö FF"
-],
+[],
 23,
 "w"
 ],
@@ -15489,10 +15389,7 @@ null,
 "WFC Vorskla Poltava Women",
 "UKR",
 2,
-[
-"WFC Vorskla Poltava",
-"Vorskla Poltava"
-],
+[],
 10,
 "w"
 ],
@@ -15567,10 +15464,7 @@ null,
 "AUS",
 3,
 [
-"Melbourne City FC",
-"City",
-"City Women",
-"Melbourne City"
+"City Women"
 ],
 12,
 "w"
@@ -16111,9 +16005,7 @@ null,
 "RSC Anderlecht Women",
 "BEL",
 2,
-[
-"RSC Anderlecht"
-],
+[],
 12,
 "w"
 ],
@@ -16504,9 +16396,7 @@ null,
 "Umeå IK Women",
 "SWE",
 4,
-[
-"Umeå IK"
-],
+[],
 28,
 "w"
 ],
@@ -16927,10 +16817,7 @@ null,
 "Orlando Pride Women",
 "USA",
 4,
-[
-"Orlando Pride",
-"Orlando City Pride"
-],
+[],
 24,
 "w"
 ],
@@ -17087,10 +16974,7 @@ null,
 "Western New York Flash Women",
 "USA",
 5,
-[
-"WNYF",
-"WNY Flash"
-],
+[],
 15,
 "w"
 ],
@@ -17170,7 +17054,6 @@ null,
 "ITA",
 3,
 [
-"ACF Fiorentina Femminile",
 "ACF Fiorentina Women",
 "Fiorentina Women",
 "Fiorentina Women's"
@@ -17417,10 +17300,7 @@ null,
 "Washington Freedom Women",
 "USA",
 4,
-[
-"Washington Freedom",
-"Washington Freedom Soccer"
-],
+[],
 10,
 "w"
 ],
@@ -19447,10 +19327,7 @@ null,
 "Les Marseillaises Women",
 "FRA",
 2,
-[
-"Les Marseillaises",
-"Olympique de Marseille"
-],
+[],
 10,
 "w"
 ],
@@ -20773,11 +20650,7 @@ null,
 "Sporting CP Women",
 "POR",
 2,
-[
-"Sporting CP",
-"Sporting CP",
-"Sporting Lisbon"
-],
+[],
 11,
 "w"
 ],
@@ -21107,9 +20980,7 @@ null,
 "Werder Bremen Women",
 "GER",
 2,
-[
-"SV Werder Bremen"
-],
+[],
 14,
 "w"
 ],
@@ -22133,14 +22004,7 @@ null,
 "Hammarby IF DFF Women",
 "SWE",
 3,
-[
-"Hammarby IF DFF",
-"Bajen",
-"Hammarby",
-"Hammarby Damfotboll",
-"Hammarby Fotboll",
-"Hammarby IF"
-],
+[],
 19,
 "w"
 ],
@@ -23044,9 +22908,7 @@ null,
 "Brøndby IF Women",
 "DEN",
 3,
-[
-"Brøndby IF"
-],
+[],
 13,
 "w"
 ],
@@ -23200,8 +23062,7 @@ null,
 "NED",
 3,
 [
-"SC Heerenveen Vrouwen",
-"SC Heerenveen"
+"SC Heerenveen Vrouwen"
 ],
 11,
 "w"
@@ -23222,9 +23083,7 @@ null,
 "INAC Kobe Leonessa Women",
 "JPN",
 4,
-[
-"INAC Kobe Leonessa"
-],
+[],
 20,
 "w"
 ],
@@ -23341,9 +23200,7 @@ null,
 "Gintra Universitetas Women",
 "LTU",
 2,
-[
-"Gintra Universitetas"
-],
+[],
 21,
 "w"
 ],
@@ -23375,9 +23232,7 @@ null,
 "North Carolina Courage Women",
 "USA",
 3,
-[
-"North Carolina Courage"
-],
+[],
 17,
 "w"
 ],
@@ -23430,7 +23285,6 @@ null,
 "CZE",
 2,
 [
-"AC Sparta Prague",
 "Sparta Prague Women"
 ],
 14,
@@ -23849,9 +23703,7 @@ null,
 "VfL Wolfsburg Women",
 "GER",
 4,
-[
-"VfL Wolfsburg"
-],
+[],
 32,
 "w"
 ],
@@ -24206,10 +24058,7 @@ null,
 "BIIK Shymkent Women",
 "KAZ",
 2,
-[
-"BIIK Shymkent",
-"BIIK Kazygurt"
-],
+[],
 16,
 "w"
 ],
@@ -25043,10 +24892,7 @@ null,
 "CFF Olimpia Cluj Women",
 "ROU",
 2,
-[
-"CFF Olimpia Cluj",
-"Olimpia Cluj"
-],
+[],
 10,
 "w"
 ],
@@ -25077,10 +24923,7 @@ null,
 "Canberra United Women",
 "AUS",
 3,
-[
-"Canberra United FC",
-"Канберра Юнайтед"
-],
+[],
 13,
 "w"
 ],
@@ -25166,9 +25009,7 @@ null,
 "GBR",
 3,
 [
-"Charlton Athletic W.F.C.",
-"Bromley Borough",
-"Charlton Athletic L.F.C."
+"Charlton Athletic W.F.C."
 ],
 10,
 "w"
@@ -25259,14 +25100,7 @@ null,
 "AGSM Verona Calcio Femminile Women",
 "ITA",
 3,
-[
-"A.S.D. CF Bardolino",
-"ACF Bardolino",
-"ASD Bardolino",
-"ASD CF Bardolino",
-"ASDCF Bardolino",
-"Bardolino CF"
-],
+[],
 11,
 "w"
 ],
@@ -25371,9 +25205,7 @@ null,
 "ASJ Soyaux Women",
 "FRA",
 2,
-[
-"ASJ Soyaux"
-],
+[],
 10,
 "w"
 ],
@@ -25845,10 +25677,7 @@ null,
 "RB Leipzig Women",
 "GER",
 2,
-[
-"RB Leipzig",
-"RB Leipzig"
-],
+[],
 10,
 "w"
 ],
@@ -26250,7 +26079,6 @@ null,
 4,
 [
 "Everton F.C. Women",
-"Everton L.F.C.",
 "Everton Ladies"
 ],
 22,
@@ -26273,9 +26101,7 @@ null,
 "Bobruichanka Bobruisk Women",
 "BLR",
 2,
-[
-"Bobruichanka Bobruisk"
-],
+[],
 10,
 "w"
 ],
@@ -26388,10 +26214,7 @@ null,
 "Tokyo Verdy Beleza Women",
 "JPN",
 5,
-[
-"Nippon TV Beleza",
-"Tokyo Verdy Beleza"
-],
+[],
 14,
 "w"
 ],
@@ -26475,9 +26298,6 @@ null,
 "FRA",
 4,
 [
-"Montpellier FC",
-"MFC",
-"Montpellier Football Club",
 "MHSC Féminines"
 ],
 19,
@@ -26566,8 +26386,7 @@ null,
 "GBR",
 2,
 [
-"Fulham F.C. Women",
-"WFC Fulham"
+"Fulham F.C. Women"
 ],
 11,
 "w"
@@ -26795,10 +26614,7 @@ null,
 "magicJack Women",
 "USA",
 4,
-[
-"magicJack",
-"MagicJack"
-],
+[],
 10,
 "w"
 ],
@@ -27429,10 +27245,7 @@ null,
 "FC Kansas City Women",
 "USA",
 3,
-[
-"FC Kansas City",
-"FCKC"
-],
+[],
 13,
 "w"
 ],
@@ -27651,11 +27464,7 @@ null,
 "Växjö DFF Women",
 "SWE",
 2,
-[
-"Växjö DFF",
-"VDFF",
-"Växjö damfotbollsförening"
-],
+[],
 10,
 "w"
 ],
@@ -28185,9 +27994,7 @@ null,
 "Rayo Vallecano Women",
 "ESP",
 2,
-[
-"Rayo Vallecano"
-],
+[],
 14,
 "w"
 ],
@@ -28288,10 +28095,7 @@ null,
 "SK Slavia Praha Women",
 "CZE",
 2,
-[
-"SK Slavia Praha",
-"SK Slavia Prague"
-],
+[],
 15,
 "w"
 ],
@@ -28585,9 +28389,7 @@ null,
 "ŽFK Ekonomist Women",
 "MNE",
 2,
-[
-"ŽFK Ekonomist"
-],
+[],
 14,
 "w"
 ],
@@ -28596,9 +28398,7 @@ null,
 "ŽNK Pomurje Women",
 "SVN",
 2,
-[
-"ŽNK Pomurje"
-],
+[],
 10,
 "w"
 ],
@@ -28608,7 +28408,6 @@ null,
 "ITA",
 3,
 [
-"ACF Brescia",
 "Brescia Women"
 ],
 12,
@@ -28632,9 +28431,7 @@ null,
 "FC Inter Women",
 "IM Women",
 "Inter Milano Women",
-"Internazionale Women",
-"InterWomen",
-"Inter"
+"Internazionale Women"
 ],
 22,
 "w"
@@ -28931,9 +28728,7 @@ null,
 "Santa Teresa CD Women",
 "ESP",
 2,
-[
-"Santa Teresa CD"
-],
+[],
 10,
 "w"
 ],
@@ -29295,8 +29090,7 @@ null,
 "GBR",
 4,
 [
-"Manchester City W.F.C.",
-"Manchester City L.F.C."
+"Manchester City W.F.C."
 ],
 29,
 "w"
@@ -30241,10 +30035,7 @@ null,
 "Boston Breakers Women",
 "USA",
 4,
-[
-"Boston Breakers",
-"Breakers"
-],
+[],
 16,
 "w"
 ],
@@ -30846,9 +30637,7 @@ null,
 "Napoli Women",
 "ITA",
 3,
-[
-"Napoli Femminile"
-],
+[],
 15,
 "w"
 ],
@@ -31327,9 +31116,7 @@ null,
 "SKN St. Pölten Women",
 "AUT",
 2,
-[
-"SKN St. Pölten"
-],
+[],
 16,
 "w"
 ],
@@ -31361,10 +31148,7 @@ null,
 "Utah Royals FC Women",
 "USA",
 2,
-[
-"Utah Royals FC",
-"Utah Royals"
-],
+[],
 12,
 "w"
 ],
@@ -31669,8 +31453,6 @@ null,
 3,
 [
 "Aston Villa W.F.C.",
-"Aston Villa L.F.C.",
-"Aston Villa LFC",
 "Aston Villa WFC"
 ],
 20,
@@ -31950,10 +31732,7 @@ null,
 "Paris Women",
 "FRA",
 3,
-[
-"Paris FC",
-"Paris Football Club"
-],
+[],
 18,
 "w"
 ],
@@ -32607,9 +32386,7 @@ null,
 "Zaragoza Women",
 "ESP",
 3,
-[
-"Zaragoza CFF"
-],
+[],
 10,
 "w"
 ],
@@ -32733,9 +32510,6 @@ null,
 2,
 [
 "Celtic F.C. Women",
-"Celtic",
-"Celtic Glasgow",
-"Celtic L.F.C.",
 "Celtic Ladies"
 ],
 10,
@@ -33207,10 +32981,7 @@ null,
 "Crystal Palace Women",
 "GBR",
 2,
-[
-"Crystal Palace F.C.",
-"Crystal Palace L.F.C."
-],
+[],
 13,
 "w"
 ],
@@ -33364,10 +33135,7 @@ null,
 "Zorky Krasnogorsk Women",
 "RUS",
 2,
-[
-"FC Zorky Krasnogorsk",
-"Zorky Krasnogorsk"
-],
+[],
 10,
 "w"
 ],
@@ -34145,8 +33913,7 @@ null,
 4,
 [
 "Manchester United W.F.C.",
-"Manchester United WFC",
-"MUWFC"
+"Manchester United WFC"
 ],
 29,
 "w"
@@ -34258,9 +34025,7 @@ null,
 "Real Sociedad Women",
 "ESP",
 2,
-[
-"Real Sociedad"
-],
+[],
 21,
 "w"
 ],
@@ -34294,10 +34059,7 @@ null,
 "A.C. Milan Women",
 "ITA",
 3,
-[
-"A.C. Milan",
-"AC Milan"
-],
+[],
 21,
 "w"
 ],
@@ -34429,8 +34191,6 @@ null,
 "ITA",
 3,
 [
-"A.S. Roma",
-"AS Roma",
 "AS Roma Women"
 ],
 23,
@@ -34522,7 +34282,6 @@ null,
 "ESP",
 3,
 [
-"Sevilla FC",
 "Sevilla FC Femenino"
 ],
 16,
@@ -35155,7 +34914,6 @@ null,
 "L.F.C. Women",
 "LFC Women",
 "Liverpool FC Women",
-"Liverpool L.F.C.",
 "Liverpool Ladies F.C."
 ],
 29,
@@ -35651,12 +35409,7 @@ null,
 "Benfica Women",
 "POR",
 2,
-[
-"S.L. Benfica",
-"Benfica",
-"S.L. Benfica",
-"Benfica Lisbon"
-],
+[],
 16,
 "w"
 ],
@@ -36306,9 +36059,7 @@ null,
 "Real Betis Féminas Women",
 "ESP",
 2,
-[
-"Real Betis Féminas"
-],
+[],
 16,
 "w"
 ],
@@ -36433,9 +36184,7 @@ null,
 "FC Gold Pride Women",
 "USA",
 4,
-[
-"FC Gold Pride"
-],
+[],
 15,
 "w"
 ],
@@ -36444,9 +36193,7 @@ null,
 "SD Eibar Women",
 "ESP",
 2,
-[
-"SD Eibar"
-],
+[],
 11,
 "w"
 ],
@@ -37102,9 +36849,7 @@ null,
 "Ryazan VDV Women",
 "RUS",
 2,
-[
-"Ryazan VDV"
-],
+[],
 14,
 "w"
 ],
@@ -37353,10 +37098,7 @@ null,
 "Deportivo de La Coruña Women",
 "ESP",
 2,
-[
-"Deportivo ABANCA",
-"Karbo Deportivo"
-],
+[],
 12,
 "w"
 ],
@@ -37913,10 +37655,7 @@ null,
 "London City Lionesses Women",
 "GBR",
 3,
-[
-"London City Lionesses",
-"LCL"
-],
+[],
 18,
 "w"
 ],
@@ -39242,9 +38981,7 @@ null,
 "Neulengbach Women",
 "AUT",
 2,
-[
-"SV Neulengbach"
-],
+[],
 13,
 "w"
 ],
@@ -40264,9 +40001,7 @@ null,
 "Piteå IF Women",
 "SWE",
 3,
-[
-"Piteå IF"
-],
+[],
 10,
 "w"
 ],
@@ -40644,8 +40379,7 @@ null,
 "GBR",
 2,
 [
-"Rangers W.F.C.",
-"Rangers L.F.C."
+"Rangers W.F.C."
 ],
 11,
 "w"
@@ -41931,9 +41665,7 @@ null,
 "Sporting de Huelva Women",
 "ESP",
 2,
-[
-"Sporting de Huelva"
-],
+[],
 14,
 "w"
 ],
@@ -42486,12 +42218,10 @@ null,
 "BEL",
 2,
 [
-"Oud-Heverlee Leuven",
-"OHL",
-"OH Leuven",
 "OH Leuven Vrouwen",
 "OH Leuven Women",
-"OHL Vrouwen"
+"OHL Vrouwen",
+"OHL Women"
 ],
 10,
 "w"
@@ -42669,10 +42399,7 @@ null,
 "Valencia Féminas Women",
 "ESP",
 3,
-[
-"Valencia Féminas CF",
-"Valencia Feminas CF"
-],
+[],
 17,
 "w"
 ],
@@ -42741,9 +42468,7 @@ null,
 "Vittsjö GIK Women",
 "SWE",
 3,
-[
-"Vittsjö GIK"
-],
+[],
 10,
 "w"
 ],
@@ -42765,9 +42490,7 @@ null,
 "Vålerenga Fotball Damer Women",
 "NOR",
 2,
-[
-"Vålerenga Fotball Damer"
-],
+[],
 16,
 "w"
 ],
@@ -43462,9 +43185,7 @@ null,
 "Freiburg Women",
 "GER",
 3,
-[
-"SC Freiburg"
-],
+[],
 17,
 "w"
 ],
@@ -44199,7 +43920,6 @@ null,
 3,
 [
 "Birmingham City W.F.C.",
-"Birmingham City L.F.C.",
 "Birmingham City Ladies"
 ],
 20,
@@ -46568,9 +46288,7 @@ null,
 "Los Angeles Sol Women",
 "USA",
 3,
-[
-"Los Angeles Sol"
-],
+[],
 15,
 "w"
 ],
@@ -46674,9 +46392,7 @@ null,
 "KKPK Medyk Konin Women",
 "POL",
 2,
-[
-"KKPK Medyk Konin"
-],
+[],
 12,
 "w"
 ],
@@ -47021,11 +46737,7 @@ null,
 "Racing Louisville FC Women",
 "USA",
 2,
-[
-"Racing Louisville FC",
-"Racing Lou FC",
-"Racing Louisville"
-],
+[],
 11,
 "w"
 ],
@@ -47099,10 +46811,7 @@ null,
 "Angel City FC Women",
 "USA",
 3,
-[
-"Angel City FC",
-"ACFC"
-],
+[],
 16,
 "w"
 ],
@@ -47111,10 +46820,7 @@ null,
 "Millwall Lionesses Women",
 "GBR",
 2,
-[
-"Millwall Lionesses L.F.C.",
-"Millwall Lionesses"
-],
+[],
 10,
 "w"
 ],

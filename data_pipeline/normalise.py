@@ -297,7 +297,9 @@ def main() -> int:
     for cid in sorted(used_clubs):
         c = keep_clubs[cid]
         country_qid = c.get("country") or ""
-        aliases = [a for a in [c["formal"], *c.get("aliases", [])] if good_alias(a, c["name"])][:6]
+        aliases = [a for a in [c["formal"], *c.get("aliases", [])] if good_alias(a, c["name"])
+                   # a women's team's nickname must say so ("Arsenal Ladies"), never the men's name
+                   and (not c["women"] or WOMEN_LABEL.search(a))][:6]
         out_clubs.append([cid, c["name"], country_code(country_qid, countries), band.get(cid, 1), aliases,
                           c.get("sitelinks", 0), "w" if c["women"] else "m"])
 
