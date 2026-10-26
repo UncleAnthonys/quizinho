@@ -58,7 +58,8 @@ class _SetupScreenState extends State<SetupScreen> {
     _lives = c.bombLives;
     _headsUpSeconds = c.headsUpSeconds;
     _eras.addAll(c.eras);
-    _gender = c.gender;
+    // Men's is always the starting choice; Both / Women's is picked per match.
+    _gender = FootballGender.men;
   }
 
   @override
@@ -102,7 +103,6 @@ class _SetupScreenState extends State<SetupScreen> {
       eras: Set.of(_eras),
       gender: _gender,
     );
-    services.settings.gender = _gender;
     await services.settings.saveConfig(config);
     if (!mounted) return;
     MatchFlow.toWheel(context, Tournament(config));
