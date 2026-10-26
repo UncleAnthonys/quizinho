@@ -8,6 +8,9 @@ on:
       min_sitelinks:
         description: "Only players covered by at least this many Wikipedias (fame cut-off)"
         default: "15"
+      countries_only:
+        description: "Only refetch countries (fast)"
+        default: "no"
   schedule:
     - cron: "0 4 1 * *" # 04:00 UTC on the 1st of each month
 
@@ -28,9 +31,14 @@ jobs:
         with:
           python-version: "3.12"
       - name: Fetch from Wikidata
-        run: bash scripts/ci_run.sh "Wikidata fetch" python3 data_pipeline/wikidata_fetch.py --min-sitelinks "${{ github.event.inputs.min_sitelinks || '15' }}"
+        run: |
+          if [ "${{ github.event.inputs.countries_only }}" = "yes" ]; then
+            bash scripts/ci_run.sh "Countries fetch" python3 data_pipeline/wikidata_fetch.py --countries-only
+          else
+            bash scripts/ci_run.sh "Wikidata fetch" python3 data_pipeline/wikidata_fetch.py --min-sitelinks "${{ github.event.inputs.min_sitelinks || '15' }}"
+          fi
       - name: Report
-        run: echo "::notice title=Fetched::$(cat data_pipeline/raw/FETCHED.txt)"
+        run: echo "::notice title=Fetched::$(cat data_pipeline/raw/FETCHED.txt 2>/dev/null || echo countries only)"
       - name: Commit raw data
         run: |
           git config user.name "quizinho-data-bot"

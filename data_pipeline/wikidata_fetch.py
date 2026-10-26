@@ -186,6 +186,32 @@ SELECT ?t ?tLabel ?sl ?type ?country ?alias WHERE {{
     return clubs
 
 
+def country_info(country_ids: list[str]) -> dict[str, dict]:
+    """Name + FIFA/ISO codes for every country referenced (for nationality labels)."""
+    out: dict[str, dict] = {}
+    for batch in chunks(country_ids, BATCH):
+        rows = sparql(f"""
+SELECT ?c ?cLabel ?fifa ?iso3 WHERE {{
+  VALUES ?c {{ {values(batch)} }}
+  OPTIONAL {{ ?c wdt:P3441 ?fifa }}
+  OPTIONAL {{ ?c wdt:P298 ?iso3 }}
+  SERVICE wikibase:label {{ bd:serviceParam wikibase:language "en,mul". }}
+}}""")
+        for r in rows:
+            c = out.setdefault(qid(r["c"]["value"]), {"id": qid(r["c"]["value"]), "name": val(r, "cLabel")})
+            if (v := val(r, "fifa")):
+                c.setdefault("fifa", v)
+            if (v := val(r, "iso3")):
+                c.setdefault("iso3", v)
+        time.sleep(0.3)
+    return out
+
+
+def load(name: str):
+    with gzip.open(OUT / f"{name}.json.gz", "rt", encoding="utf-8") as f:
+        return json.load(f)
+
+
 def save(name: str, obj) -> None:
     OUT.mkdir(parents=True, exist_ok=True)
     path = OUT / f"{name}.json.gz"
@@ -197,8 +223,15 @@ def save(name: str, obj) -> None:
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--min-sitelinks", type=int, default=15)
+    ap.add_argument("--countries-only", action="store_true", help="only (re)fetch countries for an existing dump")
     args = ap.parse_args()
     t0 = time.time()
+
+    if args.countries_only:
+        players, clubs = load("players"), load("clubs")
+        ids = {n for p in players for n in p.get("nationalities", [])} | {c["country"] for c in clubs if c.get("country")}
+        save("countries", sorted(country_info(sorted(ids)).values(), key=lambda c: c["id"]))
+        return 0
 
     players: dict[str, dict] = {}
     for lo, hi in BANDS:
@@ -218,6 +251,9 @@ def main() -> int:
     save("players", sorted(players.values(), key=lambda p: p["id"]))
     save("spells", sorted(spells, key=lambda s: (s["player"], s["start"] or "", s["team"])))
     save("clubs", sorted(clubs.values(), key=lambda c: c["id"]))
+    country_ids = {n for p in players.values() for n in p.get("nationalities", [])} | {
+        c["country"] for c in clubs.values() if c.get("country")}
+    save("countries", sorted(country_info(sorted(country_ids)).values(), key=lambda c: c["id"]))
     (OUT / "FETCHED.txt").write_text(
         f"fetched {time.strftime('%Y-%m-%d %H:%M UTC', time.gmtime())}; "
         f"players={len(players)} spells={len(spells)} teams={len(clubs)} "
