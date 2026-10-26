@@ -46,12 +46,15 @@ Applied in the pipeline so every game agrees:
 - **Starting XI**: matches from `seed/matches.json`, difficulty from match fame.
 - **Bidding War**: generated "played for both clubs" and "players from X at
   club Y" categories, plus hand-made ones in `seed/bidding_curated.json`
-  (records, awards, famous squads). Each hand-made list names its source and
-  an `as_of`; stat lists (100-goal club, caps, Golden Boot…) need refreshing
-  when they change. Answers are names; pin an ambiguous one with
-  `"Name|player-id"`, or `"Name|new"` for a player the career data lacks.
-  The build fails if any answer doesn't resolve. In the app, categories are
-  picked 40% hand-made / 40% club pairs / 20% nationality.
+  (records, awards, managers, clubs). Hand-made lists are short: 5–20
+  answers, so a team can get through them in a minute; the generated ones
+  may run longer. Each hand-made list names its source and an `as_of`; stat
+  lists (top 10s, caps, Golden Boot…) need refreshing when they change.
+  Answers are names; pin an ambiguous one with `"Name|player-id"`, or
+  `"Name|new"` for someone the career data lacks (e.g. a manager).
+  `"answers_are": "clubs"` takes club names, and `club_aliases` adds
+  nicknames. The build fails if any answer doesn't resolve. In the app,
+  categories are picked 40% hand-made / 40% club pairs / 20% nationality.
 
 The demo seed already yields 811 club pairings; with a few thousand players
 from Wikidata this becomes tens of thousands without writing questions by hand.

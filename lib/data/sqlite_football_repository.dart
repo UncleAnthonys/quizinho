@@ -21,6 +21,9 @@ class SqliteFootballRepository implements FootballRepository {
 
   final _random = Random();
 
+  @override
+  late final PlayerIndex clubIndex = PlayerIndex([for (final c in _clubs.values) c.asAnswer]);
+
   final Database _db;
   final Map<String, Club> _clubs;
   @override
@@ -49,6 +52,10 @@ class SqliteFootballRepository implements FootballRepository {
 
     final db = await openDatabase(file.path, readOnly: true);
 
+    final clubAliases = <String, List<String>>{};
+    for (final r in await db.rawQuery('SELECT club_id, alias FROM club_aliases')) {
+      clubAliases.putIfAbsent(r['club_id'] as String, () => []).add(r['alias'] as String);
+    }
     final clubs = <String, Club>{};
     for (final r in await db.rawQuery('SELECT id, name, country, fame FROM clubs')) {
       final c = Club(
@@ -56,6 +63,7 @@ class SqliteFootballRepository implements FootballRepository {
         name: r['name'] as String,
         country: r['country'] as String?,
         fame: r['fame'] as int,
+        aliases: clubAliases[r['id']] ?? const [],
       );
       clubs[c.id] = c;
     }
@@ -134,16 +142,9 @@ class SqliteFootballRepository implements FootballRepository {
     final counts = await _db.rawQuery('SELECT id FROM bidding_categories $where', args);
     final kind = BiddingKind.choose({for (final r in counts) BiddingKind.ofId(r['id'] as String)}, _random);
     if (kind == null) return null;
-    final prefix = switch (kind) {
-      BiddingKind.curated => 'stat:%',
-      BiddingKind.nationality => 'nat:%',
-      BiddingKind.pair => 'pair:%',
-    };
-    final rows = await _db.rawQuery(
-      'SELECT id, prompt, difficulty, eras FROM bidding_categories '
-      '${where.isEmpty ? 'WHERE' : '$where AND'} id LIKE ? ORDER BY RANDOM() LIMIT 1',
-      [...args, prefix],
-    );
+    final ofKind = [for (final r in counts) if (BiddingKind.ofId(r['id'] as String) == kind) r['id'] as String];
+    final pickedId = ofKind[_random.nextInt(ofKind.length)];
+    final rows = await _db.rawQuery('SELECT id, prompt, difficulty, eras FROM bidding_categories WHERE id = ?', [pickedId]);
     if (rows.isEmpty) return null;
     final r = rows.first;
     final answers = await _db.rawQuery('SELECT player_id FROM bidding_answers WHERE category_id = ?', [r['id']]);

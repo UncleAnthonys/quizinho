@@ -1,40 +1,99 @@
 {
-  "_about": "Hand-made Bidding War categories (records, awards, famous squads). Every list is checked against the source named; stats lists carry an as_of date and need refreshing when they change. Answers are player names; write 'Name|player-id' to pin an ambiguous name. eras: 1 = pre-92, 2 = 92-99, 4 = 2000s, 8 = 2010s, 16 = 2020s.",
+  "_about": "Hand-made Bidding War categories: short, specific lists (5-20 answers) a team can get through in a minute. Every list is checked against the source named; stats lists carry an as_of date and need refreshing when they change. Answers are player (or manager) names; write 'Name|player-id' to pin an ambiguous name, 'Name|new' for someone the career data lacks. Categories with \"answers_are\": \"clubs\" take club names ('Name|Q-id' to pin). club_aliases adds nicknames so they can be typed. eras: 1 = pre-92, 2 = 92-99, 4 = 2000s, 8 = 2010s, 16 = 2020s.",
+  "club_aliases": {
+    "Manchester United": ["Man Utd", "Man United", "United"],
+    "Manchester City": ["Man City", "City"],
+    "Tottenham Hotspur": ["Spurs", "Tottenham"],
+    "Blackburn Rovers": ["Blackburn"],
+    "Leicester City": ["Leicester"],
+    "Paris Saint-Germain": ["PSG", "Paris"],
+    "Borussia Dortmund": ["Dortmund", "BVB"],
+    "Bayern Munich": ["Bayern"],
+    "Barcelona": ["Barca", "Barça"],
+    "Inter Milan": ["Inter", "Internazionale"],
+    "AC Milan": ["Milan"],
+    "Juventus": ["Juve"],
+    "Real Madrid": ["Real"],
+    "Olympique de Marseille": ["Marseille"],
+    "Porto": ["FC Porto"]
+  },
   "categories": [
     {
-      "id": "pl-100-goals",
-      "prompt": "Players with 100+ Premier League goals",
+      "id": "ucl-final-scorers-english",
+      "prompt": "Scored in a Champions League final for an English club",
+      "difficulty": 2, "eras": 30,
+      "source": "Wikipedia: List of European Cup and UEFA Champions League finals (finals 1993-2026)", "as_of": "2026 final",
+      "answers": ["Teddy Sheringham", "Ole Gunnar Solskjær", "Steven Gerrard", "Vladimír Šmicer", "Xabi Alonso", "Sol Campbell", "Dirk Kuyt", "Cristiano Ronaldo", "Frank Lampard", "Wayne Rooney", "Didier Drogba", "Sadio Mané", "Mohamed Salah", "Divock Origi", "Kai Havertz", "Rodri|rodri"]
+    },
+    {
+      "id": "wc-final-scorers-1990",
+      "prompt": "Scored in a World Cup final since 1990",
+      "difficulty": 2, "eras": 31,
+      "source": "Wikipedia: List of FIFA World Cup final goalscorers", "as_of": "2026 final",
+      "answers": ["Andreas Brehme", "Zinedine Zidane", "Emmanuel Petit", "Ronaldo|ronaldo", "Marco Materazzi", "Andrés Iniesta", "Mario Götze", "Mario Mandžukić", "Ivan Perišić", "Antoine Griezmann", "Paul Pogba", "Kylian Mbappé", "Lionel Messi", "Ángel Di María", "Ferran Torres"]
+    },
+    {
+      "id": "england-shootout-misses",
+      "prompt": "England players who missed in a World Cup or Euros penalty shootout",
+      "difficulty": 2, "eras": 31,
+      "source": "Planet Football (16 players); shoot-outs 1990, 1996, 1998, 2004, 2006, 2012, 2018, 2021; none at Euro 2024 or the 2026 World Cup", "as_of": "2026 World Cup",
+      "answers": ["Stuart Pearce", "Chris Waddle", "Gareth Southgate", "Paul Ince", "David Batty", "David Beckham", "Darius Vassell", "Frank Lampard", "Steven Gerrard", "Jamie Carragher", "Ashley Young", "Ashley Cole", "Jordan Henderson", "Marcus Rashford", "Jadon Sancho", "Bukayo Saka"]
+    },
+    {
+      "id": "pl-goalkeeper-scorers",
+      "prompt": "Goalkeepers who've scored in the Premier League",
+      "difficulty": 3, "eras": 30,
+      "source": "Wikipedia: List of goalkeepers who have scored in the Premier League", "as_of": "2026",
+      "answers": ["Peter Schmeichel", "Brad Friedel", "Paul Robinson", "Tim Howard", "Asmir Begović", "Alisson|alisson-becker"]
+    },
+    {
+      "id": "pl-five-goal-games",
+      "prompt": "Scored 5 goals in one Premier League game",
+      "difficulty": 3, "eras": 30,
+      "source": "Kenya Times / The Analyst: players with five goals in a Premier League match", "as_of": "2026",
+      "answers": ["Andy Cole", "Alan Shearer", "Jermain Defoe", "Dimitar Berbatov", "Sergio Agüero"]
+    },
+    {
+      "id": "pl-30-goal-seasons",
+      "prompt": "Scored 30+ goals in a single Premier League season",
+      "difficulty": 2, "eras": 30,
+      "source": "The Football Faithful: players with 30 Premier League goals in a season (to 2022-23); no new players since", "as_of": "2025-26 season",
+      "answers": ["Kevin Phillips", "Thierry Henry", "Robin van Persie", "Harry Kane", "Alan Shearer", "Cristiano Ronaldo", "Luis Suárez", "Mohamed Salah", "Andy Cole", "Erling Haaland"]
+    },
+    {
+      "id": "ballon-dor-in-pl",
+      "prompt": "Ballon d'Or winners who played in the Premier League",
+      "difficulty": 2, "eras": 31,
+      "source": "Ballon d'Or winners list cross-checked against Premier League careers", "as_of": "2025 award",
+      "answers": ["Ruud Gullit", "George Weah", "Michael Owen", "Andriy Shevchenko", "Cristiano Ronaldo", "Luka Modrić", "Rodri|rodri"]
+    },
+    {
+      "id": "ballon-dor-ucl-wc",
+      "prompt": "Won the Ballon d'Or, the Champions League (or European Cup) and the World Cup",
+      "difficulty": 3, "eras": 31,
+      "source": "Kenya Times (9 players, Oct 2024) + Rodri (2026 World Cup)", "as_of": "2026",
+      "answers": ["Lionel Messi", "Kaká", "Ronaldinho", "Rivaldo", "Zinedine Zidane", "Paolo Rossi", "Bobby Charlton", "Gerd Müller", "Franz Beckenbauer", "Rodri|rodri"]
+    },
+    {
+      "id": "top10-pl-scorers",
+      "prompt": "Top 10 all-time Premier League goalscorers",
       "difficulty": 1, "eras": 30,
       "source": "Wikipedia: List of footballers with 100 or more Premier League goals", "as_of": "2026-09-23",
-      "answers": ["Alan Shearer", "Harry Kane", "Wayne Rooney", "Mohamed Salah", "Andy Cole", "Sergio Agüero", "Frank Lampard", "Thierry Henry", "Robbie Fowler", "Jermain Defoe", "Michael Owen", "Les Ferdinand", "Teddy Sheringham", "Jamie Vardy", "Robin van Persie", "Jimmy Floyd Hasselbaink", "Son Heung-min", "Robbie Keane", "Nicolas Anelka", "Dwight Yorke", "Raheem Sterling", "Romelu Lukaku", "Steven Gerrard", "Erling Haaland", "Ian Wright", "Sadio Mané", "Dion Dublin", "Emile Heskey", "Ryan Giggs", "Peter Crouch", "Paul Scholes", "Darren Bent", "Didier Drogba", "Cristiano Ronaldo", "Matt Le Tissier"]
+      "answers": ["Alan Shearer", "Harry Kane", "Wayne Rooney", "Mohamed Salah", "Andy Cole", "Sergio Agüero", "Frank Lampard", "Thierry Henry", "Robbie Fowler", "Jermain Defoe"]
     },
     {
-      "id": "pl-golden-boot",
-      "prompt": "Premier League Golden Boot winners (incl. joint)",
+      "id": "top10-pl-appearances",
+      "prompt": "Top 10 Premier League appearance makers",
+      "difficulty": 3, "eras": 30,
+      "source": "Wikipedia: List of footballers with 500 or more Premier League appearances", "as_of": "2026-05-24",
+      "answers": ["James Milner", "Gareth Barry", "Ryan Giggs", "Frank Lampard", "David James", "Gary Speed", "Emile Heskey", "Mark Schwarzer", "Jamie Carragher", "Phil Neville"]
+    },
+    {
+      "id": "top10-ucl-scorers",
+      "prompt": "Top 10 Champions League goalscorers (since 1992)",
       "difficulty": 2, "eras": 30,
-      "source": "Wikipedia: Premier League Golden Boot", "as_of": "2025-26 season",
-      "answers": ["Teddy Sheringham", "Andy Cole", "Alan Shearer", "Chris Sutton", "Dion Dublin", "Michael Owen", "Dwight Yorke", "Jimmy Floyd Hasselbaink", "Kevin Phillips", "Thierry Henry", "Ruud van Nistelrooy", "Didier Drogba", "Cristiano Ronaldo", "Nicolas Anelka", "Carlos Tevez", "Dimitar Berbatov", "Robin van Persie", "Luis Suárez", "Sergio Agüero", "Harry Kane", "Mohamed Salah", "Pierre-Emerick Aubameyang", "Sadio Mané", "Jamie Vardy", "Son Heung-min", "Erling Haaland"]
-    },
-    {
-      "id": "pl-player-of-season",
-      "prompt": "Premier League Player of the Season winners",
-      "difficulty": 2, "eras": 30,
-      "source": "Wikipedia: Premier League Player of the Season", "as_of": "2025-26 season",
-      "answers": ["Alan Shearer", "Peter Schmeichel", "Juninho Paulista", "Michael Owen", "Dwight Yorke", "Kevin Phillips", "Patrick Vieira", "Freddie Ljungberg", "Ruud van Nistelrooy", "Thierry Henry", "Frank Lampard", "Cristiano Ronaldo", "Nemanja Vidić", "Wayne Rooney", "Vincent Kompany", "Gareth Bale", "Luis Suárez", "Eden Hazard", "Jamie Vardy", "N'Golo Kanté", "Mohamed Salah", "Virgil van Dijk", "Kevin De Bruyne", "Rúben Dias", "Erling Haaland", "Phil Foden", "Bruno Fernandes"]
-    },
-    {
-      "id": "pfa-player-of-year",
-      "prompt": "PFA Players' Player of the Year winners since 1992-93",
-      "difficulty": 2, "eras": 30,
-      "source": "Wikipedia: PFA Players' Player of the Year", "as_of": "2025-26 season",
-      "answers": ["Paul McGrath", "Eric Cantona", "Alan Shearer", "Les Ferdinand", "Dennis Bergkamp", "David Ginola", "Roy Keane", "Teddy Sheringham", "Ruud van Nistelrooy", "Thierry Henry", "John Terry", "Steven Gerrard", "Cristiano Ronaldo", "Ryan Giggs", "Wayne Rooney", "Gareth Bale", "Robin van Persie", "Luis Suárez", "Eden Hazard", "Riyad Mahrez", "N'Golo Kanté", "Mohamed Salah", "Virgil van Dijk", "Kevin De Bruyne", "Erling Haaland", "Phil Foden", "Bruno Fernandes"]
-    },
-    {
-      "id": "ballon-dor-1990",
-      "prompt": "Ballon d'Or winners since 1990",
-      "difficulty": 1, "eras": 31,
-      "source": "Sports Illustrated: Men's Ballon d'Or full list of winners", "as_of": "2025 award",
-      "answers": ["Lothar Matthäus|new", "Jean-Pierre Papin", "Marco van Basten", "Roberto Baggio", "Hristo Stoichkov", "George Weah", "Matthias Sammer", "Ronaldo|ronaldo", "Zinedine Zidane", "Rivaldo", "Luís Figo", "Michael Owen", "Pavel Nedvěd", "Andriy Shevchenko", "Ronaldinho", "Fabio Cannavaro", "Kaká", "Cristiano Ronaldo", "Lionel Messi", "Luka Modrić", "Karim Benzema", "Rodri|rodri", "Ousmane Dembélé"]
+      "source": "Wikipedia: List of UEFA Champions League top scorers", "as_of": "2025-26 season",
+      "answers": ["Cristiano Ronaldo", "Lionel Messi", "Robert Lewandowski", "Karim Benzema", "Kylian Mbappé", "Raúl", "Erling Haaland", "Harry Kane", "Thomas Müller", "Ruud van Nistelrooy"]
     },
     {
       "id": "england-100-caps",
@@ -51,18 +110,25 @@
       "answers": ["Harry Kane", "Wayne Rooney", "Bobby Charlton", "Gary Lineker", "Jimmy Greaves", "Michael Owen", "Nat Lofthouse", "Alan Shearer", "Tom Finney"]
     },
     {
-      "id": "ucl-40-goals",
-      "prompt": "Players with 40+ Champions League goals (since 1992)",
-      "difficulty": 2, "eras": 30,
-      "source": "Wikipedia: List of UEFA Champions League top scorers", "as_of": "2025-26 season",
-      "answers": ["Cristiano Ronaldo", "Lionel Messi", "Robert Lewandowski", "Karim Benzema", "Kylian Mbappé", "Raúl", "Erling Haaland", "Harry Kane", "Thomas Müller", "Ruud van Nistelrooy", "Mohamed Salah", "Thierry Henry", "Andriy Shevchenko", "Zlatan Ibrahimović", "Filippo Inzaghi", "Didier Drogba", "Antoine Griezmann", "Neymar", "Alessandro Del Piero", "Sergio Agüero"]
+      "id": "ballon-dor-2000",
+      "prompt": "Ballon d'Or winners since 2000",
+      "difficulty": 1, "eras": 28,
+      "source": "Sports Illustrated: Men's Ballon d'Or full list of winners", "as_of": "2025 award",
+      "answers": ["Luís Figo", "Michael Owen", "Ronaldo|ronaldo", "Pavel Nedvěd", "Andriy Shevchenko", "Ronaldinho", "Fabio Cannavaro", "Kaká", "Cristiano Ronaldo", "Lionel Messi", "Luka Modrić", "Karim Benzema", "Rodri|rodri", "Ousmane Dembélé"]
     },
     {
-      "id": "pl-500-apps",
-      "prompt": "Players with 500+ Premier League appearances",
-      "difficulty": 3, "eras": 30,
-      "source": "Wikipedia: List of footballers with 500 or more Premier League appearances", "as_of": "2026-05-24",
-      "answers": ["James Milner", "Gareth Barry", "Ryan Giggs", "Frank Lampard", "David James", "Gary Speed", "Emile Heskey", "Mark Schwarzer", "Jamie Carragher", "Phil Neville", "Rio Ferdinand", "Steven Gerrard", "Sol Campbell"]
+      "id": "pl-golden-boot-2010",
+      "prompt": "Premier League Golden Boot winners since 2009-10 (incl. joint)",
+      "difficulty": 2, "eras": 28,
+      "source": "Wikipedia: Premier League Golden Boot", "as_of": "2025-26 season",
+      "answers": ["Didier Drogba", "Carlos Tevez", "Dimitar Berbatov", "Robin van Persie", "Luis Suárez", "Sergio Agüero", "Harry Kane", "Mohamed Salah", "Pierre-Emerick Aubameyang", "Sadio Mané", "Jamie Vardy", "Son Heung-min", "Erling Haaland"]
+    },
+    {
+      "id": "pl-player-of-season-2010",
+      "prompt": "Premier League Player of the Season winners since 2010-11",
+      "difficulty": 2, "eras": 24,
+      "source": "Wikipedia: Premier League Player of the Season", "as_of": "2025-26 season",
+      "answers": ["Nemanja Vidić", "Vincent Kompany", "Gareth Bale", "Luis Suárez", "Eden Hazard", "Jamie Vardy", "N'Golo Kanté", "Mohamed Salah", "Virgil van Dijk", "Kevin De Bruyne", "Rúben Dias", "Erling Haaland", "Phil Foden", "Bruno Fernandes"]
     },
     {
       "id": "wc-top-scorers-1982",
@@ -93,144 +159,49 @@
       "answers": ["Petr Čech", "Pepe Reina", "Edwin van der Sar", "Joe Hart", "Wojciech Szczęsny", "Thibaut Courtois", "David de Gea", "Alisson|alisson-becker", "Ederson", "David Raya", "Matz Sels"]
     },
     {
-      "id": "squad-spain-wc-2026",
-      "prompt": "Spain's 2026 World Cup-winning squad",
-      "difficulty": 2, "eras": 16,
-      "source": "Heavy.com: Spain National Team 2026, all 26 World Cup players", "as_of": "2026 World Cup",
-      "answers": ["Unai Simón", "David Raya", "Joan García", "Pau Cubarsí", "Marc Cucurella|marc-hagit-cucurella", "Eric García", "Marcos Llorente", "Alejandro Grimaldo|alex-grimaldo", "Pedro Porro", "Marc Pubill", "Aymeric Laporte", "Pedri", "Fabián Ruiz", "Martín Zubimendi", "Gavi", "Rodri|rodri", "Álex Baena", "Mikel Merino", "Lamine Yamal", "Nico Williams", "Víctor Muñoz|victor-munoz", "Ferran Torres", "Yeremy Pino", "Borja Iglesias", "Dani Olmo", "Mikel Oyarzabal"]
+      "id": "pl-winning-managers",
+      "prompt": "Managers who've won the Premier League",
+      "difficulty": 1, "eras": 30,
+      "source": "Wikipedia: List of Premier League managers", "as_of": "2025-26 season",
+      "answers": ["Alex Ferguson", "Kenny Dalglish", "Arsène Wenger|new", "José Mourinho", "Carlo Ancelotti", "Roberto Mancini", "Manuel Pellegrini", "Claudio Ranieri", "Antonio Conte", "Pep Guardiola", "Jürgen Klopp", "Arne Slot", "Mikel Arteta"]
     },
     {
-      "id": "squad-england-wc-2026",
-      "prompt": "England's 2026 World Cup squad",
-      "difficulty": 1, "eras": 16,
-      "source": "Lancashire Evening Post: England's 26-man World Cup squad in full", "as_of": "2026 World Cup",
-      "answers": ["Jordan Pickford", "Dean Henderson", "James Trafford", "Reece James", "Tino Livramento", "Djed Spence", "Jarell Quansah", "Ezri Konsa", "John Stones", "Marc Guéhi", "Nico O'Reilly", "Dan Burn", "Declan Rice", "Elliot Anderson", "Jordan Henderson", "Kobbie Mainoo", "Morgan Rogers", "Jude Bellingham", "Eberechi Eze", "Harry Kane", "Ivan Toney", "Ollie Watkins", "Bukayo Saka", "Noni Madueke", "Marcus Rashford", "Anthony Gordon"]
+      "id": "ucl-winning-managers",
+      "prompt": "Managers who've won the Champions League (since 1993)",
+      "difficulty": 2, "eras": 30,
+      "source": "Wikipedia: List of European Cup and UEFA Champions League winning managers", "as_of": "2026 final",
+      "answers": ["Raymond Goethals", "Fabio Capello", "Louis van Gaal", "Marcello Lippi", "Ottmar Hitzfeld", "Jupp Heynckes", "Alex Ferguson", "Vicente del Bosque", "Carlo Ancelotti", "José Mourinho", "Rafael Benítez|new", "Frank Rijkaard", "Pep Guardiola", "Roberto Di Matteo", "Luis Enrique", "Zinedine Zidane", "Jürgen Klopp", "Hansi Flick", "Thomas Tuchel"]
     },
     {
-      "id": "squad-argentina-wc-2022",
-      "prompt": "Argentina's 2022 World Cup-winning squad",
-      "difficulty": 2, "eras": 16,
-      "source": "Wikipedia: 2022 FIFA World Cup squads", "as_of": "2022 World Cup",
-      "answers": ["Franco Armani", "Juan Foyth", "Nicolás Tagliafico", "Gonzalo Montiel", "Leandro Paredes", "Germán Pezzella", "Rodrigo De Paul", "Marcos Acuña", "Julián Alvarez", "Lionel Messi", "Ángel Di María", "Gerónimo Rulli", "Cristian Romero", "Exequiel Palacios", "Ángel Correa", "Thiago Almada", "Alejandro Gómez", "Guido Rodríguez", "Nicolás Otamendi", "Alexis Mac Allister", "Paulo Dybala", "Lautaro Martínez", "Emiliano Martínez", "Enzo Fernández", "Lisandro Martínez", "Nahuel Molina"]
+      "id": "england-managers",
+      "prompt": "Permanent England managers since 1982",
+      "difficulty": 2, "eras": 31,
+      "source": "Wikipedia: England national football team manager", "as_of": "2026",
+      "answers": ["Bobby Robson", "Graham Taylor", "Terry Venables", "Glenn Hoddle", "Kevin Keegan", "Sven-Göran Eriksson", "Steve McClaren", "Fabio Capello", "Roy Hodgson", "Sam Allardyce", "Gareth Southgate", "Thomas Tuchel"]
     },
     {
-      "id": "squad-england-wc-2022",
-      "prompt": "England's 2022 World Cup squad",
-      "difficulty": 1, "eras": 16,
-      "source": "Wikipedia: 2022 FIFA World Cup squads", "as_of": "2022 World Cup",
-      "answers": ["Jordan Pickford", "Kyle Walker", "Luke Shaw", "Declan Rice", "John Stones", "Harry Maguire", "Jack Grealish", "Jordan Henderson", "Harry Kane", "Raheem Sterling", "Marcus Rashford", "Kieran Trippier", "Nick Pope", "Kalvin Phillips", "Eric Dier", "Conor Coady", "Bukayo Saka", "Trent Alexander-Arnold", "Mason Mount", "Phil Foden", "Ben White", "Jude Bellingham", "Aaron Ramsdale", "Callum Wilson", "James Maddison", "Conor Gallagher"]
+      "id": "pl-winning-clubs",
+      "prompt": "Clubs that have won the Premier League",
+      "answers_are": "clubs",
+      "difficulty": 1, "eras": 30,
+      "source": "Wikipedia: List of Premier League managers (title winners)", "as_of": "2025-26 season",
+      "answers": ["Manchester United", "Blackburn Rovers", "Arsenal", "Chelsea", "Manchester City", "Leicester City", "Liverpool"]
     },
     {
-      "id": "squad-france-wc-2018",
-      "prompt": "France's 2018 World Cup-winning squad",
-      "difficulty": 2, "eras": 8,
-      "source": "Wikipedia: 2018 FIFA World Cup squads", "as_of": "2018 World Cup",
-      "answers": ["Hugo Lloris", "Benjamin Pavard", "Presnel Kimpembe", "Raphaël Varane", "Samuel Umtiti", "Paul Pogba", "Antoine Griezmann", "Thomas Lemar", "Olivier Giroud", "Kylian Mbappé", "Ousmane Dembélé", "Corentin Tolisso", "N'Golo Kanté", "Blaise Matuidi", "Steven Nzonzi", "Steve Mandanda", "Adil Rami", "Nabil Fekir", "Djibril Sidibé", "Florian Thauvin", "Lucas Hernandez", "Benjamin Mendy", "Alphonse Areola"]
+      "id": "ucl-winning-clubs",
+      "prompt": "Clubs that have won the Champions League (since 1993)",
+      "answers_are": "clubs",
+      "difficulty": 2, "eras": 30,
+      "source": "Wikipedia: List of European Cup and UEFA Champions League finals", "as_of": "2026 final",
+      "answers": ["Olympique de Marseille", "AC Milan", "Ajax", "Juventus", "Borussia Dortmund", "Real Madrid", "Manchester United", "Bayern Munich", "Porto", "Liverpool", "Barcelona", "Inter Milan", "Chelsea", "Manchester City", "Paris Saint-Germain"]
     },
     {
-      "id": "squad-england-wc-2018",
-      "prompt": "England's 2018 World Cup squad",
-      "difficulty": 1, "eras": 8,
-      "source": "Wikipedia: 2018 FIFA World Cup squads", "as_of": "2018 World Cup",
-      "answers": ["Jordan Pickford", "Kyle Walker", "Danny Rose", "Eric Dier", "John Stones", "Harry Maguire", "Jesse Lingard", "Jordan Henderson", "Harry Kane", "Raheem Sterling", "Jamie Vardy", "Kieran Trippier", "Jack Butland", "Danny Welbeck", "Gary Cahill", "Phil Jones", "Fabian Delph", "Ashley Young", "Marcus Rashford", "Dele Alli", "Ruben Loftus-Cheek", "Trent Alexander-Arnold", "Nick Pope"]
-    },
-    {
-      "id": "squad-germany-wc-2014",
-      "prompt": "Germany's 2014 World Cup-winning squad",
-      "difficulty": 2, "eras": 8,
-      "source": "Wikipedia: 2014 FIFA World Cup squads", "as_of": "2014 World Cup",
-      "answers": ["Manuel Neuer", "Kevin Großkreutz", "Matthias Ginter", "Benedikt Höwedes", "Mats Hummels", "Sami Khedira", "Bastian Schweinsteiger", "Mesut Özil", "André Schürrle", "Lukas Podolski", "Miroslav Klose", "Ron-Robert Zieler", "Thomas Müller", "Julian Draxler", "Erik Durm", "Philipp Lahm", "Per Mertesacker", "Toni Kroos", "Mario Götze", "Jérôme Boateng", "Shkodran Mustafi", "Roman Weidenfeller", "Christoph Kramer"]
-    },
-    {
-      "id": "squad-spain-wc-2010",
-      "prompt": "Spain's 2010 World Cup-winning squad",
-      "difficulty": 2, "eras": 8,
-      "source": "Wikipedia: 2010 FIFA World Cup squads", "as_of": "2010 World Cup",
-      "answers": ["Iker Casillas", "Raúl Albiol", "Gerard Piqué", "Carlos Marchena", "Carles Puyol", "Andrés Iniesta", "David Villa", "Xavi|xavi-hernandez", "Fernando Torres", "Cesc Fàbregas", "Joan Capdevila", "Víctor Valdés", "Juan Mata|juan-mata-pata", "Xabi Alonso", "Sergio Ramos", "Sergio Busquets", "Álvaro Arbeloa", "Pedro", "Fernando Llorente", "Javi Martínez", "David Silva", "Jesús Navas", "Pepe Reina"]
-    },
-    {
-      "id": "squad-italy-wc-2006",
-      "prompt": "Italy's 2006 World Cup-winning squad",
-      "difficulty": 2, "eras": 4,
-      "source": "Wikipedia: 2006 FIFA World Cup squads", "as_of": "2006 World Cup",
-      "answers": ["Gianluigi Buffon", "Cristian Zaccardo", "Fabio Grosso", "Daniele De Rossi", "Fabio Cannavaro", "Andrea Barzagli", "Alessandro Del Piero", "Gennaro Gattuso", "Luca Toni", "Francesco Totti", "Alberto Gilardino", "Angelo Peruzzi", "Alessandro Nesta", "Marco Amelia", "Vincenzo Iaquinta", "Mauro Camoranesi", "Simone Barone", "Filippo Inzaghi", "Gianluca Zambrotta", "Simone Perrotta", "Andrea Pirlo", "Massimo Oddo", "Marco Materazzi"]
-    },
-    {
-      "id": "squad-brazil-wc-2002",
-      "prompt": "Brazil's 2002 World Cup-winning squad",
-      "difficulty": 2, "eras": 4,
-      "source": "Wikipedia: 2002 FIFA World Cup squads", "as_of": "2002 World Cup",
-      "answers": ["Marcos|marcos", "Cafu", "Lúcio", "Roque Júnior", "Edmílson", "Roberto Carlos", "Ricardinho|ricardinho", "Gilberto Silva", "Ronaldo|ronaldo", "Rivaldo", "Ronaldinho", "Dida", "Juliano Belletti", "Anderson Polga", "Kléberson|jose-kleberson", "Júnior|jenilson-angelo-de-souza", "Denílson|denilson-de-oliveira", "Vampeta", "Juninho Paulista", "Edílson", "Luizão", "Rogério Ceni", "Kaká"]
-    },
-    {
-      "id": "squad-england-wc-2002",
-      "prompt": "England's 2002 World Cup squad",
-      "difficulty": 2, "eras": 4,
-      "source": "Wikipedia: 2002 FIFA World Cup squads", "as_of": "2002 World Cup",
-      "answers": ["David Seaman", "Danny Mills", "Ashley Cole", "Trevor Sinclair", "Rio Ferdinand", "Sol Campbell", "David Beckham", "Paul Scholes", "Robbie Fowler", "Michael Owen", "Emile Heskey", "Wes Brown", "Nigel Martyn", "Wayne Bridge", "Martin Keown", "Gareth Southgate", "Teddy Sheringham", "Owen Hargreaves", "Joe Cole", "Darius Vassell", "Nicky Butt", "David James", "Kieron Dyer"]
-    },
-    {
-      "id": "squad-spain-euro-2024",
-      "prompt": "Spain's Euro 2024-winning squad",
-      "difficulty": 2, "eras": 16,
-      "source": "Wikipedia: UEFA Euro 2024 squads", "as_of": "Euro 2024",
-      "answers": ["David Raya", "Dani Carvajal", "Robin Le Normand", "Nacho", "Daniel Vivian", "Mikel Merino", "Álvaro Morata", "Fabián Ruiz", "Joselu", "Dani Olmo", "Ferran Torres", "Alejandro Grimaldo|alex-grimaldo", "Álex Remiro", "Aymeric Laporte", "Álex Baena", "Rodri|rodri", "Nico Williams", "Martín Zubimendi", "Lamine Yamal", "Pedri", "Mikel Oyarzabal", "Jesús Navas", "Unai Simón", "Marc Cucurella|marc-hagit-cucurella", "Fermín López", "Ayoze Pérez"]
-    },
-    {
-      "id": "squad-england-euro-2024",
-      "prompt": "England's Euro 2024 squad",
-      "difficulty": 1, "eras": 16,
-      "source": "Wikipedia: UEFA Euro 2024 squads", "as_of": "Euro 2024",
-      "answers": ["Jordan Pickford", "Kyle Walker", "Luke Shaw", "Declan Rice", "John Stones", "Marc Guéhi", "Bukayo Saka", "Trent Alexander-Arnold", "Harry Kane", "Jude Bellingham", "Phil Foden", "Kieran Trippier", "Aaron Ramsdale", "Ezri Konsa", "Lewis Dunk", "Conor Gallagher", "Ivan Toney", "Anthony Gordon", "Ollie Watkins", "Jarrod Bowen", "Eberechi Eze", "Joe Gomez", "Dean Henderson", "Cole Palmer", "Adam Wharton", "Kobbie Mainoo"]
-    },
-    {
-      "id": "squad-england-euro-2020",
-      "prompt": "England's Euro 2020 squad",
-      "difficulty": 1, "eras": 16,
-      "source": "Wikipedia: UEFA Euro 2020 squads (Dean Henderson replaced by Aaron Ramsdale)", "as_of": "Euro 2020",
-      "answers": ["Jordan Pickford", "Kyle Walker", "Luke Shaw", "Declan Rice", "John Stones", "Harry Maguire", "Jack Grealish", "Jordan Henderson", "Harry Kane", "Raheem Sterling", "Marcus Rashford", "Kieran Trippier", "Aaron Ramsdale", "Kalvin Phillips", "Tyrone Mings", "Conor Coady", "Jadon Sancho", "Dominic Calvert-Lewin", "Mason Mount", "Phil Foden", "Ben Chilwell", "Ben White", "Sam Johnstone", "Reece James", "Bukayo Saka", "Jude Bellingham"]
-    },
-    {
-      "id": "squad-italy-euro-2020",
-      "prompt": "Italy's Euro 2020-winning squad",
-      "difficulty": 3, "eras": 16,
-      "source": "Wikipedia: UEFA Euro 2020 squads", "as_of": "Euro 2020",
-      "answers": ["Salvatore Sirigu", "Giovanni Di Lorenzo", "Giorgio Chiellini", "Leonardo Spinazzola", "Manuel Locatelli", "Marco Verratti", "Gaetano Castrovilli|new", "Jorginho|jorginho-1991", "Andrea Belotti", "Lorenzo Insigne", "Domenico Berardi", "Matteo Pessina", "Emerson Palmieri", "Federico Chiesa", "Francesco Acerbi", "Bryan Cristante", "Ciro Immobile", "Nicolò Barella", "Leonardo Bonucci", "Federico Bernardeschi", "Gianluigi Donnarumma", "Giacomo Raspadori|new", "Alessandro Bastoni", "Alessandro Florenzi", "Rafael Tolói", "Alex Meret"]
-    },
-    {
-      "id": "squad-england-euro-1996",
-      "prompt": "England's Euro 96 squad",
-      "difficulty": 2, "eras": 2,
-      "source": "Wikipedia: UEFA Euro 1996 squads", "as_of": "Euro 96",
-      "answers": ["David Seaman", "Gary Neville", "Stuart Pearce", "Paul Ince", "Tony Adams", "Gareth Southgate", "David Platt", "Paul Gascoigne", "Alan Shearer", "Teddy Sheringham", "Darren Anderton", "Steve Howey", "Tim Flowers", "Nick Barmby", "Jamie Redknapp", "Sol Campbell", "Steve McManaman", "Les Ferdinand", "Phil Neville", "Steve Stone", "Robbie Fowler", "Ian Walker"]
-    },
-    {
-      "id": "squad-portugal-euro-2016",
-      "prompt": "Portugal's Euro 2016-winning squad",
-      "difficulty": 3, "eras": 8,
-      "source": "Wikipedia: UEFA Euro 2016 squads", "as_of": "Euro 2016",
-      "answers": ["Rui Patrício", "Bruno Alves", "Pepe", "José Fonte", "Raphaël Guerreiro", "Ricardo Carvalho", "Cristiano Ronaldo", "João Moutinho|joao-moutinh0", "Eder", "João Mário", "Vieirinha", "Anthony Lopes|anthony-lopez", "Danilo Pereira", "William Carvalho", "André Gomes", "Renato Sanches", "Nani", "Rafa Silva", "Eliseu", "Ricardo Quaresma", "Cédric Soares", "Eduardo|eduardo-carvalho", "Adrien Silva"]
-    },
-    {
-      "id": "squad-wales-euro-2016",
-      "prompt": "Wales's Euro 2016 squad (semi-finalists)",
-      "difficulty": 3, "eras": 8,
-      "source": "Wikipedia: UEFA Euro 2016 squads", "as_of": "Euro 2016",
-      "answers": ["Wayne Hennessey", "Chris Gunter", "Neil Taylor", "Ben Davies", "James Chester", "Ashley Williams", "Joe Allen", "Andy King", "Hal Robson-Kanu", "Aaron Ramsey", "Gareth Bale", "Owain Fôn Williams", "George Williams", "David Edwards", "Jazz Richards", "Joe Ledley", "David Cotterill", "Sam Vokes", "James Collins", "Jonny Williams", "Danny Ward", "David Vaughan", "Simon Church"]
-    },
-    {
-      "id": "arsenal-invincibles",
-      "prompt": "Arsenal's Invincibles: played in the 2003-04 Premier League",
-      "difficulty": 2, "eras": 4,
-      "source": "Wikipedia: 2003-04 Arsenal F.C. season (squad statistics)", "as_of": "2003-04",
-      "answers": ["Jens Lehmann", "Ashley Cole", "Patrick Vieira", "Martin Keown", "Robert Pires", "Freddie Ljungberg", "José Antonio Reyes", "Dennis Bergkamp", "Sylvain Wiltord", "Lauren", "Thierry Henry", "Ray Parlour", "Edu|edu", "Pascal Cygan", "Gilberto Silva", "Gaël Clichy", "Sol Campbell", "Nwankwo Kanu", "Kolo Touré", "Jérémie Aliadière", "David Bentley", "Justin Hoyte"]
-    },
-    {
-      "id": "leicester-2015-16",
-      "prompt": "Leicester's 2015-16 title winners: played in the league that season",
-      "difficulty": 2, "eras": 8,
-      "source": "Wikipedia: 2015-16 Leicester City F.C. season (squad statistics)", "as_of": "2015-16",
-      "answers": ["Kasper Schmeichel", "Ritchie De Laet", "Danny Drinkwater", "Wes Morgan", "Robert Huth", "Jamie Vardy", "Andy King", "Marc Albrighton", "Daniel Amartey", "N'Golo Kanté", "Jeffrey Schlupp", "Danny Simpson", "Andrej Kramarić", "Shinji Okazaki", "Demarai Gray", "Leonardo Ulloa", "Nathan Dyer", "Riyad Mahrez", "Marcin Wasilewski", "Christian Fuchs", "Yohan Benalouane", "Gökhan Inler", "Joe Dodoo|new"]
+      "id": "english-ucl-finalists",
+      "prompt": "English clubs that have played in a Champions League final",
+      "answers_are": "clubs",
+      "difficulty": 1, "eras": 30,
+      "source": "Wikipedia: List of European Cup and UEFA Champions League finals (since 1993)", "as_of": "2026 final",
+      "answers": ["Manchester United", "Arsenal", "Liverpool", "Chelsea", "Tottenham Hotspur", "Manchester City"]
     },
     {
       "id": "ucl-final-liverpool-2005",

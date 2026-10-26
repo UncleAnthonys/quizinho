@@ -48,11 +48,17 @@ enum Era {
 }
 
 class Club {
-  const Club({required this.id, required this.name, required this.fame, this.country});
+  const Club({required this.id, required this.name, required this.fame, this.country, this.aliases = const []});
   final String id;
   final String name;
   final String? country;
   final int fame;
+
+  /// Nicknames a player might type ("Spurs", "Man Utd").
+  final List<String> aliases;
+
+  /// As an answer entry, so the same type-or-say box can search clubs.
+  Player get asAnswer => Player(id: id, name: name, fame: fame, aliases: aliases, nationality: country);
 }
 
 class Player {
@@ -144,20 +150,23 @@ class BiddingCategory {
 
   /// Which family the category comes from, told by its id prefix.
   BiddingKind get kind => BiddingKind.ofId(id);
+
+  /// Answers are clubs ("Clubs that have won the Premier League"), not people.
+  bool get answersAreClubs => id.startsWith('clubs:');
 }
 
 /// Bidding War category families, and how often each comes up. The pipeline
 /// makes 1,000+ club pairs but only a few dozen hand-made records/squads, so
 /// picking uniformly would almost never show the hand-made ones.
 enum BiddingKind {
-  curated(40), // records, awards, famous squads ("100+ Premier League goals")
+  curated(40), // hand-made: records, awards, managers, clubs ("Top 10 PL scorers")
   pair(40), // "Played for both Arsenal and Barcelona"
   nationality(20); // "Brazilians who played for Chelsea"
 
   const BiddingKind(this.weight);
   final int weight;
 
-  static BiddingKind ofId(String id) => id.startsWith('stat:')
+  static BiddingKind ofId(String id) => id.startsWith('stat:') || id.startsWith('clubs:')
       ? curated
       : id.startsWith('nat:')
           ? nationality

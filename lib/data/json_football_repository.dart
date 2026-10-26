@@ -15,7 +15,13 @@ InMemoryFootballRepository parseFootballJson(String source) {
 
   final clubs = <String, Club>{
     for (final c in doc['clubs'] as List)
-      c[0] as String: Club(id: c[0] as String, name: c[1] as String, country: c[2] as String?, fame: c[3] as int),
+      c[0] as String: Club(
+        id: c[0] as String,
+        name: c[1] as String,
+        country: c[2] as String?,
+        fame: c[3] as int,
+        aliases: (c as List).length > 4 ? [for (final a in c[4] as List) a as String] : const [],
+      ),
   };
   Club club(String id) => clubs[id] ?? Club(id: id, name: id, fame: 1);
 
@@ -33,6 +39,7 @@ InMemoryFootballRepository parseFootballJson(String source) {
 
   return InMemoryFootballRepository(
     players: players.values.toList(),
+    clubs: clubs.values.toList(),
     dataStatus: (doc['data_status'] as String?) ?? 'unknown',
     connections: [
       for (final c in doc['connections'] as List)

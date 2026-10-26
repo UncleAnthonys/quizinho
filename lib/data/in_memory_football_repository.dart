@@ -12,9 +12,11 @@ class InMemoryFootballRepository implements FootballRepository {
     this.careers = const [],
     this.matches = const [],
     this.bidding = const [],
+    List<Club> clubs = const [],
     Random? random,
     this.dataStatus = 'test',
   })  : players = PlayerIndex(players),
+        _clubs = clubs,
         _random = random ?? Random();
 
   @override
@@ -26,7 +28,11 @@ class InMemoryFootballRepository implements FootballRepository {
   final List<CareerPath> careers;
   final List<HistoricMatch> matches;
   final List<BiddingCategory> bidding;
+  final List<Club> _clubs;
   final Random _random;
+
+  @override
+  late final PlayerIndex clubIndex = PlayerIndex([for (final c in _clubs) c.asAnswer]);
 
   T? _pick<T>(List<T> pool, String Function(T) id, int Function(T) level, int Function(T) era, Set<int>? levels,
       Set<String> exclude, int eras) {

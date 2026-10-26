@@ -174,20 +174,34 @@ void main() {
     });
   });
 
-  test('bundled data has hand-made categories, every answer a real player', () async {
+  test('bundled data has short hand-made categories, every answer real', () async {
     final repo = parseFootballJson(File('assets/db/football.json').readAsStringSync());
     final curated = repo.bidding.where((b) => b.kind == BiddingKind.curated).toList();
-    expect(curated.length, greaterThanOrEqualTo(30));
+    expect(curated.length, greaterThanOrEqualTo(25));
     for (final b in curated) {
-      expect(b.answerIds.length, inInclusiveRange(5, 35), reason: b.id);
+      // Short enough to get through in a minute.
+      expect(b.answerIds.length, inInclusiveRange(5, 20), reason: b.id);
+      final index = b.answersAreClubs ? repo.clubIndex : repo.players;
       for (final id in b.answerIds) {
-        expect(repo.players.byId(id), isNotNull, reason: '${b.id}: $id');
+        expect(index.byId(id), isNotNull, reason: '${b.id}: $id');
       }
     }
-    final hundred = curated.firstWhere((b) => b.id == 'stat:pl-100-goals');
-    expect(hundred.answerIds, containsAll(['alan-shearer', 'harry-kane', 'mohamed-salah']));
+    final top10 = curated.firstWhere((b) => b.id == 'stat:top10-pl-scorers');
+    expect(top10.answerIds, containsAll(['alan-shearer', 'harry-kane', 'mohamed-salah']));
     // Common spellings type in even where the data's name differs.
     expect(repo.players.matchTyped('Juan Mata').map((p) => p.id), contains('juan-mata-pata'));
+  });
+
+  test('club categories take clubs, nicknames included', () async {
+    final repo = parseFootballJson(File('assets/db/football.json').readAsStringSync());
+    final winners = repo.bidding.firstWhere((b) => b.id == 'clubs:pl-winning-clubs');
+    expect(winners.answersAreClubs, isTrue);
+    expect(winners.kind, BiddingKind.curated);
+    expect(winners.answerIds.length, 7);
+    final spurs = repo.clubIndex.matchTyped('Spurs').map((c) => c.name);
+    expect(spurs, contains('Tottenham Hotspur'));
+    final blackburn = repo.clubIndex.matchTyped('Blackburn Rovers').first;
+    expect(winners.answerIds, contains(blackburn.id));
   });
 
   test('bundled data has playable Bidding War categories', () async {

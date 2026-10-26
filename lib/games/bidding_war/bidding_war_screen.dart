@@ -283,10 +283,11 @@ class _BiddingWarScreenState extends State<BiddingWarScreen>
       const SizedBox(height: 10),
       PlayerPicker(
         key: ValueKey('bid-$_pickerKey'),
-        index: services.repo.players,
+        // Club categories ("Clubs that have won the Premier League") search clubs.
+        index: c.category.answersAreClubs ? services.repo.clubIndex : services.repo.players,
         voice: services.voice,
         accent: Palette.team(colour),
-        hint: 'Say or type a player…',
+        hint: c.category.answersAreClubs ? 'Say or type a club…' : 'Say or type a name…',
         onPick: c.submit,
         onDisputed: (typed, allowed) {
           if (allowed) c.submitDisputed(typed);

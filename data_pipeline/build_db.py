@@ -345,42 +345,72 @@ def generate_bidding(clubs, players, connections, countries):
     return out
 
 
-def load_curated_bidding(players, problems: Problems) -> list[dict]:
-    """Hand-made categories (records, awards, famous squads) from
+# Hand-made lists stay short enough to get through in a minute.
+CURATED_MAX_ANSWERS = 20
+
+
+def load_curated_bidding(players, clubs, problems: Problems) -> list[dict]:
+    """Hand-made categories (records, awards, managers, clubs) from
     seed/bidding_curated.json. Answers are names, pinned with 'Name|id' where a
-    name is ambiguous; 'Name|new' adds a player the career data lacks. Every
-    answer must resolve, so the answer set stays complete. The curated name
-    becomes an alias, so the common spelling can be typed ("Juan Mata")."""
+    name is ambiguous; 'Name|new' adds a person the career data lacks (e.g. a
+    manager who never played at this level). "answers_are": "clubs" takes club
+    names instead. Every answer must resolve, so the answer set stays complete.
+    The curated name becomes an alias, so the common spelling can be typed
+    ("Juan Mata"); club_aliases adds nicknames ("Spurs")."""
     path = SEED / "bidding_curated.json"
     if not path.exists():
         return []
-    by_name: dict[str, str] = {}
-    for pid, p in sorted(players.items(), key=lambda kv: kv[1]["fame"]):  # most famous wins
-        for n in [p["name"], *p["aliases"]]:
-            by_name[norm(n)] = pid
+    doc = json.loads(path.read_text(encoding="utf-8"))
+
+    def index(items) -> dict[str, str]:
+        by_name: dict[str, str] = {}
+        for key, item in sorted(items.items(), key=lambda kv: kv[1]["fame"]):  # most famous wins
+            for n in [item["name"], *item["aliases"]]:
+                by_name[norm(n)] = key
+        return by_name
+
+    player_names, club_names = index(players), index(clubs)
+
+    def resolve_club(raw: str) -> str | None:
+        name, _, pin = raw.partition("|")
+        return (pin if pin in clubs else None) if pin else club_names.get(norm(name))
+
+    for name, aliases in doc.get("club_aliases", {}).items():
+        cid = resolve_club(name)
+        if cid is None:
+            problems.error(f"club_aliases: unknown club '{name}'")
+            continue
+        clubs[cid]["aliases"] = list(dict.fromkeys(clubs[cid]["aliases"] + aliases))
+    club_names = index(clubs)
+
     out = []
-    for c in json.loads(path.read_text(encoding="utf-8"))["categories"]:
+    for c in doc["categories"]:
+        is_clubs = c.get("answers_are") == "clubs"
         answers = []
         for raw in c["answers"]:
             name, _, pin = raw.partition("|")
-            if pin == "new":
-                pid = "curated-" + norm(name).replace(" ", "-")
-                players.setdefault(pid, {"name": name, "nat": None, "pos": None, "fame": 3, "aliases": [], "spells": []})
-            elif pin:
-                pid = pin if pin in players else None
+            if is_clubs:
+                key = resolve_club(raw)
+                table = clubs
+            elif pin == "new":
+                key = "curated-" + norm(name).replace(" ", "-")
+                players.setdefault(key, {"name": name, "nat": None, "pos": None, "fame": 3, "aliases": [], "spells": []})
+                table = players
             else:
-                pid = by_name.get(norm(name))
-            if pid is None:
+                key = (pin if pin in players else None) if pin else player_names.get(norm(name))
+                table = players
+            if key is None:
                 problems.error(f"curated bidding {c['id']}: can't resolve '{raw}'")
                 continue
-            if norm(name) != norm(players[pid]["name"]) and name not in players[pid]["aliases"]:
-                players[pid]["aliases"].append(name)
-            answers.append(pid)
+            if norm(name) != norm(table[key]["name"]) and name not in table[key]["aliases"]:
+                table[key]["aliases"].append(name)
+            answers.append(key)
         if len(set(answers)) != len(answers):
-            problems.error(f"curated bidding {c['id']}: same player twice")
-        if not BID_MIN_ANSWERS <= len(answers) <= BID_MAX_ANSWERS:
-            problems.error(f"curated bidding {c['id']}: {len(answers)} answers, need {BID_MIN_ANSWERS}-{BID_MAX_ANSWERS}")
-        out.append({"id": f"stat:{c['id']}", "prompt": c["prompt"], "kind": "curated", "answers": sorted(set(answers)),
+            problems.error(f"curated bidding {c['id']}: same answer twice")
+        if not BID_MIN_ANSWERS <= len(answers) <= CURATED_MAX_ANSWERS:
+            problems.error(f"curated bidding {c['id']}: {len(answers)} answers, need {BID_MIN_ANSWERS}-{CURATED_MAX_ANSWERS}")
+        prefix = "clubs" if is_clubs else "stat"
+        out.append({"id": f"{prefix}:{c['id']}", "prompt": c["prompt"], "kind": "curated", "answers": sorted(set(answers)),
                     "difficulty": c["difficulty"], "eras": c["eras"]})
     return out
 
@@ -438,7 +468,8 @@ def write_json(path: pathlib.Path, version: int, clubs, players, matches, connec
     doc = {
         "db_version": version,
         "data_status": DATA_STATUS,
-        "clubs": [[cid, c["name"], c["country"], c["fame"]] for cid, c in clubs.items()],
+        "clubs": [[cid, c["name"], c["country"], c["fame"], *([c["aliases"]] if c["aliases"] else [])]
+                  for cid, c in clubs.items()],
         "players": [
             {"id": pid, "name": p["name"], "nat": p["nat"], "pos": p["pos"], "fame": p["fame"], "aliases": p["aliases"]}
             for pid, p in players.items()
@@ -469,7 +500,7 @@ def main() -> int:
 
     problems = Problems()
     clubs, players, matches = validate_and_collect(problems)
-    curated = load_curated_bidding(players, problems)
+    curated = load_curated_bidding(players, clubs, problems)
     for w in problems.warnings:
         print("WARN ", w)
     for e in problems.errors:

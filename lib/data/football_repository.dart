@@ -8,6 +8,9 @@ import 'models.dart';
 abstract class FootballRepository {
   PlayerIndex get players;
 
+  /// Clubs, searchable like players — for categories whose answers are clubs.
+  PlayerIndex get clubIndex;
+
   /// e.g. "demo_unverified" until the verified pipeline lands.
   String get dataStatus;
 
