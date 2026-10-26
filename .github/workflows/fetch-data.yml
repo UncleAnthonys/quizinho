@@ -1,0 +1,45 @@
+# Downloads raw footballer data from Wikidata and commits it to
+# data_pipeline/raw/. Run from the Actions tab ("Run workflow"), or monthly.
+name: Fetch football data
+
+on:
+  workflow_dispatch:
+    inputs:
+      min_sitelinks:
+        description: "Only players covered by at least this many Wikipedias (fame cut-off)"
+        default: "15"
+  schedule:
+    - cron: "0 4 1 * *" # 04:00 UTC on the 1st of each month
+
+permissions:
+  contents: write
+
+concurrency:
+  group: fetch-data
+  cancel-in-progress: false
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Fetch from Wikidata
+        run: bash scripts/ci_run.sh "Wikidata fetch" python3 data_pipeline/wikidata_fetch.py --min-sitelinks "${{ github.event.inputs.min_sitelinks || '15' }}"
+      - name: Report
+        run: echo "::notice title=Fetched::$(cat data_pipeline/raw/FETCHED.txt)"
+      - name: Commit raw data
+        run: |
+          git config user.name "quizinho-data-bot"
+          git config user.email "quizinho-data-bot@users.noreply.github.com"
+          git add data_pipeline/raw
+          if git diff --cached --quiet; then
+            echo "No changes."
+          else
+            git commit -m "Data: refresh raw Wikidata dump" -m "$(cat data_pipeline/raw/FETCHED.txt)"
+            git pull --rebase origin main
+            git push
+          fi

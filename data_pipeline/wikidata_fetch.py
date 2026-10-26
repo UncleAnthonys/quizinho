@@ -1,117 +1,230 @@
-"""Fetch player → club career data from Wikidata (CC0, free for commercial use).
+"""Download raw footballer data from Wikidata (CC0 — free for commercial use).
 
-    pip install requests
-    python3 data_pipeline/wikidata_fetch.py --min-sitelinks 40 --out data_pipeline/raw/wikidata_careers.json
+    python3 data_pipeline/wikidata_fetch.py [--min-sitelinks 15]
 
-STATUS: written but not yet run — the build workspace couldn't reach
-query.wikidata.org. Run it locally or in CI; expect to tune the threshold.
+Runs in GitHub Actions (.github/workflows/fetch-data.yml) because the dev
+workspace can't reach query.wikidata.org. Standard library only.
 
-What it pulls, per player (P106 = association football player):
-  * every P54 "member of sports team" statement whose team is an
-    association football club (Q476028), with start (P580), end (P582)
-    and matches played (P1350) qualifiers
-  * sitelink count as a fame proxy (more Wikipedia languages = more famous)
+Writes gzipped JSON to data_pipeline/raw/:
+  players.json.gz  id, name, sitelinks, dob, nationalities, positions,
+                   family names, English aliases, IPA pronunciations
+  spells.json.gz   every P54 "member of sports team" statement for those
+                   players, with start/end, apps, goals, acquisition type
+  clubs.json.gz    every team referenced: label, aliases, types (P31),
+                   country, sitelinks
 
-What the next step (normalise.py, Phase 2) must do with it:
-  * drop youth / reserve / B teams (label filter below is a first pass)
-  * drop spells with P1350 == 0 (signed but never played)
-  * flag spells with no P1350 for review rather than trusting them
-  * map Wikidata clubs to our club IDs + aliases
-  * order spells by start date; mark loans (P54 qualifier P1642 "acquisition
-    transaction" = loan, where present)
-  * write seed/players.json in the same shape as the demo seed, verified=1
+Raw = unfiltered. data_pipeline/normalise.py decides what counts.
+
+Strategy: one small query per sitelinks band to list players (avoids the
+60-second query timeout), then details and spells in batches of ids.
 """
 
 from __future__ import annotations
 
 import argparse
+import gzip
 import json
 import pathlib
-import re
+import sys
 import time
-
-QUERY = """
-SELECT ?player ?playerLabel ?sitelinks ?team ?teamLabel ?start ?end ?apps WHERE {
-  ?player wdt:P106 wd:Q937857 ;
-          wikibase:sitelinks ?sitelinks .
-  FILTER(?sitelinks >= %(min_sitelinks)d)
-  ?player p:P54 ?st .
-  ?st ps:P54 ?team .
-  ?team wdt:P31 wd:Q476028 .
-  OPTIONAL { ?st pq:P580 ?start }
-  OPTIONAL { ?st pq:P582 ?end }
-  OPTIONAL { ?st pq:P1350 ?apps }
-  SERVICE wikibase:label { bd:serviceParam wikibase:language "en". }
-}
-"""
+import urllib.error
+import urllib.parse
+import urllib.request
 
 ENDPOINT = "https://query.wikidata.org/sparql"
-USER_AGENT = "QuizinhoDataPipeline/0.1 (football party game; contact via app support page)"
+UA = "QuizinhoDataPipeline/0.2 (https://github.com/UncleAnthonys/quizinho; football party game)"
+OUT = pathlib.Path(__file__).resolve().parent / "raw"
 
-# First-pass filter for non-senior sides that slip through as "clubs".
-NON_SENIOR = re.compile(
-    r"\b(U-?\d{2}|Under-?\d{2}|II|B|Reserves?|Youth|Academy|Juvenil|Castilla|Atl[eè]tic|Primavera|Jong)\b",
-    re.IGNORECASE,
-)
+# Sitelinks bands queried separately so each list query stays fast.
+BANDS = [(15, 19), (20, 29), (30, 49), (50, 99), (100, 10_000)]
+BATCH = 150
+
+
+def sparql(query: str, tries: int = 6) -> list[dict]:
+    data = urllib.parse.urlencode({"query": query, "format": "json"}).encode()
+    for attempt in range(tries):
+        req = urllib.request.Request(
+            ENDPOINT, data=data,
+            headers={"User-Agent": UA, "Accept": "application/sparql-results+json",
+                     "Content-Type": "application/x-www-form-urlencoded"},
+        )
+        try:
+            with urllib.request.urlopen(req, timeout=120) as r:
+                return json.load(r)["results"]["bindings"]
+        except urllib.error.HTTPError as e:
+            wait = int(e.headers.get("Retry-After", 0) or 0) or 5 * (attempt + 1)
+            print(f"  HTTP {e.code}, retry in {wait}s", flush=True)
+            time.sleep(wait)
+        except (urllib.error.URLError, TimeoutError, json.JSONDecodeError) as e:
+            print(f"  {type(e).__name__}: {e}, retrying", flush=True)
+            time.sleep(5 * (attempt + 1))
+    raise RuntimeError("query failed repeatedly:\n" + query[:400])
 
 
 def qid(uri: str) -> str:
     return uri.rsplit("/", 1)[-1]
 
 
-def year(value: str | None) -> int | None:
-    return int(value[:4]) if value and value[:4].lstrip("-").isdigit() else None
+def val(b: dict, key: str) -> str | None:
+    return b[key]["value"] if key in b else None
 
 
-def main() -> None:
-    import requests  # imported here so --help works without it
+def chunks(xs: list, n: int):
+    for i in range(0, len(xs), n):
+        yield xs[i:i + n]
 
+
+def values(ids: list[str]) -> str:
+    return " ".join(f"wd:{i}" for i in ids)
+
+
+def list_players(lo: int, hi: int) -> dict[str, dict]:
+    rows = sparql(f"""
+SELECT ?p ?pLabel ?sl WHERE {{
+  ?p wdt:P106 wd:Q937857 ; wikibase:sitelinks ?sl .
+  FILTER(?sl >= {lo} && ?sl <= {hi})
+  SERVICE wikibase:label {{ bd:serviceParam wikibase:language "en,mul,es,pt,fr,de,it". }}
+}}""")
+    return {qid(r["p"]["value"]): {"id": qid(r["p"]["value"]), "name": val(r, "pLabel"), "sitelinks": int(val(r, "sl"))}
+            for r in rows}
+
+
+def player_details(players: dict[str, dict]) -> None:
+    ids = list(players)
+    for n, batch in enumerate(chunks(ids, BATCH)):
+        rows = sparql(f"""
+SELECT ?p ?dob ?nat ?pos ?posLabel ?famLabel ?alias ?ipa WHERE {{
+  VALUES ?p {{ {values(batch)} }}
+  OPTIONAL {{ ?p wdt:P569 ?dob }}
+  OPTIONAL {{ ?p wdt:P1532 ?nat }}
+  OPTIONAL {{ ?p wdt:P413 ?pos }}
+  OPTIONAL {{ ?p wdt:P734 ?fam }}
+  OPTIONAL {{ ?p skos:altLabel ?alias FILTER(LANG(?alias) = "en") }}
+  OPTIONAL {{ ?p wdt:P898 ?ipa }}
+  SERVICE wikibase:label {{ bd:serviceParam wikibase:language "en,mul". }}
+}}""")
+        for r in rows:
+            p = players[qid(r["p"]["value"])]
+            if (d := val(r, "dob")):
+                p["dob"] = d[:10]
+            for key, field in (("nat", "nationalities"), ("posLabel", "positions"),
+                               ("famLabel", "family_names"), ("alias", "aliases"), ("ipa", "ipa")):
+                v = val(r, key)
+                if v:
+                    v = qid(v) if key == "nat" else v
+                    lst = p.setdefault(field, [])
+                    if v not in lst:
+                        lst.append(v)
+        if n % 20 == 0:
+            print(f"  details {min((n + 1) * BATCH, len(ids))}/{len(ids)}", flush=True)
+        time.sleep(0.3)
+
+
+def player_spells(ids: list[str]) -> list[dict]:
+    out: dict[str, dict] = {}
+    for n, batch in enumerate(chunks(ids, BATCH)):
+        rows = sparql(f"""
+SELECT ?p ?st ?team ?start ?end ?apps ?goals ?acq WHERE {{
+  VALUES ?p {{ {values(batch)} }}
+  ?p p:P54 ?st . ?st ps:P54 ?team .
+  OPTIONAL {{ ?st pq:P580 ?start }}
+  OPTIONAL {{ ?st pq:P582 ?end }}
+  OPTIONAL {{ ?st pq:P1350 ?apps }}
+  OPTIONAL {{ ?st pq:P1351 ?goals }}
+  OPTIONAL {{ ?st pq:P1642 ?acq }}
+}}""")
+        for r in rows:
+            sid = r["st"]["value"]
+            s = out.setdefault(sid, {
+                "player": qid(r["p"]["value"]), "team": qid(r["team"]["value"]),
+                "start": None, "end": None, "apps": None, "goals": None, "acq": [],
+            })
+            if (v := val(r, "start")):
+                s["start"] = s["start"] or v[:10]
+            if (v := val(r, "end")):
+                s["end"] = s["end"] or v[:10]
+            if (v := val(r, "apps")) and s["apps"] is None:
+                s["apps"] = int(float(v))
+            if (v := val(r, "goals")) and s["goals"] is None:
+                s["goals"] = int(float(v))
+            if (v := val(r, "acq")) and qid(v) not in s["acq"]:
+                s["acq"].append(qid(v))
+        if n % 20 == 0:
+            print(f"  spells {min((n + 1) * BATCH, len(ids))}/{len(ids)}", flush=True)
+        time.sleep(0.3)
+    return list(out.values())
+
+
+def club_info(team_ids: list[str]) -> dict[str, dict]:
+    clubs: dict[str, dict] = {}
+    for n, batch in enumerate(chunks(team_ids, BATCH)):
+        rows = sparql(f"""
+SELECT ?t ?tLabel ?sl ?type ?country ?alias WHERE {{
+  VALUES ?t {{ {values(batch)} }}
+  OPTIONAL {{ ?t wikibase:sitelinks ?sl }}
+  OPTIONAL {{ ?t wdt:P31 ?type }}
+  OPTIONAL {{ ?t wdt:P17 ?country }}
+  OPTIONAL {{ ?t skos:altLabel ?alias FILTER(LANG(?alias) = "en") }}
+  SERVICE wikibase:label {{ bd:serviceParam wikibase:language "en,mul,es,pt,fr,de,it". }}
+}}""")
+        for r in rows:
+            t = clubs.setdefault(qid(r["t"]["value"]), {
+                "id": qid(r["t"]["value"]), "name": val(r, "tLabel"), "sitelinks": 0,
+                "types": [], "country": None, "aliases": [],
+            })
+            if (v := val(r, "sl")):
+                t["sitelinks"] = int(v)
+            if (v := val(r, "type")) and qid(v) not in t["types"]:
+                t["types"].append(qid(v))
+            if (v := val(r, "country")):
+                t["country"] = t["country"] or qid(v)
+            if (v := val(r, "alias")) and v not in t["aliases"]:
+                t["aliases"].append(v)
+        if n % 20 == 0:
+            print(f"  clubs {min((n + 1) * BATCH, len(team_ids))}/{len(team_ids)}", flush=True)
+        time.sleep(0.3)
+    return clubs
+
+
+def save(name: str, obj) -> None:
+    OUT.mkdir(parents=True, exist_ok=True)
+    path = OUT / f"{name}.json.gz"
+    with gzip.open(path, "wt", encoding="utf-8") as f:
+        json.dump(obj, f, ensure_ascii=False, separators=(",", ":"), sort_keys=True)
+    print(f"wrote {path.name} ({path.stat().st_size // 1024} KB)", flush=True)
+
+
+def main() -> int:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--min-sitelinks", type=int, default=40)
-    ap.add_argument("--out", default="data_pipeline/raw/wikidata_careers.json")
+    ap.add_argument("--min-sitelinks", type=int, default=15)
     args = ap.parse_args()
-
     t0 = time.time()
-    r = requests.get(
-        ENDPOINT,
-        params={"query": QUERY % {"min_sitelinks": args.min_sitelinks}, "format": "json"},
-        headers={"User-Agent": USER_AGENT, "Accept": "application/sparql-results+json"},
-        timeout=300,
-    )
-    r.raise_for_status()
-    rows = r.json()["results"]["bindings"]
 
     players: dict[str, dict] = {}
-    dropped = 0
-    for b in rows:
-        team_label = b["teamLabel"]["value"]
-        if NON_SENIOR.search(team_label):
-            dropped += 1
+    for lo, hi in BANDS:
+        if hi < args.min_sitelinks:
             continue
-        pid = qid(b["player"]["value"])
-        p = players.setdefault(pid, {
-            "wikidata_id": pid,
-            "name": b["playerLabel"]["value"],
-            "sitelinks": int(b["sitelinks"]["value"]),
-            "spells": [],
-        })
-        p["spells"].append({
-            "club_wikidata_id": qid(b["team"]["value"]),
-            "club_label": team_label,
-            "start": year(b.get("start", {}).get("value")),
-            "end": year(b.get("end", {}).get("value")),
-            "apps": int(float(b["apps"]["value"])) if "apps" in b else None,
-        })
+        got = list_players(max(lo, args.min_sitelinks), hi)
+        print(f"players with {lo}-{hi} sitelinks: {len(got)}", flush=True)
+        players.update(got)
+    print(f"total players: {len(players)}", flush=True)
 
-    for p in players.values():
-        p["spells"].sort(key=lambda s: (s["start"] is None, s["start"] or 0))
+    player_details(players)
+    spells = player_spells(sorted(players))
+    print(f"spells: {len(spells)}", flush=True)
+    clubs = club_info(sorted({s["team"] for s in spells}))
+    print(f"teams: {len(clubs)}", flush=True)
 
-    out = pathlib.Path(args.out)
-    out.parent.mkdir(parents=True, exist_ok=True)
-    out.write_text(json.dumps(list(players.values()), ensure_ascii=False, indent=1), encoding="utf-8")
-    print(f"{len(players)} players, {len(rows)} rows, {dropped} non-senior spells dropped, "
-          f"{time.time() - t0:.0f}s → {out}")
+    save("players", sorted(players.values(), key=lambda p: p["id"]))
+    save("spells", sorted(spells, key=lambda s: (s["player"], s["start"] or "", s["team"])))
+    save("clubs", sorted(clubs.values(), key=lambda c: c["id"]))
+    (OUT / "FETCHED.txt").write_text(
+        f"fetched {time.strftime('%Y-%m-%d %H:%M UTC', time.gmtime())}; "
+        f"players={len(players)} spells={len(spells)} teams={len(clubs)} "
+        f"min_sitelinks={args.min_sitelinks} took={int(time.time() - t0)}s\n"
+    )
+    return 0
 
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())
