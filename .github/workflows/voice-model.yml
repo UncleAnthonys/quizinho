@@ -18,9 +18,11 @@ jobs:
       - name: Build the model at several sizes
         run: |
           swiftc -O -o probe scripts/voice_model_probe.swift 2>/dev/null
-          for args in "20 0 en-US" "20 0" "20 1" "1000 1" "5000 1" "15000 1" "0 1"; do
+          # The CI Mac only has US English speech assets, so sizes are tested
+          # in en-US (same engine); the phone uses en-GB.
+          for args in "1000 1 en-US" "5000 1 en-US" "15000 1 en-US" "0 0 en-US" "0 1 en-US"; do
             ./probe assets/voice/vocab.json $args 2>&1 | tee -a probe.txt
           done
       - name: Report
         run: |
-          grep -E "^(run|export|prepare)" probe.txt | paste -sd'|' - | fold -w 900 | while IFS= read -r line; do echo "::notice::$line"; done
+          grep -E "^(run|phrases|export|prepare)" probe.txt | paste -sd'|' - | fold -w 900 | while IFS= read -r line; do echo "::notice::$line"; done
