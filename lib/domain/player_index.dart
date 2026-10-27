@@ -165,7 +165,10 @@ class PlayerIndex {
       final answer = isAnswer?.call(e.player) ?? false;
       var s = spelt;
       if (whole.length >= 3 && e.sounds.contains(whole)) {
-        s = s < 95 ? 95 : s; // whole name sounds right: "david louise" = David Luiz
+        // Whole name sounds right: "david louise" = David Luiz. One word that
+        // only sounds like a one-word nickname is no surer than a surname.
+        final sure = words.length >= 2 ? 95.0 : 90.0;
+        s = s < sure ? sure : s;
       } else if (words.length >= 2 && wordKeys.every((k) => k.length >= 2 && e.tokenSounds.contains(k))) {
         s = s < 93 ? 93 : s; // every word sounds like part of the name
       } else if (whole.length >= 3 && e.surnameSounds.contains(whole)) {
