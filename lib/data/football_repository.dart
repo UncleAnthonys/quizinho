@@ -36,19 +36,19 @@ abstract class FootballRepository {
   Future<List<ClubConnection>> allClubConnections({int eras = Era.allMask, int genders = 1});
 }
 
-/// Applies difficulty and eras with a graceful fallback, so a game never
-/// stalls or repeats: chosen eras + difficulty → chosen eras, any difficulty →
-/// any era at the difficulty → anything fresh. The men's/women's choice is
-/// never widened: women's-only never serves a men's question.
+/// Applies difficulty and eras with a graceful fallback so a game doesn't
+/// stall: chosen eras + difficulty → chosen eras, easier levels → any era at
+/// the difficulty → any era, easier. Never harder than the chosen difficulty,
+/// and the men's/women's choice is never widened.
 class ChallengeSource {
   ChallengeSource(this.repo);
   final FootballRepository repo;
 
   Future<T?> _widen<T>(Difficulty d, int eras, Future<T?> Function(Set<int>? levels, int eras) pick) async =>
       await pick(d.allowedLevels, eras) ??
-      await pick(null, eras) ??
+      await pick(d.atMostLevels, eras) ??
       await pick(d.allowedLevels, Era.allMask) ??
-      await pick(null, Era.allMask);
+      await pick(d.atMostLevels, Era.allMask);
 
   Future<ClubConnection?> clubConnection(Difficulty d, Set<String> used, {int eras = Era.allMask, int genders = 1}) =>
       _widen(d, eras, (l, e) => repo.pickClubConnection(levels: l, exclude: used, eras: e, genders: genders));

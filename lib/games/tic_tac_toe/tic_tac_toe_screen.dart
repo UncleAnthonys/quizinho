@@ -58,7 +58,7 @@ class _TicTacToeScreenState extends State<TicTacToeScreen>
     TicTacToeGrid? make(List<ClubConnection> conns, {bool strict = true}) => generateTicTacToeGrid(conns,
         random: rnd,
         minFame: minFame,
-        maxLevel: strict ? maxLevel : 4,
+        maxLevel: maxLevel, // never harder pairs than the chosen difficulty
         minKnownAnswers: strict ? known : 0,
         answerFame: fame,
         avoid: used);

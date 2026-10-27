@@ -1,8 +1,10 @@
+import 'dart:io';
 import 'dart:math';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:quizinho/data/football_repository.dart';
 import 'package:quizinho/data/in_memory_football_repository.dart';
+import 'package:quizinho/data/json_football_repository.dart';
 import 'package:quizinho/data/models.dart';
 import 'package:quizinho/domain/game_mode.dart';
 import 'package:quizinho/domain/tournament.dart';
@@ -81,10 +83,26 @@ void main() {
     expect(await source.clubConnection(Difficulty.medium, t.usedIds(GameModeId.clubConnections)), isNull);
   });
 
-  test('difficulty falls back to any level rather than stalling', () async {
+  test('difficulty falls back to easier levels rather than stalling', () async {
     final repo = InMemoryFootballRepository(players: allPlayers, connections: [arsenalBarca()]); // level 1 only
     final q = await ChallengeSource(repo).clubConnection(Difficulty.expert, {});
     expect(q?.id, arsenalBarca().id);
+  });
+
+  test('never serves anything harder than the chosen difficulty', () async {
+    final repo = parseFootballJson(File('assets/db/football.json').readAsStringSync());
+    final source = ChallengeSource(repo);
+    final used = <String>{};
+    for (var i = 0; i < 200; i++) {
+      final m = await source.match(Difficulty.medium, used);
+      if (m == null) break;
+      used.add(m.id);
+      expect(m.difficulty, lessThanOrEqualTo(2), reason: m.id);
+    }
+    for (var i = 0; i < 50; i++) {
+      final c = await source.careerPath(Difficulty.easy, {});
+      expect(c!.difficulty, 1);
+    }
   });
 }
 

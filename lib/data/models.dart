@@ -15,14 +15,17 @@ enum Difficulty {
   final int level;
   final String label;
 
-  /// Challenge difficulty levels that may be served at this setting.
-  /// Overlapping bands keep the pool large on a small database.
+  /// Challenge difficulty levels served at this setting. Expert is the
+  /// hardest level only; nothing harder than the setting is ever served.
   Set<int> get allowedLevels => switch (this) {
         Difficulty.easy => {1},
         Difficulty.medium => {1, 2},
         Difficulty.hard => {2, 3},
-        Difficulty.expert => {3, 4},
+        Difficulty.expert => {4},
       };
+
+  /// Fallback when the chosen levels run dry: this level or anything easier.
+  Set<int> get atMostLevels => {for (var l = 1; l <= allowedLevels.reduce(max); l++) l};
 
   static Difficulty fromName(String? name) =>
       Difficulty.values.firstWhere((d) => d.name == name, orElse: () => Difficulty.medium);
