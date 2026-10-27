@@ -67,7 +67,7 @@ class InMemoryFootballRepository implements FootballRepository {
       for (final m in matches)
         if (!exclude.contains(m.id) && (levels == null || levels.contains(m.difficulty)) && (m.eras & eras) != 0) m
     ];
-    return options.isEmpty ? null : HistoricMatch.weightedPick(options, (m) => m.weight, _random);
+    return options.isEmpty ? null : HistoricMatch.weightedPick<HistoricMatch>(options, (m) => m.weight, _random);
   }
 
   @override
