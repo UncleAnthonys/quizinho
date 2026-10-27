@@ -15,8 +15,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: sw_vers && swift --version
-      - name: Build the model
-        run: swift scripts/voice_model_probe.swift assets/voice/vocab.json 2>&1 | tee probe.txt
+      - name: Build the model at several sizes
+        run: |
+          swiftc -O -o probe scripts/voice_model_probe.swift 2>/dev/null
+          for args in "20 0 en-US" "20 0" "20 1" "1000 1" "5000 1" "15000 1" "0 1"; do
+            ./probe assets/voice/vocab.json $args 2>&1 | tee -a probe.txt
+          done
       - name: Report
         run: |
-          grep -E "^(phrases|unsupported|export|prepare)" probe.txt | while IFS= read -r line; do echo "::notice::${line:0:900}"; done
+          grep -E "^(run|export|prepare)" probe.txt | paste -sd'|' - | fold -w 900 | while IFS= read -r line; do echo "::notice::$line"; done

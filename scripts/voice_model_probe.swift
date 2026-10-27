@@ -8,9 +8,15 @@ func now() -> Double { Date().timeIntervalSince1970 }
 
 let vocabPath = CommandLine.arguments.count > 1 ? CommandLine.arguments[1] : "assets/voice/vocab.json"
 let doc = try JSONSerialization.jsonObject(with: Data(contentsOf: URL(fileURLWithPath: vocabPath))) as! [String: Any]
-let phrases = doc["phrases"] as! [[Any]]
-let prons = doc["pronunciations"] as! [String: [String]]
-let locale = Locale(identifier: doc["locale"] as? String ?? "en-GB")
+// Optional: how many phrases to use (0 = all), whether to add pronunciations, locale override.
+let limit = CommandLine.arguments.count > 2 ? Int(CommandLine.arguments[2]) ?? 0 : 0
+let withProns = CommandLine.arguments.count > 3 ? CommandLine.arguments[3] != "0" : true
+let allPhrases = doc["phrases"] as! [[Any]]
+let phrases = limit > 0 ? Array(allPhrases.prefix(limit)) : allPhrases
+let words = Set(phrases.flatMap { ($0[0] as! String).split(separator: " ").map(String.init) })
+let prons = withProns ? (doc["pronunciations"] as! [String: [String]]).filter { words.contains($0.key) } : [:]
+let locale = Locale(identifier: CommandLine.arguments.count > 4 ? CommandLine.arguments[4] : doc["locale"] as? String ?? "en-GB")
+print("run: phrases=\(phrases.count) prons=\(withProns) locale=\(locale.identifier)")
 
 let supported = SFCustomLanguageModelData.supportedPhonemes(locale: locale)
 print("supported phonemes (\(supported.count)): \(supported.joined(separator: " "))")
@@ -62,5 +68,5 @@ do {
   }
   print(String(format: "prepare: %.1fs, model on disk %.2f MB", t2 - t1, Double(total) / 1_048_576))
 } catch {
-  print("prepare failed: \(error)")
+  print("prepare failed: \((error as NSError).code) \(error.localizedDescription.prefix(60)) \((error as NSError).userInfo[NSUnderlyingErrorKey] ?? "")")
 }
