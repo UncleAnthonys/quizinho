@@ -570,11 +570,12 @@ def write_db(path: pathlib.Path, version: int, clubs, players, matches, connecti
         con.executemany("INSERT INTO career_spells VALUES (?,?,?,?,?,?)",
                         [(pid, s["seq"], s["club"], s["start"], s["end"], int(s["loan"])) for s in p["spells"]])
     for m in matches:
-        # A match with a "source" URL was checked against that match report.
+        # Verified = the XI agrees across two independent sources.
+        sources = m.get("sources", [])
         con.execute("INSERT INTO matches VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)",
                     (m["id"], m["title"], m["competition"], m["date"], m["home"], m["away"],
                      m["score"], m["target"], m["fame"], match_difficulty(m["fame"]),
-                     1 if m.get("source") else 0, m.get("source", "demo_seed"), match_eras(m)))
+                     1 if len(sources) >= 2 else 0, " | ".join(sources) or "demo_seed", match_eras(m)))
         con.executemany("INSERT INTO lineup_slots VALUES (?,?,?,?)",
                         [(m["id"], i, pid, pos) for i, (pid, _n, pos) in enumerate(m["xi"])])
     for c in connections:
