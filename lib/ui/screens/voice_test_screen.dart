@@ -89,7 +89,7 @@ class _VoiceTestScreenState extends State<VoiceTestScreen> {
       _live = '';
       _last = null;
     });
-    final started = await _s.voice.listen(
+    final started = await _s.voice?.listen(
       onWords: (w) => setState(() => _live = w),
       onDone: (alts) {
         if (!mounted) return;
@@ -101,7 +101,7 @@ class _VoiceTestScreenState extends State<VoiceTestScreen> {
         });
       },
     );
-    if (!started && mounted) {
+    if (started != true && mounted) {
       setState(() => _listening = false);
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
           content: Text('Voice isn’t available — turn on Voice answers in Settings and allow the microphone.')));
@@ -109,7 +109,7 @@ class _VoiceTestScreenState extends State<VoiceTestScreen> {
   }
 
   void _next() {
-    _s.voice.stop();
+    _s.voice?.stop();
     setState(() {
       _index++;
       _live = '';
@@ -138,7 +138,7 @@ class _VoiceTestScreenState extends State<VoiceTestScreen> {
 
   @override
   void dispose() {
-    _s.voice.stop();
+    _s.voice?.stop();
     super.dispose();
   }
 
