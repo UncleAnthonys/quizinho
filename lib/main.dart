@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -19,7 +21,11 @@ Future<void> main() async {
     final repo = await openFootballRepository();
     final sound = SoundService(settings);
     await sound.init();
-    runApp(QuizinhoApp(services: AppServices(repo: repo, settings: settings, sound: sound, voice: VoiceService(settings))));
+    final voice = VoiceService(settings);
+    // iPhone: build the player-name voice model in the background while
+    // people set up teams; it's kept on the phone afterwards.
+    if (settings.voiceOn) unawaited(voice.prepareModel());
+    runApp(QuizinhoApp(services: AppServices(repo: repo, settings: settings, sound: sound, voice: voice)));
   } catch (e, st) {
     debugPrint('Startup failed: $e\n$st');
     runApp(_StartupError(error: '$e'));

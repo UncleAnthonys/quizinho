@@ -26,10 +26,21 @@ class VoiceService {
   /// Voice is on in settings and the device hasn't said no.
   bool get enabled => _settings.voiceOn && _available != false;
 
-  /// Builds the player-name model in the background (iPhone only). Safe to
-  /// call repeatedly; the first build after install takes a while.
-  Future<String> prepareModel() =>
-      _model ??= _native?.prepareModel().catchError((Object e) => 'failed: $e') ?? Future.value('not used here');
+  /// Builds the player-name model in the background (iPhone only). Called at
+  /// launch; safe to call repeatedly. Built once per install or data update,
+  /// then kept on the phone. Until it's ready, voice still works, just
+  /// without the player-name boost. A failed build is retried next call.
+  Future<String> prepareModel() {
+    final n = _native;
+    if (n == null) return Future.value('not used here');
+    return _model ??= n.prepareModel().then((s) {
+      if (s.startsWith('failed')) _model = null;
+      return s;
+    }, onError: (Object e) {
+      _model = null;
+      return 'failed: $e';
+    });
+  }
 
   /// What the recogniser is doing, for the voice test report.
   Future<String> describe() async {

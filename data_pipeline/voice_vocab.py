@@ -70,6 +70,13 @@ _IPA = {
     "q": "k", "ʝ": "j", "ɬ": "l", "ɭ": "l", "ɳ": "n", "ʈ": "t", "ɖ": "d", "ɰ": "w", "ɥ": "w",
 }
 _KEYS = sorted(_IPA, key=len, reverse=True)
+
+# Apple's en-GB set (SFCustomLanguageModelData.supportedPhonemes, read on a
+# Mac by scripts/voice_model_probe.swift): no length marks, E for e, r\ for r.
+APPLE_EN_GB = {"i:": "i", "u:": "u", "A:": "A", "O:": "O", "3:": "3", "e": "E", "e@": "E@", "r": "r\\"}
+APPLE_EN_GB_SET = set(
+    ". Z j w v @ V 3 S n k l I h g f E i d b O Q A I@ m= z N aU OI @U dZ @r eI U@ E@ U tS T m { D l= n= aI "
+    "s u p t r\\".split())
 _DROP = set("ˈˌ.ʔ‿-ː̯͡ˑ̩ʰʲʷ̪̥̬ˠ ?#^") | {"̃", "̧", "̝", "̊"}
 
 
@@ -91,6 +98,8 @@ def ipa_to_xsampa(ipa: str) -> tuple[str, set[str]]:
             if s[i] not in _DROP:
                 unknown.add(s[i])
             i += 1
+    out = [APPLE_EN_GB.get(x, x) for x in " ".join(out).split()]
+    unknown |= {x for x in out if x not in APPLE_EN_GB_SET}
     return " ".join(out), unknown
 
 

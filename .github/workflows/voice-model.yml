@@ -19,4 +19,4 @@ jobs:
         run: swift scripts/voice_model_probe.swift assets/voice/vocab.json 2>&1 | tee probe.txt
       - name: Report
         run: |
-          while IFS= read -r line; do echo "::notice::${line:0:900}"; done < probe.txt
+          grep -E "^(phrases|unsupported|export|prepare)" probe.txt | while IFS= read -r line; do echo "::notice::${line:0:900}"; done
