@@ -61,8 +61,14 @@ class InMemoryFootballRepository implements FootballRepository {
 
   @override
   Future<HistoricMatch?> pickMatch(
-          {Set<int>? levels, Set<String> exclude = const {}, int eras = Era.allMask, int genders = 1}) async =>
-      _pick(matches, (m) => m.id, (m) => m.difficulty, (m) => m.eras, levels, exclude, eras, (m) => false, genders);
+          {Set<int>? levels, Set<String> exclude = const {}, int eras = Era.allMask, int genders = 1}) async {
+    if (!FootballGender.allows(genders, false)) return null; // line-ups are men's only so far
+    final options = [
+      for (final m in matches)
+        if (!exclude.contains(m.id) && (levels == null || levels.contains(m.difficulty)) && (m.eras & eras) != 0) m
+    ];
+    return options.isEmpty ? null : HistoricMatch.weightedPick(options, (m) => m.weight, _random);
+  }
 
   @override
   Future<BiddingCategory?> pickBiddingCategory(

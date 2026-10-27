@@ -57,7 +57,8 @@ CREATE TABLE matches (
   home TEXT NOT NULL, away TEXT NOT NULL, score TEXT, target_team TEXT NOT NULL,
   fame INTEGER NOT NULL, difficulty INTEGER NOT NULL,
   verified INTEGER NOT NULL DEFAULT 0, source TEXT NOT NULL,
-  eras INTEGER NOT NULL
+  eras INTEGER NOT NULL,
+  weight REAL NOT NULL DEFAULT 1  -- how often it comes up: classics 1, newer 0.5, obscure 0.2
 );
 CREATE TABLE lineup_slots (
   match_id TEXT NOT NULL REFERENCES matches(id), slot INTEGER NOT NULL,
@@ -572,10 +573,11 @@ def write_db(path: pathlib.Path, version: int, clubs, players, matches, connecti
     for m in matches:
         # Verified = the XI agrees across two independent sources.
         sources = m.get("sources", [])
-        con.execute("INSERT INTO matches VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)",
+        con.execute("INSERT INTO matches VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
                     (m["id"], m["title"], m["competition"], m["date"], m["home"], m["away"],
                      m["score"], m["target"], m["fame"], match_difficulty(m["fame"]),
-                     1 if len(sources) >= 2 else 0, " | ".join(sources) or "demo_seed", match_eras(m)))
+                     1 if len(sources) >= 2 else 0, " | ".join(sources) or "demo_seed", match_eras(m),
+                     m.get("weight", 1)))
         con.executemany("INSERT INTO lineup_slots VALUES (?,?,?,?)",
                         [(m["id"], i, pid, pos) for i, (pid, _n, pos) in enumerate(m["xi"])])
     for c in connections:
@@ -628,7 +630,8 @@ def write_json(path: pathlib.Path, version: int, clubs, players, matches, connec
         "matches": [
             {"id": m["id"], "title": m["title"], "competition": m["competition"], "date": m["date"],
              "home": m["home"], "away": m["away"], "score": m["score"], "target": m["target"],
-             "difficulty": match_difficulty(m["fame"]), "eras": match_eras(m), "xi": m["xi"]}
+             "difficulty": match_difficulty(m["fame"]), "eras": match_eras(m), "weight": m.get("weight", 1),
+             "xi": m["xi"]}
             for m in matches
         ],
     }

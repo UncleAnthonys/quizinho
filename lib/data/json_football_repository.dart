@@ -112,6 +112,7 @@ InMemoryFootballRepository parseFootballJson(String source) {
           targetTeam: m['target'] as String,
           difficulty: m['difficulty'] as int,
           eras: (m['eras'] as int?) ?? Era.allMask,
+          weight: ((m['weight'] as num?) ?? 1).toDouble(),
           lineup: [
             for (final (i, s) in (m['xi'] as List).indexed)
               LineupSlot(

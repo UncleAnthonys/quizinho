@@ -254,9 +254,9 @@ class SqliteFootballRepository implements FootballRepository {
       {Set<int>? levels, Set<String> exclude = const {}, int eras = Era.allMask, int genders = 1}) async {
     if (!FootballGender.allows(genders, false)) return null; // line-ups are men's only so far
     final (where, args) = _filter('id', levels, exclude, eras);
-    final rows = await _db.rawQuery('SELECT * FROM matches $where ORDER BY RANDOM() LIMIT 1', args);
+    final rows = await _db.rawQuery('SELECT * FROM matches $where', args);
     if (rows.isEmpty) return null;
-    final m = rows.first;
+    final m = HistoricMatch.weightedPick(rows, (r) => (r['weight'] as num).toDouble(), _random);
     final id = m['id'] as String;
     final slots = await _db.rawQuery(
       'SELECT slot, player_id, position FROM lineup_slots WHERE match_id = ? ORDER BY slot',
@@ -274,6 +274,7 @@ class SqliteFootballRepository implements FootballRepository {
       difficulty: m['difficulty'] as int,
       verified: (m['verified'] as int) == 1,
       eras: m['eras'] as int,
+      weight: (m['weight'] as num).toDouble(),
       lineup: [
         for (final s in slots)
           LineupSlot(

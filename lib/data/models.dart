@@ -300,6 +300,7 @@ class HistoricMatch {
     required this.difficulty,
     this.verified = false,
     this.eras = Era.allMask,
+    this.weight = 1,
   });
 
   final String id;
@@ -319,5 +320,20 @@ class HistoricMatch {
   /// Era bit flag of the match date.
   final int eras;
 
+  /// How often it comes up relative to others: the classics are 1, newer
+  /// additions 0.5, obscure sides 0.2 — so they're sprinkled in, not the norm.
+  final double weight;
+
   int get year => int.tryParse(date.split('-').first) ?? 0;
+
+  /// Random pick where each item's chance is proportional to [weight].
+  static T weightedPick<T>(List<T> items, double Function(T) weight, Random random) {
+    final total = items.fold<double>(0, (a, x) => a + weight(x));
+    var r = random.nextDouble() * total;
+    for (final x in items) {
+      r -= weight(x);
+      if (r < 0) return x;
+    }
+    return items.last;
+  }
 }
