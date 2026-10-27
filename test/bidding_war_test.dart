@@ -209,8 +209,9 @@ void main() {
     final b = await repo.pickBiddingCategory(levels: {1});
     expect(b, isNotNull);
     expect(b!.answerIds.length, inInclusiveRange(5, 35));
+    final index = b.answersAreClubs ? repo.clubIndex : repo.players; // club categories answer with clubs
     for (final id in b.answerIds) {
-      expect(repo.players.byId(id), isNotNull);
+      expect(index.byId(id), isNotNull, reason: '${b.id}: $id');
     }
   });
 }
