@@ -308,7 +308,7 @@ class BuzzGameView extends StatelessWidget {
               voice: services.voice,
               accent: Palette.team(colour),
               onPick: c.submit,
-              isAnswer: c.isCorrect,
+              isAnswer: c.isRightAnswer,
               onPass: c.pass,
               onDisputed: allowDispute ? (_, allowed) => c.submitDisputed(allowed: allowed) : null,
             ),

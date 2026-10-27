@@ -80,6 +80,9 @@ abstract class BuzzRaceController<Q> extends ChangeNotifier {
   @protected
   bool isCorrect(Player p);
 
+  /// For the answer box: would [p] be a right answer right now?
+  bool isRightAnswer(Player p) => isCorrect(p);
+
   /// Points for a correct answer right now, and whether it earned a bonus.
   @protected
   (int, bool) pointsFor(Player p);
