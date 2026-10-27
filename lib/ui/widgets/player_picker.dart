@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../core/flags.dart';
 import '../../core/theme.dart';
 import '../../core/voice_service.dart';
 import '../../data/models.dart';
@@ -301,12 +302,13 @@ class _PlayerPickerState extends State<PlayerPicker> {
                       child: Text(r.player.name, style: AppText.headline(24, weight: FontWeight.w800)),
                     ),
                   ),
-                  // Tells namesakes apart (Luis Suárez URU · ST vs Denis Suárez ESP · CM).
-                  Text(
-                    [if (r.player.nationality != null) r.player.nationality!, if (r.player.position != null) r.player.position!]
-                        .join(' · '),
-                    style: AppText.label(14),
-                  ),
+                  // Tells namesakes apart at a glance (Luis Suárez 🇺🇾 ST vs Denis Suárez 🇪🇸 CM).
+                  if (r.player.position != null) Text(r.player.position!, style: AppText.label(14)),
+                  if (nationalityLabel(r.player.nationality) case final flag?)
+                    Padding(
+                      padding: const EdgeInsets.only(left: 8),
+                      child: Text(flag, style: TextStyle(fontSize: flagFor(r.player.nationality) != null ? 26 : 14)),
+                    ),
                 ]),
               ),
             ),
