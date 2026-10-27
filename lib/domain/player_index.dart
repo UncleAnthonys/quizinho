@@ -72,6 +72,7 @@ class PlayerIndex {
         {for (final t in soundTokens) soundKey(t)}..removeWhere((k) => k.length < 2),
         surnames,
         {for (final s in soundSurnames) soundKey(s)}..removeWhere((k) => k.length < 3),
+        {for (final n in soundNames) if (n.contains(' ')) soundKey(n.split(' ').first)}..remove(''),
       ));
       _byId[p.id] = p;
     }
@@ -161,6 +162,7 @@ class PlayerIndex {
     final hits = <PlayerMatch>[];
     for (final e in _entries) {
       final spelt = _score(e, q);
+      final answer = isAnswer?.call(e.player) ?? false;
       var s = spelt;
       if (whole.length >= 3 && e.sounds.contains(whole)) {
         s = s < 95 ? 95 : s; // whole name sounds right: "david louise" = David Luiz
@@ -168,9 +170,18 @@ class PlayerIndex {
         s = s < 93 ? 93 : s; // every word sounds like part of the name
       } else if (whole.length >= 3 && e.surnameSounds.contains(whole)) {
         s = s < 90 ? 90 : s; // surname alone sounds right, even heard as two words ("order guard")
+      } else if (answer && words.length >= 2 && words.length <= 4) {
+        // The right answer, heard badly — but only if the first name roughly fits too:
+        // "Pneumonia Vidić" (surname spot on) or "Martin Audiard" (close all through).
+        final leads = [wordKeys.first, soundKey(words.sublist(0, words.length - 1).join(' '))];
+        final firstFits = leads.any((l) => e.firstSounds.any((f) => similarity(l, f) >= 0.5));
+        if (firstFits && wordKeys.last.length >= 3 && e.surnameSounds.contains(wordKeys.last)) {
+          s = s < 90 ? 90 : s;
+        } else if (firstFits && whole.length >= 4 && e.sounds.any((k) => similarity(whole, k) >= 0.75)) {
+          s = s < 88 ? 88 : s;
+        }
       }
       if (s > 0) {
-        final answer = isAnswer?.call(e.player) ?? false;
         hits.add(PlayerMatch(e.player, s + e.player.fame * 2 + (answer ? 20 : 0),
             base: s, exact: spelt >= 92, answer: answer));
       }
@@ -206,7 +217,9 @@ class PlayerIndex {
       if (answers.length == 1 && !saidSomeoneElse) return answers.first.player;
       if (answers.length > 1 || others.isEmpty) continue;
       final top = others.first;
-      if (!top.exact || words > 4 || (partial && top.base < 100)) continue;
+      // A wrong answer needs the name really said: exactly, or the full name
+      // sounding right word for word ("Virgil van Dyke") — never a lone sound-alike.
+      if (!(top.exact || top.base >= 93) || words > 4 || (partial && top.base < 100)) continue;
       if (others.length > 1 && others[1].score >= top.score - 6) continue;
       return top.player;
     }
@@ -243,7 +256,8 @@ class PlayerIndex {
 }
 
 class _Entry {
-  _Entry(this.player, this.keys, this.tokens, this.sounds, this.tokenSounds, this.surnames, this.surnameSounds);
+  _Entry(this.player, this.keys, this.tokens, this.sounds, this.tokenSounds, this.surnames, this.surnameSounds,
+      this.firstSounds);
   final Player player;
   final List<String> keys;
   final List<String> tokens;
@@ -253,4 +267,7 @@ class _Entry {
   final Set<String> tokenSounds;
   final Set<String> surnames;
   final Set<String> surnameSounds;
+
+  /// Sound keys of first names (for judging a half-heard right answer).
+  final Set<String> firstSounds;
 }

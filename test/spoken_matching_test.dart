@@ -38,6 +38,26 @@ void main() {
     expect(index.resolveSpoken(['ibrahimovich'], isAnswer: answerIs('zlatan'))?.id, 'zlatan');
   });
 
+  test('real phone mishearings of the right answer go in', () {
+    final repo = parseFootballJson(File('assets/db/football.json').readAsStringSync());
+    for (final (heard, id) in const [
+      ('Voyce Chesney', 'wojciech-szczesny'), ('Martin Audiard', 'martin-odegaard'), ('Do Sam Tadić', 'dusan-tadic'),
+      ('Pneumonia Vidić', 'nemanja-vidic'), ('Diane Loughran', 'dejan-lovren'), ('Pet check', 'petr-cech'),
+      ('Golo Cante', 'ngolo-kante'), ('Olivia are rude', 'olivier-giroud'), ('Frankie Deon', 'frenkie-de-jong'),
+      ('Busting shrine Steiger', 'bastian-schweinsteiger'), ('Tia Marie', 'thierry-henry'),
+    ]) {
+      expect(repo.players.resolveSpoken([heard], isAnswer: (p) => p.id == id)?.id, id, reason: heard);
+    }
+  });
+
+  test('a clear full name counts as a wrong answer; a lone sound-alike does not', () {
+    final repo = parseFootballJson(File('assets/db/football.json').readAsStringSync());
+    bool kane(Player p) => p.id == 'harry-kane';
+    expect(repo.players.resolveSpoken(['Virgil van Dyke'], isAnswer: kane)?.id, 'virgil-van-dijk');
+    expect(repo.players.resolveSpoken(['Golo Cante'], isAnswer: kane), isNull);
+    expect(repo.players.resolveSpoken(['Chesney'], isAnswer: kane), isNull);
+  });
+
   test('a sound-alike of a wrong player is never auto-submitted', () {
     // Shows the list to tap instead, so chatter can't cost a life.
     expect(index.resolveSpoken(['david louise'], isAnswer: answerIs('thierry-henry')), isNull);

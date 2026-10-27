@@ -1,4 +1,25 @@
 {
   "_note": "Extra ways a player's name is heard, from real voice tests: player_id -> what the phone wrote down. Added to the automatic respellings in data_pipeline/spoken.py.",
-  "players": {}
+  "players": {
+    "thierry-henry": [
+      "tia marie"
+    ],
+    "mesut-ozil": [
+      "mazel"
+    ],
+    "aurelien-tchouameni": [
+      "a really too many",
+      "really too many"
+    ],
+    "ilkay-gundogan": [
+      "oka guan"
+    ],
+    "ole-gunnar-solskjaer": [
+      "are you gonna sell shower",
+      "gonna sell shower"
+    ],
+    "giorgio-chiellini": [
+      "giorgio keeney"
+    ]
+  }
 }
