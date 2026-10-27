@@ -48,3 +48,23 @@ jobs:
           name: quizinho-debug-apk
           path: build/app/outputs/flutter-apk/app-debug.apk
           retention-days: 7
+
+  # Compiles the iPhone app (unsigned) so native Swift errors show up here,
+  # not in a TestFlight build.
+  ios:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - name: Platform folders (if not committed yet)
+        run: bash scripts/bootstrap_platforms.sh
+
+      - run: flutter pub get
+
+      - name: Build iOS (no signing)
+        run: flutter build ios --release --no-codesign

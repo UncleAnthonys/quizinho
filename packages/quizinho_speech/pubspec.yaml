@@ -1,0 +1,18 @@
+name: quizinho_speech
+description: "Quizinho's own iOS speech recogniser: Apple on-device recognition with a custom language model of every player's name."
+version: 0.1.0
+publish_to: 'none'
+
+environment:
+  sdk: '>=3.5.0 <4.0.0'
+  flutter: '>=3.22.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+flutter:
+  plugin:
+    platforms:
+      ios:
+        pluginClass: QuizinhoSpeechPlugin

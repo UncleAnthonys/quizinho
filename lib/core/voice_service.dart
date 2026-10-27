@@ -1,25 +1,60 @@
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
+import 'package:quizinho_speech/quizinho_speech.dart';
 import 'package:speech_to_text/speech_recognition_result.dart';
 import 'package:speech_to_text/speech_to_text.dart';
 
 import 'app_settings.dart';
 
-/// Spoken answers via the device's own speech recogniser (Apple Speech on
-/// iOS, Google on Android, the Web Speech API in Chrome/Safari). No server,
-/// no per-use cost. Every failure degrades to "type it instead".
+/// Spoken answers via the device's own speech recogniser. On iPhone that's
+/// Quizinho's own recogniser (Apple on-device speech taught every player's
+/// name — see packages/quizinho_speech); elsewhere Google on Android or the
+/// Web Speech API in browsers. No server, no per-use cost. Every failure
+/// degrades to "type it instead".
 class VoiceService {
   VoiceService(this._settings);
 
   final AppSettings _settings;
   final SpeechToText _stt = SpeechToText();
+  final QuizinhoSpeech? _native = QuizinhoSpeech.supported ? QuizinhoSpeech() : null;
+  StreamSubscription<SpeechEvent>? _nativeSub;
+  Future<String>? _model;
   bool? _available;
   VoidCallback? _onStopped;
 
   /// Voice is on in settings and the device hasn't said no.
   bool get enabled => _settings.voiceOn && _available != false;
 
+  /// Builds the player-name model in the background (iPhone only). Safe to
+  /// call repeatedly; the first build after install takes a while.
+  Future<String> prepareModel() =>
+      _model ??= _native?.prepareModel().catchError((Object e) => 'failed: $e') ?? Future.value('not used here');
+
+  /// What the recogniser is doing, for the voice test report.
+  Future<String> describe() async {
+    final n = _native;
+    if (n == null) return kIsWeb ? 'browser speech' : 'system speech';
+    try {
+      final s = await n.status();
+      return [for (final e in s.entries) '${e.key}: ${e.value}'].join('\n');
+    } catch (e) {
+      return 'status failed: $e';
+    }
+  }
+
   Future<bool> _init() async {
     if (_available != null) return _available!;
+    if (_native case final n?) {
+      try {
+        _available = await n.authorize();
+      } catch (e) {
+        debugPrint('Speech unavailable: $e');
+        _available = false;
+      }
+      if (_available!) unawaited(prepareModel());
+      return _available!;
+    }
     try {
       _available = await _stt.initialize(
         onError: (e) => debugPrint('Speech error: ${e.errorMsg}'),
@@ -51,6 +86,28 @@ class VoiceService {
       finished = true;
       _onStopped = null;
       onDone(alts);
+    }
+
+    if (_native case final n?) {
+      await _nativeSub?.cancel();
+      _nativeSub = n.events.listen((e) {
+        switch (e) {
+          case SpeechPartial(:final text):
+            if (!finished) onWords(text);
+          case SpeechFinal(:final alternatives):
+            _nativeSub?.cancel();
+            _nativeSub = null;
+            finish(alternatives);
+        }
+      });
+      try {
+        return await n.listen();
+      } catch (e) {
+        debugPrint('Speech listen failed: $e');
+        await _nativeSub?.cancel();
+        _nativeSub = null;
+        return false;
+      }
     }
 
     _onStopped = () => finish(last.trim().isEmpty ? const [] : [last]);
@@ -86,6 +143,12 @@ class VoiceService {
 
   void stop() {
     _onStopped = null;
+    if (_native case final n?) {
+      _nativeSub?.cancel();
+      _nativeSub = null;
+      n.cancel().catchError((Object _) {});
+      return;
+    }
     try {
       _stt.cancel();
     } catch (_) {}

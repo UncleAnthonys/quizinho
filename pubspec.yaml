@@ -15,6 +15,8 @@ dependencies:
   shared_preferences: ^2.3.2
   sensors_plus: ^6.1.0
   speech_to_text: ^7.0.0
+  quizinho_speech:
+    path: packages/quizinho_speech
 
 dev_dependencies:
   flutter_test:
@@ -28,6 +30,7 @@ flutter:
     - assets/db/
     - assets/sounds/
     - assets/packs/
+    - assets/voice/
 
   fonts:
     - family: BarlowCondensed

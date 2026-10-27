@@ -58,6 +58,7 @@ class _VoiceTestScreenState extends State<VoiceTestScreen> {
   bool _listening = false;
   String _live = '';
   _Result? _last;
+  String _model = '';
 
   late AppServices _s;
   bool _ready = false;
@@ -72,6 +73,17 @@ class _VoiceTestScreenState extends State<VoiceTestScreen> {
       for (final id in _testIds)
         if (_s.repo.players.byId(id) case final p?) p,
     ];
+    _loadModel();
+  }
+
+  /// On iPhone, builds the player-name voice model (first time takes a while).
+  Future<void> _loadModel() async {
+    final v = _s.voice;
+    if (v == null) return;
+    _model = 'Preparing player names…';
+    final state = await v.prepareModel();
+    final info = await v.describe();
+    if (mounted) setState(() => _model = state == 'not used here' ? info : 'Player voice model: $state');
   }
 
   Player get _current {
@@ -129,6 +141,7 @@ class _VoiceTestScreenState extends State<VoiceTestScreen> {
     final platform = kIsWeb ? 'web' : defaultTargetPlatform.name;
     final good = _results.where((r) => r.ok).length;
     final b = StringBuffer('Quizinho voice test — $platform — $good/${_results.length} recognised\n');
+    if (_model.isNotEmpty) b.writeln(_model);
     for (final r in _results) {
       b.writeln('${r.ok ? 'OK  ' : 'MISS'} ${r.player.name} [${r.player.id}] | heard: '
           '${r.heard.isEmpty ? '(nothing)' : r.heard.join(' / ')} | as answer: ${r.matched?.name ?? '-'}'
@@ -138,7 +151,8 @@ class _VoiceTestScreenState extends State<VoiceTestScreen> {
   }
 
   Future<void> _copy() async {
-    await Clipboard.setData(ClipboardData(text: _report()));
+    final details = await _s.voice?.describe() ?? '';
+    await Clipboard.setData(ClipboardData(text: '${_report()}\n$details'));
     if (!mounted) return;
     ScaffoldMessenger.of(context)
         .showSnackBar(const SnackBar(content: Text('Results copied — paste them into the chat with Claude.')));
@@ -175,6 +189,10 @@ class _VoiceTestScreenState extends State<VoiceTestScreen> {
             'Then copy the results and paste them to Claude.',
             style: AppText.label(14),
           ),
+          if (_model.isNotEmpty) ...[
+            const SizedBox(height: 8),
+            Text(_model, style: AppText.label(13, color: Palette.muted)),
+          ],
           const SizedBox(height: 8),
           Text('Name ${_index + 1}${_index < _testIds.length ? ' of ${_testIds.length}' : ' (bonus round)'}'
               ' · $good/$done recognised', style: AppText.label(13, color: Palette.yellow)),
