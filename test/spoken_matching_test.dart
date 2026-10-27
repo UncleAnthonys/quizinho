@@ -61,7 +61,7 @@ void main() {
   test('a sound-alike of a wrong player is never auto-submitted', () {
     // Shows the list to tap instead, so chatter can't cost a life.
     expect(index.resolveSpoken(['kanty'], isAnswer: answerIs('thierry-henry')), isNull);
-    expect(index.resolveSpoken(['van dyke'], isAnswer: answerIs('thierry-henry')), isNull);
+    expect(index.resolveSpoken(['ibrahimovich'], isAnswer: answerIs('thierry-henry')), isNull);
     expect(index.searchSpoken('kanty').map((m) => m.player.id), contains('ngolo-kante'));
   });
 
