@@ -1,0 +1,4 @@
+{
+  "_note": "Extra ways a player's name is heard, from real voice tests: player_id -> what the phone wrote down. Added to the automatic respellings in data_pipeline/spoken.py.",
+  "players": {}
+}

@@ -76,6 +76,10 @@ class SqliteFootballRepository implements FootballRepository {
     for (final r in await db.rawQuery('SELECT player_id, alias FROM player_aliases')) {
       aliases.putIfAbsent(r['player_id'] as String, () => []).add(r['alias'] as String);
     }
+    final spoken = <String, List<String>>{};
+    for (final r in await db.rawQuery('SELECT player_id, spoken FROM player_spoken')) {
+      spoken.putIfAbsent(r['player_id'] as String, () => []).add(r['spoken'] as String);
+    }
     final playerList = <Player>[
       for (final r in await db.rawQuery('SELECT id, name, nationality, position, fame, verified, women FROM players'))
         Player(
@@ -87,6 +91,7 @@ class SqliteFootballRepository implements FootballRepository {
           verified: (r['verified'] as int) == 1,
           women: r['women'] == 1,
           aliases: aliases[r['id'] as String] ?? const [],
+          spoken: spoken[r['id'] as String] ?? const [],
         ),
     ];
 

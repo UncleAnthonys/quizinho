@@ -40,14 +40,27 @@ class PlayerIndex {
           if (parts.last.length >= 3) surnames.add(parts.last);
         }
       }
+      // How it sounds: the spelling read as English, plus respellings of the
+      // native pronunciation ("urdegord") — only ever used for sound matching.
+      final soundNames = {...keys, for (final s in p.spoken) normaliseName(s)}..remove('');
+      final soundTokens = {...tokens};
+      final soundSurnames = {...surnames};
+      for (final s in p.spoken) {
+        final parts = normaliseName(s).split(' ');
+        soundTokens.addAll(parts.where((t) => t.length >= 3));
+        if (parts.length >= 2) {
+          soundSurnames.add(parts.sublist(1).join(' '));
+          soundSurnames.add(parts.last);
+        }
+      }
       _entries.add(_Entry(
         p,
         keys.toList(),
         tokens.toList(),
-        {for (final k in keys) soundKey(k)}..removeWhere((k) => k.length < 3),
-        {for (final t in tokens) soundKey(t)}..removeWhere((k) => k.length < 2),
+        {for (final k in soundNames) soundKey(k)}..removeWhere((k) => k.length < 3),
+        {for (final t in soundTokens) soundKey(t)}..removeWhere((k) => k.length < 2),
         surnames,
-        {for (final s in surnames) soundKey(s)}..removeWhere((k) => k.length < 3),
+        {for (final s in soundSurnames) soundKey(s)}..removeWhere((k) => k.length < 3),
       ));
       _byId[p.id] = p;
     }
@@ -57,6 +70,7 @@ class PlayerIndex {
   final Map<String, Player> _byId = {};
 
   int get length => _entries.length;
+  Iterable<Player> get all => _byId.values;
   Player? byId(String id) => _byId[id];
 
   List<PlayerMatch> search(String query, {int limit = 8}) {
@@ -138,8 +152,8 @@ class PlayerIndex {
         s = s < 95 ? 95 : s; // whole name sounds right: "david louise" = David Luiz
       } else if (words.length >= 2 && wordKeys.every((k) => k.length >= 2 && e.tokenSounds.contains(k))) {
         s = s < 93 ? 93 : s; // every word sounds like part of the name
-      } else if (words.length == 1 && whole.length >= 3 && e.surnameSounds.contains(whole)) {
-        s = s < 90 ? 90 : s; // surname alone sounds right
+      } else if (whole.length >= 3 && e.surnameSounds.contains(whole)) {
+        s = s < 90 ? 90 : s; // surname alone sounds right, even heard as two words ("order guard")
       }
       if (s > 0) hits.add(PlayerMatch(e.player, s + e.player.fame * 2));
     }

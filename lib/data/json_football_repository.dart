@@ -35,6 +35,7 @@ InMemoryFootballRepository parseFootballJson(String source) {
         position: p['pos'] as String?,
         nationality: p['nat'] as String?,
         aliases: [for (final a in p['aliases'] as List) a as String],
+        spoken: [for (final s in (p['sp'] as List?) ?? const []) s as String],
         women: p['g'] == 'w',
       ),
   };

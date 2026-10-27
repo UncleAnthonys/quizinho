@@ -4,6 +4,7 @@ import '../../core/app_services.dart';
 import '../../core/sound_service.dart';
 import '../../core/theme.dart';
 import '../widgets/common.dart';
+import 'voice_test_screen.dart';
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
@@ -36,6 +37,13 @@ class SettingsScreen extends StatelessWidget {
               subtitle: const Text('Say the player’s name after buzzing. You can always type instead.'),
               value: s.settings.voiceOn,
               onChanged: (v) => s.settings.voiceOn = v,
+            ),
+            ListTile(
+              leading: const Icon(Icons.record_voice_over, color: Palette.yellow),
+              title: const Text('Voice test'),
+              subtitle: const Text('Say tricky names and see what the phone hears'),
+              trailing: const Icon(Icons.chevron_right),
+              onTap: () => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const VoiceTestScreen())),
             ),
             SwitchListTile(
               title: const Text('Haptics'),

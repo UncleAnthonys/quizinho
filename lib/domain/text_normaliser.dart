@@ -77,33 +77,57 @@ double similarity(String a, String b) {
 
 /// A rough "how it sounds" key for matching speech-to-text output against
 /// footballer names: "luiz" and "louise" → "ls"; "van dijk" and "van dyke"
-/// → "vndk"; "mbappe" and "embappe" → "mbp". Input must already be
-/// [normaliseName]d. Consonant skeleton only — vowels are what speech
-/// recognisers get wrong most often.
+/// → "vndk"; "odegaard" and "order guard" → "dgd". Input must already be
+/// [normaliseName]d.
+///
+/// Consonant skeleton only — vowels are what recognisers get wrong most —
+/// read the way an English speaker says it: "sh"/"ch"/"zh" are one sound,
+/// "-ic" endings are "-itch", and an "r" before a consonant or at the end of a
+/// word is silent (British English), so "tardich" = "tadić".
 String soundKey(String normalised) {
-  var s = normalised.replaceAll(' ', '');
-  const rules = [
-    ('sch', 'sh'), ('sz', 's'), ('cz', 'ch'), ('ph', 'f'), ('ck', 'k'), ('qu', 'k'),
-    ('q', 'k'), ('x', 'ks'), ('th', 't'), ('ij', 'i'), ('gh', 'g'), ('dj', 'j'), ('kh', 'k'),
-  ];
-  for (final (from, to) in rules) {
-    s = s.replaceAll(from, to);
-  }
-  s = s.replaceAllMapped(RegExp(r'c(?=[eiy])'), (_) => 's');
   final buf = StringBuffer();
   String? prev;
-  for (final ch in s.split('')) {
-    var c = ch;
-    if (c == 'c') c = 'k';
-    if (c == 'z') c = 's';
-    if (c == 'w') c = 'v';
-    if ('aeiouyh'.contains(c)) {
-      prev = null; // vowels separate doubled consonants ("anna" vs "ana" still collapse below)
-      continue;
+  for (final word in normalised.split(' ')) {
+    if (word.isEmpty) continue;
+    for (final c in _wordSkeleton(word).split('')) {
+      if (c == '-') {
+        prev = null; // a vowel: separates doubled consonants
+        continue;
+      }
+      if (c == prev) continue;
+      buf.write(c);
+      prev = c;
     }
-    if (c == prev) continue;
-    buf.write(c);
-    prev = c;
   }
   return buf.toString();
+}
+
+const _soundRules = [
+  ('shch', 'sh'), ('tch', 'ch'), ('sch', 'sh'), ('sz', 's'), ('cz', 'ch'), ('ph', 'f'), ('ck', 'k'),
+  ('qu', 'k'), ('q', 'k'), ('x', 'ks'), ('th', 't'), ('ij', 'i'), ('gh', 'g'), ('dzh', 'j'), ('dj', 'j'),
+  ('kh', 'k'), ('ts', 's'), ('tz', 's'), ('zh', 'sh'),
+];
+final _icEnd = RegExp(r'ic$');
+final _softC = RegExp(r'c(?=[eiy])');
+final _silentR = RegExp(r'r(?![aeiouy])');
+
+/// One word's sounds: consonants, 'x' for the sh/ch sound, '-' for a vowel.
+String _wordSkeleton(String word) {
+  var s = word;
+  for (final (from, to) in _soundRules) {
+    s = s.replaceAll(from, to);
+  }
+  s = s.replaceFirst(_icEnd, 'ich').replaceAll(_softC, 's').replaceAll('ch', 'X').replaceAll('sh', 'X');
+  s = s.replaceAll('c', 'k').replaceAll('z', 's').replaceAll('w', 'v').replaceAll(_silentR, '');
+  final out = StringBuffer();
+  for (final ch in s.split('')) {
+    if ('aeiouy'.contains(ch)) {
+      out.write('-');
+    } else if (ch == 'h') {
+      continue;
+    } else {
+      out.write(ch == 'X' ? 'x' : ch);
+    }
+  }
+  return out.toString();
 }

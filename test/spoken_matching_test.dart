@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:flutter_test/flutter_test.dart';
+import 'package:quizinho/data/json_football_repository.dart';
 import 'package:quizinho/data/models.dart';
 import 'package:quizinho/domain/player_index.dart';
 import 'package:quizinho/domain/text_normaliser.dart';
@@ -85,5 +88,43 @@ void main() {
   test('spoken search lists the likely players for tapping', () {
     final ids = index.searchSpoken('ronaldo').map((m) => m.player.id).toSet();
     expect(ids, containsAll(['cristiano-ronaldo', 'ronaldo-nazario']));
+  });
+
+  group('names said the English way', () {
+    test('sound keys match common mishearings', () {
+      for (final (a, b) in const [
+        ('shchesny', 'chesney'), ('odegaard', 'order guard'), ('urdegord', 'order guard'),
+        ('tadic', 'tardich'), ('modric', 'modrich'), ('gerrard', 'gerard'), ('ibrahimovic', 'ibrahimovich'),
+      ]) {
+        expect(soundKey(a), soundKey(b), reason: '$a vs $b');
+      }
+    });
+
+    final foreign = PlayerIndex(const [
+      Player(id: 'szczesny', name: 'Wojciech Szczęsny', fame: 4, spoken: ['voychyeh shchesny']),
+      Player(id: 'odegaard', name: 'Martin Ødegaard', fame: 4, spoken: ['martin urdegord']),
+      Player(id: 'tadic', name: 'Dušan Tadić', fame: 3, spoken: ['dushan tadich']),
+      Player(id: 'kane', name: 'Harry Kane', fame: 5),
+    ]);
+
+    test('the native-pronunciation respelling is matched', () {
+      expect(foreign.resolveSpoken(['chesney'])?.id, 'szczesny');
+      expect(foreign.resolveSpoken(['shezny'])?.id, 'szczesny');
+      expect(foreign.resolveSpoken(['tardich'])?.id, 'tadic');
+    });
+
+    test('the English reading still works, even split into words', () {
+      expect(foreign.resolveSpoken(['odegaard'])?.id, 'odegaard');
+      expect(foreign.resolveSpoken(['order guard'])?.id, 'odegaard');
+      expect(foreign.resolveSpoken(['harry kane'])?.id, 'kane');
+    });
+
+    test('bundled data carries respellings and finds them', () {
+      final repo = parseFootballJson(File('assets/db/football.json').readAsStringSync());
+      expect(repo.players.byId('wojciech-szczesny')!.spoken, isNotEmpty);
+      final hits = repo.players.searchSpoken('chesney', limit: 5).map((m) => m.player.id);
+      expect(hits, contains('wojciech-szczesny'));
+      expect(repo.players.searchSpoken('order guard', limit: 5).map((m) => m.player.id), contains('martin-odegaard'));
+    });
   });
 }

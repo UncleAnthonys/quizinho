@@ -30,6 +30,8 @@ import sqlite3
 import sys
 import unicodedata
 
+import spoken  # noqa: E402 — sibling module (run as data_pipeline/build_db.py)
+
 ROOT = pathlib.Path(__file__).resolve().parent
 SEED = ROOT / "seed"
 ASSETS = ROOT.parent / "assets" / "db"
@@ -47,6 +49,8 @@ CREATE TABLE players (
   wikidata_id TEXT, women INTEGER NOT NULL DEFAULT 0
 );
 CREATE TABLE player_aliases (player_id TEXT NOT NULL REFERENCES players(id), alias TEXT NOT NULL);
+-- How a name may sound when spoken, spelt the English way (voice answers only).
+CREATE TABLE player_spoken (player_id TEXT NOT NULL REFERENCES players(id), spoken TEXT NOT NULL);
 CREATE TABLE career_spells (
   player_id TEXT NOT NULL REFERENCES players(id), seq INTEGER NOT NULL,
   club_id TEXT NOT NULL REFERENCES clubs(id), start_year INTEGER, end_year INTEGER,
@@ -568,6 +572,7 @@ def write_db(path: pathlib.Path, version: int, clubs, players, matches, connecti
         con.execute("INSERT INTO players VALUES (?,?,?,?,?,0,'demo_seed',NULL,?)",
                     (pid, p["name"], p["nat"], p["pos"], p["fame"], int(p.get("women", False))))
         con.executemany("INSERT INTO player_aliases VALUES (?,?)", [(pid, a) for a in p["aliases"]])
+        con.executemany("INSERT INTO player_spoken VALUES (?,?)", [(pid, s) for s in p.get("spoken", [])])
         con.executemany("INSERT INTO career_spells VALUES (?,?,?,?,?,?)",
                         [(pid, s["seq"], s["club"], s["start"], s["end"], int(s["loan"])) for s in p["spells"]])
     for m in matches:
@@ -612,7 +617,7 @@ def write_json(path: pathlib.Path, version: int, clubs, players, matches, connec
                   for cid, c in clubs.items()],
         "players": [
             {"id": pid, "name": p["name"], "nat": p["nat"], "pos": p["pos"], "fame": p["fame"], "aliases": p["aliases"],
-             **({"g": "w"} if p.get("women") else {})}
+             **({"g": "w"} if p.get("women") else {}), **({"sp": p["spoken"]} if p.get("spoken") else {})}
             for pid, p in players.items()
         ],
         "careers": [
@@ -638,6 +643,17 @@ def write_json(path: pathlib.Path, version: int, clubs, players, matches, connec
     path.write_text(json.dumps(doc, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
 
 
+def add_spoken(players, problems: Problems) -> None:
+    """Respellings of how each name sounds (voice answers), plus fixes from voice tests."""
+    spoken.selftest()
+    overrides = load("spoken_overrides.json")["players"]
+    for pid in overrides:
+        if pid not in players:
+            problems.error(f"spoken_overrides: unknown player {pid}")
+    for pid, p in players.items():
+        p["spoken"] = spoken.spoken_variants(p["name"], p.get("nat"), overrides.get(pid, []))
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--check", action="store_true", help="validate only, write nothing")
@@ -648,6 +664,7 @@ def main() -> int:
     problems = Problems()
     clubs, players, matches = validate_and_collect(problems)
     curated = load_curated_bidding(players, clubs, problems)
+    add_spoken(players, problems)
     for w in problems.warnings:
         print("WARN ", w)
     for e in problems.errors:

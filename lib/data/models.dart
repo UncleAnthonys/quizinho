@@ -84,11 +84,16 @@ class Player {
     this.nationality,
     this.verified = false,
     this.women = false,
+    this.spoken = const [],
   });
 
   final String id;
   final String name;
   final List<String> aliases;
+
+  /// How the name may sound, spelt the English way ("urdegord" for
+  /// Ødegaard). Used only to match voice answers.
+  final List<String> spoken;
   final int fame;
   final String? position;
   final String? nationality;
