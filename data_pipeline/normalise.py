@@ -126,11 +126,27 @@ def position_code(labels: list[str]) -> str | None:
     return None
 
 
-def clean_name(name: str | None) -> str | None:
+# Typos and vandalism in Wikidata labels, by Wikidata id.
+NAME_FIXES = {
+    "Q108159340": "Arda Güler",      # Greek capital alpha
+    "Q222151": "João Moutinho",      # zero for o
+    "Q19116103": "André Onana",
+    "Q22082660": "Robert Arboleda",  # zero for o
+}
+# Greek/Cyrillic letters that look Latin, slipped into Latin-script names.
+_LOOKALIKES = str.maketrans("ΑΒΕΗΙΚΜΝΟΡΤΧΥΖаеорсухАВЕКМНОРСТХ", "ABEHIKMNOPTXYZaeopcyxABEKMHOPCTX")
+
+
+def clean_name(name: str | None, qid: str | None = None) -> str | None:
     """Drop disambiguation like 'Pedro (footballer, born 1987)'."""
+    if qid in NAME_FIXES:
+        return NAME_FIXES[qid]
     if not name or re.fullmatch(r"Q\d+", name):
         return None
-    return re.sub(r"\s*\(.*?\)\s*$", "", name).strip() or None
+    name = re.sub(r"\s*\(.*?\)\s*$", "", name).strip()
+    if re.search(r"[A-Za-zÀ-ž]", name):
+        name = name.translate(_LOOKALIKES)
+    return name or None
 
 
 def good_alias(alias: str, name: str) -> bool:
@@ -232,7 +248,7 @@ def main() -> int:
     used_clubs: set[str] = set()
     # most famous first, so they get the plain slug ("pedro" = the famous Pedro)
     for p in sorted(players_raw, key=lambda p: -p.get("sitelinks", 0)):
-        name = clean_name(p.get("name"))
+        name = clean_name(p.get("name"), p.get("id"))
         spells = by_player.get(p["id"], [])
         # Women's game if recorded female, or if the career was mostly at
         # women's clubs (covers players whose recorded gender isn't female but

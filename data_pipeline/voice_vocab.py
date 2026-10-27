@@ -65,7 +65,7 @@ _IPA = {
     "p": "p", "b": "b", "t": "t", "d": "d", "k": "k", "g": "g", "ɡ": "g", "f": "f", "v": "v",
     "θ": "T", "ð": "D", "s": "s", "z": "z", "ʃ": "S", "ʒ": "Z", "h": "h", "m": "m", "n": "n",
     "ŋ": "N", "l": "l", "ɹ": "r", "r": "r", "ɾ": "r", "ʁ": "r", "ʀ": "r", "ɻ": "r", "j": "j", "w": "w",
-    "x": "k", "χ": "k", "ɣ": "g", "ç": "S", "ɕ": "S", "ʑ": "Z", "ʂ": "S", "ʐ": "Z", "ɲ": "n j",
+    "x": "h", "χ": "h", "ɣ": "g", "ç": "S", "ɕ": "S", "ʑ": "Z", "ʂ": "S", "ʐ": "Z", "ɲ": "n j",
     "ʎ": "l j", "ɟ": "g", "c": "k", "ɫ": "l", "ɱ": "m", "ʋ": "v", "β": "b", "ɦ": "h", "ħ": "h",
     "q": "k", "ʝ": "j", "ɬ": "l", "ɭ": "l", "ɳ": "n", "ʈ": "t", "ɖ": "d", "ɰ": "w", "ɥ": "w",
 }
@@ -80,7 +80,7 @@ APPLE_EN_GB_SET = set(
 _DROP = set("ˈˌ.ʔ‿-ː̯͡ˑ̩ʰʲʷ̪̥̬ˠ ?#^") | {"̃", "̧", "̝", "̊"}
 
 
-def ipa_to_xsampa(ipa: str) -> tuple[str, set[str]]:
+def ipa_to_xsampa(ipa: str, voice: str = "") -> tuple[str, set[str]]:
     """X-SAMPA phonemes separated by spaces, plus any IPA symbols it didn't know."""
     s = unicodedata.normalize("NFD", re.sub(r"\([a-z-]+\)", "", ipa))
     out, unknown, i = [], set(), 0
@@ -99,6 +99,10 @@ def ipa_to_xsampa(ipa: str) -> tuple[str, set[str]]:
                 unknown.add(s[i])
             i += 1
     out = [APPLE_EN_GB.get(x, x) for x in " ".join(out).split()]
+    if voice == "de":  # German ch: English speakers say k ("Bach")
+        out = ["k" if x == "h" and i > 0 else x for i, x in enumerate(out)]
+    # one sound, not two: "nn" from a nasal vowel before n, "ss" from espeak's doubled letters
+    out = [x for i, x in enumerate(out) if i == 0 or x != out[i - 1]]
     unknown |= {x for x in out if x not in APPLE_EN_GB_SET}
     return " ".join(out), unknown
 
@@ -152,7 +156,7 @@ def main() -> int:
         ipas = phonemize(words, language=voice, backend="espeak", strip=True, njobs=1,
                          language_switch="remove-flags")
         for w, ipa in zip(words, ipas):
-            xs, unk = ipa_to_xsampa(ipa)
+            xs, unk = ipa_to_xsampa(ipa, voice)
             for u in unk:
                 unknown[u] += 1
             if xs:
@@ -160,6 +164,13 @@ def main() -> int:
 
     if OVERRIDES.exists():
         for w, extra in json.loads(OVERRIDES.read_text(encoding="utf-8"))["words"].items():
+            for x in extra:
+                bad = [t for t in x.split() if t not in APPLE_EN_GB_SET]
+                if bad:
+                    raise SystemExit(f"pronunciation_overrides: {w} {x!r} has symbols Apple won't take: {bad}")
+            if w not in by_voice["en-gb"]:
+                print(f"pronunciation_overrides: {w} isn't in any player's name (ignored)")
+                continue
             prons[w].update(extra)
 
     OUT.parent.mkdir(parents=True, exist_ok=True)

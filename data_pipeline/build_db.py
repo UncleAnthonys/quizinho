@@ -26,6 +26,7 @@ import itertools
 import json
 import math
 import pathlib
+import re
 import sqlite3
 import sys
 import unicodedata
@@ -175,6 +176,9 @@ def validate_and_collect(problems: Problems):
         pid = p["id"]
         if pid in players:
             problems.error(f"duplicate player id {pid}")
+        # Typos/vandalism in source labels: digits, or Greek/Cyrillic letters in a Latin name
+        if re.search(r"\d", p["name"]) or (re.search(r"[A-Za-z]", p["name"]) and re.search(r"[Ͱ-ӿ]", p["name"])):
+            problems.error(f"{pid}: suspicious name {p['name']!r} — fix in normalise.py NAME_FIXES")
         spells = []
         for i, entry in enumerate(p.get("career", [])):
             club_id, start, end = entry[0], entry[1], entry[2]
