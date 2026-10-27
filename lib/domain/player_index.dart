@@ -3,11 +3,22 @@ import 'text_normaliser.dart';
 
 /// A ranked search hit.
 class PlayerMatch {
-  const PlayerMatch(this.player, this.score);
+  const PlayerMatch(this.player, this.score, {this.base = 0, this.exact = false, this.answer = false});
   final Player player;
 
-  /// Higher is better. ≥100 means an exact name/alias hit.
+  /// Higher is better: [base] plus a little for fame, plus a lot for being
+  /// a right answer to the current question.
   final double score;
+
+  /// How well the words match the name alone. ≥100 = exact full name/alias,
+  /// 92 = exact surname, 88–95 = sounds like it.
+  final double base;
+
+  /// The name (or surname, or nickname) was actually said — not just a sound-alike.
+  final bool exact;
+
+  /// A right answer to the current question.
+  final bool answer;
 }
 
 /// In-memory, accent-insensitive lookup over every player in the database.
@@ -139,7 +150,9 @@ class PlayerIndex {
       normaliseName(text).split(' ').where((w) => w.isNotEmpty && !_filler.contains(w)).join(' ');
 
   /// Search tuned for speech: spelling-based matching plus sound-alike matching.
-  List<PlayerMatch> searchSpoken(String transcript, {int limit = 6}) {
+  /// With [isAnswer], right answers to the current question rank first, so a
+  /// loose sound-alike ("chesney") lands on the right player (Szczęsny).
+  List<PlayerMatch> searchSpoken(String transcript, {int limit = 6, bool Function(Player)? isAnswer}) {
     final q = _cleanSpoken(transcript);
     if (q.isEmpty) return const [];
     final words = q.split(' ');
@@ -147,7 +160,8 @@ class PlayerIndex {
     final wordKeys = [for (final w in words) soundKey(w)];
     final hits = <PlayerMatch>[];
     for (final e in _entries) {
-      var s = _score(e, q);
+      final spelt = _score(e, q);
+      var s = spelt;
       if (whole.length >= 3 && e.sounds.contains(whole)) {
         s = s < 95 ? 95 : s; // whole name sounds right: "david louise" = David Luiz
       } else if (words.length >= 2 && wordKeys.every((k) => k.length >= 2 && e.tokenSounds.contains(k))) {
@@ -155,7 +169,11 @@ class PlayerIndex {
       } else if (whole.length >= 3 && e.surnameSounds.contains(whole)) {
         s = s < 90 ? 90 : s; // surname alone sounds right, even heard as two words ("order guard")
       }
-      if (s > 0) hits.add(PlayerMatch(e.player, s + e.player.fame * 2));
+      if (s > 0) {
+        final answer = isAnswer?.call(e.player) ?? false;
+        hits.add(PlayerMatch(e.player, s + e.player.fame * 2 + (answer ? 20 : 0),
+            base: s, exact: spelt >= 92, answer: answer));
+      }
     }
     hits.sort((a, b) {
       final c = b.score.compareTo(a.score);
@@ -164,21 +182,32 @@ class PlayerIndex {
     return hits.length > limit ? hits.sublist(0, limit) : hits;
   }
 
-  /// Best player across speech alternatives, or null if it isn't clear-cut.
-  /// [partial] = words still coming in: only a complete name (full name,
-  /// alias, or a full-name sound match) counts — never a first name alone.
-  Player? resolveSpoken(List<String> alternatives, {bool partial = false}) {
+  /// The player a spoken answer should count as, or null to show the "Did
+  /// you mean…?" list instead. A miss never costs a life by accident:
+  ///  * A right answer (per [isAnswer]) goes in even from a sound-alike —
+  ///    "chesney" is Szczęsny if he's the answer — unless several right
+  ///    answers sound alike, then they tap.
+  ///  * A wrong answer only counts if the full name, a nickname or the exact
+  ///    surname was actually said, unambiguously ("Ronaldo" → tap which), and
+  ///    never from rambling chatter.
+  /// [partial] = words still coming in: wrong answers need the full name.
+  Player? resolveSpoken(List<String> alternatives, {bool partial = false, bool Function(Player)? isAnswer}) {
     // Recognisers list their guesses best first; the first clear-cut one wins.
     // Each guess is judged on its own so a vague one ("ronaldo") can't block a
     // clear one ("cristiano ronaldo").
     for (final alt in alternatives) {
-      final ranked = searchSpoken(alt, limit: 2);
+      final words = _cleanSpoken(alt).split(' ').where((w) => w.isNotEmpty).length;
+      final ranked = searchSpoken(alt, limit: 6, isAnswer: isAnswer).where((m) => m.base >= (partial ? 90 : 88)).toList();
       if (ranked.isEmpty) continue;
-      final top = ranked.first;
-      // fame adds up to +10, so thresholds sit on the base score
-      final base = top.score - top.player.fame * 2;
-      if (base < (partial ? 95 : 88)) continue;
-      if (ranked.length > 1 && ranked[1].score >= top.score - 6) continue;
+      final answers = ranked.where((m) => m.answer).toList();
+      final others = ranked.where((m) => !m.answer).toList();
+      // Someone else's full name said outright beats a loose sound-alike of the answer.
+      final saidSomeoneElse = others.any((m) => m.base >= 100) && !answers.any((m) => m.exact);
+      if (answers.length == 1 && !saidSomeoneElse) return answers.first.player;
+      if (answers.length > 1 || others.isEmpty) continue;
+      final top = others.first;
+      if (!top.exact || words > 4 || (partial && top.base < 100)) continue;
+      if (others.length > 1 && others[1].score >= top.score - 6) continue;
       return top.player;
     }
     return null;

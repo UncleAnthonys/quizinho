@@ -289,6 +289,7 @@ class _BiddingWarScreenState extends State<BiddingWarScreen>
         accent: Palette.team(colour),
         hint: c.category.answersAreClubs ? 'Say or type a club…' : 'Say or type a name…',
         onPick: c.submit,
+        isAnswer: (p) => c.category.answerIds.contains(p.id),
         onDisputed: (typed, allowed) {
           if (allowed) c.submitDisputed(typed);
           setState(() => _pickerKey++);

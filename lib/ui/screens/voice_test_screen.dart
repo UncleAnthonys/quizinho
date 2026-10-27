@@ -38,10 +38,15 @@ const _testIds = [
 ];
 
 class _Result {
-  _Result(this.player, this.heard, this.matched);
+  _Result(this.player, this.heard, this.matched, this.unhinted);
   final Player player;
   final List<String> heard;
+
+  /// What it counted as in a game where this player is the right answer.
   final Player? matched;
+
+  /// What it counted as with no hint (e.g. said as a wrong answer).
+  final Player? unhinted;
   bool get ok => matched?.id == player.id;
 }
 
@@ -93,10 +98,12 @@ class _VoiceTestScreenState extends State<VoiceTestScreen> {
       onWords: (w) => setState(() => _live = w),
       onDone: (alts) {
         if (!mounted) return;
-        final matched = alts.isEmpty ? null : _s.repo.players.resolveSpoken(alts);
+        final players = _s.repo.players;
+        final matched = alts.isEmpty ? null : players.resolveSpoken(alts, isAnswer: (p) => p.id == target.id);
+        final unhinted = alts.isEmpty ? null : players.resolveSpoken(alts);
         setState(() {
           _listening = false;
-          _last = _Result(target, alts, matched);
+          _last = _Result(target, alts, matched, unhinted);
           _results.add(_last!);
         });
       },
@@ -124,7 +131,8 @@ class _VoiceTestScreenState extends State<VoiceTestScreen> {
     final b = StringBuffer('Quizinho voice test — $platform — $good/${_results.length} recognised\n');
     for (final r in _results) {
       b.writeln('${r.ok ? 'OK  ' : 'MISS'} ${r.player.name} [${r.player.id}] | heard: '
-          '${r.heard.isEmpty ? '(nothing)' : r.heard.join(' / ')} | matched: ${r.matched?.name ?? '-'}');
+          '${r.heard.isEmpty ? '(nothing)' : r.heard.join(' / ')} | as answer: ${r.matched?.name ?? '-'}'
+          ' | no hint: ${r.unhinted?.name ?? '-'}');
     }
     return b.toString();
   }

@@ -247,6 +247,7 @@ class _StartingXiScreenState extends State<StartingXiScreen>
               accent: Palette.team(colour),
               hint: 'Name a starter…',
               onPick: (p) => _submit(c, p),
+              isAnswer: (p) => !c.namedBy.containsKey(p.id) && c.match.lineup.any((s) => s.playerId == p.id),
               onPass: c.pass,
             ),
           ]),

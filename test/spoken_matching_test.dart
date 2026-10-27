@@ -26,14 +26,38 @@ void main() {
     expect(soundKey('mbappe'), soundKey('embappe'));
   });
 
-  test('"david louise" is accepted as David Luiz', () {
-    expect(index.resolveSpoken(['david louise'])?.id, 'david-luiz');
+  bool Function(Player) answerIs(String id) => (p) => p.id == id;
+
+  test('"david louise" is accepted as David Luiz when he is the answer', () {
+    expect(index.resolveSpoken(['david louise'], isAnswer: answerIs('david-luiz'))?.id, 'david-luiz');
   });
 
-  test('misheard surnames still resolve', () {
-    expect(index.resolveSpoken(['van dyke'])?.id, 'virgil-van-dijk');
-    expect(index.resolveSpoken(['kanty'])?.id, 'ngolo-kante');
-    expect(index.resolveSpoken(['ibrahimovich'])?.id, 'zlatan');
+  test('misheard surnames of the right answer still resolve', () {
+    expect(index.resolveSpoken(['van dyke'], isAnswer: answerIs('virgil-van-dijk'))?.id, 'virgil-van-dijk');
+    expect(index.resolveSpoken(['kanty'], isAnswer: answerIs('ngolo-kante'))?.id, 'ngolo-kante');
+    expect(index.resolveSpoken(['ibrahimovich'], isAnswer: answerIs('zlatan'))?.id, 'zlatan');
+  });
+
+  test('a sound-alike of a wrong player is never auto-submitted', () {
+    // Shows the list to tap instead, so chatter can't cost a life.
+    expect(index.resolveSpoken(['david louise'], isAnswer: answerIs('thierry-henry')), isNull);
+    expect(index.resolveSpoken(['kanty'], isAnswer: answerIs('thierry-henry')), isNull);
+    expect(index.searchSpoken('kanty').map((m) => m.player.id), contains('ngolo-kante'));
+  });
+
+  test('a wrong player said clearly does count', () {
+    expect(index.resolveSpoken(['david luiz'], isAnswer: answerIs('thierry-henry'))?.id, 'david-luiz');
+    expect(index.resolveSpoken(['kante'], isAnswer: answerIs('thierry-henry'))?.id, 'ngolo-kante');
+  });
+
+  test('rambling chatter never submits a wrong answer', () {
+    expect(index.resolveSpoken(['no wait I think it might be david luiz or someone'], isAnswer: answerIs('thierry-henry')),
+        isNull);
+  });
+
+  test('ambiguous names: the right one goes in, otherwise tap', () {
+    expect(index.resolveSpoken(['ronaldo'], isAnswer: answerIs('cristiano-ronaldo'))?.id, 'cristiano-ronaldo');
+    expect(index.resolveSpoken(['ronaldo'], isAnswer: answerIs('thierry-henry')), isNull);
   });
 
   test('filler words are ignored', () {
@@ -43,7 +67,7 @@ void main() {
   test('mid-speech, only a complete name is accepted', () {
     expect(index.resolveSpoken(['thierry'], partial: true), isNull);
     expect(index.resolveSpoken(['thierry henry'], partial: true)?.id, 'thierry-henry');
-    expect(index.resolveSpoken(['david louise'], partial: true)?.id, 'david-luiz');
+    expect(index.resolveSpoken(['david louise'], partial: true, isAnswer: answerIs('david-luiz'))?.id, 'david-luiz');
   });
 
   test('ambiguous names are never auto-accepted', () {
@@ -108,14 +132,14 @@ void main() {
     ]);
 
     test('the native-pronunciation respelling is matched', () {
-      expect(foreign.resolveSpoken(['chesney'])?.id, 'szczesny');
-      expect(foreign.resolveSpoken(['shezny'])?.id, 'szczesny');
-      expect(foreign.resolveSpoken(['tardich'])?.id, 'tadic');
+      expect(foreign.resolveSpoken(['chesney'], isAnswer: answerIs('szczesny'))?.id, 'szczesny');
+      expect(foreign.resolveSpoken(['shezny'], isAnswer: answerIs('szczesny'))?.id, 'szczesny');
+      expect(foreign.resolveSpoken(['tardich'], isAnswer: answerIs('tadic'))?.id, 'tadic');
     });
 
     test('the English reading still works, even split into words', () {
       expect(foreign.resolveSpoken(['odegaard'])?.id, 'odegaard');
-      expect(foreign.resolveSpoken(['order guard'])?.id, 'odegaard');
+      expect(foreign.resolveSpoken(['order guard'], isAnswer: answerIs('odegaard'))?.id, 'odegaard');
       expect(foreign.resolveSpoken(['harry kane'])?.id, 'kane');
     });
 
@@ -124,6 +148,9 @@ void main() {
       expect(repo.players.byId('wojciech-szczesny')!.spoken, isNotEmpty);
       final hits = repo.players.searchSpoken('chesney', limit: 5).map((m) => m.player.id);
       expect(hits, contains('wojciech-szczesny'));
+      // In an Arsenal-keepers question he's the answer, so "chesney" lands on him.
+      bool arsenalKeeper(Player p) => {'wojciech-szczesny', 'david-seaman', 'jens-lehmann'}.contains(p.id);
+      expect(repo.players.resolveSpoken(['chesney'], isAnswer: arsenalKeeper)?.id, 'wojciech-szczesny');
       expect(repo.players.searchSpoken('order guard', limit: 5).map((m) => m.player.id), contains('martin-odegaard'));
     });
   });

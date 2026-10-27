@@ -251,6 +251,7 @@ class _TicTacToeScreenState extends State<TicTacToeScreen>
           voice: services.voice,
           accent: Palette.team(colour),
           onPick: (p) => _submit(c, p),
+          isAnswer: (p) => c.selected != null && c.grid.answers[c.selected!].contains(p.id),
           onPass: c.pass,
           onDisputed: (_, allowed) => c.submitDisputed(allowed: allowed),
         ),

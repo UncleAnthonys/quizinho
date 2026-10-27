@@ -9,10 +9,10 @@ import '../../domain/player_index.dart';
 /// fragment, so it never gives the answer away — once a full surname is typed,
 /// the players it could mean drop down to tap.
 ///
-/// With [voice], the mic opens straight away. A clear match is accepted
-/// automatically; an unclear one ("Ronaldo") shows the likely players to tap.
-/// A mishearing never counts as a wrong answer — it just falls back to the
-/// list. If the player isn't in the database the room can vote, so a gap in
+/// With [voice], the mic opens straight away. A right answer ([isAnswer]) is
+/// accepted even from a sound-alike; a wrong one only if a real name was
+/// clearly said. Anything unclear ("Ronaldo", a mishearing, chatter) shows
+/// the likely players to tap — talking never costs a life by accident. If the player isn't in the database the room can vote, so a gap in
 /// our data never costs a team a correct answer.
 /// True while someone is typing an answer. Game screens listen to this and
 /// collapse to a compact layout so the question stays visible above the
@@ -29,6 +29,7 @@ class PlayerPicker extends StatefulWidget {
     this.accent = Palette.yellow,
     this.hint = 'Type the full name…',
     this.voice,
+    this.isAnswer,
   });
 
   final PlayerIndex index;
@@ -42,6 +43,9 @@ class PlayerPicker extends StatefulWidget {
 
   /// Spoken answers; null or disabled = typing only.
   final VoiceService? voice;
+
+  /// Right answers to the current question — voice leans towards these.
+  final bool Function(Player)? isAnswer;
 
   @override
   State<PlayerPicker> createState() => _PlayerPickerState();
@@ -120,7 +124,7 @@ class _PlayerPickerState extends State<PlayerPicker> {
         if (!_keepListening || words.trim().isEmpty) return;
         if (_voiceNote != 'Hearing you…') setState(() => _voiceNote = 'Hearing you…');
         // Names are checked as the words arrive — a clear match goes straight in.
-        final p = widget.index.resolveSpoken([words], partial: true);
+        final p = widget.index.resolveSpoken([words], partial: true, isAnswer: widget.isAnswer);
         if (p != null) _pick(p);
       },
       onDone: _heard,
@@ -139,19 +143,19 @@ class _PlayerPickerState extends State<PlayerPicker> {
     final seen = <String>{};
     final merged = <PlayerMatch>[];
     for (final alt in alternatives) {
-      for (final m in widget.index.searchSpoken(alt, limit: 4)) {
+      for (final m in widget.index.searchSpoken(alt, limit: 4, isAnswer: widget.isAnswer)) {
         if (seen.add(m.player.id)) merged.add(m);
       }
     }
     // Only players that fully match what was said — never hints from a fragment.
-    merged.removeWhere((m) => m.score - m.player.fame * 2 < 88);
+    merged.removeWhere((m) => m.base < 88);
     merged.sort((a, b) => b.score.compareTo(a.score));
     setState(() => _results = merged.take(4).toList());
   }
 
   void _heard(List<String> alternatives) {
     if (!mounted || _picked) return;
-    final p = widget.index.resolveSpoken(alternatives);
+    final p = widget.index.resolveSpoken(alternatives, isAnswer: widget.isAnswer);
     if (p != null) {
       _pick(p);
       return;
