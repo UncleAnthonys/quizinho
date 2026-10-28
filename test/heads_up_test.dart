@@ -46,7 +46,7 @@ void main() {
     c.advance(secs(30.1));
     c.nextTurn();
     expect(c.phase, HeadsUpPhase.finished);
-    expect(c.result().points, {0: 1, 1: 2});
+    expect(c.result().points, {0: 0, 1: HeadsUpController.winPoints});
   });
 
   test('running out of cards ends the turn early', () {

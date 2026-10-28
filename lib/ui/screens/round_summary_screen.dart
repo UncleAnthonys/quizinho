@@ -21,7 +21,7 @@ class RoundSummaryScreen extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.all(20),
             child: Column(children: [
-              const SizedBox(height: 12),
+              const Align(alignment: Alignment.centerLeft, child: ExitMatchButton()),
               Text('ROUND ${t.rounds.length} OF ${t.totalRounds}', style: AppText.label(16)),
               Text(last.mode.title.toUpperCase(), style: AppText.headline(40, color: last.mode.color)),
               if (last.multiplier > 1) Text('DOUBLE POINTS', style: AppText.label(15, color: Palette.gold)),

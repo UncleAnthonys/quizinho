@@ -47,7 +47,9 @@ class CardResult {
 
 /// Football Heads Up: one player holds the phone to their forehead, their
 /// team describes the name, tilt down for correct, up to pass. Each team
-/// gets one timed turn per round; 1 point per correct card.
+/// gets one timed turn per round. Most correct cards wins the round's
+/// [winPoints] (shared by a tie), like the other games — so one big turn
+/// can't put a team out of reach.
 class HeadsUpController extends ChangeNotifier {
   HeadsUpController({
     required this.teamCount,
@@ -59,6 +61,8 @@ class HeadsUpController extends ChangeNotifier {
       correctByTeam[t] = 0;
     }
   }
+
+  static const int winPoints = 3;
 
   final int teamCount;
   final int turnSeconds;
@@ -152,5 +156,18 @@ class HeadsUpController extends ChangeNotifier {
     notifyListeners();
   }
 
-  RoundResult result() => RoundResult(mode: GameModeId.headsUp, points: Map.of(correctByTeam));
+  /// Teams with the most correct cards (none if nobody got any).
+  Set<int> get winners {
+    final best = correctByTeam.values.fold<int>(0, (a, b) => a > b ? a : b);
+    if (best == 0) return {};
+    return {for (final e in correctByTeam.entries) if (e.value == best) e.key};
+  }
+
+  RoundResult result() {
+    final w = winners;
+    return RoundResult(
+      mode: GameModeId.headsUp,
+      points: {for (var t = 0; t < teamCount; t++) t: w.contains(t) ? winPoints : 0},
+    );
+  }
 }

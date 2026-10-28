@@ -130,8 +130,9 @@ class Scoreboard extends StatelessWidget {
         border: Border.all(color: Palette.line),
       ),
       child: Row(children: [
+        const ExitMatchButton(),
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8),
+          padding: const EdgeInsets.only(right: 8),
           child: Column(mainAxisSize: MainAxisSize.min, children: [
             Text('RD', style: AppText.label(11)),
             Text('${min(t.roundNumber, t.totalRounds)}/${t.totalRounds}', style: AppText.headline(18)),
@@ -165,6 +166,19 @@ class Scoreboard extends StatelessWidget {
       ]),
     );
   }
+}
+
+/// Leave the match: asks "Abandon match?" first (the match flow's guard), then home.
+class ExitMatchButton extends StatelessWidget {
+  const ExitMatchButton({super.key});
+
+  @override
+  Widget build(BuildContext context) => IconButton(
+        tooltip: 'Leave match',
+        visualDensity: VisualDensity.compact,
+        icon: const Icon(Icons.close_rounded, color: Palette.muted),
+        onPressed: () => Navigator.of(context).maybePop(),
+      );
 }
 
 /// Horizontal countdown bar that turns red as time runs out.

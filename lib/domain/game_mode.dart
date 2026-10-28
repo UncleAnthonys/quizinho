@@ -94,7 +94,7 @@ enum GameModeId {
     rules: [
       'One player holds the phone to their forehead. Their team describes the name on screen.',
       'Tilt DOWN when you get it, UP to pass. Or use the buttons.',
-      '1 point per correct card. Every team gets one go.',
+      'Every team gets one go. Most correct cards wins 3 points.',
     ],
     whoPlays: 'The named player guesses; their teammates describe. Other teams keep quiet!',
   ),
