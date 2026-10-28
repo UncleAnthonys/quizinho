@@ -187,11 +187,14 @@ def connection_difficulty(a: str, b: str, shared: list[str], clubs, players) -> 
             and (stars >= 2 and total >= 5 or stars >= 1 and strong >= 2 and total >= 8
                  or strong >= 2 and total >= 12):
         return 1
-    # Medium is the main game, so it takes a wide batch — but two clubs from
+    # Medium is the main game, so it takes a wide batch — but only pairs a UK
+    # group recognises at once: an English club, or two of Europe's biggest
+    # (Juve + PSG). Hertha + Köln or Sevilla + Málaga are Hard. Two clubs from
     # smaller leagues (Porto + Vitória) only with a real star (Cruyff for Ajax + Feyenoord).
-    if (top5 or one_big4) and (strong >= 1 and total >= 3 or strong >= 2 or stars >= 1 or known >= 3):
+    big_pair = familiar or min(ca["fame"], cb["fame"]) >= 5
+    if big_pair and (top5 or one_big4) and (strong >= 1 and total >= 3 or strong >= 2 or stars >= 1 or known >= 3):
         return 2
-    if stars >= 1 or strong >= 2 and total >= 5:
+    if big_pair and (stars >= 1 or strong >= 2 and total >= 5):
         return 2
     if known >= 1 or any(f >= 4 for f in fame.values()) or big4 and any(f >= 3 for f in fame.values()):
         return 3
@@ -431,7 +434,7 @@ def bidding_difficulty(answers: list[str], players) -> int | None:
 def generate_bidding(clubs, players, connections, countries):
     out = []
 
-    def add(cid, prompt, kind, answers, club_ids):
+    def add(cid, prompt, kind, answers, club_ids, floor=1):
         if any(clubs[c]["country"] not in BID_COUNTRIES for c in club_ids):
             return
         answers = sorted(answers)
@@ -440,6 +443,7 @@ def generate_bidding(clubs, players, connections, countries):
         diff = bidding_difficulty(answers, players)
         if diff is None:
             return
+        diff = max(diff, floor)
         eras = 0
         for pid in answers:
             eras |= spells_mask([s for s in players[pid]["spells"] if s["club"] in club_ids])
@@ -449,7 +453,7 @@ def generate_bidding(clubs, players, connections, countries):
     for c in connections:
         if clubs[c["a"]]["fame"] >= BID_MIN_CLUB_FAME and clubs[c["b"]]["fame"] >= BID_MIN_CLUB_FAME:
             add(f"pair:{c['id']}", f"Players who played for both {clubs[c['a']]['name']} and {clubs[c['b']]['name']}",
-                "pair", c["answers"], {c["a"], c["b"]})
+                "pair", c["answers"], {c["a"], c["b"]}, floor=c["difficulty"])  # no easier than the connection
 
     # 2. Nationality at a club ("Brazilians who played for Chelsea")
     by_club_nat: dict[tuple[str, str], set[str]] = {}

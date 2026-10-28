@@ -59,6 +59,13 @@ void main() {
     }
   });
 
+  test('the first spin is never the wildcard', () {
+    for (var seed = 0; seed < 50; seed++) {
+      final t = Tournament(config(), random: Random(seed));
+      expect(t.spin(), isNot(GameModeId.wildcard));
+    }
+  });
+
   test('wildcard resolves to a real enabled game', () {
     final t = Tournament(config(modes: {GameModeId.startingXi, GameModeId.wildcard}), random: Random(3));
     expect(t.wheelSegments, contains(GameModeId.wildcard));

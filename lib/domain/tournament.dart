@@ -206,9 +206,10 @@ class Tournament extends ChangeNotifier {
   }
 
   /// Picks where the wheel lands. Avoids the same game twice in a row when
-  /// there is a choice.
+  /// there is a choice, and never opens a match on the double-points wildcard.
   GameModeId spin() {
-    final segs = wheelSegments;
+    var segs = wheelSegments;
+    if (rounds.isEmpty && segs.length > 1) segs = segs.where((m) => m != GameModeId.wildcard).toList();
     final options = segs.length > 1 ? segs.where((m) => m != _lastGame).toList() : segs;
     final pick = options[_random.nextInt(options.length)];
     if (pick != GameModeId.wildcard) _lastGame = pick;
