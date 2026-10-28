@@ -244,6 +244,9 @@ def norm(text: str) -> str:
 def validate_and_collect(problems: Problems):
     clubs_raw = load("clubs.json")["clubs"]
     players_raw = load("players.json")["players"]
+    # League apps/goals from Wikipedia infoboxes, only where Wikidata has none
+    # (data_pipeline/wiki_stats_fetch.py).
+    wiki_stats = load("wiki_stats.json")["players"] if (SEED / "wiki_stats.json").exists() else {}
     matches_doc = load("matches.json")
 
     clubs = {}
@@ -281,7 +284,8 @@ def validate_and_collect(problems: Problems):
             spells.append({"seq": i, "club": club_id, "start": start, "end": end, "loan": loan})
         players[pid] = {
             "name": p["name"], "nat": p.get("nat"), "pos": p.get("pos"), "fame": p["fame"], "reach": p.get("reach"),
-            "women": p.get("g") == "w", "stats": p.get("stats", {}),
+            "women": p.get("g") == "w",
+            "stats": {**wiki_stats.get(pid, {}), **p.get("stats", {})},
             "aliases": p.get("aliases", []), "spells": spells,
         }
 

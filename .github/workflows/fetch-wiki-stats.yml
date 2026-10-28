@@ -1,0 +1,44 @@
+# Fills missing league apps/goals (Football 501) from English Wikipedia
+# infoboxes and commits data_pipeline/seed/wiki_stats.json. Run from the
+# Actions tab after a Wikidata refresh.
+name: Fetch Wikipedia stats
+
+on:
+  workflow_dispatch:
+    inputs:
+      min_fame:
+        description: "Only players at or above this fame (1-5)"
+        default: "1"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: fetch-data
+  cancel-in-progress: false
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Fetch from Wikipedia
+        run: bash scripts/ci_run.sh "Wikipedia stats" python3 data_pipeline/wiki_stats_fetch.py --min-fame "${{ github.event.inputs.min_fame || '1' }}"
+      - name: Report
+        run: echo "::notice title=Wikipedia stats::$(python3 -c "import json;print(json.load(open('data_pipeline/seed/wiki_stats.json'))['_note'])")"
+      - name: Commit
+        run: |
+          git config user.name "quizinho-data-bot"
+          git config user.email "quizinho-data-bot@users.noreply.github.com"
+          git add data_pipeline/seed/wiki_stats.json
+          if git diff --cached --quiet; then
+            echo "No changes."
+          else
+            git commit -m "Data: league apps/goals from Wikipedia infoboxes"
+            git pull --rebase origin main
+            git push
+          fi
