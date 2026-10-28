@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../data/models.dart';
+import '../data/question_history.dart';
 import '../domain/game_mode.dart';
 import '../domain/tournament.dart';
 
@@ -47,16 +48,11 @@ class AppSettings extends ChangeNotifier {
     return true;
   }
 
-  /// Survival questions asked in recent runs (newest last), so a new run
-  /// doesn't keep opening with the same ones.
-  Set<String> get survivalSeen => (_prefs.getStringList('survivalSeen') ?? const []).toSet();
-
-  void markSurvivalSeen(String id) {
-    final list = (_prefs.getStringList('survivalSeen') ?? <String>[])..remove(id);
-    list.add(id);
-    // Long enough to cycle through the smaller pools (Easy line-ups, categories).
-    _prefs.setStringList('survivalSeen', list.length > 600 ? list.sublist(list.length - 600) : list);
-  }
+  /// Every question this phone has been asked, across matches and solo runs.
+  late final QuestionHistory history = QuestionHistory(
+    read: _prefs.getStringList,
+    write: _prefs.setStringList,
+  );
 
   void _setBool(String key, bool v) {
     _prefs.setBool(key, v);

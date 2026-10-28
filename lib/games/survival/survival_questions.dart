@@ -7,17 +7,12 @@ import 'survival_controller.dart';
 /// Turns the party games' questions into one-answer Survival questions:
 /// club connections, career paths, line-ups and categories, mixed at random.
 class SurvivalQuestions {
-  SurvivalQuestions(this.source, {required this.genders, this.seenBefore = const {}, Random? random})
-      : _random = random ?? Random();
+  SurvivalQuestions(this.source, {required this.genders, Random? random}) : _random = random ?? Random();
 
   final ChallengeSource source;
 
   /// Men's / women's / both, from the home-screen switch.
   final int genders;
-
-  /// Questions from earlier runs: kept out until the pool runs dry, so the
-  /// same handful of Easy questions doesn't open every run.
-  final Set<String> seenBefore;
   final Random _random;
 
   /// Rough mix: mostly connections and careers, some line-ups and categories.
@@ -35,14 +30,11 @@ class SurvivalQuestions {
         if (k != SurvivalKind.lineup || genders & FootballGender.men.mask != 0) k
     ];
     final first = _pick(kinds);
-    final order = [first, ...kinds.where((k) => k != first)];
-    // Something new first (the chosen kind, then any other); only when every
-    // kind has run dry do earlier runs' questions come back.
-    for (final avoid in [{...used, ...seenBefore}, used]) {
-      for (final k in order) {
-        final q = await _question(k, d, avoid);
-        if (q != null) return q;
-      }
+    // The chosen kind first; if it has run dry, any other. (The source puts
+    // questions this phone has seen before last.)
+    for (final k in [first, ...kinds.where((k) => k != first)]) {
+      final q = await _question(k, d, used);
+      if (q != null) return q;
     }
     return null;
   }
@@ -105,25 +97,19 @@ class SurvivalQuestions {
       case SurvivalKind.category:
         // Categories that aren't just a club pair (that's a connection) and
         // whose answers are players, not clubs.
-        final skip = _raw(used, 'b:');
-        for (var i = 0; i < 12; i++) {
-          final b = await source.bidding(d, skip, genders: genders);
-          if (b == null) return null;
-          if (!b.id.startsWith('pair:') && !b.answersAreClubs) {
-            return SurvivalQuestion(
-              kind: k,
-              id: 'b:${b.id}',
-              heading: 'NAME ONE',
-              prompt: b.prompt,
-              answerIds: b.answerIds,
-              difficulty: b.difficulty,
-              showFlags: !b.hidesFlags,
-              showPositions: !b.hidesPositions,
-            );
-          }
-          skip.add(b.id);
-        }
-        return null;
+        final b = await source.bidding(d, _raw(used, 'b:'),
+            genders: genders, where: (b) => !b.id.startsWith('pair:') && !b.answersAreClubs);
+        if (b == null) return null;
+        return SurvivalQuestion(
+          kind: k,
+          id: 'b:${b.id}',
+          heading: 'NAME ONE',
+          prompt: b.prompt,
+          answerIds: b.answerIds,
+          difficulty: b.difficulty,
+          showFlags: !b.hidesFlags,
+          showPositions: !b.hidesPositions,
+        );
     }
   }
 }

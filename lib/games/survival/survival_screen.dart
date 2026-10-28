@@ -28,7 +28,6 @@ class _SurvivalScreenState extends State<SurvivalScreen>
   bool _newRecord = false;
   int _heardSerial = 0;
   bool _finished = false;
-  String? _lastSeen;
   Timer? _autoNext;
 
   @override
@@ -43,7 +42,7 @@ class _SurvivalScreenState extends State<SurvivalScreen>
     _best = s.settings.survivalBest(_gender);
     _newRecord = false;
     _finished = false;
-    final questions = SurvivalQuestions(s.challenges, genders: _gender.mask, seenBefore: s.settings.survivalSeen);
+    final questions = SurvivalQuestions(s.challenges, genders: _gender.mask);
     final c = SurvivalController(load: questions.next);
     c.addListener(() => _onChange(c));
     _c?.dispose();
@@ -53,11 +52,6 @@ class _SurvivalScreenState extends State<SurvivalScreen>
   }
 
   void _onChange(SurvivalController c) {
-    final q = c.current;
-    if (c.phase == SurvivalPhase.asking && q != null && q.id != _lastSeen) {
-      _lastSeen = q.id;
-      services.settings.markSurvivalSeen(q.id);
-    }
     if (c.eventSerial != _heardSerial) {
       _heardSerial = c.eventSerial;
       final s = services;

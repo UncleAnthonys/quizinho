@@ -86,6 +86,7 @@ class _HeadsUpScreenState extends State<HeadsUpScreen>
         for (final card in c.shown) {
           _t.markUsed(_mode, card);
         }
+        services.challenges.history.addAll('headsup', c.shown);
         final holder = _holder;
         if (holder != null) _t.creditPlayer(c.currentTeam, holder, c.turnCorrect * widget.round.multiplier);
       }
@@ -132,7 +133,10 @@ class _HeadsUpScreenState extends State<HeadsUpScreen>
         ? [for (final p in _packs) ...p.cards]
         : _packs.firstWhere((p) => p.id == _packId, orElse: () => _packs.first).cards;
     final used = _t.usedIds(_mode);
-    var fresh = source.where((c) => !used.contains(c)).toList();
+    // Cards this phone hasn't shown before first; then anything not in this match.
+    final seen = services.challenges.history.seen('headsup');
+    var fresh = source.where((c) => !used.contains(c) && !seen.contains(c)).toList();
+    if (fresh.length < 15) fresh = source.where((c) => !used.contains(c)).toList();
     if (fresh.length < 15) fresh = [...source]; // pack exhausted: allow repeats rather than stall
     return fresh..shuffle(Random());
   }

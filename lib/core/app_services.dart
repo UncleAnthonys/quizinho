@@ -20,7 +20,7 @@ class AppServices {
   final VoiceService? voice;
   final Commentary commentary;
 
-  late final ChallengeSource challenges = ChallengeSource(repo);
+  late final ChallengeSource challenges = ChallengeSource(repo, history: settings.history);
 
   void haptic(HapticStrength s) {
     if (!settings.hapticsOn) return;

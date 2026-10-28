@@ -55,18 +55,26 @@ class _TicTacToeScreenState extends State<TicTacToeScreen>
     int fame(String id) => repo.players.byId(id)?.fame ?? 0;
     final genders = _t.config.genderMask;
     final inEras = await repo.allClubConnections(eras: _t.config.eraMask, genders: genders);
-    TicTacToeGrid? make(List<ClubConnection> conns, {bool strict = true}) => generateTicTacToeGrid(conns,
-        random: rnd,
-        minFame: minFame,
-        maxLevel: maxLevel, // never harder pairs than the chosen difficulty
-        minKnownAnswers: strict ? known : 0,
-        answerFame: fame,
-        avoid: used);
+    // Grids this phone has played before come last.
+    final history = services.challenges.history;
+    final unseen = {...used, ...history.seen('ttt')};
+    TicTacToeGrid? make(List<ClubConnection> conns, {bool strict = true, bool fresh = true}) =>
+        generateTicTacToeGrid(conns,
+            random: rnd,
+            minFame: minFame,
+            maxLevel: maxLevel, // never harder pairs than the chosen difficulty
+            minKnownAnswers: strict ? known : 0,
+            answerFame: fame,
+            avoid: fresh ? unseen : used);
     // Not enough in the chosen eras at this difficulty — widen rather than stall.
     var grid = make(inEras);
     if (grid == null) {
       final all = await repo.allClubConnections(genders: genders);
-      grid = make(all) ?? make(inEras, strict: false) ?? make(all, strict: false);
+      grid = make(all) ??
+          make(inEras, fresh: false) ??
+          make(all, fresh: false) ??
+          make(inEras, strict: false) ??
+          make(all, strict: false, fresh: false);
     }
     if (!mounted) return;
     if (grid == null) {
@@ -74,6 +82,7 @@ class _TicTacToeScreenState extends State<TicTacToeScreen>
       return;
     }
     _t.markUsed(_mode, grid.id);
+    history.add('ttt', grid.id);
     final c = TicTacToeController(
       grid: grid,
       teamCount: _t.teamCount,
