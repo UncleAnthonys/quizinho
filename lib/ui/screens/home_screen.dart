@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../core/app_services.dart';
 import '../../core/theme.dart';
 import '../../domain/game_mode.dart';
+import '../../games/survival/survival_screen.dart';
 import '../match_flow.dart';
 import '../widgets/common.dart';
 import '../widgets/logo.dart';
@@ -60,7 +61,16 @@ class HomeScreen extends StatelessWidget {
                 height: 72,
                 onPressed: () => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const SetupScreen())),
               ),
-              const SizedBox(height: 8),
+              const SizedBox(height: 10),
+              BigButton(
+                label: 'Play solo · Survival',
+                icon: Icons.person_rounded,
+                height: 56,
+                color: Palette.cardHigh,
+                textColor: Palette.text,
+                onPressed: () => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const SurvivalScreen())),
+              ),
+              const SizedBox(height: 4),
               GhostButton(label: 'How to play', icon: Icons.menu_book_rounded, onPressed: () => _howToPlay(context)),
               if (demo)
                 const Padding(

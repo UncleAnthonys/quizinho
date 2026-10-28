@@ -36,6 +36,17 @@ class AppSettings extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// Survival personal best, kept separately for men's, women's and both.
+  int survivalBest(FootballGender g) => _prefs.getInt('survivalBest_${g.name}') ?? 0;
+
+  /// Saves [score] if it beats the best; returns true when it's a new record.
+  bool recordSurvival(FootballGender g, int score) {
+    if (score <= survivalBest(g)) return false;
+    _prefs.setInt('survivalBest_${g.name}', score);
+    notifyListeners();
+    return true;
+  }
+
   void _setBool(String key, bool v) {
     _prefs.setBool(key, v);
     notifyListeners();
