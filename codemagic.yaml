@@ -3,7 +3,11 @@
 # Before the first build (see docs/SETUP_IPHONE.md):
 #   1. In Codemagic, add an App Store Connect API key named exactly
 #      "Quizinho ASC key" (Team/Personal settings → Integrations → Developer Portal).
-#   2. Replace APP_STORE_APPLE_ID below with your app's numeric Apple ID.
+#   2. APP_STORE_APPLE_ID below is Quizinho's numeric Apple ID (done).
+#
+# Builds run when a tag starting "ios-" is pushed (git tag ios-1 && git push
+# --tags), or from "Start new build" in Codemagic — not on every commit, so
+# the free monthly build minutes go on builds worth testing.
 #   3. If you change bundle_identifier, change ORG in scripts/bootstrap_platforms.sh to match.
 
 workflows:
@@ -18,15 +22,15 @@ workflows:
         distribution_type: app_store
         bundle_identifier: com.littlefortstudios.quizinho
       vars:
-        APP_STORE_APPLE_ID: "0000000000" # ← replace with the number from App Store Connect → App Information
+        APP_STORE_APPLE_ID: "6828020010" # Quizinho in App Store Connect → App Information
       flutter: stable
       xcode: latest
       cocoapods: default
     triggering:
       events:
-        - push
-      branch_patterns:
-        - pattern: main
+        - tag
+      tag_patterns:
+        - pattern: ios-*
           include: true
     scripts:
       - name: Platform folders (if missing)
