@@ -244,11 +244,18 @@ def main() -> int:
 
     # ---- spells -----------------------------------------------------------
     by_player: dict[str, list[dict]] = defaultdict(list)
+    new_moves: list[dict] = []
     for s in spells_raw:
         if s["team"] not in keep_clubs:
             stats["spell_dropped_club"] += 1
             continue
+        # 0 apps = never played for them (squad numbers, unused youth) — except
+        # a brand-new move: signings show 0 until Wikidata catches up (Barcola
+        # at Liverpool, Salah at Trabzonspor). Those are checked once the whole
+        # career is known, below.
         if s.get("apps") == 0:
+            if not s.get("end") and year(s.get("start")) is not None:
+                new_moves.append(s)
             stats["spell_zero_apps"] += 1
             continue
         start = year(s.get("start"))
@@ -263,6 +270,20 @@ def main() -> int:
             "loan": bool(set(s.get("acq", [])) & LOAN), "raw_start": s.get("start") or "",
             "apps": s.get("apps"), "goals": s.get("goals"),
         })
+
+    # A 0-app current spell counts only as the latest move to a club the player
+    # hasn't been at — not a stale duplicate of an old loan or an earlier spell.
+    for s in new_moves:
+        others = by_player.get(s["player"], [])
+        start = year(s["start"])
+        if others and all(o["club"] != s["team"] and o["start"] <= start for o in others):
+            by_player[s["player"]].append({
+                "club": s["team"], "start": start, "end": None,
+                "loan": bool(set(s.get("acq", [])) & LOAN), "raw_start": s.get("start") or "",
+                "apps": None, "goals": None,
+            })
+            stats["spell_zero_apps"] -= 1
+            stats["spell_new_move_kept"] += 1
 
     # ---- players ----------------------------------------------------------
     out_players = []
@@ -313,7 +334,7 @@ def main() -> int:
         club_stats: dict[str, list[int]] = {}
         for cid in {s["club"] for s in spells}:
             at = [s for s in spells if s["club"] == cid]
-            if all(s["apps"] is not None and s["goals"] is not None for s in at):
+            if all(s["apps"] is not None and s["goals"] is not None for s in at) and sum(s["apps"] for s in at) > 0:
                 club_stats[cid] = [sum(s["apps"] for s in at), sum(s["goals"] for s in at)]
         out_players.append({
             "id": pid, "wikidata": p["id"], "name": name, "nat": nat,

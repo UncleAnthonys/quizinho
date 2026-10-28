@@ -140,6 +140,9 @@ EASY_PAIRS = {frozenset(p) for p in [
 
 # European giants: two of these make an Easy pair without an English club.
 GIANTS = {"Q7156", "Q8682", "Q8701", "Q1422", "Q1543", "Q631", "Q2739", "Q15789", "Q41420"}
+# Foreign clubs a UK group knows well enough for a Medium pair: the giants and PSG.
+# Not Ajax, PSV, Benfica, Fenerbahçe… (big, but few recent players people know).
+WELL_KNOWN = GIANTS | {"Q483020"}
 
 
 def memorable_spell(player: dict, club: str) -> bool:
@@ -189,9 +192,9 @@ def connection_difficulty(a: str, b: str, shared: list[str], clubs, players) -> 
         return 1
     # Medium is the main game, so it takes a wide batch — but only pairs a UK
     # group recognises at once: an English club, or two of Europe's biggest
-    # (Juve + PSG). Hertha + Köln or Sevilla + Málaga are Hard. Two clubs from
+    # (Juve + PSG, not Ajax + Benfica). Hertha + Köln or Sevilla + Málaga are Hard. Two clubs from
     # smaller leagues (Porto + Vitória) only with a real star (Cruyff for Ajax + Feyenoord).
-    big_pair = familiar or min(ca["fame"], cb["fame"]) >= 5
+    big_pair = familiar or {a, b} <= WELL_KNOWN
     if big_pair and (top5 or one_big4) and (strong >= 1 and total >= 3 or strong >= 2 or stars >= 1 or known >= 3):
         return 2
     if big_pair and (stars >= 1 or strong >= 2 and total >= 5):
