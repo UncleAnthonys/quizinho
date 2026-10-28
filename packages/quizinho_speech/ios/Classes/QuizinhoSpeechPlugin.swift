@@ -20,7 +20,12 @@ public class QuizinhoSpeechPlugin: NSObject, FlutterPlugin, FlutterStreamHandler
 
   private let registrar: FlutterPluginRegistrar
   private let recognizer = SFSpeechRecognizer(locale: Locale(identifier: "en-GB"))
-  private let engine = AVAudioEngine()
+  /// A fresh engine per listen, made only after the session is in record mode
+  /// (an engine whose input node was first touched in playback mode reports a
+  /// 0 Hz format, and tapping that aborts the app).
+  private var engine: AVAudioEngine?
+  private var tapped = false
+  private var observers: [NSObjectProtocol] = []
   private var sink: FlutterEventSink?
 
   private var request: SFSpeechAudioBufferRecognitionRequest?
@@ -241,13 +246,30 @@ public class QuizinhoSpeechPlugin: NSObject, FlutterPlugin, FlutterStreamHandler
     }
     if #available(iOS 16, *) { req.addsPunctuation = false }
 
+    let engine = AVAudioEngine()
     let input = engine.inputNode
-    input.removeTap(onBus: 0)
-    input.installTap(onBus: 0, bufferSize: 1024, format: input.outputFormat(forBus: 0)) { buffer, _ in
+    let format = input.outputFormat(forBus: 0)
+    guard format.sampleRate > 0, format.channelCount > 0 else {
+      throw NSError(domain: "quizinho.speech", code: 2, userInfo: [NSLocalizedDescriptionKey: "Microphone not ready"])
+    }
+    input.installTap(onBus: 0, bufferSize: 1024, format: format) { buffer, _ in
       req.append(buffer)
     }
+    self.engine = engine
+    tapped = true
     engine.prepare()
     try engine.start()
+    // Another sound taking over the audio session, a call, or a route change
+    // (headphones) stops the engine; finish with what was heard.
+    let centre = NotificationCenter.default
+    observers = [
+      centre.addObserver(forName: .AVAudioEngineConfigurationChange, object: engine, queue: .main) { [weak self] _ in
+        self?.endAudio()
+      },
+      centre.addObserver(forName: AVAudioSession.interruptionNotification, object: nil, queue: .main) { [weak self] _ in
+        self?.endAudio()
+      },
+    ]
 
     request = req
     finished = false
@@ -287,10 +309,7 @@ public class QuizinhoSpeechPlugin: NSObject, FlutterPlugin, FlutterStreamHandler
     silenceTimer?.invalidate()
     maxTimer?.invalidate()
     guard !finished else { return }
-    if engine.isRunning {
-      engine.stop()
-      engine.inputNode.removeTap(onBus: 0)
-    }
+    stopEngine()
     request?.endAudio()
     // If no final result arrives, finish with what was heard.
     let id = session
@@ -312,12 +331,22 @@ public class QuizinhoSpeechPlugin: NSObject, FlutterPlugin, FlutterStreamHandler
     maxTimer?.invalidate()
     silenceTimer = nil
     maxTimer = nil
-    if engine.isRunning { engine.stop() }
-    engine.inputNode.removeTap(onBus: 0)
+    stopEngine()
     request?.endAudio()
     task?.cancel()
     request = nil
     task = nil
+  }
+
+  /// Stops and releases the engine. Never touches an input node that wasn't tapped.
+  private func stopEngine() {
+    for o in observers { NotificationCenter.default.removeObserver(o) }
+    observers = []
+    guard let engine = engine else { return }
+    if engine.isRunning { engine.stop() }
+    if tapped { engine.inputNode.removeTap(onBus: 0) }
+    tapped = false
+    self.engine = nil
   }
 
   private func send(_ event: [String: Any]) {

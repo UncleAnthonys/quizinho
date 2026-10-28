@@ -41,6 +41,22 @@ class SoundService {
 
   Future<void> init() async {
     try {
+      // iPhone: share one record-capable audio session with the mic. The
+      // default (playback only) switches the mic off under the recogniser
+      // whenever a sound plays, e.g. the buzzer just before an answer.
+      if (!kIsWeb && defaultTargetPlatform == TargetPlatform.iOS) {
+        await AudioPlayer.global.setAudioContext(AudioContext(
+          iOS: AudioContextIOS(
+            category: AVAudioSessionCategory.playAndRecord,
+            options: const {
+              AVAudioSessionOptions.defaultToSpeaker,
+              AVAudioSessionOptions.mixWithOthers,
+              AVAudioSessionOptions.allowBluetooth,
+              AVAudioSessionOptions.allowBluetoothA2DP,
+            },
+          ),
+        )).catchError((Object e) => debugPrint('Audio context failed: $e'));
+      }
       await AudioCache.instance.loadAll([for (final s in Sfx.values) s.asset]);
       for (final s in Sfx.values) {
         _pools[s] = [
