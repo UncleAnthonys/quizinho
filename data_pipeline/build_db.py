@@ -198,8 +198,23 @@ def connection_difficulty(a: str, b: str, shared: list[str], clubs, players) -> 
     return 4
 
 
-def career_difficulty(fame: int) -> int:
-    return {5: 1, 4: 2, 3: 3}.get(fame, 4)
+def career_difficulty(p: dict, clubs) -> int:
+    """How fast a group would get the player from the list of clubs: their fame,
+    and how many real spells (not loans or cameos) at big, well-known clubs the
+    path shows. Davids (Ajax, Juventus, Spurs) is gettable even though his fame
+    rating is only 3; a star whose path is mostly obscure clubs is not Easy."""
+    big = {s["club"] for s in p["spells"]
+           if clubs[s["club"]]["fame"] >= 5 and clubs[s["club"]]["country"] in KNOWN_LEAGUES
+           and memorable_spell(p, s["club"])}
+    english = any(clubs[c]["country"] in ("GBR", "ENG") for c in big)
+    fame = p["fame"]
+    if fame >= 5 and len(big) >= 2 or fame >= 4 and len(big) >= 3 and english:
+        return 1
+    if fame >= 4 or fame >= 3 and len(big) >= 2:
+        return 2
+    if fame >= 3 or len(big) >= 1:
+        return 3
+    return 4
 
 
 def match_difficulty(fame: int) -> int:
@@ -383,7 +398,7 @@ def generate_career_challenges(players, clubs):
     for pid, p in players.items():
         distinct = {s["club"] for s in p["spells"]}
         if p["fame"] >= CAREER_MIN_FAME and len(p["spells"]) >= 3 and len(distinct) >= 3:
-            diff = career_difficulty(p["fame"])
+            diff = career_difficulty(p, clubs)
             # normal play needs a career mostly in leagues people watch:
             # at least two top-five-league clubs (Kanté: Caen, Leicester, Chelsea ✓)
             top5_clubs = {s["club"] for s in p["spells"] if clubs[s["club"]]["country"] in TOP5}
