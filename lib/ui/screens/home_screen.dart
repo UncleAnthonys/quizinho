@@ -46,7 +46,7 @@ class HomeScreen extends StatelessWidget {
                       Text('THE FOOTBALL PARTY GAME', style: AppText.label(18, color: Palette.yellow)),
                       const SizedBox(height: 18),
                       const Text(
-                        'Split into teams. A new game every round. Shout, steal, argue — the app keeps score.',
+                        'One-on-one or the whole room in teams. A new game every round. Shout, steal, argue — the app keeps score.',
                         textAlign: TextAlign.center,
                         style: TextStyle(color: Palette.muted, fontSize: 16, height: 1.4),
                       ),
@@ -56,11 +56,13 @@ class HomeScreen extends StatelessWidget {
               ),
               const Spacer(flex: 2),
               BigButton(
-                label: 'Team match',
+                label: 'Head to head',
                 icon: Icons.groups_rounded,
                 height: 72,
                 onPressed: () => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const SetupScreen())),
               ),
+              const SizedBox(height: 6),
+              Text('2 players or up to 6 teams', style: AppText.label(13)),
               const SizedBox(height: 10),
               // Solo is the side door: smaller and outlined, so the party game leads.
               SizedBox(

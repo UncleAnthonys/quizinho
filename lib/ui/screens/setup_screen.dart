@@ -113,7 +113,7 @@ class _SetupScreenState extends State<SetupScreen> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Palette.pitch,
-        title: Text('TEAM MATCH', style: AppText.headline(26)),
+        title: Text('HEAD TO HEAD', style: AppText.headline(26)),
       ),
       body: PitchBackground(
         child: SafeArea(
