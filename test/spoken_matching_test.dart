@@ -45,6 +45,7 @@ void main() {
       ('Pneumonia Vidić', 'nemanja-vidic'), ('Diane Loughran', 'dejan-lovren'), ('Pet check', 'petr-cech'),
       ('Golo Cante', 'ngolo-kante'), ('Olivia are rude', 'olivier-giroud'), ('Frankie Deon', 'frenkie-de-jong'),
       ('Busting shrine Steiger', 'bastian-schweinsteiger'), ('Tia Marie', 'thierry-henry'),
+      ('Bouček Szczęsny', 'wojciech-szczesny'),
     ]) {
       expect(repo.players.resolveSpoken([heard], isAnswer: (p) => p.id == id)?.id, id, reason: heard);
     }
@@ -56,6 +57,7 @@ void main() {
     expect(repo.players.resolveSpoken(['Virgil van Dyke'], isAnswer: kane)?.id, 'virgil-van-dijk');
     expect(repo.players.resolveSpoken(['Golo Cante'], isAnswer: kane), isNull);
     expect(repo.players.resolveSpoken(['Chesney'], isAnswer: kane), isNull);
+    expect(repo.players.resolveSpoken(['Bouček Szczęsny'], isAnswer: kane), isNull);
   });
 
   test('a sound-alike of a wrong player is never auto-submitted', () {

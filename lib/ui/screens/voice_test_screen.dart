@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:math';
 
 import 'package:flutter/foundation.dart';
@@ -19,10 +20,10 @@ class VoiceTestScreen extends StatefulWidget {
   State<VoiceTestScreen> createState() => _VoiceTestScreenState();
 }
 
-/// The hard ones first — Polish, Scandinavian, Balkan, French, German, Dutch,
-/// Italian, Spanish, Portuguese, Turkish and others. After these, random
-/// well-known players with names from other languages.
-const _testIds = [
+/// Names used while tuning the recogniser — left out of the test, along with
+/// every player whose pronunciation was fixed by hand
+/// (assets/voice/tuned_players.json), so the score is for names nobody tuned.
+const _tunedTestIds = [
   'wojciech-szczesny', 'martin-odegaard', 'pierre-emile-hojbjerg', 'dusan-tadic', 'robert-lewandowski',
   'jakub-blaszczykowski', 'lukasz-piszczek', 'luka-modric', 'ivan-rakitic', 'mateo-kovacic', 'nemanja-vidic',
   'branislav-ivanovic', 'nemanja-matic', 'aleksandar-mitrovic', 'dejan-lovren', 'tomas-rosicky', 'petr-cech',
@@ -53,7 +54,12 @@ class _Result {
 class _VoiceTestScreenState extends State<VoiceTestScreen> {
   final _random = Random();
   final List<_Result> _results = [];
-  late List<Player> _queue;
+  final List<Player> _queue = [];
+  List<Player> _pool = const [];
+
+  /// Names per test; after these it keeps going with more random ones.
+  static const _testSize = 30;
+  static const _british = {'GBR', 'ENG', 'SCO', 'WAL', 'NIR', 'IRL'};
   int _index = 0;
   bool _listening = false;
   String _live = '';
@@ -69,11 +75,27 @@ class _VoiceTestScreenState extends State<VoiceTestScreen> {
     _s = AppScope.of(context);
     if (_ready) return;
     _ready = true;
-    _queue = [
-      for (final id in _testIds)
-        if (_s.repo.players.byId(id) case final p?) p,
-    ];
+    _loadPool();
     _loadModel();
+  }
+
+  /// A fresh random set every run from well-known players nobody tuned:
+  /// mostly foreign names (the hard part), some British ones as a control.
+  Future<void> _loadPool() async {
+    final tuned = <String>{..._tunedTestIds};
+    try {
+      final doc = jsonDecode(await rootBundle.loadString('assets/voice/tuned_players.json')) as Map<String, dynamic>;
+      tuned.addAll((doc['ids'] as List).cast<String>());
+    } catch (_) {}
+    final pool = _s.repo.players.all.where((p) => p.fame >= 3 && !tuned.contains(p.id)).toList()..shuffle(_random);
+    final foreign = pool.where((p) => !_british.contains(p.nationality)).toList();
+    final home = pool.where((p) => _british.contains(p.nationality)).toList();
+    final picks = [...foreign.take(_testSize * 4 ~/ 5), ...home.take(_testSize ~/ 5)]..shuffle(_random);
+    if (!mounted) return;
+    setState(() {
+      _pool = pool;
+      _queue.addAll(picks);
+    });
   }
 
   /// On iPhone, builds the player-name voice model (first time takes a while).
@@ -86,21 +108,18 @@ class _VoiceTestScreenState extends State<VoiceTestScreen> {
     if (mounted) setState(() => _model = state == 'not used here' ? info : 'Player voice model: $state');
   }
 
-  Player get _current {
+  Player? get _current {
     while (_index >= _queue.length) {
-      _queue.add(_randomForeignName());
+      final more = _pool.where((p) => !_queue.contains(p)).toList();
+      if (more.isEmpty) return null;
+      _queue.add(more[_random.nextInt(more.length)]);
     }
     return _queue[_index];
   }
 
-  /// A well-known player whose name follows another language's rules.
-  Player _randomForeignName() {
-    final pool = _s.repo.players.all.where((p) => p.fame >= 3 && p.spoken.isNotEmpty && !_queue.contains(p)).toList();
-    return pool[_random.nextInt(pool.length)];
-  }
-
   Future<void> _listen() async {
     final target = _current;
+    if (target == null) return;
     setState(() {
       _listening = true;
       _live = '';
@@ -140,10 +159,10 @@ class _VoiceTestScreenState extends State<VoiceTestScreen> {
   String _report() {
     final platform = kIsWeb ? 'web' : defaultTargetPlatform.name;
     final good = _results.where((r) => r.ok).length;
-    final b = StringBuffer('Quizinho voice test — $platform — $good/${_results.length} recognised\n');
+    final b = StringBuffer('Quizinho voice test (random untuned names) — $platform — $good/${_results.length} recognised\n');
     if (_model.isNotEmpty) b.writeln(_model);
     for (final r in _results) {
-      b.writeln('${r.ok ? 'OK  ' : 'MISS'} ${r.player.name} [${r.player.id}] | heard: '
+      b.writeln('${r.ok ? 'OK  ' : 'MISS'} ${r.player.name} [${r.player.id}, ${r.player.nationality ?? '?'}] | heard: '
           '${r.heard.isEmpty ? '(nothing)' : r.heard.join(' / ')} | as answer: ${r.matched?.name ?? '-'}'
           ' | no hint: ${r.unhinted?.name ?? '-'}');
     }
@@ -185,6 +204,7 @@ class _VoiceTestScreenState extends State<VoiceTestScreen> {
       body: PitchBackground(
         child: ListView(padding: const EdgeInsets.all(16), children: [
           Text(
+            'A fresh random set of well-known players every time — none of them hand-tuned. '
             'Say each name the way you would in a game — no need to say it "properly". '
             'Then copy the results and paste them to Claude.',
             style: AppText.label(14),
@@ -194,7 +214,7 @@ class _VoiceTestScreenState extends State<VoiceTestScreen> {
             Text(_model, style: AppText.label(13, color: Palette.muted)),
           ],
           const SizedBox(height: 8),
-          Text('Name ${_index + 1}${_index < _testIds.length ? ' of ${_testIds.length}' : ' (bonus round)'}'
+          Text('Name ${_index + 1}${_index < _testSize ? ' of $_testSize' : ' (bonus round)'}'
               ' · $good/$done recognised', style: AppText.label(13, color: Palette.yellow)),
           const SizedBox(height: 16),
           Container(
@@ -206,7 +226,7 @@ class _VoiceTestScreenState extends State<VoiceTestScreen> {
             ),
             child: FittedBox(
               fit: BoxFit.scaleDown,
-              child: Text(p.name.toUpperCase(), style: AppText.headline(40)),
+              child: Text(p?.name.toUpperCase() ?? '…', style: AppText.headline(40)),
             ),
           ),
           const SizedBox(height: 16),

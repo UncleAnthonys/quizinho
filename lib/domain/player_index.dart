@@ -178,7 +178,11 @@ class PlayerIndex {
         // "Pneumonia Vidić" (surname spot on) or "Martin Audiard" (close all through).
         final leads = [wordKeys.first, soundKey(words.sublist(0, words.length - 1).join(' '))];
         final firstFits = leads.any((l) => e.firstSounds.any((f) => similarity(l, f) >= 0.5));
-        if (firstFits && wordKeys.last.length >= 3 && e.surnameSounds.contains(wordKeys.last)) {
+        if (words.last.length >= 4 && e.surnames.contains(words.last)) {
+          // The surname heard spelt exactly ("Bouček Szczęsny"): the first name
+          // can be any old mishearing.
+          s = s < 90 ? 90 : s;
+        } else if (firstFits && wordKeys.last.length >= 3 && e.surnameSounds.contains(wordKeys.last)) {
           s = s < 90 ? 90 : s;
         } else if (firstFits && whole.length >= 4 && e.sounds.any((k) => similarity(whole, k) >= 0.75)) {
           s = s < 88 ? 88 : s;
@@ -220,9 +224,10 @@ class PlayerIndex {
       if (answers.length == 1 && !saidSomeoneElse) return answers.first.player;
       if (answers.length > 1 || others.isEmpty) continue;
       final top = others.first;
-      // A wrong answer needs the name really said: exactly, or the full name
-      // sounding right word for word ("Virgil van Dyke") — never a lone sound-alike.
-      if (!(top.exact || top.base >= 93) || words > 4 || (partial && top.base < 100)) continue;
+      // A wrong answer needs the name really said: exactly, or the whole name
+      // sounding right ("Virgil van Dyke") — never words that each merely sound
+      // like part of someone's name ("Bouček Szczęsny" isn't Shinya Yabusaki).
+      if (!(top.exact || top.base >= 95) || words > 4 || (partial && top.base < 100)) continue;
       if (others.length > 1 && others[1].score >= top.score - 6) continue;
       return top.player;
     }

@@ -16,6 +16,7 @@ import hashlib
 import json
 import pathlib
 import re
+import sys
 import unicodedata
 from collections import defaultdict
 
@@ -23,6 +24,9 @@ ROOT = pathlib.Path(__file__).resolve().parent.parent
 SRC = ROOT / "assets" / "db" / "football.json"
 OUT = ROOT / "assets" / "voice" / "vocab.json"
 OVERRIDES = ROOT / "data_pipeline" / "seed" / "pronunciation_overrides.json"
+# Players whose names were hand-tuned, so the in-app voice test can leave them
+# out and measure names nobody tuned.
+TUNED = ROOT / "assets" / "voice" / "tuned_players.json"
 
 # espeak-ng voice for a nationality's native pronunciation. Nationalities not
 # listed (English-speaking, or names written in a script espeak can't read in
@@ -154,9 +158,21 @@ def told_voices(word: str) -> set[str]:
     return {v for v, rx in TELLS if rx.search(word)}
 
 
+def write_tuned(players: list[dict]) -> None:
+    words = set(json.loads(OVERRIDES.read_text(encoding="utf-8"))["words"]) if OVERRIDES.exists() else set()
+    ids = sorted(p["id"] for p in players if words & set(words_of(p["name"])))
+    TUNED.parent.mkdir(parents=True, exist_ok=True)
+    TUNED.write_text(json.dumps({"about": "Players with hand-tuned pronunciations (voice_vocab.py).", "ids": ids},
+                                ensure_ascii=False, indent=0) + "\n", encoding="utf-8")
+    print(f"tuned players={len(ids)}")
+
+
 def main() -> int:
-    phonemize = _espeak()
     doc = json.loads(SRC.read_text(encoding="utf-8"))
+    write_tuned(doc["players"])
+    if "--tuned-only" in sys.argv:
+        return 0
+    phonemize = _espeak()
     players = [p for p in doc["players"] if p.get("g") != "w"] + [p for p in doc["players"] if p.get("g") == "w"]
 
     phrases: dict[str, int] = defaultdict(int)
