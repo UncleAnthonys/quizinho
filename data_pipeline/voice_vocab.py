@@ -118,11 +118,40 @@ def _espeak():
     return phonemize
 
 
+_FOLD = str.maketrans({"ø": "o", "Ø": "O", "æ": "ae", "Æ": "Ae", "ß": "ss", "ł": "l", "Ł": "L", "đ": "d", "Đ": "D",
+                       "ð": "d", "þ": "th", "Þ": "Th", "ı": "i", "œ": "oe"})
+
+
+def fold(word: str) -> str:
+    t = unicodedata.normalize("NFKD", word.translate(_FOLD))
+    return "".join(c for c in t if not unicodedata.combining(c))
+
+
 def words_of(name: str) -> list[str]:
     return [w for w in re.split(r"[\s\-]+", name.replace(".", "")) if len(w) >= 2]
 
 
 COUNT_BY_FAME = {5: 100, 4: 50, 3: 20, 2: 8, 1: 3}
+
+# Letters that give a name's language away whatever the nationality: a Swiss
+# Xhaka is Albanian, a German Çalhanoğlu Turkish, a Swedish -ić Balkan.
+TELLS = [
+    ("sq", re.compile(r"xh|ë|^gj|^q[^u]", re.I)),
+    ("tr", re.compile(r"[ğışç]|ü.*[ğış]|[ğış].*ü")),
+    ("hr", re.compile(r"[ćčđ]|ić$|ič$|dž|[šž]")),
+    ("pl", re.compile(r"[łśźżęąń]|szcz|rz[a-z]|cz[a-z]")),
+    ("cs", re.compile(r"[řěů]")),
+    ("hu", re.compile(r"[őű]|sz[a-z]*[aáeéoó]|gy")),
+    ("ro", re.compile(r"[șțşţă]")),
+    ("nb", re.compile(r"[øåæ]")),
+    ("pt", re.compile(r"[ãõ]|nho$|nha$|lh[aeo]")),
+    ("es", re.compile(r"ñ")),
+    ("nl", re.compile(r"ij|^van$|aa|oo[^m]")),
+]
+
+
+def told_voices(word: str) -> set[str]:
+    return {v for v, rx in TELLS if rx.search(word)}
 
 
 def main() -> int:
@@ -147,20 +176,28 @@ def main() -> int:
             by_voice["en-gb"].add(w)
             if (v := VOICE.get(p.get("nat") or "")):
                 by_voice[v].add(w)
+            for v in told_voices(w):
+                by_voice[v].add(w)
 
     prons: dict[str, set[str]] = defaultdict(set)
     unknown: dict[str, int] = defaultdict(int)
     for voice, words in sorted(by_voice.items()):
-        words = sorted(words)
-        print(f"{voice}: {len(words)} words", flush=True)
-        ipas = phonemize(words, language=voice, backend="espeak", strip=True, njobs=1,
+        # English speakers mostly read past accents ("Muller", "Odegaard"), so
+        # the English voice also reads each name with its accents taken off.
+        pairs = [(w, w) for w in sorted(words)]
+        if voice == "en-gb":
+            pairs += [(w, f) for w, _ in list(pairs) if (f := fold(w)) != w]
+        print(f"{voice}: {len(pairs)} readings", flush=True)
+        ipas = phonemize([t for _, t in pairs], language=voice, backend="espeak", strip=True, njobs=1,
                          language_switch="remove-flags")
-        for w, ipa in zip(words, ipas):
+        for (w, text), ipa in zip(pairs, ipas):
             xs, unk = ipa_to_xsampa(ipa, voice)
+            # espeak spells out letters it can't read ("Nguyễn" -> "letter u with...")
+            if not xs or len(xs.split()) > 2 * len(text) + 2:
+                continue
             for u in unk:
                 unknown[u] += 1
-            if xs:
-                prons[w].add(xs)
+            prons[w].add(xs)
 
     if OVERRIDES.exists():
         for w, extra in json.loads(OVERRIDES.read_text(encoding="utf-8"))["words"].items():

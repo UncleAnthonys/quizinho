@@ -177,7 +177,8 @@ def validate_and_collect(problems: Problems):
         if pid in players:
             problems.error(f"duplicate player id {pid}")
         # Typos/vandalism in source labels: digits, or Greek/Cyrillic letters in a Latin name
-        if re.search(r"\d", p["name"]) or (re.search(r"[A-Za-z]", p["name"]) and re.search(r"[Ͱ-ӿ]", p["name"])):
+        # ...or a capital stuck on the end of a word ("RodríguezF")
+        if re.search(r"\d|[a-zà-ÿ][A-Z](?:\s|$)", p["name"]) or (re.search(r"[A-Za-z]", p["name"]) and re.search(r"[Ͱ-ӿ]", p["name"])):
             problems.error(f"{pid}: suspicious name {p['name']!r} — fix in normalise.py NAME_FIXES")
         spells = []
         for i, entry in enumerate(p.get("career", [])):
