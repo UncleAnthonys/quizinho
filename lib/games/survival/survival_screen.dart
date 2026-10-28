@@ -148,6 +148,8 @@ class _SurvivalScreenState extends State<SurvivalScreen>
                     voice: services.voice,
                     onPick: c.submit,
                     isAnswer: c.isRightAnswer,
+                    showFlags: q.showFlags,
+                    showPositions: q.showPositions,
                     onPass: c.pass,
                   ),
                 ] else

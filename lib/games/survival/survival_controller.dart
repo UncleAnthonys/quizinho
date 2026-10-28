@@ -15,7 +15,13 @@ class SurvivalQuestion {
     required this.answerIds,
     this.lines = const [],
     this.difficulty = 1,
+    this.showFlags = true,
+    this.showPositions = true,
   });
+
+  /// Off when the answer list's flags or positions would give it away.
+  final bool showFlags;
+  final bool showPositions;
 
   final SurvivalKind kind;
 

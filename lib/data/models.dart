@@ -187,6 +187,19 @@ class BiddingCategory {
 
   /// Answers are clubs ("Clubs that have won the Premier League"), not people.
   bool get answersAreClubs => id.startsWith('clubs:');
+
+  /// The answer list's flags would give the game away ("French players who
+  /// played for Chelsea", "Spanish clubs that…").
+  bool get hidesFlags =>
+      kind == BiddingKind.nationality || answersAreClubs || _nationalityWords.hasMatch(prompt);
+
+  /// The answer list's positions would give the game away ("Goalkeepers who…").
+  bool get hidesPositions => _positionWords.hasMatch(prompt);
+
+  static final _positionWords = RegExp(
+      r'goalkeeper|keeper|defender|centre-back|center-back|full-back|midfielder|striker|forward|winger',
+      caseSensitive: false);
+  static final _nationalityWords = RegExp(r'\bfrom\b|nationalit|countr', caseSensitive: false);
 }
 
 /// Football 501: a club, and every player's league apps + goals for it.

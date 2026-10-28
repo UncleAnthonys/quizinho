@@ -31,6 +31,8 @@ class PlayerPicker extends StatefulWidget {
     this.hint = 'Type the full name…',
     this.voice,
     this.isAnswer,
+    this.showFlags = true,
+    this.showPositions = true,
   });
 
   final PlayerIndex index;
@@ -47,6 +49,11 @@ class PlayerPicker extends StatefulWidget {
 
   /// Right answers to the current question — voice leans towards these.
   final bool Function(Player)? isAnswer;
+
+  /// Off when they'd give the answer away ("French players who played for
+  /// Chelsea" — every right answer would show a French flag).
+  final bool showFlags;
+  final bool showPositions;
 
   @override
   State<PlayerPicker> createState() => _PlayerPickerState();
@@ -303,8 +310,9 @@ class _PlayerPickerState extends State<PlayerPicker> {
                     ),
                   ),
                   // Tells namesakes apart at a glance (Luis Suárez 🇺🇾 ST vs Denis Suárez 🇪🇸 CM).
-                  if (r.player.position != null) Text(r.player.position!, style: AppText.label(14)),
-                  if (nationalityLabel(r.player.nationality) case final flag?)
+                  if (widget.showPositions && r.player.position != null)
+                    Text(r.player.position!, style: AppText.label(14)),
+                  if (widget.showFlags) if (nationalityLabel(r.player.nationality) case final flag?)
                     Padding(
                       padding: const EdgeInsets.only(left: 8),
                       child: Text(flag, style: TextStyle(fontSize: flagFor(r.player.nationality) != null ? 26 : 14)),

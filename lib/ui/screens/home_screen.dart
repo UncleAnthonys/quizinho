@@ -56,19 +56,26 @@ class HomeScreen extends StatelessWidget {
               ),
               const Spacer(flex: 2),
               BigButton(
-                label: 'New match',
-                icon: Icons.sports_soccer,
+                label: 'Team match',
+                icon: Icons.groups_rounded,
                 height: 72,
                 onPressed: () => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const SetupScreen())),
               ),
               const SizedBox(height: 10),
-              BigButton(
-                label: 'Play solo · Survival',
-                icon: Icons.person_rounded,
-                height: 56,
-                color: Palette.cardHigh,
-                textColor: Palette.text,
-                onPressed: () => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const SurvivalScreen())),
+              // Solo is the side door: smaller and outlined, so the party game leads.
+              SizedBox(
+                height: 46,
+                width: 240,
+                child: OutlinedButton.icon(
+                  style: OutlinedButton.styleFrom(
+                    side: const BorderSide(color: Palette.line, width: 1.5),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                  ),
+                  icon: const Icon(Icons.person_rounded, color: Palette.yellow, size: 20),
+                  label: Text('PLAY SOLO · SURVIVAL', style: AppText.headline(18)),
+                  onPressed: () =>
+                      Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const SurvivalScreen())),
+                ),
               ),
               const SizedBox(height: 4),
               GhostButton(label: 'How to play', icon: Icons.menu_book_rounded, onPressed: () => _howToPlay(context)),

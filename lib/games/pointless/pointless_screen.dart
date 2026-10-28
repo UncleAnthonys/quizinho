@@ -210,6 +210,8 @@ class _PointlessScreenState extends State<PointlessScreen>
         hint: clubs ? 'Say or type a club…' : 'Say or type a name…',
         onPick: c.submit,
         isAnswer: (p) => c.category.answerIds.contains(p.id),
+        showFlags: !c.category.hidesFlags,
+        showPositions: !c.category.hidesPositions,
         onPass: c.giveUp,
         onDisputed: (typed, allowed) {
           if (allowed) {

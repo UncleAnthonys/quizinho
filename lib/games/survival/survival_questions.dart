@@ -108,6 +108,8 @@ class SurvivalQuestions {
               prompt: b.prompt,
               answerIds: b.answerIds,
               difficulty: b.difficulty,
+              showFlags: !b.hidesFlags,
+              showPositions: !b.hidesPositions,
             );
           }
           skip.add(b.id);
