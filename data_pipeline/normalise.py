@@ -134,6 +134,26 @@ NAME_FIXES = {
     "Q22082660": "Robert Arboleda",  # zero for o
     "Q2612089": "Johnny Herrera",    # vandalised label
     "Q60736591": "Brian Rodríguez",
+    "Q11557367": "Takuma Asano",
+    "Q186330": "Rafael Márquez",
+    "Q294204": "Joaquín",
+    "Q218394": "Frédéric Kanouté",
+    "Q14602686": "Gabriel Paulista",
+    "Q372605": "Nicolás Gaitán",
+    "Q251721": "Ángel Labruna",
+    "Q10557534": "Mahmoud Kahraba",
+    "Q1042372": "Carlo Parola",
+    "Q946473": "Umut Bulut",
+    "Q133760": "Jordan Spence",
+    "Q933222": "Mohammad Reza Khalatbari",
+    "Q16302370": "Guido Vadalá",
+    "Q1996365": "Aldo Leão Ramírez",
+    "Q936015": "Florin Petre",
+    "Q30089624": "Lucas Paquetá",
+    "Q603681": "Antonio Mirante",
+    "Q15130650": "Roger Martínez",
+    "Q529244": "Julio César de León",
+    "Q2557773": "Fabián Rinaudo",
 }
 # Greek/Cyrillic letters that look Latin, slipped into Latin-script names.
 _LOOKALIKES = str.maketrans("ΑΒΕΗΙΚΜΝΟΡΤΧΥΖаеорсухАВЕКМНОРСТХ", "ABEHIKMNOPTXYZaeopcyxABEKMHOPCTX")

@@ -117,14 +117,83 @@ def load(name: str) -> dict:
     return json.loads((SEED / name).read_text(encoding="utf-8"))
 
 
-def connection_difficulty(best_fame: int, club_fame_a: int, club_fame_b: int) -> int:
-    """1 easy .. 4 expert. Driven by how famous the best answer is, then the clubs."""
-    score = best_fame * 0.6 + (club_fame_a + club_fame_b) / 2 * 0.4
-    if score >= 4.6:
+NAME_PARTICLES = {"van", "von", "de", "der", "den", "da", "dos", "das", "do", "di", "del", "della", "la", "le",
+                  "ter", "ten", "af", "al", "el", "bin", "ben", "y", "e", "zu", "of", "du", "des", "dal", "'t",
+                  "los", "las", "te", "i", "á"}
+# The four leagues a UK group knows best. Easy connections stay inside them:
+# Feyenoord + Ajax is two big clubs, but not an easy question here.
+BIG4 = {"GBR", "ENG", "ESP", "ITA", "GER"}
+# Rivals everyone links: Easy as long as two answers are well known. (Liverpool +
+# Everton, Celtic + Rangers and Newcastle + Sunderland have hardly any
+# crossovers people know — Beardsley, Kenny Miller — so the data leaves them hard.)
+EASY_PAIRS = {frozenset(p) for p in [
+    ("Q9617", "Q18741"),    # Arsenal, Tottenham
+    ("Q18656", "Q50602"),   # Man United, Man City
+    ("Q18656", "Q1130849"), # Man United, Liverpool
+    ("Q7156", "Q8682"),     # Barcelona, Real Madrid
+    ("Q8682", "Q8701"),     # Real Madrid, Atlético
+    ("Q1543", "Q631"),      # AC Milan, Inter
+    ("Q1422", "Q631"),      # Juventus, Inter
+    ("Q15789", "Q41420"),   # Bayern, Dortmund
+]}
+
+
+# European giants: two of these make an Easy pair without an English club.
+GIANTS = {"Q7156", "Q8682", "Q8701", "Q1422", "Q1543", "Q631", "Q2739", "Q15789", "Q41420"}
+
+
+def memorable_spell(player: dict, club: str) -> bool:
+    """Would people link this player with this club? A loan, a handful of
+    games, or a short late cameo at a smaller club doesn't count (Lampard's
+    teenage loan at Swansea, Balotelli at Monza, Özil at Başakşehir)."""
+    spells = [s for s in player["spells"] if s["club"] == club]
+    if spells and all(s["loan"] for s in spells):
+        return False
+    apps = (player.get("stats") or {}).get(club, [None])[0]
+    if apps is None:  # no numbers: trust a permanent spell
+        return True
+    return apps >= 50 or (apps >= 20 and CLUB_FAME[club] >= 4)  # Cantona's Leeds counts
+
+
+CLUB_FAME: dict[str, int] = {}
+
+
+def connection_difficulty(a: str, b: str, shared: list[str], clubs, players) -> int:
+    """1 easy .. 4 expert, from how many answers people would actually think of
+    (famous players with real spells at both clubs), how many answers there are
+    in all, and how big and familiar the two clubs are."""
+    def solid(pid: str) -> bool:
+        return memorable_spell(players[pid], a) and memorable_spell(players[pid], b)
+
+    fame = {pid: players[pid]["fame"] for pid in shared}
+    stars = sum(1 for pid in shared if fame[pid] >= 5 and solid(pid))   # Rooney, Ronaldo
+    strong = sum(1 for pid in shared if fame[pid] >= 4 and solid(pid))  # Ashley Young
+    known = sum(1 for pid in shared if fame[pid] >= 3 and solid(pid))
+    total = len(shared)
+    ca, cb = clubs[a], clubs[b]
+    big4 = ca["country"] in BIG4 and cb["country"] in BIG4
+    one_big4 = ca["country"] in BIG4 or cb["country"] in BIG4
+    top5 = ca["country"] in TOP5 and cb["country"] in TOP5
+    known_leagues = ca["country"] in KNOWN_LEAGUES and cb["country"] in KNOWN_LEAGUES
+
+    if not known_leagues:
+        return 4
+    if frozenset((a, b)) in EASY_PAIRS and known >= 2:
         return 1
-    if score >= 3.8:
+    # Easy: big clubs a UK group knows (at least one English, or two European
+    # giants) and two or more answers that come straight to mind.
+    familiar = ca["country"] in ("GBR", "ENG") or cb["country"] in ("GBR", "ENG") or {a, b} <= GIANTS
+    if big4 and familiar and min(ca["fame"], cb["fame"]) >= 4 and max(ca["fame"], cb["fame"]) >= 5 \
+            and (stars >= 2 and total >= 5 or stars >= 1 and strong >= 2 and total >= 8
+                 or strong >= 2 and total >= 12):
+        return 1
+    # Medium is the main game, so it takes a wide batch — but two clubs from
+    # smaller leagues (Porto + Vitória) only with a real star (Cruyff for Ajax + Feyenoord).
+    if (top5 or one_big4) and (strong >= 1 and total >= 3 or strong >= 2 or stars >= 1 or known >= 3):
         return 2
-    if score >= 3.0:
+    if stars >= 1 or strong >= 2 and total >= 5:
+        return 2
+    if known >= 1 or any(f >= 4 for f in fame.values()) or big4 and any(f >= 3 for f in fame.values()):
         return 3
     return 4
 
@@ -179,6 +248,9 @@ def validate_and_collect(problems: Problems):
         # Typos/vandalism in source labels: digits, or Greek/Cyrillic letters in a Latin name
         # ...or a capital stuck on the end of a word ("RodríguezF")
         if re.search(r"\d|[a-zà-ÿ][A-Z](?:\s|$)", p["name"]) or (re.search(r"[A-Za-z]", p["name"]) and re.search(r"[Ͱ-ӿ]", p["name"])):
+            problems.error(f"{pid}: suspicious name {p['name']!r} — fix in normalise.py NAME_FIXES")
+        # ...or a lower-case word that isn't a name particle ("gabriel putita del leon")
+        if any(w[0].islower() and w not in NAME_PARTICLES for w in p["name"].split()):
             problems.error(f"{pid}: suspicious name {p['name']!r} — fix in normalise.py NAME_FIXES")
         spells = []
         for i, entry in enumerate(p.get("career", [])):
@@ -286,6 +358,7 @@ CAREER_MIN_FAME = 2
 
 def generate_connections(clubs, players):
     """Pairs built from each player's own clubs (fast at 20k+ players)."""
+    CLUB_FAME.update({cid: c["fame"] for cid, c in clubs.items()})
     pairs: dict[tuple[str, str], set[str]] = {}
     for pid, p in players.items():
         own = sorted({s["club"] for s in p["spells"] if clubs[s["club"]]["fame"] >= CONNECTION_MIN_CLUB_FAME})
@@ -296,9 +369,7 @@ def generate_connections(clubs, players):
         best = max(players[pid]["fame"] for pid in shared)
         if best < CONNECTION_MIN_ANSWER_FAME:
             continue  # nobody guessable
-        diff = connection_difficulty(best, clubs[a]["fame"], clubs[b]["fame"])
-        if clubs[a]["country"] not in KNOWN_LEAGUES or clubs[b]["country"] not in KNOWN_LEAGUES:
-            diff = 4
+        diff = connection_difficulty(a, b, sorted(shared), clubs, players)
         eras = 0
         for pid in shared:
             eras |= spells_mask([s for s in players[pid]["spells"] if s["club"] in (a, b)])
