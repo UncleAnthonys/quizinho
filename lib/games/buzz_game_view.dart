@@ -318,8 +318,12 @@ class BuzzGameView extends StatelessWidget {
     }
     {
         final o = c.outcome;
-        return SingleChildScrollView(
-          padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
+        // The answers scroll; Next stays pinned at the bottom, so nothing that
+        // appears above it (commentary, "show all") can shift it under a tap.
+        return Column(children: [
+          Expanded(
+            child: SingleChildScrollView(
+          padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
           child: Column(children: [
             if (o != null && o.scored) ...[
               TeamChip(
@@ -339,8 +343,12 @@ class BuzzGameView extends StatelessWidget {
               Text('NOBODY GOT IT', style: AppText.headline(40, color: Palette.danger)),
             const SizedBox(height: 12),
             resolvedDetail,
-            const SizedBox(height: 16),
-            BigButton(
+          ]),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16, 4, 16, 12),
+            child: BigButton(
               label: c.isLastQuestion ? 'Finish round' : 'Next question',
               icon: c.isLastQuestion ? Icons.flag : Icons.arrow_forward,
               onPressed: () {
@@ -352,8 +360,8 @@ class BuzzGameView extends StatelessWidget {
                 }
               },
             ),
-          ]),
-        );
+          ),
+        ]);
     }
   }
 }
