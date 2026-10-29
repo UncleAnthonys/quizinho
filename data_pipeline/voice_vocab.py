@@ -160,7 +160,9 @@ def told_voices(word: str) -> set[str]:
 
 def write_tuned(players: list[dict]) -> None:
     words = set(json.loads(OVERRIDES.read_text(encoding="utf-8"))["words"]) if OVERRIDES.exists() else set()
-    ids = sorted(p["id"] for p in players if words & set(words_of(p["name"])))
+    spoken = ROOT / "data_pipeline" / "seed" / "spoken_overrides.json"
+    respelled = set(json.loads(spoken.read_text(encoding="utf-8"))["players"]) if spoken.exists() else set()
+    ids = sorted(p["id"] for p in players if words & set(words_of(p["name"])) or p["id"] in respelled)
     TUNED.parent.mkdir(parents=True, exist_ok=True)
     TUNED.write_text(json.dumps({"about": "Players with hand-tuned pronunciations (voice_vocab.py).", "ids": ids},
                                 ensure_ascii=False, indent=0) + "\n", encoding="utf-8")

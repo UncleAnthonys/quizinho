@@ -213,7 +213,7 @@ class PlayerIndex {
     // Recognisers list their guesses best first; the first clear-cut one wins.
     // Each guess is judged on its own so a vague one ("ronaldo") can't block a
     // clear one ("cristiano ronaldo").
-    for (final alt in alternatives) {
+    for (final (i, alt) in alternatives.indexed) {
       final words = _cleanSpoken(alt).split(' ').where((w) => w.isNotEmpty).length;
       final ranked = searchSpoken(alt, limit: 6, isAnswer: isAnswer).where((m) => m.base >= (partial ? 90 : 88)).toList();
       if (ranked.isEmpty) continue;
@@ -223,6 +223,9 @@ class PlayerIndex {
       final saidSomeoneElse = others.any((m) => m.base >= 100) && !answers.any((m) => m.exact);
       if (answers.length == 1 && !saidSomeoneElse) return answers.first.player;
       if (answers.length > 1 || others.isEmpty) continue;
+      // A wrong answer only from the recogniser's best guess — never a long
+      // shot further down its list ("Sio" for Mignolet, "Nari" for Gnabry).
+      if (i > 0) continue;
       final top = others.first;
       // A wrong answer needs the name really said: exactly, or the whole name
       // sounding right ("Virgil van Dyke") — never words that each merely sound

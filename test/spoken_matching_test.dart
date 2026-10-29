@@ -46,6 +46,7 @@ void main() {
       ('Golo Cante', 'ngolo-kante'), ('Olivia are rude', 'olivier-giroud'), ('Frankie Deon', 'frenkie-de-jong'),
       ('Busting shrine Steiger', 'bastian-schweinsteiger'), ('Tia Marie', 'thierry-henry'),
       ('Bouček Szczęsny', 'wojciech-szczesny'),
+      ('Denver Ball', 'demba-ba'), ('Mediterranean', 'mehdi-taremi'), ('Juan Cano Canoe', 'nwankwo-kanu'),
     ]) {
       expect(repo.players.resolveSpoken([heard], isAnswer: (p) => p.id == id)?.id, id, reason: heard);
     }
@@ -58,6 +59,9 @@ void main() {
     expect(repo.players.resolveSpoken(['Golo Cante'], isAnswer: kane), isNull);
     expect(repo.players.resolveSpoken(['Chesney'], isAnswer: kane), isNull);
     expect(repo.players.resolveSpoken(['Bouček Szczęsny'], isAnswer: kane), isNull);
+    // A long-shot alternative never submits someone else.
+    bool mignolet(Player p) => p.id == 'simon-mignolet';
+    expect(repo.players.resolveSpoken(['Simonyan', 'Cemil', 'Seymour', 'Sio'], isAnswer: mignolet), isNull);
   });
 
   test('a sound-alike of a wrong player is never auto-submitted', () {
