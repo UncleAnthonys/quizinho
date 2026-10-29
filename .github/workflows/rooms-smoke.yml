@@ -1,0 +1,24 @@
+# Checks the rooms database: a room can be written, read and streamed live,
+# and anything outside rooms/ is refused. Run from the Actions tab.
+name: Rooms smoke test
+
+on:
+  workflow_dispatch:
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Write, read, stream, refuse, clean up
+        run: |
+          U=$(grep -o "https://[^']*firebasedatabase.app" lib/multiplayer/rooms_config.dart)
+          code=ZZZZ
+          put=$(curl -s -o /dev/null -w "%{http_code}" -X PUT -d '{"at":{".sv":"timestamp"}}' "$U/rooms/$code/host.json")
+          got=$(curl -s "$U/rooms/$code/host.json")
+          stream=$(timeout 4 curl -s -N -H "Accept: text/event-stream" "$U/rooms/$code.json" | head -c 300 || true)
+          other=$(curl -s -o /dev/null -w "%{http_code}" -X PUT -d '1' "$U/elsewhere.json")
+          badcode=$(curl -s -o /dev/null -w "%{http_code}" -X PUT -d '1' "$U/rooms/TOOLONG/x.json")
+          curl -s -X DELETE "$U/rooms/$code.json" > /dev/null
+          echo "::notice title=Rooms::put=$put read=$got other=$other badcode=$badcode stream=$(echo "$stream" | tr '\n' ' ' | cut -c1-200)"
+          [ "$put" = "200" ] && [ "$other" != "200" ] && [ "$badcode" != "200" ] && echo "$stream" | grep -q "event: put"
