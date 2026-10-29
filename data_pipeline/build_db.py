@@ -264,6 +264,9 @@ def validate_and_collect(problems: Problems):
     # League apps/goals from Wikipedia infoboxes, only where Wikidata has none
     # (data_pipeline/wiki_stats_fetch.py).
     wiki_stats = load("wiki_stats.json")["players"] if (SEED / "wiki_stats.json").exists() else {}
+    # The name each player is known by (English Wikipedia title): "Alex", not
+    # "Alex Rodrigo Dias da Costa". Shown in the game; the full name stays an alias.
+    wiki_names = load("wiki_names.json")["players"] if (SEED / "wiki_names.json").exists() else {}
     matches_doc = load("matches.json")
 
     clubs = {}
@@ -278,11 +281,19 @@ def validate_and_collect(problems: Problems):
             problems.error(f"club {cid} fame out of range")
         clubs[cid] = {"name": name, "country": country, "fame": fame, "aliases": aliases, "reach": reach, "women": women}
 
+    def plausible(name: str) -> bool:
+        return not (re.search(r"\d|[a-zà-ÿ][A-Z](?:\s|$)", name)
+                    or re.search(r"[A-Za-z]", name) and re.search(r"[Ͱ-ӿ]", name)
+                    or any(w[0].islower() and w not in NAME_PARTICLES for w in name.split()))
+
     players = {}
     for p in players_raw:
         pid = p["id"]
         if pid in players:
             problems.error(f"duplicate player id {pid}")
+        known = wiki_names.get(pid)
+        if known and known != p["name"] and plausible(known):
+            p = {**p, "name": known, "aliases": list(dict.fromkeys([p["name"], *p.get("aliases", [])]))}
         # Typos/vandalism in source labels: digits, or Greek/Cyrillic letters in a Latin name
         # ...or a capital stuck on the end of a word ("RodríguezF")
         if re.search(r"\d|[a-zà-ÿ][A-Z](?:\s|$)", p["name"]) or (re.search(r"[A-Za-z]", p["name"]) and re.search(r"[Ͱ-ӿ]", p["name"])):
