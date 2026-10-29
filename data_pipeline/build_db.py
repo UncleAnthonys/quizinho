@@ -194,14 +194,24 @@ def connection_difficulty(a: str, b: str, shared: list[str], clubs, players) -> 
     # group recognises at once: an English club, or two of Europe's biggest
     # (Juve + PSG, not Ajax + Benfica). Hertha + Köln or Sevilla + Málaga are Hard. Two clubs from
     # smaller leagues (Porto + Vitória) only with a real star (Cruyff for Ajax + Feyenoord).
-    big_pair = familiar or {a, b} <= WELL_KNOWN
-    if big_pair and (top5 or one_big4) and (strong >= 1 and total >= 3 or strong >= 2 or stars >= 1 or known >= 3):
-        return 2
-    if big_pair and (stars >= 1 or strong >= 2 and total >= 5):
+    def english(c: str) -> bool:
+        return clubs[c]["country"] in ("GBR", "ENG")
+
+    # Partner for an English club: English too, or a big name (Everton + Barcelona,
+    # Chelsea + Marseille) — not Rennes or Lyon (Arsenal + Rennes: four obscure answers).
+    def big_name(c: str) -> bool:
+        return english(c) or c in WELL_KNOWN or clubs[c]["fame"] >= 5 and clubs[c]["country"] in TOP5
+
+    big_pair = (english(a) or english(b)) and big_name(a) and big_name(b) or {a, b} <= WELL_KNOWN
+    if big_pair and total >= 5 and (strong >= 1 or known >= 3 or stars >= 1):
         return 2
     if known >= 1 or any(f >= 4 for f in fame.values()) or big4 and any(f >= 3 for f in fame.values()):
         return 3
     return 4
+
+
+# Wikipedias covering a player — above this, a household name worldwide.
+ICON_REACH = 100
 
 
 def career_difficulty(p: dict, clubs) -> int:
@@ -213,10 +223,14 @@ def career_difficulty(p: dict, clubs) -> int:
            if clubs[s["club"]]["fame"] >= 5 and clubs[s["club"]]["country"] in KNOWN_LEAGUES
            and memorable_spell(p, s["club"])}
     english = any(clubs[c]["country"] in ("GBR", "ENG") for c in big)
+    # A real spell in England: a UK group's go-to (Stanković or Hagi never played here).
+    played_here = any(clubs[s["club"]]["country"] in ("GBR", "ENG") and memorable_spell(p, s["club"])
+                      for s in p["spells"])
     fame = p["fame"]
-    if fame >= 5 and len(big) >= 2 or fame >= 4 and len(big) >= 3 and english:
+    icon = fame >= 5 and (p.get("reach") or 0) >= ICON_REACH  # Messi, Zidane, R9 — everyone knows them
+    if (fame >= 5 and len(big) >= 2 or fame >= 4 and len(big) >= 3 and english) and (played_here or icon):
         return 1
-    if fame >= 4 or fame >= 3 and len(big) >= 2:
+    if (fame >= 4 or fame >= 3 and len(big) >= 2) and (played_here or fame >= 5):
         return 2
     if fame >= 3 or len(big) >= 1:
         return 3
@@ -367,6 +381,20 @@ def spells_mask(spells) -> int:
     return m
 
 
+def career_mask(spells) -> int:
+    """Eras a career mostly belongs to: each era holding at least a third of
+    its years (Hagi, 1982-2001, is 80s/90s — not 2000s for one last season)."""
+    years: set[int] = set()
+    for s in spells:
+        if s["start"] is not None:
+            years.update(range(s["start"], (CURRENT_YEAR if s["end"] is None else s["end"]) + 1))
+    if not years:
+        return 0
+    per = {bit: sum(1 for y in years if lo <= y <= hi) for bit, lo, hi in ERAS}
+    m = sum(bit for bit, n in per.items() if n * 3 >= len(years))
+    return m or max(per, key=per.get)
+
+
 # Club Connections / Tic-Tac-Toe only use clubs at least this well known, and
 # a pair needs at least one answer at least this famous — technically valid but
 # unguessable pairs ("Kauno Žalgiris + Vegalta Sendai") are no fun.
@@ -416,7 +444,7 @@ def generate_career_challenges(players, clubs):
             if len(top5_clubs) < 2 or known * 2 < len(p["spells"]):  # and most of the career
                 diff = 4
             out.append({"player": pid, "clues": len(p["spells"]), "difficulty": diff,
-                        "eras": spells_mask(p["spells"]) or 31})
+                        "eras": career_mask(p["spells"]) or 31})
     return out
 
 
