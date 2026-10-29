@@ -6,7 +6,7 @@ import '../../core/app_services.dart';
 import '../../core/sound_service.dart';
 import '../../core/theme.dart';
 import '../../domain/tournament.dart';
-import '../match_flow.dart';
+import '../match_access.dart';
 import '../widgets/common.dart';
 
 class WinnerScreen extends StatefulWidget {
@@ -33,6 +33,8 @@ class _WinnerScreenState extends State<WinnerScreen> with SingleTickerProviderSt
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!mounted) return;
       final s = AppScope.read(context);
+      // The free cup is done: the next match is the full game.
+      if (widget.tournament.config.warmUp) s.settings.markWarmUpPlayed();
       s.sound.play(Sfx.whistle);
       s.sound.play(Sfx.fanfare);
       s.sound.play(Sfx.cheer);
@@ -48,8 +50,9 @@ class _WinnerScreenState extends State<WinnerScreen> with SingleTickerProviderSt
   }
 
   void _rematch() {
-    final t = Tournament(widget.tournament.config);
-    MatchFlow.toWheel(context, t);
+    final config = widget.tournament.config;
+    // After the Warm-Up Cup, a rematch is the full game with the same teams.
+    MatchAccess.start(context, config.warmUp ? AppScope.read(context).settings.lastConfig() : config, rematch: true);
   }
 
   @override

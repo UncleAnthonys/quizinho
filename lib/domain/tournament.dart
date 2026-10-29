@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 
 import '../data/models.dart';
 import 'game_mode.dart';
+import 'warm_up_cup.dart';
 
 enum MatchLength {
   short(4, 'Short', '4 rounds · ~20 min'),
@@ -58,6 +59,7 @@ class TournamentConfig {
     this.headsUpSeconds = 60,
     Set<Era>? eras,
     this.gender = FootballGender.men,
+    this.warmUp = false,
   })  : modes = modes ?? {...GameModeId.concreteGames, GameModeId.wildcard},
         eras = (eras == null || eras.isEmpty) ? Era.values.toSet() : eras;
 
@@ -79,6 +81,19 @@ class TournamentConfig {
 
   /// Men's, women's or both — chosen on the home screen.
   final FootballGender gender;
+
+  /// The free Warm-Up Cup: three fixed rounds of hand-picked challenges.
+  final bool warmUp;
+
+  /// The same teams in the Warm-Up Cup instead of the full game.
+  TournamentConfig asWarmUp() => TournamentConfig(
+        teams: teams,
+        difficulty: Difficulty.easy,
+        modes: WarmUpCup.games.toSet(),
+        answerSeconds: answerSeconds,
+        gender: FootballGender.men,
+        warmUp: true,
+      );
   int get genderMask => gender.mask;
 
   /// Women's-only drops games that have no women's questions yet.
@@ -146,7 +161,7 @@ class Tournament extends ChangeNotifier {
   int get teamCount => config.teams.length;
   String teamName(int i) => config.teams[i].name;
   int get roundNumber => rounds.length + 1;
-  int get totalRounds => config.length.rounds;
+  int get totalRounds => config.warmUp ? WarmUpCup.games.length : config.length.rounds;
   bool get isFinished => rounds.length >= totalRounds;
   bool get isFinalRound => rounds.length == totalRounds - 1;
 
@@ -208,6 +223,7 @@ class Tournament extends ChangeNotifier {
   /// Picks where the wheel lands. Avoids the same game twice in a row when
   /// there is a choice, and never opens a match on the double-points wildcard.
   GameModeId spin() {
+    if (config.warmUp) return WarmUpCup.games[min(rounds.length, WarmUpCup.games.length - 1)];
     var segs = wheelSegments;
     if (rounds.isEmpty && segs.length > 1) segs = segs.where((m) => m != GameModeId.wildcard).toList();
     final options = segs.length > 1 ? segs.where((m) => m != _lastGame).toList() : segs;

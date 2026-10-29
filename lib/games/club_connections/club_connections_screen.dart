@@ -5,6 +5,7 @@ import '../../core/theme.dart';
 import '../../data/models.dart';
 import '../../domain/game_mode.dart';
 import '../../domain/tournament.dart';
+import '../../domain/warm_up_cup.dart';
 import '../buzz_game_view.dart';
 import '../game_screen_support.dart';
 import 'club_connections_controller.dart';
@@ -37,7 +38,9 @@ class _ClubConnectionsScreenState extends State<ClubConnectionsScreen>
     final source = services.challenges;
     final qs = <ClubConnection>[];
     for (var i = 0; i < t.config.questionsPerRound; i++) {
-      final q = await source.clubConnection(t.config.difficulty, t.usedIds(_mode), eras: t.config.eraMask, genders: t.config.genderMask);
+      final q = t.config.warmUp
+          ? (i < WarmUpCup.connections.length ? await source.fixedConnection(WarmUpCup.connections[i]) : null)
+          : await source.clubConnection(t.config.difficulty, t.usedIds(_mode), eras: t.config.eraMask, genders: t.config.genderMask);
       if (q == null) break;
       t.markUsed(_mode, q.id);
       qs.add(q);

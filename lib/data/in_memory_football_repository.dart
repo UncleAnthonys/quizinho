@@ -93,4 +93,13 @@ class InMemoryFootballRepository implements FootballRepository {
   @override
   Future<List<ClubConnection>> allClubConnections({int eras = Era.allMask, int genders = 1}) async =>
       [for (final c in connections) if ((c.eras & eras) != 0 && FootballGender.allows(genders, c.women)) c];
+
+  @override
+  Future<ClubConnection?> clubConnectionById(String id) async => connections.where((c) => c.id == id).firstOrNull;
+
+  @override
+  Future<CareerPath?> careerPathById(String playerId) async => careers.where((c) => c.id == playerId).firstOrNull;
+
+  @override
+  Future<BiddingCategory?> biddingCategoryById(String id) async => bidding.where((b) => b.id == id).firstOrNull;
 }

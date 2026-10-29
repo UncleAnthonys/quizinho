@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 
 import 'core/app_services.dart';
 import 'core/app_settings.dart';
+import 'core/purchases.dart';
 import 'core/sound_service.dart';
 import 'core/theme.dart';
 import 'core/voice_service.dart';
@@ -25,7 +26,11 @@ Future<void> main() async {
     // iPhone: build the player-name voice model in the background while
     // people set up teams; it's kept on the phone afterwards.
     if (settings.voiceOn) unawaited(voice.prepareModel());
-    runApp(QuizinhoApp(services: AppServices(repo: repo, settings: settings, sound: sound, voice: voice)));
+    // Listen for purchases from the start (incl. ones finished while closed).
+    final purchases = Purchases(settings);
+    unawaited(purchases.init());
+    runApp(QuizinhoApp(
+        services: AppServices(repo: repo, settings: settings, sound: sound, voice: voice, purchases: purchases)));
   } catch (e, st) {
     debugPrint('Startup failed: $e\n$st');
     runApp(_StartupError(error: '$e'));

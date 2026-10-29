@@ -5,7 +5,7 @@ import '../../core/theme.dart';
 import '../../data/models.dart';
 import '../../domain/game_mode.dart';
 import '../../domain/tournament.dart';
-import '../match_flow.dart';
+import '../match_access.dart';
 import '../widgets/common.dart';
 
 /// Teams, length, difficulty, games — then kick off. Prefilled from last time.
@@ -105,11 +105,12 @@ class _SetupScreenState extends State<SetupScreen> {
     );
     await services.settings.saveConfig(config);
     if (!mounted) return;
-    MatchFlow.toWheel(context, Tournament(config));
+    await MatchAccess.start(context, config);
   }
 
   @override
   Widget build(BuildContext context) {
+    final warmUp = MatchAccess.warmUpNext(AppScope.of(context));
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Palette.pitch,
@@ -142,6 +143,9 @@ class _SetupScreenState extends State<SetupScreen> {
                     ),
                   ),
                 const SizedBox(height: 12),
+                if (warmUp)
+                  const _WarmUpBanner()
+                else ...[
                 _section('MATCH LENGTH'),
                 SegmentedButton<MatchLength>(
                   segments: [for (final m in MatchLength.values) ButtonSegment(value: m, label: Text(m.label))],
@@ -233,11 +237,15 @@ class _SetupScreenState extends State<SetupScreen> {
                     ],
                   ),
                 ),
+                ],
               ]),
             ),
             Padding(
               padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
-              child: BigButton(label: 'Kick off', icon: Icons.sports_soccer, onPressed: _valid ? _start : null),
+              child: BigButton(
+                  label: warmUp ? 'Kick off the Warm-Up Cup' : 'Kick off',
+                  icon: Icons.sports_soccer,
+                  onPressed: _valid ? _start : null),
             ),
           ]),
         ),
@@ -390,4 +398,32 @@ class _PlayerNamesState extends State<_PlayerNames> {
             ),
           ),
       ]);
+}
+
+/// Before the unlock: what the free cup is, and what the full game adds.
+class _WarmUpBanner extends StatelessWidget {
+  const _WarmUpBanner();
+
+  @override
+  Widget build(BuildContext context) => Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: Colors.black.withValues(alpha: 0.3),
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: Palette.yellow, width: 2),
+        ),
+        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Text('FREE WARM-UP CUP', style: AppText.headline(28, color: Palette.yellow)),
+          const SizedBox(height: 4),
+          Text('3 rounds: Club Connections, Career Path and Bidding War.',
+              style: AppText.label(15, color: Palette.text)),
+          const SizedBox(height: 8),
+          const Text(
+            'The Warm-Up Cup has the same hand-picked challenges for everyone. '
+            'The full game (£2.99, one-off) gives you random challenges from a huge database, '
+            'all 8 games and unlimited matches.',
+            style: TextStyle(color: Palette.muted, fontSize: 14),
+          ),
+        ]),
+      );
 }

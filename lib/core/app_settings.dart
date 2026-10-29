@@ -48,6 +48,14 @@ class AppSettings extends ChangeNotifier {
     return true;
   }
 
+  /// The one-off full-game unlock (set by [Purchases] once the store confirms it).
+  bool get unlocked => _prefs.getBool('fullGameUnlocked') ?? false;
+  set unlocked(bool v) => _setBool('fullGameUnlocked', v);
+
+  /// Finished the free Warm-Up Cup — the next match needs the full game.
+  bool get warmUpPlayed => _prefs.getBool('warmUpPlayed') ?? false;
+  void markWarmUpPlayed() => _setBool('warmUpPlayed', true);
+
   /// Every question this phone has been asked, across matches and solo runs.
   late final QuestionHistory history = QuestionHistory(
     read: _prefs.getStringList,

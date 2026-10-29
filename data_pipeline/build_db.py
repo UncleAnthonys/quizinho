@@ -428,10 +428,10 @@ BID_MIN_CLUB_FAME = 4
 BID_COUNTRIES = {"GBR", "ENG", "SCO", "ESP", "ITA", "GER", "FRA", "NED", "POR", "TUR", "BEL", "MCO"}
 
 
-# Bidding only works if a team can realistically get three or four: a
+# Bidding only works if a team can realistically get a few: a
 # category needs this many solid answers (known players with a real spell at
 # the club — not a loan or a cameo) or it isn't used at all.
-BID_MIN_SOLID = 4
+BID_MIN_SOLID = 3
 
 
 def bidding_difficulty(answers: list[str], players, club_ids=()) -> int | None:
@@ -445,7 +445,7 @@ def bidding_difficulty(answers: list[str], players, club_ids=()) -> int | None:
     guessable = sum(1 for pid in answers if players[pid]["fame"] >= 2)
     if guessable < BID_MIN_ANSWERS or known < BID_MIN_SOLID:
         return None
-    return 1 if known >= 10 else 2 if known >= 6 else 3
+    return 1 if known >= 10 else 2 if known >= 5 else 3
 
 
 def generate_bidding(clubs, players, connections, countries):
@@ -483,7 +483,10 @@ def generate_bidding(clubs, players, connections, countries):
     for (cid, nat), answers in sorted(by_club_nat.items()):
         country = countries.get(nat)
         if country:
-            add(f"nat:{cid}:{nat}", f"Players from {country} who played for {clubs[cid]['name']}", "nationality", answers, {cid})
+            # Medium only at clubs a UK group knows (Brazilians at Chelsea, not Colombians at Porto)
+            familiar = clubs[cid]["country"] in ("GBR", "ENG") or cid in WELL_KNOWN
+            add(f"nat:{cid}:{nat}", f"Players from {country} who played for {clubs[cid]['name']}", "nationality", answers, {cid},
+                floor=1 if familiar else 3)
     return out
 
 

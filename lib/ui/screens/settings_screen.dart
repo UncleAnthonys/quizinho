@@ -4,6 +4,7 @@ import '../../core/app_services.dart';
 import '../../core/sound_service.dart';
 import '../../core/theme.dart';
 import '../widgets/common.dart';
+import 'paywall_screen.dart';
 import 'voice_test_screen.dart';
 
 class SettingsScreen extends StatelessWidget {
@@ -50,6 +51,27 @@ class SettingsScreen extends StatelessWidget {
               value: s.settings.hapticsOn,
               onChanged: (v) => s.settings.hapticsOn = v,
             ),
+            if (s.purchases case final p?)
+              ListenableBuilder(
+                listenable: p,
+                builder: (context, _) => Column(children: [
+                  const Divider(color: Palette.line, height: 32),
+                  ListTile(
+                    leading: Icon(p.unlocked ? Icons.verified_rounded : Icons.lock_open_rounded, color: Palette.yellow),
+                    title: Text(p.unlocked ? 'Full game unlocked' : 'Unlock the full game'),
+                    subtitle: Text(p.unlocked ? 'Thanks for supporting Quizinho!' : '${p.price} one-off. No subscription, no ads.'),
+                    trailing: p.unlocked ? null : const Icon(Icons.chevron_right),
+                    onTap: p.unlocked ? null : () => PaywallScreen.show(context),
+                  ),
+                  if (!p.unlocked)
+                    ListTile(
+                      leading: const Icon(Icons.restore_rounded, color: Palette.muted),
+                      title: const Text('Restore purchase'),
+                      subtitle: p.error != null ? Text(p.error!) : (p.busy ? const Text('Checking…') : null),
+                      onTap: p.busy ? null : p.restore,
+                    ),
+                ]),
+              ),
             const Divider(color: Palette.line, height: 32),
             Text('FOOTBALL DATA', style: AppText.label(14, color: Palette.yellow)),
             const SizedBox(height: 8),

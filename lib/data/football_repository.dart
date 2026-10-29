@@ -37,6 +37,11 @@ abstract class FootballRepository {
 
   /// Every club pairing with its answers (for grid games like Tic-Tac-Toe).
   Future<List<ClubConnection>> allClubConnections({int eras = Era.allMask, int genders = 1});
+
+  /// A specific challenge by id (the hand-picked Warm-Up Cup). Null if gone.
+  Future<ClubConnection?> clubConnectionById(String id);
+  Future<CareerPath?> careerPathById(String playerId);
+  Future<BiddingCategory?> biddingCategoryById(String id);
 }
 
 /// Applies difficulty and eras with a graceful fallback so a game doesn't
@@ -69,6 +74,26 @@ class ChallengeSource {
     }
     if (found != null && record) history.add(kind, idOf(found));
     return found;
+  }
+
+  /// Hand-picked challenges (the Warm-Up Cup). Recorded as seen, so the full
+  /// game doesn't serve them straight back.
+  Future<ClubConnection?> fixedConnection(String id) async {
+    final c = await repo.clubConnectionById(id);
+    if (c != null) history.add('conn', c.id);
+    return c;
+  }
+
+  Future<CareerPath?> fixedCareer(String playerId) async {
+    final c = await repo.careerPathById(playerId);
+    if (c != null) history.add('career', c.id);
+    return c;
+  }
+
+  Future<BiddingCategory?> fixedBidding(String id) async {
+    final b = await repo.biddingCategoryById(id);
+    if (b != null) history.add('bidding', b.id);
+    return b;
   }
 
   Future<ClubConnection?> clubConnection(Difficulty d, Set<String> used, {int eras = Era.allMask, int genders = 1}) =>

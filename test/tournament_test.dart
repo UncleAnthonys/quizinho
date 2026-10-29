@@ -8,6 +8,7 @@ import 'package:quizinho/data/json_football_repository.dart';
 import 'package:quizinho/data/models.dart';
 import 'package:quizinho/domain/game_mode.dart';
 import 'package:quizinho/domain/tournament.dart';
+import 'package:quizinho/domain/warm_up_cup.dart';
 
 import 'fixtures.dart';
 
@@ -57,6 +58,35 @@ void main() {
       expect(next, isNot(last));
       last = next;
     }
+  });
+
+  test('the Warm-Up Cup is three fixed rounds, same order for everyone', () {
+    final t = Tournament(config(teams: 3).asWarmUp(), random: Random(7));
+    expect(t.totalRounds, 3);
+    expect(t.config.difficulty, Difficulty.easy);
+    for (final game in WarmUpCup.games) {
+      expect(t.spin(), game);
+      t.recordRound(RoundResult.empty(game, t.teamCount));
+    }
+    expect(t.isFinished, isTrue);
+  });
+
+  test('every Warm-Up Cup challenge exists in the bundled data', () async {
+    final repo = parseFootballJson(File('assets/db/football.json').readAsStringSync());
+    for (final id in WarmUpCup.connections) {
+      expect((await repo.clubConnectionById(id))?.answerIds.length, greaterThanOrEqualTo(10), reason: id);
+    }
+    for (final id in WarmUpCup.careers) {
+      expect(await repo.careerPathById(id), isNotNull, reason: id);
+    }
+    expect((await repo.biddingCategoryById(WarmUpCup.bidding))?.answerIds.length, greaterThanOrEqualTo(10));
+  });
+
+  test('Warm-Up Cup questions count as seen, so the full game avoids them', () async {
+    final repo = parseFootballJson(File('assets/db/football.json').readAsStringSync());
+    final source = ChallengeSource(repo);
+    await source.fixedConnection(WarmUpCup.connections.first);
+    expect(source.history.seen('conn'), contains(WarmUpCup.connections.first));
   });
 
   test('the first spin is never the wildcard', () {

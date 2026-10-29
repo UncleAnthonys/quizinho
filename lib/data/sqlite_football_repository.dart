@@ -132,10 +132,17 @@ class SqliteFootballRepository implements FootballRepository {
   Future<ClubConnection?> pickClubConnection(
       {Set<int>? levels, Set<String> exclude = const {}, int eras = Era.allMask, int genders = 1}) async {
     final (where, args) = _filter('id', levels, exclude, eras, genders: genders, womenCol: _connWomen);
-    final rows = await _db.rawQuery(
+    return _connection(await _db.rawQuery(
       'SELECT id, club_a, club_b, difficulty, eras FROM club_connections $where ORDER BY RANDOM() LIMIT 1',
       args,
-    );
+    ));
+  }
+
+  @override
+  Future<ClubConnection?> clubConnectionById(String id) async => _connection(
+      await _db.rawQuery('SELECT id, club_a, club_b, difficulty, eras FROM club_connections WHERE id = ?', [id]));
+
+  Future<ClubConnection?> _connection(List<Map<String, Object?>> rows) async {
     if (rows.isEmpty) return null;
     final r = rows.first;
     final id = r['id'] as String;
@@ -159,7 +166,11 @@ class SqliteFootballRepository implements FootballRepository {
     final kind = BiddingKind.choose({for (final r in counts) BiddingKind.ofId(r['id'] as String)}, _random);
     if (kind == null) return null;
     final ofKind = [for (final r in counts) if (BiddingKind.ofId(r['id'] as String) == kind) r['id'] as String];
-    final pickedId = ofKind[_random.nextInt(ofKind.length)];
+    return biddingCategoryById(ofKind[_random.nextInt(ofKind.length)]);
+  }
+
+  @override
+  Future<BiddingCategory?> biddingCategoryById(String pickedId) async {
     final rows = await _db.rawQuery(
         'SELECT id, prompt, difficulty, eras, women FROM bidding_categories WHERE id = ?', [pickedId]);
     if (rows.isEmpty) return null;
@@ -226,10 +237,17 @@ class SqliteFootballRepository implements FootballRepository {
       {Set<int>? levels, Set<String> exclude = const {}, int eras = Era.allMask, int genders = 1}) async {
     final (where, args) = _filter('player_id', levels, exclude, eras,
         genders: genders, womenCol: '(SELECT women FROM players WHERE players.id = player_id)');
-    final rows = await _db.rawQuery(
+    return _career(await _db.rawQuery(
       'SELECT player_id, difficulty, eras FROM career_challenges $where ORDER BY RANDOM() LIMIT 1',
       args,
-    );
+    ));
+  }
+
+  @override
+  Future<CareerPath?> careerPathById(String playerId) async =>
+      _career(await _db.rawQuery('SELECT player_id, difficulty, eras FROM career_challenges WHERE player_id = ?', [playerId]));
+
+  Future<CareerPath?> _career(List<Map<String, Object?>> rows) async {
     if (rows.isEmpty) return null;
     final playerId = rows.first['player_id'] as String;
     final player = players.byId(playerId);

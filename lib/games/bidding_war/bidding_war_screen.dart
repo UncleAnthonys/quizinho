@@ -7,6 +7,7 @@ import '../../core/sound_service.dart';
 import '../../core/theme.dart';
 import '../../domain/game_mode.dart';
 import '../../domain/tournament.dart';
+import '../../domain/warm_up_cup.dart';
 import '../../ui/widgets/common.dart';
 import '../../ui/widgets/player_picker.dart';
 import '../buzz_game_view.dart' show LoadingRound, OutOfChallenges;
@@ -42,7 +43,9 @@ class _BiddingWarScreenState extends State<BiddingWarScreen>
   }
 
   Future<void> _load() async {
-    final b = await services.challenges.bidding(_t.config.difficulty, _t.usedIds(_mode), eras: _t.config.eraMask, genders: _t.config.genderMask);
+    final b = _t.config.warmUp
+        ? await services.challenges.fixedBidding(WarmUpCup.bidding)
+        : await services.challenges.bidding(_t.config.difficulty, _t.usedIds(_mode), eras: _t.config.eraMask, genders: _t.config.genderMask);
     if (!mounted) return;
     if (b == null) {
       setState(() => _empty = true);

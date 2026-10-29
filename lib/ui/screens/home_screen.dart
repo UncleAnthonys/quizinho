@@ -4,6 +4,7 @@ import '../../core/app_services.dart';
 import '../../core/theme.dart';
 import '../../domain/game_mode.dart';
 import '../../games/survival/survival_screen.dart';
+import '../match_access.dart';
 import '../match_flow.dart';
 import '../widgets/common.dart';
 import '../widgets/logo.dart';
@@ -75,8 +76,10 @@ class HomeScreen extends StatelessWidget {
                   ),
                   icon: const Icon(Icons.person_rounded, color: Palette.yellow, size: 20),
                   label: Text('PLAY SOLO · SURVIVAL', style: AppText.headline(18)),
-                  onPressed: () =>
-                      Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const SurvivalScreen())),
+                  onPressed: () async {
+                    if (!await MatchAccess.allowed(context) || !context.mounted) return;
+                    Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const SurvivalScreen()));
+                  },
                 ),
               ),
               const SizedBox(height: 4),

@@ -5,6 +5,7 @@ import '../../core/theme.dart';
 import '../../data/models.dart';
 import '../../domain/game_mode.dart';
 import '../../domain/tournament.dart';
+import '../../domain/warm_up_cup.dart';
 import '../buzz_game_view.dart';
 import '../buzz_race_controller.dart';
 import '../game_screen_support.dart';
@@ -37,7 +38,9 @@ class _CareerPathScreenState extends State<CareerPathScreen>
     final source = services.challenges;
     final qs = <CareerPath>[];
     for (var i = 0; i < t.config.questionsPerRound; i++) {
-      final q = await source.careerPath(t.config.difficulty, t.usedIds(_mode), eras: t.config.eraMask, genders: t.config.genderMask);
+      final q = t.config.warmUp
+          ? (i < WarmUpCup.careers.length ? await source.fixedCareer(WarmUpCup.careers[i]) : null)
+          : await source.careerPath(t.config.difficulty, t.usedIds(_mode), eras: t.config.eraMask, genders: t.config.genderMask);
       if (q == null) break;
       t.markUsed(_mode, q.id);
       qs.add(q);
