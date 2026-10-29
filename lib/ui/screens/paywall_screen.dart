@@ -102,7 +102,7 @@ class _PaywallScreenState extends State<PaywallScreen> {
                     : BigButton(
                         label: 'Unlock for ${p?.price ?? '£2.99'}',
                         icon: Icons.lock_open_rounded,
-                        onPressed: p == null ? null : p.buy,
+                        onPressed: p?.buy,
                       ),
                 const SizedBox(height: 4),
                 Row(mainAxisAlignment: MainAxisAlignment.center, children: [
