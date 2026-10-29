@@ -231,7 +231,9 @@ public class QuizinhoSpeechPlugin: NSObject, FlutterPlugin, FlutterStreamHandler
       throw NSError(domain: "quizinho.speech", code: 1, userInfo: [NSLocalizedDescriptionKey: "Speech recogniser unavailable"])
     }
     let audio = AVAudioSession.sharedInstance()
-    try audio.setCategory(.playAndRecord, mode: .measurement, options: [.defaultToSpeaker, .allowBluetooth, .mixWithOthers])
+    // Mode .default, not .measurement: measurement turns the speaker right
+    // down, so sound effects went near-silent after the first spoken answer.
+    try audio.setCategory(.playAndRecord, mode: .default, options: [.defaultToSpeaker, .allowBluetooth, .mixWithOthers])
     try audio.setActive(true, options: .notifyOthersOnDeactivation)
 
     let req = SFSpeechAudioBufferRecognitionRequest()

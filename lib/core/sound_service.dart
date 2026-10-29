@@ -67,6 +67,18 @@ class SoundService {
   static const _poolSizes = {Sfx.spinTick: 4, Sfx.tick: 3, Sfx.tickFast: 3};
 
   Future<void> init() async {
+    // Sounds load first, on their own: nothing about the audio session may
+    // ever stop them loading.
+    try {
+      await AudioCache.instance.loadAll([for (final s in Sfx.values) s.asset]);
+      for (final s in Sfx.values) {
+        _pools[s] = [
+          for (var i = 0; i < (_poolSizes[s] ?? 2); i++) AudioPlayer()..setReleaseMode(ReleaseMode.stop),
+        ];
+      }
+    } catch (e) {
+      debugPrint('Sound init failed: $e');
+    }
     try {
       // iPhone: share one record-capable audio session with the mic. The
       // default (playback only) switches the mic off under the recogniser
@@ -82,16 +94,10 @@ class SoundService {
               AVAudioSessionOptions.allowBluetoothA2DP,
             },
           ),
-        )).catchError((Object e) => debugPrint('Audio context failed: $e'));
-      }
-      await AudioCache.instance.loadAll([for (final s in Sfx.values) s.asset]);
-      for (final s in Sfx.values) {
-        _pools[s] = [
-          for (var i = 0; i < (_poolSizes[s] ?? 2); i++) AudioPlayer()..setReleaseMode(ReleaseMode.stop),
-        ];
+        ));
       }
     } catch (e) {
-      debugPrint('Sound init failed: $e');
+      debugPrint('Audio context failed: $e');
     }
   }
 
