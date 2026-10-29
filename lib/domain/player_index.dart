@@ -223,10 +223,11 @@ class PlayerIndex {
       final saidSomeoneElse = others.any((m) => m.base >= 100) && !answers.any((m) => m.exact);
       if (answers.length == 1 && !saidSomeoneElse) return answers.first.player;
       if (answers.length > 1 || others.isEmpty) continue;
-      // A wrong answer only from the recogniser's best guess — never a long
-      // shot further down its list ("Sio" for Mignolet, "Nari" for Gnabry).
-      if (i > 0) continue;
       final top = others.first;
+      // Further down the recogniser's list, a wrong answer needs a full name
+      // said exactly — never a lone surname or sound-alike long shot ("Sio"
+      // for Mignolet, "Nari" for Gnabry).
+      if (i > 0 && top.base < 100) continue;
       // A wrong answer needs the name really said: exactly, or the whole name
       // sounding right ("Virgil van Dyke") — never words that each merely sound
       // like part of someone's name ("Bouček Szczęsny" isn't Shinya Yabusaki).
