@@ -193,7 +193,7 @@ class _BiddingWarScreenState extends State<BiddingWarScreen>
           ],
           Text('${c.maxBid} answers exist', style: AppText.label(13)),
           const SizedBox(height: 2),
-          Text('Challenged? ${c.answerSeconds} seconds to name your bid',
+          Text('Challenged? ${c.answerSeconds} seconds to name that many answers',
               style: AppText.label(13, color: Palette.yellow)),
         ]),
       ),
