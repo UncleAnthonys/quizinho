@@ -115,13 +115,20 @@ class SoundService {
     }
   }
 
-  /// Settings → Test sounds: a whistle, then a clip, ignoring the cooldowns.
+  /// Settings → Test sounds: a whistle, then every pundit clip in turn.
   Future<void> test() async {
-    _clipPlayed.clear();
-    _lastClip = null;
     play(Sfx.whistle);
-    playClip(Clip.keegan, delay: const Duration(milliseconds: 1200));
+    await Future<void>.delayed(const Duration(milliseconds: 1200));
+    for (final c in Clip.values) {
+      _clipPlayed.clear();
+      _lastClip = null;
+      await _playClipNow(c);
+      await Future<void>.delayed(const Duration(milliseconds: 400));
+    }
   }
+
+  /// True while a pundit clip plays: sound effects stay quiet under it.
+  bool _clipPlaying = false;
   final Map<Clip, DateTime> _clipPlayed = {};
   DateTime? _lastClip;
 
@@ -135,19 +142,28 @@ class SoundService {
     if (_lastClip != null && now.difference(_lastClip!) < const Duration(seconds: 6)) return;
     _clipPlayed[c] = now;
     _lastClip = now;
-    unawaited(Future.delayed(delay, () async {
-      try {
-        final p = _clipPlayer ??= AudioPlayer()..setReleaseMode(ReleaseMode.stop);
-        await p.stop();
-        await p.play(AssetSource(c.asset));
-      } catch (e) {
-        debugPrint('Clip ${c.file} unavailable: $e');
-      }
-    }));
+    unawaited(Future.delayed(delay, () => _playClipNow(c)));
+  }
+
+  /// Plays [c] and completes when it has finished (or failed).
+  Future<void> _playClipNow(Clip c) async {
+    if (!_settings.soundOn || !_settings.commentaryOn) return;
+    try {
+      final p = _clipPlayer ??= AudioPlayer()..setReleaseMode(ReleaseMode.stop);
+      await p.stop();
+      final done = p.onPlayerComplete.first;
+      _clipPlaying = true;
+      await p.play(AssetSource(c.asset));
+      await done.timeout(const Duration(seconds: 12), onTimeout: () {});
+    } catch (e) {
+      debugPrint('Clip ${c.file} unavailable: $e');
+    } finally {
+      _clipPlaying = false;
+    }
   }
 
   void play(Sfx s, {double volume = 1.0}) {
-    if (!_settings.soundOn) return;
+    if (!_settings.soundOn || _clipPlaying) return;
     final pool = _pools[s];
     if (pool == null || pool.isEmpty) return;
     final i = (_next[s] ?? 0) % pool.length;

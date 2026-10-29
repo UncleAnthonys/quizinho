@@ -42,7 +42,7 @@ class SettingsScreen extends StatelessWidget {
                 subtitle: Text(snap.data == null
                     ? 'Checking…'
                     : snap.data! > 0
-                        ? 'Plays the whistle, then a pundit clip (${snap.data} clips in this build)'
+                        ? 'Plays the whistle, then all ${snap.data} pundit clips in turn'
                         : 'Plays the whistle. No pundit clips in this build.'),
                 onTap: s.sound.test,
               ),
