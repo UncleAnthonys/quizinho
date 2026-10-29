@@ -77,15 +77,12 @@ class _BiddingWarScreenState extends State<BiddingWarScreen>
         case BidEvent.correct:
           s.sound.play(Sfx.correct, volume: 0.8);
           s.haptic(HapticStrength.light);
-          _pickerKey++;
         case BidEvent.duplicate:
           s.sound.play(Sfx.wrong, volume: 0.5);
           _toast('Already got that one!');
-          _pickerKey++;
         case BidEvent.wrong:
           s.sound.play(Sfx.wrong, volume: 0.5);
           _toast('Not on the list — keep going!');
-          _pickerKey++;
         case BidEvent.completed:
           s.sound.play(Sfx.fanfare);
           s.sound.play(Sfx.cheer);
@@ -192,6 +189,9 @@ class _BiddingWarScreenState extends State<BiddingWarScreen>
             Text('${c.currentBid}', style: AppText.headline(72, color: Palette.yellow)),
           ],
           Text('${c.maxBid} answers exist', style: AppText.label(13)),
+          const SizedBox(height: 2),
+          Text('Challenged? ${c.answerSeconds} seconds to name your bid',
+              style: AppText.label(13, color: Palette.yellow)),
         ]),
       ),
       const SizedBox(height: 14),
@@ -292,6 +292,7 @@ class _BiddingWarScreenState extends State<BiddingWarScreen>
         isAnswer: (p) => c.category.answerIds.contains(p.id),
         showFlags: !c.category.hidesFlags,
         showPositions: !c.category.hidesPositions,
+        rapid: true, // the box stays open: name them one after another
         onDisputed: (typed, allowed) {
           if (allowed) c.submitDisputed(typed);
           setState(() => _pickerKey++);

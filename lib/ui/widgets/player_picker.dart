@@ -33,7 +33,13 @@ class PlayerPicker extends StatefulWidget {
     this.isAnswer,
     this.showFlags = true,
     this.showPositions = true,
+    this.rapid = false,
   });
+
+  /// Rapid fire (Bidding War): keep going after each answer. The mic stays
+  /// open and picks out every name in a run of speech ("Rooney Giggs
+  /// Scholes"); typing clears the box and keeps the keyboard up.
+  final bool rapid;
 
   final PlayerIndex index;
   final ValueChanged<Player> onPick;
@@ -112,6 +118,15 @@ class _PlayerPickerState extends State<PlayerPicker> {
 
   void _pick(Player p) {
     if (_picked) return;
+    if (widget.rapid) {
+      widget.onPick(p);
+      _controller.clear();
+      setState(() {
+        _results = const [];
+        _typedNote = null;
+      });
+      return;
+    }
     _picked = true;
     widget.voice?.stop();
     widget.onPick(p);
@@ -125,11 +140,16 @@ class _PlayerPickerState extends State<PlayerPicker> {
     if (voice == null || !_keepListening) return;
     setState(() {
       _listening = true;
-      _voiceNote ??= 'Listening… say the player';
+      _voiceNote ??= widget.rapid ? 'Listening… keep the names coming' : 'Listening… say the player';
     });
+    _consumed = 0;
     final started = await voice.listen(
       onWords: (words) {
         if (!_keepListening || words.trim().isEmpty) return;
+        if (widget.rapid) {
+          _scanRapid(words, partial: true);
+          return;
+        }
         if (_voiceNote != 'Hearing you…') setState(() => _voiceNote = 'Hearing you…');
         // Names are checked as the words arrive — a clear match goes straight in.
         final p = widget.index.resolveSpoken([words], partial: true, isAnswer: widget.isAnswer);
@@ -161,8 +181,48 @@ class _PlayerPickerState extends State<PlayerPicker> {
     setState(() => _results = merged.take(4).toList());
   }
 
+  /// Words of the current stretch of speech already used for a name.
+  int _consumed = 0;
+
+  /// Rapid fire: every name in the speech so far that hasn't been used yet,
+  /// longest match first ("Wayne Rooney" before "Wayne").
+  void _scanRapid(String transcript, {required bool partial}) {
+    final words = transcript.trim().split(RegExp(r'\s+')).where((w) => w.isNotEmpty).toList();
+    if (_consumed > words.length) _consumed = words.length; // the recogniser revised itself
+    var i = _consumed;
+    while (i < words.length) {
+      Player? found;
+      var used = 0;
+      for (var len = 3; len >= 1 && found == null; len--) {
+        if (i + len > words.length) continue;
+        found = widget.index.resolveSpoken([words.sublist(i, i + len).join(' ')],
+            partial: partial, isAnswer: widget.isAnswer);
+        used = len;
+      }
+      if (found != null) {
+        i += used;
+        _consumed = i;
+        if (_voiceNote != 'Got it — next!') setState(() => _voiceNote = 'Got it — next!');
+        widget.onPick(found);
+      } else {
+        i++;
+      }
+    }
+  }
+
   void _heard(List<String> alternatives) {
     if (!mounted || _picked) return;
+    if (widget.rapid) {
+      if (alternatives.isNotEmpty) _scanRapid(alternatives.first, partial: false);
+      _silentRestarts = alternatives.isEmpty ? _silentRestarts + 1 : 0;
+      setState(() => _listening = false);
+      if (_silentRestarts < 10) {
+        Future.delayed(const Duration(milliseconds: 100), () {
+          if (_keepListening) _listen();
+        });
+      }
+      return;
+    }
     final p = widget.index.resolveSpoken(alternatives, isAnswer: widget.isAnswer);
     if (p != null) {
       _pick(p);

@@ -428,14 +428,24 @@ BID_MIN_CLUB_FAME = 4
 BID_COUNTRIES = {"GBR", "ENG", "SCO", "ESP", "ITA", "GER", "FRA", "NED", "POR", "TUR", "BEL", "MCO"}
 
 
-def bidding_difficulty(answers: list[str], players) -> int | None:
+# Bidding only works if a team can realistically get three or four: a
+# category needs this many solid answers (known players with a real spell at
+# the club — not a loan or a cameo) or it isn't used at all.
+BID_MIN_SOLID = 4
+
+
+def bidding_difficulty(answers: list[str], players, club_ids=()) -> int | None:
     """Easy needs lots of recognisable answers; a category with 25 valid
-    answers that nobody would know is rejected rather than called 'hard'."""
-    known = sum(1 for pid in answers if players[pid]["fame"] >= 3)
+    answers that nobody would know is rejected rather than called 'hard'.
+    Málaga + Real Sociedad, with one or two names anyone knows, is rejected."""
+    def solid(pid: str) -> bool:
+        return players[pid]["fame"] >= 3 and all(memorable_spell(players[pid], c) for c in club_ids)
+
+    known = sum(1 for pid in answers if solid(pid))
     guessable = sum(1 for pid in answers if players[pid]["fame"] >= 2)
-    if guessable < BID_MIN_ANSWERS or known < 2:
+    if guessable < BID_MIN_ANSWERS or known < BID_MIN_SOLID:
         return None
-    return 1 if known >= 10 else 2 if known >= 5 else 3
+    return 1 if known >= 10 else 2 if known >= 6 else 3
 
 
 def generate_bidding(clubs, players, connections, countries):
@@ -447,7 +457,7 @@ def generate_bidding(clubs, players, connections, countries):
         answers = sorted(answers)
         if not BID_MIN_ANSWERS <= len(answers) <= BID_MAX_ANSWERS:
             return
-        diff = bidding_difficulty(answers, players)
+        diff = bidding_difficulty(answers, players, club_ids)
         if diff is None:
             return
         diff = max(diff, floor)
