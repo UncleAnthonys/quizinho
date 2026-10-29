@@ -30,9 +30,22 @@ class SettingsScreen extends StatelessWidget {
             ),
             SwitchListTile(
               title: const Text('Commentary'),
-              subtitle: const Text('On-screen one-liners after big moments'),
+              subtitle: const Text('One-liners and pundit clips after big moments'),
               value: s.settings.commentaryOn,
               onChanged: (v) => s.settings.commentaryOn = v,
+            ),
+            FutureBuilder<int>(
+              future: s.sound.clipsInBuild(),
+              builder: (context, snap) => ListTile(
+                leading: const Icon(Icons.volume_up_rounded, color: Palette.yellow),
+                title: const Text('Test sounds'),
+                subtitle: Text(snap.data == null
+                    ? 'Checking…'
+                    : snap.data! > 0
+                        ? 'Plays the whistle, then a pundit clip (${snap.data} clips in this build)'
+                        : 'Plays the whistle. No pundit clips in this build.'),
+                onTap: s.sound.test,
+              ),
             ),
             SwitchListTile(
               title: const Text('Voice answers'),

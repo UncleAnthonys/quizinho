@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart' show AssetManifest, rootBundle;
 
 import 'app_settings.dart';
 
@@ -102,6 +103,25 @@ class SoundService {
   }
 
   AudioPlayer? _clipPlayer;
+
+  /// How many pundit clips this build carries (0 = not a TestFlight build
+  /// with the clips unpacked).
+  Future<int> clipsInBuild() async {
+    try {
+      final manifest = await AssetManifest.loadFromAssetBundle(rootBundle);
+      return manifest.listAssets().where((a) => a.startsWith('assets/clips/') && a.endsWith('.m4a')).length;
+    } catch (_) {
+      return 0;
+    }
+  }
+
+  /// Settings → Test sounds: a whistle, then a clip, ignoring the cooldowns.
+  Future<void> test() async {
+    _clipPlayed.clear();
+    _lastClip = null;
+    play(Sfx.whistle);
+    playClip(Clip.keegan, delay: const Duration(milliseconds: 1200));
+  }
   final Map<Clip, DateTime> _clipPlayed = {};
   DateTime? _lastClip;
 
