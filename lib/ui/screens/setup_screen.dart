@@ -29,7 +29,7 @@ class _SetupScreenState extends State<SetupScreen> {
   MatchLength _length = MatchLength.medium;
   Difficulty _difficulty = Difficulty.medium;
   final Set<GameModeId> _modes = {};
-  int _answerSeconds = 15;
+  int _answerSeconds = 8;
   int _bombSeconds = 20;
   int _lives = 3;
   int _headsUpSeconds = 60;
@@ -231,7 +231,7 @@ class _SetupScreenState extends State<SetupScreen> {
                     tilePadding: EdgeInsets.zero,
                     title: Text('TIMERS & RULES', style: AppText.label(15)),
                     children: [
-                      _choice('Answer time', [10, 15, 20], _answerSeconds, (v) => _answerSeconds = v, suffix: 's'),
+                      _choice('Answer time', [5, 8, 12], _answerSeconds, (v) => _answerSeconds = v, suffix: 's'),
                       _choice('Bomb timer', [10, 20, 30], _bombSeconds, (v) => _bombSeconds = v, suffix: 's'),
                       _choice('Heads Up turn', [30, 60, 90], _headsUpSeconds, (v) => _headsUpSeconds = v, suffix: 's'),
                       _choice('Bomb lives', [1, 3], _lives, (v) => _lives = v, labels: {1: 'Sudden death', 3: 'Three lives'}),

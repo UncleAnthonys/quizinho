@@ -8,7 +8,7 @@ enum GameModeId {
     rules: [
       'Two clubs appear. Hit your buzzer as soon as you know a player who played for both.',
       'Get it right: 2 points. Get it wrong: you’re locked out and the others can steal.',
-      'Name a deep cut nobody expected for a bonus point.',
+      'Name a less obvious player — one most people wouldn’t think of — for a bonus point.',
     ],
     whoPlays: 'Anyone can buzz — unless it says FACE-OFF, then only the two named players.',
   ),

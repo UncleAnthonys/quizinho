@@ -53,7 +53,7 @@ class TournamentConfig {
     this.difficulty = Difficulty.medium,
     Set<GameModeId>? modes,
     this.questionsPerRound = 3,
-    this.answerSeconds = 15,
+    this.answerSeconds = 8,
     this.bombSeconds = 20,
     this.bombLives = 3,
     this.headsUpSeconds = 60,

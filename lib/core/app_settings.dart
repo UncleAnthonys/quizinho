@@ -89,7 +89,8 @@ class AppSettings extends ChangeNotifier {
       length: MatchLength.fromName(_prefs.getString('length')),
       difficulty: Difficulty.fromName(_prefs.getString('difficulty')),
       modes: (modes == null || modes.isEmpty) ? null : modes,
-      answerSeconds: _prefs.getInt('answerSeconds') ?? 15,
+      // After buzzing you should know it: 5/8/12s (older saves of 10/15/20 move to 8).
+      answerSeconds: const {5, 8, 12}.contains(_prefs.getInt('answerSeconds')) ? _prefs.getInt('answerSeconds')! : 8,
       bombSeconds: _prefs.getInt('bombSeconds') ?? 20,
       bombLives: _prefs.getInt('bombLives') ?? 3,
       headsUpSeconds: _prefs.getInt('headsUpSeconds') ?? 60,

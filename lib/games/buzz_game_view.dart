@@ -333,7 +333,7 @@ class BuzzGameView extends StatelessWidget {
                 textAlign: TextAlign.center,
                 style: AppText.headline(30),
               ),
-              if (o.bonus) Text('DEEP CUT BONUS', style: AppText.label(15, color: Palette.gold)),
+              if (o.bonus) Text('BONUS: LESS OBVIOUS ANSWER', style: AppText.label(15, color: Palette.gold)),
             ] else
               Text('NOBODY GOT IT', style: AppText.headline(40, color: Palette.danger)),
             const SizedBox(height: 12),
