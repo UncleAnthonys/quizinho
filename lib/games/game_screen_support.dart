@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:flutter/material.dart' show ScaffoldMessenger, SnackBar;
 import 'package:flutter/services.dart' show DeviceOrientation, SystemChrome;
 import 'package:flutter/widgets.dart';
 
@@ -44,10 +45,16 @@ mixin GameScreenSupport<W extends StatefulWidget> on State<W>, TickerProviderSta
   }
 
   /// Call from the controller listener; reacts once per new event.
-  void handleEvent(int serial, GameEvent? event) {
+  /// [miss]: shown on a wrong answer or time-out ("✗ Gary Cahill").
+  void handleEvent(int serial, GameEvent? event, {String? miss}) {
     if (event == null || serial == _seenSerial) return;
     _seenSerial = serial;
     final s = services;
+    if ((event == GameEvent.wrong || event == GameEvent.timeUp) && miss != null && mounted) {
+      ScaffoldMessenger.of(context)
+        ..hideCurrentSnackBar()
+        ..showSnackBar(SnackBar(content: Text('✗ $miss'), duration: const Duration(milliseconds: 1800)));
+    }
     switch (event) {
       case GameEvent.buzz:
         s.sound.play(Sfx.buzzIn);

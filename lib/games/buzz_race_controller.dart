@@ -122,6 +122,7 @@ abstract class BuzzRaceController<Q> extends ChangeNotifier {
         secondsLeft -= dt;
         if (secondsLeft <= 0) {
           secondsLeft = 0;
+          lastMiss = 'Time ran out';
           _wrong(timeout: true);
           return;
         }
@@ -152,9 +153,14 @@ abstract class BuzzRaceController<Q> extends ChangeNotifier {
       _award(BuzzOutcome(team: team, player: player, points: pts, bonus: bonus),
           bonus ? GameEvent.deepCut : (isSteal ? GameEvent.steal : GameEvent.correct));
     } else {
+      lastMiss = player.name;
       _wrong();
     }
   }
+
+  /// Shown after a wrong answer: who it counted as, or that time ran out —
+  /// so a voice mix-up (Gary for Tim Cahill) is visible, not a mystery.
+  String? lastMiss;
 
   /// The team named someone the database doesn't know; the room voted.
   void submitDisputed({required bool allowed}) {
