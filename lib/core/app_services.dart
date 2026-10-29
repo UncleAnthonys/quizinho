@@ -2,6 +2,10 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
 import '../data/football_repository.dart';
+import '../multiplayer/rest_room_link.dart';
+import '../multiplayer/room.dart';
+import '../multiplayer/room_link.dart';
+import '../multiplayer/rooms_config.dart';
 import 'app_settings.dart';
 import 'commentary.dart';
 import 'purchases.dart';
@@ -21,6 +25,12 @@ class AppServices {
   /// Spoken answers. Null in tests.
   final VoiceService? voice;
   final Commentary commentary;
+
+  /// Shared rooms for playing on several phones (null = not set up).
+  late final RoomLink? roomLink = roomsEnabled ? RestRoomLink(roomsDatabaseUrl) : null;
+
+  /// The room this phone is hosting, if any.
+  HostRoom? room;
 
   /// The full-game unlock. Null in tests (= full game).
   final Purchases? purchases;

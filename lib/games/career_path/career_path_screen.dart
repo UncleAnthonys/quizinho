@@ -6,6 +6,7 @@ import '../../data/models.dart';
 import '../../domain/game_mode.dart';
 import '../../domain/tournament.dart';
 import '../../domain/warm_up_cup.dart';
+import '../../multiplayer/buzz_bridge.dart';
 import '../buzz_game_view.dart';
 import '../buzz_race_controller.dart';
 import '../game_screen_support.dart';
@@ -58,15 +59,45 @@ class _CareerPathScreenState extends State<CareerPathScreen>
           miss: c.lastMiss, clip: punditClip(c, faceOff: _faces.current != null));
       if (mounted) setState(() {});
     });
+    final room = services.room;
+    if (room != null) {
+      _bridge = BuzzBridge(
+        room: room,
+        controller: c,
+        tournament: t,
+        players: services.repo.players,
+        title: 'CAREER PATH',
+        prompt: 'Who had this career?',
+        lines: () {
+          final resolved = c.phase == BuzzPhase.resolved || c.phase == BuzzPhase.finished;
+          return [
+            for (final s in c.current.spells.take(resolved ? c.clueCount : c.revealed))
+              '${s.club.name}${s.isLoan ? ' (loan)' : ''}${s.yearsLabel.isEmpty ? '' : '  ${s.yearsLabel}'}',
+          ];
+        },
+        answerIds: () => {c.current.player.id},
+        reveal: () => ['It was ${c.current.player.name}'],
+        faceOff: () => _faces.current,
+        paused: () => _faces.awaitingReady,
+      )
+        ..addListener(() {
+          if (mounted) setState(() {});
+        })
+        ..start();
+    }
     setState(() => _c = c);
     startClock((dt) {
       if (!_faces.awaitingReady) c.advance(dt);
     });
   }
 
+  /// Plays the question on the room's phones, when there is a room.
+  BuzzBridge? _bridge;
+
   @override
   void dispose() {
     disposeGameSupport();
+    _bridge?.dispose();
     _c?.dispose();
     super.dispose();
   }
@@ -91,6 +122,7 @@ class _CareerPathScreenState extends State<CareerPathScreen>
       timerLabel: c.allRevealed ? 'FINAL CHANCE' : 'NEXT CLUB IN',
       onFinished: () => widget.round.onComplete(c.result()),
       faceOff: _faces.current,
+      remoteAnswerer: _bridge?.remote?.name,
       awaitingFaceOff: _faces.awaitingReady,
       onFaceOffReady: () {
         services.sound.play(Sfx.whistle);

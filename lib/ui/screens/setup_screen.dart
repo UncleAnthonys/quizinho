@@ -5,6 +5,9 @@ import '../../core/theme.dart';
 import '../../data/models.dart';
 import '../../domain/game_mode.dart';
 import '../../domain/tournament.dart';
+import '../../multiplayer/host_lobby.dart';
+import '../../multiplayer/room.dart';
+import '../../multiplayer/rooms_config.dart';
 import '../match_access.dart';
 import '../match_flow.dart';
 import '../widgets/common.dart';
@@ -87,8 +90,78 @@ class _SetupScreenState extends State<SetupScreen> {
       _names.every((n) => n.text.trim().isNotEmpty) &&
       _modes.any((m) => m != GameModeId.wildcard);
 
+  List<TeamSetup> _teamsNow() => [
+        for (var i = 0; i < _names.length; i++)
+          TeamSetup(name: _names[i].text.trim(), colorIndex: _colours[i], players: [..._players[i]]),
+      ];
+
+  bool _openingRoom = false;
+
+  /// Everyone buzzes and answers on their own phone: a room they join by QR.
+  Future<void> _openPhones() async {
+    final s = AppScope.read(context);
+    final link = s.roomLink;
+    if (link == null || _openingRoom) return;
+    var room = s.room;
+    if (room == null) {
+      setState(() => _openingRoom = true);
+      try {
+        room = await HostRoom.open(link, _teamsNow());
+        s.room = room;
+      } catch (e) {
+        if (mounted) {
+          ScaffoldMessenger.of(context)
+              .showSnackBar(const SnackBar(content: Text('Couldn’t open a room — check your connection.')));
+        }
+        return;
+      } finally {
+        if (mounted) setState(() => _openingRoom = false);
+      }
+    } else {
+      await room.setTeams(_teamsNow());
+    }
+    if (!mounted) return;
+    await showRoomSheet(context, room, _teamsNow());
+    if (mounted) setState(() {});
+  }
+
+  Widget _phones() {
+    final room = AppScope.of(context).room;
+    final named = _players.every((p) => p.isNotEmpty);
+    return Padding(
+      padding: const EdgeInsets.only(top: 6),
+      child: Container(
+        padding: const EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          color: Colors.black.withValues(alpha: 0.25),
+          borderRadius: BorderRadius.circular(14),
+          border: Border.all(color: Palette.line),
+        ),
+        child: Row(children: [
+          const Icon(Icons.qr_code_2_rounded, color: Palette.yellow, size: 34),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              Text(room == null ? 'BUZZ ON YOUR OWN PHONES' : 'ROOM ${room.code} · ${room.members.length} JOINED',
+                  style: AppText.headline(19)),
+              Text(
+                named ? 'Everyone scans a QR code — no download needed.' : 'Add player names to every team first.',
+                style: const TextStyle(color: Palette.muted, fontSize: 13),
+              ),
+            ]),
+          ),
+          FilledButton(
+            onPressed: named && !_openingRoom ? _openPhones : null,
+            child: Text(room == null ? 'SET UP' : 'SHOW QR'),
+          ),
+        ]),
+      ),
+    );
+  }
+
   Future<void> _start() async {
     final services = AppScope.read(context);
+    await services.room?.setTeams(_teamsNow());
     final config = TournamentConfig(
       teams: [
         for (var i = 0; i < _names.length; i++)
@@ -143,6 +216,7 @@ class _SetupScreenState extends State<SetupScreen> {
                       onPressed: () => setState(_addTeam),
                     ),
                   ),
+                if (roomsEnabled) _phones(),
                 const SizedBox(height: 12),
                 if (warmUp)
                   const _WarmUpBanner()

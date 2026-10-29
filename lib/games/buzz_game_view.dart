@@ -31,7 +31,12 @@ class BuzzGameView extends StatelessWidget {
     this.faceOff,
     this.awaitingFaceOff = false,
     this.onFaceOffReady,
+    this.remoteAnswerer,
   });
+
+  /// Someone answering on their own phone: this screen waits instead of
+  /// opening its own answer box.
+  final String? remoteAnswerer;
 
   final RoundContext round;
   final BuzzRaceController controller;
@@ -70,6 +75,31 @@ class BuzzGameView extends StatelessWidget {
     // Depends on the phase only — switching layout when the keyboard opens
     // rebuilt the answer box, which closed the keyboard again (typing loop bug).
     final answeringUpright = c.phase == BuzzPhase.answering;
+    if (answeringUpright && remoteAnswerer != null) {
+      return Scaffold(
+        body: PitchBackground(
+          child: SafeArea(
+            child: Column(children: [
+              Scoreboard(tournament: t, highlightTeam: c.answeringTeam),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
+                child: TimerBar(fraction: c.secondsLeft / c.phaseSeconds, seconds: c.secondsLeft, height: 10),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(children: [
+                  const Icon(Icons.phone_iphone_rounded, color: Palette.yellow, size: 40),
+                  Text('${remoteAnswerer!.toUpperCase()} IS ANSWERING', textAlign: TextAlign.center,
+                      style: AppText.headline(30)),
+                  Text('on their phone', style: AppText.label(15)),
+                ]),
+              ),
+              Expanded(child: SingleChildScrollView(child: question(false))),
+            ]),
+          ),
+        ),
+      );
+    }
     if (answeringUpright) {
       return Scaffold(
         resizeToAvoidBottomInset: true,

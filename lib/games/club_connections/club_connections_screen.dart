@@ -6,6 +6,7 @@ import '../../data/models.dart';
 import '../../domain/game_mode.dart';
 import '../../domain/tournament.dart';
 import '../../domain/warm_up_cup.dart';
+import '../../multiplayer/buzz_bridge.dart';
 import '../buzz_game_view.dart';
 import '../game_screen_support.dart';
 import 'club_connections_controller.dart';
@@ -62,17 +63,45 @@ class _ClubConnectionsScreenState extends State<ClubConnectionsScreen>
       }
       if (mounted) setState(() {});
     });
+    final room = services.room;
+    if (room != null) {
+      final players = services.repo.players;
+      _bridge = BuzzBridge(
+        room: room,
+        controller: c,
+        tournament: t,
+        players: players,
+        title: 'CLUB CONNECTIONS',
+        prompt: 'Name a player who played for both',
+        lines: () => [c.current.clubA.name, c.current.clubB.name],
+        answerIds: () => c.current.answerIds,
+        reveal: () => ([for (final id in c.current.answerIds) if (players.byId(id) case final p?) p]
+              ..sort((a, b) => b.fame.compareTo(a.fame)))
+            .map((p) => p.name)
+            .toList(),
+        faceOff: () => _faces.current,
+        paused: () => _faces.awaitingReady,
+      )
+        ..addListener(() {
+          if (mounted) setState(() {});
+        })
+        ..start();
+    }
     setState(() => _c = c);
     startClock((dt) {
       if (!_faces.awaitingReady) c.advance(dt);
     });
   }
 
+  /// Plays the question on the room's phones, when there is a room.
+  BuzzBridge? _bridge;
+
   int _lastQuestion = 0;
 
   @override
   void dispose() {
     disposeGameSupport();
+    _bridge?.dispose();
     _c?.dispose();
     super.dispose();
   }
@@ -99,6 +128,7 @@ class _ClubConnectionsScreenState extends State<ClubConnectionsScreen>
       allowDispute: true,
       onFinished: () => widget.round.onComplete(c.result()),
       faceOff: _faces.current,
+      remoteAnswerer: _bridge?.remote?.name,
       awaitingFaceOff: _faces.awaitingReady,
       onFaceOffReady: () {
         services.sound.play(Sfx.whistle);

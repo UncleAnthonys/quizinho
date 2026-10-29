@@ -11,6 +11,8 @@ import 'core/sound_service.dart';
 import 'core/theme.dart';
 import 'core/voice_service.dart';
 import 'data/open_repository.dart';
+import 'multiplayer/guest_screen.dart';
+import 'multiplayer/rooms_config.dart';
 import 'ui/screens/home_screen.dart';
 
 Future<void> main() async {
@@ -37,6 +39,9 @@ Future<void> main() async {
   }
 }
 
+/// Room code from the join link, on the web build.
+final String? _joinCode = kIsWeb && roomsEnabled ? Uri.base.queryParameters['join'] : null;
+
 class QuizinhoApp extends StatelessWidget {
   const QuizinhoApp({super.key, required this.services});
   final AppServices services;
@@ -49,7 +54,8 @@ class QuizinhoApp extends StatelessWidget {
           debugShowCheckedModeBanner: false,
           theme: buildTheme(),
           builder: (context, child) => _PhoneFrame(child: child!),
-          home: const HomeScreen(),
+          // A phone that scanned the QR code (…?join=ABCD) goes straight to joining.
+          home: _joinCode == null ? const HomeScreen() : JoinScreen(code: _joinCode),
         ),
       );
 }

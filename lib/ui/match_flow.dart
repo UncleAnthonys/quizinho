@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../core/app_services.dart';
 import '../core/theme.dart';
 import '../domain/game_mode.dart';
 import '../domain/tournament.dart';
@@ -27,28 +28,42 @@ abstract final class MatchFlow {
             FadeTransition(opacity: animation, child: child),
       );
 
-  static void toWheel(BuildContext context, Tournament t) =>
-      Navigator.of(context).pushReplacement(_route(_Guard(child: FreeKickScreen(tournament: t))));
+  /// Joined phones show "eyes on the main screen" with the scores.
+  static void _phones(BuildContext context, Tournament t, String what) =>
+      AppScope.read(context).room?.showMainScreen(t, what);
 
-  static void toIntro(BuildContext context, Tournament t, GameModeId mode, int multiplier) =>
-      Navigator.of(context).pushReplacement(
-          _route(_Guard(child: RoundIntroScreen(tournament: t, mode: mode, multiplier: multiplier))));
+  static void toWheel(BuildContext context, Tournament t) {
+    _phones(context, t, t.rounds.isEmpty ? 'Kick-off — picking the first game' : 'Picking the next game');
+    Navigator.of(context).pushReplacement(_route(_Guard(child: FreeKickScreen(tournament: t))));
+  }
+
+  static void toIntro(BuildContext context, Tournament t, GameModeId mode, int multiplier) {
+    _phones(context, t, 'Next up: ${mode.title}${multiplier > 1 ? ' — double points' : ''}');
+    Navigator.of(context).pushReplacement(
+        _route(_Guard(child: RoundIntroScreen(tournament: t, mode: mode, multiplier: multiplier))));
+  }
 
   static void toGame(BuildContext context, Tournament t, GameModeId mode, int multiplier) {
     final nav = Navigator.of(context);
+    final room = AppScope.read(context).room;
     final round = RoundContext(
       tournament: t,
       multiplier: multiplier,
       onComplete: (result) {
         t.recordRound(result, multiplier: multiplier);
+        room?.showMainScreen(t, 'Round ${t.rounds.length} of ${t.totalRounds} done');
         nav.pushReplacement(_route(_Guard(child: RoundSummaryScreen(tournament: t))));
       },
     );
+    // Buzzer games put the question on the phones themselves.
+    if (mode != GameModeId.clubConnections && mode != GameModeId.careerPath) _phones(context, t, mode.title);
     nav.pushReplacement(_route(_Guard(child: _gameFor(mode, round))));
   }
 
-  static void toWinner(BuildContext context, Tournament t) =>
-      Navigator.of(context).pushReplacement(_route(WinnerScreen(tournament: t)));
+  static void toWinner(BuildContext context, Tournament t) {
+    _phones(context, t, 'Full time!');
+    Navigator.of(context).pushReplacement(_route(WinnerScreen(tournament: t)));
+  }
 
   static Widget _gameFor(GameModeId mode, RoundContext round) => switch (mode) {
         GameModeId.clubConnections => ClubConnectionsScreen(round: round),

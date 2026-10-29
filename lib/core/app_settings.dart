@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -55,6 +57,17 @@ class AppSettings extends ChangeNotifier {
   /// Finished the free Warm-Up Cup — the next match needs the full game.
   bool get warmUpPlayed => _prefs.getBool('warmUpPlayed') ?? false;
   void markWarmUpPlayed() => _setBool('warmUpPlayed', true);
+
+  /// This phone, for joining rooms (random, made once).
+  String get deviceId {
+    var id = _prefs.getString('deviceId');
+    if (id == null) {
+      final r = Random.secure();
+      id = List.generate(12, (_) => r.nextInt(36).toRadixString(36)).join();
+      _prefs.setString('deviceId', id);
+    }
+    return id;
+  }
 
   /// Every question this phone has been asked, across matches and solo runs.
   late final QuestionHistory history = QuestionHistory(

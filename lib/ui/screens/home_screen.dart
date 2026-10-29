@@ -4,6 +4,8 @@ import '../../core/app_services.dart';
 import '../../core/theme.dart';
 import '../../domain/game_mode.dart';
 import '../../games/survival/survival_screen.dart';
+import '../../multiplayer/guest_screen.dart';
+import '../../multiplayer/rooms_config.dart';
 import '../match_access.dart';
 import '../match_flow.dart';
 import '../widgets/common.dart';
@@ -83,6 +85,12 @@ class HomeScreen extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 4),
+              if (roomsEnabled)
+                GhostButton(
+                  label: 'Join a game',
+                  icon: Icons.qr_code_scanner_rounded,
+                  onPressed: () => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const JoinScreen())),
+                ),
               GhostButton(label: 'How to play', icon: Icons.menu_book_rounded, onPressed: () => _howToPlay(context)),
               if (demo)
                 const Padding(
