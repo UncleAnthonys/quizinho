@@ -7,15 +7,15 @@ abstract final class WarmUpCup {
   /// Rounds in order.
   static const games = [GameModeId.clubConnections, GameModeId.careerPath, GameModeId.biddingWar];
 
-  /// Big, familiar clubs with plenty of answers.
+  /// An English club and a big European one — gettable, but a race to think of one.
   static const connections = [
-    'Q9616|Q9617', // Chelsea + Arsenal
-    'Q18656|Q8682', // Manchester United + Real Madrid
-    'Q1130849|Q50602', // Liverpool + Manchester City
+    'Q5794|Q7156', // Everton + Barcelona: Lineker, Eto'o, Arteta, Digne…
+    'Q132885|Q9616', // Chelsea + Marseille: Drogba, Desailly, Makélélé…
+    'Q18711|Q7156', // Aston Villa + Barcelona: Coutinho, Rashford, Reina…
   ];
 
-  /// Easiest first.
-  static const careers = ['david-beckham', 'fernando-torres', 'zlatan-ibrahimovic'];
+  /// Premier League names hidden behind early clubs nobody remembers.
+  static const careers = ['yaya-toure', 'peter-crouch', 'robbie-keane'];
 
   /// 28 answers: Henry, Vieira, Pires, Giroud, Saliba…
   static const bidding = 'nat:Q9617:FRA';

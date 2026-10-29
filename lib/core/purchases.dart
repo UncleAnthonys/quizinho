@@ -11,6 +11,10 @@ import 'app_settings.dart';
 class Purchases extends ChangeNotifier {
   Purchases(this._settings);
 
+  /// Master switch for the Warm-Up Cup + paywall. Off = everyone gets the
+  /// full game (until the in-app purchase is set up in App Store Connect).
+  static const enabled = false;
+
   /// Must match the product created in App Store Connect / Play Console.
   static const productId = 'com.littlefortstudios.quizinho.fullgame';
 
@@ -32,7 +36,7 @@ class Purchases extends ChangeNotifier {
   static bool get supported =>
       !kIsWeb && (defaultTargetPlatform == TargetPlatform.iOS || defaultTargetPlatform == TargetPlatform.android);
 
-  bool get unlocked => !supported || _settings.unlocked;
+  bool get unlocked => !enabled || !supported || _settings.unlocked;
 
   /// Shown before the store answers.
   String get price => product?.price ?? '£2.99';
@@ -40,7 +44,7 @@ class Purchases extends ChangeNotifier {
   /// Starts listening for purchases (including ones finished while the app
   /// was closed) and loads the price. Safe to call again.
   Future<void> init() async {
-    if (!supported) return;
+    if (!enabled || !supported) return;
     try {
       final store = _store ??= InAppPurchase.instance;
       _sub ??= store.purchaseStream.listen(_onUpdates, onError: (Object e) {

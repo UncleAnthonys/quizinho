@@ -74,7 +74,7 @@ void main() {
   test('every Warm-Up Cup challenge exists in the bundled data', () async {
     final repo = parseFootballJson(File('assets/db/football.json').readAsStringSync());
     for (final id in WarmUpCup.connections) {
-      expect((await repo.clubConnectionById(id))?.answerIds.length, greaterThanOrEqualTo(10), reason: id);
+      expect((await repo.clubConnectionById(id))?.answerIds.length, greaterThanOrEqualTo(5), reason: id);
     }
     for (final id in WarmUpCup.careers) {
       expect(await repo.careerPathById(id), isNotNull, reason: id);

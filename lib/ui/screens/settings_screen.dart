@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../core/app_services.dart';
+import '../../core/purchases.dart';
 import '../../core/sound_service.dart';
 import '../../core/theme.dart';
 import '../widgets/common.dart';
@@ -51,7 +52,7 @@ class SettingsScreen extends StatelessWidget {
               value: s.settings.hapticsOn,
               onChanged: (v) => s.settings.hapticsOn = v,
             ),
-            if (s.purchases case final p?)
+            if (Purchases.enabled) if (s.purchases case final p?)
               ListenableBuilder(
                 listenable: p,
                 builder: (context, _) => Column(children: [
