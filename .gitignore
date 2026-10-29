@@ -44,3 +44,6 @@ __pycache__/
 
 # macOS
 .DS_Store
+
+# Commentary clips: only the encrypted bundle (private/clips.tar.enc) is committed
+assets/clips/*.m4a

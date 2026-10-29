@@ -46,10 +46,12 @@ mixin GameScreenSupport<W extends StatefulWidget> on State<W>, TickerProviderSta
 
   /// Call from the controller listener; reacts once per new event.
   /// [miss]: shown on a wrong answer or time-out ("✗ Gary Cahill").
-  void handleEvent(int serial, GameEvent? event, {String? miss}) {
+  /// [clip]: a pundit line for the moment, after the sound effect.
+  void handleEvent(int serial, GameEvent? event, {String? miss, Clip? clip}) {
     if (event == null || serial == _seenSerial) return;
     _seenSerial = serial;
     final s = services;
+    if (clip != null) s.sound.playClip(clip, delay: const Duration(milliseconds: 700));
     if ((event == GameEvent.wrong || event == GameEvent.timeUp) && miss != null && mounted) {
       ScaffoldMessenger.of(context)
         ..hideCurrentSnackBar()

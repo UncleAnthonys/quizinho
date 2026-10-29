@@ -42,6 +42,10 @@ class ClubConnectionsController extends BuzzRaceController<ClubConnection> {
   @override
   bool isCorrect(Player p) => current.answerIds.contains(p.id);
 
+  /// Easy pairs: famous names everyone should get.
+  @override
+  bool get currentIsObvious => current.difficulty <= 1;
+
   @override
   (int, bool) pointsFor(Player p) {
     final bonus = p.fame <= deepCutFame;

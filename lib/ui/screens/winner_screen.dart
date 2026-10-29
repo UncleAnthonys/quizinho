@@ -38,6 +38,7 @@ class _WinnerScreenState extends State<WinnerScreen> with SingleTickerProviderSt
       s.sound.play(Sfx.whistle);
       s.sound.play(Sfx.fanfare);
       s.sound.play(Sfx.cheer);
+      s.sound.playClip(Clip.mcmanaman, delay: const Duration(milliseconds: 2200));
       s.haptic(HapticStrength.heavy);
       setState(() => _line = s.settings.commentaryOn ? s.commentary.winner(draw: widget.tournament.leaders.length > 1) : '');
     });

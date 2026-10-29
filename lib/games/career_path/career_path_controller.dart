@@ -62,5 +62,8 @@ class CareerPathController extends BuzzRaceController<CareerPath> {
   bool isCorrect(Player p) => p.id == current.player.id;
 
   @override
+  bool get currentIsObvious => current.difficulty <= 1 || current.player.fame >= 5;
+
+  @override
   (int, bool) pointsFor(Player p) => (pointsAvailable, false);
 }

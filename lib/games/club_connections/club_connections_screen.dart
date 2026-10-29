@@ -54,7 +54,8 @@ class _ClubConnectionsScreenState extends State<ClubConnectionsScreen>
     _faces.sync(c);
     c.addListener(() {
       _faces.sync(c);
-      handleEvent(c.eventSerial, c.lastEvent, miss: c.lastMiss);
+      handleEvent(c.eventSerial, c.lastEvent,
+          miss: c.lastMiss, clip: punditClip(c, faceOff: _faces.current != null));
       if (c.questionIndex != _lastQuestion) {
         _lastQuestion = c.questionIndex;
         _showAll = false;

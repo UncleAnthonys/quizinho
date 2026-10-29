@@ -54,7 +54,8 @@ class _CareerPathScreenState extends State<CareerPathScreen>
     _faces.sync(c);
     c.addListener(() {
       _faces.sync(c);
-      handleEvent(c.eventSerial, c.lastEvent, miss: c.lastMiss);
+      handleEvent(c.eventSerial, c.lastEvent,
+          miss: c.lastMiss, clip: punditClip(c, faceOff: _faces.current != null));
       if (mounted) setState(() {});
     });
     setState(() => _c = c);

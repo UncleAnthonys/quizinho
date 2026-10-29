@@ -18,6 +18,8 @@ workflows:
     integrations:
       app_store_connect: Quizinho ASC key
     environment:
+      groups:
+        - clips
       ios_signing:
         distribution_type: app_store
         bundle_identifier: com.littlefortstudios.quizinho
@@ -37,6 +39,16 @@ workflows:
         script: bash scripts/bootstrap_platforms.sh
       - name: Get packages
         script: flutter pub get
+      - name: Commentary clips (TestFlight only)
+        script: |
+          # Placeholder clips of real pundits: kept encrypted in the public repo,
+          # unpacked only here with the CLIPS_KEY secret (env group "clips").
+          if [ -n "${CLIPS_KEY:-}" ]; then
+            openssl enc -d -aes-256-cbc -md sha256 -pass env:CLIPS_KEY -in private/clips.tar.enc | tar -C assets/clips -xf -
+            ls -la assets/clips
+          else
+            echo "No CLIPS_KEY - building without commentary clips"
+          fi
       - name: Analyze and test
         script: |
           flutter analyze --no-fatal-infos

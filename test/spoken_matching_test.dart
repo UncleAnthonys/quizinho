@@ -58,6 +58,8 @@ void main() {
     expect(repo.players.resolveSpoken(['Tim'], partial: true, isAnswer: cahill), isNull);
     expect(repo.players.resolveSpoken(['Tim'], isAnswer: cahill), isNull);
     expect(repo.players.resolveSpoken(['Tim Cahill'], isAnswer: cahill)?.id, 'tim-cahill');
+    // "Tim" is the start of the right answer, so it never counts as anyone else.
+    expect(repo.players.resolveSpoken(['Tim'], isAnswer: cahill), isNull);
   });
 
   test('a clear full name counts as a wrong answer; a lone sound-alike does not', () {

@@ -215,7 +215,11 @@ class PlayerIndex {
     // clear one ("cristiano ronaldo").
     for (final (i, alt) in alternatives.indexed) {
       final words = _cleanSpoken(alt).split(' ').where((w) => w.isNotEmpty).length;
-      final ranked = searchSpoken(alt, limit: 6, isAnswer: isAnswer).where((m) => m.base >= (partial ? 90 : 88)).toList();
+      final hits = searchSpoken(alt, limit: 6, isAnswer: isAnswer);
+      final ranked = hits.where((m) => m.base >= (partial ? 90 : 88)).toList();
+      // What's been said so far is the start of a right answer's name ("Tim…"
+      // for Tim Cahill): it can't count as anyone else.
+      final answerUnderway = hits.any((m) => m.answer && m.base >= 70);
       if (ranked.isEmpty) continue;
       final answers = ranked.where((m) => m.answer).toList();
       final others = ranked.where((m) => !m.answer).toList();
@@ -228,6 +232,7 @@ class PlayerIndex {
       // said exactly — never a lone surname or sound-alike long shot ("Sio"
       // for Mignolet, "Nari" for Gnabry).
       if (i > 0 && top.base < 100) continue;
+      if (answerUnderway) continue;
       // Mid-speech in a game, never a wrong answer: "Tim…" is a Brazilian called
       // Tim until "…Cahill" arrives. Wrong answers wait for the pause.
       if (partial && isAnswer != null) continue;

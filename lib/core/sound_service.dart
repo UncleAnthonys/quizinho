@@ -27,6 +27,33 @@ enum Sfx {
   String get asset => 'sounds/$file.wav';
 }
 
+/// Pundit lines for big moments. Placeholders until a voice actor records
+/// them: only TestFlight builds carry the files (see codemagic.yaml), so
+/// elsewhere playing one silently does nothing.
+enum Clip {
+  /// Kick-off: "I would love it if we beat them".
+  keegan('keegan'),
+
+  /// Nobody even tried an obvious one: "That is a bad one".
+  neville('neville'),
+
+  /// Final whistle: "We'll have a look, course we'll have a look".
+  mcmanaman('mcmanaman'),
+
+  /// Face-off, both missed an obvious one: "Leave the football before the football leaves you".
+  carragher('carragher'),
+
+  /// A team tried and missed an obvious one: "The game's gone".
+  gamesGone('games_gone'),
+
+  /// Same team wrong twice in a row: "It can't go on like this, can it? It can."
+  mccarthy('mccarthy');
+
+  const Clip(this.file);
+  final String file;
+  String get asset => 'clips/$file.m4a';
+}
+
 /// Fire-and-forget sound effects from bundled files (instant, offline).
 /// Sound must never break gameplay, so every failure is swallowed.
 class SoundService {
@@ -66,6 +93,31 @@ class SoundService {
     } catch (e) {
       debugPrint('Sound init failed: $e');
     }
+  }
+
+  AudioPlayer? _clipPlayer;
+  final Map<Clip, DateTime> _clipPlayed = {};
+  DateTime? _lastClip;
+
+  /// A pundit line, at most one at a time and not the same line twice in a
+  /// minute, so they stay a treat. Off with sound or commentary.
+  void playClip(Clip c, {Duration delay = Duration.zero}) {
+    if (!_settings.soundOn || !_settings.commentaryOn) return;
+    final now = DateTime.now();
+    final last = _clipPlayed[c];
+    if (last != null && now.difference(last) < const Duration(seconds: 60)) return;
+    if (_lastClip != null && now.difference(_lastClip!) < const Duration(seconds: 6)) return;
+    _clipPlayed[c] = now;
+    _lastClip = now;
+    unawaited(Future.delayed(delay, () async {
+      try {
+        final p = _clipPlayer ??= AudioPlayer()..setReleaseMode(ReleaseMode.stop);
+        await p.stop();
+        await p.play(AssetSource(c.asset));
+      } catch (e) {
+        debugPrint('Clip ${c.file} unavailable: $e');
+      }
+    }));
   }
 
   void play(Sfx s, {double volume = 1.0}) {

@@ -83,6 +83,15 @@ abstract class BuzzRaceController<Q> extends ChangeNotifier {
   /// For the answer box: would [p] be a right answer right now?
   bool isRightAnswer(Player p) => isCorrect(p);
 
+  /// The current question has an answer everyone should know.
+  bool get currentIsObvious => false;
+
+  /// Wrong answers (incl. passes and time-outs) in a row, per team.
+  final Map<int, int> wrongStreak = {};
+
+  /// The streak of the team that just got one wrong (0 after a right answer).
+  int lastWrongStreak = 0;
+
   /// Points for a correct answer right now, and whether it earned a bonus.
   @protected
   (int, bool) pointsFor(Player p);
@@ -148,6 +157,8 @@ abstract class BuzzRaceController<Q> extends ChangeNotifier {
     final team = answeringTeam;
     if (phase != BuzzPhase.answering || team == null) return;
     if (isCorrect(player)) {
+      wrongStreak[team] = 0;
+      lastWrongStreak = 0;
       final (pts, bonus) = pointsFor(player);
       final isSteal = lockedOut.isNotEmpty;
       _award(BuzzOutcome(team: team, player: player, points: pts, bonus: bonus),
@@ -207,7 +218,10 @@ abstract class BuzzRaceController<Q> extends ChangeNotifier {
 
   void _wrong({bool timeout = false}) {
     final team = answeringTeam;
-    if (team != null) lockedOut.add(team);
+    if (team != null) {
+      lockedOut.add(team);
+      lastWrongStreak = wrongStreak[team] = (wrongStreak[team] ?? 0) + 1;
+    }
     answeringTeam = null;
     if (lockedOut.length >= teamCount) {
       _resolve(const BuzzOutcome(), GameEvent.nobodyGotIt);

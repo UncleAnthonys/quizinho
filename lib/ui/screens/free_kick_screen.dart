@@ -58,6 +58,12 @@ class _FreeKickScreenState extends State<FreeKickScreen> with TickerProviderStat
   void initState() {
     super.initState();
     _kick.addListener(_onTick);
+    // Teams picked, match on: Keegan sets the tone before the first kick.
+    if (widget.tournament.rounds.isEmpty) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) _s.sound.playClip(Clip.keegan, delay: const Duration(milliseconds: 400));
+      });
+    }
   }
 
   @override

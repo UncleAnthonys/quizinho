@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../core/app_services.dart';
+import '../core/sound_service.dart';
 import '../core/theme.dart';
 import '../domain/game_mode.dart';
 import '../domain/tournament.dart';
@@ -333,7 +334,7 @@ class BuzzGameView extends StatelessWidget {
                 textAlign: TextAlign.center,
                 style: AppText.headline(30),
               ),
-              if (o.bonus) Text('BONUS: LESS OBVIOUS ANSWER', style: AppText.label(15, color: Palette.gold)),
+              if (o.bonus) Text('RARE PICK BONUS', style: AppText.label(15, color: Palette.gold)),
             ] else
               Text('NOBODY GOT IT', style: AppText.headline(40, color: Palette.danger)),
             const SizedBox(height: 12),
@@ -564,6 +565,23 @@ class FaceOffTracker {
       round.tournament.creditPlayer(o.team!, f.nameFor(o.team!), o.points * round.multiplier);
     }
   }
+}
+
+/// A pundit line for what just happened in a buzzer question, if it earns one:
+/// an obvious answer missed (face-off pair → Carragher; a team tried and failed
+/// → "the game's gone"; nobody even buzzed → Neville), or a team's second
+/// wrong answer in a row (McCarthy).
+Clip? punditClip(BuzzRaceController c, {required bool faceOff}) {
+  final e = c.lastEvent;
+  final missedIt = c.phase == BuzzPhase.resolved && !(c.outcome?.scored ?? false) &&
+      (e == GameEvent.nobodyGotIt || e == GameEvent.timeUp);
+  if (missedIt && c.currentIsObvious) {
+    if (faceOff) return Clip.carragher;
+    return c.lockedOut.isNotEmpty ? Clip.gamesGone : Clip.neville;
+  }
+  final wrongNow = e == GameEvent.wrong || (e == GameEvent.timeUp && c.phase != BuzzPhase.resolved) || missedIt;
+  if (wrongNow && c.lastWrongStreak == 2) return Clip.mccarthy;
+  return null;
 }
 
 /// Shown when the database has run out of fresh challenges for this mode.
