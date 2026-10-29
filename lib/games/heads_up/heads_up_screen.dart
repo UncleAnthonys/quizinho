@@ -78,7 +78,7 @@ class _HeadsUpScreenState extends State<HeadsUpScreen>
       final from = _lastPhase;
       _lastPhase = c.phase;
       _tilt.enabled = c.phase == HeadsUpPhase.playing;
-      if (c.phase == HeadsUpPhase.ready) _holder = _t.nextTurnPlayer(c.currentTeam);
+      if (c.phase == HeadsUpPhase.ready) _holder = _t.fairRandomPlayer(c.currentTeam);
       if (c.phase == HeadsUpPhase.playing) services.sound.play(Sfx.whistle);
       if (c.phase == HeadsUpPhase.turnOver && from == HeadsUpPhase.playing) {
         services.sound.play(Sfx.whistle);

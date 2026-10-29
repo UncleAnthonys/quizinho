@@ -198,6 +198,20 @@ class Tournament extends ChangeNotifier {
     return names[i % names.length];
   }
 
+  final Map<String, int> _holds = {};
+
+  /// Who holds the phone next (Heads Up): random, but nobody goes twice until
+  /// everyone in the team has had a go. Null if no names.
+  String? fairRandomPlayer(int team) {
+    final names = config.teams[team].players;
+    if (names.isEmpty) return null;
+    final fewest = names.map((n) => _holds[_key(team, n)] ?? 0).reduce(min);
+    final options = names.where((n) => (_holds[_key(team, n)] ?? 0) == fewest).toList();
+    final name = options[_random.nextInt(options.length)];
+    _holds[_key(team, name)] = fewest + 1;
+    return name;
+  }
+
   void creditPlayer(int team, String name, int points) {
     if (name.isEmpty || points <= 0) return;
     _playerPoints[_key(team, name)] = (_playerPoints[_key(team, name)] ?? 0) + points;

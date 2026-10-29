@@ -369,17 +369,33 @@ class _PlayerNamesState extends State<_PlayerNames> {
   Widget build(BuildContext context) => Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
         if (widget.names.isNotEmpty)
           Wrap(spacing: 6, runSpacing: 6, children: [
-            for (final n in widget.names)
+            for (final (i, n) in widget.names.indexed)
               InputChip(
-                label: Text(n),
-                backgroundColor: Palette.team(widget.colorIndex).withValues(alpha: 0.25),
-                side: BorderSide(color: Palette.team(widget.colorIndex)),
+                // The first name is the captain: bids and takes the team's turns.
+                label: Text(i == 0 ? '$n (C)' : n,
+                    style: i == 0 ? const TextStyle(fontWeight: FontWeight.w800) : null),
+                backgroundColor: Palette.team(widget.colorIndex).withValues(alpha: i == 0 ? 0.45 : 0.25),
+                side: BorderSide(color: Palette.team(widget.colorIndex), width: i == 0 ? 2 : 1),
+                tooltip: i == 0 ? 'Captain' : 'Tap to make captain',
+                onPressed: i == 0
+                    ? null
+                    : () {
+                        widget.names
+                          ..remove(n)
+                          ..insert(0, n);
+                        widget.onChanged();
+                      },
                 onDeleted: () {
                   widget.names.remove(n);
                   widget.onChanged();
                 },
               ),
           ]),
+        if (widget.names.length >= 2)
+          Padding(
+            padding: const EdgeInsets.only(top: 4),
+            child: Text('(C) = captain. Tap another name to swap.', style: AppText.label(12)),
+          ),
         if (widget.names.length < _maxPlayers)
           SizedBox(
             height: 44,

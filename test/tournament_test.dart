@@ -89,6 +89,18 @@ void main() {
     expect(source.history.seen('conn'), contains(WarmUpCup.connections.first));
   });
 
+  test('Heads Up holders: random, but everyone goes once before anyone twice', () {
+    final t = Tournament(
+      TournamentConfig(teams: [
+        TeamSetup(name: 'A', colorIndex: 0, players: ['Ann', 'Bob', 'Cat']),
+        TeamSetup(name: 'B', colorIndex: 1),
+      ]),
+      random: Random(5),
+    );
+    expect({for (var i = 0; i < 3; i++) t.fairRandomPlayer(0)}, {'Ann', 'Bob', 'Cat'});
+    expect(t.fairRandomPlayer(1), isNull);
+  });
+
   test('the first spin is never the wildcard', () {
     for (var seed = 0; seed < 50; seed++) {
       final t = Tournament(config(), random: Random(seed));
