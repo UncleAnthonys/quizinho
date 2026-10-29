@@ -228,6 +228,11 @@ class PlayerIndex {
       // said exactly — never a lone surname or sound-alike long shot ("Sio"
       // for Mignolet, "Nari" for Gnabry).
       if (i > 0 && top.base < 100) continue;
+      // Mid-speech in a game, never a wrong answer: "Tim…" is a Brazilian called
+      // Tim until "…Cahill" arrives. Wrong answers wait for the pause.
+      if (partial && isAnswer != null) continue;
+      // One word naming someone obscure isn't an answer anyone meant ("Tim").
+      if (words == 1 && top.player.fame < 3) continue;
       // A wrong answer needs the name really said: exactly, or the whole name
       // sounding right ("Virgil van Dyke") — never words that each merely sound
       // like part of someone's name ("Bouček Szczęsny" isn't Shinya Yabusaki).

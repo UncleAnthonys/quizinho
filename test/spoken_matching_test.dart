@@ -52,6 +52,14 @@ void main() {
     }
   });
 
+  test('"Tim" mid-speech is not the Brazilian called Tim', () {
+    final repo = parseFootballJson(File('assets/db/football.json').readAsStringSync());
+    bool cahill(Player p) => p.id == 'tim-cahill';
+    expect(repo.players.resolveSpoken(['Tim'], partial: true, isAnswer: cahill), isNull);
+    expect(repo.players.resolveSpoken(['Tim'], isAnswer: cahill), isNull);
+    expect(repo.players.resolveSpoken(['Tim Cahill'], isAnswer: cahill)?.id, 'tim-cahill');
+  });
+
   test('a clear full name counts as a wrong answer; a lone sound-alike does not', () {
     final repo = parseFootballJson(File('assets/db/football.json').readAsStringSync());
     bool kane(Player p) => p.id == 'harry-kane';
@@ -94,6 +102,8 @@ void main() {
     expect(index.resolveSpoken(['thierry'], partial: true), isNull);
     expect(index.resolveSpoken(['thierry henry'], partial: true)?.id, 'thierry-henry');
     expect(index.resolveSpoken(['david louise'], partial: true, isAnswer: answerIs('david-luiz'))?.id, 'david-luiz');
+    // In a game a wrong answer never goes in mid-speech ("Tim…" before "…Cahill").
+    expect(index.resolveSpoken(['david luiz'], partial: true, isAnswer: answerIs('thierry-henry')), isNull);
   });
 
   test('ambiguous names are never auto-accepted', () {
