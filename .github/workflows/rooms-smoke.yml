@@ -12,7 +12,9 @@ jobs:
       - uses: actions/checkout@v4
       - name: Write, read, stream, refuse, clean up
         run: |
-          U=$(grep -o "https://[^']*firebasedatabase.app" lib/multiplayer/rooms_config.dart)
+          set +e
+          U=https://quizinho-8022c-default-rtdb.europe-west1.firebasedatabase.app
+          echo "url=$U"
           code=ZZZZ
           put=$(curl -s -o /dev/null -w "%{http_code}" -X PUT -d '{"at":{".sv":"timestamp"}}' "$U/rooms/$code/host.json")
           got=$(curl -s "$U/rooms/$code/host.json")
