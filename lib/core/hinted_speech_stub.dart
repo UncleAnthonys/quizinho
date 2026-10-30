@@ -1,5 +1,9 @@
+import 'package:flutter/foundation.dart';
+
 /// Not a browser: never used (apps have their own recognisers).
 class HintedSpeech {
+  static final ValueNotifier<String> status = ValueNotifier('unsupported');
+
   static Future<bool> ready() async => false;
 
   bool listen({

@@ -1,8 +1,10 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 
 import '../core/app_services.dart';
+import '../core/hinted_speech.dart';
 import '../core/theme.dart';
 import '../data/models.dart';
 import '../domain/tournament.dart';
@@ -175,6 +177,9 @@ class _GuestGameState extends State<_GuestGame> {
   @override
   void initState() {
     super.initState();
+    // Straight after picking a name (a tap), so Chrome may start fetching its
+    // on-device speech pack now rather than at the first buzz.
+    if (kIsWeb) unawaited(HintedSpeech.ready());
     _tick = Timer.periodic(const Duration(milliseconds: 100), (_) {
       if (_left > 0 && mounted) setState(() => _left = (_left - 0.1).clamp(0, _total));
     });
@@ -218,7 +223,7 @@ class _GuestGameState extends State<_GuestGame> {
       'closed' => _center('FULL TIME', 'Thanks for playing!'),
       _ => _center('YOU’RE IN', 'Waiting for kick-off on the main phone…'),
     };
-    return Column(children: [header, Expanded(child: body)]);
+    return Column(children: [header, if (kIsWeb) const _VoiceBoost(), Expanded(child: body)]);
   }
 
   /// The host's score strip, drawn from the view.
@@ -407,5 +412,33 @@ class _GuestGameState extends State<_GuestGame> {
   Widget _status(String text) => Padding(
         padding: const EdgeInsets.all(24),
         child: Text(text, textAlign: TextAlign.center, style: AppText.headline(26, color: Palette.muted)),
+      );
+}
+
+/// Whether this browser's mic is getting the answer-name boost (Chrome's
+/// on-device speech with hints), so it's obvious which phones have it.
+class _VoiceBoost extends StatelessWidget {
+  const _VoiceBoost();
+
+  @override
+  Widget build(BuildContext context) => ValueListenableBuilder<String>(
+        valueListenable: HintedSpeech.status,
+        builder: (context, s, _) {
+          final (text, colour) = switch (s) {
+            'ready' => ('Voice boost ON', Palette.green),
+            'downloading' => ('Voice boost: downloading…', Palette.gold),
+            'checking' => ('Voice boost: checking…', Palette.muted),
+            'no on-device speech' => ('Voice boost: not on this phone', Palette.muted),
+            _ => ('Voice boost: needs Chrome on Android (or the app)', Palette.muted),
+          };
+          return Padding(
+            padding: const EdgeInsets.fromLTRB(16, 0, 16, 2),
+            child: Row(children: [
+              Icon(s == 'ready' ? Icons.mic_rounded : Icons.mic_none_rounded, size: 15, color: colour),
+              const SizedBox(width: 4),
+              Text(text, style: AppText.label(12, color: colour)),
+            ]),
+          );
+        },
       );
 }

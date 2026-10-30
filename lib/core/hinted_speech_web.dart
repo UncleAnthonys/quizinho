@@ -16,6 +16,11 @@ class HintedSpeech {
   /// Turned off for the session after the browser refuses hints.
   static bool _refused = false;
 
+  /// For the joined phone's screen: 'checking', 'ready', 'downloading',
+  /// 'no on-device speech' (Chrome, but this phone can't) or 'unsupported'
+  /// (not Chrome — e.g. any iPhone browser).
+  static final ValueNotifier<String> status = ValueNotifier('checking');
+
   static JSObject? get _class {
     for (final name in const ['SpeechRecognition', 'webkitSpeechRecognition']) {
       final c = globalContext[name];
@@ -32,24 +37,42 @@ class HintedSpeech {
     if (_refused) return Future.value(false);
     return _ready ??= _check().catchError((Object e) {
       debugPrint('Hinted speech check failed: $e');
+      status.value = 'unsupported';
       return false;
     });
   }
 
   static Future<bool> _check() async {
     final c = _class;
-    if (c == null) return false;
-    final proto = c['prototype'];
-    if (proto == null || !(proto as JSObject).has('phrases')) return false;
-    if (!globalContext.has('SpeechRecognitionPhrase') || !c.has('available')) return false;
-    final state = (await c.callMethod<JSPromise<JSString>>('available'.toJS, _options).toDart).toDart;
-    if (state == 'available') return true;
-    if ((state == 'downloadable' || state == 'downloading') && !_installTried && c.has('install')) {
-      _installTried = true;
-      unawaited(c.callMethod<JSPromise<JSAny?>>('install'.toJS, _options).toDart.then((_) {
-        _ready = null; // look again next time
-      }, onError: (Object e) => debugPrint('Speech pack not installed: $e')));
+    final proto = c?['prototype'];
+    if (c == null ||
+        proto == null ||
+        !(proto as JSObject).has('phrases') ||
+        !globalContext.has('SpeechRecognitionPhrase') ||
+        !c.has('available')) {
+      status.value = 'unsupported';
+      return false;
     }
+    final state = (await c.callMethod<JSPromise<JSString>>('available'.toJS, _options).toDart).toDart;
+    if (state == 'available') {
+      status.value = 'ready';
+      return true;
+    }
+    if (state == 'downloadable' || state == 'downloading') {
+      status.value = 'downloading';
+      if (!_installTried && c.has('install')) {
+        _installTried = true;
+        unawaited(c.callMethod<JSPromise<JSAny?>>('install'.toJS, _options).toDart.then((_) {
+          _ready = null; // look again: it should be ready now
+          unawaited(ready());
+        }, onError: (Object e) {
+          debugPrint('Speech pack not installed: $e');
+          status.value = 'no on-device speech';
+        }));
+      }
+      return false;
+    }
+    status.value = 'no on-device speech';
     return false;
   }
 
@@ -108,6 +131,7 @@ class HintedSpeech {
         // The browser won't take hints after all: use normal speech from now on.
         if (const {'phrases-not-supported', 'language-not-supported', 'service-not-allowed'}.contains(error)) {
           _refused = true;
+          status.value = 'unsupported';
         }
       }).toJS;
       r['onend'] = ((JSAny? _) => finish(last.trim().isEmpty ? const [] : [last])).toJS;
