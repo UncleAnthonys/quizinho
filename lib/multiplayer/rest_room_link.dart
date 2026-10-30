@@ -24,7 +24,10 @@ class RestRoomLink extends RoomLink {
     while (true) {
       Object? tree;
       try {
-        await for (final e in sseEvents(_url(path))) {
+        // The database sends a keep-alive every ~30 s: hearing nothing for
+        // longer means a dead connection (phone slept, Wi-Fi switched) that
+        // never reported an error — drop it and reconnect.
+        await for (final e in sseEvents(_url(path)).timeout(const Duration(seconds: 45))) {
           if (e.type == 'put' || e.type == 'patch') {
             final msg = jsonDecode(e.data) as Map;
             tree = writeAt(tree, pathParts('${msg['path']}'), msg['data'], merge: e.type == 'patch');

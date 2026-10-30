@@ -343,6 +343,17 @@ class _GuestGameState extends State<_GuestGame> with SingleTickerProviderStateMi
                     s.haptic(HapticStrength.heavy);
                     setState(() => _buzzedOn = q);
                     widget.room.buzz(q);
+                    // The main phone should take it within a second; if it
+                    // hasn't (asleep, lost signal), let them buzz again.
+                    Future.delayed(const Duration(seconds: 3), () {
+                      if (!mounted || _buzzedOn != q) return;
+                      final v = widget.room.view;
+                      if ('${v['q']}' == q && v['phase'] == 'open') {
+                        setState(() => _buzzedOn = null);
+                        ScaffoldMessenger.maybeOf(context)?.showSnackBar(const SnackBar(
+                            content: Text('The main phone didn’t get that — keep it open and buzz again')));
+                      }
+                    });
                   },
             child: Text(buzzed ? 'BUZZED!' : 'BUZZ', style: AppText.headline(56, color: Palette.onTeam(colour))),
           ),
