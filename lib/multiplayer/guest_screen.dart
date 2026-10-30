@@ -464,11 +464,10 @@ class _VoiceBoost extends StatelessWidget {
         valueListenable: HintedSpeech.status,
         builder: (context, s, _) {
           final (text, colour) = switch (s) {
-            'ready' => ('Voice boost ON', Palette.green),
-            'downloading' => ('Voice boost: downloading…', Palette.gold),
-            'checking' => ('Voice boost: checking…', Palette.muted),
-            'no on-device speech' => ('Voice boost: not on this phone', Palette.muted),
-            _ => ('Voice boost: not in this browser (basic voice)', Palette.muted),
+            'ready' => ('Player-name voice on: say any name', Palette.green),
+            'downloading' => ('Player-name voice downloading — tricky names? Type them', Palette.gold),
+            'checking' => ('Checking voice…', Palette.muted),
+            _ => ('Basic voice — tricky names? Type them', Palette.muted),
           };
           return Padding(
             padding: const EdgeInsets.fromLTRB(16, 0, 16, 2),
