@@ -132,6 +132,7 @@ class _ClubConnectionsScreenState extends State<ClubConnectionsScreen>
       onFinished: () => widget.round.onComplete(c.result()),
       faceOff: _faces.current,
       remoteAnswerer: _bridge?.remote?.name,
+      phoneTeams: _bridge?.phoneTeams() ?? const {},
       awaitingFaceOff: _faces.awaitingReady,
       onFaceOffReady: () {
         services.sound.play(Sfx.whistle);

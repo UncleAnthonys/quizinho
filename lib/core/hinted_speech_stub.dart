@@ -6,6 +6,8 @@ class HintedSpeech {
 
   static Future<bool> ready() async => false;
 
+  static Future<void> primeMic() async {}
+
   bool listen({
     required List<String> hints,
     required void Function(String words) onWords,

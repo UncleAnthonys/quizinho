@@ -32,7 +32,12 @@ class BuzzGameView extends StatelessWidget {
     this.awaitingFaceOff = false,
     this.onFaceOffReady,
     this.remoteAnswerer,
+    this.phoneTeams = const {},
   });
+
+  /// Teams whose players buzz on their own phones (in a face-off: the named
+  /// player's phone has joined) — their buzzer isn't on this screen.
+  final Set<int> phoneTeams;
 
   /// Someone answering on their own phone: this screen waits instead of
   /// opening its own answer box.
@@ -217,8 +222,9 @@ class BuzzGameView extends StatelessWidget {
                         ? t.teamName(team)
                         : '${faceOff!.nameFor(team)} · ${t.teamName(team)}',
                     colorIndex: t.config.teams[team].colorIndex,
-                    enabled: c.canBuzz(team) && !awaitingFaceOff,
+                    enabled: c.canBuzz(team) && !awaitingFaceOff && !phoneTeams.contains(team),
                     locked: c.lockedOut.contains(team),
+                    onPhone: phoneTeams.contains(team),
                     onBuzz: () => c.buzz(team),
                     quarterTurns: quarterTurns,
                   ),
@@ -313,6 +319,7 @@ class BuzzGameView extends StatelessWidget {
                 onBuzz: c.buzz,
                 lockedOut: c.lockedOut,
                 faceOff: faceOff,
+                onPhone: phoneTeams,
               ),
             ),
           ),

@@ -3,6 +3,7 @@ import 'dart:js_interop';
 import 'dart:js_interop_unsafe';
 
 import 'package:flutter/foundation.dart';
+import 'package:web/web.dart' as web;
 
 /// Chrome's speech recogniser, given the names worth listening for (the right
 /// answers) so it leans towards them — like the iPhone app's player model.
@@ -20,6 +21,22 @@ class HintedSpeech {
   /// 'no on-device speech' (Chrome, but this phone can't) or 'unsupported'
   /// (not Chrome — e.g. any iPhone browser).
   static final ValueNotifier<String> status = ValueNotifier('checking');
+
+  /// Asks for the microphone now, from a tap (picking your name), so the
+  /// browser's permission prompt shows at a calm moment — not when the answer
+  /// box opens mid-question, where some browsers block or hide it.
+  static Future<void> primeMic() async {
+    try {
+      final stream = await web.window.navigator.mediaDevices
+          .getUserMedia(web.MediaStreamConstraints(audio: true.toJS))
+          .toDart;
+      for (final t in stream.getTracks().toDart) {
+        t.stop();
+      }
+    } catch (e) {
+      debugPrint('Mic not allowed: $e');
+    }
+  }
 
   static JSObject? get _class {
     for (final name in const ['SpeechRecognition', 'webkitSpeechRecognition']) {

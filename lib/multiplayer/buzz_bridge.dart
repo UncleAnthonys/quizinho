@@ -107,6 +107,21 @@ class BuzzBridge extends ChangeNotifier {
     if (p != null) controller.submit(p);
   }
 
+  /// Teams that buzz only on their own phones, so the host screen hides their
+  /// buzzer: in a face-off, the named player's phone has joined; otherwise
+  /// every player on the team has one (anyone without still needs the host).
+  Set<int> phoneTeams() {
+    final f = faceOff();
+    return {
+      for (var t = 0; t < tournament.teamCount; t++)
+        if (f != null
+            ? f.players[t] != null && room.memberFor(t, f.players[t]!) != null
+            : tournament.config.teams[t].players.isNotEmpty &&
+                tournament.config.teams[t].players.every((n) => room.memberFor(t, n) != null))
+          t,
+    };
+  }
+
   /// A team buzzed on the host phone: they answer there, not on a phone.
   void localBuzz() {
     remote = null;

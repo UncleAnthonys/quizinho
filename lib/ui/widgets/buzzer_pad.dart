@@ -12,7 +12,11 @@ class BuzzerPad extends StatelessWidget {
     required this.onBuzz,
     this.lockedOut = const {},
     this.faceOff,
+    this.onPhone = const {},
   });
+
+  /// Teams buzzing on their own phones: no buzzer here.
+  final Set<int> onPhone;
 
   final Tournament tournament;
 
@@ -44,8 +48,9 @@ class BuzzerPad extends StatelessWidget {
                           ? tournament.teamName(team)
                           : '${faceOff!.nameFor(team)} · ${tournament.teamName(team)}',
                       colorIndex: tournament.config.teams[team].colorIndex,
-                      enabled: canBuzz(team),
+                      enabled: canBuzz(team) && !onPhone.contains(team),
                       locked: lockedOut.contains(team),
+                      onPhone: onPhone.contains(team),
                       onBuzz: () => onBuzz(team),
                     ),
                   ),
@@ -67,7 +72,11 @@ class TeamBuzzer extends StatefulWidget {
     required this.locked,
     required this.onBuzz,
     this.quarterTurns = 0,
+    this.onPhone = false,
   });
+
+  /// This team buzzes on their own phone(s), not here.
+  final bool onPhone;
 
   /// Rotates the label to face a player sitting at the end of the table.
   final int quarterTurns;
@@ -118,9 +127,10 @@ class TeamBuzzerState extends State<TeamBuzzer> {
               child: FittedBox(
                 fit: BoxFit.scaleDown,
                 child: Column(mainAxisSize: MainAxisSize.min, children: [
-              Icon(widget.locked ? Icons.lock : Icons.touch_app, color: active ? on : Palette.muted, size: 34),
+              Icon(widget.locked ? Icons.lock : (widget.onPhone ? Icons.phone_iphone_rounded : Icons.touch_app),
+                  color: active ? on : Palette.muted, size: 34),
               const SizedBox(height: 4),
-              Text(widget.locked ? 'LOCKED OUT' : 'BUZZ',
+              Text(widget.locked ? 'LOCKED OUT' : (widget.onPhone ? 'ON PHONE' : 'BUZZ'),
                   style: AppText.headline(34, color: active ? on : Palette.muted)),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8),

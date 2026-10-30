@@ -148,7 +148,12 @@ class _JoinScreenState extends State<JoinScreen> {
                   label: Text(j == 0 ? '$n (C)' : n, style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w700)),
                   selected: false,
                   avatar: room.taken(i, n) ? const Icon(Icons.check_circle_rounded, color: Palette.green, size: 18) : null,
-                  onSelected: room.taken(i, n) ? null : (_) => room.claim(i, n),
+                  onSelected: room.taken(i, n)
+                      ? null
+                      : (_) {
+                          if (kIsWeb) unawaited(HintedSpeech.primeMic());
+                          room.claim(i, n);
+                        },
                 ),
             ]),
           const SizedBox(height: 20),
