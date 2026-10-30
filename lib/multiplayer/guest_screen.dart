@@ -187,10 +187,14 @@ class _GuestGameState extends State<_GuestGame> {
   }
 
   void _syncClock(Map<String, Object?> v) {
-    final key = '${v['q']}|${v['phase']}|${v['left']}|${v['answering']}';
+    // Only a fresh clock from the host resets the countdown; anything else
+    // (a view without one) leaves it running.
+    final left = (v['left'] as num?)?.toDouble();
+    if (left == null) return;
+    final key = '${v['q']}|${v['phase']}|$left|${v['answering']}';
     if (key == _clockFrom) return;
     _clockFrom = key;
-    _left = (v['left'] as num?)?.toDouble() ?? 0;
+    _left = left;
     _total = (v['total'] as num?)?.toDouble() ?? 1;
   }
 

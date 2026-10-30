@@ -161,16 +161,35 @@ class BuzzBridge extends ChangeNotifier {
 
   String? _lastShape;
 
+  /// The clock as last sent, and how long ago: phones count down from it.
+  double? _sentLeft;
+  final Stopwatch _sinceSent = Stopwatch();
+  static const _resync = Duration(seconds: 3);
+
   void _publish() {
     final v = _view();
-    // The clock isn't sent every frame — only with each change, and phones
-    // count down from there.
+    final ticking = controller.phase == BuzzPhase.open || controller.phase == BuzzPhase.answering;
+    // The clock isn't sent every frame — with each change, then every few
+    // seconds or whenever it's drifted from the phones' countdown (a reset,
+    // a pause), so a phone can never get stuck on a stale clock.
     final shape = jsonEncode(v);
-    if (shape == _lastShape) return;
+    final sent = _sentLeft;
+    final drifted = ticking &&
+        !paused() &&
+        (sent == null ||
+            _sinceSent.elapsed >= _resync ||
+            (sent - _sinceSent.elapsedMilliseconds / 1000 - controller.secondsLeft).abs() > 0.5);
+    if (shape == _lastShape && !drifted) return;
     _lastShape = shape;
-    if (controller.phase == BuzzPhase.open || controller.phase == BuzzPhase.answering) {
+    if (ticking) {
       v['left'] = (controller.secondsLeft * 10).round() / 10;
       v['total'] = (controller.phaseSeconds * 10).round() / 10;
+      _sentLeft = controller.secondsLeft;
+      _sinceSent
+        ..reset()
+        ..start();
+    } else {
+      _sentLeft = null;
     }
     room.show(v);
   }

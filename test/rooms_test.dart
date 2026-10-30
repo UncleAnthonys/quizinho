@@ -97,6 +97,17 @@ void main() {
       expect(game.outcome?.team, 0);
     });
 
+    test('phones get the clock again when it drifts, so it never sticks', () async {
+      final first = (ann.view['left']! as num).toDouble();
+      for (var i = 0; i < 20; i++) {
+        game.advance(const Duration(milliseconds: 100));
+      }
+      await settle();
+      final now = (ann.view['left']! as num).toDouble();
+      expect(now, lessThan(first - 1));
+      expect((now - game.secondsLeft).abs(), lessThan(0.6));
+    });
+
     test('only the answering phone can answer', () async {
       await ann.buzz(bridge.questionKey);
       await settle(300);
