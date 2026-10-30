@@ -57,9 +57,10 @@ class VoiceService {
   final HintedSpeech _hinted = HintedSpeech();
   final VoiceMissLog _misses = VoiceMissLog();
 
-  /// A spoken answer that didn't match, then the right player picked by
-  /// hand: saved so that mishearing counts next time (see [VoiceMissLog]).
-  void reportMiss(List<String> heard, String playerId) => _misses.report(heard: heard, playerId: playerId);
+  /// A spoken answer that matched nobody: saved with the right answers (and
+  /// the one picked by hand, if any) so it can count next time ([VoiceMissLog]).
+  void reportMiss(List<String> heard, {String? playerId, List<String> answers = const []}) =>
+      _misses.report(heard: heard, playerId: playerId, answers: answers);
   Future<String>? _model;
   bool? _available;
   VoidCallback? _onStopped;

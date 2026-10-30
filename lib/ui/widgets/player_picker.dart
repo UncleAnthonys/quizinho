@@ -112,6 +112,12 @@ class _PlayerPickerState extends State<PlayerPicker> {
 
   @override
   void dispose() {
+    // The box closed (time up, pass, or a wrong pick) after speech that
+    // matched nobody: save it with the right answers — usually there's no
+    // time left to type the name, so this is where most misses are caught.
+    if (_missedSpeech.isNotEmpty && widget.isAnswer != null) {
+      widget.voice?.reportMiss(_missedSpeech, answers: _answerIds);
+    }
     _picked = true;
     widget.voice?.stop();
     _focus.removeListener(_onFocus);
@@ -129,7 +135,7 @@ class _PlayerPickerState extends State<PlayerPicker> {
     // Said it, wasn't understood, then picked the right answer by hand:
     // remember what was heard so it counts next time.
     if (!spoken && _missedSpeech.isNotEmpty && (widget.isAnswer?.call(p) ?? false)) {
-      widget.voice?.reportMiss(_missedSpeech, p.id);
+      widget.voice?.reportMiss(_missedSpeech, playerId: p.id);
       _missedSpeech = const [];
     }
     if (widget.rapid) {
@@ -199,11 +205,13 @@ class _PlayerPickerState extends State<PlayerPicker> {
 
   /// The right answers' names (and surnames), for recognisers that can be
   /// told what to listen for. Worked out once per answer box.
+  late final List<Player> _answers =
+      widget.isAnswer == null ? const [] : widget.index.all.where(widget.isAnswer!).take(100).toList();
+  List<String> get _answerIds => [for (final p in _answers) p.id];
+
   late final List<String> _hints = () {
-    final isAnswer = widget.isAnswer;
-    if (isAnswer == null) return const <String>[];
     final out = <String>{};
-    for (final p in widget.index.all.where(isAnswer).take(100)) {
+    for (final p in _answers) {
       out.add(p.name);
       final last = p.name.split(' ').last;
       if (last.length > 3) out.add(last);

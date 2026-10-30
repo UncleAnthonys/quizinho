@@ -22,15 +22,22 @@ jobs:
           import json, collections
           raw = json.load(open('/tmp/misses.json')) or {}
           by_player = collections.defaultdict(collections.Counter)
+          unclaimed = collections.Counter()
           sources = collections.Counter()
           for e in raw.values():
-              if not isinstance(e, dict) or not isinstance(e.get('p'), str): continue
+              if not isinstance(e, dict) or not e.get('h'): continue
               sources[e.get('s', '?')] += 1
-              heard = e.get('h') or []
-              if heard: by_player[e['p']][str(heard[0]).lower().strip()] += 1
+              heard = str(e['h'][0]).lower().strip()
+              answers = e.get('a') or []
+              pid = e.get('p') or (answers[0] if len(answers) == 1 else None)
+              if pid:
+                  by_player[pid][heard] += 1  # picked by hand, or the only right answer
+              else:
+                  unclaimed[f"{heard}  <-  one of: {', '.join(answers[:12])}"] += 1
           out = {
-              "_note": f"{sum(sources.values())} misses from {dict(sources)}: player -> what was heard (count). Review, then copy good ones into seed/spoken_overrides.json.",
+              "_note": f"{sum(sources.values())} misses from {dict(sources)}. players: who it was -> what was heard (count). unclaimed: several right answers, work out which. Review, then copy good ones into seed/spoken_overrides.json.",
               "players": {p: dict(c.most_common()) for p, c in sorted(by_player.items())},
+              "unclaimed": dict(unclaimed.most_common()),
           }
           json.dump(out, open('data_pipeline/raw/voice_misses.json', 'w'), indent=1, ensure_ascii=False)
           print(f"::notice title=Voice misses::{out['_note']}")
