@@ -464,10 +464,10 @@ class _VoiceBoost extends StatelessWidget {
         valueListenable: HintedSpeech.status,
         builder: (context, s, _) {
           final (text, colour) = switch (s) {
-            'ready' => ('Player-name voice on: say any name', Palette.green),
-            'downloading' => ('Player-name voice downloading — tricky names? Type them', Palette.gold),
+            'ready' => ('Voice tuned to footballer names — just say it', Palette.green),
+            'downloading' => ('Tuning voice to footballer names… type unusual names for now', Palette.gold),
             'checking' => ('Checking voice…', Palette.muted),
-            _ => ('Basic voice — tricky names? Type them', Palette.muted),
+            _ => ('Basic voice — may mishear unusual names, so type those', Palette.muted),
           };
           return Padding(
             padding: const EdgeInsets.fromLTRB(16, 0, 16, 2),
