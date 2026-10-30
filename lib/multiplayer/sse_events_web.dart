@@ -13,7 +13,7 @@ Stream<SseEvent> sseEvents(Uri url) {
     onListen: () {
       final s = web.EventSource(url.toString());
       source = s;
-      for (final type in const ['put', 'patch', 'cancel']) {
+      for (final type in const ['put', 'patch', 'cancel', 'keep-alive']) {
         s.addEventListener(
           type,
           ((web.Event e) {
