@@ -12,6 +12,7 @@ class HintedSpeech {
     required List<String> hints,
     required void Function(String words) onWords,
     required void Function(List<String> alternatives) onDone,
+    bool boost = true,
   }) =>
       false;
 

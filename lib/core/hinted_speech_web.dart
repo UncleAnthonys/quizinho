@@ -95,15 +95,20 @@ class HintedSpeech {
 
   JSObject? _rec;
 
-  /// Listens for one answer, leaning towards [hints]. False = couldn't start.
+  /// Listens for one answer. With [boost] (only once [ready]), on-device and
+  /// leaning towards [hints]; without, the browser's normal speech — one
+  /// utterance at a time, which avoids Android Chrome repeating words
+  /// ("Dwight Dwight Yorke") in continuous mode. False = couldn't start.
   bool listen({
     required List<String> hints,
     required void Function(String words) onWords,
     required void Function(List<String> alternatives) onDone,
+    bool boost = true,
   }) {
     final c = _class;
     final phrase = globalContext['SpeechRecognitionPhrase'];
-    if (c == null || phrase == null || _refused) return false;
+    if (c == null) return false;
+    if (boost && (phrase == null || _refused)) return false;
     stop();
     var finished = false;
     var last = '';
@@ -119,10 +124,12 @@ class HintedSpeech {
       r['continuous'] = false.toJS;
       r['interimResults'] = true.toJS;
       r['maxAlternatives'] = 5.toJS;
-      r['processLocally'] = true.toJS;
-      r['phrases'] = [
-        for (final h in hints) (phrase as JSFunction).callAsConstructor<JSObject>(h.toJS, 3.0.toJS),
-      ].toJS;
+      if (boost) {
+        r['processLocally'] = true.toJS;
+        r['phrases'] = [
+          for (final h in hints) (phrase! as JSFunction).callAsConstructor<JSObject>(h.toJS, 3.0.toJS),
+        ].toJS;
+      }
       r['onresult'] = ((JSObject e) {
         final results = e['results']! as JSObject;
         final n = (results['length']! as JSNumber).toDartInt;
@@ -146,7 +153,7 @@ class HintedSpeech {
         final error = (e['error'] as JSString?)?.toDart ?? '';
         debugPrint('Hinted speech error: $error');
         // The browser won't take hints after all: use normal speech from now on.
-        if (const {'phrases-not-supported', 'language-not-supported', 'service-not-allowed'}.contains(error)) {
+        if (boost && const {'phrases-not-supported', 'language-not-supported', 'service-not-allowed'}.contains(error)) {
           _refused = true;
           status.value = 'unsupported';
         }
@@ -156,8 +163,8 @@ class HintedSpeech {
       _rec = r;
       return true;
     } catch (e) {
-      debugPrint('Hinted speech failed: $e');
-      _refused = true;
+      debugPrint('Browser speech failed: $e');
+      if (boost) _refused = true;
       return false;
     }
   }

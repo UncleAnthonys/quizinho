@@ -309,6 +309,28 @@ class BuzzGameView extends StatelessWidget {
     final c = controller;
     final t = round.tournament;
     if (c.phase == BuzzPhase.open) {
+        // Everyone who can buzz has it on their own phone: no buzzers here.
+        final inPlay = faceOff?.players.keys.toSet() ?? {for (var i = 0; i < t.teamCount; i++) i};
+        if (phoneTeams.isNotEmpty && inPlay.every(phoneTeams.contains)) {
+          return Column(children: [
+            Expanded(
+              child: Center(
+                child: Column(mainAxisSize: MainAxisSize.min, children: [
+                  const Icon(Icons.phone_iphone_rounded, color: Palette.yellow, size: 56),
+                  const SizedBox(height: 8),
+                  Text(
+                    faceOff == null
+                        ? 'BUZZ ON YOUR PHONES'
+                        : 'BUZZ ON YOUR PHONES:\n${faceOff!.players.values.join(' v ')}',
+                    textAlign: TextAlign.center,
+                    style: AppText.headline(30),
+                  ),
+                ]),
+              ),
+            ),
+            TextButton(onPressed: c.giveUp, child: Text('NOBODY KNOWS — SKIP', style: AppText.label(14))),
+          ]);
+        }
         return Column(children: [
           Expanded(
             child: Padding(

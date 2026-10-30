@@ -95,8 +95,14 @@ class VoiceService {
     List<String> hints = const [],
   }) async {
     if (!_settings.voiceOn || !await _init()) return false;
-    if (kIsWeb && hints.isNotEmpty && await HintedSpeech.ready()) {
-      if (_hinted.listen(hints: hints, onWords: onWords, onDone: onDone)) return true;
+    // Browsers: our own recogniser, boosted with the answers' names where
+    // Chrome can; the speech_to_text plugin only if that can't start.
+    if (kIsWeb) {
+      final boost = hints.isNotEmpty && await HintedSpeech.ready();
+      if (_hinted.listen(hints: hints, boost: boost, onWords: onWords, onDone: onDone) ||
+          (boost && _hinted.listen(hints: hints, boost: false, onWords: onWords, onDone: onDone))) {
+        return true;
+      }
     }
     var finished = false;
     var last = '';
