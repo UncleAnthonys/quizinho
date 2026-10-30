@@ -418,10 +418,18 @@ class _GuestGameState extends State<_GuestGame> with SingleTickerProviderStateMi
       if (phase == 'open' || phase == 'answering')
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 4),
-          child: ValueListenableBuilder<double>(
-            valueListenable: _left,
-            builder: (context, left, _) => TimerBar(fraction: _total == 0 ? 0 : left / _total, seconds: left),
-          ),
+          child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            // Same label as the host's ("FINAL CHANCE", "NEXT CLUB IN").
+            if ((phase == 'answering' ? 'ANSWER CLOCK' : asMap(v['question'])['clock']) case final String label)
+              Padding(
+                padding: const EdgeInsets.only(bottom: 4),
+                child: Text(label, style: AppText.label(15)),
+              ),
+            ValueListenableBuilder<double>(
+              valueListenable: _left,
+              builder: (context, left, _) => TimerBar(fraction: _total == 0 ? 0 : left / _total, seconds: left),
+            ),
+          ]),
         ),
       action,
       if (iAnswer) question,

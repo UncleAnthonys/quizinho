@@ -79,6 +79,7 @@ class _CareerPathScreenState extends State<CareerPathScreen>
             'shown': shown,
             'highlight': c.revealed - 1,
             if (!resolved) 'worth': c.pointsAvailable * widget.round.multiplier,
+            if (!resolved) 'clock': c.allRevealed ? 'FINAL CHANCE' : 'NEXT CLUB IN',
           };
         },
         answerIds: () => {c.current.player.id},

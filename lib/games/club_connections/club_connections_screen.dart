@@ -75,6 +75,7 @@ class _ClubConnectionsScreenState extends State<ClubConnectionsScreen>
         prompt: 'Name a player who played for both',
         question: () => {
           'clubs': [c.current.clubA.name, c.current.clubB.name],
+          'clock': c.lockedOut.isEmpty ? 'BUZZ IN' : 'STEAL IT',
         },
         answerIds: () => c.current.answerIds,
         reveal: () => ([for (final id in c.current.answerIds) if (players.byId(id) case final p?) p]

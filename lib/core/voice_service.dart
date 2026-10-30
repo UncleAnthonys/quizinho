@@ -13,6 +13,39 @@ import 'hinted_speech.dart';
 /// name — see packages/quizinho_speech); elsewhere Google on Android or the
 /// Web Speech API in browsers. No server, no per-use cost. Every failure
 /// degrades to "type it instead".
+/// Undoes Android Chrome's habit of repeating partial results inside the
+/// transcript: "jamesjames milner" → "james milner", "dwight dwight yorke" →
+/// "dwight yorke", "jordan jordan henderson jordan henderson" → "jordan henderson".
+String dedupeSpeech(String text) {
+  var words = text.trim().split(RegExp(r'\s+')).where((w) => w.isNotEmpty).toList();
+  // A word glued to itself ("jamesjames").
+  words = [
+    for (final w in words)
+      if (w.length.isEven && w.length >= 4 && w.substring(0, w.length ~/ 2).toLowerCase() == w.substring(w.length ~/ 2).toLowerCase())
+        w.substring(0, w.length ~/ 2)
+      else
+        w,
+  ];
+  // A run of words that's a prefix of what follows ("dwight | dwight yorke").
+  var changed = true;
+  while (changed) {
+    changed = false;
+    for (var len = 1; len <= words.length ~/ 2 && !changed; len++) {
+      for (var i = 0; i + 2 * len <= words.length && !changed; i++) {
+        var same = true;
+        for (var k = 0; k < len && same; k++) {
+          same = words[i + k].toLowerCase() == words[i + len + k].toLowerCase();
+        }
+        if (same) {
+          words.removeRange(i, i + len);
+          changed = true;
+        }
+      }
+    }
+  }
+  return words.join(' ');
+}
+
 class VoiceService {
   VoiceService(this._settings);
 
@@ -97,12 +130,15 @@ class VoiceService {
     if (!_settings.voiceOn || !await _init()) return false;
     // Browsers: our own recogniser, boosted with the answers' names where
     // Chrome can; the speech_to_text plugin only if that can't start.
+    if (kIsWeb && hints.isNotEmpty && await HintedSpeech.ready()) {
+      if (_hinted.listen(hints: hints, onWords: onWords, onDone: onDone)) return true;
+    }
     if (kIsWeb) {
-      final boost = hints.isNotEmpty && await HintedSpeech.ready();
-      if (_hinted.listen(hints: hints, boost: boost, onWords: onWords, onDone: onDone) ||
-          (boost && _hinted.listen(hints: hints, boost: false, onWords: onWords, onDone: onDone))) {
-        return true;
-      }
+      // Android Chrome repeats what it's heard so far ("zlatanzlatan
+      // ibrahimovic", "dwight dwight yorke"): tidy it before matching.
+      final words = onWords, done = onDone;
+      onWords = (w) => words(dedupeSpeech(w));
+      onDone = (alts) => done([for (final a in alts) dedupeSpeech(a)]);
     }
     var finished = false;
     var last = '';
