@@ -40,6 +40,7 @@ def main() -> None:
     ap.add_argument("--vosk", default="voices/vosk-model-small-en-us-0.15")
     args = ap.parse_args()
 
+    import numpy as np
     from faster_whisper import WhisperModel
     from piper import PiperVoice
     from vosk import KaldiRecognizer, Model
@@ -59,7 +60,9 @@ def main() -> None:
             while data := w.readframes(4000):
                 rec.AcceptWaveform(data)
         heard_vosk = json.loads(rec.FinalResult()).get("text", "")
-        segs, _ = whisper.transcribe(str(wav16), language="en", beam_size=1)
+        with wave.open(str(wav16), "rb") as w:
+            audio = np.frombuffer(w.readframes(w.getnframes()), dtype=np.int16).astype(np.float32) / 32768
+        segs, _ = whisper.transcribe(audio, language="en", beam_size=1)  # raw audio: skips PyAV
         heard_whisper = " ".join(s.text for s in segs).strip(" .,!?")
         results.append({"id": p["id"], "name": p["name"], "vosk": heard_vosk, "whisper": heard_whisper})
         print(f"{p['name']:<32} vosk: {heard_vosk:<32} whisper: {heard_whisper}")
