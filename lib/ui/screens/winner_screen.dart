@@ -86,7 +86,7 @@ class _WinnerScreenState extends State<WinnerScreen> with SingleTickerProviderSt
                 if (_line.isNotEmpty)
                   Text(_line, textAlign: TextAlign.center, style: AppText.headline(22, color: Palette.text, weight: FontWeight.w700)),
                 const SizedBox(height: 12),
-                if (t.playerTable.isNotEmpty) _PlayerOfTheMatch(tournament: t),
+                if (t.playerTable.isNotEmpty && !t.everyTeamSolo) _PlayerOfTheMatch(tournament: t),
                 const SizedBox(height: 8),
                 Expanded(
                   child: ListView(children: [

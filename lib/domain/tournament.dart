@@ -270,6 +270,10 @@ class Tournament extends ChangeNotifier {
   /// Face-offs need at least one named player in every team.
   bool get hasPlayerNames => config.teams.every((t) => t.players.isNotEmpty);
 
+  /// Every team is one person (a 1 v 1, names added for phone buzzers):
+  /// face-offs and Player of the Match would just repeat the team result.
+  bool get everyTeamSolo => config.teams.every((t) => t.players.length <= 1);
+
   static String _key(int team, String name) => '$team|$name';
 
   /// Least-picked player in [team] (random among ties); records the pick.
@@ -284,7 +288,7 @@ class Tournament extends ChangeNotifier {
 
   /// Roll for a face-off on the next buzzer question. Null = whole-team question.
   FaceOff? maybeFaceOff() {
-    if (!hasPlayerNames || _random.nextDouble() >= faceOffChance) return null;
+    if (!hasPlayerNames || everyTeamSolo || _random.nextDouble() >= faceOffChance) return null;
     return FaceOff({for (var t = 0; t < teamCount; t++) t: _pickPlayer(t)});
   }
 

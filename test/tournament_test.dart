@@ -217,6 +217,19 @@ void faceOffTests() {
     expect(picked, {'Sam': 2, 'Ali': 2, 'Jo': 2});
   });
 
+  test('one player per team (a 1 v 1) → no face-offs', () {
+    final t = Tournament(
+        TournamentConfig(teams: [
+          TeamSetup(name: 'Home', colorIndex: 0, players: ['Sam']),
+          TeamSetup(name: 'Away', colorIndex: 1, players: ['Kim']),
+        ]),
+        random: Random(4));
+    expect(t.everyTeamSolo, isTrue);
+    for (var i = 0; i < 20; i++) {
+      expect(t.maybeFaceOff(), isNull);
+    }
+  });
+
   test('turn players cycle in order', () {
     final t = Tournament(namedConfig());
     expect([for (var i = 0; i < 4; i++) t.nextTurnPlayer(1)], ['Kim', 'Raj', 'Kim', 'Raj']);

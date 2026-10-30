@@ -189,7 +189,9 @@ class _SetupScreenState extends State<SetupScreen> {
                   padding: const EdgeInsets.only(bottom: 10),
                   child: Text(
                     _players.every((p) => p.isNotEmpty)
-                        ? 'Face-offs on. First name is captain (C) — tap a name to swap.'
+                        ? (_players.every((p) => p.length == 1)
+                            ? 'Names added. Face-offs start when a team has 2+ players.'
+                            : 'Face-offs on. First name is captain (C) — tap a name to swap.')
                         : 'Add player names to unlock face-offs and phone buzzers.',
                     style: const TextStyle(color: Palette.muted, fontSize: 13),
                   ),
