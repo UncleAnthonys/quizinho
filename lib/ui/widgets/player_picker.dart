@@ -144,6 +144,7 @@ class _PlayerPickerState extends State<PlayerPicker> {
     });
     _consumed = 0;
     final started = await voice.listen(
+      hints: _hints,
       onWords: (words) {
         if (!_keepListening || words.trim().isEmpty) return;
         if (widget.rapid) {
@@ -180,6 +181,20 @@ class _PlayerPickerState extends State<PlayerPicker> {
     merged.sort((a, b) => b.score.compareTo(a.score));
     setState(() => _results = merged.take(4).toList());
   }
+
+  /// The right answers' names (and surnames), for recognisers that can be
+  /// told what to listen for. Worked out once per answer box.
+  late final List<String> _hints = () {
+    final isAnswer = widget.isAnswer;
+    if (isAnswer == null) return const <String>[];
+    final out = <String>{};
+    for (final p in widget.index.all.where(isAnswer).take(100)) {
+      out.add(p.name);
+      final last = p.name.split(' ').last;
+      if (last.length > 3) out.add(last);
+    }
+    return out.toList();
+  }();
 
   /// Words of the current stretch of speech already used for a name.
   int _consumed = 0;

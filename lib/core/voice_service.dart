@@ -6,6 +6,7 @@ import 'package:speech_to_text/speech_recognition_result.dart';
 import 'package:speech_to_text/speech_to_text.dart';
 
 import 'app_settings.dart';
+import 'hinted_speech.dart';
 
 /// Spoken answers via the device's own speech recogniser. On iPhone that's
 /// Quizinho's own recogniser (Apple on-device speech taught every player's
@@ -19,6 +20,7 @@ class VoiceService {
   final SpeechToText _stt = SpeechToText();
   final QuizinhoSpeech? _native = QuizinhoSpeech.supported ? QuizinhoSpeech() : null;
   StreamSubscription<SpeechEvent>? _nativeSub;
+  final HintedSpeech _hinted = HintedSpeech();
   Future<String>? _model;
   bool? _available;
   VoidCallback? _onStopped;
@@ -84,12 +86,18 @@ class VoiceService {
 
   /// Listens for one answer. [onWords] gets the live transcript; [onDone] gets
   /// the final transcript alternatives, best first (empty if nothing heard).
+  /// [hints] are names worth listening for (the right answers): in Chrome,
+  /// where supported, the recogniser leans towards them.
   /// Returns false if voice isn't available, so the caller can fall back.
   Future<bool> listen({
     required void Function(String words) onWords,
     required void Function(List<String> alternatives) onDone,
+    List<String> hints = const [],
   }) async {
     if (!_settings.voiceOn || !await _init()) return false;
+    if (kIsWeb && hints.isNotEmpty && await HintedSpeech.ready()) {
+      if (_hinted.listen(hints: hints, onWords: onWords, onDone: onDone)) return true;
+    }
     var finished = false;
     var last = '';
     void finish(List<String> alts) {
@@ -154,6 +162,7 @@ class VoiceService {
 
   void stop() {
     _onStopped = null;
+    _hinted.stop();
     if (_native case final n?) {
       _nativeSub?.cancel();
       _nativeSub = null;
