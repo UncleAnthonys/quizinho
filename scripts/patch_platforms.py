@@ -95,6 +95,15 @@ def patch_web() -> None:
     s = index.read_text(encoding="utf-8")
     s = re.sub(r"<title>[^<]*</title>", f"<title>{DISPLAY_NAME}</title>", s, count=1)
     s = re.sub(r'(<meta name="apple-mobile-web-app-title" content=")[^"]*"', rf'\g<1>{DISPLAY_NAME}"', s, count=1)
+    # Android Chrome: the keyboard slides over the page instead of shrinking
+    # it — no jerky full-screen re-layout while typing an answer. (Answer
+    # boxes sit near the top, above the keyboard.)
+    if "virtualKeyboard" not in s:
+        s = s.replace(
+            "</head>",
+            '  <script>if ("virtualKeyboard" in navigator) navigator.virtualKeyboard.overlaysContent = true;</script>\n</head>',
+            1,
+        )
     index.write_text(s, encoding="utf-8")
     print("patched", index.relative_to(ROOT))
 
