@@ -28,7 +28,7 @@ jobs:
           curl -sfLO "$H/en_GB-alan-medium.onnx" && curl -sfLO "$H/en_GB-alan-medium.onnx.json"
           curl -sfLO https://alphacephei.com/vosk/models/vosk-model-small-en-us-0.15.zip && unzip -q vosk-model-small-en-us-0.15.zip
       - name: Say and hear
-        run: python3 data_pipeline/voice_guess.py --limit "${{ github.event.inputs.limit || '50' }}"
+        run: bash scripts/ci_run.sh "Say and hear" python3 data_pipeline/voice_guess.py --limit "${{ github.event.inputs.limit || '50' }}"
       - uses: subosito/flutter-action@v2
         with:
           channel: stable
@@ -36,7 +36,7 @@ jobs:
       - name: Check against Quizinho's matching
         run: |
           flutter pub get
-          flutter test test/voice_guess_check_test.dart
+          bash scripts/ci_run.sh "Check" flutter test test/voice_guess_check_test.dart
       - uses: actions/upload-artifact@v4
         with:
           name: voice-guess
