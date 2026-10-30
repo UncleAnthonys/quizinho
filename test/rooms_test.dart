@@ -57,7 +57,7 @@ void main() {
         players: PlayerIndex(const [henry, fabregas, gallas]),
         title: 'CLUB CONNECTIONS',
         prompt: 'Name a player who played for both',
-        lines: () => [game.current.clubA.name, game.current.clubB.name],
+        question: () => {'clubs': [game.current.clubA.name, game.current.clubB.name]},
         answerIds: () => game.current.answerIds,
         reveal: () => ['Thierry Henry'],
         faceOff: () => null,
@@ -76,7 +76,7 @@ void main() {
     test('phones join by name and see the question', () {
       expect(host.members.values.map((m) => m.name), containsAll(['Ann', 'Bob']));
       expect(ann.view['kind'], 'buzz');
-      expect(asList(ann.view['lines']), ['Arsenal', 'Barcelona']);
+      expect(asList(asMap(ann.view['question'])['clubs']), ['Arsenal', 'Barcelona']);
       expect(ann.taken(1, 'Bob'), isTrue);
     });
 
@@ -115,7 +115,7 @@ void main() {
         players: PlayerIndex(const [henry]),
         title: 'CLUB CONNECTIONS',
         prompt: '',
-        lines: () => const [],
+        question: () => const {},
         answerIds: () => game.current.answerIds,
         reveal: () => const [],
         faceOff: () => const FaceOff({0: 'Al', 1: 'Bob'}),

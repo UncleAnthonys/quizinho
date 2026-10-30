@@ -73,7 +73,9 @@ class _ClubConnectionsScreenState extends State<ClubConnectionsScreen>
         players: players,
         title: 'CLUB CONNECTIONS',
         prompt: 'Name a player who played for both',
-        lines: () => [c.current.clubA.name, c.current.clubB.name],
+        question: () => {
+          'clubs': [c.current.clubA.name, c.current.clubB.name],
+        },
         answerIds: () => c.current.answerIds,
         reveal: () => ([for (final id in c.current.answerIds) if (players.byId(id) case final p?) p]
               ..sort((a, b) => b.fame.compareTo(a.fame)))
@@ -81,6 +83,7 @@ class _ClubConnectionsScreenState extends State<ClubConnectionsScreen>
             .toList(),
         faceOff: () => _faces.current,
         paused: () => _faces.awaitingReady,
+        multiplier: widget.round.multiplier,
       )
         ..addListener(() {
           if (mounted) setState(() {});
@@ -134,7 +137,7 @@ class _ClubConnectionsScreenState extends State<ClubConnectionsScreen>
         services.sound.play(Sfx.whistle);
         setState(_faces.ready);
       },
-      question: (compact) => _ClubsCard(a: q.clubA.name, b: q.clubB.name, compact: compact),
+      question: (compact) => ClubsCard(a: q.clubA.name, b: q.clubB.name, compact: compact),
       resolvedDetail: Column(children: [
         Text(
           answers.length == 1 ? 'THE ONLY ANSWER IN OUR DATABASE' : '${answers.length} ANSWERS IN OUR DATABASE',
@@ -159,8 +162,8 @@ class _ClubConnectionsScreenState extends State<ClubConnectionsScreen>
 
 }
 
-class _ClubsCard extends StatelessWidget {
-  const _ClubsCard({required this.a, required this.b, this.compact = false});
+class ClubsCard extends StatelessWidget {
+  const ClubsCard({required this.a, required this.b, this.compact = false});
   final String a;
   final String b;
 

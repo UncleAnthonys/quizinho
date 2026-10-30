@@ -21,12 +21,16 @@ class BuzzBridge extends ChangeNotifier {
     required this.players,
     required this.title,
     required this.prompt,
-    required this.lines,
+    required this.question,
     required this.answerIds,
     required this.reveal,
     required this.faceOff,
     required this.paused,
+    this.multiplier = 1,
   });
+
+  /// 2 on a wildcard round: points shown on the phones match the host.
+  final int multiplier;
 
   /// The face-off intro is up: the clock's stopped and nobody can buzz yet.
   final bool Function() paused;
@@ -38,8 +42,10 @@ class BuzzBridge extends ChangeNotifier {
   final String title;
   final String prompt;
 
-  /// What the question shows right now (club names; the clubs revealed so far).
-  final List<String> Function() lines;
+  /// What the question shows right now, for the phones to draw with the same
+  /// widgets as the host: {"clubs": [a, b]} or {"spells": [...], "shown",
+  /// "highlight", "worth"}.
+  final Map<String, Object?> Function() question;
 
   /// Right answers, so the answering phone can judge speech like the host does.
   final Set<String> Function() answerIds;
@@ -128,7 +134,9 @@ class BuzzBridge extends ChangeNotifier {
       'q': questionKey,
       'n': '${c.questionIndex + 1}/${c.questions.length}',
       'prompt': prompt,
-      'lines': lines(),
+      // Nothing until the host's face-off intro is dismissed — no head start.
+      'question': paused() ? const <String, Object?>{} : question(),
+      'round': '${tournament.roundNumber.clamp(1, tournament.totalRounds)}/${tournament.totalRounds}',
       'phase': paused() && c.phase == BuzzPhase.open ? 'ready' : c.phase.name,
       'teams': teamsView(tournament),
       'canBuzz': [for (var i = 0; i < tournament.teamCount; i++) if (c.canBuzz(i)) i],
@@ -145,7 +153,7 @@ class BuzzBridge extends ChangeNotifier {
           'scored': o?.scored ?? false,
           if (o != null && o.scored) 'team': o.team,
           if (o?.player != null) 'player': o!.player!.name,
-          'points': o?.points ?? 0,
+          'points': (o?.points ?? 0) * multiplier,
           'reveal': reveal().take(30).toList(),
         },
     };

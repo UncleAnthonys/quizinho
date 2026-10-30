@@ -68,17 +68,24 @@ class _CareerPathScreenState extends State<CareerPathScreen>
         players: services.repo.players,
         title: 'CAREER PATH',
         prompt: 'Who had this career?',
-        lines: () {
+        question: () {
           final resolved = c.phase == BuzzPhase.resolved || c.phase == BuzzPhase.finished;
-          return [
-            for (final s in c.current.spells.take(resolved ? c.clueCount : c.revealed))
-              '${s.club.name}${s.isLoan ? ' (loan)' : ''}${s.yearsLabel.isEmpty ? '' : '  ${s.yearsLabel}'}',
-          ];
+          final shown = resolved ? c.clueCount : c.revealed;
+          return {
+            'spells': [
+              for (final s in c.current.spells.take(shown))
+                {'c': s.club.name, 's': s.startYear, 'e': s.endYear, 'l': s.isLoan},
+            ],
+            'shown': shown,
+            'highlight': c.revealed - 1,
+            if (!resolved) 'worth': c.pointsAvailable * widget.round.multiplier,
+          };
         },
         answerIds: () => {c.current.player.id},
         reveal: () => ['It was ${c.current.player.name}'],
         faceOff: () => _faces.current,
         paused: () => _faces.awaitingReady,
+        multiplier: widget.round.multiplier,
       )
         ..addListener(() {
           if (mounted) setState(() {});
@@ -136,7 +143,7 @@ class _CareerPathScreenState extends State<CareerPathScreen>
           ),
         // Once answered, the ring stays on the club that was showing when they
         // got it (revealing stops at that moment), not the last club.
-        _CareerTrail(
+        CareerTrail(
           spells: c.current.spells,
           shown: shown,
           highlight: c.revealed - 1,
@@ -153,8 +160,8 @@ class _CareerPathScreenState extends State<CareerPathScreen>
 }
 
 /// The clubs revealed so far, newest at the bottom; [highlight] is ringed.
-class _CareerTrail extends StatelessWidget {
-  const _CareerTrail({required this.spells, required this.shown, required this.highlight, required this.maxHeight});
+class CareerTrail extends StatelessWidget {
+  const CareerTrail({required this.spells, required this.shown, required this.highlight, required this.maxHeight});
   final List<CareerSpell> spells;
   final int shown;
 

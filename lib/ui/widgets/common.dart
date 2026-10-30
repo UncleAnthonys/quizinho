@@ -121,51 +121,79 @@ class Scoreboard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final t = tournament;
-    return Container(
-      margin: const EdgeInsets.fromLTRB(12, 8, 12, 4),
-      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 6),
-      decoration: BoxDecoration(
-        color: Colors.black.withValues(alpha: 0.35),
-        borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: Palette.line),
-      ),
-      child: Row(children: [
-        const ExitMatchButton(),
-        Padding(
-          padding: const EdgeInsets.only(right: 8),
-          child: Column(mainAxisSize: MainAxisSize.min, children: [
-            Text('RD', style: AppText.label(11)),
-            Text('${min(t.roundNumber, t.totalRounds)}/${t.totalRounds}', style: AppText.headline(18)),
-          ]),
-        ),
-        for (var i = 0; i < t.teamCount; i++)
-          Expanded(
-            child: AnimatedContainer(
-              duration: const Duration(milliseconds: 250),
-              margin: const EdgeInsets.symmetric(horizontal: 3),
-              padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 6),
-              decoration: BoxDecoration(
-                color: highlightTeam == i
-                    ? Palette.team(t.config.teams[i].colorIndex).withValues(alpha: 0.35)
-                    : Colors.white.withValues(alpha: 0.04),
-                borderRadius: BorderRadius.circular(10),
-                border: Border(
-                  left: BorderSide(color: Palette.team(t.config.teams[i].colorIndex), width: 5),
-                ),
-              ),
-              child: Column(mainAxisSize: MainAxisSize.min, children: [
-                FittedBox(
-                  fit: BoxFit.scaleDown,
-                  child: Text(t.teamName(i).toUpperCase(), style: AppText.label(13, color: Palette.text)),
-                ),
-                Text('${t.scores[i]}', style: AppText.headline(26)),
-                if (extra != null) Text(extra!(i), style: AppText.label(11)),
-              ]),
-            ),
-          ),
-      ]),
+    return ScoreStrip(
+      round: '${min(t.roundNumber, t.totalRounds)}/${t.totalRounds}',
+      teams: [for (var i = 0; i < t.teamCount; i++) (t.teamName(i), t.config.teams[i].colorIndex, t.scores[i])],
+      highlightTeam: highlightTeam,
+      extra: extra,
+      showExit: true,
     );
   }
+}
+
+/// The score strip itself, from plain data — the same look on joined phones.
+class ScoreStrip extends StatelessWidget {
+  const ScoreStrip({
+    super.key,
+    required this.round,
+    required this.teams,
+    this.highlightTeam,
+    this.extra,
+    this.showExit = false,
+  });
+
+  /// "2/6"
+  final String round;
+
+  /// (name, colour index, score) per team.
+  final List<(String, int, int)> teams;
+  final int? highlightTeam;
+  final String Function(int team)? extra;
+  final bool showExit;
+
+  @override
+  Widget build(BuildContext context) => Container(
+        margin: const EdgeInsets.fromLTRB(12, 8, 12, 4),
+        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 6),
+        decoration: BoxDecoration(
+          color: Colors.black.withValues(alpha: 0.35),
+          borderRadius: BorderRadius.circular(14),
+          border: Border.all(color: Palette.line),
+        ),
+        child: Row(children: [
+          if (showExit) const ExitMatchButton() else const SizedBox(width: 8),
+          Padding(
+            padding: const EdgeInsets.only(right: 8),
+            child: Column(mainAxisSize: MainAxisSize.min, children: [
+              Text('RD', style: AppText.label(11)),
+              Text(round, style: AppText.headline(18)),
+            ]),
+          ),
+          for (final (i, (name, colour, score)) in teams.indexed)
+            Expanded(
+              child: AnimatedContainer(
+                duration: const Duration(milliseconds: 250),
+                margin: const EdgeInsets.symmetric(horizontal: 3),
+                padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 6),
+                decoration: BoxDecoration(
+                  color: highlightTeam == i
+                      ? Palette.team(colour).withValues(alpha: 0.35)
+                      : Colors.white.withValues(alpha: 0.04),
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border(left: BorderSide(color: Palette.team(colour), width: 5)),
+                ),
+                child: Column(mainAxisSize: MainAxisSize.min, children: [
+                  FittedBox(
+                    fit: BoxFit.scaleDown,
+                    child: Text(name.toUpperCase(), style: AppText.label(13, color: Palette.text)),
+                  ),
+                  Text('$score', style: AppText.headline(26)),
+                  if (extra != null) Text(extra!(i), style: AppText.label(11)),
+                ]),
+              ),
+            ),
+        ]),
+      );
 }
 
 /// Leave the match: asks "Abandon match?" first (the match flow's guard), then home.

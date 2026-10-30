@@ -4,7 +4,10 @@ import 'package:flutter/material.dart';
 
 import '../core/app_services.dart';
 import '../core/theme.dart';
+import '../data/models.dart';
 import '../domain/tournament.dart';
+import '../games/career_path/career_path_screen.dart' show CareerTrail;
+import '../games/club_connections/club_connections_screen.dart' show ClubsCard;
 import '../ui/widgets/common.dart';
 import '../ui/widgets/player_picker.dart';
 import 'room.dart';
@@ -212,30 +215,50 @@ class _GuestGameState extends State<_GuestGame> {
     return Column(children: [header, Expanded(child: body)]);
   }
 
-  Widget _scores(Object? teams) => Row(children: [
-        for (final t in asList(teams))
-          if (asMap(t) case final m)
-            Expanded(
-              child: Container(
-                margin: const EdgeInsets.symmetric(horizontal: 3),
-                padding: const EdgeInsets.symmetric(vertical: 6),
-                decoration: BoxDecoration(
-                  color: Colors.black.withValues(alpha: 0.3),
-                  borderRadius: BorderRadius.circular(10),
-                  border: Border(left: BorderSide(color: Palette.team((m['color'] as num?)?.toInt() ?? 0), width: 5)),
-                ),
-                child: Column(children: [
-                  FittedBox(child: Text('${m['name']}'.toUpperCase(), style: AppText.label(12, color: Palette.text))),
-                  Text('${m['score'] ?? 0}', style: AppText.headline(24)),
-                ]),
-              ),
-            ),
-      ]);
+  /// The host's score strip, drawn from the view.
+  Widget _scores(Object? teams, {String round = '', int? highlight}) => ScoreStrip(
+        round: round,
+        highlightTeam: highlight,
+        teams: [
+          for (final t in asList(teams))
+            if (asMap(t) case final m)
+              ('${m['name'] ?? ''}', (m['color'] as num?)?.toInt() ?? 0, (m['score'] as num?)?.toInt() ?? 0),
+        ],
+      );
+
+  /// The question with the host's own widgets, so both screens look the same.
+  Widget _question(Map<String, Object?> v, {bool compact = false}) {
+    final q = asMap(v['question']);
+    final clubs = asList(q['clubs']);
+    if (clubs.length == 2) return ClubsCard(a: '${clubs[0]}', b: '${clubs[1]}', compact: compact);
+    final spells = [
+      for (final sp in asList(q['spells']))
+        if (asMap(sp) case final m)
+          CareerSpell(
+            club: Club(id: '', name: '${m['c'] ?? ''}', fame: 1),
+            startYear: (m['s'] as num?)?.toInt(),
+            endYear: (m['e'] as num?)?.toInt(),
+            isLoan: m['l'] == true,
+          ),
+    ];
+    if (spells.isEmpty) return const SizedBox.shrink();
+    final worth = (q['worth'] as num?)?.toInt();
+    return Column(children: [
+      if (worth != null)
+        Text('WORTH $worth ${worth == 1 ? 'POINT' : 'POINTS'}', style: AppText.headline(compact ? 18 : 24, color: Palette.gold)),
+      CareerTrail(
+        spells: spells,
+        shown: (q['shown'] as num?)?.toInt() ?? spells.length,
+        highlight: (q['highlight'] as num?)?.toInt() ?? spells.length - 1,
+        maxHeight: compact ? 190 : 250,
+      ),
+    ]);
+  }
 
   Widget _center(String title, String body, {Object? scores}) => Padding(
         padding: const EdgeInsets.all(20),
         child: Column(children: [
-          if (scores != null) _scores(scores),
+          if (scores != null) _scores(scores, round: '${widget.room.view['round'] ?? ''}'),
           const Spacer(),
           Text(title, textAlign: TextAlign.center, style: AppText.headline(34, color: Palette.yellow)),
           const SizedBox(height: 8),
@@ -258,25 +281,7 @@ class _GuestGameState extends State<_GuestGame> {
     final iAnswer = phase == 'answering' && answering['device'] == widget.room.device;
     final result = asMap(v['result']);
 
-    final question = Container(
-      width: double.infinity,
-      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-      padding: const EdgeInsets.all(14),
-      decoration: BoxDecoration(
-        color: Colors.black.withValues(alpha: 0.3),
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Palette.line),
-      ),
-      child: Column(children: [
-        Text('${v['prompt'] ?? ''}', textAlign: TextAlign.center, style: AppText.label(14, color: Palette.text)),
-        const SizedBox(height: 6),
-        for (final l in asList(v['lines']))
-          FittedBox(
-            fit: BoxFit.scaleDown,
-            child: Text('$l'.toUpperCase(), style: AppText.headline(asList(v['lines']).length <= 2 ? 34 : 22)),
-          ),
-      ]),
-    );
+    final question = _question(v, compact: iAnswer);
 
     Widget action;
     if (iAnswer) {
@@ -325,13 +330,21 @@ class _GuestGameState extends State<_GuestGame> {
     } else if (phase == 'open') {
       action = _status('LOCKED OUT — WAIT FOR THE STEAL');
     } else if (result.isNotEmpty) {
+      final scorer = (result['team'] as num?)?.toInt();
+      final teamsV = asList(v['teams']);
+      final scorerTeam = scorer != null && scorer < teamsV.length ? asMap(teamsV[scorer]) : const <String, Object?>{};
       action = Padding(
         padding: const EdgeInsets.all(16),
         child: Column(children: [
-          Text(result['scored'] == true ? '+${result['points']} · ${result['player'] ?? ''}' : 'NOBODY GOT IT',
-              textAlign: TextAlign.center,
-              style: AppText.headline(30, color: result['scored'] == true ? Palette.green : Palette.danger)),
-          const SizedBox(height: 8),
+          if (result['scored'] == true) ...[
+            TeamChip(
+                name: '${scorerTeam['name'] ?? ''}', colorIndex: (scorerTeam['color'] as num?)?.toInt() ?? 0, size: 22),
+            const SizedBox(height: 8),
+            Text('+${result['points']}', style: AppText.headline(64, color: Palette.yellow)),
+            Text('${result['player'] ?? ''}', textAlign: TextAlign.center, style: AppText.headline(30)),
+          ] else
+            Text('NOBODY GOT IT', style: AppText.headline(40, color: Palette.danger)),
+          const SizedBox(height: 12),
           Wrap(alignment: WrapAlignment.center, spacing: 6, runSpacing: 6, children: [
             for (final n in asList(result['reveal'])) Chip(label: Text('$n'), backgroundColor: Palette.card),
           ]),
@@ -342,7 +355,7 @@ class _GuestGameState extends State<_GuestGame> {
     }
 
     return ListView(children: [
-      Padding(padding: const EdgeInsets.symmetric(horizontal: 13), child: _scores(v['teams'])),
+      _scores(v['teams'], round: '${v['round'] ?? ''}', highlight: (answering['team'] as num?)?.toInt()),
       Padding(
         padding: const EdgeInsets.fromLTRB(18, 8, 18, 0),
         child: Row(children: [
