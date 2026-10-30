@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:math';
 
 import 'package:flutter/foundation.dart';
@@ -57,6 +58,31 @@ class AppSettings extends ChangeNotifier {
   /// Finished the free Warm-Up Cup — the next match needs the full game.
   bool get warmUpPlayed => _prefs.getBool('warmUpPlayed') ?? false;
   void markWarmUpPlayed() => _setBool('warmUpPlayed', true);
+
+  /// The match in progress (see Tournament.toJson), so closing the app — or
+  /// iPhone closing it in the background — doesn't lose it. Old ones expire.
+  Map<String, Object?>? get savedMatch {
+    final raw = _prefs.getString('savedMatch');
+    if (raw == null) return null;
+    try {
+      final m = jsonDecode(raw) as Map<String, Object?>;
+      final at = DateTime.fromMillisecondsSinceEpoch((m['at'] as num?)?.toInt() ?? 0);
+      if (DateTime.now().difference(at) > const Duration(hours: 12)) return null;
+      return m;
+    } catch (_) {
+      return null;
+    }
+  }
+
+  void saveMatch(Map<String, Object?> match) {
+    _prefs.setString('savedMatch', jsonEncode({...match, 'at': DateTime.now().millisecondsSinceEpoch}));
+    notifyListeners();
+  }
+
+  void clearMatch() {
+    _prefs.remove('savedMatch');
+    notifyListeners();
+  }
 
   /// This phone, for joining rooms (random, made once).
   String get deviceId {

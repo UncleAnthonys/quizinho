@@ -86,6 +86,10 @@ class HostRoom extends ChangeNotifier {
     return room;
   }
 
+  /// Picks a room back up after the app was closed: same code, so phones
+  /// that joined carry on without scanning again.
+  static HostRoom reattach(RoomLink link, String code) => HostRoom._(link, code).._listen();
+
   /// Names to pick from on the phones (call again if the team sheet changes).
   Future<void> setTeams(List<TeamSetup> teams) => link.put('$_root/host', {
         'teams': [

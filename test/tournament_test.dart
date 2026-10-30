@@ -101,6 +101,29 @@ void main() {
     expect(t.fairRandomPlayer(1), isNull);
   });
 
+  test('a match saves and comes back exactly (app closed mid-match)', () {
+    final t = Tournament(
+      TournamentConfig(teams: [
+        TeamSetup(name: 'Home', colorIndex: 2, players: ['Ann', 'Bob']),
+        TeamSetup(name: 'Away', colorIndex: 4),
+      ], length: MatchLength.long, difficulty: Difficulty.hard),
+      random: Random(2),
+    );
+    t.recordRound(RoundResult(mode: GameModeId.careerPath, points: {0: 3, 1: 1}), multiplier: 2);
+    t.markUsed(GameModeId.careerPath, 'lionel-messi');
+    t.fairRandomPlayer(0);
+    final back = Tournament.fromJson(t.toJson())!;
+    expect(back.scores, [6, 2]);
+    expect(back.rounds.single.mode, GameModeId.careerPath);
+    expect(back.rounds.single.multiplier, 2);
+    expect(back.usedIds(GameModeId.careerPath), {'lionel-messi'});
+    expect(back.config.teams.first.players, ['Ann', 'Bob']);
+    expect(back.config.length, MatchLength.long);
+    expect(back.config.difficulty, Difficulty.hard);
+    expect(back.roundNumber, 2);
+    expect(Tournament.fromJson({'nonsense': 1}), isNull);
+  });
+
   test('the first spin is never the wildcard', () {
     for (var seed = 0; seed < 50; seed++) {
       final t = Tournament(config(), random: Random(seed));

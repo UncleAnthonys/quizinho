@@ -165,6 +165,105 @@ class Tournament extends ChangeNotifier {
   bool get isFinished => rounds.length >= totalRounds;
   bool get isFinalRound => rounds.length == totalRounds - 1;
 
+  // ---- saving, so a match survives the app being closed --------------------
+
+  /// Everything needed to carry on this match later.
+  Map<String, Object?> toJson() => {
+        'config': {
+          'teams': [
+            for (final t in config.teams) {'name': t.name, 'color': t.colorIndex, 'players': t.players},
+          ],
+          'length': config.length.name,
+          'difficulty': config.difficulty.name,
+          'modes': [for (final m in config.modes) m.name],
+          'questionsPerRound': config.questionsPerRound,
+          'answerSeconds': config.answerSeconds,
+          'bombSeconds': config.bombSeconds,
+          'bombLives': config.bombLives,
+          'headsUpSeconds': config.headsUpSeconds,
+          'eras': config.eraMask,
+          'gender': config.gender.name,
+          'warmUp': config.warmUp,
+        },
+        'scores': scores,
+        'rounds': [
+          for (final r in rounds)
+            {
+              'mode': r.mode.name,
+              'points': {for (final e in r.points.entries) '${e.key}': e.value},
+              'multiplier': r.multiplier,
+              'headline': r.headline,
+            },
+        ],
+        'used': {for (final e in _used.entries) e.key.name: e.value.toList()},
+        'lastGame': _lastGame?.name,
+        'tableMode': _tableMode,
+        'playerPoints': _playerPoints,
+        'picks': _picks,
+        'turnIndex': {for (final e in _turnIndex.entries) '${e.key}': e.value},
+        'holds': _holds,
+      };
+
+  /// A match saved with [toJson]; null if it can't be read.
+  static Tournament? fromJson(Map<String, Object?> j, {Random? random}) {
+    try {
+      final c = j['config']! as Map;
+      final config = TournamentConfig(
+        teams: [
+          for (final t in c['teams'] as List)
+            TeamSetup(
+              name: '${(t as Map)['name']}',
+              colorIndex: (t['color'] as num).toInt(),
+              players: [for (final p in t['players'] as List) '$p'],
+            ),
+        ],
+        length: MatchLength.fromName(c['length'] as String?),
+        difficulty: Difficulty.fromName(c['difficulty'] as String?),
+        modes: {for (final m in c['modes'] as List) if (GameModeId.fromName('$m') case final g?) g},
+        questionsPerRound: (c['questionsPerRound'] as num).toInt(),
+        answerSeconds: (c['answerSeconds'] as num).toInt(),
+        bombSeconds: (c['bombSeconds'] as num).toInt(),
+        bombLives: (c['bombLives'] as num).toInt(),
+        headsUpSeconds: (c['headsUpSeconds'] as num).toInt(),
+        eras: Era.fromMask((c['eras'] as num).toInt()),
+        gender: FootballGender.fromName(c['gender'] as String?),
+        warmUp: c['warmUp'] == true,
+      );
+      final t = Tournament(config, random: random);
+      final sc = j['scores'] as List;
+      for (var i = 0; i < t.scores.length && i < sc.length; i++) {
+        t.scores[i] = (sc[i] as num).toInt();
+      }
+      for (final r in j['rounds'] as List) {
+        final m = r as Map;
+        final mode = GameModeId.fromName('${m['mode']}');
+        if (mode == null) continue;
+        t.rounds.add(RoundRecord(
+          mode,
+          {for (final e in (m['points'] as Map).entries) int.parse('${e.key}'): (e.value as num).toInt()},
+          (m['multiplier'] as num).toInt(),
+          '${m['headline'] ?? ''}',
+        ));
+      }
+      for (final e in (j['used'] as Map? ?? const {}).entries) {
+        final mode = GameModeId.fromName('${e.key}');
+        if (mode != null) t._used[mode] = {for (final id in e.value as List) '$id'};
+      }
+      t._lastGame = j['lastGame'] == null ? null : GameModeId.fromName('${j['lastGame']}');
+      t._tableMode = j['tableMode'] == true;
+      Map<String, int> counts(Object? v) => {for (final e in (v as Map? ?? const {}).entries) '${e.key}': (e.value as num).toInt()};
+      t._playerPoints.addAll(counts(j['playerPoints']));
+      t._picks.addAll(counts(j['picks']));
+      t._holds.addAll(counts(j['holds']));
+      for (final e in counts(j['turnIndex']).entries) {
+        t._turnIndex[int.parse(e.key)] = e.value;
+      }
+      return t;
+    } catch (_) {
+      return null;
+    }
+  }
+
   Set<String> usedIds(GameModeId mode) => _used.putIfAbsent(mode, () => <String>{});
   void markUsed(GameModeId mode, String id) => usedIds(mode).add(id);
 

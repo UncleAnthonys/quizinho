@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../core/app_services.dart';
 import '../../core/theme.dart';
 import '../../domain/game_mode.dart';
+import '../../domain/tournament.dart';
 import '../../games/survival/survival_screen.dart';
 import '../../multiplayer/guest_screen.dart';
 import '../../multiplayer/rooms_config.dart';
@@ -58,6 +59,7 @@ class HomeScreen extends StatelessWidget {
                 ),
               ),
               const Spacer(flex: 2),
+              const _ResumeMatch(),
               BigButton(
                 label: 'Head to head',
                 icon: Icons.groups_rounded,
@@ -143,3 +145,67 @@ class HomeScreen extends StatelessWidget {
       );
 }
 
+/// A match that was going when the app closed: carry on, or bin it.
+class _ResumeMatch extends StatefulWidget {
+  const _ResumeMatch();
+
+  @override
+  State<_ResumeMatch> createState() => _ResumeMatchState();
+}
+
+class _ResumeMatchState extends State<_ResumeMatch> {
+  @override
+  Widget build(BuildContext context) {
+    final s = AppScope.of(context);
+    return ListenableBuilder(listenable: s.settings, builder: (context, _) => _card(context, s));
+  }
+
+  Widget _card(BuildContext context, AppServices s) {
+    final saved = s.settings.savedMatch;
+    final t = saved == null ? null : asTournament(saved);
+    if (saved == null || t == null) return const SizedBox.shrink();
+    final score = [for (var i = 0; i < t.teamCount; i++) '${t.teamName(i)} ${t.scores[i]}'].join(' · ');
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 12),
+      child: Container(
+        padding: const EdgeInsets.fromLTRB(14, 10, 6, 10),
+        decoration: BoxDecoration(
+          color: Colors.black.withValues(alpha: 0.35),
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: Palette.yellow, width: 2),
+        ),
+        child: Row(children: [
+          Expanded(
+            child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              Text('MATCH IN PROGRESS', style: AppText.label(13, color: Palette.yellow)),
+              FittedBox(
+                fit: BoxFit.scaleDown,
+                alignment: Alignment.centerLeft,
+                child: Text(score.toUpperCase(), style: AppText.headline(20)),
+              ),
+              Text('Round ${t.roundNumber.clamp(1, t.totalRounds)} of ${t.totalRounds}', style: AppText.label(13)),
+            ]),
+          ),
+          FilledButton(
+            onPressed: () async {
+              MatchFlow.resume(context, saved);
+              if (mounted) setState(() {});
+            },
+            child: const Text('RESUME'),
+          ),
+          IconButton(
+            tooltip: 'Discard',
+            icon: const Icon(Icons.close_rounded, color: Palette.muted),
+            onPressed: () {
+              s.settings.clearMatch();
+              setState(() {});
+            },
+          ),
+        ]),
+      ),
+    );
+  }
+}
+
+Tournament? asTournament(Map<String, Object?> saved) =>
+    saved['t'] is Map ? Tournament.fromJson(Map<String, Object?>.from(saved['t']! as Map)) : null;

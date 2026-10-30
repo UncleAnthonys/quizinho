@@ -13,6 +13,7 @@ import '../games/heads_up/heads_up_screen.dart';
 import '../games/pointless/pointless_screen.dart';
 import '../games/starting_xi/starting_xi_screen.dart';
 import '../games/tic_tac_toe/tic_tac_toe_screen.dart';
+import '../multiplayer/room.dart';
 import 'screens/free_kick_screen.dart';
 import 'screens/round_intro_screen.dart';
 import 'screens/round_summary_screen.dart';
@@ -32,12 +33,48 @@ abstract final class MatchFlow {
   static void _phones(BuildContext context, Tournament t, String what) =>
       AppScope.read(context).room?.showMainScreen(t, what);
 
+  /// Saves the match so it survives the app closing; [pending] = the round
+  /// that's about to be (or being) played, replayed from its intro on resume.
+  static void _save(AppServices s, Tournament t, {GameModeId? pending, int multiplier = 1}) => s.settings.saveMatch({
+        't': t.toJson(),
+        if (pending != null) 'pending': {'mode': pending.name, 'multiplier': multiplier},
+        if (s.room != null) 'room': s.room!.code,
+      });
+
+  /// Carries on a match saved before the app closed (from the home screen).
+  static void resume(BuildContext context, Map<String, Object?> saved) {
+    final s = AppScope.read(context);
+    final t = Tournament.fromJson(Map<String, Object?>.from(saved['t']! as Map));
+    if (t == null) {
+      s.settings.clearMatch();
+      return;
+    }
+    final code = saved['room'] as String?;
+    final link = s.roomLink;
+    if (code != null && link != null && s.room?.code != code) s.room = HostRoom.reattach(link, code);
+    final pending = saved['pending'] is Map ? saved['pending']! as Map : null;
+    final mode = pending == null ? null : GameModeId.fromName('${pending['mode']}');
+    final nav = Navigator.of(context);
+    if (mode != null) {
+      final multiplier = (pending!['multiplier'] as num?)?.toInt() ?? 1;
+      _phones(context, t, 'Back on: ${mode.title}');
+      nav.push(_route(_Guard(child: RoundIntroScreen(tournament: t, mode: mode, multiplier: multiplier))));
+    } else if (t.isFinished) {
+      nav.push(_route(WinnerScreen(tournament: t)));
+    } else {
+      _phones(context, t, 'Picking the next game');
+      nav.push(_route(_Guard(child: FreeKickScreen(tournament: t))));
+    }
+  }
+
   static void toWheel(BuildContext context, Tournament t) {
+    _save(AppScope.read(context), t);
     _phones(context, t, t.rounds.isEmpty ? 'Kick-off — picking the first game' : 'Picking the next game');
     Navigator.of(context).pushReplacement(_route(_Guard(child: FreeKickScreen(tournament: t))));
   }
 
   static void toIntro(BuildContext context, Tournament t, GameModeId mode, int multiplier) {
+    _save(AppScope.read(context), t, pending: mode, multiplier: multiplier);
     _phones(context, t, 'Next up: ${mode.title}${multiplier > 1 ? ' — double points' : ''}');
     Navigator.of(context).pushReplacement(
         _route(_Guard(child: RoundIntroScreen(tournament: t, mode: mode, multiplier: multiplier))));
@@ -45,12 +82,14 @@ abstract final class MatchFlow {
 
   static void toGame(BuildContext context, Tournament t, GameModeId mode, int multiplier) {
     final nav = Navigator.of(context);
-    final room = AppScope.read(context).room;
+    final services = AppScope.read(context);
+    final room = services.room;
     final round = RoundContext(
       tournament: t,
       multiplier: multiplier,
       onComplete: (result) {
         t.recordRound(result, multiplier: multiplier);
+        _save(services, t);
         room?.showMainScreen(t, 'Round ${t.rounds.length} of ${t.totalRounds} done');
         nav.pushReplacement(_route(_Guard(child: RoundSummaryScreen(tournament: t))));
       },
@@ -61,6 +100,7 @@ abstract final class MatchFlow {
   }
 
   static void toWinner(BuildContext context, Tournament t) {
+    AppScope.read(context).settings.clearMatch();
     _phones(context, t, 'Full time!');
     Navigator.of(context).pushReplacement(_route(WinnerScreen(tournament: t)));
   }
@@ -104,7 +144,10 @@ class _Guard extends StatelessWidget {
               ],
             ),
           );
-          if (quit == true) nav.popUntil((r) => r.isFirst);
+          if (quit == true) {
+            if (context.mounted) AppScope.read(context).settings.clearMatch();
+            nav.popUntil((r) => r.isFirst);
+          }
         },
         child: child,
       );
