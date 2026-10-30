@@ -425,7 +425,9 @@ class _GuestGameState extends State<_GuestGame> with SingleTickerProviderStateMi
           Text('Q ${v['n'] ?? ''}', style: AppText.label(15)),
         ]),
       ),
-      if (!iAnswer) question,
+      // Above the answer box, compact while answering — like the host, so
+      // it stays in view over the keyboard.
+      question,
       if (phase == 'open' || phase == 'answering')
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 4),
@@ -443,7 +445,6 @@ class _GuestGameState extends State<_GuestGame> with SingleTickerProviderStateMi
           ]),
         ),
       action,
-      if (iAnswer) question,
     ]);
   }
 
