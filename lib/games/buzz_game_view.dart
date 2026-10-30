@@ -167,9 +167,11 @@ class BuzzGameView extends StatelessWidget {
             ),
             if (awaitingFaceOff && faceOff != null)
               Expanded(
-                child: _FaceOffIntro(
-                  faceOff: faceOff!,
-                  tournament: t,
+                child: FaceOffIntro(
+                  players: [
+                    for (final team in faceOff!.players.keys.toList()..sort())
+                      (faceOff!.nameFor(team), t.config.teams[team].colorIndex, t.teamName(team)),
+                  ],
                   questionNumber: c.questionIndex + 1,
                   onReady: onFaceOffReady,
                 ),
@@ -435,22 +437,27 @@ class _FaceOffBanner extends StatelessWidget {
 }
 
 /// Full-screen warning before a face-off question, so the two named players
-/// can step up before anything is revealed.
-class _FaceOffIntro extends StatelessWidget {
-  const _FaceOffIntro({
-    required this.faceOff,
-    required this.tournament,
+/// can step up before anything is revealed. Joined phones show it too, with
+/// no button (the host phone starts the question).
+class FaceOffIntro extends StatelessWidget {
+  const FaceOffIntro({
+    super.key,
+    required this.players,
     required this.questionNumber,
-    required this.onReady,
+    this.onReady,
+    this.showButton = true,
+    this.message = 'Step up to the phone.\nEveryone else — hands off, no helping!',
   });
-  final FaceOff faceOff;
-  final Tournament tournament;
+
+  /// (player name, team colour, team name) for each side.
+  final List<(String, int, String)> players;
   final int questionNumber;
   final VoidCallback? onReady;
+  final bool showButton;
+  final String message;
 
   @override
   Widget build(BuildContext context) {
-    final teams = faceOff.players.keys.toList()..sort();
     // Only the headline block scales to fit, using all the height there is;
     // the instructions and button keep their fixed size below it.
     return Padding(
@@ -473,28 +480,30 @@ class _FaceOffIntro extends StatelessWidget {
                 ),
                 Text('QUESTION $questionNumber', style: AppText.label(22)),
                 const SizedBox(height: 16),
-                for (final (i, team) in teams.indexed) ...[
+                for (final (i, (name, colour, team)) in players.indexed) ...[
                   if (i > 0)
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 4),
                       child: Text('V', style: AppText.headline(52, color: Palette.muted).copyWith(height: 1.0)),
                     ),
-                  TeamChip(name: faceOff.nameFor(team), colorIndex: tournament.config.teams[team].colorIndex, size: 88),
+                  TeamChip(name: name, colorIndex: colour, size: 88),
                   const SizedBox(height: 2),
-                  Text(tournament.teamName(team).toUpperCase(), style: AppText.label(26)),
+                  Text(team.toUpperCase(), style: AppText.label(26)),
                 ],
               ]),
             ),
           ),
         ),
         const SizedBox(height: 12),
-        const Text(
-          'Step up to the phone.\nEveryone else — hands off, no helping!',
+        Text(
+          message,
           textAlign: TextAlign.center,
-          style: TextStyle(fontSize: 20, height: 1.35, color: Palette.text, fontWeight: FontWeight.w600),
+          style: const TextStyle(fontSize: 20, height: 1.35, color: Palette.text, fontWeight: FontWeight.w600),
         ),
-        const SizedBox(height: 16),
-        BigButton(label: 'Ready — show question', icon: Icons.visibility_rounded, onPressed: onReady),
+        if (showButton) ...[
+          const SizedBox(height: 16),
+          BigButton(label: 'Ready — show question', icon: Icons.visibility_rounded, onPressed: onReady),
+        ],
       ]),
     );
   }

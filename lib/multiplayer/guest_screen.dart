@@ -6,6 +6,7 @@ import '../core/app_services.dart';
 import '../core/theme.dart';
 import '../data/models.dart';
 import '../domain/tournament.dart';
+import '../games/buzz_game_view.dart' show FaceOffIntro;
 import '../games/career_path/career_path_screen.dart' show CareerTrail;
 import '../games/club_connections/club_connections_screen.dart' show ClubsCard;
 import '../ui/widgets/common.dart';
@@ -353,6 +354,29 @@ class _GuestGameState extends State<_GuestGame> {
       );
     } else {
       action = const SizedBox.shrink();
+    }
+
+    // The host's face-off intro, on every phone: who's up, before the question.
+    if (phase == 'ready' && faceOff.isNotEmpty) {
+      final teamsV = asList(v['teams']);
+      final sides = [
+        for (final e in faceOff.entries.toList()..sort((a, b) => a.key.compareTo(b.key)))
+          if (int.tryParse(e.key) case final t? when t < teamsV.length)
+            ('${e.value}', (asMap(teamsV[t])['color'] as num?)?.toInt() ?? 0, '${asMap(teamsV[t])['name'] ?? ''}'),
+      ];
+      return Column(children: [
+        _scores(v['teams'], round: '${v['round'] ?? ''}'),
+        Expanded(
+          child: FaceOffIntro(
+            players: sides,
+            questionNumber: int.tryParse('${v['n'] ?? ''}'.split('/').first) ?? 1,
+            showButton: false,
+            message: faceOff['${me.team}'] == me.name
+                ? 'You’re up! Buzz on this phone\nwhen the question appears.'
+                : 'Hands off — no helping!',
+          ),
+        ),
+      ]);
     }
 
     return ListView(children: [
