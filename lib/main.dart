@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:app_links/app_links.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -12,6 +13,7 @@ import 'core/theme.dart';
 import 'core/voice_service.dart';
 import 'data/open_repository.dart';
 import 'multiplayer/guest_screen.dart';
+import 'multiplayer/room.dart' show normaliseRoomCode;
 import 'multiplayer/rooms_config.dart';
 import 'ui/screens/home_screen.dart';
 
@@ -42,14 +44,50 @@ Future<void> main() async {
 /// Room code from the join link, on the web build.
 final String? _joinCode = kIsWeb && roomsEnabled ? Uri.base.queryParameters['join'] : null;
 
-class QuizinhoApp extends StatelessWidget {
+class QuizinhoApp extends StatefulWidget {
   const QuizinhoApp({super.key, required this.services});
   final AppServices services;
 
   @override
+  State<QuizinhoApp> createState() => _QuizinhoAppState();
+}
+
+class _QuizinhoAppState extends State<QuizinhoApp> {
+  final _navigator = GlobalKey<NavigatorState>();
+  StreamSubscription<Uri>? _links;
+
+  @override
+  void initState() {
+    super.initState();
+    // In the app, scanning the QR code with the camera opens the app (when
+    // it's installed) on this link — straight to joining, with app voice.
+    if (!kIsWeb && roomsEnabled) {
+      _links = AppLinks().uriLinkStream.listen(_openLink, onError: (Object e) => debugPrint('Link failed: $e'));
+    }
+  }
+
+  void _openLink(Uri uri) {
+    final code = normaliseRoomCode(uri.queryParameters['join'] ?? '');
+    if (code.length != 4) return;
+    void open() => _navigator.currentState?.push(MaterialPageRoute<void>(builder: (_) => JoinScreen(code: code)));
+    if (_navigator.currentState == null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) => open());
+    } else {
+      open();
+    }
+  }
+
+  @override
+  void dispose() {
+    _links?.cancel();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) => AppScope(
-        services: services,
+        services: widget.services,
         child: MaterialApp(
+          navigatorKey: _navigator,
           title: 'Quizinho',
           debugShowCheckedModeBanner: false,
           theme: buildTheme(),

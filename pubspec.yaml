@@ -16,6 +16,7 @@ dependencies:
   http: ^1.2.2
   web: ^1.1.0
   qr_flutter: ^4.1.0
+  app_links: ^6.3.3
   shared_preferences: ^2.3.2
   sensors_plus: ^6.1.0
   speech_to_text: ^7.0.0

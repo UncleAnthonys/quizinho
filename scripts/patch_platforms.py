@@ -11,6 +11,11 @@ import re
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 DISPLAY_NAME = "Quizinho"
 
+# Join links (the QR code) open the app when it's installed: Universal Links,
+# backed by .well-known/apple-app-site-association on this domain.
+LINK_DOMAIN = "uncleanthonys.github.io"
+BUNDLE_ID = "com.littlefortstudios.quizinho"
+
 
 def patch_ios() -> None:
     plist_path = ROOT / "ios" / "Runner" / "Info.plist"
@@ -37,9 +42,30 @@ def patch_ios() -> None:
     # Phase 2 (speech answers) needs these; harmless to declare early.
     p["NSMicrophoneUsageDescription"] = "Say your answer out loud instead of typing it."
     p["NSSpeechRecognitionUsageDescription"] = "Recognises footballer names you say during a game."
+    # Links are handled in Dart (app_links), not by Flutter's router.
+    p["FlutterDeepLinkingEnabled"] = False
     with plist_path.open("wb") as f:
         plistlib.dump(p, f)
     print("patched", plist_path.relative_to(ROOT))
+
+    # Associated Domains entitlement, wired into the Runner target's builds.
+    ent_path = ROOT / "ios" / "Runner" / "Runner.entitlements"
+    ent = {}
+    if ent_path.exists():
+        with ent_path.open("rb") as f:
+            ent = plistlib.load(f)
+    ent["com.apple.developer.associated-domains"] = [f"applinks:{LINK_DOMAIN}"]
+    with ent_path.open("wb") as f:
+        plistlib.dump(ent, f)
+    pbx_path = ROOT / "ios" / "Runner.xcodeproj" / "project.pbxproj"
+    pbx = pbx_path.read_text(encoding="utf-8")
+    if "CODE_SIGN_ENTITLEMENTS = Runner/Runner.entitlements;" not in pbx:
+        target = f"PRODUCT_BUNDLE_IDENTIFIER = {BUNDLE_ID};"
+        n = pbx.count(target)
+        print(f"adding entitlements to {n} Runner build configurations")
+        pbx = pbx.replace(target, "CODE_SIGN_ENTITLEMENTS = Runner/Runner.entitlements;\n\t\t\t\t" + target)
+        pbx_path.write_text(pbx, encoding="utf-8")
+    print("patched", ent_path.relative_to(ROOT))
 
 
 def patch_android() -> None:
