@@ -78,7 +78,8 @@ class _JoinScreenState extends State<JoinScreen> {
           const Spacer(),
           Text('JOIN A GAME', style: AppText.headline(40, color: Palette.yellow)),
           const SizedBox(height: 8),
-          Text('Enter the 4-letter code on the main phone', style: AppText.label(15, color: Palette.text)),
+          Text('Type the 4-letter code under the QR\non the host’s phone',
+              textAlign: TextAlign.center, style: AppText.label(15, color: Palette.text)),
           const SizedBox(height: 20),
           TextField(
             controller: _codeField,

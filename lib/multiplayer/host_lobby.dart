@@ -26,43 +26,37 @@ class _RoomSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) => ListenableBuilder(
         listenable: room,
-        builder: (context, _) => ListView(shrinkWrap: true, padding: const EdgeInsets.all(20), children: [
-          Text('PLAY ON YOUR PHONES', textAlign: TextAlign.center, style: AppText.headline(30, color: Palette.yellow)),
-          const SizedBox(height: 4),
-          Text('Scan with the phone camera — no download needed',
-              textAlign: TextAlign.center, style: AppText.label(14, color: Palette.text)),
+        builder: (context, _) => ListView(shrinkWrap: true, padding: const EdgeInsets.fromLTRB(20, 20, 20, 12), children: [
+          Text('SCAN FOR YOUR OWN BUZZER',
+              textAlign: TextAlign.center, style: AppText.headline(28, color: Palette.yellow)),
           const SizedBox(height: 14),
           Center(
             child: Container(
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(16)),
-              child: QrImageView(data: joinLink(room.code), size: 220, backgroundColor: Colors.white),
+              child: QrImageView(data: joinLink(room.code), size: 230, backgroundColor: Colors.white),
             ),
           ),
-          const SizedBox(height: 10),
-          Text('or Quizinho → Join a game →', textAlign: TextAlign.center, style: AppText.label(13)),
-          Text(room.code, textAlign: TextAlign.center, style: AppText.headline(56, color: Palette.text)),
-          const SizedBox(height: 10),
-          for (final (i, t) in teams.indexed) ...[
-            TeamChip(name: t.name, colorIndex: t.colorIndex, size: 18),
-            const SizedBox(height: 6),
-            Wrap(spacing: 6, runSpacing: 6, children: [
-              for (final (j, n) in t.players.indexed)
+          const SizedBox(height: 8),
+          Text('Got the app? Join a friend’s game · ${room.code}',
+              textAlign: TextAlign.center, style: AppText.label(13)),
+          const SizedBox(height: 16),
+          // Who's in: a tick per player whose phone has joined.
+          Wrap(alignment: WrapAlignment.center, spacing: 6, runSpacing: 6, children: [
+            for (final (i, t) in teams.indexed)
+              for (final n in t.players)
                 Chip(
                   avatar: Icon(
-                    room.memberFor(i, n) != null ? Icons.phone_iphone_rounded : Icons.hourglass_empty_rounded,
+                    room.memberFor(i, n) != null ? Icons.check_circle_rounded : Icons.circle_outlined,
                     size: 18,
                     color: room.memberFor(i, n) != null ? Palette.green : Palette.muted,
                   ),
-                  label: Text(j == 0 ? '$n (C)' : n),
-                  backgroundColor: Palette.card,
+                  label: Text(n),
+                  backgroundColor: Palette.team(t.colorIndex).withValues(alpha: 0.25),
+                  side: BorderSide(color: Palette.team(t.colorIndex)),
                 ),
-            ]),
-            const SizedBox(height: 12),
-          ],
-          Text('Anyone without a phone joined plays on this one, as normal.',
-              textAlign: TextAlign.center, style: AppText.label(13)),
-          const SizedBox(height: 12),
+          ]),
+          const SizedBox(height: 16),
           BigButton(label: 'Done', icon: Icons.check_rounded, onPressed: () => Navigator.of(context).pop()),
         ]),
       );

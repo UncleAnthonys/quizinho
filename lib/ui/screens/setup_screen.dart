@@ -127,34 +127,22 @@ class _SetupScreenState extends State<SetupScreen> {
 
   Widget _phones() {
     final room = AppScope.of(context).room;
-    final named = _players.every((p) => p.isNotEmpty);
+    // Phone buzzers need names to pick from.
+    if (!_players.every((p) => p.isNotEmpty)) return const SizedBox.shrink();
     return Padding(
       padding: const EdgeInsets.only(top: 6),
-      child: Container(
-        padding: const EdgeInsets.all(12),
-        decoration: BoxDecoration(
-          color: Colors.black.withValues(alpha: 0.25),
-          borderRadius: BorderRadius.circular(14),
-          border: Border.all(color: Palette.line),
+      child: OutlinedButton.icon(
+        style: OutlinedButton.styleFrom(
+          minimumSize: const Size.fromHeight(52),
+          side: const BorderSide(color: Palette.yellow, width: 1.5),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
         ),
-        child: Row(children: [
-          const Icon(Icons.qr_code_2_rounded, color: Palette.yellow, size: 34),
-          const SizedBox(width: 10),
-          Expanded(
-            child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Text(room == null ? 'BUZZ ON YOUR OWN PHONES' : 'ROOM ${room.code} · ${room.members.length} JOINED',
-                  style: AppText.headline(19)),
-              Text(
-                named ? 'Everyone scans a QR code — no download needed.' : 'Add player names to every team first.',
-                style: const TextStyle(color: Palette.muted, fontSize: 13),
-              ),
-            ]),
-          ),
-          FilledButton(
-            onPressed: named && !_openingRoom ? _openPhones : null,
-            child: Text(room == null ? 'SET UP' : 'SHOW QR'),
-          ),
-        ]),
+        onPressed: _openingRoom ? null : _openPhones,
+        icon: const Icon(Icons.qr_code_2_rounded, color: Palette.yellow),
+        label: Text(
+          room == null ? 'BUZZERS ON YOUR OWN PHONES' : 'PHONE BUZZERS · ${room.members.length} JOINED',
+          style: AppText.headline(18),
+        ),
       ),
     );
   }
@@ -201,8 +189,8 @@ class _SetupScreenState extends State<SetupScreen> {
                   padding: const EdgeInsets.only(bottom: 10),
                   child: Text(
                     _players.every((p) => p.isNotEmpty)
-                        ? 'Face-offs ON: some questions pit one named player against another.'
-                        : 'Optional: add player names to every team to unlock head-to-head face-offs.',
+                        ? 'Face-offs on. First name is captain (C) — tap a name to swap.'
+                        : 'Add player names to unlock face-offs and phone buzzers.',
                     style: const TextStyle(color: Palette.muted, fontSize: 13),
                   ),
                 ),
@@ -465,11 +453,6 @@ class _PlayerNamesState extends State<_PlayerNames> {
                 },
               ),
           ]),
-        if (widget.names.length >= 2)
-          Padding(
-            padding: const EdgeInsets.only(top: 4),
-            child: Text('(C) = captain. Tap another name to swap.', style: AppText.label(12)),
-          ),
         if (widget.names.length < _maxPlayers)
           SizedBox(
             height: 44,

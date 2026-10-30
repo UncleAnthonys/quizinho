@@ -89,8 +89,8 @@ class HomeScreen extends StatelessWidget {
               const SizedBox(height: 4),
               if (roomsEnabled)
                 GhostButton(
-                  label: 'Join a game',
-                  icon: Icons.qr_code_scanner_rounded,
+                  label: 'Join a friend’s game',
+                  icon: Icons.login_rounded,
                   onPressed: () => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const JoinScreen())),
                 ),
               GhostButton(label: 'How to play', icon: Icons.menu_book_rounded, onPressed: () => _howToPlay(context)),
