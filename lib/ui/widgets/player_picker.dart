@@ -140,7 +140,7 @@ class _PlayerPickerState extends State<PlayerPicker> {
     if (voice == null || !_keepListening) return;
     setState(() {
       _listening = true;
-      _voiceNote ??= widget.rapid ? 'Listening… keep the names coming' : 'Listening… say the player';
+      _voiceNote ??= widget.rapid ? 'Listening… keep the names coming (or tap the box to type)' : 'Listening… say the player (or tap the box to type)';
     });
     _consumed = 0;
     final started = await voice.listen(
