@@ -73,6 +73,10 @@ class _PlayerPickerState extends State<PlayerPicker> {
   bool _listening = false;
   String? _voiceNote;
 
+  /// What the recogniser last heard, word for word — shown small, so it's
+  /// clear the mic is working and what it made of the name.
+  String _heardWords = '';
+
   /// Answer already chosen — ignore any further speech.
   bool _picked = false;
 
@@ -147,6 +151,7 @@ class _PlayerPickerState extends State<PlayerPicker> {
       hints: _hints,
       onWords: (words) {
         if (!_keepListening || words.trim().isEmpty) return;
+        if (words != _heardWords) setState(() => _heardWords = words);
         if (widget.rapid) {
           _scanRapid(words, partial: true);
           return;
@@ -363,6 +368,15 @@ class _PlayerPickerState extends State<PlayerPicker> {
             const SizedBox(width: 6),
             Expanded(child: Text(_voiceNote!, style: AppText.label(14, color: _listening ? Palette.text : Palette.muted))),
           ]),
+        ),
+      if (_heardWords.isNotEmpty && _voiceOn && !_typing)
+        Padding(
+          padding: const EdgeInsets.only(top: 2, left: 24),
+          child: Align(
+            alignment: Alignment.centerLeft,
+            child: Text('Heard: “$_heardWords”',
+                maxLines: 1, overflow: TextOverflow.ellipsis, style: AppText.label(12, color: Palette.muted)),
+          ),
         ),
       const SizedBox(height: 8),
       for (final r in _results)

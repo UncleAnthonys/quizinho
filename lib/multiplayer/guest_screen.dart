@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart' show Ticker;
 
 import '../core/app_services.dart';
 import '../core/hinted_speech.dart';
@@ -171,10 +172,13 @@ class _GuestGame extends StatefulWidget {
   State<_GuestGame> createState() => _GuestGameState();
 }
 
-class _GuestGameState extends State<_GuestGame> {
-  /// Local countdown from the last time the host sent the clock.
-  Timer? _tick;
-  double _left = 0;
+class _GuestGameState extends State<_GuestGame> with SingleTickerProviderStateMixin {
+  /// Local countdown from the last time the host sent the clock: redrawn
+  /// every frame (smooth, like the host), and only the timer bar rebuilds.
+  late final Ticker _ticker;
+  final ValueNotifier<double> _left = ValueNotifier(0);
+  double _syncedLeft = 0;
+  final Stopwatch _sinceSync = Stopwatch();
   double _total = 1;
   String? _clockFrom;
   String? _buzzedOn;
@@ -185,14 +189,17 @@ class _GuestGameState extends State<_GuestGame> {
     // Straight after picking a name (a tap), so Chrome may start fetching its
     // on-device speech pack now rather than at the first buzz.
     if (kIsWeb) unawaited(HintedSpeech.ready());
-    _tick = Timer.periodic(const Duration(milliseconds: 100), (_) {
-      if (_left > 0 && mounted) setState(() => _left = (_left - 0.1).clamp(0, _total));
-    });
+    _ticker = createTicker((_) {
+      if (_left.value <= 0) return;
+      _left.value = (_syncedLeft - _sinceSync.elapsedMicroseconds / 1e6).clamp(0, _total);
+    })
+      ..start();
   }
 
   @override
   void dispose() {
-    _tick?.cancel();
+    _ticker.dispose();
+    _left.dispose();
     super.dispose();
   }
 
@@ -204,8 +211,12 @@ class _GuestGameState extends State<_GuestGame> {
     final key = '${v['q']}|${v['phase']}|$left|${v['answering']}';
     if (key == _clockFrom) return;
     _clockFrom = key;
-    _left = left;
     _total = (v['total'] as num?)?.toDouble() ?? 1;
+    _syncedLeft = left;
+    _sinceSync
+      ..reset()
+      ..start();
+    _left.value = left;
   }
 
   @override
@@ -407,7 +418,10 @@ class _GuestGameState extends State<_GuestGame> {
       if (phase == 'open' || phase == 'answering')
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 4),
-          child: TimerBar(fraction: _total == 0 ? 0 : _left / _total, seconds: _left),
+          child: ValueListenableBuilder<double>(
+            valueListenable: _left,
+            builder: (context, left, _) => TimerBar(fraction: _total == 0 ? 0 : left / _total, seconds: left),
+          ),
         ),
       action,
       if (iAnswer) question,
