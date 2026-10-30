@@ -106,6 +106,8 @@ const _soundRules = [
   ('shch', 'sh'), ('tch', 'ch'), ('sch', 'sh'), ('sz', 's'), ('cz', 'ch'), ('ph', 'f'), ('ck', 'k'),
   ('qu', 'k'), ('q', 'k'), ('x', 'ks'), ('th', 't'), ('ij', 'i'), ('gh', 'g'), ('dzh', 'j'), ('dj', 'j'),
   ('kh', 'k'), ('ts', 's'), ('tz', 's'), ('zh', 'sh'),
+  // A hard "ch" the English way: Nicholas, Christian, Christopher, Michael.
+  ('nichol', 'nikol'), ('chr', 'kr'), ('chl', 'kl'), ('chael', 'kael'),
 ];
 final _icEnd = RegExp(r'ic$');
 final _softC = RegExp(r'c(?=[eiy])');

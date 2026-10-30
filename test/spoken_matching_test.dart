@@ -47,6 +47,7 @@ void main() {
       ('Busting shrine Steiger', 'bastian-schweinsteiger'), ('Tia Marie', 'thierry-henry'),
       ('Bouček Szczęsny', 'wojciech-szczesny'),
       ('Denver Ball', 'demba-ba'), ('Mediterranean', 'mehdi-taremi'), ('Juan Cano Canoe', 'nwankwo-kanu'),
+      ('Nicholas Aneld', 'nicolas-anelka'), ('Carlos tethers', 'carlos-tevez'),
     ]) {
       expect(repo.players.resolveSpoken([heard], isAnswer: (p) => p.id == id)?.id, id, reason: heard);
     }

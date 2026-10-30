@@ -186,6 +186,13 @@ class PlayerIndex {
           s = s < 90 ? 90 : s;
         } else if (firstFits && whole.length >= 4 && e.sounds.any((k) => similarity(whole, k) >= 0.75)) {
           s = s < 88 ? 88 : s;
+        } else if (wordKeys.length == 2 &&
+            e.firstSounds.contains(wordKeys.first) &&
+            wordKeys.last.length >= 2 &&
+            e.surnameSounds.any((k) => k.isNotEmpty && k[0] == wordKeys.last[0] && similarity(wordKeys.last, k) >= 0.6)) {
+          // First name heard right, surname close and starting the same:
+          // "Nicholas Aneld" is Nicolas Anelka.
+          s = s < 88 ? 88 : s;
         }
       }
       if (s > 0) {
