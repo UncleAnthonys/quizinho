@@ -1,0 +1,43 @@
+# Collects real mishearings saved by games (spoken answer not understood,
+# then the right player picked by hand) into data_pipeline/raw/voice_misses.json
+# for review before they go into seed/spoken_overrides.json. Run from Actions.
+name: Collect voice misses
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  collect:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download and summarise
+        run: |
+          U=https://quizinho-8022c-default-rtdb.europe-west1.firebasedatabase.app
+          curl -sf "$U/voicemisses.json" -o /tmp/misses.json || echo '{}' > /tmp/misses.json
+          python3 - <<'PY'
+          import json, collections
+          raw = json.load(open('/tmp/misses.json')) or {}
+          by_player = collections.defaultdict(collections.Counter)
+          sources = collections.Counter()
+          for e in raw.values():
+              if not isinstance(e, dict) or not isinstance(e.get('p'), str): continue
+              sources[e.get('s', '?')] += 1
+              heard = e.get('h') or []
+              if heard: by_player[e['p']][str(heard[0]).lower().strip()] += 1
+          out = {
+              "_note": f"{sum(sources.values())} misses from {dict(sources)}: player -> what was heard (count). Review, then copy good ones into seed/spoken_overrides.json.",
+              "players": {p: dict(c.most_common()) for p, c in sorted(by_player.items())},
+          }
+          json.dump(out, open('data_pipeline/raw/voice_misses.json', 'w'), indent=1, ensure_ascii=False)
+          print(f"::notice title=Voice misses::{out['_note']}")
+          PY
+      - name: Commit
+        run: |
+          git config user.name "quizinho-data-bot"
+          git config user.email "quizinho-data-bot@users.noreply.github.com"
+          git add data_pipeline/raw/voice_misses.json
+          git diff --cached --quiet || (git commit -m "Voice misses from games" && git push)

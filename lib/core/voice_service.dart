@@ -7,6 +7,7 @@ import 'package:speech_to_text/speech_to_text.dart';
 
 import 'app_settings.dart';
 import 'hinted_speech.dart';
+import 'voice_misses.dart';
 
 /// Spoken answers via the device's own speech recogniser. On iPhone that's
 /// Quizinho's own recogniser (Apple on-device speech taught every player's
@@ -54,6 +55,11 @@ class VoiceService {
   final QuizinhoSpeech? _native = QuizinhoSpeech.supported ? QuizinhoSpeech() : null;
   StreamSubscription<SpeechEvent>? _nativeSub;
   final HintedSpeech _hinted = HintedSpeech();
+  final VoiceMissLog _misses = VoiceMissLog();
+
+  /// A spoken answer that didn't match, then the right player picked by
+  /// hand: saved so that mishearing counts next time (see [VoiceMissLog]).
+  void reportMiss(List<String> heard, String playerId) => _misses.report(heard: heard, playerId: playerId);
   Future<String>? _model;
   bool? _available;
   VoidCallback? _onStopped;

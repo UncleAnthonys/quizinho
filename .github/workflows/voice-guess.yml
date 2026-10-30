@@ -1,0 +1,43 @@
+# Trial: a computer voice says hard footballer names, two free offline speech
+# recognisers write down what they hear, and we check which of those Quizinho
+# already accepts. Results: the run's notice + the voice-guess artifact.
+name: Voice guess
+
+on:
+  workflow_dispatch:
+    inputs:
+      limit:
+        description: "How many hard names"
+        default: "50"
+
+jobs:
+  guess:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Tools
+        run: |
+          sudo apt-get update -q && sudo apt-get install -y -q ffmpeg unzip
+          pip install -q piper-tts vosk faster-whisper
+          mkdir -p voices && cd voices
+          H=https://huggingface.co/rhasspy/piper-voices/resolve/main/en/en_GB/alan/medium
+          curl -sfLO "$H/en_GB-alan-medium.onnx" && curl -sfLO "$H/en_GB-alan-medium.onnx.json"
+          curl -sfLO https://alphacephei.com/vosk/models/vosk-model-small-en-us-0.15.zip && unzip -q vosk-model-small-en-us-0.15.zip
+      - name: Say and hear
+        run: python3 data_pipeline/voice_guess.py --limit "${{ github.event.inputs.limit || '50' }}"
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+      - name: Check against Quizinho's matching
+        run: |
+          flutter pub get
+          flutter test test/voice_guess_check_test.dart
+      - uses: actions/upload-artifact@v4
+        with:
+          name: voice-guess
+          path: build/voice_guess*.json

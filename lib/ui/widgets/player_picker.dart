@@ -121,8 +121,17 @@ class _PlayerPickerState extends State<PlayerPicker> {
     super.dispose();
   }
 
-  void _pick(Player p) {
+  /// What the mic heard that didn't match anyone, this answer.
+  List<String> _missedSpeech = const [];
+
+  void _pick(Player p, {bool spoken = false}) {
     if (_picked) return;
+    // Said it, wasn't understood, then picked the right answer by hand:
+    // remember what was heard so it counts next time.
+    if (!spoken && _missedSpeech.isNotEmpty && (widget.isAnswer?.call(p) ?? false)) {
+      widget.voice?.reportMiss(_missedSpeech, p.id);
+      _missedSpeech = const [];
+    }
     if (widget.rapid) {
       widget.onPick(p);
       _controller.clear();
@@ -160,7 +169,7 @@ class _PlayerPickerState extends State<PlayerPicker> {
         if (_voiceNote != 'Hearing you…') setState(() => _voiceNote = 'Hearing you…');
         // Names are checked as the words arrive — a clear match goes straight in.
         final p = widget.index.resolveSpoken([words], partial: true, isAnswer: widget.isAnswer);
-        if (p != null) _pick(p);
+        if (p != null) _pick(p, spoken: true);
       },
       onDone: _heard,
     );
@@ -246,9 +255,10 @@ class _PlayerPickerState extends State<PlayerPicker> {
     }
     final p = widget.index.resolveSpoken(alternatives, isAnswer: widget.isAnswer);
     if (p != null) {
-      _pick(p);
+      _pick(p, spoken: true);
       return;
     }
+    if (alternatives.isNotEmpty) _missedSpeech = alternatives;
     _silentRestarts = alternatives.isEmpty ? _silentRestarts + 1 : 0;
     if (_silentRestarts >= 10) {
       setState(() {
