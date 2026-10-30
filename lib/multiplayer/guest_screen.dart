@@ -448,7 +448,7 @@ class _VoiceBoost extends StatelessWidget {
             'downloading' => ('Voice boost: downloading…', Palette.gold),
             'checking' => ('Voice boost: checking…', Palette.muted),
             'no on-device speech' => ('Voice boost: not on this phone', Palette.muted),
-            _ => ('Voice boost: needs Chrome on Android (or the app)', Palette.muted),
+            _ => ('Voice boost: not in this browser (basic voice)', Palette.muted),
           };
           return Padding(
             padding: const EdgeInsets.fromLTRB(16, 0, 16, 2),
