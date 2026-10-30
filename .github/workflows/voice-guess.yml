@@ -3,6 +3,9 @@
 # already accepts. Results: the run's notice + the voice-guess artifact.
 name: Voice guess
 
+permissions:
+  contents: write
+
 on:
   workflow_dispatch:
     inputs:
@@ -37,7 +40,10 @@ jobs:
         run: |
           flutter pub get
           bash scripts/ci_run.sh "Check" flutter test test/voice_guess_check_test.dart
-      - uses: actions/upload-artifact@v4
-        with:
-          name: voice-guess
-          path: build/voice_guess*.json
+      - name: Commit results
+        run: |
+          cp build/voice_guess.json build/voice_guess_misses.json data_pipeline/raw/
+          git config user.name "quizinho-data-bot"
+          git config user.email "quizinho-data-bot@users.noreply.github.com"
+          git add data_pipeline/raw/voice_guess.json data_pipeline/raw/voice_guess_misses.json
+          git diff --cached --quiet || (git commit -m "Voice guess results" && git pull --rebase -q && git push)
