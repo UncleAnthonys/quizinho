@@ -50,7 +50,7 @@ class HomeScreen extends StatelessWidget {
                       Text('THE FOOTBALL PARTY GAME', style: AppText.label(18, color: Palette.yellow)),
                       const SizedBox(height: 18),
                       const Text(
-                        'One-on-one or split into teams. A different game every round — buzz in, steal points, and the app keeps the score.',
+                        'One-on-one or split into teams. A different game every round — buzz in, steal points, and Quizinho keeps the score.',
                         textAlign: TextAlign.center,
                         style: TextStyle(color: Palette.muted, fontSize: 16, height: 1.4),
                       ),
