@@ -133,21 +133,18 @@ class HintedSpeech {
       r['onresult'] = ((JSObject e) {
         final results = e['results']! as JSObject;
         final n = (results['length']! as JSNumber).toDartInt;
-        var text = '';
-        var isFinal = false;
-        var alts = <String>[];
-        for (var i = 0; i < n; i++) {
-          final res = results.callMethod<JSObject>('item'.toJS, i.toJS);
-          text += _transcript(res, 0);
-          if (i == n - 1) {
-            isFinal = (res['isFinal'] as JSBoolean?)?.toDart ?? false;
-            final m = (res['length']! as JSNumber).toDartInt;
-            alts = [for (var j = 0; j < m; j++) _transcript(res, j)]..removeWhere((a) => a.trim().isEmpty);
-          }
-        }
+        if (n == 0) return;
+        // One utterance at a time, so the latest result holds all of it.
+        // (Android Chrome keeps stale partial results alongside — joining
+        // them gave "zlatanzlatan ibrahimovic".)
+        final res = results.callMethod<JSObject>('item'.toJS, (n - 1).toJS);
+        final text = _transcript(res, 0).trim();
+        final isFinal = (res['isFinal'] as JSBoolean?)?.toDart ?? false;
+        final m = (res['length']! as JSNumber).toDartInt;
+        final alts = [for (var j = 0; j < m; j++) _transcript(res, j).trim()]..removeWhere((a) => a.isEmpty);
         last = text;
         onWords(text);
-        if (isFinal) finish(n == 1 && alts.isNotEmpty ? alts : [text]);
+        if (isFinal) finish(alts.isNotEmpty ? alts : [text]);
       }).toJS;
       r['onerror'] = ((JSObject e) {
         final error = (e['error'] as JSString?)?.toDart ?? '';
