@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 
 import '../../core/flags.dart';
@@ -73,8 +74,8 @@ class _PlayerPickerState extends State<PlayerPicker> {
   bool _listening = false;
   String? _voiceNote;
 
-  /// What the recogniser last heard, word for word — shown small, so it's
-  /// clear the mic is working and what it made of the name.
+  /// What the recogniser last heard, word for word — shown small on browser
+  /// phones (basic voice), so it's clear the mic is working.
   String _heardWords = '';
 
   /// Answer already chosen — ignore any further speech.
@@ -369,7 +370,7 @@ class _PlayerPickerState extends State<PlayerPicker> {
             Expanded(child: Text(_voiceNote!, style: AppText.label(14, color: _listening ? Palette.text : Palette.muted))),
           ]),
         ),
-      if (_heardWords.isNotEmpty && _voiceOn && !_typing)
+      if (kIsWeb && _heardWords.isNotEmpty && _voiceOn && !_typing)
         Padding(
           padding: const EdgeInsets.only(top: 2, left: 24),
           child: Align(
