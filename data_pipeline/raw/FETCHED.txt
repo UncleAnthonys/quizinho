@@ -1,1 +1,1 @@
-fetched 2026-10-26 13:16 UTC; players=31610 spells=197296 teams=11782 min_sitelinks=15 min_sitelinks_women=5 women=5931 took=2030s
+fetched 2026-11-01 11:36 UTC; players=31642 spells=197665 teams=11818 min_sitelinks=15 min_sitelinks_women=5 women=5943 took=2637s
