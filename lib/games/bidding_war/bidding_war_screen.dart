@@ -522,7 +522,7 @@ class _BidControlsState extends State<BidControls> {
       if (d['canPass'] == true) ...[
         const SizedBox(height: 6),
         Center(
-          child: TextButton(onPressed: widget.onPass, child: Text('PASS (DROP OUT OF BIDDING)', style: AppText.label(15))),
+          child: TextButton(onPressed: widget.onPass, child: Text('DROP OUT — LET THE NEXT TEAM DECIDE', style: AppText.label(15))),
         ),
       ],
     ]);

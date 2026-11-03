@@ -66,7 +66,10 @@ class BiddingWarController extends ChangeNotifier {
   int get correctCount => named.length;
   bool get canRaise => phase == BidPhase.bidding && minRaise <= maxBid;
   bool get canChallenge => phase == BidPhase.bidding && holder != null && currentTeam != holder;
-  bool get canPass => phase == BidPhase.bidding && teamCount > 2 && holder != null && currentTeam != holder;
+  /// Drop out and let the next team decide — 3+ teams, and never the last
+  /// team left against the top bidder: they must raise or challenge.
+  bool get canPass =>
+      phase == BidPhase.bidding && teamCount > 2 && active.length > 2 && holder != null && currentTeam != holder;
   double get fractionLeft => answerSeconds == 0 ? 0 : (secondsLeft / answerSeconds).clamp(0.0, 1.0);
 
   /// Bid [to] answers (must beat the current bid, max = answers that exist).

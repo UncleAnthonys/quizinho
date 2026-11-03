@@ -122,11 +122,13 @@ void main() {
       expect(c.currentTeam, 0); // skips B
     });
 
-    test('last bidder standing is challenged by the last team to pass', () {
+    test('the last team left against the top bidder can\'t drop out: raise or challenge', () {
       final c = three()..raise(2); // A
-      c.pass(); // B
-      c.pass(); // C — only A left
-      expect(c.phase, BidPhase.countdown);
+      c.pass(); // B drops out
+      expect(c.canPass, isFalse); // C is the last one left
+      c.pass();
+      expect(c.phase, BidPhase.bidding);
+      c.challenge();
       expect((c.holder, c.challenger), (0, 2));
     });
 
