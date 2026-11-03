@@ -25,7 +25,7 @@ jobs:
           unclaimed = collections.Counter()
           sources = collections.Counter()
           for e in raw.values():
-              if not isinstance(e, dict) or not e.get('h'): continue
+              if not isinstance(e, dict) or not e.get('h') or e.get('s') == 'smoke': continue
               sources[e.get('s', '?')] += 1
               heard = str(e['h'][0]).lower().strip()
               answers = e.get('a') or []

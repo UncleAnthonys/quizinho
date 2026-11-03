@@ -22,5 +22,9 @@ jobs:
           other=$(curl -s -o /dev/null -w "%{http_code}" -X PUT -d '1' "$U/elsewhere.json")
           badcode=$(curl -s -o /dev/null -w "%{http_code}" -X PUT -d '1' "$U/rooms/TOOLONG/x.json")
           curl -s -X DELETE "$U/rooms/$code.json" > /dev/null
+          miss=$(curl -s -X POST -d '{"h":["_smoke_test"],"s":"smoke"}' "$U/voicemisses.json")
+          missid=$(echo "$miss" | python3 -c "import sys,json;print(json.load(sys.stdin).get('name',''))" 2>/dev/null)
+          overwrite=$(curl -s -o /dev/null -w "%{http_code}" -X PUT -d '{"h":["x"]}' "$U/voicemisses/$missid.json")
+          echo "::notice title=Voice misses::saved=$miss overwrite=$overwrite (should be refused)"
           echo "::notice title=Rooms::put=$put read=$got other=$other badcode=$badcode stream=$(echo "$stream" | tr '\n' ' ' | cut -c1-200)"
-          [ "$put" = "200" ] && [ "$other" != "200" ] && [ "$badcode" != "200" ] && echo "$stream" | grep -q "event: put"
+          [ "$put" = "200" ] && [ "$other" != "200" ] && [ "$badcode" != "200" ] && echo "$stream" | grep -q "event: put" && [ -n "$missid" ] && [ "$overwrite" != "200" ]
