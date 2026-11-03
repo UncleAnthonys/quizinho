@@ -7,6 +7,7 @@ import '../../core/sound_service.dart';
 import '../../core/theme.dart';
 import '../../domain/game_mode.dart';
 import '../../domain/tournament.dart';
+import '../../multiplayer/turn_bridge.dart';
 import '../../ui/widgets/common.dart';
 import '../../ui/widgets/player_picker.dart';
 import '../buzz_game_view.dart' show LoadingRound, OutOfChallenges;
@@ -54,8 +55,44 @@ class _CheckoutScreenState extends State<CheckoutScreen>
     _t.markUsed(_mode, cat.id);
     final c = CheckoutController(category: cat, teamCount: _t.teamCount, startTeam: _t.standings.last)..begin();
     c.addListener(() => _onChange(c));
+    if (services.room case final room?) _phones = TurnBridge(room, _t)..start();
     setState(() => _c = c);
+    _syncPhones(c);
     startClock(c.advance);
+  }
+
+  /// The team's dart on their captain's phone, when they've joined.
+  TurnBridge? _phones;
+
+  void _syncPhones(CheckoutController c) {
+    final p = _phones;
+    if (p == null) return;
+    if (c.phase != CoPhase.answering) {
+      final t = c.lastThrow;
+      p.idle(c.phase == CoPhase.finished
+          ? '501 — round over'
+          : t == null
+              ? 'Football 501'
+              : '${_t.teamName(t.team)}: ${t.label} ${_tag(t)} — on ${max(0, t.after)}');
+      return;
+    }
+    final team = c.currentTeam;
+    p.show(
+      key: '${_t.rounds.length}-co-${c.turn}-$_pickerKey',
+      team: team,
+      stage: TurnStage.answer,
+      title: 'FOOTBALL 501 · DART ${c.dartNumber}/${c.maxTurns}',
+      headline: c.category.prompt,
+      sub: 'You’re on ${max(0, c.remaining[team])} — apps + goals come off. Over ${CheckoutController.maxDart} = bust.',
+      lines: [for (var i = 0; i < _t.teamCount; i++) '${_t.teamName(i)}: ${max(0, c.remaining[i])}'],
+      left: c.secondsLeft,
+      total: c.answerSeconds.toDouble(),
+      index: services.repo.players,
+      answers: {...c.category.values.keys, ...c.category.noStats},
+      hint: 'Say or type a player…',
+      onPick: c.submit,
+      onPass: c.pass,
+    );
   }
 
   void _onChange(CheckoutController c) {
@@ -101,6 +138,7 @@ class _CheckoutScreenState extends State<CheckoutScreen>
     } else {
       _lastSecond = -1;
     }
+    _syncPhones(c);
     if (mounted) setState(() {});
   }
 
@@ -113,6 +151,7 @@ class _CheckoutScreenState extends State<CheckoutScreen>
   @override
   void dispose() {
     disposeGameSupport();
+    _phones?.dispose();
     _c?.dispose();
     super.dispose();
   }
@@ -243,6 +282,9 @@ class _CheckoutScreenState extends State<CheckoutScreen>
       const SizedBox(height: 8),
       TimerBar(fraction: c.fractionLeft, seconds: c.secondsLeft),
       const SizedBox(height: 8),
+      if (_phones?.remote case final m?)
+        OnTheirPhone(name: '${m.name} (${_t.teamName(team)})', onSkip: () => setState(() => _phones!.playHere()))
+      else
       PlayerPicker(
         key: ValueKey('co-${c.turn}-$_pickerKey'),
         index: services.repo.players,

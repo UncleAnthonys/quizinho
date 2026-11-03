@@ -7,6 +7,7 @@ import '../../core/theme.dart';
 import '../../data/models.dart';
 import '../../domain/game_mode.dart';
 import '../../domain/tournament.dart';
+import '../../multiplayer/turn_bridge.dart';
 import '../../ui/widgets/common.dart';
 import '../../ui/widgets/player_picker.dart';
 import '../buzz_game_view.dart' show LoadingRound, OutOfChallenges;
@@ -68,12 +69,54 @@ class _StartingXiScreenState extends State<StartingXiScreen>
     );
     _assignTurnPlayer(c);
     c.addListener(() => _onChange(c));
+    if (services.room case final room?) _phones = TurnBridge(room, t)..start();
     setState(() => _c = c);
+    _syncPhones(c);
     startClock(c.advance);
+  }
+
+  /// Each player's turn on their own phone, when they've joined.
+  TurnBridge? _phones;
+
+  void _syncPhones(StartingXiController c) {
+    final p = _phones;
+    if (p == null) return;
+    final t = widget.round.tournament;
+    final m = c.match;
+    final key = '${t.rounds.length}-xi-$_turn';
+    final named = [for (final s in m.lineup) if (c.namedBy.containsKey(s.playerId)) s.playerName];
+    switch (c.phase) {
+      case BombPhase.handover:
+      case BombPhase.ticking:
+        final ticking = c.phase == BombPhase.ticking;
+        p.show(
+          key: ticking ? key : '$key-go',
+          team: c.currentTeam,
+          name: _turnPlayer,
+          stage: ticking ? TurnStage.answer : TurnStage.ready,
+          title: 'STARTING XI BOMB · ${c.turnSeconds}s',
+          headline: 'NAME ${m.targetTeam.toUpperCase()}’S XI',
+          sub: '${m.home} v ${m.away} · ${m.score} · ${m.year}',
+          lines: named.isEmpty ? const ['Nobody named yet'] : named,
+          left: ticking ? c.secondsLeft : null,
+          total: ticking ? c.turnSeconds.toDouble() : null,
+          index: services.repo.players,
+          answers: {for (final s in m.lineup) if (!c.namedBy.containsKey(s.playerId)) s.playerId},
+          hint: 'Name a starter…',
+          onPick: (pl) => _submit(c, pl),
+          onPass: c.pass,
+          onReady: c.startTurn,
+        );
+      case BombPhase.exploded:
+        p.idle('BOOM! ${t.teamName(c.lastExploded ?? c.currentTeam)} lose a life');
+      case BombPhase.finished:
+        p.idle('Starting XI Bomb — round over');
+    }
   }
 
   void _onChange(StartingXiController c) {
     _assignTurnPlayer(c);
+    _syncPhones(c);
     handleEvent(c.eventSerial, c.lastEvent);
     if (c.phase == BombPhase.ticking) {
       final sec = c.secondsLeft.ceil();
@@ -94,6 +137,7 @@ class _StartingXiScreenState extends State<StartingXiScreen>
   @override
   void dispose() {
     disposeGameSupport();
+    _phones?.dispose();
     _c?.dispose();
     super.dispose();
   }
@@ -114,6 +158,7 @@ class _StartingXiScreenState extends State<StartingXiScreen>
         ));
     }
     _turn++; // fresh answer box (and mic) every time
+    _syncPhones(c);
   }
 
   @override
@@ -217,7 +262,10 @@ class _StartingXiScreenState extends State<StartingXiScreen>
                 if (_turnPlayer != null)
                   Text(t.teamName(team).toUpperCase(), style: AppText.label(18, color: Palette.onTeam(colour))),
                 const SizedBox(height: 6),
-                Text('TAP WHEN READY — ${c.turnSeconds}s ON THE CLOCK',
+                Text(
+                    _phones?.remote != null
+                        ? 'STARTING ON THEIR PHONE — OR TAP HERE'
+                        : 'TAP WHEN READY — ${c.turnSeconds}s ON THE CLOCK',
                     style: AppText.label(15, color: Palette.onTeam(colour))),
               ]),
             ),
@@ -240,6 +288,12 @@ class _StartingXiScreenState extends State<StartingXiScreen>
               ),
             ]),
             const SizedBox(height: 10),
+            if (_phones?.remote != null)
+              OnTheirPhone(
+                name: _turnPlayer ?? t.teamName(team),
+                onSkip: () => setState(() => _phones!.playHere()),
+              )
+            else
             PlayerPicker(
               key: ValueKey('xi-$_turn'),
               index: services.repo.players,

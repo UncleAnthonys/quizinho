@@ -7,6 +7,7 @@ import '../../core/sound_service.dart';
 import '../../core/theme.dart';
 import '../../domain/game_mode.dart';
 import '../../domain/tournament.dart';
+import '../../multiplayer/turn_bridge.dart';
 import '../../ui/widgets/common.dart';
 import '../../ui/widgets/player_picker.dart';
 import '../buzz_game_view.dart' show LoadingRound, OutOfChallenges;
@@ -53,8 +54,47 @@ class _PointlessScreenState extends State<PointlessScreen>
     _t.markUsed(_mode, b.id);
     final c = PointlessController(category: b, teamCount: _t.teamCount, startTeam: _t.standings.last)..start();
     c.addListener(() => _onChange(c));
+    if (services.room case final room?) _phones = TurnBridge(room, _t)..start();
     setState(() => _c = c);
+    _syncPhones(c);
     startClock(c.advance);
+  }
+
+  /// The team's answer on their captain's phone, when they've joined.
+  TurnBridge? _phones;
+
+  void _syncPhones(PointlessController c) {
+    final p = _phones;
+    if (p == null) return;
+    if (c.phase != PtPhase.answering) {
+      final a = c.lastAnswer;
+      p.idle(c.phase == PtPhase.finished
+          ? 'Pointless — round over'
+          : a == null
+              ? 'Pointless'
+              : '${_t.teamName(a.team)}: ${a.label} — ${a.score}');
+      return;
+    }
+    final clubs = c.category.answersAreClubs;
+    p.show(
+      key: '${_t.rounds.length}-pt-${c.turn}-$_pickerKey',
+      team: c.currentTeam,
+      stage: TurnStage.answer,
+      title: 'POINTLESS · ANSWER ${c.goNumber} OF ${c.answersPerTeam}',
+      headline: c.category.prompt,
+      sub: 'Confer — the most obscure right answer wins',
+      lines: [for (final a in c.answers) '${_t.teamName(a.team)}: ${a.label} ${a.score}'],
+      left: c.secondsLeft,
+      total: c.answerSeconds.toDouble(),
+      index: clubs ? services.repo.clubIndex : services.repo.players,
+      answers: c.category.answerIds.toSet(),
+      clubs: clubs,
+      showFlags: !c.category.hidesFlags,
+      showPositions: !c.category.hidesPositions,
+      hint: clubs ? 'Say or type a club…' : 'Say or type a name…',
+      onPick: c.submit,
+      onPass: c.giveUp,
+    );
   }
 
   void _onChange(PointlessController c) {
@@ -84,6 +124,7 @@ class _PointlessScreenState extends State<PointlessScreen>
     } else {
       _lastSecond = -1;
     }
+    _syncPhones(c);
     if (mounted) setState(() {});
   }
 
@@ -96,6 +137,7 @@ class _PointlessScreenState extends State<PointlessScreen>
   @override
   void dispose() {
     disposeGameSupport();
+    _phones?.dispose();
     _c?.dispose();
     super.dispose();
   }
@@ -202,6 +244,9 @@ class _PointlessScreenState extends State<PointlessScreen>
       const SizedBox(height: 8),
       TimerBar(fraction: c.fractionLeft, seconds: c.secondsLeft),
       const SizedBox(height: 8),
+      if (_phones?.remote case final m?)
+        OnTheirPhone(name: '${m.name} (${_t.teamName(team)})', onSkip: () => setState(() => _phones!.playHere()))
+      else
       PlayerPicker(
         key: ValueKey('pt-${c.turn}-$_pickerKey'),
         index: clubs ? services.repo.clubIndex : services.repo.players,

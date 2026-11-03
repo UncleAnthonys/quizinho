@@ -8,6 +8,7 @@ import '../../core/theme.dart';
 import '../../domain/game_mode.dart';
 import '../../domain/tournament.dart';
 import '../../domain/warm_up_cup.dart';
+import '../../multiplayer/turn_bridge.dart';
 import '../../ui/widgets/common.dart';
 import '../../ui/widgets/player_picker.dart';
 import '../buzz_game_view.dart' show LoadingRound, OutOfChallenges;
@@ -54,11 +55,52 @@ class _BiddingWarScreenState extends State<BiddingWarScreen>
     _t.markUsed(_mode, b.id);
     final c = BiddingWarController(category: b, teamCount: _t.teamCount, startTeam: _t.standings.last);
     c.addListener(() => _onChange(c));
+    if (services.room case final room?) _phones = TurnBridge(room, _t)..start();
     setState(() {
       _c = c;
       _pending = min(3, b.maxBid);
     });
+    _syncPhones(c);
     startClock(c.advance);
+  }
+
+  /// The challenged team names them on their captain's phone, when joined.
+  /// (Bids are called out loud and entered on the host.)
+  TurnBridge? _phones;
+
+  void _syncPhones(BiddingWarController c) {
+    final p = _phones;
+    if (p == null) return;
+    final holder = c.holder;
+    switch (c.phase) {
+      case BidPhase.bidding:
+        p.idle('Bidding War: ${c.category.prompt} — bid ${c.currentBid}');
+      case BidPhase.countdown:
+        p.idle('${_t.teamName(holder!)} challenged — name ${c.currentBid}!');
+      case BidPhase.answering:
+        final clubs = c.category.answersAreClubs;
+        p.show(
+          key: '${_t.rounds.length}-bid-$_pickerKey',
+          team: holder!,
+          stage: TurnStage.answer,
+          title: 'BIDDING WAR · ${c.correctCount} / ${c.currentBid}',
+          headline: c.category.prompt,
+          sub: 'Name ${c.currentBid} — keep them coming',
+          lines: c.named,
+          left: c.secondsLeft,
+          total: c.answerSeconds.toDouble(),
+          index: clubs ? services.repo.clubIndex : services.repo.players,
+          answers: c.category.answerIds.toSet(),
+          clubs: clubs,
+          rapid: true,
+          showFlags: !c.category.hidesFlags,
+          showPositions: !c.category.hidesPositions,
+          hint: clubs ? 'Say or type a club…' : 'Say or type a name…',
+          onPick: c.submit,
+        );
+      case BidPhase.finished:
+        p.idle(c.completed == true ? 'Bid completed!' : 'Bluff called!');
+    }
   }
 
   void _onChange(BiddingWarController c) {
@@ -113,6 +155,7 @@ class _BiddingWarScreenState extends State<BiddingWarScreen>
         services.sound.play(Sfx.countdownBeep);
       }
     }
+    _syncPhones(c);
     if (mounted) setState(() {});
   }
 
@@ -125,6 +168,7 @@ class _BiddingWarScreenState extends State<BiddingWarScreen>
   @override
   void dispose() {
     disposeGameSupport();
+    _phones?.dispose();
     _c?.dispose();
     super.dispose();
   }
@@ -284,6 +328,9 @@ class _BiddingWarScreenState extends State<BiddingWarScreen>
       const SizedBox(height: 6),
       TimerBar(fraction: c.fractionLeft, seconds: c.secondsLeft),
       const SizedBox(height: 10),
+      if (_phones?.remote case final m?)
+        OnTheirPhone(name: '${m.name} (${_t.teamName(c.holder!)})', what: 'is naming them')
+      else
       PlayerPicker(
         key: ValueKey('bid-$_pickerKey'),
         // Club categories ("Clubs that have won the Premier League") search clubs.

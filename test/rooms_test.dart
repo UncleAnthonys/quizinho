@@ -7,6 +7,7 @@ import 'package:quizinho/multiplayer/buzz_bridge.dart';
 import 'package:quizinho/multiplayer/memory_room_link.dart';
 import 'package:quizinho/multiplayer/room.dart';
 import 'package:quizinho/multiplayer/room_link.dart';
+import 'package:quizinho/multiplayer/turn_bridge.dart';
 
 import 'fixtures.dart';
 
@@ -114,6 +115,44 @@ void main() {
       await bob.answer(bridge.questionKey, 'thierry-henry');
       await settle();
       expect(game.phase, BuzzPhase.answering);
+    });
+
+    test('a team turn goes to the captain\'s phone; a named turn to that player', () async {
+      final turns = TurnBridge(host, tournament)..start();
+      final picked = <String>[];
+      var passed = 0;
+      RoomMember? showTurn(int team, {String? name}) => turns.show(
+            key: 'k-$team-$name',
+            team: team,
+            name: name,
+            stage: TurnStage.answer,
+            title: 'POINTLESS',
+            headline: 'Arsenal players',
+            index: PlayerIndex(const [henry, fabregas]),
+            answers: {'thierry-henry'},
+            onPick: (p) => picked.add(p.id),
+            onPass: () => passed++,
+          );
+
+      // Home's captain is Ann (first on the sheet): her phone plays it.
+      expect(showTurn(0)?.name, 'Ann');
+      await settle();
+      expect(asMap(ann.view['who'])['device'], 'phone-ann');
+      await bob.answer('k-0-null', 'thierry-henry'); // not Bob's turn
+      await ann.answer('k-0-null', 'thierry-henry');
+      await settle();
+      expect(picked, ['thierry-henry']);
+
+      // Al's own turn, but Al hasn't joined: played on the host.
+      expect(showTurn(0, name: 'Al'), isNull);
+
+      // Taken back by the host: Ann's phone no longer counts.
+      showTurn(0);
+      turns.playHere();
+      await ann.pass('k-0-null');
+      await settle();
+      expect(passed, 0);
+      turns.dispose();
     });
 
     test('in a face-off only the two named phones can buzz', () async {

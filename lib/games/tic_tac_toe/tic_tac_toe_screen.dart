@@ -7,6 +7,7 @@ import '../../core/theme.dart';
 import '../../data/models.dart';
 import '../../domain/game_mode.dart';
 import '../../domain/tournament.dart';
+import '../../multiplayer/turn_bridge.dart';
 import '../../ui/widgets/common.dart';
 import '../../ui/widgets/player_picker.dart';
 import '../buzz_game_view.dart' show LoadingRound, OutOfChallenges;
@@ -90,9 +91,54 @@ class _TicTacToeScreenState extends State<TicTacToeScreen>
       answerSeconds: max(15, _t.config.answerSeconds),
     );
     c.addListener(() => _onChange(c));
+    if (services.room case final room?) _phones = TurnBridge(room, _t)..start();
     setState(() => _c = c);
     _onChange(c);
     startClock(c.advance);
+  }
+
+  /// Each player's turn on their own phone, when they've joined.
+  TurnBridge? _phones;
+
+  void _syncPhones(TicTacToeController c) {
+    final p = _phones;
+    if (p == null) return;
+    if (c.phase == TttPhase.finished) {
+      p.idle(c.winner != null ? '${_t.teamName(c.winner!)} get three in a row!' : 'Tic-Tac-Toe — squares decide it');
+      return;
+    }
+    final answering = c.phase == TttPhase.answering;
+    final sq = c.selected;
+    p.show(
+      key: '${_t.rounds.length}-ttt-${c.turnSerial}${answering ? '-$_pickerKey' : ''}',
+      team: c.currentTeam,
+      name: _turnPlayer,
+      stage: answering ? TurnStage.answer : TurnStage.choose,
+      title: 'TIC-TAC-TOE',
+      headline: answering && sq != null
+          ? '${c.grid.rows[sq ~/ 3].name} + ${c.grid.cols[sq % 3].name}'
+          : 'PICK A SQUARE',
+      sub: answering ? 'Name a player who played for both' : 'Then name a player who played for both clubs',
+      grid: {
+        'rows': [for (final r in c.grid.rows) r.name],
+        'cols': [for (final k in c.grid.cols) k.name],
+        'cells': [
+          for (var i = 0; i < 9; i++)
+            {
+              if (c.owner[i] != null) 't': c.owner[i],
+              if (c.claimedWith[i] != null) 'n': c.claimedWith[i],
+              if (c.selected == i) 'sel': true,
+            },
+        ],
+      },
+      left: answering ? c.secondsLeft : null,
+      total: answering ? c.answerSeconds.toDouble() : null,
+      index: services.repo.players,
+      answers: sq == null ? const {} : c.grid.answers[sq],
+      onPick: (pl) => _submit(c, pl),
+      onPass: c.pass,
+      onChoose: c.choose,
+    );
   }
 
   void _onChange(TicTacToeController c) {
@@ -100,6 +146,7 @@ class _TicTacToeScreenState extends State<TicTacToeScreen>
       _turnFor = c.turnSerial;
       _turnPlayer = _t.nextTurnPlayer(c.currentTeam);
     }
+    _syncPhones(c);
     handleEvent(c.eventSerial, c.lastEvent);
     if (c.phase == TttPhase.answering) {
       final sec = c.secondsLeft.ceil();
@@ -128,11 +175,13 @@ class _TicTacToeScreenState extends State<TicTacToeScreen>
       _t.creditPlayer(team, who, widget.round.multiplier);
     }
     _pickerKey++;
+    _syncPhones(c);
   }
 
   @override
   void dispose() {
     disposeGameSupport();
+    _phones?.dispose();
     _c?.dispose();
     super.dispose();
   }
@@ -212,6 +261,13 @@ class _TicTacToeScreenState extends State<TicTacToeScreen>
   }
 
   Widget _bottom(TicTacToeController c) {
+    if (_phones?.remote case final m?) {
+      return OnTheirPhone(
+        name: m.name,
+        what: c.phase == TttPhase.choosing ? 'is picking a square' : 'is answering',
+        onSkip: () => setState(() => _phones!.playHere()),
+      );
+    }
     if (c.phase == TttPhase.choosing) {
       final left = c.turnsUntilStall;
       return Column(children: [
