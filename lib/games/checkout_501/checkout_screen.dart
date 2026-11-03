@@ -68,12 +68,7 @@ class _CheckoutScreenState extends State<CheckoutScreen>
     final p = _phones;
     if (p == null) return;
     if (c.phase != CoPhase.answering) {
-      final t = c.lastThrow;
-      p.idle(c.phase == CoPhase.finished
-          ? '501 — round over'
-          : t == null
-              ? 'Football 501'
-              : '${_t.teamName(t.team)}: ${t.label} ${_tag(t)} — on ${max(0, t.after)}');
+      p.idle('Football 501', game: 'co', board: _view(c));
       return;
     }
     final team = c.currentTeam;
@@ -84,7 +79,8 @@ class _CheckoutScreenState extends State<CheckoutScreen>
       title: 'FOOTBALL 501 · DART ${c.dartNumber}/${c.maxTurns}',
       headline: c.category.prompt,
       sub: 'You’re on ${max(0, c.remaining[team])} — apps + goals come off. Over ${CheckoutController.maxDart} = bust.',
-      lines: [for (var i = 0; i < _t.teamCount; i++) '${_t.teamName(i)}: ${max(0, c.remaining[i])}'],
+      game: 'co',
+      board: _view(c),
       left: c.secondsLeft,
       total: c.answerSeconds.toDouble(),
       index: services.repo.players,
@@ -156,9 +152,6 @@ class _CheckoutScreenState extends State<CheckoutScreen>
     super.dispose();
   }
 
-  Widget _teamChip(int team, {double size = 16}) =>
-      TeamChip(name: _t.teamName(team), colorIndex: _t.config.teams[team].colorIndex, size: size);
-
   @override
   Widget build(BuildContext context) {
     if (_empty) {
@@ -180,74 +173,74 @@ class _CheckoutScreenState extends State<CheckoutScreen>
           child: SafeArea(
             child: Column(children: [
               typing ? const SizedBox.shrink() : Scoreboard(tournament: _t, highlightTeam: c.phase == CoPhase.finished ? null : c.currentTeam),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(16, 6, 16, 0),
-                child: Row(children: [
-                  Text('FOOTBALL 501', style: AppText.label(16, color: _oche)),
-                  const Spacer(),
-                  if (widget.round.multiplier > 1)
-                    Text('x${widget.round.multiplier} POINTS', style: AppText.label(15, color: Palette.gold)),
-                ]),
-              ),
-              _CategoryCard(prompt: c.category.prompt, compact: typing),
-              typing ? const SizedBox.shrink() : _board(c),
-              typing ? const SizedBox.shrink() : CommentaryBanner(text: commentaryText),
               Expanded(
-                child: switch (c.phase) {
-                  CoPhase.answering => _answering(c),
-                  CoPhase.reveal => _reveal(c),
-                  CoPhase.finished => _finished(c),
-                },
+                child: CoLayout(
+                  data: _view(c),
+                  multiplier: widget.round.multiplier,
+                  typing: typing,
+                  commentary: CommentaryBanner(text: commentaryText),
+                  answerBox: _answerBox(c),
+                  onContinue: c.next,
+                  finish: BigButton(label: 'Finish round', icon: Icons.flag, onPressed: () => widget.round.onComplete(c.result())),
+                ),
               ),
             ]),
           ),
         ),
       );
 
-  /// The darts scoreboard: each team's score big, the history crossed out.
-  Widget _board(CheckoutController c) => Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 12),
-        child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          for (var t = 0; t < _t.teamCount; t++)
-            Expanded(
-              child: Container(
-                margin: const EdgeInsets.symmetric(horizontal: 3),
-                padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 4),
-                decoration: BoxDecoration(
-                  color: Colors.black.withValues(alpha: 0.3),
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(
-                    color: c.phase != CoPhase.finished && c.currentTeam == t ? _oche : Palette.line,
-                    width: c.phase != CoPhase.finished && c.currentTeam == t ? 2 : 1,
-                  ),
-                ),
-                child: Column(children: [
-                  FittedBox(fit: BoxFit.scaleDown, child: _teamChip(t, size: 14)),
-                  FittedBox(
-                    fit: BoxFit.scaleDown,
-                    child: Text('${max(0, c.remaining[t])}', style: AppText.headline(46, color: _oche)),
-                  ),
-                  for (final th in c.throwsOf(t).reversed.take(3))
-                    FittedBox(
-                      fit: BoxFit.scaleDown,
-                      child: Text(
-                        '${_short(th)} ${_tag(th)}',
-                        style: AppText.label(11, color: th.outcome == CoOutcome.scored || th.outcome == CoOutcome.checkout
-                            ? Palette.text
-                            : Palette.danger),
-                      ),
-                    ),
-                ]),
-              ),
-            ),
-        ]),
-      );
-
-  String _short(CoThrow t) => switch (t.outcome) {
-        CoOutcome.timeUp => 'Time',
-        CoOutcome.wrong when t.label == 'Passed' => 'Pass',
-        _ => t.label.split(' ').last,
-      };
+  /// Everything both the host and joined phones draw.
+  Map<String, Object?> _view(CheckoutController c) {
+    final players = services.repo.players;
+    String short(CoThrow t) => switch (t.outcome) {
+          CoOutcome.timeUp => 'Time',
+          CoOutcome.wrong when t.label == 'Passed' => 'Pass',
+          _ => t.label.split(' ').last,
+        };
+    final last = c.lastThrow;
+    return {
+      'phase': c.phase.name,
+      'prompt': c.category.prompt,
+      'team': c.currentTeam,
+      'teams': [for (var i = 0; i < _t.teamCount; i++) {'name': _t.teamName(i), 'color': _t.config.teams[i].colorIndex}],
+      'remaining': [for (final r in c.remaining) max(0, r)],
+      'history': [
+        for (var i = 0; i < _t.teamCount; i++)
+          [
+            for (final th in c.throwsOf(i).reversed.take(3))
+              {'s': '${short(th)} ${_tag(th)}', 'ok': th.outcome == CoOutcome.scored || th.outcome == CoOutcome.checkout},
+          ],
+      ],
+      'dart': c.dartNumber,
+      'maxDarts': c.maxTurns,
+      'checkedOut': c.checkedOut.isNotEmpty,
+      if (last != null)
+        'last': {
+          'team': last.team,
+          'label': last.label,
+          'outcome': last.outcome.name,
+          if (last.apps != null) 'apps': last.apps,
+          if (last.goals != null) 'goals': last.goals,
+          'value': last.value,
+          'before': last.before,
+          'after': last.after,
+        },
+      if (c.phase == CoPhase.finished) ...{
+        'winners': c.winners.toList(),
+        'winPoints': CheckoutController.winPoints * widget.round.multiplier,
+        'unused': [
+          for (final (p, v) in ([
+            for (final e in c.category.values.entries)
+              if (!c.used.contains(e.key) && players.byId(e.key) != null) (players.byId(e.key)!, e.value.$1 + e.value.$2),
+          ]..sort((a, b) => b.$1.fame.compareTo(a.$1.fame)))
+              .take(24)
+              .toList()
+            ..sort((a, b) => a.$2.compareTo(b.$2)))
+            {'n': p.name, 'v': v},
+        ],
+      },
+    };
+  }
 
   String _tag(CoThrow t) => switch (t.outcome) {
         CoOutcome.scored || CoOutcome.checkout => '−${t.value}',
@@ -255,9 +248,134 @@ class _CheckoutScreenState extends State<CheckoutScreen>
         CoOutcome.wrong || CoOutcome.timeUp => '✗',
       };
 
-  Widget _answering(CheckoutController c) {
+  /// The host's answer box — or who's answering on their own phone.
+  Widget _answerBox(CheckoutController c) {
     final team = c.currentTeam;
     final colour = _t.config.teams[team].colorIndex;
+    return Column(children: [
+      TimerBar(fraction: c.fractionLeft, seconds: c.secondsLeft),
+      const SizedBox(height: 8),
+      if (_phones?.remote case final m?)
+        OnTheirPhone(name: '${m.name} (${_t.teamName(team)})', onSkip: () => setState(() => _phones!.playHere()))
+      else
+        PlayerPicker(
+          key: ValueKey('co-${c.turn}-$_pickerKey'),
+          index: services.repo.players,
+          voice: services.voice,
+          accent: Palette.team(colour),
+          hint: 'Say or type a player…',
+          onPick: c.submit,
+          isAnswer: (p) => c.category.values.containsKey(p.id) || c.category.noStats.contains(p.id),
+          onPass: c.pass,
+        ),
+    ]);
+  }
+}
+
+/// The whole Football 501 screen under the scores, from a plain snapshot —
+/// the host and joined phones draw exactly the same thing. [answerBox] is
+/// the timer + answer box (or "answering on their phone"); [finish] the
+/// host's "Finish round" button.
+class CoLayout extends StatelessWidget {
+  const CoLayout({
+    super.key,
+    required this.data,
+    required this.answerBox,
+    this.multiplier = 1,
+    this.typing = false,
+    this.commentary,
+    this.onContinue,
+    this.finish,
+  });
+  final Map<String, Object?> data;
+  final Widget answerBox;
+  final int multiplier;
+  final bool typing;
+  final Widget? commentary;
+  final VoidCallback? onContinue;
+  final Widget? finish;
+
+  List<Object?> _list(String k) => (data[k] as List?) ?? const [];
+  Map<String, Object?> _map(Object? v) => v is Map ? v.cast<String, Object?>() : const {};
+  int _int(Object? v) => (v as num?)?.toInt() ?? 0;
+
+  Widget _teamChip(int team, {double size = 16}) {
+    final t = team < _list('teams').length ? _map(_list('teams')[team]) : const <String, Object?>{};
+    return TeamChip(name: '${t['name'] ?? ''}', colorIndex: _int(t['color']), size: size);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final phase = '${data['phase']}';
+    return Column(children: [
+      Padding(
+        padding: const EdgeInsets.fromLTRB(16, 6, 16, 0),
+        child: Row(children: [
+          Text('FOOTBALL 501', style: AppText.label(16, color: _oche)),
+          const Spacer(),
+          if (multiplier > 1) Text('x$multiplier POINTS', style: AppText.label(15, color: Palette.gold)),
+        ]),
+      ),
+      _CategoryCard(prompt: '${data['prompt'] ?? ''}', compact: typing),
+      typing ? const SizedBox.shrink() : _board(phase),
+      if (!typing && commentary != null) commentary!,
+      Expanded(
+        child: switch (phase) {
+          'answering' => _answering(),
+          'reveal' => _reveal(),
+          _ => _finished(),
+        },
+      ),
+    ]);
+  }
+
+  /// The darts scoreboard: each team's score big, the history crossed out.
+  Widget _board(String phase) {
+    final team = _int(data['team']);
+    final remaining = _list('remaining');
+    final history = _list('history');
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 12),
+      child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        for (var t = 0; t < _list('teams').length; t++)
+          Expanded(
+            child: Container(
+              margin: const EdgeInsets.symmetric(horizontal: 3),
+              padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 4),
+              decoration: BoxDecoration(
+                color: Colors.black.withValues(alpha: 0.3),
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(
+                  color: phase != 'finished' && team == t ? _oche : Palette.line,
+                  width: phase != 'finished' && team == t ? 2 : 1,
+                ),
+              ),
+              child: Column(children: [
+                FittedBox(fit: BoxFit.scaleDown, child: _teamChip(t, size: 14)),
+                FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: Text('${t < remaining.length ? remaining[t] : ''}', style: AppText.headline(46, color: _oche)),
+                ),
+                for (final th in t < history.length ? (history[t] as List? ?? const []) : const [])
+                  FittedBox(
+                    fit: BoxFit.scaleDown,
+                    child: Text(
+                      '${_map(th)['s'] ?? ''}',
+                      style: AppText.label(11, color: _map(th)['ok'] == true ? Palette.text : Palette.danger),
+                    ),
+                  ),
+              ]),
+            ),
+          ),
+      ]),
+    );
+  }
+
+  Widget _answering() {
+    final team = _int(data['team']);
+    final remaining = _list('remaining');
+    final on = team < remaining.length ? _int(remaining[team]) : 0;
+    final checkedOut = data['checkedOut'] == true;
     return ListView(padding: const EdgeInsets.fromLTRB(14, 6, 14, 16), children: [
       Row(mainAxisAlignment: MainAxisAlignment.center, children: [
         _teamChip(team, size: 20),
@@ -265,112 +383,87 @@ class _CheckoutScreenState extends State<CheckoutScreen>
         Flexible(
           child: FittedBox(
             fit: BoxFit.scaleDown,
-            child: Text('ON ${max(0, c.remaining[team])} · DART ${c.dartNumber}/${c.maxTurns}', style: AppText.headline(22)),
+            child: Text('ON $on · DART ${data['dart']}/${data['maxDarts']}', style: AppText.headline(22)),
           ),
         ),
       ]),
       Text(
-        c.checkedOut.isNotEmpty
+        checkedOut
             ? 'LAST DART! They’ve checked out — finish closer to 0 to win it.'
-            : c.remaining[team] <= CheckoutController.maxDart
+            : on <= CheckoutController.maxDart
                 ? 'Finish between 0 and −${CheckoutController.checkoutWindow} to check out!'
                 : 'Over ${CheckoutController.maxDart} = bust. Players named are gone for everyone.',
         textAlign: TextAlign.center,
-        style: AppText.label(13,
-            color: c.checkedOut.isNotEmpty || c.remaining[team] <= CheckoutController.maxDart ? Palette.gold : Palette.muted),
+        style: AppText.label(13, color: checkedOut || on <= CheckoutController.maxDart ? Palette.gold : Palette.muted),
       ),
       const SizedBox(height: 8),
-      TimerBar(fraction: c.fractionLeft, seconds: c.secondsLeft),
-      const SizedBox(height: 8),
-      if (_phones?.remote case final m?)
-        OnTheirPhone(name: '${m.name} (${_t.teamName(team)})', onSkip: () => setState(() => _phones!.playHere()))
-      else
-      PlayerPicker(
-        key: ValueKey('co-${c.turn}-$_pickerKey'),
-        index: services.repo.players,
-        voice: services.voice,
-        accent: Palette.team(colour),
-        hint: 'Say or type a player…',
-        onPick: c.submit,
-        isAnswer: (p) => c.category.values.containsKey(p.id) || c.category.noStats.contains(p.id),
-        onPass: c.pass,
-      ),
+      answerBox,
     ]);
   }
 
-  Widget _reveal(CheckoutController c) {
-    final t = c.lastThrow!;
-    final (headline, colour) = switch (t.outcome) {
-      CoOutcome.checkout => ('CHECKED OUT!', Palette.yellow),
-      CoOutcome.scored => ('${t.before} → ${t.after}', _oche),
-      CoOutcome.bust => ('BUST — OVER 180', Palette.danger),
-      CoOutcome.overshoot => ('BUST — TOO FAR (${t.before - t.value})', Palette.danger),
-      CoOutcome.wrong => (t.label == 'Passed' ? 'PASSED' : 'NEVER PLAYED FOR THEM', Palette.danger),
-      CoOutcome.timeUp => ('OUT OF TIME', Palette.danger),
+  Widget _reveal() {
+    final t = _map(data['last']);
+    final label = '${t['label'] ?? ''}';
+    final value = _int(t['value']);
+    final (headline, colour) = switch ('${t['outcome']}') {
+      'checkout' => ('CHECKED OUT!', Palette.yellow),
+      'scored' => ('${t['before']} → ${t['after']}', _oche),
+      'bust' => ('BUST — OVER 180', Palette.danger),
+      'overshoot' => ('BUST — TOO FAR (${_int(t['before']) - value})', Palette.danger),
+      'wrong' => (label == 'Passed' ? 'PASSED' : 'NEVER PLAYED FOR THEM', Palette.danger),
+      _ => ('OUT OF TIME', Palette.danger),
     };
     return GestureDetector(
-      onTap: c.next,
+      onTap: onContinue,
       behavior: HitTestBehavior.opaque,
       child: Padding(
         padding: const EdgeInsets.all(16),
         child: FittedBox(
           fit: BoxFit.scaleDown,
           child: Column(mainAxisSize: MainAxisSize.min, children: [
-            _teamChip(t.team, size: 22),
+            _teamChip(_int(t['team']), size: 22),
             const SizedBox(height: 6),
-            if (t.label != 'Time up' && t.label != 'Passed') Text(t.label.toUpperCase(), style: AppText.headline(32)),
-            if (t.apps != null)
-              Text('${t.apps} APPS + ${t.goals} GOALS = ${t.value}', style: AppText.headline(26, color: Palette.muted)),
+            if (label != 'Time up' && label != 'Passed') Text(label.toUpperCase(), style: AppText.headline(32)),
+            if (t['apps'] != null)
+              Text('${t['apps']} APPS + ${t['goals']} GOALS = $value', style: AppText.headline(26, color: Palette.muted)),
             const SizedBox(height: 6),
             Text(headline, style: AppText.headline(48, color: colour)),
-            const SizedBox(height: 8),
-            Text('TAP TO CONTINUE', style: AppText.label(12)),
+            if (onContinue != null) ...[
+              const SizedBox(height: 8),
+              Text('TAP TO CONTINUE', style: AppText.label(12)),
+            ],
           ]),
         ),
       ),
     );
   }
 
-  Widget _finished(CheckoutController c) {
-    final winners = c.winners;
-    final players = services.repo.players;
-    // Players nobody named: the best-known 24, lowest score first, so you
-    // can see what would have finished it — and who'd have been a bust.
-    final unused = ([
-      for (final e in c.category.values.entries)
-        if (!c.used.contains(e.key) && players.byId(e.key) != null) (players.byId(e.key)!, e.value.$1 + e.value.$2),
-    ]..sort((a, b) => b.$1.fame.compareTo(a.$1.fame)))
-        .take(24)
-        .toList()
-      ..sort((a, b) => a.$2.compareTo(b.$2));
-    return ListView(padding: const EdgeInsets.fromLTRB(14, 6, 14, 16), children: [
-      Text(c.checkedOut.isNotEmpty ? 'GAME SHOT!' : 'CLOSEST TO ZERO WINS', textAlign: TextAlign.center,
-          style: AppText.headline(34, color: _oche)),
-      const SizedBox(height: 6),
-      for (final w in winners)
-        Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-          _teamChip(w, size: 22),
-          const SizedBox(width: 10),
-          Text('+${CheckoutController.winPoints * widget.round.multiplier}', style: AppText.headline(40, color: Palette.yellow)),
+  Widget _finished() => ListView(padding: const EdgeInsets.fromLTRB(14, 6, 14, 16), children: [
+        Text(data['checkedOut'] == true ? 'GAME SHOT!' : 'CLOSEST TO ZERO WINS',
+            textAlign: TextAlign.center, style: AppText.headline(34, color: _oche)),
+        const SizedBox(height: 6),
+        for (final w in _list('winners'))
+          Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+            _teamChip(_int(w), size: 22),
+            const SizedBox(width: 10),
+            Text('+${data['winPoints']}', style: AppText.headline(40, color: Palette.yellow)),
+          ]),
+        const SizedBox(height: 12),
+        Text('WHO ELSE WAS ON THE BOARD', style: AppText.label(13)),
+        Text('Red = over ${CheckoutController.maxDart}, a bust', style: AppText.label(12, color: Palette.danger)),
+        const SizedBox(height: 6),
+        Wrap(spacing: 6, runSpacing: 6, children: [
+          for (final u in _list('unused'))
+            Chip(
+              label: Text('${_map(u)['n']}  ${_map(u)['v']}'),
+              backgroundColor: Palette.card,
+              side: _int(_map(u)['v']) > CheckoutController.maxDart
+                  ? const BorderSide(color: Palette.danger, width: 2)
+                  : const BorderSide(color: Palette.line),
+            ),
         ]),
-      const SizedBox(height: 12),
-      Text('WHO ELSE WAS ON THE BOARD', style: AppText.label(13)),
-      Text('Red = over ${CheckoutController.maxDart}, a bust', style: AppText.label(12, color: Palette.danger)),
-      const SizedBox(height: 6),
-      Wrap(spacing: 6, runSpacing: 6, children: [
-        for (final (p, v) in unused)
-          Chip(
-            label: Text('${p.name}  $v'),
-            backgroundColor: Palette.card,
-            side: v > CheckoutController.maxDart
-                ? const BorderSide(color: Palette.danger, width: 2)
-                : const BorderSide(color: Palette.line),
-          ),
-      ]),
-      const SizedBox(height: 16),
-      BigButton(label: 'Finish round', icon: Icons.flag, onPressed: () => widget.round.onComplete(c.result())),
-    ]);
-  }
+        if (finish != null) ...[const SizedBox(height: 16), finish!],
+      ]);
 }
 
 class _CategoryCard extends StatelessWidget {

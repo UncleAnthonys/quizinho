@@ -9,7 +9,12 @@ import '../core/hinted_speech.dart';
 import '../core/theme.dart';
 import '../data/models.dart';
 import '../domain/tournament.dart';
+import '../games/bidding_war/bidding_war_screen.dart' show BidControls, BidLayout;
 import '../games/buzz_game_view.dart' show FaceOffIntro;
+import '../games/checkout_501/checkout_screen.dart' show CoLayout;
+import '../games/pointless/pointless_screen.dart' show PtLayout;
+import '../games/starting_xi/starting_xi_screen.dart' show XiLayout;
+import '../games/tic_tac_toe/tic_tac_toe_screen.dart' show TttLayout;
 import '../games/career_path/career_path_screen.dart' show CareerTrail;
 import '../games/club_connections/club_connections_screen.dart' show ClubsCard;
 import '../ui/widgets/common.dart';
@@ -244,9 +249,10 @@ class _GuestGameState extends State<_GuestGame> with SingleTickerProviderStateMi
   }
 
   /// The host's score strip, drawn from the view.
-  Widget _scores(Object? teams, {String round = '', int? highlight}) => ScoreStrip(
+  Widget _scores(Object? teams, {String round = '', int? highlight, List<String> extra = const []}) => ScoreStrip(
         round: round,
         highlightTeam: highlight,
+        extra: extra.isEmpty ? null : (i) => i < extra.length ? extra[i] : '',
         teams: [
           for (final t in asList(teams))
             if (asMap(t) case final m)
@@ -449,172 +455,145 @@ class _GuestGameState extends State<_GuestGame> with SingleTickerProviderStateMi
     ]);
   }
 
-  /// Someone's turn in XI Bomb, Tic-Tac-Toe, Pointless, 501 or Bidding War:
-  /// theirs to play on this phone, or theirs to watch.
+  /// Someone's turn in XI Bomb, Tic-Tac-Toe, Pointless, 501 or Bidding War,
+  /// drawn with the host's own layout for that game: theirs to play on this
+  /// phone, or theirs to watch.
   Widget _turn(Map<String, Object?> v, int colour) {
     _syncClock(v);
     final s = AppScope.of(context);
     final q = '${v['q']}';
     final stage = '${v['stage']}';
     final who = asMap(v['who']);
+    final whoName = '${who['name'] ?? ''}';
     final whoTeam = (who['team'] as num?)?.toInt();
-    final mine = who['device'] == widget.room.device;
+    final mine = q.isNotEmpty && who['device'] == widget.room.device;
     final teamsV = asList(v['teams']);
     final whoColour =
         whoTeam != null && whoTeam < teamsV.length ? (asMap(teamsV[whoTeam])['color'] as num?)?.toInt() ?? 0 : colour;
-    final grid = asMap(v['grid']);
+    final board = asMap(v['board']);
+    final scores = _scores(v['teams'],
+        round: '${v['round'] ?? ''}', highlight: whoTeam, extra: [for (final e in asList(v['extra'])) '$e']);
 
-    Widget action;
-    if (!mine) {
-      action = _status(stage == 'ready'
-          ? '${who['name'] ?? ''} IS UP NEXT'.toUpperCase()
-          : '${who['name'] ?? ''} IS PLAYING THIS TURN'.toUpperCase());
-    } else if (stage == 'ready') {
-      action = Padding(
-        padding: const EdgeInsets.all(16),
-        child: SizedBox(
-          height: 150,
-          width: double.infinity,
-          child: FilledButton(
-            style: FilledButton.styleFrom(
-              backgroundColor: Palette.team(whoColour),
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(28)),
-            ),
-            onPressed: _readyOn == q
-                ? null
-                : () {
-                    s.haptic(HapticStrength.heavy);
-                    setState(() => _readyOn = q);
-                    widget.room.answer(q, 'ready');
-                  },
-            child: Text(_readyOn == q ? 'GO!' : 'YOUR TURN — TAP TO START',
-                textAlign: TextAlign.center, style: AppText.headline(34, color: Palette.onTeam(whoColour))),
-          ),
-        ),
-      );
-    } else if (stage == 'choose') {
-      action = Column(children: [
-        _status('YOUR TURN — TAP A SQUARE ABOVE'),
-        TextButton(
-          onPressed: () => widget.room.pass(q),
-          child: Text("DON'T KNOW ANY — PASS", style: AppText.label(15, color: Palette.danger)),
-        ),
-      ]);
-    } else {
+    Widget clock() => ValueListenableBuilder<double>(
+          valueListenable: _left,
+          builder: (context, left, _) => TimerBar(fraction: _total == 0 ? 0 : left / _total, seconds: left),
+        );
+
+    // The answer box when it's this phone's turn; who's playing otherwise.
+    Widget answerBox() {
+      if (!mine || stage != 'answer') {
+        return _status(whoName.isEmpty ? '' : '${whoName.toUpperCase()} IS ANSWERING');
+      }
       final ids = {for (final a in asList(v['answers'])) '$a'};
-      action = Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: PlayerPicker(
-          key: ValueKey('turn-$q'),
-          index: v['clubs'] == true ? s.repo.clubIndex : s.repo.players,
-          voice: s.voice,
-          accent: Palette.team(whoColour),
-          hint: '${v['hint'] ?? 'Say or type a name…'}',
-          rapid: v['rapid'] == true,
-          showFlags: v['flags'] != false,
-          showPositions: v['positions'] != false,
-          isAnswer: (p) => ids.contains(p.id),
-          onPick: (p) => widget.room.answer(q, p.id),
-          onPass: v['rapid'] == true ? null : () => widget.room.pass(q),
-        ),
+      return PlayerPicker(
+        key: ValueKey('turn-$q'),
+        index: v['clubs'] == true ? s.repo.clubIndex : s.repo.players,
+        voice: s.voice,
+        accent: Palette.team(whoColour),
+        hint: '${v['hint'] ?? 'Say or type a name…'}',
+        rapid: v['rapid'] == true,
+        showFlags: v['flags'] != false,
+        showPositions: v['positions'] != false,
+        isAnswer: (p) => ids.contains(p.id),
+        onPick: (p) => widget.room.answer(q, p.id),
+        onPass: v['rapid'] == true ? null : () => widget.room.pass(q),
       );
     }
 
-    return ListView(children: [
-      _scores(v['teams'], round: '${v['round'] ?? ''}', highlight: whoTeam),
-      Padding(
-        padding: const EdgeInsets.fromLTRB(18, 8, 18, 0),
-        child: Text('${v['title'] ?? ''}', style: AppText.label(15, color: Palette.yellow)),
-      ),
-      Padding(
-        padding: const EdgeInsets.fromLTRB(18, 4, 18, 0),
-        child: Text('${v['headline'] ?? ''}', textAlign: TextAlign.center, style: AppText.headline(28)),
-      ),
-      if ('${v['sub'] ?? ''}'.isNotEmpty)
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 18),
-          child: Text('${v['sub']}', textAlign: TextAlign.center, style: AppText.label(14)),
-        ),
-      if (grid.isNotEmpty) _grid(grid, q, mine && stage == 'choose'),
-      if (asList(v['lines']).isNotEmpty)
-        Padding(
-          padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
-          child: Wrap(alignment: WrapAlignment.center, spacing: 6, runSpacing: 6, children: [
-            for (final l in asList(v['lines'])) Chip(label: Text('$l'), backgroundColor: Palette.card),
-          ]),
-        ),
-      if (v['left'] != null)
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 8),
-          child: ValueListenableBuilder<double>(
-            valueListenable: _left,
-            builder: (context, left, _) => TimerBar(fraction: _total == 0 ? 0 : left / _total, seconds: left),
-          ),
-        ),
-      action,
-    ]);
-  }
+    Widget clockAndBox() => Column(children: [
+          if (v['left'] != null) clock(),
+          const SizedBox(height: 8),
+          answerBox(),
+        ]);
 
-  String? _readyOn;
-
-  /// Tic-Tac-Toe: rows × columns of clubs; on your turn, tap a free square.
-  Widget _grid(Map<String, Object?> g, String q, bool canPick) {
-    final rows = [for (final r in asList(g['rows'])) '$r'];
-    final cols = [for (final c in asList(g['cols'])) '$c'];
-    final cells = asList(g['cells']);
-    final teamsV = asList(widget.room.view['teams']);
-    Widget cell(int i) {
-      final c = i < cells.length ? asMap(cells[i]) : const <String, Object?>{};
-      final owner = (c['t'] as num?)?.toInt();
-      final ownerColour = owner != null && owner < teamsV.length ? (asMap(teamsV[owner])['color'] as num?)?.toInt() : null;
-      final free = owner == null;
-      return Expanded(
-        child: Padding(
-          padding: const EdgeInsets.all(3),
-          child: Material(
-            color: ownerColour != null
-                ? Palette.team(ownerColour)
-                : (c['sel'] == true ? Palette.yellow.withValues(alpha: 0.35) : Palette.card),
-            borderRadius: BorderRadius.circular(10),
-            child: InkWell(
-              borderRadius: BorderRadius.circular(10),
-              onTap: canPick && free ? () => widget.room.answer(q, 'choice:$i') : null,
-              child: SizedBox(
-                height: 54,
-                child: Center(
-                  child: Padding(
-                    padding: const EdgeInsets.all(4),
-                    child: FittedBox(
-                      fit: BoxFit.scaleDown,
-                      child: Text(
-                        '${c['n'] ?? (canPick && free ? 'TAP' : '')}',
-                        style: AppText.label(13,
-                            color: ownerColour != null ? Palette.onTeam(ownerColour) : Palette.text),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ),
-      );
-    }
-
-    Widget head(String t) => Expanded(
-          child: Padding(
-            padding: const EdgeInsets.all(3),
-            child: FittedBox(fit: BoxFit.scaleDown, child: Text(t, style: AppText.label(12, color: Palette.yellow))),
+    switch (v['game']) {
+      case 'xi':
+        final seconds = (board['seconds'] as num?)?.toDouble() ?? 1;
+        return ValueListenableBuilder<double>(
+          valueListenable: _left,
+          builder: (context, left, _) => XiLayout(
+            data: board,
+            scores: scores,
+            left: board['phase'] == 'ticking' && v['left'] != null ? left : seconds,
+            startLabel: 'STARTING…',
+            answerBox: answerBox(),
           ),
         );
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(12, 8, 12, 0),
-      child: Column(children: [
-        Row(children: [const Expanded(child: SizedBox()), for (final c in cols) head(c)]),
-        for (var r = 0; r < rows.length; r++)
-          Row(children: [head(rows[r]), for (var k = 0; k < cols.length; k++) cell(r * cols.length + k)]),
-      ]),
-    );
+      case 'ttt':
+        final choosing = stage == 'choose';
+        Widget bottom;
+        if (stage == 'wait') {
+          bottom = _status('${v['headline'] ?? ''}'.toUpperCase());
+        } else if (choosing && !mine) {
+          bottom = _status('${whoName.toUpperCase()} IS PICKING A SQUARE');
+        } else if (choosing) {
+          bottom = Column(children: [
+            const Text(
+              'Tap an empty square, then name a player who played for both clubs.\n'
+              'Once you pick a square you\'re locked in. Each player once per grid.',
+              textAlign: TextAlign.center,
+              style: TextStyle(color: Palette.muted, height: 1.4),
+            ),
+            const SizedBox(height: 10),
+            OutlinedButton.icon(
+              onPressed: () => widget.room.pass(q),
+              icon: const Icon(Icons.skip_next_rounded),
+              label: Text("DON'T KNOW ANY — PASS", style: AppText.label(15, color: Palette.text)),
+              style: OutlinedButton.styleFrom(
+                foregroundColor: Palette.text,
+                side: const BorderSide(color: Palette.line),
+                padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
+              ),
+            ),
+          ]);
+        } else {
+          bottom = Column(children: [
+            Text('${v['headline'] ?? ''}', textAlign: TextAlign.center, style: AppText.headline(20, color: Palette.yellow)),
+            const SizedBox(height: 6),
+            clockAndBox(),
+          ]);
+        }
+        return Column(children: [
+          scores,
+          Expanded(
+            child: TttLayout(
+              data: board,
+              bottom: bottom,
+              onTap: mine && choosing ? (i) => widget.room.answer(q, 'choice:$i') : null,
+            ),
+          ),
+        ]);
+      case 'pt':
+        return Column(children: [
+          scores,
+          Expanded(child: PtLayout(data: board, answerBox: clockAndBox())),
+        ]);
+      case 'co':
+        return Column(children: [
+          scores,
+          Expanded(child: CoLayout(data: board, answerBox: clockAndBox())),
+        ]);
+      case 'bid':
+        final phase = '${board['phase']}';
+        return Column(children: [
+          if (phase == 'bidding' || phase == 'finished') scores,
+          Expanded(
+            child: BidLayout(
+              data: board,
+              controls: mine && stage == 'bid'
+                  ? BidControls(
+                      data: board,
+                      onRaise: (n) => widget.room.answer(q, 'act:raise:$n'),
+                      onChallenge: () => widget.room.answer(q, 'act:challenge'),
+                      onPass: () => widget.room.answer(q, 'act:pass'),
+                    )
+                  : _status(whoName.isEmpty ? '' : '${whoName.toUpperCase()} IS DECIDING'),
+              answerBox: clockAndBox(),
+            ),
+          ),
+        ]);
+    }
+    return _center('EYES ON THE MAIN SCREEN', '${v['headline'] ?? ''}', scores: v['teams']);
   }
 
   Widget _status(String text) => Padding(

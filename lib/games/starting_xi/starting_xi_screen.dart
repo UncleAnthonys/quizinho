@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -84,10 +85,15 @@ class _StartingXiScreenState extends State<StartingXiScreen>
     final t = widget.round.tournament;
     final m = c.match;
     final key = '${t.rounds.length}-xi-$_turn';
-    final named = [for (final s in m.lineup) if (c.namedBy.containsKey(s.playerId)) s.playerName];
+    final extra = [for (var i = 0; i < t.teamCount; i++) _extra(c, i)];
     switch (c.phase) {
       case BombPhase.handover:
       case BombPhase.ticking:
+        // On their own phone the bomb passes straight on — no "tap to start"
+        // to buy thinking time. Only a passed-round host phone waits for a tap.
+        if (c.phase == BombPhase.handover && p.phoneFor(c.currentTeam, name: _turnPlayer) != null) {
+          scheduleMicrotask(c.startTurn);
+        }
         final ticking = c.phase == BombPhase.ticking;
         p.show(
           key: ticking ? key : '$key-go',
@@ -97,7 +103,9 @@ class _StartingXiScreenState extends State<StartingXiScreen>
           title: 'STARTING XI BOMB · ${c.turnSeconds}s',
           headline: 'NAME ${m.targetTeam.toUpperCase()}’S XI',
           sub: '${m.home} v ${m.away} · ${m.score} · ${m.year}',
-          lines: named.isEmpty ? const ['Nobody named yet'] : named,
+          game: 'xi',
+          board: _view(c),
+          extra: extra,
           left: ticking ? c.secondsLeft : null,
           total: ticking ? c.turnSeconds.toDouble() : null,
           index: services.repo.players,
@@ -108,9 +116,9 @@ class _StartingXiScreenState extends State<StartingXiScreen>
           onReady: c.startTurn,
         );
       case BombPhase.exploded:
-        p.idle('BOOM! ${t.teamName(c.lastExploded ?? c.currentTeam)} lose a life');
+        p.idle('BOOM!', game: 'xi', board: _view(c), extra: extra);
       case BombPhase.finished:
-        p.idle('Starting XI Bomb — round over');
+        p.idle('Starting XI Bomb', game: 'xi', board: _view(c), extra: extra);
     }
   }
 
@@ -176,125 +184,27 @@ class _StartingXiScreenState extends State<StartingXiScreen>
     }
     final c = _c;
     if (c == null) return const LoadingRound();
-    final m = c.match;
-    final finished = c.phase == BombPhase.finished;
-    final exploded = c.phase == BombPhase.exploded;
     final typing = typingNow && c.phase == BombPhase.ticking;
-
-    return Scaffold(
-      resizeToAvoidBottomInset: true,
-      body: AnimatedContainer(
-        duration: const Duration(milliseconds: 200),
-        foregroundDecoration: BoxDecoration(color: exploded ? Palette.danger.withValues(alpha: 0.18) : Colors.transparent),
-        child: PitchBackground(
-          child: SafeArea(
-            child: Column(children: [
-              typing
-                  ? const SizedBox.shrink()
-                  : Scoreboard(
-                      tournament: t,
-                      highlightTeam: finished ? null : c.currentTeam,
-                      extra: (i) => c.livesLeft[i]! > 0 ? '${'♥' * c.livesLeft[i]!}  ${c.correctByTeam[i]} named' : 'OUT',
-                    ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(16, 4, 16, 0),
-                child: Column(children: [
-                  Row(children: [
-                    Text('STARTING XI BOMB', style: AppText.label(15, color: Palette.yellow)),
-                    const Spacer(),
-                    if (widget.round.multiplier > 1)
-                      Text('x${widget.round.multiplier} POINTS', style: AppText.label(15, color: Palette.gold)),
-                  ]),
-                  FittedBox(
-                    fit: BoxFit.scaleDown,
-                    child: Text('NAME ${m.targetTeam.toUpperCase()}’S XI', style: AppText.headline(30)),
-                  ),
-                  Text(
-                    '${m.home} v ${m.away} · ${m.score} · ${m.year}',
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(color: Palette.muted, fontSize: 13),
-                  ),
-                  Text(m.title, style: AppText.label(13)),
-                ]),
-              ),
-              CommentaryBanner(text: commentaryText),
-              // Keyboard up: swap the pitch for a one-line list of who's been named.
-              if (typing)
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-                  child: Text(
-                    c.namedBy.isEmpty
-                        ? 'Nobody named yet'
-                        : 'Named: ${[for (final s in m.lineup) if (c.namedBy.containsKey(s.playerId)) s.playerName.split(' ').last].join(', ')}',
-                    style: AppText.label(14, color: Palette.text),
-                  ),
-                )
-              else
-                Flexible(flex: 5, child: _Formation(match: m, named: c.namedBy, revealAll: finished, tournament: t)),
-              Flexible(flex: 6, child: _bottom(c, t)),
-            ]),
-          ),
-        ),
+    final colour = t.config.teams[c.currentTeam].colorIndex;
+    return XiLayout(
+      data: _view(c),
+      typing: typing,
+      left: c.secondsLeft,
+      multiplier: widget.round.multiplier,
+      scores: Scoreboard(
+        tournament: t,
+        highlightTeam: c.phase == BombPhase.finished ? null : c.currentTeam,
+        extra: (i) => _extra(c, i),
       ),
-    );
-  }
-
-  Widget _bottom(StartingXiController c, Tournament t) {
-    final team = c.currentTeam;
-    final colour = t.config.teams[team].colorIndex;
-    if (c.phase == BombPhase.handover) {
-        return Padding(
-          padding: const EdgeInsets.all(16),
-          child: GestureDetector(
-            onTap: c.startTurn,
-            child: Container(
-              width: double.infinity,
-              decoration: BoxDecoration(color: Palette.team(colour), borderRadius: BorderRadius.circular(24)),
-              child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-                Icon(Icons.phone_iphone, size: 44, color: Palette.onTeam(colour)),
-                const SizedBox(height: 6),
-                Text('PASS TO', style: AppText.label(18, color: Palette.onTeam(colour))),
-                FittedBox(
-                  fit: BoxFit.scaleDown,
-                  child: Text((_turnPlayer ?? t.teamName(team)).toUpperCase(),
-                      style: AppText.headline(54, color: Palette.onTeam(colour))),
-                ),
-                if (_turnPlayer != null)
-                  Text(t.teamName(team).toUpperCase(), style: AppText.label(18, color: Palette.onTeam(colour))),
-                const SizedBox(height: 6),
-                Text(
-                    _phones?.remote != null
-                        ? 'STARTING ON THEIR PHONE — OR TAP HERE'
-                        : 'TAP WHEN READY — ${c.turnSeconds}s ON THE CLOCK',
-                    style: AppText.label(15, color: Palette.onTeam(colour))),
-              ]),
-            ),
-          ),
-        );
-    }
-    if (c.phase == BombPhase.ticking) {
-        return SingleChildScrollView(
-          padding: const EdgeInsets.fromLTRB(16, 4, 16, 16),
-          child: Column(children: [
-            Row(children: [
-              _Bomb(fraction: c.fractionLeft),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                  TeamChip(name: _turnPlayer ?? t.teamName(team), colorIndex: colour),
-                  const SizedBox(height: 6),
-                  TimerBar(fraction: c.fractionLeft, seconds: c.secondsLeft),
-                ]),
-              ),
-            ]),
-            const SizedBox(height: 10),
-            if (_phones?.remote != null)
-              OnTheirPhone(
-                name: _turnPlayer ?? t.teamName(team),
-                onSkip: () => setState(() => _phones!.playHere()),
-              )
-            else
-            PlayerPicker(
+      commentary: CommentaryBanner(text: commentaryText),
+      onStart: c.startTurn,
+      onContinue: c.continueAfterExplosion,
+      answerBox: _phones?.remote != null
+          ? OnTheirPhone(
+              name: _turnPlayer ?? t.teamName(c.currentTeam),
+              onSkip: () => setState(() => _phones!.playHere()),
+            )
+          : PlayerPicker(
               key: ValueKey('xi-$_turn'),
               index: services.repo.players,
               voice: services.voice,
@@ -304,62 +214,236 @@ class _StartingXiScreenState extends State<StartingXiScreen>
               isAnswer: (p) => !c.namedBy.containsKey(p.id) && c.match.lineup.any((s) => s.playerId == p.id),
               onPass: c.pass,
             ),
-          ]),
-        );
-    }
-    if (c.phase == BombPhase.exploded) {
-        final lost = c.lastExploded ?? team;
-        final out = c.livesLeft[lost]! <= 0;
-        return Padding(
-          padding: const EdgeInsets.all(16),
-          child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-            _Shake(child: Text('BOOM!', style: AppText.headline(80, color: Palette.danger))),
-            Text(
-              out ? '${t.teamName(lost).toUpperCase()} ARE OUT' : '${t.teamName(lost).toUpperCase()} LOSE A LIFE',
-              textAlign: TextAlign.center,
-              style: AppText.headline(30),
-            ),
-            const SizedBox(height: 20),
-            BigButton(label: 'Continue', icon: Icons.arrow_forward, onPressed: c.continueAfterExplosion),
-          ]),
-        );
-    }
-    {
-        final bonus = c.bonusTeams;
-        return SingleChildScrollView(
-          padding: const EdgeInsets.all(16),
-          child: Column(children: [
-            Text(c.isComplete ? 'FULL XI NAMED!' : 'LAST TEAM STANDING', style: AppText.headline(34, color: Palette.yellow)),
-            const SizedBox(height: 8),
-            if (bonus.isNotEmpty)
-              Wrap(spacing: 8, runSpacing: 8, alignment: WrapAlignment.center, children: [
-                for (final b in bonus) TeamChip(name: t.teamName(b), colorIndex: t.config.teams[b].colorIndex),
-              ]),
-            if (bonus.isNotEmpty)
+      finish: BigButton(label: 'Finish round', icon: Icons.flag, onPressed: () => widget.round.onComplete(c.result())),
+    );
+  }
+
+  String _extra(StartingXiController c, int i) =>
+      c.livesLeft[i]! > 0 ? '${'♥' * c.livesLeft[i]!}  ${c.correctByTeam[i]} named' : 'OUT';
+
+  /// Everything both the host and joined phones draw.
+  Map<String, Object?> _view(StartingXiController c) {
+    final t = widget.round.tournament;
+    final m = c.match;
+    final lost = c.lastExploded ?? c.currentTeam;
+    return {
+      'phase': c.phase.name,
+      'target': m.targetTeam,
+      'match': '${m.home} v ${m.away} · ${m.score} · ${m.year}',
+      'title': m.title,
+      'lineup': [for (final s in m.lineup) {'p': s.position, 'n': s.playerName, 'i': s.playerId}],
+      'named': {for (final e in c.namedBy.entries) e.key: e.value},
+      'colours': [for (final team in t.config.teams) team.colorIndex],
+      'team': c.currentTeam,
+      'teamName': t.teamName(c.currentTeam),
+      if (_turnPlayer != null) 'who': _turnPlayer,
+      'seconds': c.turnSeconds,
+      'lost': t.teamName(lost),
+      'out': c.livesLeft[lost]! <= 0,
+      'complete': c.isComplete,
+      'bonus': [for (final b in c.bonusTeams) {'name': t.teamName(b), 'color': t.config.teams[b].colorIndex}],
+      'bonusPts': StartingXiController.survivorBonus * widget.round.multiplier,
+    };
+  }
+}
+
+/// The whole Starting XI Bomb screen, from a plain snapshot — the host and
+/// joined phones draw exactly the same thing. [answerBox] is the answer box
+/// (or "on their phone"); [onStart] / [onContinue] / [finish] are the host's
+/// taps (left out on a phone that's only watching).
+class XiLayout extends StatelessWidget {
+  const XiLayout({
+    super.key,
+    required this.data,
+    required this.scores,
+    required this.answerBox,
+    required this.left,
+    this.multiplier = 1,
+    this.typing = false,
+    this.commentary,
+    this.onStart,
+    this.onContinue,
+    this.finish,
+    this.startLabel,
+  });
+  final Map<String, Object?> data;
+  final Widget scores;
+  final Widget answerBox;
+
+  /// Seconds left on the bomb.
+  final double left;
+  final int multiplier;
+  final bool typing;
+  final Widget? commentary;
+  final VoidCallback? onStart;
+  final VoidCallback? onContinue;
+  final Widget? finish;
+
+  /// Overrides the handover card's bottom line.
+  final String? startLabel;
+
+  List<Object?> _list(String k) => (data[k] as List?) ?? const [];
+  int _int(Object? v) => (v as num?)?.toInt() ?? 0;
+
+  @override
+  Widget build(BuildContext context) {
+    final phase = '${data['phase']}';
+    final finished = phase == 'finished';
+    final exploded = phase == 'exploded';
+    final lineup = [
+      for (final (i, s) in _list('lineup').indexed)
+        if (s is Map) LineupSlot(index: i, playerId: '${s['i']}', playerName: '${s['n']}', position: '${s['p']}'),
+    ];
+    final named = {for (final e in ((data['named'] as Map?) ?? const {}).entries) '${e.key}': _int(e.value)};
+    final colours = [for (final c in _list('colours')) _int(c)];
+    return Scaffold(
+      resizeToAvoidBottomInset: true,
+      body: AnimatedContainer(
+        duration: const Duration(milliseconds: 200),
+        foregroundDecoration: BoxDecoration(color: exploded ? Palette.danger.withValues(alpha: 0.18) : Colors.transparent),
+        child: PitchBackground(
+          child: SafeArea(
+            child: Column(children: [
+              typing ? const SizedBox.shrink() : scores,
               Padding(
-                padding: const EdgeInsets.only(top: 6),
-                child: Text('+${StartingXiController.survivorBonus * widget.round.multiplier} BONUS',
-                    style: AppText.label(15, color: Palette.gold)),
+                padding: const EdgeInsets.fromLTRB(16, 4, 16, 0),
+                child: Column(children: [
+                  Row(children: [
+                    Text('STARTING XI BOMB', style: AppText.label(15, color: Palette.yellow)),
+                    const Spacer(),
+                    if (multiplier > 1) Text('x$multiplier POINTS', style: AppText.label(15, color: Palette.gold)),
+                  ]),
+                  FittedBox(
+                    fit: BoxFit.scaleDown,
+                    child: Text('NAME ${'${data['target'] ?? ''}'.toUpperCase()}’S XI', style: AppText.headline(30)),
+                  ),
+                  Text('${data['match'] ?? ''}', textAlign: TextAlign.center, style: const TextStyle(color: Palette.muted, fontSize: 13)),
+                  Text('${data['title'] ?? ''}', style: AppText.label(13)),
+                ]),
               ),
-            const SizedBox(height: 16),
-            BigButton(label: 'Finish round', icon: Icons.flag, onPressed: () => widget.round.onComplete(c.result())),
-          ]),
-        );
+              if (commentary != null) commentary!,
+              // Keyboard up: swap the pitch for a one-line list of who's been named.
+              if (typing)
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                  child: Text(
+                    named.isEmpty
+                        ? 'Nobody named yet'
+                        : 'Named: ${[for (final s in lineup) if (named.containsKey(s.playerId)) s.playerName.split(' ').last].join(', ')}',
+                    style: AppText.label(14, color: Palette.text),
+                  ),
+                )
+              else
+                Flexible(flex: 5, child: _Formation(lineup: lineup, named: named, revealAll: finished, colours: colours)),
+              Flexible(flex: 6, child: _bottom(phase, colours)),
+            ]),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _bottom(String phase, List<int> colours) {
+    final team = _int(data['team']);
+    final colour = team < colours.length ? colours[team] : 0;
+    final who = '${data['who'] ?? data['teamName'] ?? ''}';
+    final seconds = _int(data['seconds']);
+    final fraction = seconds == 0 ? 0.0 : (left / seconds).clamp(0.0, 1.0);
+    if (phase == 'handover') {
+      return Padding(
+        padding: const EdgeInsets.all(16),
+        child: GestureDetector(
+          onTap: onStart,
+          child: Container(
+            width: double.infinity,
+            decoration: BoxDecoration(color: Palette.team(colour), borderRadius: BorderRadius.circular(24)),
+            child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+              Icon(Icons.phone_iphone, size: 44, color: Palette.onTeam(colour)),
+              const SizedBox(height: 6),
+              Text('PASS TO', style: AppText.label(18, color: Palette.onTeam(colour))),
+              FittedBox(
+                fit: BoxFit.scaleDown,
+                child: Text(who.toUpperCase(), style: AppText.headline(54, color: Palette.onTeam(colour))),
+              ),
+              if (data['who'] != null)
+                Text('${data['teamName'] ?? ''}'.toUpperCase(), style: AppText.label(18, color: Palette.onTeam(colour))),
+              const SizedBox(height: 6),
+              Text(startLabel ?? 'TAP WHEN READY — ${seconds}s ON THE CLOCK',
+                  style: AppText.label(15, color: Palette.onTeam(colour))),
+            ]),
+          ),
+        ),
+      );
     }
+    if (phase == 'ticking') {
+      return SingleChildScrollView(
+        padding: const EdgeInsets.fromLTRB(16, 4, 16, 16),
+        child: Column(children: [
+          Row(children: [
+            _Bomb(fraction: fraction),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                TeamChip(name: who, colorIndex: colour),
+                const SizedBox(height: 6),
+                TimerBar(fraction: fraction, seconds: left),
+              ]),
+            ),
+          ]),
+          const SizedBox(height: 10),
+          answerBox,
+        ]),
+      );
+    }
+    if (phase == 'exploded') {
+      final lost = '${data['lost'] ?? ''}'.toUpperCase();
+      return Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+          _Shake(child: Text('BOOM!', style: AppText.headline(80, color: Palette.danger))),
+          Text(data['out'] == true ? '$lost ARE OUT' : '$lost LOSE A LIFE',
+              textAlign: TextAlign.center, style: AppText.headline(30)),
+          if (onContinue != null) ...[
+            const SizedBox(height: 20),
+            BigButton(label: 'Continue', icon: Icons.arrow_forward, onPressed: onContinue),
+          ],
+        ]),
+      );
+    }
+    final bonus = [for (final b in _list('bonus')) if (b is Map) b];
+    return SingleChildScrollView(
+      padding: const EdgeInsets.all(16),
+      child: Column(children: [
+        Text(data['complete'] == true ? 'FULL XI NAMED!' : 'LAST TEAM STANDING', style: AppText.headline(34, color: Palette.yellow)),
+        const SizedBox(height: 8),
+        if (bonus.isNotEmpty)
+          Wrap(spacing: 8, runSpacing: 8, alignment: WrapAlignment.center, children: [
+            for (final b in bonus) TeamChip(name: '${b['name']}', colorIndex: _int(b['color'])),
+          ]),
+        if (bonus.isNotEmpty)
+          Padding(
+            padding: const EdgeInsets.only(top: 6),
+            child: Text('+${data['bonusPts']} BONUS', style: AppText.label(15, color: Palette.gold)),
+          ),
+        if (finish != null) ...[const SizedBox(height: 16), finish!],
+      ]),
+    );
   }
 }
 
 class _Formation extends StatelessWidget {
-  const _Formation({required this.match, required this.named, required this.revealAll, required this.tournament});
-  final HistoricMatch match;
+  const _Formation({required this.lineup, required this.named, required this.revealAll, required this.colours});
+  final List<LineupSlot> lineup;
   final Map<String, int> named;
   final bool revealAll;
-  final Tournament tournament;
+
+  /// Colour index per team.
+  final List<int> colours;
 
   @override
   Widget build(BuildContext context) {
     final lines = <int, List<LineupSlot>>{};
-    for (final s in match.lineup) {
+    for (final s in lineup) {
       lines.putIfAbsent(s.line, () => []).add(s);
     }
     final order = lines.keys.toList()..sort((a, b) => b.compareTo(a)); // attack at the top
@@ -368,7 +452,7 @@ class _Formation extends StatelessWidget {
       child: Column(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
         for (final line in order)
           Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-            for (final s in lines[line]!) Expanded(child: _Slot(slot: s, team: named[s.playerId], revealAll: revealAll, tournament: tournament)),
+            for (final s in lines[line]!) Expanded(child: _Slot(slot: s, team: named[s.playerId], revealAll: revealAll, colours: colours)),
           ]),
       ]),
     );
@@ -376,16 +460,17 @@ class _Formation extends StatelessWidget {
 }
 
 class _Slot extends StatelessWidget {
-  const _Slot({required this.slot, required this.team, required this.revealAll, required this.tournament});
+  const _Slot({required this.slot, required this.team, required this.revealAll, required this.colours});
   final LineupSlot slot;
   final int? team;
   final bool revealAll;
-  final Tournament tournament;
+  final List<int> colours;
 
   @override
   Widget build(BuildContext context) {
     final shown = team != null || revealAll;
-    final colour = team == null ? null : Palette.team(tournament.config.teams[team!].colorIndex);
+    final colourIndex = team == null || team! >= colours.length ? null : colours[team!];
+    final colour = colourIndex == null ? null : Palette.team(colourIndex);
     final surname = slot.playerName.split(' ').last;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 2),
@@ -403,7 +488,7 @@ class _Slot extends StatelessWidget {
             fit: BoxFit.scaleDown,
             child: Text(
               shown ? surname.toUpperCase() : '?',
-              style: AppText.headline(17, color: shown && team != null ? Palette.onTeam(tournament.config.teams[team!].colorIndex) : Palette.text),
+              style: AppText.headline(17, color: shown && colourIndex != null ? Palette.onTeam(colourIndex) : Palette.text),
             ),
           ),
         ]),

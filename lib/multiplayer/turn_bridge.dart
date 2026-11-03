@@ -16,6 +16,12 @@ enum TurnStage {
 
   /// Say or type an answer.
   answer,
+
+  /// Bid, challenge or pass (Bidding War).
+  bid,
+
+  /// Nothing to do: watching (a reveal, an explosion, the result).
+  wait,
 }
 
 /// Turn-based games (XI Bomb, Tic-Tac-Toe, Pointless, 501, Bidding War)
@@ -45,6 +51,7 @@ class TurnBridge {
   void Function()? _onPass;
   void Function()? _onReady;
   void Function(int)? _onChoose;
+  void Function(String)? _onAction;
 
   String? _lastShape;
   double? _sentLeft;
@@ -75,7 +82,9 @@ class TurnBridge {
     required String headline,
     String sub = '',
     List<String> lines = const [],
-    Map<String, Object?>? grid,
+    String game = '',
+    Map<String, Object?>? board,
+    List<String>? extra,
     double? left,
     double? total,
     PlayerIndex? index,
@@ -89,6 +98,9 @@ class TurnBridge {
     void Function()? onPass,
     void Function()? onReady,
     void Function(int square)? onChoose,
+
+    /// Anything else the phone sends ("raise:5", "challenge", "pass").
+    void Function(String action)? onAction,
   }) {
     final m = key == _hereKey ? null : phoneFor(team, name: name);
     remote = m;
@@ -98,6 +110,7 @@ class TurnBridge {
     _onPass = onPass;
     _onReady = onReady;
     _onChoose = onChoose;
+    _onAction = onAction;
     final who = name ?? tournament.teamName(team);
     final view = <String, Object?>{
       'kind': 'turn',
@@ -106,7 +119,9 @@ class TurnBridge {
       'headline': headline,
       'sub': sub,
       if (lines.isNotEmpty) 'lines': lines.take(40).toList(),
-      if (grid != null) 'grid': grid,
+      if (game.isNotEmpty) 'game': game,
+      if (board != null) 'board': board,
+      if (extra != null) 'extra': extra,
       'stage': stage.name,
       'round': '${tournament.roundNumber.clamp(1, tournament.totalRounds)}/${tournament.totalRounds}',
       'teams': teamsView(tournament),
@@ -130,13 +145,31 @@ class TurnBridge {
     remote = null;
   }
 
-  /// Between turns: "eyes on the main screen".
-  void idle(String what) {
+  /// Between turns: "eyes on the main screen" — or, with [board], the
+  /// game's own screen (a reveal, an explosion, the result) on every phone.
+  void idle(String what, {String game = '', Map<String, Object?>? board, List<String>? extra, int? team}) {
     remote = null;
     _key = '';
-    _lastShape = null;
-    _sentLeft = null;
-    room.showMainScreen(tournament, what);
+    if (board == null) {
+      _lastShape = null;
+      _sentLeft = null;
+      room.showMainScreen(tournament, what);
+      return;
+    }
+    _publish({
+      'kind': 'turn',
+      'q': '',
+      'title': '',
+      'headline': what,
+      'sub': '',
+      'game': game,
+      'board': board,
+      if (extra != null) 'extra': extra,
+      'stage': TurnStage.wait.name,
+      'round': '${tournament.roundNumber.clamp(1, tournament.totalRounds)}/${tournament.totalRounds}',
+      'teams': teamsView(tournament),
+      'who': {if (team != null) 'team': team},
+    });
   }
 
   void _publish(Map<String, Object?> v, {double? left, double? total}) {
@@ -175,6 +208,8 @@ class TurnBridge {
     if (id == null) return;
     if (id == 'ready') {
       _onReady?.call();
+    } else if (id.startsWith('act:')) {
+      _onAction?.call(id.substring(4));
     } else if (id.startsWith('choice:')) {
       final i = int.tryParse(id.substring(7));
       if (i != null) _onChoose?.call(i);

@@ -103,8 +103,10 @@ class _TicTacToeScreenState extends State<TicTacToeScreen>
   void _syncPhones(TicTacToeController c) {
     final p = _phones;
     if (p == null) return;
+    final extra = [for (var i = 0; i < _t.teamCount; i++) '${c.squaresOf(i)} ▢'];
     if (c.phase == TttPhase.finished) {
-      p.idle(c.winner != null ? '${_t.teamName(c.winner!)} get three in a row!' : 'Tic-Tac-Toe — squares decide it');
+      p.idle(c.winner != null ? '${_t.teamName(c.winner!)} get three in a row!' : 'Squares decide it',
+          game: 'ttt', board: _view(c), extra: extra);
       return;
     }
     final answering = c.phase == TttPhase.answering;
@@ -116,21 +118,11 @@ class _TicTacToeScreenState extends State<TicTacToeScreen>
       stage: answering ? TurnStage.answer : TurnStage.choose,
       title: 'TIC-TAC-TOE',
       headline: answering && sq != null
-          ? '${c.grid.rows[sq ~/ 3].name} + ${c.grid.cols[sq % 3].name}'
-          : 'PICK A SQUARE',
-      sub: answering ? 'Name a player who played for both' : 'Then name a player who played for both clubs',
-      grid: {
-        'rows': [for (final r in c.grid.rows) r.name],
-        'cols': [for (final k in c.grid.cols) k.name],
-        'cells': [
-          for (var i = 0; i < 9; i++)
-            {
-              if (c.owner[i] != null) 't': c.owner[i],
-              if (c.claimedWith[i] != null) 'n': c.claimedWith[i],
-              if (c.selected == i) 'sel': true,
-            },
-        ],
-      },
+          ? '${c.grid.rows[sq ~/ 3].name.toUpperCase()}  +  ${c.grid.cols[sq % 3].name.toUpperCase()}'
+          : '',
+      game: 'ttt',
+      board: _view(c),
+      extra: extra,
       left: answering ? c.secondsLeft : null,
       total: answering ? c.answerSeconds.toDouble() : null,
       index: services.repo.players,
@@ -216,24 +208,15 @@ class _TicTacToeScreenState extends State<TicTacToeScreen>
                     highlightTeam: c.phase == TttPhase.finished ? null : c.currentTeam,
                     extra: (i) => '${c.squaresOf(i)} ▢',
                   ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(16, 4, 16, 0),
-              child: Row(children: [
-                Text('TIC-TAC-TOE', style: AppText.label(15, color: Palette.yellow)),
-                const Spacer(),
-                if (widget.round.multiplier > 1)
-                  Text('x${widget.round.multiplier} POINTS', style: AppText.label(15, color: Palette.gold)),
-              ]),
-            ),
             typing ? const SizedBox.shrink() : CommentaryBanner(text: commentaryText),
             Expanded(
-              child: ListView(padding: const EdgeInsets.fromLTRB(12, 4, 12, 16), children: [
-                typing ? const SizedBox.shrink() : _turnBanner(c),
-                typing ? const SizedBox.shrink() : const SizedBox(height: 8),
-                typing ? const SizedBox.shrink() : _Board(controller: c, tournament: _t, onTap: c.choose),
-                typing ? const SizedBox.shrink() : const SizedBox(height: 12),
-                _bottom(c),
-              ]),
+              child: TttLayout(
+                data: _view(c),
+                multiplier: widget.round.multiplier,
+                typing: typing,
+                onTap: c.choose,
+                bottom: _bottom(c),
+              ),
             ),
           ]),
         ),
@@ -241,24 +224,9 @@ class _TicTacToeScreenState extends State<TicTacToeScreen>
     );
   }
 
-  Widget _turnBanner(TicTacToeController c) {
-    if (c.phase == TttPhase.finished) {
-      final w = c.winner;
-      return Center(
-        child: Text(
-          w != null ? '${_t.teamName(w).toUpperCase()} GET THREE IN A ROW!' : 'NO LINE — SQUARES DECIDE IT',
-          textAlign: TextAlign.center,
-          style: AppText.headline(26, color: Palette.yellow),
-        ),
-      );
-    }
-    final team = c.currentTeam;
-    return Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-      TeamChip(name: _turnPlayer ?? _t.teamName(team), colorIndex: _t.config.teams[team].colorIndex, size: 20),
-      const SizedBox(width: 10),
-      Text(c.phase == TttPhase.choosing ? 'PICK A SQUARE' : 'NAME A PLAYER', style: AppText.headline(22)),
-    ]);
-  }
+  /// Everything both the host and joined phones draw.
+  Map<String, Object?> _view(TicTacToeController c) =>
+      {...TttBoard.snapshot(c, _t), 'who': _turnPlayer ?? _t.teamName(c.currentTeam)};
 
   Widget _bottom(TicTacToeController c) {
     if (_phones?.remote case final m?) {
@@ -343,16 +311,104 @@ class _TicTacToeScreenState extends State<TicTacToeScreen>
   }
 }
 
-class _Board extends StatelessWidget {
-  const _Board({required this.controller, required this.tournament, required this.onTap});
-  final TicTacToeController controller;
-  final Tournament tournament;
-  final void Function(int square) onTap;
+/// The whole Tic-Tac-Toe screen under the scores — title, whose turn, the
+/// grid — with the host's or the phone's own [bottom] (answer box, buttons).
+class TttLayout extends StatelessWidget {
+  const TttLayout({
+    super.key,
+    required this.data,
+    required this.bottom,
+    this.multiplier = 1,
+    this.typing = false,
+    this.onTap,
+  });
+  final Map<String, Object?> data;
+  final Widget bottom;
+  final int multiplier;
+
+  /// Keyboard up: the board gives way to the answer box.
+  final bool typing;
+  final void Function(int square)? onTap;
 
   @override
   Widget build(BuildContext context) {
-    final c = controller;
-    Widget clubLabel(Club club) => Container(
+    final phase = '${data['phase']}';
+    final colours = [for (final c in (data['colours'] as List?) ?? const []) (c as num).toInt()];
+    final team = (data['team'] as num?)?.toInt() ?? 0;
+    final banner = phase == 'finished'
+        ? Center(
+            child: Text(
+              data['winner'] != null ? '${'${data['winner']}'.toUpperCase()} GET THREE IN A ROW!' : 'NO LINE — SQUARES DECIDE IT',
+              textAlign: TextAlign.center,
+              style: AppText.headline(26, color: Palette.yellow),
+            ),
+          )
+        : Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+            TeamChip(name: '${data['who'] ?? ''}', colorIndex: team < colours.length ? colours[team] : 0, size: 20),
+            const SizedBox(width: 10),
+            Text(phase == 'choosing' ? 'PICK A SQUARE' : 'NAME A PLAYER', style: AppText.headline(22)),
+          ]);
+    return Column(children: [
+      Padding(
+        padding: const EdgeInsets.fromLTRB(16, 4, 16, 0),
+        child: Row(children: [
+          Text('TIC-TAC-TOE', style: AppText.label(15, color: Palette.yellow)),
+          const Spacer(),
+          if (multiplier > 1) Text('x$multiplier POINTS', style: AppText.label(15, color: Palette.gold)),
+        ]),
+      ),
+      Expanded(
+        child: ListView(padding: const EdgeInsets.fromLTRB(12, 4, 12, 16), children: [
+          typing ? const SizedBox.shrink() : banner,
+          typing ? const SizedBox.shrink() : const SizedBox(height: 8),
+          typing ? const SizedBox.shrink() : TttBoard(data: data, onTap: onTap),
+          typing ? const SizedBox.shrink() : const SizedBox(height: 12),
+          bottom,
+        ]),
+      ),
+    ]);
+  }
+}
+
+/// The grid, drawn from a plain snapshot ([snapshot]) so joined phones draw
+/// exactly what the host does.
+class TttBoard extends StatelessWidget {
+  const TttBoard({super.key, required this.data, this.onTap});
+
+  /// From [snapshot]: rows, cols (club names), owner/claimed per square,
+  /// selected, line (winning squares), colours (per team), choosing.
+  final Map<String, Object?> data;
+  final void Function(int square)? onTap;
+
+  static Map<String, Object?> snapshot(TicTacToeController c, Tournament t) => {
+        'rows': [for (final r in c.grid.rows) r.name],
+        'cols': [for (final k in c.grid.cols) k.name],
+        'owner': [...c.owner],
+        'claimed': [...c.claimedWith],
+        if (c.selected != null) 'selected': c.selected,
+        if (c.winningLine != null) 'line': c.winningLine,
+        'colours': [for (final team in t.config.teams) team.colorIndex],
+        'choosing': c.phase == TttPhase.choosing,
+        'phase': c.phase.name,
+        'team': c.currentTeam,
+        if (c.winner != null) 'winner': t.teamName(c.winner!),
+      };
+
+  static List<T?> _list<T>(Object? v) => v is List ? [for (final x in v) x is T ? x : null] : const [];
+
+  @override
+  Widget build(BuildContext context) {
+    final rows = [for (final r in _list<String>(data['rows'])) r ?? ''];
+    final cols = [for (final k in _list<String>(data['cols'])) k ?? ''];
+    final owner = [for (final o in _list<num>(data['owner'])) o?.toInt()];
+    final claimed = _list<String>(data['claimed']);
+    final colours = [for (final c in _list<num>(data['colours'])) c?.toInt() ?? 0];
+    final line = [for (final i in _list<num>(data['line'])) i?.toInt()];
+    final selectedSq = (data['selected'] as num?)?.toInt();
+    final choosing = data['choosing'] == true;
+    bool canChoose(int i) => choosing && i < owner.length && owner[i] == null;
+
+    Widget clubLabel(String name) => Container(
           alignment: Alignment.center,
           padding: const EdgeInsets.all(4),
           decoration: BoxDecoration(
@@ -365,7 +421,7 @@ class _Board extends StatelessWidget {
           child: FittedBox(
             fit: BoxFit.scaleDown,
             child: Text(
-              club.name.toUpperCase().split(' ').join('\n'),
+              name.toUpperCase().split(' ').join('\n'),
               textAlign: TextAlign.center,
               style: AppText.headline(17, weight: FontWeight.w800).copyWith(height: 1.05),
             ),
@@ -373,12 +429,13 @@ class _Board extends StatelessWidget {
         );
 
     Widget square(int i) {
-      final ownerTeam = c.owner[i];
-      final selected = c.selected == i;
-      final winning = c.winningLine?.contains(i) ?? false;
-      final colour = ownerTeam == null ? null : tournament.config.teams[ownerTeam].colorIndex;
+      final ownerTeam = i < owner.length ? owner[i] : null;
+      final selected = selectedSq == i;
+      final winning = line.contains(i);
+      final colour = ownerTeam == null || ownerTeam >= colours.length ? null : colours[ownerTeam];
+      final tap = onTap;
       return GestureDetector(
-        onTap: c.canChoose(i) ? () => onTap(i) : null,
+        onTap: canChoose(i) && tap != null ? () => tap(i) : null,
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 250),
           alignment: Alignment.center,
@@ -391,14 +448,14 @@ class _Board extends StatelessWidget {
               width: winning || selected ? 4 : 1,
             ),
           ),
-          child: ownerTeam == null
+          child: colour == null
               ? Icon(selected ? Icons.mic_rounded : Icons.add_rounded,
-                  color: c.canChoose(i) || selected ? Palette.yellow : Palette.muted, size: 30)
+                  color: (canChoose(i) && tap != null) || selected ? Palette.yellow : Palette.muted, size: 30)
               : Padding(
                   padding: const EdgeInsets.all(6),
                   child: FittedBox(
                     fit: BoxFit.scaleDown,
-                    child: _ClaimName(c.claimedWith[i] ?? '', color: Palette.onTeam(colour!)),
+                    child: _ClaimName(i < claimed.length ? claimed[i] ?? '' : '', color: Palette.onTeam(colour)),
                   ),
                 ),
         ),
@@ -410,12 +467,12 @@ class _Board extends StatelessWidget {
     return Column(children: [
       Row(children: [
         cell(const SizedBox()),
-        for (final club in c.grid.cols) cell(clubLabel(club)),
+        for (final club in cols) cell(clubLabel(club)),
       ]),
-      for (var r = 0; r < 3; r++)
+      for (var r = 0; r < rows.length; r++)
         Row(children: [
-          cell(clubLabel(c.grid.rows[r])),
-          for (var col = 0; col < 3; col++) cell(square(r * 3 + col)),
+          cell(clubLabel(rows[r])),
+          for (var col = 0; col < cols.length; col++) cell(square(r * cols.length + col)),
         ]),
     ]);
   }

@@ -32,9 +32,6 @@ class _BiddingWarScreenState extends State<BiddingWarScreen>
   int _pickerKey = 0;
   int _lastSecond = -1;
 
-  /// The bid the current team is about to make (stepper value).
-  int _pending = 1;
-
   Tournament get _t => widget.round.tournament;
 
   @override
@@ -56,16 +53,13 @@ class _BiddingWarScreenState extends State<BiddingWarScreen>
     final c = BiddingWarController(category: b, teamCount: _t.teamCount, startTeam: _t.standings.last);
     c.addListener(() => _onChange(c));
     if (services.room case final room?) _phones = TurnBridge(room, _t)..start();
-    setState(() {
-      _c = c;
-      _pending = min(3, b.maxBid);
-    });
+    setState(() => _c = c);
     _syncPhones(c);
     startClock(c.advance);
   }
 
-  /// The challenged team names them on their captain's phone, when joined.
-  /// (Bids are called out loud and entered on the host.)
+  /// The team's bids, and naming them when challenged, on their captain's
+  /// phone when they've joined.
   TurnBridge? _phones;
 
   void _syncPhones(BiddingWarController c) {
@@ -74,9 +68,27 @@ class _BiddingWarScreenState extends State<BiddingWarScreen>
     final holder = c.holder;
     switch (c.phase) {
       case BidPhase.bidding:
-        p.idle('Bidding War: ${c.category.prompt} — bid ${c.currentBid}');
+        p.show(
+          key: '${_t.rounds.length}-bid-${c.currentBid}-${c.currentTeam}-${c.active.length}',
+          team: c.currentTeam,
+          stage: TurnStage.bid,
+          title: 'BIDDING WAR',
+          headline: c.category.prompt,
+          game: 'bid',
+          board: _view(c),
+          onAction: (a) {
+            if (a == 'challenge') {
+              c.challenge();
+            } else if (a == 'pass') {
+              c.pass();
+            } else if (a.startsWith('raise:')) {
+              final to = int.tryParse(a.substring(6));
+              if (to != null && c.canRaise && to >= c.minRaise && to <= c.maxBid) c.raise(to);
+            }
+          },
+        );
       case BidPhase.countdown:
-        p.idle('${_t.teamName(holder!)} challenged — name ${c.currentBid}!');
+        p.idle('${_t.teamName(holder!)} challenged — name ${c.currentBid}!', game: 'bid', board: _view(c));
       case BidPhase.answering:
         final clubs = c.category.answersAreClubs;
         p.show(
@@ -86,7 +98,8 @@ class _BiddingWarScreenState extends State<BiddingWarScreen>
           title: 'BIDDING WAR · ${c.correctCount} / ${c.currentBid}',
           headline: c.category.prompt,
           sub: 'Name ${c.currentBid} — keep them coming',
-          lines: c.named,
+          game: 'bid',
+          board: _view(c),
           left: c.secondsLeft,
           total: c.answerSeconds.toDouble(),
           index: clubs ? services.repo.clubIndex : services.repo.players,
@@ -99,7 +112,7 @@ class _BiddingWarScreenState extends State<BiddingWarScreen>
           onPick: c.submit,
         );
       case BidPhase.finished:
-        p.idle(c.completed == true ? 'Bid completed!' : 'Bluff called!');
+        p.idle(c.completed == true ? 'Bid completed!' : 'Bluff called!', game: 'bid', board: _view(c));
     }
   }
 
@@ -111,7 +124,6 @@ class _BiddingWarScreenState extends State<BiddingWarScreen>
         case BidEvent.raised:
           s.sound.play(Sfx.reveal, volume: 0.7);
           s.haptic(HapticStrength.medium);
-          _pending = min(c.minRaise, c.maxBid);
         case BidEvent.challenged:
           s.sound.play(Sfx.buzzIn);
           s.sound.play(Sfx.whistle);
@@ -189,200 +201,330 @@ class _BiddingWarScreenState extends State<BiddingWarScreen>
         child: SafeArea(
           child: Column(children: [
             if (c.phase == BidPhase.bidding || c.phase == BidPhase.finished) Scoreboard(tournament: _t, highlightTeam: c.phase == BidPhase.bidding ? c.currentTeam : null),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(16, 6, 16, 0),
-              child: Row(children: [
-                Text('BIDDING WAR', style: AppText.label(16, color: Palette.yellow)),
-                const Spacer(),
-                if (widget.round.multiplier > 1)
-                  Text('x${widget.round.multiplier} POINTS', style: AppText.label(15, color: Palette.gold)),
-              ]),
+            Expanded(
+              child: BidLayout(
+                data: _view(c),
+                multiplier: widget.round.multiplier,
+                commentary: CommentaryBanner(text: commentaryText),
+                controls: _controls(c),
+                answerBox: _answerBox(c),
+                finish: BigButton(label: 'Finish round', icon: Icons.flag, onPressed: () => widget.round.onComplete(c.result())),
+              ),
             ),
-            _CategoryCard(prompt: c.category.prompt, compact: c.phase == BidPhase.answering),
-            CommentaryBanner(text: commentaryText),
-            Expanded(child: _body(c)),
           ]),
         ),
       ),
     );
   }
 
-  Widget _body(BiddingWarController c) => switch (c.phase) {
-        BidPhase.bidding => _bidding(c),
-        BidPhase.countdown => _countdown(c),
-        BidPhase.answering => _answering(c),
-        BidPhase.finished => _result(c),
-      };
+  /// Everything both the host and joined phones draw.
+  Map<String, Object?> _view(BiddingWarController c) {
+    final finished = c.phase == BidPhase.finished;
+    final players = services.repo.players;
+    return {
+      'phase': c.phase.name,
+      'prompt': c.category.prompt,
+      'teams': [for (var i = 0; i < _t.teamCount; i++) {'name': _t.teamName(i), 'color': _t.config.teams[i].colorIndex}],
+      'team': c.currentTeam,
+      if (c.holder != null) 'holder': c.holder,
+      'bid': c.currentBid,
+      'max': c.maxBid,
+      'min': c.minRaise,
+      'seconds': c.answerSeconds,
+      'canRaise': c.canRaise,
+      'canChallenge': c.canChallenge,
+      'canPass': c.canPass,
+      'out': [for (var i = 0; i < _t.teamCount; i++) if (!c.active.contains(i)) _t.teamName(i)],
+      'count': max(1, c.secondsLeft.ceil()),
+      'correct': c.correctCount,
+      'named': c.named,
+      if (finished) ...{
+        'done': c.completed == true,
+        'winner': c.completed == true ? c.holder : c.challenger,
+        'points': BiddingWarController.points * widget.round.multiplier,
+        'full': [
+          for (final p in [
+            for (final id in c.category.answerIds) if (players.byId(id) != null) players.byId(id)!,
+          ]..sort((a, b) => b.fame.compareTo(a.fame)))
+            p.name,
+        ],
+      },
+    };
+  }
 
-  Widget _teamChip(int team, {double size = 20}) =>
-      TeamChip(name: _t.teamName(team), colorIndex: _t.config.teams[team].colorIndex, size: size);
+  /// Bid / challenge / pass here — or who's deciding on their own phone.
+  Widget _controls(BiddingWarController c) {
+    if (c.phase == BidPhase.bidding) {
+      if (_phones?.remote case final m?) {
+        return OnTheirPhone(name: '${m.name} (${_t.teamName(c.currentTeam)})', what: 'is deciding',
+            onSkip: () => setState(() => _phones!.playHere()));
+      }
+    }
+    return BidControls(data: _view(c), onRaise: c.raise, onChallenge: c.challenge, onPass: c.pass);
+  }
 
-  Widget _bidding(BiddingWarController c) {
-    final team = c.currentTeam;
-    final colour = _t.config.teams[team].colorIndex;
-    final pending = _pending.clamp(c.minRaise, max(c.minRaise, c.maxBid)).toInt();
+  /// The host's clock and answer box — or who's naming them on their own phone.
+  Widget _answerBox(BiddingWarController c) {
+    if (c.phase != BidPhase.answering) return const SizedBox.shrink();
+    final colour = _t.config.teams[c.holder!].colorIndex;
+    return Column(children: [
+      TimerBar(fraction: c.fractionLeft, seconds: c.secondsLeft),
+      const SizedBox(height: 10),
+      if (_phones?.remote case final m?)
+        OnTheirPhone(name: '${m.name} (${_t.teamName(c.holder!)})', what: 'is naming them',
+            onSkip: () => setState(() => _phones!.playHere()))
+      else
+        _picker(c, colour),
+    ]);
+  }
+
+  Widget _picker(BiddingWarController c, int colour) {
+    return PlayerPicker(
+      key: ValueKey('bid-$_pickerKey'),
+      // Club categories ("Clubs that have won the Premier League") search clubs.
+      index: c.category.answersAreClubs ? services.repo.clubIndex : services.repo.players,
+      voice: services.voice,
+      accent: Palette.team(colour),
+      hint: c.category.answersAreClubs ? 'Say or type a club…' : 'Say or type a name…',
+      onPick: c.submit,
+      isAnswer: (p) => c.category.answerIds.contains(p.id),
+      showFlags: !c.category.hidesFlags,
+      showPositions: !c.category.hidesPositions,
+      rapid: true, // the box stays open: name them one after another
+      onDisputed: (typed, allowed) {
+        if (allowed) c.submitDisputed(typed);
+        setState(() => _pickerKey++);
+      },
+    );
+  }
+}
+
+/// The whole Bidding War screen under the scores, from a plain snapshot —
+/// the host and joined phones draw exactly the same thing. [controls] is the
+/// bid / challenge / pass panel, [answerBox] the rapid-fire answer box (or
+/// "on their phone"), [finish] the host's "Finish round" button.
+class BidLayout extends StatelessWidget {
+  const BidLayout({
+    super.key,
+    required this.data,
+    required this.controls,
+    required this.answerBox,
+    this.multiplier = 1,
+    this.commentary,
+    this.finish,
+  });
+  final Map<String, Object?> data;
+  final Widget controls;
+  final Widget answerBox;
+  final int multiplier;
+  final Widget? commentary;
+  final Widget? finish;
+
+  List<Object?> _list(String k) => (data[k] as List?) ?? const [];
+  Map<String, Object?> _map(Object? v) => v is Map ? v.cast<String, Object?>() : const {};
+  int _int(Object? v) => (v as num?)?.toInt() ?? 0;
+
+  Widget _teamChip(int team, {double size = 20}) {
+    final t = team < _list('teams').length ? _map(_list('teams')[team]) : const <String, Object?>{};
+    return TeamChip(name: '${t['name'] ?? ''}', colorIndex: _int(t['color']), size: size);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final phase = '${data['phase']}';
+    return Column(children: [
+      Padding(
+        padding: const EdgeInsets.fromLTRB(16, 6, 16, 0),
+        child: Row(children: [
+          Text('BIDDING WAR', style: AppText.label(16, color: Palette.yellow)),
+          const Spacer(),
+          if (multiplier > 1) Text('x$multiplier POINTS', style: AppText.label(15, color: Palette.gold)),
+        ]),
+      ),
+      _CategoryCard(prompt: '${data['prompt'] ?? ''}', compact: phase == 'answering'),
+      if (commentary != null) commentary!,
+      Expanded(
+        child: switch (phase) {
+          'bidding' => _bidding(),
+          'countdown' => _countdown(),
+          'answering' => _answering(),
+          _ => _result(),
+        },
+      ),
+    ]);
+  }
+
+  Widget _bidding() {
+    final holder = (data['holder'] as num?)?.toInt();
+    final out = _list('out');
     return ListView(padding: const EdgeInsets.fromLTRB(16, 4, 16, 16), children: [
       // Current bid
       Container(
         padding: const EdgeInsets.symmetric(vertical: 12),
         decoration: BoxDecoration(color: Colors.black.withValues(alpha: 0.3), borderRadius: BorderRadius.circular(16)),
         child: Column(children: [
-          if (c.holder == null)
+          if (holder == null)
             Text('NO BIDS YET', style: AppText.headline(28, color: Palette.muted))
           else ...[
-            _teamChip(c.holder!, size: 18),
+            _teamChip(holder, size: 18),
             const SizedBox(height: 4),
             Text('CLAIM THEY CAN NAME', style: AppText.label(15)),
-            Text('${c.currentBid}', style: AppText.headline(72, color: Palette.yellow)),
+            Text('${data['bid']}', style: AppText.headline(72, color: Palette.yellow)),
           ],
-          Text('${c.maxBid} answers exist', style: AppText.label(13)),
+          Text('${data['max']} answers exist', style: AppText.label(13)),
           const SizedBox(height: 2),
-          Text('Challenged? ${c.answerSeconds} seconds to name that many answers',
+          Text('Challenged? ${data['seconds']} seconds to name that many answers',
               style: AppText.label(13, color: Palette.yellow)),
         ]),
       ),
       const SizedBox(height: 14),
       Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-        _teamChip(team, size: 22),
+        _teamChip(_int(data['team']), size: 22),
         const SizedBox(width: 8),
         Flexible(
           child: FittedBox(
             fit: BoxFit.scaleDown,
-            child: Text(c.holder == null ? 'OPENING BID' : 'WHAT DO YOU DO?', style: AppText.headline(26)),
+            child: Text(holder == null ? 'OPENING BID' : 'WHAT DO YOU DO?', style: AppText.headline(26)),
           ),
         ),
       ]),
       const SizedBox(height: 10),
-      if (c.canRaise) ...[
+      controls,
+      if (out.isNotEmpty)
+        Padding(
+          padding: const EdgeInsets.only(top: 6),
+          child: Text('Out: ${out.join(', ')}', textAlign: TextAlign.center, style: AppText.label(13)),
+        ),
+    ]);
+  }
+
+  Widget _countdown() => Padding(
+        padding: const EdgeInsets.all(16),
+        child: FittedBox(
+          fit: BoxFit.scaleDown,
+          child: Column(mainAxisSize: MainAxisSize.min, children: [
+            _teamChip(_int(data['holder']), size: 34),
+            const SizedBox(height: 6),
+            Text('HAVE BEEN CHALLENGED!', style: AppText.headline(34, color: Palette.danger)),
+            const SizedBox(height: 10),
+            Text('NAME ${data['bid']} IN ${data['seconds']} SECONDS', style: AppText.headline(30)),
+            const SizedBox(height: 10),
+            Text('${data['count']}', style: AppText.headline(120, color: Palette.yellow)),
+          ]),
+        ),
+      );
+
+  Widget _answering() => ListView(padding: const EdgeInsets.fromLTRB(16, 4, 16, 16), children: [
         Row(children: [
-          _StepButton(icon: Icons.remove, onTap: pending > c.minRaise ? () => setState(() => _pending = pending - 1) : null),
+          _teamChip(_int(data['holder']), size: 18),
+          const Spacer(),
+          Text('${data['correct']} / ${data['bid']}', style: AppText.headline(44, color: Palette.yellow)),
+        ]),
+        const SizedBox(height: 6),
+        answerBox,
+        const SizedBox(height: 8),
+        Wrap(spacing: 6, runSpacing: 6, children: [
+          for (final n in _list('named').reversed)
+            Chip(
+              avatar: const Icon(Icons.check_circle_rounded, color: Palette.green, size: 18),
+              label: Text('$n', style: const TextStyle(fontWeight: FontWeight.w700)),
+              backgroundColor: Palette.card,
+            ),
+        ]),
+      ]);
+
+  Widget _result() {
+    final done = data['done'] == true;
+    final full = _list('full');
+    return ListView(padding: const EdgeInsets.fromLTRB(16, 4, 16, 16), children: [
+      Text(done ? 'BID COMPLETED!' : 'BLUFF CALLED!', textAlign: TextAlign.center,
+          style: AppText.headline(40, color: done ? Palette.green : Palette.danger)),
+      Text('${data['correct']} of ${data['bid']} named', textAlign: TextAlign.center, style: AppText.label(16, color: Palette.text)),
+      const SizedBox(height: 10),
+      Center(child: _teamChip(_int(data['winner']), size: 26)),
+      Text('+${data['points']}', textAlign: TextAlign.center, style: AppText.headline(56, color: Palette.yellow)),
+      const SizedBox(height: 8),
+      Text('THE FULL LIST (${full.length})', style: AppText.label(13)),
+      const SizedBox(height: 6),
+      Wrap(spacing: 6, runSpacing: 6, children: [
+        for (final n in full) Chip(label: Text('$n'), backgroundColor: Palette.card),
+      ]),
+      if (finish != null) ...[const SizedBox(height: 16), finish!],
+    ]);
+  }
+}
+
+/// Raise / challenge / pass, for the team whose turn it is — on the host,
+/// or on their captain's phone.
+class BidControls extends StatefulWidget {
+  const BidControls({super.key, required this.data, required this.onRaise, required this.onChallenge, required this.onPass});
+  final Map<String, Object?> data;
+  final void Function(int to) onRaise;
+  final VoidCallback onChallenge;
+  final VoidCallback onPass;
+
+  @override
+  State<BidControls> createState() => _BidControlsState();
+}
+
+class _BidControlsState extends State<BidControls> {
+  int? _pending;
+  String _for = '';
+
+  int _int(Object? v) => (v as num?)?.toInt() ?? 0;
+
+  @override
+  Widget build(BuildContext context) {
+    final d = widget.data;
+    final minRaise = _int(d['min']);
+    final maxBid = _int(d['max']);
+    final team = _int(d['team']);
+    final teams = (d['teams'] as List?) ?? const [];
+    final colour = team < teams.length ? _int((teams[team] as Map)['color']) : 0;
+    // A fresh suggestion each new bid or turn: 3 to open, else the minimum raise.
+    final key = '${d['bid']}-$team';
+    if (key != _for) {
+      _for = key;
+      _pending = d['holder'] == null ? min(3, maxBid) : min(minRaise, maxBid);
+    }
+    final pending = (_pending ?? minRaise).clamp(minRaise, max(minRaise, maxBid)).toInt();
+    return Column(children: [
+      if (d['canRaise'] == true) ...[
+        Row(children: [
+          _StepButton(icon: Icons.remove, onTap: pending > minRaise ? () => setState(() => _pending = pending - 1) : null),
           Expanded(
             child: Column(children: [
               Text('$pending', textAlign: TextAlign.center, style: AppText.headline(56)),
               Text('ANSWERS', style: AppText.label(13)),
             ]),
           ),
-          _StepButton(icon: Icons.add, onTap: pending < c.maxBid ? () => setState(() => _pending = pending + 1) : null),
+          _StepButton(icon: Icons.add, onTap: pending < maxBid ? () => setState(() => _pending = pending + 1) : null),
         ]),
         const SizedBox(height: 10),
         BigButton(
-          label: c.holder == null ? 'We can name $pending' : 'Raise to $pending',
+          label: d['holder'] == null ? 'We can name $pending' : 'Raise to $pending',
           icon: Icons.trending_up_rounded,
           color: Palette.team(colour),
           textColor: Palette.onTeam(colour),
-          onPressed: () => c.raise(pending),
+          onPressed: () => widget.onRaise(pending),
         ),
       ],
-      if (c.canChallenge) ...[
+      if (d['canChallenge'] == true) ...[
         const SizedBox(height: 10),
         BigButton(
           label: 'Challenge — prove it!',
           icon: Icons.gavel_rounded,
           color: Palette.danger,
           textColor: Colors.white,
-          onPressed: c.challenge,
+          onPressed: widget.onChallenge,
         ),
       ],
-      if (c.canPass) ...[
+      if (d['canPass'] == true) ...[
         const SizedBox(height: 6),
         Center(
-          child: TextButton(onPressed: c.pass, child: Text('PASS (DROP OUT OF BIDDING)', style: AppText.label(15))),
+          child: TextButton(onPressed: widget.onPass, child: Text('PASS (DROP OUT OF BIDDING)', style: AppText.label(15))),
         ),
       ],
-      if (_t.teamCount > 2 && c.active.length < _t.teamCount)
-        Padding(
-          padding: const EdgeInsets.only(top: 6),
-          child: Text(
-            'Out: ${[for (var i = 0; i < _t.teamCount; i++) if (!c.active.contains(i)) _t.teamName(i)].join(', ')}',
-            textAlign: TextAlign.center,
-            style: AppText.label(13),
-          ),
-        ),
-    ]);
-  }
-
-  Widget _countdown(BiddingWarController c) => Padding(
-        padding: const EdgeInsets.all(16),
-        child: FittedBox(
-          fit: BoxFit.scaleDown,
-          child: Column(mainAxisSize: MainAxisSize.min, children: [
-            _teamChip(c.holder!, size: 34),
-            const SizedBox(height: 6),
-            Text('HAVE BEEN CHALLENGED!', style: AppText.headline(34, color: Palette.danger)),
-            const SizedBox(height: 10),
-            Text('NAME ${c.currentBid} IN ${c.answerSeconds} SECONDS', style: AppText.headline(30)),
-            const SizedBox(height: 10),
-            Text('${max(1, c.secondsLeft.ceil())}', style: AppText.headline(120, color: Palette.yellow)),
-          ]),
-        ),
-      );
-
-  Widget _answering(BiddingWarController c) {
-    final colour = _t.config.teams[c.holder!].colorIndex;
-    return ListView(padding: const EdgeInsets.fromLTRB(16, 4, 16, 16), children: [
-      Row(children: [
-        _teamChip(c.holder!, size: 18),
-        const Spacer(),
-        Text('${c.correctCount} / ${c.currentBid}', style: AppText.headline(44, color: Palette.yellow)),
-      ]),
-      const SizedBox(height: 6),
-      TimerBar(fraction: c.fractionLeft, seconds: c.secondsLeft),
-      const SizedBox(height: 10),
-      if (_phones?.remote case final m?)
-        OnTheirPhone(name: '${m.name} (${_t.teamName(c.holder!)})', what: 'is naming them')
-      else
-      PlayerPicker(
-        key: ValueKey('bid-$_pickerKey'),
-        // Club categories ("Clubs that have won the Premier League") search clubs.
-        index: c.category.answersAreClubs ? services.repo.clubIndex : services.repo.players,
-        voice: services.voice,
-        accent: Palette.team(colour),
-        hint: c.category.answersAreClubs ? 'Say or type a club…' : 'Say or type a name…',
-        onPick: c.submit,
-        isAnswer: (p) => c.category.answerIds.contains(p.id),
-        showFlags: !c.category.hidesFlags,
-        showPositions: !c.category.hidesPositions,
-        rapid: true, // the box stays open: name them one after another
-        onDisputed: (typed, allowed) {
-          if (allowed) c.submitDisputed(typed);
-          setState(() => _pickerKey++);
-        },
-      ),
-      const SizedBox(height: 8),
-      Wrap(spacing: 6, runSpacing: 6, children: [
-        for (final n in c.named.reversed)
-          Chip(
-            avatar: const Icon(Icons.check_circle_rounded, color: Palette.green, size: 18),
-            label: Text(n, style: const TextStyle(fontWeight: FontWeight.w700)),
-            backgroundColor: Palette.card,
-          ),
-      ]),
-    ]);
-  }
-
-  Widget _result(BiddingWarController c) {
-    final done = c.completed == true;
-    final winner = done ? c.holder! : c.challenger!;
-    final players = services.repo.players;
-    final missed = [
-      for (final id in c.category.answerIds) if (players.byId(id) != null) players.byId(id)!,
-    ]..sort((a, b) => b.fame.compareTo(a.fame));
-    return ListView(padding: const EdgeInsets.fromLTRB(16, 4, 16, 16), children: [
-      Text(done ? 'BID COMPLETED!' : 'BLUFF CALLED!', textAlign: TextAlign.center,
-          style: AppText.headline(40, color: done ? Palette.green : Palette.danger)),
-      Text('${c.correctCount} of ${c.currentBid} named', textAlign: TextAlign.center, style: AppText.label(16, color: Palette.text)),
-      const SizedBox(height: 10),
-      Center(child: _teamChip(winner, size: 26)),
-      Text('+${BiddingWarController.points * widget.round.multiplier}', textAlign: TextAlign.center,
-          style: AppText.headline(56, color: Palette.yellow)),
-      const SizedBox(height: 8),
-      Text('THE FULL LIST (${missed.length})', style: AppText.label(13)),
-      const SizedBox(height: 6),
-      Wrap(spacing: 6, runSpacing: 6, children: [
-        for (final p in missed) Chip(label: Text(p.name), backgroundColor: Palette.card),
-      ]),
-      const SizedBox(height: 16),
-      BigButton(label: 'Finish round', icon: Icons.flag, onPressed: () => widget.round.onComplete(c.result())),
     ]);
   }
 }
