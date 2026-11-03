@@ -1,0 +1,29 @@
+# Renders the turn games' layouts (as joined phones and the host draw them)
+# to docs/shots/*.png and commits them. Run from the Actions tab.
+name: Screenshots
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  shots:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+      - name: Render
+        run: |
+          flutter pub get
+          SHOTS=1 bash scripts/ci_run.sh "Screenshots" flutter test test/screenshots_test.dart --update-goldens
+      - name: Commit
+        run: |
+          git config user.name "quizinho-data-bot"
+          git config user.email "quizinho-data-bot@users.noreply.github.com"
+          git add docs/shots
+          git diff --cached --quiet || (git commit -m "Screenshots" && git pull --rebase -q && git push)
