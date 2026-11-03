@@ -207,8 +207,10 @@ class BuzzGameView extends StatelessWidget {
   Widget _tableMode(BuildContext context, AppServices services, {required bool canExit}) {
     final c = controller;
     final t = round.tournament;
-    final left = [for (var i = 0; i < t.teamCount; i += 2) i];
-    final right = [for (var i = 1; i < t.teamCount; i += 2) i];
+    // Teams buzzing on their own phones get no buzzer on this screen.
+    final here = [for (var i = 0; i < t.teamCount; i++) if (!phoneTeams.contains(i)) i];
+    final left = [for (var i = 0; i < here.length; i += 2) here[i]];
+    final right = [for (var i = 1; i < here.length; i += 2) here[i]];
 
     Widget side(List<int> teams, int quarterTurns) => SizedBox(
           width: 118,
@@ -238,8 +240,8 @@ class BuzzGameView extends StatelessWidget {
         return _TableFaceOffIntro(
           faceOff: faceOff!,
           tournament: t,
-          left: left,
-          right: right,
+          left: [for (var i = 0; i < t.teamCount; i += 2) i],
+          right: [for (var i = 1; i < t.teamCount; i += 2) i],
           questionNumber: c.questionIndex + 1,
           onReady: onFaceOffReady,
         );
@@ -299,7 +301,7 @@ class BuzzGameView extends StatelessWidget {
     }
 
     return Row(children: [
-      side(left, 1),
+      if (left.isNotEmpty) side(left, 1),
       Expanded(child: centre()),
       if (right.isNotEmpty) side(right, 3),
     ]);

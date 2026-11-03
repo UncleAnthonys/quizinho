@@ -28,11 +28,13 @@ class BuzzerPad extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final n = tournament.teamCount;
+    // Teams buzzing on their own phones get no buzzer here at all.
+    final shown = [for (var i = 0; i < tournament.teamCount; i++) if (!onPhone.contains(i)) i];
+    final n = shown.length;
     final perRow = n <= 2 ? n : (n <= 4 ? 2 : 3);
     final rows = <List<int>>[];
     for (var i = 0; i < n; i += perRow) {
-      rows.add([for (var j = i; j < i + perRow && j < n; j++) j]);
+      rows.add([for (var j = i; j < i + perRow && j < n; j++) shown[j]]);
     }
     return Column(
       children: [
