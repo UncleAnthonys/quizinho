@@ -81,7 +81,7 @@ class HomeScreen extends StatelessWidget {
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
                   ),
                   icon: const Icon(Icons.person_rounded, color: Palette.yellow, size: 20),
-                  label: Text('PLAY SOLO · SURVIVAL', style: AppText.headline(18)),
+                  label: Text('PLAY SOLO', style: AppText.headline(18)),
                   onPressed: () async {
                     if (!await MatchAccess.allowed(context) || !context.mounted) return;
                     Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const SurvivalScreen()));
