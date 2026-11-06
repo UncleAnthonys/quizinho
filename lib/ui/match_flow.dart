@@ -164,9 +164,7 @@ extension GameModeStyle on GameModeId {
         GameModeId.biddingWar => const Color(0xFFFF8A3D), // orange
         GameModeId.pointless => const Color(0xFF29C5FF), // studio blue
         GameModeId.checkout501 => const Color(0xFF2EE6C9), // oche teal
-        GameModeId.whoAmI => const Color(0xFF9AA5B1),
         GameModeId.headsUp => const Color(0xFF3DFFB0), // mint
-        GameModeId.taboo => const Color(0xFFE0A0FF),
       };
 
   IconData get icon => switch (this) {
@@ -178,9 +176,7 @@ extension GameModeStyle on GameModeId {
         GameModeId.biddingWar => Icons.gavel_rounded,
         GameModeId.pointless => Icons.trending_down_rounded,
         GameModeId.checkout501 => Icons.adjust_rounded,
-        GameModeId.whoAmI => Icons.help_outline_rounded,
         GameModeId.headsUp => Icons.screen_rotation_rounded,
-        GameModeId.taboo => Icons.block_rounded,
       };
 
   /// Short label that fits on a wheel segment.
@@ -193,8 +189,6 @@ extension GameModeStyle on GameModeId {
         GameModeId.biddingWar => 'BIDDING WAR',
         GameModeId.pointless => 'POINTLESS',
         GameModeId.checkout501 => '501',
-        GameModeId.whoAmI => 'WHO AM I',
         GameModeId.headsUp => 'HEADS UP',
-        GameModeId.taboo => 'TABOO',
       };
 }

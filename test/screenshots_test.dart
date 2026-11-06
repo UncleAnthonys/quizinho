@@ -19,7 +19,9 @@ import 'package:quizinho/games/checkout_501/checkout_screen.dart';
 import 'package:quizinho/games/pointless/pointless_screen.dart';
 import 'package:quizinho/games/starting_xi/starting_xi_screen.dart';
 import 'package:quizinho/games/tic_tac_toe/tic_tac_toe_screen.dart';
+import 'package:quizinho/domain/tournament.dart';
 import 'package:quizinho/ui/screens/home_screen.dart';
+import 'package:quizinho/ui/screens/setup_screen.dart';
 import 'package:quizinho/ui/widgets/common.dart';
 import 'package:quizinho/ui/widgets/player_picker.dart';
 
@@ -116,6 +118,22 @@ void main() {
     ));
     await tester.pump(const Duration(seconds: 2));
     await expectLater(find.byType(MaterialApp), matchesGoldenFile('../docs/shots/home.png'));
+  }, skip: !_shots);
+
+  testWidgets('Setup', (tester) async {
+    await services.settings.saveConfig(TournamentConfig(teams: [
+      TeamSetup(name: 'Home', colorIndex: 0, players: ['Alex', 'Sam']),
+      TeamSetup(name: 'Away', colorIndex: 1, players: ['Gav']),
+    ]));
+    tester.view.physicalSize = const Size(390, 844);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.reset);
+    await tester.pumpWidget(AppScope(
+      services: services,
+      child: MaterialApp(debugShowCheckedModeBanner: false, theme: buildTheme(), home: const SetupScreen()),
+    ));
+    await tester.pump(const Duration(seconds: 2));
+    await expectLater(find.byType(MaterialApp), matchesGoldenFile('../docs/shots/setup.png'));
   }, skip: !_shots);
 
   Widget column(Widget scores, Widget layout) => Column(children: [scores, Expanded(child: layout)]);

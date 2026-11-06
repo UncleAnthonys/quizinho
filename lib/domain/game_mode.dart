@@ -87,7 +87,6 @@ enum GameModeId {
     ],
     whoPlays: 'Each team confers, then names one player per turn.',
   ),
-  whoAmI(title: 'Who Am I?', tagline: 'Coming soon', playable: false),
   headsUp(
     title: 'Football Heads Up',
     tagline: 'Phone on your forehead — your team describes',
@@ -98,8 +97,7 @@ enum GameModeId {
       'Every team gets one go. Most correct cards wins 3 points.',
     ],
     whoPlays: 'The named player guesses; their teammates describe. Other teams keep quiet!',
-  ),
-  taboo(title: 'Football Taboo', tagline: 'Coming soon', playable: false);
+  );
 
   const GameModeId({
     required this.title,
