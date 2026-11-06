@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../core/theme.dart';
 import '../domain/game_mode.dart';
+import 'match_flow.dart' show GameModeStyle;
 
 /// The rules for the whole game and every round — from Settings.
 void showHowToPlay(BuildContext context) => showModalBottomSheet<void>(
