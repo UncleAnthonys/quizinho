@@ -22,6 +22,7 @@ import 'package:quizinho/games/tic_tac_toe/tic_tac_toe_screen.dart';
 import 'package:quizinho/domain/tournament.dart';
 import 'package:quizinho/ui/screens/home_screen.dart';
 import 'package:quizinho/ui/screens/setup_screen.dart';
+import 'package:quizinho/ui/screens/solo_screen.dart';
 import 'package:quizinho/ui/widgets/common.dart';
 import 'package:quizinho/ui/widgets/player_picker.dart';
 
@@ -134,6 +135,20 @@ void main() {
     ));
     await tester.pump(const Duration(seconds: 2));
     await expectLater(find.byType(MaterialApp), matchesGoldenFile('../docs/shots/setup.png'));
+  }, skip: !_shots);
+
+  testWidgets('Solo', (tester) async {
+    services.settings.recordSolo('cup', 'medium', 412);
+    services.settings.recordSolo('clubConnections', 'medium', 86);
+    tester.view.physicalSize = const Size(390, 1100);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.reset);
+    await tester.pumpWidget(AppScope(
+      services: services,
+      child: MaterialApp(debugShowCheckedModeBanner: false, theme: buildTheme(), home: const SoloScreen()),
+    ));
+    await tester.pump(const Duration(seconds: 2));
+    await expectLater(find.byType(MaterialApp), matchesGoldenFile('../docs/shots/solo.png'));
   }, skip: !_shots);
 
   Widget column(Widget scores, Widget layout) => Column(children: [scores, Expanded(child: layout)]);
