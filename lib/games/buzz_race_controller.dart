@@ -185,6 +185,14 @@ abstract class BuzzRaceController<Q> extends ChangeNotifier {
     }
   }
 
+  /// Solo: no buzzer — the answer box is open while the clock runs, and an
+  /// answer counts at the moment it's given (so a quicker one scores more).
+  void submitSolo(Player player) {
+    if (teamCount != 1 || phase != BuzzPhase.open) return;
+    buzz(0);
+    submit(player);
+  }
+
   /// Answering team gives up — same as a wrong answer.
   void pass() {
     if (phase == BuzzPhase.answering) _wrong();

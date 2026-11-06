@@ -79,7 +79,9 @@ class BuzzGameView extends StatelessWidget {
     // player gets an upright screen, then it flips back to table mode.
     // Depends on the phase only — switching layout when the keyboard opens
     // rebuilt the answer box, which closed the keyboard again (typing loop bug).
-    final answeringUpright = c.phase == BuzzPhase.answering;
+    // Solo: no buzzer — the answer box is open for the whole clock.
+    final solo = t.teamCount == 1;
+    final answeringUpright = c.phase == BuzzPhase.answering || (solo && c.phase == BuzzPhase.open);
     if (answeringUpright && remoteAnswerer != null) {
       return Scaffold(
         body: PitchBackground(
@@ -157,6 +159,7 @@ class BuzzGameView extends StatelessWidget {
                 const SizedBox(width: 10),
                 Text('Q ${c.questionIndex + 1}/${c.questions.length}', style: AppText.label(16)),
                 const Spacer(),
+                if (t.teamCount > 1)
                 TextButton.icon(
                   onPressed: () => t.tableMode = true,
                   icon: const Icon(Icons.table_restaurant_rounded, color: Palette.yellow, size: 20),
@@ -310,6 +313,20 @@ class BuzzGameView extends StatelessWidget {
   Widget _bottom(BuildContext context, AppServices services) {
     final c = controller;
     final t = round.tournament;
+    if (c.phase == BuzzPhase.open && t.teamCount == 1) {
+        // Solo: straight to the answer box; the clock runs while you think.
+        return SingleChildScrollView(
+          padding: const EdgeInsets.fromLTRB(16, 6, 16, 16),
+          child: PlayerPicker(
+            key: ValueKey('solo-${c.questionIndex}'),
+            index: services.repo.players,
+            voice: services.voice,
+            onPick: c.submitSolo,
+            isAnswer: c.isRightAnswer,
+            onPass: c.giveUp,
+          ),
+        );
+    }
     if (c.phase == BuzzPhase.open) {
         // Everyone who can buzz has it on their own phone: no buzzers here.
         final inPlay = faceOff?.players.keys.toSet() ?? {for (var i = 0; i < t.teamCount; i++) i};

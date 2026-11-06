@@ -34,6 +34,14 @@ void main() {
     expect(c.result().solo, (100 / c.match.lineup.length).round());
   });
 
+  test('solo answers straight in, no buzzer; the clock left counts for speed', () {
+    final c = ClubConnectionsController(teamCount: 1, questions: [arsenalBarca()]);
+    c.advance(secs(c.openSeconds / 2)); // half the clock gone
+    c.submitSolo(henry);
+    expect(c.outcome?.scored, isTrue);
+    expect(c.lastSolo, 15); // 12 + 6 × half
+  });
+
   test('team games have no solo score', () {
     final c = ClubConnectionsController(teamCount: 2, questions: [arsenalBarca()]);
     expect(c.result().solo, isNull);
