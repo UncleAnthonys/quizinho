@@ -6,6 +6,7 @@ import 'package:flutter/scheduler.dart' show Ticker;
 
 import '../core/app_services.dart';
 import '../core/hinted_speech.dart';
+import '../core/web_keyboard.dart';
 import '../core/theme.dart';
 import '../data/models.dart';
 import '../domain/tournament.dart';
@@ -238,14 +239,26 @@ class _GuestGameState extends State<_GuestGame> with SingleTickerProviderStateMi
         Text('GAME ${widget.room.code}', style: AppText.label(13)),
       ]),
     );
-    final body = switch (v['kind']) {
+    Widget body() => switch (v['kind']) {
       'buzz' => _buzz(v, colour),
       'turn' => _turn(v, colour),
       'main' => _center('EYES ON THE MAIN SCREEN', '${v['what'] ?? ''}', scores: v['teams']),
       'closed' => _center('FULL TIME', 'Thanks for playing!'),
       _ => _center('YOU’RE IN', 'Waiting for kick-off on the main phone…'),
     };
-    return Column(children: [header, if (kIsWeb) const _VoiceBoost(), Expanded(child: body)]);
+    // Typing: the keyboard slides over the page, so lift everything above it
+    // and let the game shrink to its compact "typing" layout, like the app.
+    return ListenableBuilder(
+      listenable: Listenable.merge([keyboardInset, answerTyping]),
+      builder: (context, _) => Padding(
+        padding: EdgeInsets.only(bottom: keyboardInset.value),
+        child: Column(children: [
+          if (keyboardInset.value == 0) header,
+          if (kIsWeb && keyboardInset.value == 0) const _VoiceBoost(),
+          Expanded(child: body()),
+        ]),
+      ),
+    );
   }
 
   /// The host's score strip, drawn from the view.
@@ -513,6 +526,7 @@ class _GuestGameState extends State<_GuestGame> with SingleTickerProviderStateMi
           valueListenable: _left,
           builder: (context, left, _) => XiLayout(
             data: board,
+            typing: answerTyping.value && board['phase'] == 'ticking',
             scores: scores,
             left: board['phase'] == 'ticking' && v['left'] != null ? left : seconds,
             startLabel: 'STARTING…',
@@ -559,6 +573,7 @@ class _GuestGameState extends State<_GuestGame> with SingleTickerProviderStateMi
           Expanded(
             child: TttLayout(
               data: board,
+              typing: answerTyping.value && stage == 'answer',
               bottom: bottom,
               onTap: mine && choosing ? (i) => widget.room.answer(q, 'choice:$i') : null,
             ),
@@ -567,12 +582,12 @@ class _GuestGameState extends State<_GuestGame> with SingleTickerProviderStateMi
       case 'pt':
         return Column(children: [
           scores,
-          Expanded(child: PtLayout(data: board, answerBox: clockAndBox())),
+          Expanded(child: PtLayout(data: board, typing: answerTyping.value, answerBox: clockAndBox())),
         ]);
       case 'co':
         return Column(children: [
           scores,
-          Expanded(child: CoLayout(data: board, answerBox: clockAndBox())),
+          Expanded(child: CoLayout(data: board, typing: answerTyping.value, answerBox: clockAndBox())),
         ]);
       case 'bid':
         final phase = '${board['phase']}';

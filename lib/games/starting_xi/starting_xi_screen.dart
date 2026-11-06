@@ -446,7 +446,7 @@ class XiLayout extends StatelessWidget {
         if (bonus.isNotEmpty)
           Padding(
             padding: const EdgeInsets.only(top: 6),
-            child: Text('+${data['bonusPts']} BONUS', style: AppText.label(15, color: Palette.gold)),
+            child: Text('+${data['bonusPts']}', style: AppText.label(15, color: Palette.gold)),
           ),
         if (finish != null) ...[const SizedBox(height: 16), finish!],
       ]),
@@ -468,6 +468,13 @@ class _Formation extends StatelessWidget {
     final lines = <int, List<LineupSlot>>{};
     for (final s in lineup) {
       lines.putIfAbsent(s.line, () => []).add(s);
+    }
+    // As seen from the stand with the team attacking up the screen: left-sided
+    // players (LB, LM, LW) on the left, right-sided on the right.
+    int side(LineupSlot s) => s.position.startsWith('L') ? 0 : (s.position.startsWith('R') ? 2 : 1);
+    for (final k in lines.keys) {
+      final l = lines[k]!;
+      lines[k] = [for (final want in const [0, 1, 2]) ...l.where((s) => side(s) == want)];
     }
     final order = lines.keys.toList()..sort((a, b) => b.compareTo(a)); // attack at the top
     return Padding(
