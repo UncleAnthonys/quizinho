@@ -89,9 +89,10 @@ class HomeScreen extends StatelessWidget {
               // For someone with the app joining a friend's game by code (most
               // join by scanning the QR) — a quiet link, not a button.
               if (roomsEnabled)
-                TextButton(
+                TextButton.icon(
                   onPressed: () => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const JoinScreen())),
-                  child: Text('Join a friend’s game', style: AppText.label(14, color: Palette.muted)),
+                  icon: const Icon(Icons.login_rounded, color: Palette.muted, size: 18),
+                  label: Text('JOIN A FRIEND’S GAME', style: AppText.label(14, color: Palette.muted)),
                 ),
               if (demo)
                 const Padding(
