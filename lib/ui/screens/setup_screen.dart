@@ -140,7 +140,7 @@ class _SetupScreenState extends State<SetupScreen> {
         onPressed: _openingRoom ? null : _openPhones,
         icon: const Icon(Icons.qr_code_2_rounded, color: Palette.yellow),
         label: Text(
-          room == null ? 'BUZZERS ON YOUR OWN PHONES' : 'PHONE BUZZERS · ${room.members.length} JOINED',
+          room == null ? 'BUZZERS ON YOUR OWN PHONES' : 'PHONE BUZZERS · ${room.code} · ${room.members.length} JOINED',
           style: AppText.headline(18),
         ),
       ),
