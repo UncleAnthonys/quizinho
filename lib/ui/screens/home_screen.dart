@@ -49,7 +49,7 @@ class HomeScreen extends StatelessWidget {
                       Text('THE FOOTBALL PARTY GAME', style: AppText.label(18, color: Palette.yellow)),
                       const SizedBox(height: 18),
                       const Text(
-                        'One-on-one or teams. A new game every round.',
+                        'Settle who’s got the best football knowledge.',
                         textAlign: TextAlign.center,
                         style: TextStyle(color: Palette.muted, fontSize: 16, height: 1.4),
                       ),
@@ -60,13 +60,16 @@ class HomeScreen extends StatelessWidget {
               const Spacer(flex: 2),
               const _ResumeMatch(),
               BigButton(
-                label: 'Head to head',
+                // Before the full game: the free Warm-Up Cup (only once the
+                // in-app purchase is switched on).
+                label: MatchAccess.warmUpNext(services) ? 'Play free Warm-Up Cup' : 'Start tournament',
                 icon: Icons.groups_rounded,
                 height: 72,
                 onPressed: () => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const SetupScreen())),
               ),
               const SizedBox(height: 6),
-              Text('2 players or up to 6 teams', style: AppText.label(13)),
+              Text(MatchAccess.warmUpNext(services) ? '3 rounds · 2 players or up to 6 teams' : '2 players or up to 6 teams',
+                  style: AppText.label(15, color: Palette.text)),
               const SizedBox(height: 10),
               // Solo is the side door: smaller and outlined, so the party game leads.
               SizedBox(
@@ -91,8 +94,8 @@ class HomeScreen extends StatelessWidget {
               if (roomsEnabled)
                 TextButton.icon(
                   onPressed: () => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const JoinScreen())),
-                  icon: const Icon(Icons.login_rounded, color: Palette.muted, size: 18),
-                  label: Text('JOIN A FRIEND’S GAME', style: AppText.label(14, color: Palette.muted)),
+                  icon: const Icon(Icons.login_rounded, color: Palette.text, size: 18),
+                  label: Text('JOIN A FRIEND’S GAME', style: AppText.label(15, color: Palette.text)),
                 ),
               if (demo)
                 const Padding(
