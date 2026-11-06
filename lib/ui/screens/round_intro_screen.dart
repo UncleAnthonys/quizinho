@@ -22,8 +22,17 @@ class RoundIntroScreen extends StatelessWidget {
         child: SafeArea(
           child: Column(children: [
             Scoreboard(tournament: tournament),
+            // Everything shrinks to fit above the button — nothing hides behind it.
             Expanded(
-              child: ListView(padding: const EdgeInsets.fromLTRB(20, 24, 20, 12), children: [
+              child: LayoutBuilder(
+                builder: (context, box) => Padding(
+                  padding: const EdgeInsets.fromLTRB(20, 24, 20, 12),
+                  child: FittedBox(
+                    fit: BoxFit.scaleDown,
+                    alignment: Alignment.topCenter,
+                    child: SizedBox(
+                      width: box.maxWidth - 40,
+                      child: Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.stretch, children: [
                 Icon(mode.icon, color: mode.color, size: 56),
                 const SizedBox(height: 8),
                 Text(mode.title.toUpperCase(), textAlign: TextAlign.center, style: AppText.headline(48, color: mode.color)),
@@ -54,9 +63,21 @@ class RoundIntroScreen extends StatelessWidget {
                       Expanded(child: Text(rule, style: const TextStyle(fontSize: 18, height: 1.35))),
                     ]),
                   ),
-                if (mode == GameModeId.clubConnections || mode == GameModeId.careerPath)
+                const SizedBox(height: 6),
+                Container(
+                  padding: const EdgeInsets.all(14),
+                  decoration: BoxDecoration(color: Colors.black.withValues(alpha: 0.3), borderRadius: BorderRadius.circular(14)),
+                  child: Row(children: [
+                    const Icon(Icons.people_alt_rounded, color: Palette.gold),
+                    const SizedBox(width: 10),
+                    Expanded(child: Text(mode.whoPlays, style: const TextStyle(fontSize: 16, color: Palette.text))),
+                  ]),
+                ),
+                // Table mode is for sharing one phone — not when everyone's on their own.
+                if ((mode == GameModeId.clubConnections || mode == GameModeId.careerPath) &&
+                    AppScope.of(context).room == null)
                   const Padding(
-                    padding: EdgeInsets.only(bottom: 10),
+                    padding: EdgeInsets.only(top: 12),
                     child: Row(children: [
                       Icon(Icons.screen_rotation_rounded, color: Palette.yellow),
                       SizedBox(width: 10),
@@ -68,17 +89,11 @@ class RoundIntroScreen extends StatelessWidget {
                       ),
                     ]),
                   ),
-                const SizedBox(height: 6),
-                Container(
-                  padding: const EdgeInsets.all(14),
-                  decoration: BoxDecoration(color: Colors.black.withValues(alpha: 0.3), borderRadius: BorderRadius.circular(14)),
-                  child: Row(children: [
-                    const Icon(Icons.people_alt_rounded, color: Palette.gold),
-                    const SizedBox(width: 10),
-                    Expanded(child: Text(mode.whoPlays, style: const TextStyle(fontSize: 16, color: Palette.text))),
-                  ]),
+                      ]),
+                    ),
+                  ),
                 ),
-              ]),
+              ),
             ),
             Padding(
               padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
