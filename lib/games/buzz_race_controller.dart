@@ -222,6 +222,9 @@ abstract class BuzzRaceController<Q> extends ChangeNotifier {
   static const double soloPerQuestion = 20;
   double soloTotal = 0;
 
+  /// Solo points for the question just answered (shown instead of +2).
+  int lastSolo = 0;
+
   /// Solo score for a right answer, out of [soloPerQuestion]. Default (Club
   /// Connections): 12 for getting it, up to 6 for speed — [openFraction] of
   /// the clock left when you buzzed — and 2 for a rare pick.
@@ -230,7 +233,9 @@ abstract class BuzzRaceController<Q> extends ChangeNotifier {
 
   void _award(BuzzOutcome o, GameEvent e) {
     if (teamCount == 1) {
-      soloTotal += soloScoreFor(o, (_pausedOpen.$1 / _pausedOpen.$2).clamp(0.0, 1.0)).clamp(0, soloPerQuestion);
+      final s = soloScoreFor(o, (_pausedOpen.$1 / _pausedOpen.$2).clamp(0.0, 1.0)).clamp(0, soloPerQuestion).toDouble();
+      soloTotal += s;
+      lastSolo = s.round();
     }
     roundPoints[o.team!] = (roundPoints[o.team!] ?? 0) + o.points;
     _resolve(o, e);

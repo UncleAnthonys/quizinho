@@ -60,6 +60,7 @@ class TournamentConfig {
     Set<Era>? eras,
     this.gender = FootballGender.men,
     this.warmUp = false,
+    this.rounds,
   })  : modes = modes ?? {...GameModeId.concreteGames, GameModeId.wildcard},
         eras = (eras == null || eras.isEmpty) ? Era.values.toSet() : eras;
 
@@ -70,6 +71,9 @@ class TournamentConfig {
   /// Enabled wheel segments. May include [GameModeId.wildcard].
   final Set<GameModeId> modes;
   final int questionsPerRound;
+
+  /// Solo play: how many games in the run (overrides [length]). Not saved.
+  final int? rounds;
   final int answerSeconds;
   final int bombSeconds;
   final int bombLives;
@@ -165,7 +169,7 @@ class Tournament extends ChangeNotifier {
   int get teamCount => config.teams.length;
   String teamName(int i) => config.teams[i].name;
   int get roundNumber => rounds.length + 1;
-  int get totalRounds => config.warmUp ? WarmUpCup.games.length : config.length.rounds;
+  int get totalRounds => config.rounds ?? (config.warmUp ? WarmUpCup.games.length : config.length.rounds);
   bool get isFinished => rounds.length >= totalRounds;
   bool get isFinalRound => rounds.length == totalRounds - 1;
 

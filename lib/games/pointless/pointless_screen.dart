@@ -197,6 +197,7 @@ class _PointlessScreenState extends State<PointlessScreen>
       'answers': [for (final a in c.answers) answer(a)],
       'go': c.goNumber,
       'per': c.answersPerTeam,
+      if (finished && _t.teamCount == 1) 'solo': c.result().solo ?? 0,
       if (finished) ...{
         'tie': c.winners.length > 1,
         'points': [for (var i = 0; i < _t.teamCount; i++) c.result().points[i]! * widget.round.multiplier],
@@ -387,6 +388,9 @@ class PtLayout extends StatelessWidget {
     return ListView(padding: const EdgeInsets.fromLTRB(13, 4, 13, 16), children: [
       _totals(),
       const SizedBox(height: 10),
+      if (data['solo'] != null)
+        Center(child: SoloScore(score: _int(data['solo']), color: _studio))
+      else ...[
       Text(data['tie'] == true ? 'IT’S A TIE!' : 'LOWEST SCORE WINS!',
           textAlign: TextAlign.center, style: AppText.headline(30, color: _studio)),
       const SizedBox(height: 4),
@@ -402,6 +406,7 @@ class PtLayout extends StatelessWidget {
                 Text('  incl. POINTLESS bonus', style: AppText.label(12, color: Palette.gold)),
             ]),
           ),
+      ],
       const SizedBox(height: 10),
       Text('EVERY ANSWER (${all.length}) — LOWEST FIRST', style: AppText.label(13)),
       const SizedBox(height: 6),

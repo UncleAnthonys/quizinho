@@ -65,6 +65,7 @@ class _SoloScreenState extends State<SoloScreen> {
       bombLives: 3,
       eras: Set.of(_eras),
       gender: _gender,
+      rounds: games.length,
     );
     await SoloRun(config: config, games: games, cup: cup).start(context);
     if (mounted) setState(() {}); // fresh bests
@@ -275,8 +276,10 @@ class SoloRun {
           onComplete: (result) {
             final score = result.solo ?? 0;
             (_scores[mode] ??= []).add(score);
-            // The score strip shows your running total.
-            _t.recordRound(RoundResult(mode: mode, points: {0: score}), multiplier: 1);
+            // The score strip shows your running total — once per game (after
+            // Pointless's last category), so the round count matches the run.
+            final lastOfGame = i + 1 >= _plan.length || _plan[i + 1] != mode;
+            if (lastOfGame) _t.recordRound(RoundResult(mode: mode, points: {0: scores[mode]!}), multiplier: 1);
             final nav = Navigator.of(context);
             if (i + 1 < _plan.length) {
               nav.pushReplacement(_route(_next(i + 1)));

@@ -292,6 +292,13 @@ class _TicTacToeScreenState extends State<TicTacToeScreen>
     }
     // finished
     final standings = List.generate(_t.teamCount, (i) => i)..sort((a, b) => c.squaresOf(b).compareTo(c.squaresOf(a)));
+    if (_t.teamCount == 1) {
+      return Column(children: [
+        SoloScore(score: c.result().solo ?? 0),
+        const SizedBox(height: 12),
+        BigButton(label: 'Finish round', icon: Icons.flag, onPressed: () => widget.round.onComplete(c.result())),
+      ]);
+    }
     return Column(children: [
       for (final t in standings)
         Padding(

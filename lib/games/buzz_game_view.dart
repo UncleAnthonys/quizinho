@@ -395,7 +395,9 @@ class BuzzGameView extends StatelessWidget {
                 size: 22,
               ),
               const SizedBox(height: 8),
-              Text('+${o.points * round.multiplier}', style: AppText.headline(64, color: Palette.yellow)),
+              // Solo: this question's points out of 20 (for a score out of 100).
+              Text(t.teamCount == 1 ? '+${c.lastSolo}' : '+${o.points * round.multiplier}',
+                  style: AppText.headline(64, color: Palette.yellow)),
               Text(
                 o.disputed ? 'Room-approved answer' : o.player!.name,
                 textAlign: TextAlign.center,

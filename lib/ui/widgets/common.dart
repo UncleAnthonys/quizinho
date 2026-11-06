@@ -313,3 +313,19 @@ class OnTheirPhone extends StatelessWidget {
         ]),
       );
 }
+
+/// Solo play: the round's score out of 100, where a team match shows who won.
+class SoloScore extends StatelessWidget {
+  const SoloScore({super.key, required this.score, this.color = Palette.yellow});
+  final int score;
+  final Color color;
+
+  @override
+  Widget build(BuildContext context) => Column(mainAxisSize: MainAxisSize.min, children: [
+        Text('YOUR SCORE', style: AppText.label(15, color: Palette.text)),
+        Row(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.baseline, textBaseline: TextBaseline.alphabetic, children: [
+          Text('$score', style: AppText.headline(72, color: color)),
+          Text(' / 100', style: AppText.headline(28, color: Palette.muted)),
+        ]),
+      ]);
+}

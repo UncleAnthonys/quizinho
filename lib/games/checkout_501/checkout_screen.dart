@@ -214,6 +214,7 @@ class _CheckoutScreenState extends State<CheckoutScreen>
       'dart': c.dartNumber,
       'maxDarts': c.maxTurns,
       'checkedOut': c.checkedOut.isNotEmpty,
+      if (c.phase == CoPhase.finished && _t.teamCount == 1) 'solo': c.soloScore,
       if (last != null)
         'last': {
           'team': last.team,
@@ -442,12 +443,15 @@ class CoLayout extends StatelessWidget {
         Text(data['checkedOut'] == true ? 'GAME SHOT!' : 'CLOSEST TO ZERO WINS',
             textAlign: TextAlign.center, style: AppText.headline(34, color: _oche)),
         const SizedBox(height: 6),
-        for (final w in _list('winners'))
-          Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-            _teamChip(_int(w), size: 22),
-            const SizedBox(width: 10),
-            Text('+${data['winPoints']}', style: AppText.headline(40, color: Palette.yellow)),
-          ]),
+        if (data['solo'] != null)
+          Center(child: SoloScore(score: _int(data['solo']), color: _oche))
+        else
+          for (final w in _list('winners'))
+            Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+              _teamChip(_int(w), size: 22),
+              const SizedBox(width: 10),
+              Text('+${data['winPoints']}', style: AppText.headline(40, color: Palette.yellow)),
+            ]),
         const SizedBox(height: 12),
         Text('WHO ELSE WAS ON THE BOARD', style: AppText.label(13)),
         Text('Red = over ${CheckoutController.maxDart}, a bust', style: AppText.label(12, color: Palette.danger)),

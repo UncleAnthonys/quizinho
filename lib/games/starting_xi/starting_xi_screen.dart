@@ -263,6 +263,7 @@ class _StartingXiScreenState extends State<StartingXiScreen>
       'lost': t.teamName(lost),
       'out': c.livesLeft[lost]! <= 0,
       'complete': c.isComplete,
+      if (c.phase == BombPhase.finished && t.teamCount == 1) 'solo': c.result().solo ?? 0,
       'bonus': [for (final b in c.bonusTeams) {'name': t.teamName(b), 'color': t.config.teams[b].colorIndex}],
       'bonusPts': StartingXiController.winPoints * widget.round.multiplier,
     };
@@ -440,13 +441,16 @@ class XiLayout extends StatelessWidget {
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16),
       child: Column(children: [
-        Text(data['complete'] == true ? 'FULL XI NAMED!' : 'LAST TEAM STANDING', style: AppText.headline(34, color: Palette.yellow)),
+        Text(
+            data['complete'] == true ? 'FULL XI NAMED!' : (data['solo'] != null ? 'OUT OF LIVES' : 'LAST TEAM STANDING'),
+            style: AppText.headline(34, color: Palette.yellow)),
         const SizedBox(height: 8),
-        if (bonus.isNotEmpty)
+        if (data['solo'] != null) SoloScore(score: _int(data['solo'])),
+        if (bonus.isNotEmpty && data['solo'] == null)
           Wrap(spacing: 8, runSpacing: 8, alignment: WrapAlignment.center, children: [
             for (final b in bonus) TeamChip(name: '${b['name']}', colorIndex: _int(b['color'])),
           ]),
-        if (bonus.isNotEmpty)
+        if (bonus.isNotEmpty && data['solo'] == null)
           Padding(
             padding: const EdgeInsets.only(top: 6),
             child: Text('+${data['bonusPts']}', style: AppText.label(15, color: Palette.gold)),
