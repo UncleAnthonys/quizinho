@@ -52,9 +52,12 @@ class _PointlessScreenState extends State<PointlessScreen>
       return;
     }
     _t.markUsed(_mode, b.id);
-    final c = PointlessController(category: b, teamCount: _t.teamCount, startTeam: _t.standings.last)..start();
+    // Solo: one answer per category (a solo Pointless is three categories).
+    final c = PointlessController(
+        category: b, teamCount: _t.teamCount, startTeam: _t.standings.last, answersPerTeam: _t.teamCount == 1 ? 1 : 2)
+      ..start();
     c.addListener(() => _onChange(c));
-    if (services.room case final room?) _phones = TurnBridge(room, _t)..start();
+    if (roomFor(_t) case final room?) _phones = TurnBridge(room, _t)..start();
     setState(() => _c = c);
     _syncPhones(c);
     startClock(c.advance);

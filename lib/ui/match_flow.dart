@@ -96,7 +96,7 @@ abstract final class MatchFlow {
     );
     // Buzzer games put the question on the phones themselves.
     if (mode != GameModeId.clubConnections && mode != GameModeId.careerPath) _phones(context, t, mode.title);
-    nav.pushReplacement(_route(_Guard(child: _gameFor(mode, round))));
+    nav.pushReplacement(_route(_Guard(child: gameFor(mode, round))));
   }
 
   static void toWinner(BuildContext context, Tournament t) {
@@ -105,7 +105,8 @@ abstract final class MatchFlow {
     Navigator.of(context).pushReplacement(_route(WinnerScreen(tournament: t)));
   }
 
-  static Widget _gameFor(GameModeId mode, RoundContext round) => switch (mode) {
+  /// The game screen for [mode] (also used by solo play).
+  static Widget gameFor(GameModeId mode, RoundContext round) => switch (mode) {
         GameModeId.clubConnections => ClubConnectionsScreen(round: round),
         GameModeId.careerPath => CareerPathScreen(round: round),
         GameModeId.startingXi => StartingXiScreen(round: round),

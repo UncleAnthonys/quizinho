@@ -66,4 +66,9 @@ class CareerPathController extends BuzzRaceController<CareerPath> {
 
   @override
   (int, bool) pointsFor(Player p) => (pointsAvailable, false);
+
+  /// Solo: the fewer clubs you needed, the more of the 20 you get.
+  @override
+  double soloScoreFor(BuzzOutcome o, double openFraction) =>
+      BuzzRaceController.soloPerQuestion * o.points / maxPoints;
 }

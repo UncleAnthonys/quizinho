@@ -55,7 +55,7 @@ class _CheckoutScreenState extends State<CheckoutScreen>
     _t.markUsed(_mode, cat.id);
     final c = CheckoutController(category: cat, teamCount: _t.teamCount, startTeam: _t.standings.last)..begin();
     c.addListener(() => _onChange(c));
-    if (services.room case final room?) _phones = TurnBridge(room, _t)..start();
+    if (roomFor(_t) case final room?) _phones = TurnBridge(room, _t)..start();
     setState(() => _c = c);
     _syncPhones(c);
     startClock(c.advance);

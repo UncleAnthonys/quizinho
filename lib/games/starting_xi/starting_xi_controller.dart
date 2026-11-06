@@ -111,7 +111,8 @@ class StartingXiController extends ChangeNotifier {
 
   void continueAfterExplosion() {
     if (phase != BombPhase.exploded) return;
-    if (aliveTeams.length <= 1) {
+    // Solo: play on until your lives are gone; teams: until one's left.
+    if (aliveTeams.length <= (teamCount == 1 ? 0 : 1)) {
       _finish();
       return;
     }
@@ -125,7 +126,12 @@ class StartingXiController extends ChangeNotifier {
     for (var t = 0; t < teamCount; t++) {
       pts[t] = bonusTeams.contains(t) ? winPoints : 0;
     }
-    return RoundResult(mode: GameModeId.startingXi, points: pts);
+    return RoundResult(
+      mode: GameModeId.startingXi,
+      points: pts,
+      // Solo: how much of the XI you named.
+      solo: teamCount == 1 ? (correctByTeam[0]! * 100 / match.lineup.length).round() : null,
+    );
   }
 
   void _explode() {

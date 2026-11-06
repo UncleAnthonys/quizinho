@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import '../../core/app_services.dart';
 import '../../core/theme.dart';
 import '../../domain/tournament.dart';
-import '../../games/survival/survival_screen.dart';
 import '../../multiplayer/guest_screen.dart';
 import '../../multiplayer/rooms_config.dart';
 import '../match_access.dart';
@@ -12,6 +11,7 @@ import '../widgets/common.dart';
 import '../widgets/logo.dart';
 import 'settings_screen.dart';
 import 'setup_screen.dart';
+import 'solo_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -82,10 +82,7 @@ class HomeScreen extends StatelessWidget {
                   ),
                   icon: const Icon(Icons.person_rounded, color: Palette.yellow, size: 20),
                   label: Text('PLAY SOLO', style: AppText.headline(18)),
-                  onPressed: () async {
-                    if (!await MatchAccess.allowed(context) || !context.mounted) return;
-                    Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const SurvivalScreen()));
-                  },
+                  onPressed: () => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const SoloScreen())),
                 ),
               ),
               const SizedBox(height: 6),

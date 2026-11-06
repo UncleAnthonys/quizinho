@@ -59,7 +59,7 @@ class _CareerPathScreenState extends State<CareerPathScreen>
           miss: c.lastMiss, clip: punditClip(c, faceOff: _faces.current != null));
       if (mounted) setState(() {});
     });
-    final room = services.room;
+    final room = roomFor(t);
     if (room != null) {
       _bridge = BuzzBridge(
         room: room,

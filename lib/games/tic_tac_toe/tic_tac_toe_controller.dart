@@ -193,7 +193,14 @@ class TicTacToeController extends ChangeNotifier {
         points: {
           for (var t = 0; t < teamCount; t++) t: squaresOf(t) + (winner == t ? lineBonus : 0),
         },
+        // Solo: 10 a square, 10 more for any line.
+        solo: teamCount == 1 ? min(100, squaresOf(0) * 10 + (winningLine != null ? 10 : 0)) : null,
       );
+
+  /// Solo: wrong answers or passes allowed before the game ends.
+  static const int soloLives = 3;
+  int misses = 0;
+  bool get _solo => teamCount == 1;
 
   void _claim(int sq, String name) {
     dryTurns = 0;
@@ -202,6 +209,12 @@ class TicTacToeController extends ChangeNotifier {
     _emit(GameEvent.correct);
     for (final line in lines) {
       if (line.every((i) => owner[i] == currentTeam)) {
+        // Solo carries on to fill the grid; a line still counts.
+        if (_solo) {
+          winningLine ??= line;
+          winner = currentTeam;
+          continue;
+        }
         winningLine = line;
         winner = currentTeam;
         _finish();
@@ -218,13 +231,14 @@ class TicTacToeController extends ChangeNotifier {
   void _miss({bool timeout = false}) {
     _emit(timeout ? GameEvent.timeUp : GameEvent.wrong);
     dryTurns++;
+    misses++;
     _nextTurn();
   }
 
   void _nextTurn() {
     turns++;
     selected = null;
-    if (turns >= maxTurns || dryTurns >= stallLaps * teamCount) {
+    if (_solo ? misses >= soloLives : (turns >= maxTurns || dryTurns >= stallLaps * teamCount)) {
       _finish();
       return;
     }

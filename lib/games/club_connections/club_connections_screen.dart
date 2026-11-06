@@ -63,7 +63,7 @@ class _ClubConnectionsScreenState extends State<ClubConnectionsScreen>
       }
       if (mounted) setState(() {});
     });
-    final room = services.room;
+    final room = roomFor(t);
     if (room != null) {
       final players = services.repo.players;
       _bridge = BuzzBridge(

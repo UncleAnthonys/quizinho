@@ -52,7 +52,7 @@ class _BiddingWarScreenState extends State<BiddingWarScreen>
     _t.markUsed(_mode, b.id);
     final c = BiddingWarController(category: b, teamCount: _t.teamCount, startTeam: _t.standings.last);
     c.addListener(() => _onChange(c));
-    if (services.room case final room?) _phones = TurnBridge(room, _t)..start();
+    if (roomFor(_t) case final room?) _phones = TurnBridge(room, _t)..start();
     setState(() => _c = c);
     _syncPhones(c);
     startClock(c.advance);

@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/foundation.dart';
 
 import '../../data/models.dart';
@@ -182,11 +184,19 @@ class CheckoutController extends ChangeNotifier {
     return {for (var t = 0; t < teamCount; t++) if (remaining[t] == best) t};
   }
 
+  /// Solo, out of 100: check out and it's 100, less 8 for every dart after
+  /// the third (never below 40); don't, and it's up to 50 for how far you got.
+  int get soloScore {
+    if (checkedOut.contains(0)) return max(40, 100 - max(0, throws.length - 3) * 8);
+    return (50 * (start - max(0, remaining[0])) / start).round().clamp(0, 50);
+  }
+
   RoundResult result() {
     final w = winners;
     return RoundResult(
       mode: GameModeId.checkout501,
       points: {for (var t = 0; t < teamCount; t++) t: w.contains(t) ? winPoints : 0},
+      solo: teamCount == 1 ? soloScore : null,
     );
   }
 

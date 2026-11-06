@@ -150,6 +150,10 @@ class PointlessController extends ChangeNotifier {
         for (var t = 0; t < teamCount; t++)
           t: (w.contains(t) ? winPoints : 0) + answersOf(t).where((a) => a.pointless).length * pointlessBonus,
       },
+      // Solo: how far under 100 your answers landed (a wrong one scores 0).
+      solo: teamCount == 1 && answers.isNotEmpty
+          ? (answers.fold<int>(0, (s, a) => s + (a.valid ? 100 - a.score : 0)) / answers.length).round().clamp(0, 100)
+          : null,
     );
   }
 

@@ -51,6 +51,18 @@ class AppSettings extends ChangeNotifier {
     return true;
   }
 
+  /// Solo personal bests, per game (or 'cup') and difficulty — an Easy best
+  /// never stands against Expert.
+  int soloBest(String what, String difficulty) => _prefs.getInt('soloBest_${what}_$difficulty') ?? 0;
+
+  /// Saves [score] if it beats the best; true when it's a new record.
+  bool recordSolo(String what, String difficulty, int score) {
+    if (score <= soloBest(what, difficulty)) return false;
+    _prefs.setInt('soloBest_${what}_$difficulty', score);
+    notifyListeners();
+    return true;
+  }
+
   /// Games whose full rules this phone has already been shown before a
   /// round; after that the intro is a short card with a Rules button.
   bool rulesSeen(String mode) => (_prefs.getStringList('rulesSeen') ?? const []).contains(mode);

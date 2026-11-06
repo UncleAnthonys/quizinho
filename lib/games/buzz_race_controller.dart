@@ -208,10 +208,30 @@ abstract class BuzzRaceController<Q> extends ChangeNotifier {
     notifyListeners();
   }
 
-  RoundResult result({String headline = ''}) =>
-      RoundResult(mode: mode, points: Map.of(roundPoints), headline: headline);
+  RoundResult result({String headline = ''}) => RoundResult(
+        mode: mode,
+        points: Map.of(roundPoints),
+        headline: headline,
+        solo: teamCount == 1 ? (soloTotal * 100 / (soloPerQuestion * questions.length)).round().clamp(0, 100) : null,
+      );
+
+  // ---- solo (one team) -----------------------------------------------------
+
+  /// Each question is worth this much in solo play; the round is then scaled
+  /// to 100.
+  static const double soloPerQuestion = 20;
+  double soloTotal = 0;
+
+  /// Solo score for a right answer, out of [soloPerQuestion]. Default (Club
+  /// Connections): 12 for getting it, up to 6 for speed — [openFraction] of
+  /// the clock left when you buzzed — and 2 for a rare pick.
+  @protected
+  double soloScoreFor(BuzzOutcome o, double openFraction) => 12 + 6 * openFraction + (o.bonus ? 2 : 0);
 
   void _award(BuzzOutcome o, GameEvent e) {
+    if (teamCount == 1) {
+      soloTotal += soloScoreFor(o, (_pausedOpen.$1 / _pausedOpen.$2).clamp(0.0, 1.0)).clamp(0, soloPerQuestion);
+    }
     roundPoints[o.team!] = (roundPoints[o.team!] ?? 0) + o.points;
     _resolve(o, e);
   }

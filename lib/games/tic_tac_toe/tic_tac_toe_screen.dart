@@ -91,7 +91,7 @@ class _TicTacToeScreenState extends State<TicTacToeScreen>
       answerSeconds: max(15, _t.config.answerSeconds),
     );
     c.addListener(() => _onChange(c));
-    if (services.room case final room?) _phones = TurnBridge(room, _t)..start();
+    if (roomFor(_t) case final room?) _phones = TurnBridge(room, _t)..start();
     setState(() => _c = c);
     _onChange(c);
     startClock(c.advance);

@@ -70,9 +70,10 @@ class _StartingXiScreenState extends State<StartingXiScreen>
     );
     _assignTurnPlayer(c);
     c.addListener(() => _onChange(c));
-    if (services.room case final room?) _phones = TurnBridge(room, t)..start();
+    if (roomFor(t) case final room?) _phones = TurnBridge(room, t)..start();
     setState(() => _c = c);
     _syncPhones(c);
+    if (t.teamCount == 1) scheduleMicrotask(c.startTurn); // solo: straight in
     startClock(c.advance);
   }
 
@@ -125,6 +126,8 @@ class _StartingXiScreenState extends State<StartingXiScreen>
 
   void _onChange(StartingXiController c) {
     _assignTurnPlayer(c);
+    // Solo: nobody to pass to — the bomb's straight back with you.
+    if (c.teamCount == 1 && c.phase == BombPhase.handover) scheduleMicrotask(c.startTurn);
     _syncPhones(c);
     handleEvent(c.eventSerial, c.lastEvent);
     if (c.phase == BombPhase.ticking) {

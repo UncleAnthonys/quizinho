@@ -9,6 +9,7 @@ import 'package:flutter/widgets.dart';
 import '../core/app_services.dart';
 import '../core/sound_service.dart';
 import '../domain/tournament.dart';
+import '../multiplayer/room.dart' show HostRoom;
 import 'buzz_race_controller.dart' show GameEvent;
 
 /// What every game screen receives from the tournament flow.
@@ -31,6 +32,9 @@ mixin GameScreenSupport<W extends StatefulWidget> on State<W>, TickerProviderSta
   int _seenSerial = 0;
 
   AppServices get services => AppScope.read(context);
+
+  /// The room's phones for this round — none in solo play (one team).
+  HostRoom? roomFor(Tournament t) => t.teamCount > 1 ? services.room : null;
 
   /// Start calling [onTick] every frame with the time since the last frame.
   void startClock(void Function(Duration dt) onTick) {

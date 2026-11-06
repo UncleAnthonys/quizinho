@@ -105,7 +105,7 @@ class TournamentConfig {
 
 /// Points a single round awarded, before any wildcard multiplier.
 class RoundResult {
-  RoundResult({required this.mode, required this.points, this.headline = ''});
+  RoundResult({required this.mode, required this.points, this.headline = '', this.solo});
 
   /// Nothing played — zero for everyone.
   factory RoundResult.empty(GameModeId mode, int teamCount) =>
@@ -115,6 +115,10 @@ class RoundResult {
   /// team index → points earned this round
   final Map<int, int> points;
   final String headline;
+
+  /// Solo play (one team): the round's score out of 100, the same scale for
+  /// every game so personal bests line up.
+  final int? solo;
 }
 
 class RoundRecord {
