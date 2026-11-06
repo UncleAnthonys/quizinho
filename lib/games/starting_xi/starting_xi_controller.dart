@@ -40,7 +40,9 @@ class StartingXiController extends ChangeNotifier {
   final int turnSeconds;
   final int startingLives;
 
-  static const int survivorBonus = 3;
+  /// The round's winner(s) — last team standing, or most named — get this,
+  /// like every other game. Names still count towards Player of the Match.
+  static const int winPoints = 3;
 
   final Map<int, int> livesLeft = {};
   final Map<int, int> correctByTeam = {};
@@ -121,7 +123,7 @@ class StartingXiController extends ChangeNotifier {
   RoundResult result() {
     final pts = <int, int>{};
     for (var t = 0; t < teamCount; t++) {
-      pts[t] = correctByTeam[t]! + (bonusTeams.contains(t) ? survivorBonus : 0);
+      pts[t] = bonusTeams.contains(t) ? winPoints : 0;
     }
     return RoundResult(mode: GameModeId.startingXi, points: pts);
   }

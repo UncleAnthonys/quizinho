@@ -261,7 +261,7 @@ class _StartingXiScreenState extends State<StartingXiScreen>
       'out': c.livesLeft[lost]! <= 0,
       'complete': c.isComplete,
       'bonus': [for (final b in c.bonusTeams) {'name': t.teamName(b), 'color': t.config.teams[b].colorIndex}],
-      'bonusPts': StartingXiController.survivorBonus * widget.round.multiplier,
+      'bonusPts': StartingXiController.winPoints * widget.round.multiplier,
     };
   }
 }

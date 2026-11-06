@@ -28,11 +28,11 @@ enum GameModeId {
     tagline: 'Name the line-up before the bomb goes off',
     playable: true,
     rules: [
-      'Name one player from the starting XI, then pass the phone.',
+      'Name one player from the starting XI, then the bomb passes on.',
       'Wrong answer or time up: the bomb goes off and you lose a life.',
-      '1 point per player named. Last team standing (or most named) takes a 3-point bonus.',
+      'Last team standing — or most named if the XI is finished — wins the round: +3.',
     ],
-    whoPlays: 'Teams take turns. Pass the phone to whoever is named.',
+    whoPlays: 'Teams take turns — on your own phone if you’ve joined, otherwise pass the phone to whoever is named.',
   ),
   wildcard(
     title: 'Wildcard',

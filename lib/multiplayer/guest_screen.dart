@@ -18,6 +18,7 @@ import '../games/starting_xi/starting_xi_screen.dart' show XiLayout;
 import '../games/tic_tac_toe/tic_tac_toe_screen.dart' show TttLayout;
 import '../games/career_path/career_path_screen.dart' show CareerTrail;
 import '../games/club_connections/club_connections_screen.dart' show ClubsCard;
+import '../ui/widgets/buzzer_pad.dart' show TeamBuzzer;
 import '../ui/widgets/common.dart';
 import '../ui/widgets/player_picker.dart';
 import 'room.dart';
@@ -347,35 +348,33 @@ class _GuestGameState extends State<_GuestGame> with SingleTickerProviderStateMi
       );
     } else if (myBuzzer) {
       final buzzed = _buzzedOn == q;
+      final teamName = me.team < asList(v['teams']).length ? '${asMap(asList(v['teams'])[me.team])['name'] ?? ''}' : '';
+      // The host's own buzzer, filling the rest of the screen like it does there.
       action = Padding(
-        padding: const EdgeInsets.all(16),
-        child: SizedBox(
-          height: 180,
-          width: double.infinity,
-          child: FilledButton(
-            style: FilledButton.styleFrom(
-              backgroundColor: Palette.team(colour),
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(28)),
-            ),
-            onPressed: buzzed
-                ? null
-                : () {
-                    s.haptic(HapticStrength.heavy);
-                    setState(() => _buzzedOn = q);
-                    widget.room.buzz(q);
-                    // The main phone should take it within a second; if it
-                    // hasn't (asleep, lost signal), let them buzz again.
-                    Future.delayed(const Duration(seconds: 3), () {
-                      if (!mounted || _buzzedOn != q) return;
-                      final v = widget.room.view;
-                      if ('${v['q']}' == q && v['phase'] == 'open') {
-                        setState(() => _buzzedOn = null);
-                        ScaffoldMessenger.maybeOf(context)?.showSnackBar(const SnackBar(
-                            content: Text('The main phone didn’t get that — keep it open and buzz again')));
-                      }
-                    });
-                  },
-            child: Text(buzzed ? 'BUZZED!' : 'BUZZ', style: AppText.headline(56, color: Palette.onTeam(colour))),
+        padding: const EdgeInsets.all(12),
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(minHeight: 180),
+          child: TeamBuzzer(
+            name: faceOff.isEmpty ? teamName : '${me.name} · $teamName',
+            colorIndex: colour,
+            enabled: !buzzed,
+            locked: false,
+            onBuzz: () {
+              s.haptic(HapticStrength.heavy);
+              setState(() => _buzzedOn = q);
+              widget.room.buzz(q);
+              // The main phone should take it within a second; if it
+              // hasn't (asleep, lost signal), let them buzz again.
+              Future.delayed(const Duration(seconds: 3), () {
+                if (!mounted || _buzzedOn != q) return;
+                final v = widget.room.view;
+                if ('${v['q']}' == q && v['phase'] == 'open') {
+                  setState(() => _buzzedOn = null);
+                  ScaffoldMessenger.maybeOf(context)?.showSnackBar(const SnackBar(
+                      content: Text('The main phone didn’t get that — keep it open and buzz again')));
+                }
+              });
+            },
           ),
         ),
       );
@@ -435,7 +434,10 @@ class _GuestGameState extends State<_GuestGame> with SingleTickerProviderStateMi
       ]);
     }
 
-    return ListView(children: [
+    // Everything above scrolls if it must; the action (the buzzer, the answer
+    // box) fills whatever's left of the screen.
+    return CustomScrollView(slivers: [
+      SliverList(delegate: SliverChildListDelegate([
       _scores(v['teams'], round: '${v['round'] ?? ''}', highlight: (answering['team'] as num?)?.toInt()),
       Padding(
         padding: const EdgeInsets.fromLTRB(18, 8, 18, 0),
@@ -464,7 +466,8 @@ class _GuestGameState extends State<_GuestGame> with SingleTickerProviderStateMi
             ),
           ]),
         ),
-      action,
+      ])),
+      SliverFillRemaining(hasScrollBody: false, child: action),
     ]);
   }
 

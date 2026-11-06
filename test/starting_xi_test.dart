@@ -49,7 +49,7 @@ void main() {
     expect(c.livesLeft[0], 2);
   });
 
-  test('sudden death: last team standing gets the bonus', () {
+  test('sudden death: last team standing wins the round', () {
     final c = make(lives: 1)..startTurn();
     c.submit(henry); // team 0 +1
     c.startTurn();
@@ -58,7 +58,7 @@ void main() {
     expect(c.phase, BombPhase.finished);
     expect(c.bonusTeams, [0]);
     final r = c.result();
-    expect(r.points[0], 1 + StartingXiController.survivorBonus);
+    expect(r.points[0], StartingXiController.winPoints);
     expect(r.points[1], 0);
   });
 
@@ -75,7 +75,7 @@ void main() {
     expect(c.currentTeam, 1); // 0 skipped
   });
 
-  test('completing the XI ends the round; most names wins the bonus', () {
+  test('completing the XI ends the round; most names wins it', () {
     final c = make()..startTurn();
     c.submit(henry); // team 0
     c.startTurn();
@@ -85,6 +85,6 @@ void main() {
     expect(c.isComplete, isTrue);
     expect(c.phase, BombPhase.finished);
     expect(c.bonusTeams, [0]);
-    expect(c.result().points, {0: 2 + StartingXiController.survivorBonus, 1: 1});
+    expect(c.result().points, {0: StartingXiController.winPoints, 1: 0});
   });
 }
