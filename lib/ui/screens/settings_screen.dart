@@ -5,6 +5,7 @@ import '../../core/purchases.dart';
 import '../../core/sound_service.dart';
 import '../../core/theme.dart';
 import '../widgets/common.dart';
+import '../how_to_play.dart';
 import 'paywall_screen.dart';
 import 'voice_test_screen.dart';
 
@@ -20,6 +21,12 @@ class SettingsScreen extends StatelessWidget {
         child: ListenableBuilder(
           listenable: s.settings,
           builder: (context, _) => ListView(padding: const EdgeInsets.all(16), children: [
+            ListTile(
+              leading: const Icon(Icons.menu_book_rounded, color: Palette.yellow),
+              title: const Text('How to play'),
+              subtitle: const Text('The rules of every game'),
+              onTap: () => showHowToPlay(context),
+            ),
             SwitchListTile(
               title: const Text('Sound effects'),
               value: s.settings.soundOn,

@@ -8,12 +8,25 @@ import '../../domain/tournament.dart';
 import '../match_flow.dart';
 import '../widgets/common.dart';
 
-/// Ten-second rules card before each game. No long tutorials.
-class RoundIntroScreen extends StatelessWidget {
+/// Ten-second rules card before each game. The full rules the first time a
+/// phone plays each game; after that just the name, who plays, and a Rules
+/// button for anyone who wants a reminder.
+class RoundIntroScreen extends StatefulWidget {
   const RoundIntroScreen({super.key, required this.tournament, required this.mode, required this.multiplier});
   final Tournament tournament;
   final GameModeId mode;
   final int multiplier;
+
+  @override
+  State<RoundIntroScreen> createState() => _RoundIntroScreenState();
+}
+
+class _RoundIntroScreenState extends State<RoundIntroScreen> {
+  Tournament get tournament => widget.tournament;
+  GameModeId get mode => widget.mode;
+  int get multiplier => widget.multiplier;
+
+  late bool _showRules = !AppScope.read(context).settings.rulesSeen(mode.name);
 
   @override
   Widget build(BuildContext context) {
@@ -48,6 +61,15 @@ class RoundIntroScreen extends StatelessWidget {
                   ),
                 ],
                 const SizedBox(height: 24),
+                if (!_showRules)
+                  Center(
+                    child: TextButton.icon(
+                      onPressed: () => setState(() => _showRules = true),
+                      icon: const Icon(Icons.menu_book_rounded, color: Palette.yellow),
+                      label: Text('RULES', style: AppText.label(16, color: Palette.yellow)),
+                    ),
+                  ),
+                if (_showRules)
                 for (final (i, rule) in mode.rules.indexed)
                   Padding(
                     padding: const EdgeInsets.only(bottom: 14),
@@ -102,6 +124,7 @@ class RoundIntroScreen extends StatelessWidget {
                 icon: Icons.sports_soccer,
                 onPressed: () {
                   final s = AppScope.read(context);
+                  s.settings.markRulesSeen(mode.name);
                   s.sound.play(Sfx.whistle);
                   s.haptic(HapticStrength.medium);
                   MatchFlow.toGame(context, tournament, mode, multiplier);

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import '../../core/app_services.dart';
 import '../../core/theme.dart';
-import '../../domain/game_mode.dart';
 import '../../domain/tournament.dart';
 import '../../games/survival/survival_screen.dart';
 import '../../multiplayer/guest_screen.dart';
@@ -50,7 +49,7 @@ class HomeScreen extends StatelessWidget {
                       Text('THE FOOTBALL PARTY GAME', style: AppText.label(18, color: Palette.yellow)),
                       const SizedBox(height: 18),
                       const Text(
-                        'One-on-one or split into teams. A different game every round — buzz in, steal points, and Quizinho keeps the score.',
+                        'One-on-one or teams. A new game every round.',
                         textAlign: TextAlign.center,
                         style: TextStyle(color: Palette.muted, fontSize: 16, height: 1.4),
                       ),
@@ -86,14 +85,14 @@ class HomeScreen extends StatelessWidget {
                   },
                 ),
               ),
-              const SizedBox(height: 4),
+              const SizedBox(height: 6),
+              // For someone with the app joining a friend's game by code (most
+              // join by scanning the QR) — a quiet link, not a button.
               if (roomsEnabled)
-                GhostButton(
-                  label: 'Join a friend’s game',
-                  icon: Icons.login_rounded,
+                TextButton(
                   onPressed: () => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const JoinScreen())),
+                  child: Text('Join a friend’s game', style: AppText.label(14, color: Palette.muted)),
                 ),
-              GhostButton(label: 'How to play', icon: Icons.menu_book_rounded, onPressed: () => _howToPlay(context)),
               if (demo)
                 const Padding(
                   padding: EdgeInsets.only(top: 8),
@@ -109,40 +108,6 @@ class HomeScreen extends StatelessWidget {
       ),
     );
   }
-
-  void _howToPlay(BuildContext context) => showModalBottomSheet<void>(
-        context: context,
-        backgroundColor: Palette.pitch,
-        isScrollControlled: true,
-        showDragHandle: true,
-        builder: (_) => DraggableScrollableSheet(
-          expand: false,
-          initialChildSize: 0.75,
-          maxChildSize: 0.95,
-          builder: (context, scroll) => ListView(controller: scroll, padding: const EdgeInsets.fromLTRB(20, 0, 20, 30), children: [
-            Text('HOW TO PLAY', style: AppText.headline(34)),
-            const SizedBox(height: 8),
-            const Text(
-              '1. Split into 2–6 teams and name them.\n'
-              '2. Each round, the app picks a game at random.\n'
-              '3. The app explains the rules, runs the clock and keeps score.\n'
-              '4. Most points after the last round lifts the trophy.',
-              style: TextStyle(fontSize: 16, height: 1.5),
-            ),
-            const SizedBox(height: 16),
-            for (final m in GameModeId.values.where((m) => m.playable)) ...[
-              Row(children: [
-                Icon(m.icon, color: m.color),
-                const SizedBox(width: 8),
-                Text(m.title.toUpperCase(), style: AppText.headline(24, color: m.color)),
-              ]),
-              const SizedBox(height: 4),
-              for (final r in m.rules) Text('• $r', style: const TextStyle(fontSize: 15, height: 1.45)),
-              const SizedBox(height: 14),
-            ],
-          ]),
-        ),
-      );
 }
 
 /// A match that was going when the app closed: carry on, or bin it.
