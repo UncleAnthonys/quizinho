@@ -516,6 +516,7 @@ class _GuestGameState extends State<_GuestGame> with SingleTickerProviderStateMi
             scores: scores,
             left: board['phase'] == 'ticking' && v['left'] != null ? left : seconds,
             startLabel: 'STARTING…',
+            passing: false,
             answerBox: answerBox(),
           ),
         );

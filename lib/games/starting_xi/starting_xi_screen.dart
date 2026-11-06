@@ -90,8 +90,9 @@ class _StartingXiScreenState extends State<StartingXiScreen>
       case BombPhase.handover:
       case BombPhase.ticking:
         // On their own phone the bomb passes straight on — no "tap to start"
-        // to buy thinking time. Only a passed-round host phone waits for a tap.
-        if (c.phase == BombPhase.handover && p.phoneFor(c.currentTeam, name: _turnPlayer) != null) {
+        // to buy thinking time. Same on the host phone when it's just one
+        // person's (everyone else has joined): nobody's passing it round.
+        if (c.phase == BombPhase.handover && (p.phoneFor(c.currentTeam, name: _turnPlayer) != null || _hostIsOnePlayers)) {
           scheduleMicrotask(c.startTurn);
         }
         final ticking = c.phase == BombPhase.ticking;
@@ -190,6 +191,7 @@ class _StartingXiScreenState extends State<StartingXiScreen>
       data: _view(c),
       typing: typing,
       left: c.secondsLeft,
+      passing: !_hostIsOnePlayers,
       multiplier: widget.round.multiplier,
       scores: Scoreboard(
         tournament: t,
@@ -216,6 +218,23 @@ class _StartingXiScreenState extends State<StartingXiScreen>
             ),
       finish: BigButton(label: 'Finish round', icon: Icons.flag, onPressed: () => widget.round.onComplete(c.result())),
     );
+  }
+
+  /// Everyone but one player has joined on their own phone, so the host
+  /// phone is that one player's and is never passed round.
+  bool get _hostIsOnePlayers {
+    final room = _phones?.room;
+    if (room == null) return false;
+    final t = widget.round.tournament;
+    var notJoined = 0;
+    for (var i = 0; i < t.teamCount; i++) {
+      final names = t.config.teams[i].players;
+      if (names.isEmpty) return false; // team turns without names: unknown
+      for (final n in names) {
+        if (room.memberFor(i, n) == null) notJoined++;
+      }
+    }
+    return notJoined <= 1;
   }
 
   String _extra(StartingXiController c, int i) =>
@@ -265,7 +284,11 @@ class XiLayout extends StatelessWidget {
     this.onContinue,
     this.finish,
     this.startLabel,
+    this.passing = true,
   });
+
+  /// The host phone is being passed round ("PASS TO …"); otherwise "UP NEXT".
+  final bool passing;
   final Map<String, Object?> data;
   final Widget scores;
   final Widget answerBox;
@@ -360,7 +383,7 @@ class XiLayout extends StatelessWidget {
             child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
               Icon(Icons.phone_iphone, size: 44, color: Palette.onTeam(colour)),
               const SizedBox(height: 6),
-              Text('PASS TO', style: AppText.label(18, color: Palette.onTeam(colour))),
+              Text(passing ? 'PASS TO' : 'UP NEXT', style: AppText.label(18, color: Palette.onTeam(colour))),
               FittedBox(
                 fit: BoxFit.scaleDown,
                 child: Text(who.toUpperCase(), style: AppText.headline(54, color: Palette.onTeam(colour))),
