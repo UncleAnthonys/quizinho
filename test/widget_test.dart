@@ -22,7 +22,7 @@ void main() {
     await tester.pumpWidget(QuizinhoApp(services: services));
     expect(find.byType(QuizinhoWordmark), findsOneWidget);
 
-    await tester.tap(find.text('HEAD TO HEAD'));
+    await tester.tap(find.text('START TOURNAMENT'));
     await tester.pumpAndSettle();
 
     expect(find.text('Home'), findsOneWidget);
