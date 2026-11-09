@@ -241,7 +241,7 @@ class _SetupScreenState extends State<SetupScreen> {
                 if (_gender == FootballGender.women)
                   const Padding(
                     padding: EdgeInsets.only(top: 6, left: 4),
-                    child: Text('Starting XI and Heads Up are men’s only for now, so they’re left out.',
+                    child: Text('Starting XI and On Your Head are men’s only for now, so they’re left out.',
                         style: TextStyle(color: Palette.muted)),
                   ),
                 const SizedBox(height: 18),
@@ -297,7 +297,7 @@ class _SetupScreenState extends State<SetupScreen> {
                     children: [
                       _choice('Answer time', [5, 8, 12], _answerSeconds, (v) => _answerSeconds = v, suffix: 's'),
                       _choice('Bomb timer', [10, 20, 30], _bombSeconds, (v) => _bombSeconds = v, suffix: 's'),
-                      _choice('Heads Up turn', [30, 60, 90], _headsUpSeconds, (v) => _headsUpSeconds = v, suffix: 's'),
+                      _choice('On Your Head turn', [30, 60, 90], _headsUpSeconds, (v) => _headsUpSeconds = v, suffix: 's'),
                       _choice('Bomb lives', [1, 3], _lives, (v) => _lives = v, labels: {1: 'Sudden death', 3: 'Three lives'}),
                     ],
                   ),

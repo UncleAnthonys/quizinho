@@ -174,7 +174,7 @@ class _HeadsUpScreenState extends State<HeadsUpScreen>
     final colour = _t.config.teams[team].colorIndex;
     return ListView(padding: const EdgeInsets.fromLTRB(16, 8, 16, 16), children: [
       Row(children: [
-        Text('FOOTBALL HEADS UP', style: AppText.label(15, color: Palette.yellow)),
+        Text('ON YOUR HEAD', style: AppText.label(15, color: Palette.yellow)),
         const Spacer(),
         if (widget.round.multiplier > 1)
           Text('x${widget.round.multiplier} POINTS', style: AppText.label(15, color: Palette.gold)),

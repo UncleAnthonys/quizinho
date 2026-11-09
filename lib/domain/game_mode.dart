@@ -88,7 +88,7 @@ enum GameModeId {
     whoPlays: 'Each team confers, then names one player per turn.',
   ),
   headsUp(
-    title: 'Football Heads Up',
+    title: 'On Your Head',
     tagline: 'Phone on your forehead — your team describes',
     playable: true,
     rules: [

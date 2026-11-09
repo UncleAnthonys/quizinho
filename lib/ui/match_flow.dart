@@ -190,6 +190,6 @@ extension GameModeStyle on GameModeId {
         GameModeId.biddingWar => 'BIDDING WAR',
         GameModeId.pointless => 'POINTLESS',
         GameModeId.checkout501 => '501',
-        GameModeId.headsUp => 'HEADS UP',
+        GameModeId.headsUp => 'ON YOUR HEAD',
       };
 }
