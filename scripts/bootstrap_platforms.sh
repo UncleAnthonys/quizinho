@@ -16,3 +16,7 @@ else
 fi
 
 python3 scripts/patch_platforms.py
+
+# App icon (iPhone, Android, web) from assets/icon/icon.png.
+flutter pub get > /dev/null
+dart run flutter_launcher_icons
