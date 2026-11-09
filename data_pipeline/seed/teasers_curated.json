@@ -3,10 +3,10 @@
   "teasers": [
     {
       "q": "Played in El Clásico, the Manchester derby AND the North London derby",
-      "eras": 8,
-      "answers": ["emmanuel-adebayor", "alexis-sanchez"],
-      "names": ["Emmanuel Adebayor", "Alexis Sánchez"],
-      "unconfirmed": ["nicolas-anelka", "sylvinho", "gabriel-jesus"],
+      "eras": 30,
+      "answers": ["emmanuel-adebayor", "alexis-sanchez", "nicolas-anelka", "gabriel-jesus"],
+      "names": ["Emmanuel Adebayor", "Alexis Sánchez", "Nicolas Anelka", "Gabriel Jesus"],
+      "ruled_out": {"sylvinho": "Clásico (Barça) and North London derby (Arsenal) yes, but never played a Manchester derby: no United game in his City season, 2009-10 https://aws.fbref.com/en/players/b46e497d/matchlogs/2009-2010/Sylvinho-Match-Logs"},
       "difficulty": 2,
       "proof": {
         "emmanuel-adebayor": [
@@ -18,6 +18,16 @@
           "El Clásico: Barcelona 2-1 Real Madrid, 26 Oct 2013 (scored) https://www.sportsmole.co.uk/football/barcelona/el-clasico/result/result-barcelona-claim-victory-over-real_113802.html",
           "Manchester derby: Man City 2-3 Man United, 7 Apr 2018 (81 min) https://fbref.com/en/matches/50a03a01/",
           "North London derby: Arsenal 2-0 Tottenham, 18 Nov 2017 (scored) https://fourfourtwo.com/news/arsenal-2-tottenham-0-ozil-and-sanchez-come-trumps-wenger"
+        ],
+        "nicolas-anelka": [
+          "El Clásico: Barcelona 2-2 Real Madrid, 13 Oct 1999 (started) https://worldfootball.net/report/primera-division-1999-2000-fc-barcelona-real-madrid",
+          "Manchester derby: Man City 3-1 Man United, 9 Nov 2002 (scored) https://www.rte.ie/sport/soccer/2002/1109/168427-manchester",
+          "North London derby: Arsenal 0-0 Tottenham, 14 Nov 1998 (78 min) https://aws.fbref.com/en/players/931ed5e9/matchlogs/1998-1999/Nicolas-Anelka-Match-Logs"
+        ],
+        "gabriel-jesus": [
+          "El Clásico: Barcelona 1-2 Real Madrid, 25 Oct 2026 (sub, 86') https://www.si.com/soccer/barcelona-vs-real-madrid-player-ratings-mbappe-100-los-blancos-stun-camp-nou",
+          "Manchester derby: Man United 0-2 Man City, 24 Apr 2019 (20 min) https://aws.fbref.com/en/players/b66315ae/matchlogs/2018-2019/Gabriel-Jesus-Match-Logs",
+          "North London derby: Arsenal 3-1 Tottenham, 1 Oct 2022 (scored) https://www.outlookindia.com/sports/epl-2022-arsenal-beats-tottenham-hotspur-3-1-to-stay-top-news-227197"
         ]
       }
     },
