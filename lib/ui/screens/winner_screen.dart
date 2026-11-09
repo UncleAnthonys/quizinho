@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -105,7 +106,18 @@ class _WinnerScreenState extends State<WinnerScreen> with SingleTickerProviderSt
                 ),
                 BigButton(label: 'Rematch', icon: Icons.replay, onPressed: _rematch),
                 const SizedBox(height: 8),
-                GhostButton(label: 'Home', icon: Icons.home, onPressed: () => Navigator.of(context).popUntil((r) => r.isFirst)),
+                GhostButton(
+                  label: 'Home',
+                  icon: Icons.home,
+                  onPressed: () {
+                    // Done for the night: end the phones' room (Rematch keeps it).
+                    final s = AppScope.read(context);
+                    final room = s.room;
+                    s.room = null;
+                    if (room != null) unawaited(room.end().whenComplete(room.dispose));
+                    Navigator.of(context).popUntil((r) => r.isFirst);
+                  },
+                ),
               ]),
             ),
           ),

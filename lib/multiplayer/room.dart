@@ -151,6 +151,16 @@ class HostRoom extends ChangeNotifier {
         'teams': teamsView(t),
       });
 
+  /// The party's over: phones show "Full time", then the room is deleted
+  /// from the database a few seconds later (so they've seen it).
+  Future<void> end() async {
+    await close();
+    await Future<void>.delayed(const Duration(seconds: 10));
+    try {
+      await link.remove(_root);
+    } catch (_) {}
+  }
+
   Future<void> close() async {
     for (final s in _subs) {
       await s.cancel();
