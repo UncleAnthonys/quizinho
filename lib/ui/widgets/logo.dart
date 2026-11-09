@@ -7,9 +7,9 @@ import '../../core/theme.dart';
 /// Quizinho club badge: oval crest with the name arched over the top, 2026
 /// underneath, and a split field — Brazil on the left, England on the right.
 class QuizinhoBadge extends StatelessWidget {
-  const QuizinhoBadge({super.key, this.size = 150, this.brazilRight = false});
+  const QuizinhoBadge({super.key, this.size = 150, this.brazilRight = true});
 
-  /// Flags swapped: England on the left, Brazil on the right.
+  /// England on the left, Brazil on the right (false swaps them).
   final bool brazilRight;
 
   /// Badge height including the stars. Width is 260/370 of the height.
@@ -21,7 +21,7 @@ class QuizinhoBadge extends StatelessWidget {
 }
 
 class _BadgePainter extends CustomPainter {
-  _BadgePainter({this.brazilRight = false});
+  _BadgePainter({this.brazilRight = true});
   final bool brazilRight;
 
   static const _navy = Color(0xFF0F235A);

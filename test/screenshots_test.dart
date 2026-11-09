@@ -173,25 +173,6 @@ void main() {
     await expectLater(find.byType(MaterialApp), matchesGoldenFile('../assets/icon/icon.png'));
   }, skip: !_shots);
 
-  testWidgets('App icon, Brazil on the right (preview)', (tester) async {
-    tester.view.physicalSize = const Size(1024, 1024);
-    tester.view.devicePixelRatio = 1;
-    addTearDown(tester.view.reset);
-    await tester.pumpWidget(MaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: buildTheme(),
-      home: Container(
-        decoration: const BoxDecoration(
-          gradient: RadialGradient(colors: [Color(0xFF17573A), Palette.pitchDeep], radius: 0.9),
-        ),
-        alignment: Alignment.center,
-        child: const QuizinhoBadge(size: 880, brazilRight: true),
-      ),
-    ));
-    await tester.pump(const Duration(seconds: 1));
-    await expectLater(find.byType(MaterialApp), matchesGoldenFile('../docs/shots/icon_brazil_right.png'));
-  }, skip: !_shots);
-
   Widget column(Widget scores, Widget layout) => Column(children: [scores, Expanded(child: layout)]);
 
   const lineup = [
