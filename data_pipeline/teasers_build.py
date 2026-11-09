@@ -63,7 +63,35 @@ POOL = {
     "Q29108": "Zenit", "Q19628": "Olympiacos",
 }
 
+# Derbies, both sides in POOL. A derby teaser names three: you need a player
+# who played for a side in each, so every name that comes to mind for one
+# derby is a red herring for the other two.
+DERBIES = {
+    "El Clásico": ("Q8682", "Q7156"),
+    "the Madrid derby": ("Q8682", "Q8701"),
+    "the Manchester derby": ("Q18656", "Q50602"),
+    "the North London derby": ("Q9617", "Q18741"),
+    "the Merseyside derby": ("Q1130849", "Q5794"),
+    "the North West derby": ("Q1130849", "Q18656"),
+    "the Old Firm": ("Q19593", "Q19597"),
+    "the Tyne–Wear derby": ("Q18716", "Q18739"),
+    "the Milan derby": ("Q1543", "Q631"),
+    "the Derby della Capitale": ("Q2739", "Q2609"),
+    "the Derby d'Italia": ("Q1422", "Q631"),
+    "Der Klassiker": ("Q15789", "Q41420"),
+    "the Revierderby": ("Q41420", "Q32494"),
+    "Le Classique": ("Q483020", "Q132885"),
+    "De Klassieker": ("Q81888", "Q134241"),
+    "O Clássico": ("Q131499", "Q128446"),
+    "the Lisbon derby": ("Q131499", "Q75729"),
+    "the Intercontinental derby": ("Q495299", "Q6601875"),
+    "the Superclásico": ("Q170703", "Q15799"),
+    "the Seville derby": ("Q10329", "Q8723"),
+}
+
 MAX_ANSWERS = 2
+MAX_DERBY_ANSWERS = 4
+KEEP_DERBY = 250
 MIN_FAME = 3  # at least one answer a table could know
 KEEP = 400
 
@@ -103,6 +131,20 @@ def fits(careers: dict[str, set[str]]) -> dict[tuple, set[str]]:
     return out
 
 
+def derby_fits(careers: dict[str, set[str]]) -> dict[tuple, set[str]]:
+    """Three derbies → players who played for a side in each (one club per derby)."""
+    out = collections.defaultdict(set)
+    for pid, s in careers.items():
+        hit = sorted(d for d, pair in DERBIES.items() if s & set(pair))
+        for t in itertools.combinations(hit, 3):
+            # Each derby needs its own club: Real Madrid alone can't cover
+            # El Clásico and the Madrid derby.
+            pairs = [s & set(DERBIES[d]) for d in t]
+            if any(len({x, y, z}) == 3 for x in pairs[0] for y in pairs[1] for z in pairs[2]):
+                out[t].add(pid)
+    return out
+
+
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--offline", action="store_true", help="skip the Wikipedia check (local dry run)")
@@ -115,10 +157,13 @@ def main() -> None:
     fa = fits(a)
     cand = {t: s for t, s in fa.items() if 1 <= len(s) <= MAX_ANSWERS
             and max(by_id[i].get("fame", 0) for i in s) >= MIN_FAME}
-    print(f"Wikidata: {len(a)} players at 2+ pool clubs; {len(cand)} candidate trios")
+    fda = derby_fits(a)
+    dcand = {t: s for t, s in fda.items() if 1 <= len(s) <= MAX_DERBY_ANSWERS
+             and max(by_id[i].get("fame", 0) for i in s) >= MIN_FAME}
+    print(f"Wikidata: {len(a)} players at 2+ pool clubs; {len(cand)} club trios, {len(dcand)} derby trios")
 
     if args.offline:
-        kept = cand
+        kept, dkept = cand, dcand
     else:
         # Everyone with 2+ pool clubs anywhere in Wikidata (appearances or not), so a
         # club or a number Wikidata lacks still shows up on the Wikipedia side.
@@ -127,7 +172,9 @@ def main() -> None:
         b = careers_b(players, loose)
         fb = fits(b)
         kept = {t: s for t, s in cand.items() if fb.get(t, set()) == s}
-        print(f"Both sources agree on {len(kept)} of {len(cand)}")
+        fdb = derby_fits(b)
+        dkept = {t: s for t, s in dcand.items() if fdb.get(t, set()) == s}
+        print(f"Both sources agree on {len(kept)} of {len(cand)} club trios, {len(dkept)} of {len(dcand)} derby trios")
 
     # One question per player as the (or an) answer, the most famous answers first,
     # then shuffled so a run isn't all one club.
@@ -141,6 +188,7 @@ def main() -> None:
         used |= s
         top = max(by_id[i]["fame"] for i in s)
         out.append({
+            "kind": "clubs",
             "clubs": list(t),
             "q": "Played for " + ", ".join(POOL[c] for c in t[:-1]) + " AND " + POOL[t[-1]],
             "answers": sorted(s),
@@ -149,9 +197,31 @@ def main() -> None:
         })
         if len(out) >= KEEP:
             break
+
+    # Derbies: the fewer answers the better, and a player can be the answer
+    # to two derby teasers at most.
+    dorder = sorted(dkept.items(), key=lambda kv: (len(kv[1]), -max(by_id[i]["fame"] for i in kv[1]), kv[0]))
+    dused: collections.Counter = collections.Counter()
+    nd = 0
+    for t, s in dorder:
+        if any(dused[i] >= 2 for i in s):
+            continue
+        dused.update(s)
+        top = max(by_id[i]["fame"] for i in s)
+        out.append({
+            "kind": "derbies",
+            "derbies": list(t),
+            "q": "Played for a side in " + ", ".join(t[:-1]) + " AND " + t[-1],
+            "answers": sorted(s),
+            "names": [by_id[i]["name"] for i in sorted(s)],
+            "difficulty": 1 if top >= 5 and len(s) > 1 else 2 if top >= 4 else 3,
+        })
+        nd += 1
+        if nd >= KEEP_DERBY:
+            break
     rng.shuffle(out)
 
-    note = (f"Half-Time Teasers: three clubs, one or two players who played for all three. "
+    note = (f"Half-Time Teasers: three clubs (one or two players fit) or three derbies (up to four). "
             f"{'UNCHECKED (offline run)' if args.offline else 'Wikidata and English Wikipedia agree on every answer set'}. "
             f"{len(out)} teasers. Built {time.strftime('%Y-%m-%d %H:%M UTC', time.gmtime())}.")
     print(note)
