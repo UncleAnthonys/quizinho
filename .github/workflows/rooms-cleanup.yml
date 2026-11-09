@@ -13,14 +13,22 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Delete rooms older than 24 hours
+        env:
+          # Firebase → Project settings → Service accounts → Database secrets.
+          # Listing every room needs it: the public rules only allow one room at a time.
+          SECRET: ${{ secrets.FIREBASE_DB_SECRET }}
         run: |
+          if [ -z "$SECRET" ]; then echo "::error title=Rooms clean-up::Add the FIREBASE_DB_SECRET repository secret first"; exit 1; fi
           python3 - <<'PY'
-          import json, time, urllib.request
+          import json, os, time, urllib.parse, urllib.request
           U = "https://quizinho-8022c-default-rtdb.europe-west1.firebasedatabase.app"
-          def get(path):
-              with urllib.request.urlopen(f"{U}/{path}.json") as r:
+          AUTH = urllib.parse.quote(os.environ["SECRET"])
+          def url(path, extra=""):
+              return f"{U}/{path}.json?auth={AUTH}{extra}"
+          def get(path, extra=""):
+              with urllib.request.urlopen(url(path, extra)) as r:
                   return json.load(r)
-          codes = get("rooms?shallow=true") or {}
+          codes = get("rooms", "&shallow=true") or {}
           now = time.time() * 1000
           kept = deleted = 0
           for code in codes:
@@ -28,7 +36,7 @@ jobs:
               if isinstance(at, (int, float)) and now - at < 24 * 3600 * 1000:
                   kept += 1
                   continue
-              urllib.request.urlopen(urllib.request.Request(f"{U}/rooms/{code}.json", method="DELETE"))
+              urllib.request.urlopen(urllib.request.Request(url(f"rooms/{code}"), method="DELETE"))
               deleted += 1
           print(f"::notice title=Rooms clean-up::deleted {deleted}, kept {kept}")
           PY
