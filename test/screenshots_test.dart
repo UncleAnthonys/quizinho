@@ -24,6 +24,7 @@ import 'package:quizinho/ui/screens/home_screen.dart';
 import 'package:quizinho/ui/screens/setup_screen.dart';
 import 'package:quizinho/ui/screens/solo_screen.dart';
 import 'package:quizinho/ui/widgets/common.dart';
+import 'package:quizinho/ui/widgets/logo.dart';
 import 'package:quizinho/ui/widgets/player_picker.dart';
 
 import 'fixtures.dart';
@@ -149,6 +150,27 @@ void main() {
     ));
     await tester.pump(const Duration(seconds: 2));
     await expectLater(find.byType(MaterialApp), matchesGoldenFile('../docs/shots/solo.png'));
+  }, skip: !_shots);
+
+  // The app icon: the crest on the pitch green, square, no transparency
+  // (Apple rounds the corners itself). Written to assets/icon/icon.png.
+  testWidgets('App icon', (tester) async {
+    tester.view.physicalSize = const Size(1024, 1024);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.reset);
+    await tester.pumpWidget(MaterialApp(
+      debugShowCheckedModeBanner: false,
+      theme: buildTheme(),
+      home: Container(
+        decoration: const BoxDecoration(
+          gradient: RadialGradient(colors: [Color(0xFF17573A), Palette.pitchDeep], radius: 0.9),
+        ),
+        alignment: Alignment.center,
+        child: const QuizinhoBadge(size: 880),
+      ),
+    ));
+    await tester.pump(const Duration(seconds: 1));
+    await expectLater(find.byType(MaterialApp), matchesGoldenFile('../assets/icon/icon.png'));
   }, skip: !_shots);
 
   Widget column(Widget scores, Widget layout) => Column(children: [scores, Expanded(child: layout)]);

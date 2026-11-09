@@ -25,5 +25,5 @@ jobs:
         run: |
           git config user.name "quizinho-data-bot"
           git config user.email "quizinho-data-bot@users.noreply.github.com"
-          git add docs/shots
+          git add docs/shots assets/icon
           git diff --cached --quiet || (git commit -m "Screenshots" && git pull --rebase -q && git push)
