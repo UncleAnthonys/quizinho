@@ -1,0 +1,34 @@
+# Deletes game rooms more than a day old from the rooms database, so it
+# stays small and well inside Firebase's free limits. Runs daily; can also
+# be run from the Actions tab.
+name: Rooms clean-up
+
+on:
+  schedule:
+    - cron: "17 4 * * *"
+  workflow_dispatch:
+
+jobs:
+  clean:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Delete rooms older than 24 hours
+        run: |
+          python3 - <<'PY'
+          import json, time, urllib.request
+          U = "https://quizinho-8022c-default-rtdb.europe-west1.firebasedatabase.app"
+          def get(path):
+              with urllib.request.urlopen(f"{U}/{path}.json") as r:
+                  return json.load(r)
+          codes = get("rooms?shallow=true") or {}
+          now = time.time() * 1000
+          kept = deleted = 0
+          for code in codes:
+              at = get(f"rooms/{code}/host/at")
+              if isinstance(at, (int, float)) and now - at < 24 * 3600 * 1000:
+                  kept += 1
+                  continue
+              urllib.request.urlopen(urllib.request.Request(f"{U}/rooms/{code}.json", method="DELETE"))
+              deleted += 1
+          print(f"::notice title=Rooms clean-up::deleted {deleted}, kept {kept}")
+          PY
