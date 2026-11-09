@@ -1,0 +1,90 @@
+{
+  "_note": "Hand-checked Half-Time Teasers. Every answer has a line-up or match report per fixture in proof. 'unconfirmed' = fits on paper but no line-up found yet: not accepted automatically (the host can still award it).",
+  "teasers": [
+    {
+      "q": "Played in El Clásico, the Manchester derby AND the North London derby",
+      "answers": ["emmanuel-adebayor", "alexis-sanchez"],
+      "names": ["Emmanuel Adebayor", "Alexis Sánchez"],
+      "unconfirmed": ["nicolas-anelka", "sylvinho", "gabriel-jesus"],
+      "difficulty": 2,
+      "proof": {
+        "emmanuel-adebayor": [
+          "El Clásico: Barcelona 1-1 Real Madrid, 3 May 2011 (36 min) https://fbref.com/en/matchs/af5c5e5a/",
+          "Manchester derby: Man City 0-1 Man United, 17 Apr 2010 (73 min) https://aws.fbref.com/en/matches/6f818c39/",
+          "North London derby: Arsenal 5-2 Tottenham, 26 Feb 2012 (90 min, scored) https://fbref.com/en/matches/30fbb04f/"
+        ],
+        "alexis-sanchez": [
+          "El Clásico: Barcelona 2-1 Real Madrid, 26 Oct 2013 (scored) https://www.sportsmole.co.uk/football/barcelona/el-clasico/result/result-barcelona-claim-victory-over-real_113802.html",
+          "Manchester derby: Man City 2-3 Man United, 7 Apr 2018 (81 min) https://fbref.com/en/matches/50a03a01/",
+          "North London derby: Arsenal 2-0 Tottenham, 18 Nov 2017 (scored) https://fourfourtwo.com/news/arsenal-2-tottenham-0-ozil-and-sanchez-come-trumps-wenger"
+        ]
+      }
+    },
+    {
+      "q": "Played in El Clásico, the Manchester derby AND the Merseyside derby",
+      "answers": ["nicolas-anelka", "michael-owen", "steve-mcmanaman"],
+      "names": ["Nicolas Anelka", "Michael Owen", "Steve McManaman"],
+      "unconfirmed": ["mark-hughes"],
+      "difficulty": 2,
+      "proof": {
+        "nicolas-anelka": [
+          "El Clásico: Barcelona 2-2 Real Madrid, 13 Oct 1999 (started) https://worldfootball.net/report/primera-division-1999-2000-fc-barcelona-real-madrid",
+          "Manchester derby: Man City 3-1 Man United, 9 Nov 2002 (scored) https://www.rte.ie/sport/soccer/2002/1109/168427-manchester",
+          "Merseyside derby: Liverpool 1-1 Everton, 23 Feb 2002 (90 min) https://aws.fbref.com/en/matches/eb996343/"
+        ],
+        "michael-owen": [
+          "El Clásico: Real Madrid 4-2 Barcelona, 10 Apr 2005 (scored) https://www.pastemagazine.com/soccer/throwback-thursday-real-madrid-vs-barcelona-april",
+          "Manchester derby: Man United 4-3 Man City, 20 Sep 2009 (scored winner) https://www.cityam.com/owen-strikes-late-snatch-derby-spoils/",
+          "Merseyside derby: Everton 0-3 Liverpool, 30 Aug 2003 (90 min, 2 goals) https://fbref.com/en/matches/b46993cc/"
+        ],
+        "steve-mcmanaman": [
+          "El Clásico: Barcelona 0-2 Real Madrid, 23 Apr 2002, Champions League (sub, scored) https://www.uefa.com/uefachampionsleague/news/01ff-0e7e61c4966a-2818eb810f95-1000--2001-02-fc-barcelona-0-2-real-madrid-cf-report",
+          "Manchester derby: Man City 4-1 Man United, 14 Mar 2004 (45 min) https://fbref.com/en/matches/a4dd182c/",
+          "Merseyside derby: Liverpool 3-2 Everton, 3 Apr 1999 (90 min) https://fbref.com/en/matchs/2a42b41e/"
+        ]
+      }
+    },
+    {
+      "q": "Played in the Merseyside derby, the Old Firm, the North London derby AND the Manchester derby",
+      "answers": ["kolo-toure"],
+      "names": ["Kolo Touré"],
+      "difficulty": 2,
+      "proof": {
+        "kolo-toure": [
+          "Merseyside derby: 1 appearance v Everton, 90 min (Liverpool, 2013-14) https://lfchistory.net/players/1259",
+          "Old Firm: Celtic 5-1 Rangers, 10 Sep 2016 (started) https://www.thecelticwiki.com/?p=14369",
+          "North London derby: Tottenham 2-2 Arsenal, 25 Apr 2004 (90 min) https://fbref.com/en/matches/84bffb37/",
+          "Manchester derby: Man City 0-1 Man United, 17 Apr 2010 (90 min) https://aws.fbref.com/en/matches/6f818c39/"
+        ]
+      }
+    },
+    {
+      "q": "Played in El Clásico, the Milan derby AND the Manchester derby",
+      "answers": ["zlatan-ibrahimovic", "robinho", "alexis-sanchez", "laurent-blanc"],
+      "names": ["Zlatan Ibrahimović", "Robinho", "Alexis Sánchez", "Laurent Blanc"],
+      "difficulty": 2,
+      "proof": {
+        "zlatan-ibrahimovic": [
+          "El Clásico: Barcelona 1-0 Real Madrid, 29 Nov 2009 (sub, scored) https://www.aljazeera.com/sports/2009/11/29/barca-edge-el-clasico",
+          "Milan derby: Inter 4-2 Milan, 9 Feb 2020 (90 min, scored) https://fbref.com/en/matches/b175fd39/",
+          "Manchester derby: Man United 1-2 Man City, 10 Sep 2016 (90 min, scored) https://fbref.com/en/matches/a5978934/"
+        ],
+        "robinho": [
+          "El Clásico: Barcelona 0-1 Real Madrid, 23 Dec 2007 (81 min) https://aws.fbref.com/en/players/f034613c/matchlogs/2007-2008/Robinho-Match-Logs",
+          "Milan derby: Inter 4-2 Milan, 6 May 2012 (90 min) https://aws.fbref.com/en/players/f034613c/matchlogs/2011-2012/Robinho-Match-Logs",
+          "Manchester derby: Man City v Man United, 30 Nov 2008 (90 min) https://aws.fbref.com/en/players/f034613c/matchlogs/2008-2009/Robinho-Match-Logs"
+        ],
+        "alexis-sanchez": [
+          "El Clásico: Barcelona 2-1 Real Madrid, 26 Oct 2013 (scored) https://www.sportsmole.co.uk/football/barcelona/el-clasico/result/result-barcelona-claim-victory-over-real_113802.html",
+          "Milan derby: Inter 4-2 Milan, 9 Feb 2020 (71 min) https://fbref.com/en/matches/b175fd39/",
+          "Manchester derby: Man City 2-3 Man United, 7 Apr 2018 (81 min) https://fbref.com/en/matches/50a03a01/"
+        ],
+        "laurent-blanc": [
+          "El Clásico: Real Madrid 2-0 Barcelona, 7 Dec 1996 (90 min) https://aws.fbref.com/en/players/51a9b34c/matchlogs/1996-1997/Laurent-Blanc-Match-Logs",
+          "Milan derby: Inter 1-2 Milan, 23 Oct 1999 (90 min) https://aws.fbref.com/fr/joueurs/51a9b34c/matchs/1999-2000/c11/summary/Journaux-de-match-Laurent-Blanc",
+          "Manchester derby: Man City 3-1 Man United, 9 Nov 2002 (started) https://bbcbreakingnews.pages.dev/sport2/hi/football/eng_prem/2388563.stm"
+        ]
+      }
+    }
+  ]
+}

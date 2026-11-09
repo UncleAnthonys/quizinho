@@ -1,21 +1,17 @@
-"""Half-Time Teasers: "Name the player who played for X, Y AND Z".
+"""Half-Time Teasers: the slow-burn question that runs through a tournament.
 
-    python3 data_pipeline/teasers_build.py            # fetch + check (CI)
-    python3 data_pipeline/teasers_build.py --offline  # candidates only, no checking
+    python3 data_pipeline/teasers_build.py            # curated + final scorers (CI)
+    python3 data_pipeline/teasers_build.py --offline  # curated only
 
-Two independent sources must agree before a teaser is kept:
+Two kinds:
 
-  A. Wikidata careers (seed/players.json), with appearances at each club
-     (Wikidata's own numbers or the Wikipedia-filled seed/wiki_stats.json).
-  B. The senior-career rows of each player's English Wikipedia infobox,
-     with at least one league appearance at each club (loans count).
-
-For every trio of well-known clubs, the set of players who fit must be the
-SAME in A and B, and only one or two players. Every player with two or more
-of the clubs in either source is checked, so a player Wikidata missed but
-Wikipedia has (or the other way round) knocks the trio out rather than
-becoming a "wrong" answer at the table. Wikidata errors (a transfer that
-never happened, an unused registration) fail the same way.
+  curated  seed/teasers_curated.json, written by hand: "Played in El Clásico,
+           the Manchester derby AND the North London derby". Every answer
+           has a line-up or match report per fixture in its proof.
+  final    "Scored in a Champions League / World Cup final AND played for X".
+           Scorers come from each final's Wikipedia article; the club must be
+           in both Wikidata and the player's Wikipedia infobox, with league
+           games, and the two sources must agree on the whole answer set.
 
 Writes seed/teasers.json. Runs in GitHub Actions (teasers.yml): the dev
 workspace can't reach Wikipedia.
@@ -24,11 +20,10 @@ workspace can't reach Wikipedia.
 from __future__ import annotations
 
 import argparse
-import collections
-import itertools
 import json
 import pathlib
 import random
+import re
 import time
 
 from wiki_stats_fetch import club_qids, enwiki_titles, infobox_rows, wikitext
@@ -63,40 +58,10 @@ POOL = {
     "Q29108": "Zenit", "Q19628": "Olympiacos",
 }
 
-# Derbies, both sides in POOL. A derby teaser names three: you need a player
-# who played for a side in each, so every name that comes to mind for one
-# derby is a red herring for the other two.
-DERBIES = {
-    "El Clásico": ("Q8682", "Q7156"),
-    "the Madrid derby": ("Q8682", "Q8701"),
-    "the Manchester derby": ("Q18656", "Q50602"),
-    "the North London derby": ("Q9617", "Q18741"),
-    "the Merseyside derby": ("Q1130849", "Q5794"),
-    "the North West derby": ("Q1130849", "Q18656"),
-    "the Old Firm": ("Q19593", "Q19597"),
-    "the Tyne–Wear derby": ("Q18716", "Q18739"),
-    "the Milan derby": ("Q1543", "Q631"),
-    "the Derby della Capitale": ("Q2739", "Q2609"),
-    "the Derby d'Italia": ("Q1422", "Q631"),
-    "Der Klassiker": ("Q15789", "Q41420"),
-    "the Revierderby": ("Q41420", "Q32494"),
-    "Le Classique": ("Q483020", "Q132885"),
-    "De Klassieker": ("Q81888", "Q134241"),
-    "O Clássico": ("Q131499", "Q128446"),
-    "the Lisbon derby": ("Q131499", "Q75729"),
-    "the Intercontinental derby": ("Q495299", "Q6601875"),
-    "the Superclásico": ("Q170703", "Q15799"),
-    "the Seville derby": ("Q10329", "Q8723"),
-}
-
-MAX_ANSWERS = 2
-MAX_DERBY_ANSWERS = 4
-KEEP_DERBY = 250
 MIN_FAME = 3  # at least one answer a table could know
-KEEP = 400
 
 
-def careers_a(players: list[dict], wiki_stats: dict) -> dict[str, set[str]]:
+def careers_a(players: list[dict], wiki_stats: dict, least: int = 2) -> dict[str, set[str]]:
     """Wikidata: player → pool clubs with at least one appearance."""
     out = {}
     for p in players:
@@ -104,7 +69,7 @@ def careers_a(players: list[dict], wiki_stats: dict) -> dict[str, set[str]]:
             continue
         stats = {**(wiki_stats.get(p["id"]) or {}), **(p.get("stats") or {})}
         clubs = {e[0] for e in p.get("career", []) if e[0] in POOL and (stats.get(e[0]) or [0])[0] > 0}
-        if len(clubs) >= 2:
+        if len(clubs) >= least:
             out[p["id"]] = clubs
     return out
 
@@ -123,110 +88,99 @@ def careers_b(players: list[dict], ids: list[str]) -> dict[str, set[str]]:
     return out
 
 
-def fits(careers: dict[str, set[str]]) -> dict[tuple, set[str]]:
-    out = collections.defaultdict(set)
-    for pid, s in careers.items():
-        for t in itertools.combinations(sorted(s), 3):
-            out[t].add(pid)
-    return out
+GOALS = re.compile(r"\|\s*goals([12])\s*=(.*?)(?=\n\s*\||\n\}\})", re.S)
+PLAYER_LINK = re.compile(r"\[\[([^\]|#]+)(?:\|[^\]]*)?\]\]\s*((?:\{\{[^}]*\}\}\s*,?\s*)+)")
 
 
-def derby_fits(careers: dict[str, set[str]]) -> dict[tuple, set[str]]:
-    """Three derbies → players who played for a side in each (one club per derby)."""
-    out = collections.defaultdict(set)
-    for pid, s in careers.items():
-        hit = sorted(d for d, pair in DERBIES.items() if s & set(pair))
-        for t in itertools.combinations(hit, 3):
-            # Each derby needs its own club: Real Madrid alone can't cover
-            # El Clásico and the Madrid derby.
-            pairs = [s & set(DERBIES[d]) for d in t]
-            if any(len({x, y, z}) == 3 for x in pairs[0] for y in pairs[1] for z in pairs[2]):
-                out[t].add(pid)
+def final_titles() -> dict[str, list[str]]:
+    """Competition → Wikipedia article titles of its finals (redirects resolve the old names)."""
+    cl = [f"{y} European Cup final" if y < 1993 else f"{y} UEFA Champions League final" for y in range(1956, 2027)]
+    wc = [f"{y} FIFA World Cup final" for y in (1930, 1934, 1938, *range(1954, 2023, 4))]
+    return {"cl": cl, "wc": wc}
+
+
+def final_scorers(titles: list[str]) -> dict[str, set[str]]:
+    """Final article title → linked titles of players who scored in it (own goals and shoot-outs left out)."""
+    pages = wikitext(titles)
+    out = {}
+    for t, text in pages.items():
+        who = set()
+        for _, block in GOALS.findall(text):
+            for name, marks in PLAYER_LINK.findall(block):
+                goals = re.findall(r"\{\{\s*goal\s*\|([^}]*)\}\}", marks, re.I)
+                # {{goal|35|o.g.}} is an own goal; {{goal|12|pen.}} still counts.
+                if any(not re.search(r"\bo\.?g\.?\s*$", g.strip(), re.I) for g in goals):
+                    who.add(name.strip().replace("_", " "))
+        out[t] = who
     return out
 
 
 def main() -> None:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--offline", action="store_true", help="skip the Wikipedia check (local dry run)")
+    ap.add_argument("--offline", action="store_true", help="only the curated teasers (no Wikipedia)")
     args = ap.parse_args()
 
     players = json.loads((SEED / "players.json").read_text())["players"]
     wiki_stats = json.loads((SEED / "wiki_stats.json").read_text())["players"]
     by_id = {p["id"]: p for p in players}
-    a = careers_a(players, wiki_stats)
-    fa = fits(a)
-    cand = {t: s for t, s in fa.items() if 1 <= len(s) <= MAX_ANSWERS
-            and max(by_id[i].get("fame", 0) for i in s) >= MIN_FAME}
-    fda = derby_fits(a)
-    dcand = {t: s for t, s in fda.items() if 1 <= len(s) <= MAX_DERBY_ANSWERS
-             and max(by_id[i].get("fame", 0) for i in s) >= MIN_FAME}
-    print(f"Wikidata: {len(a)} players at 2+ pool clubs; {len(cand)} club trios, {len(dcand)} derby trios")
-
-    if args.offline:
-        kept, dkept = cand, dcand
-    else:
-        # Everyone with 2+ pool clubs anywhere in Wikidata (appearances or not), so a
-        # club or a number Wikidata lacks still shows up on the Wikipedia side.
-        loose = [p["id"] for p in players if not p.get("women") and p.get("wikidata")
-                 and len({e[0] for e in p.get("career", []) if e[0] in POOL}) >= 2]
-        b = careers_b(players, loose)
-        fb = fits(b)
-        kept = {t: s for t, s in cand.items() if fb.get(t, set()) == s}
-        fdb = derby_fits(b)
-        dkept = {t: s for t, s in dcand.items() if fdb.get(t, set()) == s}
-        print(f"Both sources agree on {len(kept)} of {len(cand)} club trios, {len(dkept)} of {len(dcand)} derby trios")
-
-    # One question per player as the (or an) answer, the most famous answers first,
-    # then shuffled so a run isn't all one club.
-    rng = random.Random(7)
-    order = sorted(kept.items(), key=lambda kv: (-max(by_id[i]["fame"] for i in kv[1]), len(kv[1]), kv[0]))
-    used: set[str] = set()
+    by_qid = {p["wikidata"]: p["id"] for p in players if p.get("wikidata")}
     out = []
-    for t, s in order:
-        if s & used:
-            continue
-        used |= s
-        top = max(by_id[i]["fame"] for i in s)
-        out.append({
-            "kind": "clubs",
-            "clubs": list(t),
-            "q": "Played for " + ", ".join(POOL[c] for c in t[:-1]) + " AND " + POOL[t[-1]],
-            "answers": sorted(s),
-            "names": [by_id[i]["name"] for i in sorted(s)],
-            "difficulty": 1 if top >= 5 else 2 if top == 4 else 3,
-        })
-        if len(out) >= KEEP:
-            break
 
-    # Derbies: the fewer answers the better, and a player can be the answer
-    # to two derby teasers at most.
-    dorder = sorted(dkept.items(), key=lambda kv: (len(kv[1]), -max(by_id[i]["fame"] for i in kv[1]), kv[0]))
-    dused: collections.Counter = collections.Counter()
-    nd = 0
-    for t, s in dorder:
-        if any(dused[i] >= 2 for i in s):
-            continue
-        dused.update(s)
-        top = max(by_id[i]["fame"] for i in s)
-        out.append({
-            "kind": "derbies",
-            "derbies": list(t),
-            "q": "Played for a side in " + ", ".join(t[:-1]) + " AND " + t[-1],
-            "answers": sorted(s),
-            "names": [by_id[i]["name"] for i in sorted(s)],
-            "difficulty": 1 if top >= 5 and len(s) > 1 else 2 if top >= 4 else 3,
-        })
-        nd += 1
-        if nd >= KEEP_DERBY:
-            break
-    rng.shuffle(out)
+    # Hand-checked teasers (derbies played in and the like): every answer has a
+    # line-up or match report per fixture in its sources.
+    curated = json.loads((SEED / "teasers_curated.json").read_text())["teasers"]
+    for t in curated:
+        out.append({"kind": "curated", **t})
+    print(f"{len(curated)} curated teasers")
 
-    note = (f"Half-Time Teasers: three clubs (one or two players fit) or three derbies (up to four). "
-            f"{'UNCHECKED (offline run)' if args.offline else 'Wikidata and English Wikipedia agree on every answer set'}. "
-            f"{len(out)} teasers. Built {time.strftime('%Y-%m-%d %H:%M UTC', time.gmtime())}.")
+    if not args.offline:
+        # "Scored in a Champions League / World Cup final AND played for X".
+        # Scorers: the goals in each final's own article. Clubs: Wikidata AND the
+        # player's Wikipedia infobox must both have league games there.
+        a = careers_a(players, wiki_stats, least=1)
+        comps = final_titles()
+        scored: dict[str, set[str]] = {}
+        for comp, titles in comps.items():
+            per = final_scorers(titles)
+            names = sorted({n for s in per.values() for n in s})
+            qids = club_qids(names)  # works for any article title
+            ids = {by_qid[q] for n, q in qids.items() if q in by_qid}
+            scored[comp] = ids
+            print(f"{comp}: {len(per)} finals, {len(names)} scorers, {len(ids)} in our player data")
+        everyone = sorted(set().union(*scored.values()))
+        b = careers_b(players, everyone)
+        label = {"cl": "Scored in a European Cup or Champions League final", "wc": "Scored in a World Cup final"}
+        for comp, ids in scored.items():
+            for club, name in POOL.items():
+                s = {i for i in ids if club in a.get(i, set()) and club in b.get(i, set())}
+                # Both sources must agree, and nobody Wikidata alone puts at the club.
+                loose = {i for i in ids if club in a.get(i, set()) or club in b.get(i, set())}
+                if not (1 <= len(s) <= 3) or s != loose or max(by_id[i]["fame"] for i in s) < MIN_FAME:
+                    continue
+                top = max(by_id[i]["fame"] for i in s)
+                out.append({
+                    "kind": "final",
+                    "q": f"{label[comp]} AND played for {name}",
+                    "answers": sorted(s),
+                    "names": [by_id[i]["name"] for i in sorted(s)],
+                    "difficulty": 1 if top >= 5 else 2 if top == 4 else 3,
+                })
+        both = scored["cl"] & scored["wc"]
+        out.append({
+            "kind": "final",
+            "q": "Scored in a World Cup final AND a European Cup or Champions League final",
+            "answers": sorted(both),
+            "names": [by_id[i]["name"] for i in sorted(both)],
+            "difficulty": 2,
+        })
+
+    random.Random(7).shuffle(out)
+    note = (f"Half-Time Teasers: {sum(t['kind'] == 'curated' for t in out)} hand-checked, "
+            f"{sum(t['kind'] == 'final' for t in out)} final-scorer teasers checked against Wikipedia. "
+            f"Built {time.strftime('%Y-%m-%d %H:%M UTC', time.gmtime())}.")
     print(note)
     (SEED / "teasers.json").write_text(
-        "{\n" + f'  "_note": {json.dumps(note)},\n  "checked": {json.dumps(not args.offline)},\n  "teasers": [\n'
+        "{\n" + f'  "_note": {json.dumps(note)},\n  "teasers": [\n'
         + ",\n".join("    " + json.dumps(t, ensure_ascii=False) for t in out) + "\n  ]\n}\n",
         encoding="utf-8")
 
