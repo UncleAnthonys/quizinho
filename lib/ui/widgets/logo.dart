@@ -7,17 +7,23 @@ import '../../core/theme.dart';
 /// Quizinho club badge: oval crest with the name arched over the top, 2026
 /// underneath, and a split field — Brazil on the left, England on the right.
 class QuizinhoBadge extends StatelessWidget {
-  const QuizinhoBadge({super.key, this.size = 150});
+  const QuizinhoBadge({super.key, this.size = 150, this.brazilRight = false});
+
+  /// Flags swapped: England on the left, Brazil on the right.
+  final bool brazilRight;
 
   /// Badge height including the stars. Width is 260/370 of the height.
   final double size;
 
   @override
   Widget build(BuildContext context) =>
-      CustomPaint(size: Size(size * 260 / 370, size), painter: _BadgePainter());
+      CustomPaint(size: Size(size * 260 / 370, size), painter: _BadgePainter(brazilRight: brazilRight));
 }
 
 class _BadgePainter extends CustomPainter {
+  _BadgePainter({this.brazilRight = false});
+  final bool brazilRight;
+
   static const _navy = Color(0xFF0F235A);
   static const _green = Color(0xFF009C3B);
   static const _red = Color(0xFFCE1124);
@@ -37,9 +43,16 @@ class _BadgePainter extends CustomPainter {
     final field = oval(80, 108);
     canvas.save();
     canvas.clipPath(Path()..addOval(field));
-    // Left: Brazil
-    canvas.drawRect(Rect.fromLTRB(field.left, field.top, c.dx, field.bottom), Paint()..color = _green);
-    final lx = c.dx - field.width / 4 - 2 * k;
+    // Brazil on one half, England on the other.
+    final b = brazilRight ? 1.0 : -1.0; // which side Brazil is on
+    final brazilHalf = brazilRight
+        ? Rect.fromLTRB(c.dx, field.top, field.right, field.bottom)
+        : Rect.fromLTRB(field.left, field.top, c.dx, field.bottom);
+    final englandHalf = brazilRight
+        ? Rect.fromLTRB(field.left, field.top, c.dx, field.bottom)
+        : Rect.fromLTRB(c.dx, field.top, field.right, field.bottom);
+    canvas.drawRect(brazilHalf, Paint()..color = _green);
+    final lx = c.dx + b * (field.width / 4 + 2 * k);
     canvas.drawPath(
       Path()
         ..moveTo(lx, c.dy - 62 * k)
@@ -50,11 +63,11 @@ class _BadgePainter extends CustomPainter {
       Paint()..color = Palette.yellow,
     );
     canvas.drawCircle(Offset(lx, c.dy), 20 * k, Paint()..color = Palette.blue);
-    // Right: England (St George's cross)
-    canvas.drawRect(Rect.fromLTRB(c.dx, field.top, field.right, field.bottom), Paint()..color = Colors.white);
-    final rx = c.dx + field.width / 4;
+    // England (St George's cross)
+    canvas.drawRect(englandHalf, Paint()..color = Colors.white);
+    final rx = c.dx - b * field.width / 4;
     canvas.drawRect(Rect.fromLTRB(rx - 9 * k, field.top, rx + 9 * k, field.bottom), Paint()..color = _red);
-    canvas.drawRect(Rect.fromLTRB(c.dx, c.dy - 9 * k, field.right, c.dy + 9 * k), Paint()..color = _red);
+    canvas.drawRect(Rect.fromLTRB(englandHalf.left, c.dy - 9 * k, englandHalf.right, c.dy + 9 * k), Paint()..color = _red);
     // Gold divider
     canvas.drawRect(Rect.fromLTRB(c.dx - 2 * k, field.top, c.dx + 2 * k, field.bottom), Paint()..color = Palette.yellow);
     canvas.restore();
