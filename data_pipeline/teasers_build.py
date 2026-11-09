@@ -173,6 +173,21 @@ def main() -> None:
         b = careers_b(players, everyone)
         label = {"cl": "Scored in a European Cup or Champions League final", "wc": "Scored in a World Cup final"}
 
+        def stats(pid: str) -> dict[str, int]:
+            p = by_id[pid]
+            st = {**(wiki_stats.get(pid) or {}), **(p.get("stats") or {})}
+            return {q: v[0] for q, v in st.items() if v and v[0]}
+
+        def passing_through(pid: str, club: str) -> bool:
+            """A spell people forget: not where he started, under 60 league games
+            and at most a quarter of his career (Best at Fulham, not Rooney at Everton)."""
+            career = spells[pid]
+            if not career or career[0][0] == club:
+                return False
+            st = stats(pid)
+            apps, total = st.get(club, 0), sum(st.values())
+            return 0 < apps < 60 and total > 0 and apps * 4 <= total
+
         def eras(pid: str, comp: str, club: str | None = None) -> int:
             m = 0
             for year, _ in scored[comp].get(pid, []):
@@ -192,6 +207,9 @@ def main() -> None:
                 # The club must be a red herring: nobody scored a final FOR it
                 # (Campbell's goal for Arsenal makes "…and played for Arsenal" too easy).
                 if any(tm == club for i in s for _, tm in per[i]):
+                    continue
+                # …and a club they only passed through, so it takes some thinking.
+                if not all(passing_through(i, club) for i in s):
                     continue
                 top = max(by_id[i]["fame"] for i in s)
                 m = 0
