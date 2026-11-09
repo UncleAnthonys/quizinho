@@ -26,7 +26,8 @@ import random
 import re
 import time
 
-from wiki_stats_fetch import club_qids, enwiki_titles, infobox_rows, wikitext
+from build_db import era_mask
+from wiki_stats_fetch import LINK, club_qids, enwiki_titles, infobox_rows, wikitext
 
 ROOT = pathlib.Path(__file__).resolve().parent
 SEED = ROOT / "seed"
@@ -99,19 +100,35 @@ def final_titles() -> dict[str, list[str]]:
     return {"cl": cl, "wc": wc}
 
 
-def final_scorers(titles: list[str]) -> dict[str, set[str]]:
-    """Final article title → linked titles of players who scored in it (own goals and shoot-outs left out)."""
+TEAM = re.compile(r"\|\s*team([12])\s*=\s*([^\n]*)")
+FOOTBALL_BOX = re.compile(r"\{\{\s*football ?box", re.I)
+
+
+def link_title(s: str) -> str | None:
+    m = LINK.search(s)
+    if not m:
+        return None
+    t = m.group(1).strip().replace("_", " ")
+    return t[:1].upper() + t[1:]
+
+
+def final_scorers(titles: list[str]) -> list[tuple[int, str, str | None]]:
+    """[(year, scorer's article title, title of the team he scored for)] from each
+    final's football box(es); own goals and shoot-outs left out."""
     pages = wikitext(titles)
-    out = {}
+    out = []
     for t, text in pages.items():
-        who = set()
-        for _, block in GOALS.findall(text):
-            for name, marks in PLAYER_LINK.findall(block):
-                goals = re.findall(r"\{\{\s*goal\s*\|([^}]*)\}\}", marks, re.I)
-                # {{goal|35|o.g.}} is an own goal; {{goal|12|pen.}} still counts.
-                if any(not re.search(r"\bo\.?g\.?\s*$", g.strip(), re.I) for g in goals):
-                    who.add(name.strip().replace("_", " "))
-        out[t] = who
+        year = int(t[:4])
+        # One box per match (a replayed final has two).
+        for box in FOOTBALL_BOX.split(text)[1:]:
+            box = box[:6000]
+            teams = {n: link_title(v) for n, v in TEAM.findall(box)}
+            for side, block in GOALS.findall(box):
+                for name, marks in PLAYER_LINK.findall(block):
+                    goals = re.findall(r"\{\{\s*goal\s*\|([^}]*)\}\}", marks, re.I)
+                    # {{goal|35|o.g.}} is an own goal; {{goal|12|pen.}} still counts.
+                    if any(not re.search(r"\bo\.?g\.?\s*$", g.strip(), re.I) for g in goals):
+                        out.append((year, name.strip().replace("_", " "), teams.get(side)))
     return out
 
 
@@ -138,40 +155,67 @@ def main() -> None:
         # Scorers: the goals in each final's own article. Clubs: Wikidata AND the
         # player's Wikipedia infobox must both have league games there.
         a = careers_a(players, wiki_stats, least=1)
+        spells = {p["id"]: p.get("career", []) for p in players}
         comps = final_titles()
-        scored: dict[str, set[str]] = {}
+        # comp → player → [(year, club qid he scored for)]
+        scored: dict[str, dict[str, list[tuple[int, str | None]]]] = {}
         for comp, titles in comps.items():
-            per = final_scorers(titles)
-            names = sorted({n for s in per.values() for n in s})
-            qids = club_qids(names)  # works for any article title
-            ids = {by_qid[q] for n, q in qids.items() if q in by_qid}
-            scored[comp] = ids
-            print(f"{comp}: {len(per)} finals, {len(names)} scorers, {len(ids)} in our player data")
+            rows = final_scorers(titles)
+            qids = club_qids(sorted({n for _, n, _ in rows} | {tm for _, _, tm in rows if tm}))
+            per: dict[str, list[tuple[int, str | None]]] = {}
+            for year, n, tm in rows:
+                if (q := qids.get(n)) in by_qid:
+                    per.setdefault(by_qid[q], []).append((year, qids.get(tm) if tm else None))
+            scored[comp] = per
+            print(f"{comp}: {len({y for y, _, _ in rows})} finals, {len({n for _, n, _ in rows})} scorers, "
+                  f"{len(per)} in our player data")
         everyone = sorted(set().union(*scored.values()))
         b = careers_b(players, everyone)
         label = {"cl": "Scored in a European Cup or Champions League final", "wc": "Scored in a World Cup final"}
-        for comp, ids in scored.items():
+
+        def eras(pid: str, comp: str, club: str | None = None) -> int:
+            m = 0
+            for year, _ in scored[comp].get(pid, []):
+                m |= era_mask(year, year)
+            for e in spells[pid]:
+                if club is None or e[0] == club:
+                    m |= era_mask(e[1], e[2]) if club else 0
+            return m
+
+        for comp, per in scored.items():
             for club, name in POOL.items():
-                s = {i for i in ids if club in a.get(i, set()) and club in b.get(i, set())}
+                s = {i for i in per if club in a.get(i, set()) and club in b.get(i, set())}
                 # Both sources must agree, and nobody Wikidata alone puts at the club.
-                loose = {i for i in ids if club in a.get(i, set()) or club in b.get(i, set())}
+                loose = {i for i in per if club in a.get(i, set()) or club in b.get(i, set())}
                 if not (1 <= len(s) <= 3) or s != loose or max(by_id[i]["fame"] for i in s) < MIN_FAME:
                     continue
+                # The club must be a red herring: nobody scored a final FOR it
+                # (Campbell's goal for Arsenal makes "…and played for Arsenal" too easy).
+                if any(tm == club for i in s for _, tm in per[i]):
+                    continue
                 top = max(by_id[i]["fame"] for i in s)
+                m = 0
+                for i in s:
+                    m |= eras(i, comp, club)
                 out.append({
                     "kind": "final",
                     "q": f"{label[comp]} AND played for {name}",
                     "answers": sorted(s),
                     "names": [by_id[i]["name"] for i in sorted(s)],
                     "difficulty": 1 if top >= 5 else 2 if top == 4 else 3,
+                    "eras": m or 31,
                 })
-        both = scored["cl"] & scored["wc"]
+        both = sorted(set(scored["cl"]) & set(scored["wc"]))
+        m = 0
+        for i in both:
+            m |= eras(i, "cl") | eras(i, "wc")
         out.append({
             "kind": "final",
             "q": "Scored in a World Cup final AND a European Cup or Champions League final",
-            "answers": sorted(both),
-            "names": [by_id[i]["name"] for i in sorted(both)],
+            "answers": both,
+            "names": [by_id[i]["name"] for i in both],
             "difficulty": 2,
+            "eras": m or 31,
         })
 
     random.Random(7).shuffle(out)

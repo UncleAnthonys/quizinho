@@ -1,8 +1,9 @@
 {
-  "_note": "Hand-checked Half-Time Teasers. Every answer has a line-up or match report per fixture in proof. 'unconfirmed' = fits on paper but no line-up found yet: not accepted automatically (the host can still award it).",
+  "_note": "Hand-checked Half-Time Teasers. eras = the eras of the confirmed matches (bits: 1 pre-92, 2 92-99, 4 2000s, 8 2010s, 16 2020s); a teaser comes up when any of them is switched on. Every answer has a line-up or match report per fixture in proof. 'unconfirmed' = fits on paper but no line-up found yet: not accepted automatically (the host can still award it).",
   "teasers": [
     {
       "q": "Played in El Clásico, the Manchester derby AND the North London derby",
+      "eras": 8,
       "answers": ["emmanuel-adebayor", "alexis-sanchez"],
       "names": ["Emmanuel Adebayor", "Alexis Sánchez"],
       "unconfirmed": ["nicolas-anelka", "sylvinho", "gabriel-jesus"],
@@ -22,6 +23,7 @@
     },
     {
       "q": "Played in El Clásico, the Manchester derby AND the Merseyside derby",
+      "eras": 6,
       "answers": ["nicolas-anelka", "michael-owen", "steve-mcmanaman"],
       "names": ["Nicolas Anelka", "Michael Owen", "Steve McManaman"],
       "unconfirmed": ["mark-hughes"],
@@ -46,6 +48,7 @@
     },
     {
       "q": "Played in the Merseyside derby, the Old Firm, the North London derby AND the Manchester derby",
+      "eras": 12,
       "answers": ["kolo-toure"],
       "names": ["Kolo Touré"],
       "difficulty": 2,
@@ -60,6 +63,7 @@
     },
     {
       "q": "Played in El Clásico, the Milan derby AND the Manchester derby",
+      "eras": 30,
       "answers": ["zlatan-ibrahimovic", "robinho", "alexis-sanchez", "laurent-blanc"],
       "names": ["Zlatan Ibrahimović", "Robinho", "Alexis Sánchez", "Laurent Blanc"],
       "difficulty": 2,
