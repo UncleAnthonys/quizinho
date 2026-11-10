@@ -125,7 +125,7 @@ class TeaserHalfTime extends StatelessWidget {
 
   final String question;
   final double fraction;
-  final int seconds;
+  final double seconds;
 
   /// Team buttons, or the answer box once a team's answering.
   final Widget bottom;
