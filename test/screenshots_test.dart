@@ -457,7 +457,9 @@ void main() {
                   ]),
                 ),
               ),
-            BigButton(label: 'Next challenge', icon: Icons.casino, onPressed: () {}),
+            // While the teaser's open, Next Challenge waits a few seconds so a
+            // team that's locked out can't skip past it before the others buzz.
+            BigButton(label: open ? 'Next challenge in 5' : 'Next challenge', icon: Icons.casino, onPressed: open ? null : () {}),
           ]),
         );
     await shot(tester, 'teaser_between_games', summary(open: true));

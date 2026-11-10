@@ -34,7 +34,7 @@ class TeaserPrompt extends StatelessWidget {
           Text(question.toUpperCase(),
               textAlign: TextAlign.center, style: AppText.headline(compact ? 24 : 32, weight: FontWeight.w800)),
           SizedBox(height: compact ? 8 : 12),
-          Text(halfTime ? '+5 IF YOU GET IT NOW · +3 LATER' : 'ONE NAME WINS +3 · ONE GUESS EACH',
+          Text(halfTime ? 'WORTH 5 POINTS · DROPS TO 3 WHEN THE CLOCK RUNS OUT' : 'WORTH 3 POINTS · ONE GUESS PER TEAM',
               textAlign: TextAlign.center, style: AppText.label(compact ? 12 : 14, color: Palette.yellow)),
         ]),
       );

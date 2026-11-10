@@ -519,7 +519,7 @@
     {
       "q": "Has been a club teammate of BOTH Steven Gerrard AND Paul Scholes",
       "eras": 6,
-      "difficulty": 3,
+      "difficulty": 2,
       "answers": [
         "michael-owen",
         "paul-ince"
@@ -612,7 +612,7 @@
     {
       "q": "Has been a club teammate of BOTH Paolo Maldini AND Carles Puyol",
       "eras": 6,
-      "difficulty": 3,
+      "difficulty": 2,
       "answers": [
         "ronaldinho",
         "gianluca-zambrotta",
@@ -758,7 +758,7 @@
     {
       "q": "Has been a club teammate of BOTH Sergio Busquets AND Sergio Ramos",
       "eras": 28,
-      "difficulty": 3,
+      "difficulty": 2,
       "answers": [
         "lionel-messi",
         "neymar",
@@ -809,7 +809,7 @@
     {
       "q": "Has been a club teammate of Lionel Messi, Cristiano Ronaldo AND Neymar",
       "eras": 28,
-      "difficulty": 3,
+      "difficulty": 2,
       "answers": [
         "gerard-pique",
         "sergio-ramos",
@@ -956,7 +956,7 @@
     {
       "q": "Has been a club teammate of BOTH Wayne Rooney AND Lionel Messi",
       "eras": 28,
-      "difficulty": 3,
+      "difficulty": 2,
       "answers": [
         "zlatan-ibrahimovic",
         "gerard-pique",
@@ -1007,7 +1007,7 @@
     {
       "q": "Has been a club teammate of BOTH Mohamed Salah AND Harry Kane",
       "eras": 24,
-      "difficulty": 3,
+      "difficulty": 2,
       "answers": [
         "luis-diaz",
         "federico-fazio"
