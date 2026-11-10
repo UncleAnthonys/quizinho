@@ -8,6 +8,9 @@ Two kinds:
   curated  seed/teasers_curated.json, written by hand: "Played in El Clásico,
            the Manchester derby AND the North London derby". Every answer
            has a line-up or match report per fixture in its proof.
+  derby    "Played in A, B AND C", made from seed/derby_facts.json (one
+           checked appearance per player per derby) whenever everyone with
+           the clubs on paper has been checked.
   final    "Scored in a Champions League / World Cup final AND played for X".
            Scorers come from each final's Wikipedia article; the club must be
            in both Wikidata and the player's Wikipedia infobox, with league
@@ -213,6 +216,64 @@ def final_scorers(titles: list[str]) -> list[tuple[int, str, str | None]]:
     return out
 
 
+DERBY_CAP = 3  # most three-derby questions one player answers
+
+
+def derby_teasers(players: list[dict], curated: list[dict], shown) -> list[dict]:
+    """Every "Played in A, B AND C" (three derbies, no club shared) whose whole
+    shortlist is checked in seed/derby_facts.json. The shortlist is everyone in
+    players.json with a club on each side list; each of them needs a checked
+    appearance (or a checked "never played") in all three. Red herrings, the
+    ones who have the clubs but missed a derby, go in ruled_out."""
+    src = json.loads((SEED / "derby_facts.json").read_text())
+    der, facts = src["derbies"], src["facts"]
+    clubs = {p["id"]: {e[0] for e in p.get("career", [])} for p in players}
+    done = set()
+    for t in curated:  # combos already written by hand
+        q = t["q"].lower()
+        hit = frozenset(k for k, d in der.items() if d["name"].lower().replace("the ", "").split(" (")[0] in q)
+        if len(hit) >= 3:
+            done.add(hit)
+    short = {k: d["name"].removeprefix("the ").split(" (")[0] for k, d in der.items()}
+    short = {k: s[0].upper() + s[1:] for k, s in short.items()}
+    found = []
+    for ks in itertools.combinations(der, 3):
+        side = [q for k in ks for q in der[k]["clubs"]]
+        if len(side) != len(set(side)) or frozenset(ks) in done:
+            continue
+        cands = [pid for pid, c in clubs.items() if all(c & set(der[k]["clubs"]) for k in ks)]
+        if not cands or any(k not in facts.get(pid, {}) for pid in cands for k in ks):
+            continue  # someone on the shortlist isn't checked yet
+        yes = [p for p in cands if all(facts[p][k]["played"] is True for k in ks)]
+        unsure = [p for p in cands if p not in yes and all(facts[p][k]["played"] is not False for k in ks)]
+        if not 1 <= len(yes) <= 6:
+            continue
+        found.append((ks, yes, unsure, [p for p in cands if p not in yes and p not in unsure]))
+    found.sort(key=lambda f: (len(f[1]), f[0]))  # fewest answers first: those are the best
+    used: dict[str, int] = {}
+    out = []
+    for ks, yes, unsure, no in found:
+        if any(used.get(p, 0) >= DERBY_CAP for p in yes):
+            continue
+        for p in yes:
+            used[p] = used.get(p, 0) + 1
+        names = [der[k]["name"] for k in ks]
+        t = {"kind": "derby", "q": f"Played in {names[0]}, {names[1]} AND {names[2]}",
+             "eras": 0, "difficulty": 4 if any(der[k].get("expert") for k in ks) else 2,
+             "answers": yes, "names": [shown(p) for p in yes],
+             "proof": {p: [f"{short[k]}: {facts[p][k]['proof']}" for k in ks] for p in yes}}
+        for p in yes:
+            for k in ks:
+                t["eras"] |= era_mask(facts[p][k]["year"], facts[p][k]["year"])
+        if unsure:
+            t["unconfirmed"] = unsure
+        if no:
+            t["ruled_out"] = {p: "; ".join(f"never played {der[k]['name']}: {facts[p][k]['why']}"
+                                            for k in ks if facts[p][k]["played"] is False) for p in no}
+        out.append(t)
+    return out
+
+
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--offline", action="store_true", help="only the curated teasers (no Wikipedia)")
@@ -236,6 +297,9 @@ def main() -> None:
     for t in curated:
         out.append({"kind": "curated", **t})
     print(f"{len(curated)} curated teasers")
+    derbies = derby_teasers(players, curated, shown)
+    out += derbies
+    print(f"{len(derbies)} derby teasers from derby_facts.json")
 
     if not args.offline:
         # "Scored in a Champions League / World Cup final AND played for X".
@@ -383,6 +447,7 @@ def main() -> None:
     print(f"Audit: {len(AUDIT)} finals to check by hand")
     random.Random(7).shuffle(out)
     note = (f"Half-Time Teasers: {sum(t['kind'] == 'curated' for t in out)} hand-checked, "
+            f"{sum(t['kind'] == 'derby' for t in out)} from checked derby line-ups, "
             f"{sum(t['kind'] == 'final' for t in out)} final-scorer teasers checked against Wikipedia. "
             f"Built {time.strftime('%Y-%m-%d %H:%M UTC', time.gmtime())}.")
     print(note)
