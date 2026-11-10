@@ -139,8 +139,8 @@ def final_titles() -> dict[str, list[str]]:
 
 
 TEAM = re.compile(r"\|\s*team([12])\s*=\s*([^\n]*)")
-DEBUG_TITLES = {"2026 UEFA Champions League final", "2021 UEFA Champions League final"}
-FOOTBALL_BOX = re.compile(r"\{\{\s*football ?box", re.I)
+# Old {{Football box}} and the newer {{#invoke:football box|main}}.
+FOOTBALL_BOX = re.compile(r"\{\{\s*(?:#invoke:\s*)?football ?box", re.I)
 
 
 def link_title(s: str) -> str | None:
@@ -156,11 +156,6 @@ def final_scorers(titles: list[str]) -> list[tuple[int, str, str | None]]:
     final's football box(es); own goals and shoot-outs left out."""
     pages = wikitext(titles)
     out = []
-    for t in DEBUG_TITLES & set(titles):
-        text = pages.get(t, "")
-        i = text.lower().find("goals1")
-        print(f"::notice title=debug {t}::found={t in pages} boxes={len(FOOTBALL_BOX.split(text)) - 1} "
-              + text[max(0, i - 400):i + 400].replace("\n", " | ").replace("::", ": :"))
     for t, text in pages.items():
         year = int(re.search(r"\d{4}", t).group())
         # One box per match (a replayed final has two).
