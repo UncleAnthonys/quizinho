@@ -219,6 +219,11 @@
         "played": true,
         "year": 2021,
         "proof": "Inter 2-1 Milan, 26 Jan 2021, Coppa Italia (scored) https://www.inter.it/en/news/2021-01-26-eriksen-free-kick-inter-milan-coppa-italia"
+      },
+      "northwest": {
+        "played": true,
+        "year": 2022,
+        "proof": "Man United 2-1 Liverpool, 22 Aug 2022, 85 min https://aws.fbref.com/en/players/980522ec/matchlogs/2022-2023/Christian-Eriksen-Match-Logs"
       }
     },
     "christian-ziege": {
@@ -418,6 +423,23 @@
         "proof": "Tottenham 3-1 Arsenal, FA Cup semi-final, 14 Apr 1991 (2 goals) https://www.pastemagazine.com/soccer/arsenal/throwback-thursday-tottenham-v-arsenal-fa-cup-semi"
       }
     },
+    "giovanni-van-bronckhorst": {
+      "clasico": {
+        "played": true,
+        "year": 2005,
+        "proof": "Real Madrid 0-3 Barcelona, 19 Nov 2005, 90 min https://aws.fbref.com/en/players/7e4e7dea/matchlogs/2005-2006/Giovanni-van-Bronckhorst-Match-Logs"
+      },
+      "oldfirm": {
+        "played": true,
+        "year": 2000,
+        "proof": "Rangers 4-0 Celtic, 26 Mar 2000 (scored) https://thecelticwiki.com/?p=12179"
+      },
+      "nld": {
+        "played": true,
+        "year": 2002,
+        "proof": "Tottenham 1-1 Arsenal, 15 Dec 2002 (on 79') https://spursodyssey.com/0203/ar151202.html"
+      }
+    },
     "henrikh-mkhitaryan": {
       "nld": {
         "played": true,
@@ -607,6 +629,22 @@
         "played": true,
         "year": 2025,
         "proof": "Milan 1-1 Inter, 2 Feb 2025 https://aws.fbref.com/en/matches/c14ebb74/"
+      }
+    },
+    "lassana-diarra": {
+      "clasico": {
+        "played": true,
+        "year": 2010,
+        "proof": "Barcelona 5-0 Real Madrid, 29 Nov 2010, 46 min https://aws.fbref.com/en/players/79584585/matchlogs/2010-2011/misc/Lassana-Diarra-Match-Logs"
+      },
+      "nld": {
+        "played": false,
+        "why": "No Tottenham game in his half-season at Arsenal, 2007-08 https://aws.fbref.com/en/players/79584585/matchlogs/2007-2008/Lassana-Diarra-Match-Logs"
+      },
+      "classique": {
+        "played": true,
+        "year": 2015,
+        "proof": "PSG 2-1 Marseille, 4 Oct 2015, 90 min https://aws.fbref.com/en/players/79584585/matchlogs/2015-2016/Lassana-Diarra-Match-Logs"
       }
     },
     "laurent-blanc": {
@@ -805,6 +843,11 @@
         "played": true,
         "year": 1999,
         "proof": "Inter 2-2 Milan, 13 Mar 1999 https://aws.fbref.com/en/players/4dde97ea/matchlogs/1998-1999/Mikael-Silvestre-Match-Logs"
+      },
+      "northwest": {
+        "played": true,
+        "year": 2003,
+        "proof": "Liverpool 1-2 Man United, 9 Nov 2003, started https://www.lfchistory.net/SeasonArchive/Game/2457"
       }
     },
     "mikel-arteta": {
@@ -1001,6 +1044,23 @@
         "proof": "Liverpool 1-1 Everton, 27 Sep 2014 https://aws.fbref.com/en/players/b400bde0/matchlogs/2014-2015/Raheem-Sterling-Match-Logs"
       }
     },
+    "ray-wilkins": {
+      "milan": {
+        "played": true,
+        "year": 1984,
+        "proof": "Milan 2-1 Inter, 28 Oct 1984, started https://www.glieroidelcalcio.com/?p=10057"
+      },
+      "oldfirm": {
+        "played": true,
+        "year": 1988,
+        "proof": "Rangers 5-1 Celtic, Aug 1988 (scored) https://www.sundaypost.com/fp/5-of-ray-wilkins-most-memorable-matches-from-an-old-firm-classic-for-rangers-to-helping-manchester-united-lift-the-fa-cup"
+      },
+      "northwest": {
+        "played": true,
+        "year": 1983,
+        "proof": "Liverpool 2-1 Man United, League Cup final, 26 Mar 1983, started https://www.mufcinfo.com/manupag/finals/final_appearences_line_ups/leaguecuplineups/1983leaguecupfinalvliverpool.htm"
+      }
+    },
     "richard-wright": {
       "manc": {
         "played": false,
@@ -1095,6 +1155,23 @@
         "proof": "Milan 2-2 Inter, 8 Nov 1998 (scored) https://aws.fbref.com/en/players/57feb553/matchlogs/1998-1999/Ronaldo-Match-Logs"
       }
     },
+    "samir-nasri": {
+      "manc": {
+        "played": true,
+        "year": 2011,
+        "proof": "Man United 1-6 Man City, 23 Oct 2011 (off the bench) https://bleacherreport.com/articles/906846-manchester-united-vs-manchester-city-player-ratings-in-6-1-demolition-derby"
+      },
+      "nld": {
+        "played": true,
+        "year": 2010,
+        "proof": "Tottenham 1-4 Arsenal, League Cup, 21 Sep 2010 (2 penalties) https://foxnews.com/sports/nasris-overtime-penalty-kicks-help-arsenal-to-4-1-win-at-spurs"
+      },
+      "classique": {
+        "played": true,
+        "year": 2007,
+        "proof": "PSG 1-1 Marseille, 2 Sep 2007, 90 min https://aws.fbref.com/en/players/165bed61/matchlogs/2007-2008/Samir-Nasri-Match-Logs"
+      }
+    },
     "samuel-etoo": {
       "clasico": {
         "played": true,
@@ -1156,10 +1233,43 @@
         "proof": "Atlético 1-1 Real Madrid, 18 Mar 2000, 8 min https://aws.fbref.com/en/matches/79ab1416/El-Derbi-Madrileno-Atletico-Madrid-Real-Madrid-March-18-2000-La-Liga"
       }
     },
+    "steven-pienaar": {
+      "klassiker": {
+        "played": true,
+        "year": 2006,
+        "proof": "Bayern 2-0 Dortmund, 11 Aug 2006, 90 min https://aws.fbref.com/en/matches/509a13db/Der-Klassiker-Bayern-Munich-Dortmund-August-11-2006-Bundesliga"
+      },
+      "mersey": {
+        "played": true,
+        "year": 2009,
+        "proof": "Liverpool 1-1 Everton, 19 Jan 2009, 90 min https://aws.fbref.com/en/matches/30efb319/Merseyside-Derby-Liverpool-Everton-January-19-2009-Premier-League"
+      },
+      "nld": {
+        "played": false,
+        "why": "Unused sub for Tottenham 3-3 Arsenal (20 Apr 2011) and not involved in Tottenham 2-1 Arsenal (2 Oct 2011), the two in his Spurs spell https://bleacherreport.com/articles/672556-tottenham-hotspur-3-3-arsenal-spurs-win-north-london-derby-after-3-3-draw https://spursodyssey.com/1112/ar021011.html"
+      }
+    },
     "sylvinho": {
       "manc": {
         "played": false,
         "why": "No Man United game in his one City season, 2009-10 https://aws.fbref.com/en/players/b46e497d/matchlogs/2009-2010/Sylvinho-Match-Logs"
+      }
+    },
+    "thomas-gravesen": {
+      "clasico": {
+        "played": true,
+        "year": 2006,
+        "proof": "Barcelona 1-1 Real Madrid, 1 Apr 2006, 12 min https://aws.fbref.com/en/players/b769b5bd/matchlogs/2005-2006/Thomas-Gravesen-Match-Logs"
+      },
+      "mersey": {
+        "played": true,
+        "year": 2004,
+        "proof": "Liverpool 0-0 Everton, 31 Jan 2004, 90 min https://fbref.com/en/matches/f49f3e2b/Merseyside-Derby-Liverpool-Ev"
+      },
+      "oldfirm": {
+        "played": true,
+        "year": 2006,
+        "proof": "Celtic 2-0 Rangers, 23 Sep 2006 (scored) https://thecelticwiki.com/?p=13030"
       }
     },
     "xabi-alonso": {
