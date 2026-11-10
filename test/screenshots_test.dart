@@ -23,6 +23,7 @@ import 'package:quizinho/domain/tournament.dart';
 import 'package:quizinho/ui/screens/home_screen.dart';
 import 'package:quizinho/ui/screens/setup_screen.dart';
 import 'package:quizinho/ui/screens/solo_screen.dart';
+import 'package:quizinho/ui/teaser/teaser_widgets.dart';
 import 'package:quizinho/ui/widgets/common.dart';
 import 'package:quizinho/ui/widgets/logo.dart';
 import 'package:quizinho/ui/widgets/player_picker.dart';
@@ -361,5 +362,90 @@ void main() {
       BidLayout(data: bid('answering'), controls: const SizedBox(), answerBox: Column(children: [_timer(), _picker()])),
     );
     await shot(tester, 'bid_result', column(_scores(), BidLayout(data: bid('finished'), controls: const SizedBox(), answerBox: const SizedBox())));
+  }, skip: !_shots);
+
+  // Half-Time Teaser mock-ups.
+  const teaserQ = 'played in El Clásico, the Manchester derby AND the North London derby';
+  const teaserTeams = [('Home', 0), ('Away', 1)];
+
+  testWidgets('Teaser', (tester) async {
+    await shot(
+        tester,
+        'teaser_halftime',
+        TeaserHalfTime(
+            question: teaserQ,
+            fraction: 0.7,
+            seconds: 63,
+            onLater: () {},
+            bottom: TeaserTeams(teams: teaserTeams, onPick: (_) {})));
+    await shot(
+        tester,
+        'teaser_answering',
+        TeaserHalfTime(
+            question: teaserQ,
+            fraction: 0.55,
+            seconds: 49,
+            bottom: Column(children: [
+              const TeamChip(name: 'Home answering', colorIndex: 0, size: 20),
+              const SizedBox(height: 10),
+              _picker(),
+            ])));
+
+    // Between games: the table after a round, with the teaser still open.
+    Widget summary({required bool open}) => Padding(
+          padding: const EdgeInsets.all(20),
+          child: Column(children: [
+            Text('ROUND 4 OF 6', style: AppText.label(16)),
+            Text('BIDDING WAR', style: AppText.headline(40, color: Palette.gold)),
+            const SizedBox(height: 24),
+            Text('THE TABLE', style: AppText.label(14)),
+            const SizedBox(height: 8),
+            for (final (pos, (name, color, score, plus)) in const [('Home', 0, 9, 2), ('Away', 1, 6, 0)].indexed)
+              Container(
+                margin: const EdgeInsets.only(bottom: 8),
+                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+                decoration: BoxDecoration(
+                  color: Colors.black.withValues(alpha: 0.3),
+                  borderRadius: BorderRadius.circular(14),
+                  border: Border(left: BorderSide(color: Palette.team(color), width: 6)),
+                ),
+                child: Row(children: [
+                  SizedBox(width: 28, child: Text('${pos + 1}', style: AppText.headline(26, color: Palette.muted))),
+                  Expanded(child: Text(name.toUpperCase(), style: AppText.headline(28))),
+                  if (plus > 0)
+                    Padding(
+                      padding: const EdgeInsets.only(right: 12),
+                      child: Text('+$plus', style: AppText.headline(24, color: Palette.yellow)),
+                    ),
+                  Text('$score', style: AppText.headline(36)),
+                ]),
+              ),
+            const Spacer(),
+            if (open) ...[
+              const SizedBox(height: 12),
+              TeaserChip(onPressed: () {}),
+              const SizedBox(height: 16),
+            ] else
+              Padding(
+                padding: const EdgeInsets.only(bottom: 16),
+                child: Container(
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: Colors.black.withValues(alpha: 0.45),
+                    borderRadius: BorderRadius.circular(20),
+                    border: Border.all(color: Palette.gold, width: 2),
+                  ),
+                  child: Column(children: [
+                    const TeaserPrompt(question: teaserQ, compact: true),
+                    const SizedBox(height: 14),
+                    TeaserTeams(teams: teaserTeams, locked: const {1}, onPick: (_) {}),
+                  ]),
+                ),
+              ),
+            BigButton(label: 'Next challenge', icon: Icons.casino, onPressed: () {}),
+          ]),
+        );
+    await shot(tester, 'teaser_between_games', summary(open: true));
+    await shot(tester, 'teaser_tapped', summary(open: false));
   }, skip: !_shots);
 }
