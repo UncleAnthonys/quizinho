@@ -1,0 +1,10 @@
+{
+  "_note": "Wikidata career spells that are wrong, fixed by normalise.py before anything else reads them. Match on player + team + start year; 'to' is the right club (null = drop the spell). Each one checked against the player's own Wikipedia article or club records.",
+  "spells": [
+    {"player": "Q350107", "name": "Sol Bamba", "team": "Q8701", "start": 2006, "to": "Q390256", "why": "Dunfermline Athletic 2006-08, not Atlético Madrid"},
+    {"player": "Q350107", "name": "Sol Bamba", "team": "Q18741", "start": 2008, "to": "Q192597", "why": "Hibernian 2008-11, not Tottenham"},
+    {"player": "Q216557", "name": "Mohamed Sissoko", "team": "Q8682", "start": 2015, "to": null, "why": "never played for Real Madrid"},
+    {"player": "Q27049064", "name": "João Félix", "team": "Q284461", "start": 2025, "to": "Q482764", "why": "joined Al-Nassr in 2025, not Al-Hilal"},
+    {"player": "Q482955", "name": "Edwin van der Sar", "team": "Q7156", "start": 1990, "to": "Q81888", "why": "Ajax 1990-99, not Barcelona"}
+  ]
+}
