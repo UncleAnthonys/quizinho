@@ -107,6 +107,25 @@
       "clasico": {
         "played": false,
         "why": "No Barcelona game in his Real Madrid season, 2017-18 https://aws.fbref.com/en/players/e42d61c7/matchlogs/2017-2018/Achraf-Hakimi-Match-Logs"
+      },
+      "klassiker": {
+        "played": true,
+        "year": 2018,
+        "proof": "Dortmund 3-2 Bayern, 10 Nov 2018, 90 min https://aws.fbref.com/en/players/e42d61c7/matchlogs/2018-2019/Achraf-Hakimi-Match-Logs"
+      },
+      "classique": {
+        "played": true,
+        "year": 2023,
+        "proof": "PSG 4-0 Marseille, 24 Sep 2023, 82 min https://aws.fbref.com/en/players/e42d61c7/matchlogs/2023-2024/Achraf-Hakimi-Match-Logs"
+      },
+      "ditalia": {
+        "played": true,
+        "year": 2021,
+        "proof": "Inter 2-0 Juventus, 17 Jan 2021, 90 min https://aws.fbref.com/en/players/e42d61c7/matchlogs/2020-2021/misc/Achraf-Hakimi-Match-Logs"
+      },
+      "madrid": {
+        "played": false,
+        "why": "No Atlético game in his only Real Madrid first-team season, 2017-18 https://aws.fbref.com/en/players/e42d61c7/matchlogs/2017-2018/Achraf-Hakimi-Match-Logs"
       }
     },
     "albert-gu-mundsson-1923": {
@@ -184,6 +203,11 @@
         "played": true,
         "year": 2023,
         "proof": "Liverpool 2-0 Everton, 21 Oct 2023, 36 min https://aws.fbref.com/en/players/be927d03/matchlogs/2023-2024/Ashley-Young-Match-Logs"
+      },
+      "ditalia": {
+        "played": true,
+        "year": 2021,
+        "proof": "Inter 1-2 Juventus, Coppa Italia semi, 2 Feb 2021, 65 min https://fbref.com/en/matches/dcf51113/Derby-dItalia-Internazionale-Juventus-February-2-2021-Coppa-Italia"
       }
     },
     "brahim-diaz": {
@@ -229,6 +253,11 @@
         "played": true,
         "year": 2022,
         "proof": "Man United 2-1 Liverpool, 22 Aug 2022, 85 min https://aws.fbref.com/en/players/980522ec/matchlogs/2022-2023/Christian-Eriksen-Match-Logs"
+      },
+      "ditalia": {
+        "played": true,
+        "year": 2021,
+        "proof": "Inter 1-2 Juventus, Coppa Italia semi, 2 Feb 2021, 18 min https://fbref.com/en/matches/dcf51113/Derby-dItalia-Internazionale-Juventus-February-2-2021-Coppa-Italia"
       }
     },
     "christian-ziege": {
@@ -691,6 +720,23 @@
         "proof": "Liverpool 1-0 Everton, 6 Feb 2010 https://aws.fbref.com/en/players/7106e4fe/matchlogs/2009-2010/Louis-Saha-Match-Logs"
       }
     },
+    "lucas-hernandez": {
+      "madrid": {
+        "played": true,
+        "year": 2017,
+        "proof": "Atlético 0-0 Real Madrid, 18 Nov 2017, 90 min https://aws.fbref.com/en/players/c3ee18ef/matchlogs/2017-2018/Lucas-Hernandez-Match-Logs"
+      },
+      "klassiker": {
+        "played": true,
+        "year": 2020,
+        "proof": "Dortmund 2-3 Bayern, 7 Nov 2020, 90 min https://aws.fbref.com/en/players/c3ee18ef/matchlogs/2020-2021/Lucas-Hernandez-Match-Logs"
+      },
+      "classique": {
+        "played": true,
+        "year": 2023,
+        "proof": "PSG 4-0 Marseille, 24 Sep 2023, 68 min https://aws.fbref.com/en/players/c3ee18ef/matchlogs/2023-2024/misc/Lucas-Hernandez-Match-Logs"
+      }
+    },
     "luis-garcia": {
       "clasico": {
         "played": true,
@@ -779,6 +825,23 @@
         "played": true,
         "year": 2009,
         "proof": "Juventus 1-1 Inter, 18 Apr 2009 (scored) https://www.inter.it/en/match_center/3768"
+      }
+    },
+    "mario-mandzukic": {
+      "madrid": {
+        "played": true,
+        "year": 2015,
+        "proof": "Atlético 4-0 Real Madrid, 7 Feb 2015, 90 min https://aws.fbref.com/en/players/afa0d4e0/matchlogs/2014-2015/Mario-Mandzukic-Match-Logs"
+      },
+      "klassiker": {
+        "played": true,
+        "year": 2013,
+        "proof": "Dortmund 0-3 Bayern, 23 Nov 2013, 55 min https://aws.fbref.com/en/players/afa0d4e0/matchlogs/2013-2014/Mario-Mandzukic-Match-Logs"
+      },
+      "ditalia": {
+        "played": true,
+        "year": 2016,
+        "proof": "Inter 2-1 Juventus, 18 Sep 2016, 73 min https://aws.fbref.com/en/players/afa0d4e0/matchlogs/2016-2017/Mario-Mandzukic-Match-Logs"
       }
     },
     "mateo-kovacic": {
@@ -995,6 +1058,11 @@
         "played": true,
         "year": 1994,
         "proof": "Man United 5-0 Man City, 10 Nov 1994, 90 min https://aws.fbref.com/en/matches/45c9f128/"
+      },
+      "ditalia": {
+        "played": true,
+        "year": 1996,
+        "proof": "Juventus 0-3 Inter, Coppa Italia, 13 Nov 1996 (scored) https://inter.it/en/news/2021-02-08-juventus-inter-0-3-coppa-italia-1996-97"
       }
     },
     "paul-walsh": {
@@ -1137,6 +1205,11 @@
         "played": true,
         "year": 2008,
         "proof": "Man City v Man United, 30 Nov 2008 (90 min) https://aws.fbref.com/en/players/f034613c/matchlogs/2008-2009/Robinho-Match-Logs"
+      },
+      "madrid": {
+        "played": true,
+        "year": 2007,
+        "proof": "Real Madrid 2-1 Atlético, 25 Aug 2007, 90 min https://aws.fbref.com/en/players/f034613c/matchlogs/2007-2008/Robinho-Match-Logs"
       }
     },
     "rodri": {
@@ -1171,6 +1244,11 @@
         "played": true,
         "year": 2016,
         "proof": "Everton 0-1 Liverpool, 19 Dec 2016, 90 min https://aws.fbref.com/en/players/5eae500a/matchlogs/2016-2017/Romelu-Lukaku-Match-Logs"
+      },
+      "ditalia": {
+        "played": true,
+        "year": 2021,
+        "proof": "Inter 2-0 Juventus, 17 Jan 2021, 90 min https://aws.fbref.com/fr/joueurs/5eae500a/matchs/2020-2021/misc/Journaux-de-match-Romelu-Lukaku"
       }
     },
     "ronaldo": {
@@ -1222,6 +1300,11 @@
         "played": true,
         "year": 2009,
         "proof": "Milan 0-4 Inter, 29 Aug 2009, started https://www.inter.it/en/match_center/3777"
+      },
+      "ditalia": {
+        "played": true,
+        "year": 2010,
+        "proof": "Inter 2-0 Juventus, 16 Apr 2010 (scored) https://www.inter.it/en/news/2020-04-16-inter-juventus-2-0-16-april-2010-maicon-etoo"
       }
     },
     "sergio-aguero": {
