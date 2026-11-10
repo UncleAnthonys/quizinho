@@ -1230,6 +1230,70 @@
         ]
       },
       "prefix": "NAME A MANAGER WHO…"
+    },
+    {
+      "q": "Played in the Madrid derby, the Milan derby AND the North West derby (Liverpool v Man United)",
+      "eras": 12,
+      "difficulty": 2,
+      "answers": [
+        "david-beckham",
+        "fernando-torres",
+        "diego-forlan"
+      ],
+      "names": [
+        "David Beckham",
+        "Fernando Torres",
+        "Diego Forlán"
+      ],
+      "proof": {
+        "david-beckham": [
+          "Madrid derby: Atlético v Real Madrid, 15 Oct 2005 (90 min) https://aws.fbref.com/en/players/53539318/matchlogs/2005-2006/David-Beckham-Match-Logs",
+          "Milan derby: Milan 1-2 Inter, 15 Feb 2009 https://aws.fbref.com/en/players/53539318/matchlogs/2008-2009/David-Beckham-Match-Logs",
+          "North West derby: Liverpool 3-1 Man United, 4 Nov 2001 https://aws.fbref.com/en/players/53539318/matchlogs/2001-2002/David-Beckham-Match-Logs"
+        ],
+        "fernando-torres": [
+          "Madrid derby: Atlético 4-0 Real Madrid, 7 Feb 2015 https://aws.fbref.com/en/players/bdf7b97d/matchlogs/2014-2015/Fernando-Torres-Match-Logs",
+          "Milan derby: Milan 1-1 Inter, 23 Nov 2014 (72 min) https://aws.fbref.com/en/players/bdf7b97d/matchlogs/2014-2015/Fernando-Torres-Match-Logs",
+          "North West derby: Man United 1-4 Liverpool, 14 Mar 2009 (scored) https://aws.fbref.com/en/players/bdf7b97d/matchlogs/2008-2009/Fernando-Torres-Match-Logs"
+        ],
+        "diego-forlan": [
+          "Madrid derby: Atlético 1-2 Real Madrid, 18 Oct 2008 https://aws.fbref.com/en/players/d87d0dfc/matchlogs/2008-2009/Diego-Forlan-Match-Logs",
+          "Milan derby: Milan 0-1 Inter, 15 Jan 2012 (sub) https://fbref.com/en/players/d87d0dfc/matchlogs/2011-2012/Diego-Forlan-Match-Logs",
+          "North West derby: Liverpool 1-2 Man United, 1 Dec 2002 https://aws.fbref.com/en/players/d87d0dfc/matchlogs/2002-2003/Diego-Forlan-Match-Logs"
+        ]
+      }
+    },
+    {
+      "q": "Played in El Clásico, the Madrid derby AND the Merseyside derby",
+      "eras": 14,
+      "difficulty": 2,
+      "answers": [
+        "luis-suarez",
+        "luis-garcia",
+        "samuel-etoo"
+      ],
+      "names": [
+        "Luis Suárez",
+        "Luis García",
+        "Samuel Eto'o"
+      ],
+      "proof": {
+        "luis-suarez": [
+          "El Clásico: Real Madrid 0-4 Barcelona, 21 Nov 2015 (2 goals) https://aws.fbref.com/en/players/a6154613/matchlogs/2015-2016/Luis-Suarez-Match-Logs",
+          "Madrid derby: Real Madrid 2-0 Atlético, 12 Dec 2020 https://aws.fbref.com/en/players/a6154613/matchlogs/2020-2021/Luis-Suarez-Match-Logs",
+          "Merseyside derby: Everton 3-3 Liverpool, 23 Nov 2013 (scored) https://aws.fbref.com/en/players/a6154613/matchlogs/2013-2014/Luis-Suarez-Match-Logs"
+        ],
+        "luis-garcia": [
+          "El Clásico: Barcelona 1-2 Real Madrid, 6 Dec 2003 https://aws.fbref.com/en/players/a5c8d2b7/matchlogs/2003-2004/Luis-Garcia-Match-Logs",
+          "Madrid derby: Atlético 0-2 Real Madrid, 20 Jan 2008 (sub) https://aws.fbref.com/en/players/a5c8d2b7/matchlogs/2007-2008/Luis-Garcia-Match-Logs",
+          "Merseyside derby: Liverpool 2-1 Everton, 20 Mar 2005 (scored) https://www.irishexaminer.com/sport/soccer/arid-30194555.html"
+        ],
+        "samuel-etoo": [
+          "El Clásico: Barcelona 2-0 Real Madrid, 13 Dec 2008 (scored) https://aws.fbref.com/en/matches/6b9bf4b5/",
+          "Madrid derby: Real Madrid 1-3 Atlético, 30 Oct 1999 (sub, for Real) https://aws.fbref.com/en/players/06420c93/matchlogs/1999-2000/Samuel-Etoo-Match-Logs",
+          "Merseyside derby: Liverpool 1-1 Everton, 27 Sep 2014 (sub) https://aws.fbref.com/en/players/06420c93/matchlogs/2014-2015/c9/summary/Samuel-Etoo-Match-Logs"
+        ]
+      }
     }
   ]
 }
