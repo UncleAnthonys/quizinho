@@ -11,10 +11,14 @@ import '../widgets/common.dart';
 
 /// The question itself, as a card.
 class TeaserPrompt extends StatelessWidget {
-  const TeaserPrompt({super.key, required this.question, this.halfTime = false, this.compact = false});
+  const TeaserPrompt({super.key, required this.question, this.prefix = 'NAME A PLAYER WHO…', this.halfTime = false, this.compact = false});
 
   /// "Name a player who…" — the rest of the sentence.
   final String question;
+
+  /// "NAME A PLAYER WHO…", or "NAME A MANAGER WHO…".
+  final String prefix;
+
   /// During the half-time clock: 5 points now, 3 later.
   final bool halfTime;
   final bool compact;
@@ -29,7 +33,7 @@ class TeaserPrompt extends StatelessWidget {
           border: Border.all(color: Palette.gold.withValues(alpha: 0.7), width: 2),
         ),
         child: Column(mainAxisSize: MainAxisSize.min, children: [
-          Text('NAME A PLAYER WHO…', style: AppText.label(compact ? 13 : 15, color: Palette.gold)),
+          Text(prefix, style: AppText.label(compact ? 13 : 15, color: Palette.gold)),
           SizedBox(height: compact ? 6 : 10),
           Text(question.toUpperCase(),
               textAlign: TextAlign.center, style: AppText.headline(compact ? 24 : 32, weight: FontWeight.w800)),

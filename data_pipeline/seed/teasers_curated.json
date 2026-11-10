@@ -1102,6 +1102,159 @@
       "unconfirmed": [
         "gilberto-silva"
       ]
+    },
+    {
+      "q": "Won the Champions League in back-to-back seasons with two different clubs, and played in both finals",
+      "eras": 6,
+      "difficulty": 3,
+      "answers": [
+        "marcel-desailly",
+        "paulo-sousa",
+        "samuel-etoo"
+      ],
+      "names": [
+        "Marcel Desailly",
+        "Paulo Sousa",
+        "Samuel Eto'o"
+      ],
+      "proof": {
+        "marcel-desailly": [
+          "1993 Marseille (played the whole final) and 1994 Milan (scored) https://thefootballfaithful.com/four-players-win-successive-champions-leagues-different-clubs/"
+        ],
+        "paulo-sousa": [
+          "1996 Juventus and 1997 Dortmund, played in both https://learning.coachesvoice.com/cv/paulo-sousa-juventus-dortmund-champions-league/"
+        ],
+        "samuel-etoo": [
+          "2009 Barcelona (scored) https://thefootballfaithful.com/four-players-win-successive-champions-leagues-different-clubs/",
+          "2010 Inter (started) https://www.foxsports.com/stories/soccer/no-surprises-in-champions-league-final-lineups"
+        ]
+      },
+      "ruled_out": {
+        "gerard-pique": "Won with Man United 2008 and Barcelona 2009, but wasn't in United's squad for the 2008 final"
+      }
+    },
+    {
+      "q": "Won the Premier League with two different clubs AND won the Champions League",
+      "eras": 30,
+      "difficulty": 2,
+      "answers": [
+        "carlos-tevez",
+        "ashley-cole",
+        "james-milner",
+        "riyad-mahrez",
+        "ngolo-kante",
+        "henning-berg"
+      ],
+      "names": [
+        "Carlos Tevez",
+        "Ashley Cole",
+        "James Milner",
+        "Riyad Mahrez",
+        "N'Golo Kanté",
+        "Henning Berg"
+      ],
+      "proof": {
+        "carlos-tevez": [
+          "Premier League: Man United 2008, 2009 and Man City 2012; Champions League: Man United 2008"
+        ],
+        "ashley-cole": [
+          "Premier League: Arsenal 2002, 2004 and Chelsea 2010; Champions League: Chelsea 2012"
+        ],
+        "james-milner": [
+          "Premier League: Man City 2012, 2014 and Liverpool 2020; Champions League: Liverpool 2019"
+        ],
+        "riyad-mahrez": [
+          "Premier League: Leicester 2016 and Man City 2018-23; Champions League: Man City 2023"
+        ],
+        "ngolo-kante": [
+          "Premier League: Leicester 2016 and Chelsea 2017; Champions League: Chelsea 2021"
+        ],
+        "henning-berg": [
+          "Premier League: Blackburn 1995 and Man United 1999, 2000; Champions League: Man United 1999 (injured for the final, but got a winner's medal) https://en.wikipedia.org/wiki/Henning_Berg"
+        ]
+      },
+      "proof_note": "Premier League two-club winners: https://www.planetfootball.com/premier-league/players-win-premier-league-more-than-one-club",
+      "ruled_out": {
+        "kolo-toure": "Premier League with Arsenal and Man City, but never won the Champions League",
+        "gael-clichy": "Premier League with Arsenal and Man City, but never won the Champions League",
+        "nicolas-anelka": "Premier League with Arsenal and Chelsea, but left Chelsea before their 2012 Champions League",
+        "gabriel-jesus": "Premier League with Man City and Arsenal, but left City the year before they won the Champions League",
+        "robert-huth": "Premier League with Chelsea and Leicester, but never won the Champions League"
+      }
+    },
+    {
+      "q": "Won the World Cup, the European Championship, the Champions League AND the Premier League",
+      "eras": 6,
+      "difficulty": 2,
+      "answers": [
+        "fabien-barthez",
+        "thierry-henry",
+        "pedro",
+        "gerard-pique"
+      ],
+      "names": [
+        "Fabien Barthez",
+        "Thierry Henry",
+        "Pedro",
+        "Gerard Piqué"
+      ],
+      "proof": {
+        "fabien-barthez": [
+          "World Cup 1998, Euro 2000, Champions League 1993 (Marseille), Premier League 2001, 2003 (Man United) https://thefootballfaithful.com/the-players-to-win-premier-league-champions-league-and-world-cup/"
+        ],
+        "thierry-henry": [
+          "World Cup 1998, Euro 2000, Champions League 2009 (Barcelona), Premier League 2002, 2004 (Arsenal)"
+        ],
+        "pedro": [
+          "World Cup 2010, Euro 2012, Champions League 2009, 2011, 2015 (Barcelona), Premier League 2017 (Chelsea)"
+        ],
+        "gerard-pique": [
+          "World Cup 2010, Euro 2012, Champions League 2008 (Man United) and Barcelona, Premier League 2008 (Man United) https://en.wikipedia.org/wiki/Gerard_Piqu%C3%A9"
+        ]
+      },
+      "ruled_out": {
+        "ngolo-kante": "World Cup, Champions League and Premier League, but France didn't win a Euro in his time",
+        "fernando-torres": "World Cup, two Euros and the Champions League, but never won the Premier League",
+        "david-silva": "World Cup, two Euros and the Premier League, but never won the Champions League"
+      }
+    },
+    {
+      "q": "Won the Champions League with THREE different clubs",
+      "eras": 6,
+      "difficulty": 2,
+      "answers": [
+        "clarence-seedorf"
+      ],
+      "names": [
+        "Clarence Seedorf"
+      ],
+      "proof": {
+        "clarence-seedorf": [
+          "Ajax 1995, Real Madrid 1998, Milan 2003 and 2007 https://www.fourfourtwo.com/features/players-who-won-the-champions-league-with-more-than-one-club"
+        ]
+      }
+    },
+    {
+      "q": "Won the Champions League AND the World Cup as a manager",
+      "eras": 30,
+      "difficulty": 2,
+      "answers": [
+        "vicente-del-bosque",
+        "marcello-lippi"
+      ],
+      "names": [
+        "Vicente del Bosque",
+        "Marcello Lippi"
+      ],
+      "proof": {
+        "vicente-del-bosque": [
+          "Champions League with Real Madrid 2000, 2002; World Cup with Spain 2010"
+        ],
+        "marcello-lippi": [
+          "Champions League with Juventus 1996; World Cup with Italy 2006"
+        ]
+      },
+      "prefix": "NAME A MANAGER WHO…"
     }
   ]
 }
