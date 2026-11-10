@@ -179,6 +179,12 @@ def main() -> None:
     wiki_stats = json.loads((SEED / "wiki_stats.json").read_text())["players"]
     by_id = {p["id"]: p for p in players}
     by_qid = {p["wikidata"]: p["id"] for p in players if p.get("wikidata")}
+    # The app shows Wikipedia's title for a player where it has one ("Juan Mata", not
+    # Wikidata's "Juan Mata Pata"), so the teasers do too.
+    wiki_names = json.loads((SEED / "wiki_names.json").read_text())["players"]
+
+    def shown(pid: str) -> str:
+        return wiki_names.get(pid) or by_id[pid]["name"]
     out = []
 
     # Hand-checked teasers (derbies played in and the like): every answer has a
@@ -224,7 +230,8 @@ def main() -> None:
             """A spell people forget: not where he started, under 60 league games
             and at most a quarter of his career (Best at Fulham, not Rooney at Everton)."""
             career = spells[pid]
-            if not career or career[0][0] == club:
+            # Not his first club, and not the famous last move (Gerrard at LA Galaxy).
+            if not career or career[0][0] == club or career[-1][0] == club:
                 return False
             st = stats(pid)
             apps, total = st.get(club, 0), sum(st.values())
@@ -239,6 +246,7 @@ def main() -> None:
                     m |= era_mask(e[1], e[2]) if club else 0
             return m
 
+        used: dict[str, int] = {}
         for comp, per in scored.items():
             for club, name in POOL.items():
                 s = {i for i in per if club in a.get(i, set()) and club in b.get(i, set())}
@@ -253,6 +261,11 @@ def main() -> None:
                 # …and a club they only passed through, so it takes some thinking.
                 if not all(passing_through(i, club) for i in s):
                     continue
+                # Two club questions per player at most (Diego Costa passed through a lot of clubs).
+                if any(used.get(i, 0) >= 2 for i in s):
+                    continue
+                for i in s:
+                    used[i] = used.get(i, 0) + 1
                 top = max(by_id[i]["fame"] for i in s)
                 m = 0
                 for i in s:
@@ -261,7 +274,7 @@ def main() -> None:
                     "kind": "final",
                     "q": f"Scored in {label[comp]} AND played for {name}",
                     "answers": sorted(s),
-                    "names": [by_id[i]["name"] for i in sorted(s)],
+                    "names": [shown(i) for i in sorted(s)],
                     "difficulty": 1 if top >= 5 else 2 if top == 4 else 3,
                     "eras": m or 31,
                 })
@@ -272,7 +285,7 @@ def main() -> None:
                 for c in comps_:
                     m |= eras(i, c)
             top = max(by_id[i]["fame"] for i in ids)
-            out.append({"kind": "final", "q": q, "answers": ids, "names": [by_id[i]["name"] for i in ids],
+            out.append({"kind": "final", "q": q, "answers": ids, "names": [shown(i) for i in ids],
                         "difficulty": 1 if top >= 5 else 2 if top == 4 else 3, "eras": m or 31})
 
         # Finals in two, three or four competitions ("FA Cup, League Cup, UEFA
