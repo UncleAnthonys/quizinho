@@ -201,6 +201,12 @@ def main() -> None:
         a = careers_a(players, wiki_stats, least=1)
         spells = {p["id"]: p.get("career", []) for p in players}
         comps = final_titles()
+
+        def club_in(pid: str, year: int) -> str | None:
+            """His club for a final played in [year] (spring): the spell running through it."""
+            now = [e for e in spells[pid] if e[1] is not None and e[1] < year and (e[2] is None or e[2] >= year)]
+            return now[-1][0] if len(now) == 1 else None
+
         # comp → player → [(year, club qid he scored for)]
         scored: dict[str, dict[str, list[tuple[int, str | None]]]] = {}
         for comp, titles in comps.items():
@@ -209,7 +215,13 @@ def main() -> None:
             per: dict[str, list[tuple[int, str | None]]] = {}
             for year, n, tm in rows:
                 if (q := qids.get(n)) in by_qid:
-                    per.setdefault(by_qid[q], []).append((year, qids.get(tm) if tm else None))
+                    pid = by_qid[q]
+                    club = qids.get(tm) if tm else None
+                    if club is None and comp not in ("wc", "euro"):
+                        # The box names the team with a template ({{fb-rt|PSG}}) rather than
+                        # a link: take the club he was at that season from his career.
+                        club = club_in(pid, year)
+                    per.setdefault(pid, []).append((year, club))
             scored[comp] = per
             print(f"{comp}: {len({y for y, _, _ in rows})} finals, {len({n for _, n, _ in rows})} scorers, "
                   f"{len(per)} in our player data")
