@@ -432,6 +432,676 @@
           "Conte: Inter 2019-21"
         ]
       }
+    },
+    {
+      "q": "Has been a club teammate of BOTH Steven Gerrard AND Frank Lampard",
+      "eras": 12,
+      "difficulty": 2,
+      "answers": [
+        "fernando-torres",
+        "joe-cole",
+        "glen-johnson",
+        "daniel-sturridge",
+        "yossi-benayoun",
+        "raul-meireles",
+        "victor-moses",
+        "fabio-borini",
+        "boudewijn-zenden",
+        "nicolas-anelka",
+        "ashley-cole",
+        "rigobert-song",
+        "titi-camara"
+      ],
+      "names": [
+        "Fernando Torres",
+        "Joe Cole",
+        "Glen Johnson",
+        "Daniel Sturridge",
+        "Yossi Benayoun",
+        "Raul Meireles",
+        "Victor Moses",
+        "Fabio Borini",
+        "Boudewijn Zenden",
+        "Nicolas Anelka",
+        "Ashley Cole",
+        "Rigobert Song",
+        "Titi Camara"
+      ],
+      "proof": {
+        "fernando-torres": [
+          "Gerrard at Liverpool 2007-11; Lampard at Chelsea 2011-14"
+        ],
+        "joe-cole": [
+          "Lampard at West Ham 1998-2001 and Chelsea 2003-10; Gerrard at Liverpool 2010-13"
+        ],
+        "glen-johnson": [
+          "Lampard at Chelsea 2003-07; Gerrard at Liverpool 2009-15"
+        ],
+        "daniel-sturridge": [
+          "Lampard at Chelsea 2009-13; Gerrard at Liverpool 2013-15"
+        ],
+        "yossi-benayoun": [
+          "Gerrard at Liverpool 2007-10; Lampard at Chelsea 2010-13"
+        ],
+        "raul-meireles": [
+          "Gerrard at Liverpool 2010-11; Lampard at Chelsea 2011-12"
+        ],
+        "victor-moses": [
+          "Lampard at Chelsea 2012-14; Gerrard at Liverpool (loan) 2013-14"
+        ],
+        "fabio-borini": [
+          "Lampard at Chelsea 2009-11; Gerrard at Liverpool 2012-15"
+        ],
+        "boudewijn-zenden": [
+          "Lampard at Chelsea 2001-03; Gerrard at Liverpool 2005-07"
+        ],
+        "nicolas-anelka": [
+          "Gerrard at Liverpool (loan) 2001-02; Lampard at Chelsea 2008-12"
+        ],
+        "ashley-cole": [
+          "Lampard at Chelsea 2006-14; Gerrard at LA Galaxy 2016"
+        ],
+        "rigobert-song": [
+          "Gerrard at Liverpool 1998-2000; Lampard at West Ham 2000-01"
+        ],
+        "titi-camara": [
+          "Gerrard at Liverpool 1999-2000; Lampard at West Ham 2000-01"
+        ]
+      },
+      "proof_note": "club careers (Wikidata), both in the first-team squad",
+      "ruled_out": {
+        "james-milner": "With Lampard at Man City 2014-15, but joined Liverpool after Gerrard left",
+        "raheem-sterling": "With Gerrard at Liverpool, but joined Man City after Lampard left",
+        "david-james": "With Gerrard at Liverpool, but joined West Ham after Lampard left",
+        "neil-ruddock": "With Lampard at West Ham, but left Liverpool before Gerrard's debut"
+      }
+    },
+    {
+      "q": "Has been a club teammate of BOTH Steven Gerrard AND Paul Scholes",
+      "eras": 6,
+      "difficulty": 3,
+      "answers": [
+        "michael-owen",
+        "paul-ince"
+      ],
+      "names": [
+        "Michael Owen",
+        "Paul Ince"
+      ],
+      "proof": {
+        "michael-owen": [
+          "Gerrard at Liverpool 1998-2004; Scholes at Man United 2009-12"
+        ],
+        "paul-ince": [
+          "Scholes at Man United 1994-95; Gerrard at Liverpool 1998-99"
+        ]
+      },
+      "proof_note": "club careers (Wikidata), both in the first-team squad",
+      "ruled_out": {
+        "danny-guthrie": "Liverpool first team with Gerrard, but only United's youth team"
+      }
+    },
+    {
+      "q": "Has been a club teammate of BOTH Tony Adams AND Ledley King",
+      "eras": 6,
+      "difficulty": 3,
+      "answers": [
+        "sol-campbell"
+      ],
+      "names": [
+        "Sol Campbell"
+      ],
+      "proof": {
+        "sol-campbell": [
+          "King at Tottenham 1999-2001; Adams at Arsenal 2001-02"
+        ]
+      },
+      "proof_note": "club careers (Wikidata), both in the first-team squad",
+      "ruled_out": {
+        "david-bentley": "At Arsenal while Adams played, but made his first-team debut after Adams retired"
+      }
+    },
+    {
+      "q": "Has been a club teammate of BOTH Paolo Maldini AND Francesco Totti",
+      "eras": 7,
+      "difficulty": 4,
+      "answers": [
+        "cafu",
+        "christian-panucci",
+        "emerson",
+        "marco-borriello",
+        "francesco-antonioli",
+        "diego-fuser"
+      ],
+      "names": [
+        "Cafu",
+        "Christian Panucci",
+        "Emerson",
+        "Marco Borriello",
+        "Francesco Antonioli",
+        "Diego Fuser"
+      ],
+      "proof": {
+        "cafu": [
+          "Totti at Roma 1997-2003; Maldini at Milan 2003-08"
+        ],
+        "christian-panucci": [
+          "Maldini at Milan 1993-97; Totti at Roma 2001-09"
+        ],
+        "emerson": [
+          "Totti at Roma 2000-04; Maldini at Milan 2007-09"
+        ],
+        "marco-borriello": [
+          "Maldini at Milan 2002-07 / 2008-09; Totti at Roma 2010-15"
+        ],
+        "francesco-antonioli": [
+          "Maldini at Milan 1988-94; Totti at Roma 1999-2003"
+        ],
+        "diego-fuser": [
+          "Maldini at Milan 1989-92; Totti at Roma 2001-03"
+        ]
+      },
+      "proof_note": "club careers (Wikidata), both in the first-team squad",
+      "ruled_out": {
+        "antonio-cassano": "With Totti at Roma, but reached Milan after Maldini retired"
+      },
+      "unconfirmed": [
+        "max-tonetto"
+      ]
+    },
+    {
+      "q": "Has been a club teammate of BOTH Paolo Maldini AND Carles Puyol",
+      "eras": 6,
+      "difficulty": 3,
+      "answers": [
+        "ronaldinho",
+        "gianluca-zambrotta",
+        "rivaldo",
+        "patrick-kluivert",
+        "edgar-davids",
+        "michael-reiziger",
+        "demetrio-albertini",
+        "francesco-coco",
+        "winston-bogarde"
+      ],
+      "names": [
+        "Ronaldinho",
+        "Gianluca Zambrotta",
+        "Rivaldo",
+        "Patrick Kluivert",
+        "Edgar Davids",
+        "Michael Reiziger",
+        "Demetrio Albertini",
+        "Francesco Coco",
+        "Winston Bogarde"
+      ],
+      "proof": {
+        "ronaldinho": [
+          "Puyol at Barcelona 2003-08; Maldini at Milan 2008-09"
+        ],
+        "gianluca-zambrotta": [
+          "Puyol at Barcelona 2006-08; Maldini at Milan 2008-09"
+        ],
+        "rivaldo": [
+          "Puyol at Barcelona 1999-2002; Maldini at Milan 2002-03"
+        ],
+        "patrick-kluivert": [
+          "Maldini at Milan 1997-98; Puyol at Barcelona 1999-2004"
+        ],
+        "edgar-davids": [
+          "Maldini at Milan 1996-97; Puyol at Barcelona 2004"
+        ],
+        "michael-reiziger": [
+          "Maldini at Milan 1996-97; Puyol at Barcelona 1999-2004"
+        ],
+        "demetrio-albertini": [
+          "Maldini at Milan 1988-2002; Puyol at Barcelona 2005"
+        ],
+        "francesco-coco": [
+          "Maldini at Milan 1995-2002; Puyol at Barcelona 2001-02"
+        ],
+        "winston-bogarde": [
+          "Maldini at Milan 1997; Puyol at Barcelona 1999-2000"
+        ]
+      },
+      "proof_note": "club careers (Wikidata), both in the first-team squad",
+      "ruled_out": {
+        "zlatan-ibrahimovic": "With Puyol at Barcelona, but reached Milan a year after Maldini retired"
+      }
+    },
+    {
+      "q": "Has been a club teammate of BOTH Francesco Totti AND Alessandro Del Piero",
+      "eras": 7,
+      "difficulty": 4,
+      "answers": [
+        "emerson",
+        "jonathan-zebina",
+        "alberto-aquilani",
+        "mirko-vucinic",
+        "luca-toni",
+        "marco-borriello",
+        "marco-motta",
+        "federico-balzaretti",
+        "cristiano-zanetti",
+        "daniel-fonseca",
+        "morgan-de-sanctis",
+        "antonio-chimenti",
+        "luigi-sartor",
+        "matteo-brighi"
+      ],
+      "names": [
+        "Emerson",
+        "Jonathan Zebina",
+        "Alberto Aquilani",
+        "Mirko Vučinić",
+        "Luca Toni",
+        "Marco Borriello",
+        "Marco Motta",
+        "Federico Balzaretti",
+        "Cristiano Zanetti",
+        "Daniel Fonseca",
+        "Morgan De Sanctis",
+        "Antonio Chimenti",
+        "Luigi Sartor",
+        "Matteo Brighi"
+      ],
+      "proof": {
+        "emerson": [
+          "Totti at Roma 2000-04; Del Piero at Juventus 2004-06"
+        ],
+        "jonathan-zebina": [
+          "Totti at Roma 2000-04; Del Piero at Juventus 2004-10"
+        ],
+        "alberto-aquilani": [
+          "Totti at Roma 2002-09; Del Piero at Juventus 2010-11"
+        ],
+        "mirko-vucinic": [
+          "Totti at Roma 2006-11; Del Piero at Juventus 2011-12"
+        ],
+        "luca-toni": [
+          "Totti at Roma 2010; Del Piero at Juventus 2011-12"
+        ],
+        "marco-borriello": [
+          "Totti at Roma 2010-15; Del Piero at Juventus 2012"
+        ],
+        "marco-motta": [
+          "Totti at Roma 2009-10; Del Piero at Juventus 2010-12"
+        ],
+        "federico-balzaretti": [
+          "Del Piero at Juventus 2005-07; Totti at Roma 2012-15"
+        ],
+        "cristiano-zanetti": [
+          "Totti at Roma 1999-2001; Del Piero at Juventus 2006-09"
+        ],
+        "daniel-fonseca": [
+          "Totti at Roma 1994-97; Del Piero at Juventus 1997-2001"
+        ],
+        "morgan-de-sanctis": [
+          "Del Piero at Juventus 1997-99; Totti at Roma 2013-16"
+        ],
+        "antonio-chimenti": [
+          "Totti at Roma 1997-99; Del Piero at Juventus 2002-06 / 2008-10"
+        ],
+        "luigi-sartor": [
+          "Del Piero at Juventus 1993-94; Totti at Roma 2002-05"
+        ],
+        "matteo-brighi": [
+          "Del Piero at Juventus 2000-02; Totti at Roma 2004-12"
+        ]
+      },
+      "proof_note": "club careers (Wikidata), both in the first-team squad",
+      "unconfirmed": [
+        "simone-perrotta",
+        "manuele-blasi"
+      ]
+    },
+    {
+      "q": "Has been a club teammate of BOTH Sergio Busquets AND Sergio Ramos",
+      "eras": 28,
+      "difficulty": 3,
+      "answers": [
+        "lionel-messi",
+        "neymar",
+        "daniel-alves",
+        "ivan-rakitic",
+        "rafinha-1993",
+        "adriano-correia-claro",
+        "marcos-alonso-mendoza"
+      ],
+      "names": [
+        "Lionel Messi",
+        "Neymar",
+        "Daniel Alves",
+        "Ivan Rakitić",
+        "Rafinha",
+        "Adriano Correia Claro",
+        "Marcos Alonso Mendoza"
+      ],
+      "proof": {
+        "lionel-messi": [
+          "Busquets at Barcelona 2008-21 and Inter Miami; Ramos at PSG 2021-23"
+        ],
+        "neymar": [
+          "Busquets at Barcelona 2013-17; Ramos at PSG 2021-23"
+        ],
+        "daniel-alves": [
+          "Ramos at Sevilla 2004-05; Busquets at Barcelona 2008-16 and 2022"
+        ],
+        "ivan-rakitic": [
+          "Busquets at Barcelona 2014-20; Ramos at Sevilla 2023-24"
+        ],
+        "rafinha-1993": [
+          "Busquets at Barcelona 2011-20; Ramos at PSG 2021-22"
+        ],
+        "adriano-correia-claro": [
+          "Ramos at Sevilla 2005; Busquets at Barcelona 2010-16"
+        ],
+        "marcos-alonso-mendoza": [
+          "Ramos at Real Madrid 2010-11 (one first-team game); Busquets at Barcelona 2022-23"
+        ]
+      },
+      "proof_note": "club careers (Wikidata), both in the first-team squad",
+      "ruled_out": {
+        "ousmane-dembele": "With Busquets at Barcelona, but joined PSG after Ramos left",
+        "luis-figo": "Left Real Madrid the summer Ramos arrived"
+      }
+    },
+    {
+      "q": "Has been a club teammate of Lionel Messi, Cristiano Ronaldo AND Neymar",
+      "eras": 28,
+      "difficulty": 3,
+      "answers": [
+        "gerard-pique",
+        "sergio-ramos",
+        "angel-di-maria",
+        "keylor-navas",
+        "achraf-hakimi",
+        "pablo-sarabia",
+        "arthur-melo"
+      ],
+      "names": [
+        "Gerard Piqué",
+        "Sergio Ramos",
+        "Ángel Di María",
+        "Keylor Navas",
+        "Achraf Hakimi",
+        "Pablo Sarabia",
+        "Arthur Melo"
+      ],
+      "proof": {
+        "gerard-pique": [
+          "Ronaldo at Man United 2004-08; Messi and Neymar at Barcelona 2013-17"
+        ],
+        "sergio-ramos": [
+          "Ronaldo at Real Madrid 2009-18; Messi and Neymar at PSG 2021-23"
+        ],
+        "angel-di-maria": [
+          "Ronaldo at Real Madrid 2010-14; Messi and Neymar at PSG 2021-22"
+        ],
+        "keylor-navas": [
+          "Ronaldo at Real Madrid 2014-18; Messi and Neymar at PSG 2021-23"
+        ],
+        "achraf-hakimi": [
+          "Ronaldo at Real Madrid 2017-18; Messi and Neymar at PSG 2021-23"
+        ],
+        "pablo-sarabia": [
+          "Ronaldo at Real Madrid (debut for him, Dec 2010); Messi and Neymar at PSG 2022-23 https://en.wikipedia.org/wiki/Pablo_Sarabia"
+        ],
+        "arthur-melo": [
+          "Messi at Barcelona 2018-20; Ronaldo at Juventus 2020-21; Neymar at Santos 2026 https://ohoje.com/2026/08/31/santos-anuncia-arthur-como-reforco-ate-o-fim-da-temporada-2026/"
+        ]
+      },
+      "proof_note": "club careers (Wikidata), both in the first-team squad",
+      "ruled_out": {
+        "marco-asensio": "With Ronaldo at Real, but joined PSG after Messi left",
+        "moise-kean": "With Ronaldo at Juventus and Neymar at PSG, but left PSG before Messi arrived"
+      }
+    },
+    {
+      "q": "Has been a club teammate of BOTH Xavi AND Iker Casillas",
+      "eras": 6,
+      "difficulty": 3,
+      "answers": [
+        "luis-figo",
+        "javier-saviola",
+        "albert-celades",
+        "samuel-etoo"
+      ],
+      "names": [
+        "Luís Figo",
+        "Javier Saviola",
+        "Albert Celades",
+        "Samuel Eto'o"
+      ],
+      "proof": {
+        "luis-figo": [
+          "Xavi at Barcelona 1998-2000; Casillas at Real Madrid 2000-05"
+        ],
+        "javier-saviola": [
+          "Xavi at Barcelona 2001-07; Casillas at Real Madrid 2007-09"
+        ],
+        "albert-celades": [
+          "Xavi at Barcelona 1998-99; Casillas at Real Madrid 2000-05"
+        ],
+        "samuel-etoo": [
+          "Casillas at Real Madrid 1999-2000 (5 first-team games https://en.wikipedia.org/wiki/1999%E2%80%932000_Real_Madrid_CF_season); Xavi at Barcelona 2004-09"
+        ]
+      },
+      "proof_note": "club careers (Wikidata), both in the first-team squad",
+      "ruled_out": {
+        "cristian-tello": "With Xavi at Barcelona, but was out on loan when Casillas joined Porto",
+        "ricardo-quaresma": "With Xavi at Barcelona, but left Porto before Casillas arrived"
+      }
+    },
+    {
+      "q": "Has been a club teammate of BOTH John Terry AND Jamie Carragher",
+      "eras": 12,
+      "difficulty": 1,
+      "answers": [
+        "fernando-torres",
+        "joe-cole",
+        "glen-johnson",
+        "yossi-benayoun",
+        "raul-meireles",
+        "daniel-sturridge",
+        "fabio-borini",
+        "boudewijn-zenden",
+        "nicolas-anelka"
+      ],
+      "names": [
+        "Fernando Torres",
+        "Joe Cole",
+        "Glen Johnson",
+        "Yossi Benayoun",
+        "Raul Meireles",
+        "Daniel Sturridge",
+        "Fabio Borini",
+        "Boudewijn Zenden",
+        "Nicolas Anelka"
+      ],
+      "proof": {
+        "fernando-torres": [
+          "Carragher at Liverpool 2007-11; Terry at Chelsea 2011-15"
+        ],
+        "joe-cole": [
+          "Terry at Chelsea 2003-10; Carragher at Liverpool 2010-13"
+        ],
+        "glen-johnson": [
+          "Terry at Chelsea 2003-07; Carragher at Liverpool 2009-13"
+        ],
+        "yossi-benayoun": [
+          "Carragher at Liverpool 2007-10; Terry at Chelsea 2010-13"
+        ],
+        "raul-meireles": [
+          "Carragher at Liverpool 2010-11; Terry at Chelsea 2011-12"
+        ],
+        "daniel-sturridge": [
+          "Terry at Chelsea 2009-13; Carragher at Liverpool Jan-May 2013"
+        ],
+        "fabio-borini": [
+          "Terry at Chelsea 2009-11; Carragher at Liverpool 2012-13"
+        ],
+        "boudewijn-zenden": [
+          "Terry at Chelsea 2001-03; Carragher at Liverpool 2005-07"
+        ],
+        "nicolas-anelka": [
+          "Carragher at Liverpool 2001-02; Terry at Chelsea 2008-12"
+        ]
+      },
+      "proof_note": "club careers (Wikidata), both in the first-team squad",
+      "ruled_out": {
+        "victor-moses": "With Terry at Chelsea, but reached Liverpool after Carragher retired"
+      }
+    },
+    {
+      "q": "Has been a club teammate of BOTH Wayne Rooney AND Lionel Messi",
+      "eras": 28,
+      "difficulty": 3,
+      "answers": [
+        "zlatan-ibrahimovic",
+        "gerard-pique",
+        "angel-di-maria",
+        "victor-valdes",
+        "henrik-larsson",
+        "ander-herrera",
+        "idrissa-gueye"
+      ],
+      "names": [
+        "Zlatan Ibrahimović",
+        "Gerard Piqué",
+        "Ángel Di María",
+        "Víctor Valdés",
+        "Henrik Larsson",
+        "Ander Herrera",
+        "Idrissa Gueye"
+      ],
+      "proof": {
+        "zlatan-ibrahimovic": [
+          "Messi at Barcelona 2009-10; Rooney at Man United 2016-17"
+        ],
+        "gerard-pique": [
+          "Rooney at Man United 2004-08; Messi at Barcelona 2008-21"
+        ],
+        "angel-di-maria": [
+          "Rooney at Man United 2014-15; Messi at PSG 2021-22"
+        ],
+        "victor-valdes": [
+          "Messi at Barcelona 2004-14; Rooney at Man United 2015-16"
+        ],
+        "henrik-larsson": [
+          "Messi at Barcelona 2004-06; Rooney at Man United (loan) 2007"
+        ],
+        "ander-herrera": [
+          "Rooney at Man United 2014-17; Messi at PSG 2021-23"
+        ],
+        "idrissa-gueye": [
+          "Rooney at Everton 2017-18; Messi at PSG 2021-22"
+        ]
+      },
+      "proof_note": "club careers (Wikidata), both in the first-team squad",
+      "ruled_out": {
+        "memphis-depay": "With Rooney at United, but joined Barcelona the summer Messi left",
+        "lucas-digne": "With Messi at Barcelona, but joined Everton after Rooney left"
+      }
+    },
+    {
+      "q": "Has been a club teammate of BOTH Mohamed Salah AND Harry Kane",
+      "eras": 24,
+      "difficulty": 3,
+      "answers": [
+        "luis-diaz",
+        "federico-fazio"
+      ],
+      "names": [
+        "Luis Díaz",
+        "Federico Fazio"
+      ],
+      "proof": {
+        "luis-diaz": [
+          "Salah at Liverpool 2022-25; Kane at Bayern 2025-"
+        ],
+        "federico-fazio": [
+          "Kane at Tottenham 2014-16; Salah at Roma 2016-17"
+        ]
+      },
+      "proof_note": "club careers (Wikidata), both in the first-team squad",
+      "ruled_out": {
+        "sadio-mane": "With Salah at Liverpool, but left Bayern before Kane arrived",
+        "ryan-gravenberch": "Left Bayern for Liverpool before Kane arrived",
+        "yann-sommer": "With Salah at Basel, but left Bayern before Kane arrived"
+      },
+      "unconfirmed": [
+        "iago-falque"
+      ]
+    },
+    {
+      "q": "Has been a club teammate of BOTH Dennis Bergkamp AND Ronaldinho",
+      "eras": 6,
+      "difficulty": 2,
+      "answers": [
+        "thierry-henry",
+        "giovanni-van-bronckhorst",
+        "sylvinho",
+        "marc-overmars",
+        "nicolas-anelka",
+        "clarence-seedorf",
+        "edgar-davids",
+        "michael-reiziger",
+        "philippe-senderos",
+        "mathieu-flamini"
+      ],
+      "names": [
+        "Thierry Henry",
+        "Giovanni van Bronckhorst",
+        "Sylvinho",
+        "Marc Overmars",
+        "Nicolas Anelka",
+        "Clarence Seedorf",
+        "Edgar Davids",
+        "Michael Reiziger",
+        "Philippe Senderos",
+        "Mathieu Flamini"
+      ],
+      "proof": {
+        "thierry-henry": [
+          "Bergkamp at Arsenal 1999-2006; Ronaldinho at Barcelona 2007-08"
+        ],
+        "giovanni-van-bronckhorst": [
+          "Bergkamp at Arsenal 2001-03; Ronaldinho at Barcelona 2003-07"
+        ],
+        "sylvinho": [
+          "Bergkamp at Arsenal 1999-2001; Ronaldinho at Barcelona 2004-08"
+        ],
+        "marc-overmars": [
+          "Bergkamp at Ajax 1992-93 and Arsenal 1997-2000; Ronaldinho at Barcelona 2003-04"
+        ],
+        "nicolas-anelka": [
+          "Bergkamp at Arsenal 1997-99; Ronaldinho at PSG 2001-02"
+        ],
+        "clarence-seedorf": [
+          "Bergkamp at Ajax 1992-93; Ronaldinho at Milan 2008-10"
+        ],
+        "edgar-davids": [
+          "Bergkamp at Ajax 1991-93; Ronaldinho at Barcelona 2004"
+        ],
+        "michael-reiziger": [
+          "Bergkamp at Ajax 1990-93; Ronaldinho at Barcelona 2003-04"
+        ],
+        "philippe-senderos": [
+          "Bergkamp at Arsenal 2003-06; Ronaldinho at Milan 2008-09"
+        ],
+        "mathieu-flamini": [
+          "Bergkamp at Arsenal 2004-06; Ronaldinho at Milan 2008-10"
+        ]
+      },
+      "proof_note": "club careers (Wikidata), both in the first-team squad",
+      "ruled_out": {
+        "aliaksandr-hleb": "With Bergkamp at Arsenal, but joined Barcelona after Ronaldinho left",
+        "frank-de-boer": "With Bergkamp at Ajax, but left Barcelona before Ronaldinho arrived"
+      },
+      "unconfirmed": [
+        "gilberto-silva"
+      ]
     }
   ]
 }
