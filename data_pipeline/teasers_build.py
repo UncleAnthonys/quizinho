@@ -83,12 +83,19 @@ def tidy(name: str) -> str:
     return name
 
 
+OBSCURE_LEAGUES = {"QAT", "KSA", "UAE", "CHN", "JPN"}
+
+
 def _widen_pool() -> None:
     clubs = json.loads((SEED / "clubs.json").read_text())["clubs"]
     for qid, name, _country, fame, *_rest in clubs:
         if fame >= 4 and _rest[-1] == "m" and qid not in POOL:
             POOL[qid] = tidy(name)
     POOL.update({q: n for q, n in EXTRA.items() if q not in POOL})
+    # Leagues a table can't tell apart (Al Sadd, Al-Duhail, Al-Gharafa…): leave them out.
+    country = {c[0]: c[2] for c in clubs}
+    for q in [q for q in POOL if country.get(q) in OBSCURE_LEAGUES]:
+        del POOL[q]
 
 
 _widen_pool()
@@ -138,6 +145,9 @@ def final_titles() -> dict[str, list[str]]:
     return {"cl": cl, "wc": wc, "uel": uel, "euro": euro, "fac": fac, "lc": lc}
 
 
+AUDIT: list[str] = []
+SCORE = re.compile(r"\|\s*score\s*=\s*(?:\[\[[^\]|]*\|)?(\d+)\s*[–-]\s*(\d+)")
+MINUTE = re.compile(r"^\d+(\+\d+)?'?$")
 TEAM = re.compile(r"\|\s*team([12])\s*=\s*([^\n]*)")
 # Old {{Football box}} and the newer {{#invoke:football box|main}}.
 FOOTBALL_BOX = re.compile(r"\{\{\s*(?:#invoke:\s*)?football ?box", re.I)
@@ -156,12 +166,26 @@ def final_scorers(titles: list[str]) -> list[tuple[int, str, str | None]]:
     final's football box(es); own goals and shoot-outs left out."""
     pages = wikitext(titles)
     out = []
+    for t in titles:
+        if t not in pages:
+            AUDIT.append(f"{t}: no article")
     for t, text in pages.items():
         year = int(re.search(r"\d{4}", t).group())
+        boxes = FOOTBALL_BOX.split(text)[1:]
+        if not boxes:
+            AUDIT.append(f"{t}: no match box found")
         # One box per match (a replayed final has two).
-        for box in FOOTBALL_BOX.split(text)[1:]:
+        for box in boxes:
             box = box[:6000]
             teams = {n: link_title(v) for n, v in TEAM.findall(box)}
+            # Check the goals read add up to the score, so a final we misread is flagged.
+            if m := SCORE.search(box):
+                want = int(m.group(1)) + int(m.group(2))
+                got = sum(len([x for x in g.split("|") if MINUTE.match(x.strip())])
+                          for _, block in GOALS.findall(box)
+                          for g in re.findall(r"\{\{\s*goal\s*\|([^}]*)\}\}", block, re.I))
+                if got != want:
+                    AUDIT.append(f"{t}: score {m.group(1)}-{m.group(2)} but {got} goals read")
             for side, block in GOALS.findall(box):
                 for name, marks in PLAYER_LINK.findall(block):
                     goals = re.findall(r"\{\{\s*goal\s*\|([^}]*)\}\}", marks, re.I)
@@ -250,6 +274,12 @@ def main() -> None:
             apps, total = st.get(club, 0), sum(st.values())
             return 0 < apps < 60 and total > 0 and apps * 4 <= total
 
+        def known_for(pid: str, club: str) -> bool:
+            """A spell people remember: where he started, his famous last move, or 60+ league games."""
+            career = spells[pid]
+            return bool(career) and (career[0][0] == club or career[-1][0] == club
+                                     or stats(pid).get(club, 0) >= 60)
+
         def eras(pid: str, comp: str, club: str | None = None) -> int:
             m = 0
             for year, _ in scored[comp].get(pid, []):
@@ -259,7 +289,7 @@ def main() -> None:
                     m |= era_mask(e[1], e[2]) if club else 0
             return m
 
-        used: dict[str, int] = {}
+        used: dict[tuple[str, bool], int] = {}
         for comp, per in scored.items():
             for club, name in POOL.items():
                 s = {i for i in per if club in a.get(i, set()) and club in b.get(i, set())}
@@ -271,15 +301,21 @@ def main() -> None:
                 # (Campbell's goal for Arsenal makes "…and played for Arsenal" too easy).
                 if any(tm == club for i in s for _, tm in per[i]):
                     continue
-                # …and a club they only passed through, so it takes some thinking.
-                if not all(passing_through(i, club) for i in s):
+                top = max(by_id[i]["fame"] for i in s)
+                # A club they only passed through takes some thinking (Best at Fulham):
+                # medium to expert by how famous the answer is. A club they're known
+                # for (Bale at Southampton, Gerrard at LA Galaxy) is an easy-mode teaser.
+                if all(passing_through(i, club) for i in s):
+                    level = {5: 2, 4: 3}.get(top, 4)
+                elif all(known_for(i, club) and by_id[i]["fame"] >= 4 for i in s):
+                    level = 1
+                else:
                     continue
-                # Two club questions per player at most (Diego Costa passed through a lot of clubs).
-                if any(used.get(i, 0) >= 2 for i in s):
+                # Two club questions per player per level at most (Diego Costa passed through a lot of clubs).
+                if any(used.get((i, level == 1), 0) >= 2 for i in s):
                     continue
                 for i in s:
-                    used[i] = used.get(i, 0) + 1
-                top = max(by_id[i]["fame"] for i in s)
+                    used[(i, level == 1)] = used.get((i, level == 1), 0) + 1
                 m = 0
                 for i in s:
                     m |= eras(i, comp, club)
@@ -288,7 +324,7 @@ def main() -> None:
                     "q": f"Scored in {label[comp]} AND played for {name}",
                     "answers": sorted(s),
                     "names": [shown(i) for i in sorted(s)],
-                    "difficulty": 1 if top >= 5 else 2 if top == 4 else 3,
+                    "difficulty": level,
                     "eras": m or 31,
                 })
         def add(q: str, ids, comps_: tuple[str, ...]) -> None:
@@ -299,7 +335,7 @@ def main() -> None:
                     m |= eras(i, c)
             top = max(by_id[i]["fame"] for i in ids)
             out.append({"kind": "final", "q": q, "answers": ids, "names": [shown(i) for i in ids],
-                        "difficulty": 1 if top >= 5 else 2 if top == 4 else 3, "eras": m or 31})
+                        "difficulty": {5: 2, 4: 3}.get(top, 4), "eras": m or 31})
 
         # Finals in two, three or four competitions ("FA Cup, League Cup, UEFA
         # Cup AND Champions League" → Gerrard). Up to six answers: naming one is enough.
@@ -320,6 +356,9 @@ def main() -> None:
             if 1 <= len(ids) <= 6:
                 add(f"Scored in {label[comp]} for TWO different clubs", ids, (comp,))
 
+    for line in AUDIT:
+        print(f"::warning title=Teaser audit::{line}")
+    print(f"Audit: {len(AUDIT)} finals to check by hand")
     random.Random(7).shuffle(out)
     note = (f"Half-Time Teasers: {sum(t['kind'] == 'curated' for t in out)} hand-checked, "
             f"{sum(t['kind'] == 'final' for t in out)} final-scorer teasers checked against Wikipedia. "
@@ -327,7 +366,8 @@ def main() -> None:
     print(note)
     (SEED / "teasers.json").write_text(
         "{\n" + f'  "_note": {json.dumps(note)},\n  "teasers": [\n'
-        + ",\n".join("    " + json.dumps(t, ensure_ascii=False) for t in out) + "\n  ]\n}\n",
+        + ",\n".join("    " + json.dumps(t, ensure_ascii=False) for t in out) + "\n  ],\n"
+        + f'  "audit": {json.dumps(AUDIT, ensure_ascii=False)}\n}}\n',
         encoding="utf-8")
 
 
