@@ -129,12 +129,34 @@
       "madrid": {
         "played": false,
         "why": "No Atlético game in his only Real Madrid first-team season, 2017-18 https://aws.fbref.com/en/players/e42d61c7/matchlogs/2017-2018/Achraf-Hakimi-Match-Logs"
+      },
+      "milan": {
+        "played": true,
+        "year": 2021,
+        "proof": "Milan 0-3 Inter, 21 Feb 2021, 82 min https://aws.fbref.com/en/players/e42d61c7/matchlogs/2020-2021/misc/Achraf-Hakimi-Match-Logs"
       }
     },
     "albert-gu-mundsson-1923": {
       "nld": {
         "played": false,
         "why": "His two Arsenal games were First Division in Oct 1946, while Tottenham were in the Second Division https://en.wikipedia.org/wiki/Albert_Gu%C3%B0mundsson_(footballer,_born_1923)"
+      }
+    },
+    "alex-oxlade-chamberlain": {
+      "oldfirm": {
+        "played": true,
+        "year": 2026,
+        "proof": "Celtic 2-2 Rangers, Mar 2026, off at half-time https://www.thecelticwiki.com/?p=174608"
+      },
+      "nld": {
+        "played": true,
+        "year": 2014,
+        "proof": "Arsenal 1-1 Tottenham, 27 Sep 2014, 90 min https://aws.fbref.com/en/players/38c7feef/matchlogs/2014-2015/Alex-Oxlade-Chamberlain-Match-Logs"
+      },
+      "northwest": {
+        "played": true,
+        "year": 2018,
+        "proof": "5 appearances v Man United for Liverpool https://www.lfchistory.net/Players/Player/Profile/1320"
       }
     },
     "alexis-sanchez": {
@@ -191,6 +213,38 @@
         "proof": "Rangers 2-2 Celtic, 3 Jan 1999, started https://www.thecelticwiki.com/?p=12033"
       }
     },
+    "angel-di-maria": {
+      "madrid": {
+        "played": true,
+        "year": 2014,
+        "proof": "Atlético 2-2 Real Madrid, 2 Mar 2014, 71 min https://aws.fbref.com/en/players/19cda00b/matchlogs/2013-2014/Angel-Di-Maria-Match-Logs"
+      },
+      "ditalia": {
+        "played": true,
+        "year": 2023,
+        "proof": "Inter v Juventus, Coppa Italia semi, 26 Apr 2023, 90 min https://aws.fbref.com/en/players/19cda00b/matchlogs/2022-2023/misc/Angel-Di-Maria-Match-Logs"
+      },
+      "classique": {
+        "played": true,
+        "year": 2016,
+        "proof": "PSG 0-0 Marseille, 23 Oct 2016, 74 min https://aws.fbref.com/en/players/19cda00b/matchlogs/2016-2017/Angel-Di-Maria-Match-Logs"
+      },
+      "northwest": {
+        "played": true,
+        "year": 2015,
+        "proof": "Liverpool 1-2 Man United, 22 Mar 2015, 36 min https://aws.fbref.com/en/players/19cda00b/matchlogs/2014-2015/Angel-Di-Maria-Match-Logs"
+      },
+      "clasico": {
+        "played": true,
+        "year": 2014,
+        "proof": "Real Madrid 3-4 Barcelona, 23 Mar 2014 https://bleacherreport.com/articles/2003684-film-focus-reviewing-real-madrid-vs-barcelona-messi-and-di-maria-shine"
+      },
+      "manc": {
+        "played": true,
+        "year": 2014,
+        "proof": "Man City 1-0 Man United, 2 Nov 2014, 90 min https://aws.fbref.com/en/players/19cda00b/matchlogs/2014-2015/Angel-Di-Maria-Match-Logs"
+      }
+    },
     "arturo-vidal": {
       "clasico": {
         "played": true,
@@ -233,6 +287,28 @@
         "played": true,
         "year": 2021,
         "proof": "Inter 1-2 Juventus, Coppa Italia semi, 2 Feb 2021, 65 min https://fbref.com/en/matches/dcf51113/Derby-dItalia-Internazionale-Juventus-February-2-2021-Coppa-Italia"
+      }
+    },
+    "benjamin-pavard": {
+      "ditalia": {
+        "played": true,
+        "year": 2024,
+        "proof": "Inter 1-0 Juventus, 4 Feb 2024, 90 min https://aws.fbref.com/en/players/45a03961/matchlogs/2023-2024/misc/Benjamin-Pavard-Match-Logs"
+      },
+      "klassiker": {
+        "played": true,
+        "year": 2020,
+        "proof": "Bayern 3-2 Dortmund, Supercup, 30 Sep 2020, 75 min https://aws.fbref.com/en/players/45a03961/matchlogs/2020-2021/Benjamin-Pavard-Match-Logs"
+      },
+      "classique": {
+        "played": true,
+        "year": 2025,
+        "proof": "Marseille 1-0 PSG, 22 Sep 2025 https://www.psg.fr/en/content/paris-beaten-in-marseille-match-report-olympique-de-marseille-paris-saint-germain-ligue-1-20252026"
+      },
+      "milan": {
+        "played": true,
+        "year": 2024,
+        "proof": "Inter 1-2 Milan, 22 Sep 2024, 90 min https://aws.fbref.com/en/players/45a03961/matchlogs/2024-2025/misc/Benjamin-Pavard-Match-Logs"
       }
     },
     "brahim-diaz": {
@@ -328,6 +404,50 @@
         "proof": "Everton 0-2 Liverpool, 1 Oct 2011 (off the bench) https://anfield-online.co.uk/match-reports/premiership/2011/everton-0-liverpool-2/amp"
       }
     },
+    "cristiano-ronaldo": {
+      "madrid": {
+        "played": true,
+        "year": 2013,
+        "proof": "Real Madrid 0-1 Atlético, 28 Sep 2013, 90 min https://aws.fbref.com/en/players/dea698d9/matchlogs/2013-2014/Cristiano-Ronaldo-Match-Logs"
+      },
+      "northwest": {
+        "played": true,
+        "year": 2007,
+        "proof": "Liverpool 0-1 Man United, 16 Dec 2007, 90 min https://aws.fbref.com/en/players/dea698d9/matchlogs/2007-2008/c9/summary/Cristiano-Ronaldo-Match-Logs"
+      },
+      "ditalia": {
+        "played": true,
+        "year": 2018,
+        "proof": "Juventus 1-0 Inter, 7 Dec 2018, 90 min https://aws.fbref.com/fr/joueurs/dea698d9/matchs/2018-2019/misc/Journaux-de-match-Cristiano-Ronaldo"
+      },
+      "clasico": {
+        "played": true,
+        "year": 2009,
+        "proof": "Barcelona 1-0 Real Madrid, 29 Nov 2009, 64 min https://aws.fbref.com/en/players/dea698d9/matchlogs/2009-2010/Cristiano-Ronaldo-Match-Logs"
+      },
+      "manc": {
+        "played": true,
+        "year": 2008,
+        "proof": "Man City 0-1 Man United, 30 Nov 2008, 67 min https://aws.fbref.com/en/players/dea698d9/matchlogs/2008-2009/Cristiano-Ronaldo-Match-Logs"
+      }
+    },
+    "danilo": {
+      "madrid": {
+        "played": true,
+        "year": 2016,
+        "proof": "Real Madrid 0-1 Atlético, 27 Feb 2016, 90 min https://aws.fbref.com/en/players/94b2001f/matchlogs/2015-2016/Danilo-Match-Logs"
+      },
+      "manc": {
+        "played": true,
+        "year": 2018,
+        "proof": "Man City 2-3 Man United, 7 Apr 2018, 90 min https://aws.fbref.com/en/players/94b2001f/matchlogs/2017-2018/Danilo-Match-Logs"
+      },
+      "ditalia": {
+        "played": true,
+        "year": 2022,
+        "proof": "Juventus 2-0 Inter, 6 Nov 2022, started https://www.juventus.com/en/news/articles/derby-d-italia-delight-for-juve"
+      }
+    },
     "david-beckham": {
       "clasico": {
         "played": true,
@@ -355,6 +475,18 @@
         "proof": "Liverpool 3-1 Man United, 4 Nov 2001 https://aws.fbref.com/en/players/53539318/matchlogs/2001-2002/David-Beckham-Match-Logs"
       }
     },
+    "david-ginola": {
+      "nld": {
+        "played": true,
+        "year": 1999,
+        "proof": "Tottenham 2-1 Arsenal, 7 Nov 1999, 88 min https://fbref.com/en/matches/99c7af05/North-London-Derby-Tottenham-Hotspur-Arsenal-November-7-1999-Premiership"
+      },
+      "mersey": {
+        "played": true,
+        "year": 2002,
+        "proof": "Liverpool 1-1 Everton, 23 Feb 2002, 45 min https://aws.fbref.com/en/matches/eb996343/Merseyside-Derby-Liverpool-Everton-February-23-2002-Premier-League"
+      }
+    },
     "diego-forlan": {
       "madrid": {
         "played": true,
@@ -375,6 +507,11 @@
         "played": true,
         "year": 2002,
         "proof": "Man City 3-1 Man United, 9 Nov 2002 https://mufcinfo.com/manupag/a-z_player_archive/a-z_player_archive_pages/forlan_diego.html"
+      },
+      "ditalia": {
+        "played": true,
+        "year": 2012,
+        "proof": "Juventus 2-0 Inter, 25 Mar 2012, started https://www.skysports.com/football/juventus-vs-inter/teams/247546"
       }
     },
     "dietmar-hamann": {
@@ -468,6 +605,24 @@
         "played": true,
         "year": 2017,
         "proof": "Liverpool 0-0 Man United, 14 Oct 2017, 90 min https://aws.fbref.com/en/players/a65ce836/matchlogs/2017-2018/Emre-Can-Match-Logs"
+      }
+    },
+    "ethan-nwaneri": {
+      "classique": {
+        "played": true,
+        "year": 2026,
+        "proof": "PSG 5-0 Marseille, 8 Feb 2026, started, off at half-time https://africa.espn.com/football/match/_/gameId/746595/marseille-paris-saint-germain"
+      },
+      "klassiker": {
+        "played": false,
+        "why": "Unused sub for Dortmund at Bayern 2-2, 31 Oct 2026, his only Klassiker squad so far (recheck after the spring 2027 game) https://www.bvb.de/de/en/news/news-overview/news.html/2026/10/31/BVB-Earns-Point-in-Munich-Thanks-to-Goals-by-Guirassy-and-Silva.html"
+      }
+    },
+    "fernando-morientes": {
+      "mersey": {
+        "played": true,
+        "year": 2005,
+        "proof": "Everton 1-3 Liverpool, 28 Dec 2005, 14 min https://aws.fbref.com/en/players/bceebb25/matchlogs/2005-2006/misc/Fernando-Morientes-Match-Logs"
       }
     },
     "fernando-torres": {
@@ -624,6 +779,30 @@
         "played": true,
         "year": 2020,
         "proof": "Everton 2-2 Liverpool, 17 Oct 2020 https://aws.fbref.com/en/players/715bf047/matchlogs/2020-2021/James-Rodriguez-Match-Logs"
+      },
+      "clasico": {
+        "played": true,
+        "year": 2014,
+        "proof": "Real Madrid 3-1 Barcelona, 25 Oct 2014, 90 min https://aws.fbref.com/en/players/715bf047/matchlogs/2014-2015/James-Rodriguez-Match-Logs"
+      }
+    },
+    "javier-manquillo": {
+      "mersey": {
+        "played": true,
+        "year": 2014,
+        "proof": "Liverpool 1-1 Everton, 27 Sep 2014, full match https://www.11v11.com/matches/liverpool-v-everton-27-september-2014-310529/"
+      },
+      "classique": {
+        "played": true,
+        "year": 2015,
+        "proof": "PSG 2-1 Marseille, 4 Oct 2015, 90 min https://aws.fbref.com/en/players/758dd7f0/matchlogs/2015-2016/Javier-Manquillo-Match-Logs"
+      }
+    },
+    "jean-pierre-papin": {
+      "milan": {
+        "played": true,
+        "year": 1993,
+        "proof": "Scored in Milan's 2-1 derby win over Inter, 1993-94 https://thecrazydribbler.substack.com/p/papins-pain-in-milan"
       }
     },
     "jesper-blomqvist": {
@@ -666,6 +845,23 @@
         "played": true,
         "year": 2018,
         "proof": "Juventus 1-0 Inter, 7 Dec 2018, 90 min https://aws.fbref.com/en/players/bd6351cd/matchlogs/2018-2019/misc/Joao-Cancelo-Match-Logs"
+      }
+    },
+    "joey-barton": {
+      "manc": {
+        "played": true,
+        "year": 2006,
+        "proof": "Man City 3-1 Man United, 14 Jan 2006, 90 min https://fbref.com/en/spiele/a4ae3e38/Manchester-Derby-Manchester-City-Manchester-United-14-Januar-2006-Premier-League"
+      },
+      "oldfirm": {
+        "played": true,
+        "year": 2016,
+        "proof": "Celtic 5-1 Rangers, 10 Sep 2016 https://www.skysports.com/football/celtic-vs-rangers/report/357046"
+      },
+      "classique": {
+        "played": true,
+        "year": 2013,
+        "proof": "PSG 2-1 Marseille, 24 Feb 2013 https://bleacherreport.com/articles/1542948-psg-v-marseille-6-things-we-learned"
       }
     },
     "john-stones": {
@@ -726,6 +922,17 @@
         "proof": "Bayern 3-1 Dortmund, 8 Feb 2009, 90 min https://aws.fbref.com/fr/matchs/17352854/Der-Klassiker-Bayern-Munich-Dortmund-8-Fevrier-2009-Bundesliga"
       }
     },
+    "kingsley-coman": {
+      "klassiker": {
+        "played": true,
+        "year": 2015,
+        "proof": "Bayern 5-1 Dortmund, 4 Oct 2015, 11 min https://aws.fbref.com/en/players/042e8a49/matchlogs/2015-2016/Kingsley-Coman-Match-Logs"
+      },
+      "ditalia": {
+        "played": false,
+        "why": "No Inter game in his one Juventus season, 2014-15, before he left for Bayern https://fbref.com/en/players/042e8a49/matchlogs/2014-2015/Kingsley-Coman-Match-Logs"
+      }
+    },
     "kolo-toure": {
       "mersey": {
         "played": true,
@@ -746,6 +953,11 @@
         "played": true,
         "year": 2010,
         "proof": "Man City 0-1 Man United, 17 Apr 2010 (90 min) https://aws.fbref.com/en/matches/6f818c39/"
+      },
+      "northwest": {
+        "played": true,
+        "year": 2014,
+        "proof": "3 appearances v Man United for Liverpool, 234 min https://www.lfchistory.net/Players/Player/Profile/1259"
       }
     },
     "kyle-walker": {
@@ -801,6 +1013,16 @@
         "played": true,
         "year": 2002,
         "proof": "Man United 0-1 Liverpool, 22 Jan 2002, started https://www.11v11.com/matches/manchester-united-v-liverpool-22-january-2002-11118/"
+      },
+      "classique": {
+        "played": true,
+        "year": 1997,
+        "proof": "PSG 1-2 Marseille, 8 Nov 1997, 90 min https://aws.fbref.com/en/players/51a9b34c/matchlogs/1997-1998/Laurent-Blanc-Match-Logs"
+      },
+      "ditalia": {
+        "played": true,
+        "year": 1999,
+        "proof": "Inter 0-1 Juventus, 12 Dec 1999, 90 min https://aws.fbref.com/fr/joueurs/51a9b34c/matchs/1999-2000/c11/summary/Journaux-de-match-Laurent-Blanc"
       }
     },
     "louis-saha": {
@@ -947,6 +1169,16 @@
         "played": true,
         "year": 2009,
         "proof": "Juventus 1-1 Inter, 18 Apr 2009 (scored) https://www.inter.it/en/match_center/3768"
+      },
+      "northwest": {
+        "played": true,
+        "year": 2014,
+        "proof": "Man United 3-0 Liverpool, 14 Dec 2014 (on at half-time) https://thisisanfield.com/2014/12/manchester-united-3-0-liverpool-player-ratings"
+      },
+      "classique": {
+        "played": true,
+        "year": 2019,
+        "proof": "PSG 3-1 Marseille, 17 Mar 2019, started https://www.maxifoot.fr/football/article-39494.htm"
       }
     },
     "mario-mandzukic": {
@@ -989,6 +1221,11 @@
       "clasico": {
         "played": null,
         "why": "Not in Barcelona's side for the 3-2 win over Real Madrid (31 Jan 1987); no line-up found for the other 1986-87 Clásico https://statmuse.com/fc/match/1-31-1987-fcb-vs-rma-28923"
+      },
+      "northwest": {
+        "played": true,
+        "year": 1994,
+        "proof": "Man United 2-0 Liverpool, 17 Sep 1994, started https://www.lfchistory.net/SeasonArchive/Game/1963"
       }
     },
     "mark-van-bommel": {
@@ -1028,6 +1265,11 @@
         "played": true,
         "year": 2016,
         "proof": "Atlético 0-3 Real Madrid, 19 Nov 2016, 90 min https://aws.fbref.com/en/players/79c0821a/matchlogs/2016-2017/Mateo-Kovacic-Match-Logs"
+      },
+      "ditalia": {
+        "played": true,
+        "year": 2014,
+        "proof": "Juventus 3-1 Inter, 2 Feb 2014, started https://www.inter.it/en/match_center/4026"
       }
     },
     "matthijs-de-ligt": {
@@ -1138,6 +1380,16 @@
         "played": true,
         "year": 2001,
         "proof": "PSG 0-0 Marseille, 29 Nov 2001, 90 min https://statmuse.com/fc/match/11-29-2001-psg-vs-om-91275"
+      },
+      "nld": {
+        "played": true,
+        "year": 2012,
+        "proof": "Arsenal 5-2 Tottenham, 17 Nov 2012, 90 min https://fbref.com/en/matches/f39b2855/North-London-Derby-Arsenal-Tottenham-Hotspur-November-17-2012-Premier-League"
+      },
+      "mersey": {
+        "played": true,
+        "year": 2006,
+        "proof": "Everton 3-0 Liverpool, 9 Sep 2006, 89 min https://fbref.com/en/matches/880e137f/Merseyside-Derby-Everton-Live"
       }
     },
     "nicolas-anelka": {
@@ -1198,6 +1450,10 @@
       "madrid": {
         "played": false,
         "why": "Unused sub for Real 4-1 Atlético, 26 Nov 2011, and not in the squad for Atlético 1-4 Real, 11 Apr 2012 https://espndeportes.espn.com/futbol/partido/_/juegoId/323904/atletico-madrid-real-madrid https://www.espn.com.br/futebol/partida/_/jogoId/323740/real-madrid-atletico-madrid"
+      },
+      "clasico": {
+        "played": false,
+        "why": "Not in Real Madrid's squad or used for any of the four 2011-12 Clásicos (10 Dec 2011, 19 Jan, 25 Jan, 21 Apr 2012) https://www.espn.co.uk/football/match/_/gameId/323721/real-madrid-barcelona"
       }
     },
     "ousmane-dembele": {
@@ -1292,6 +1548,15 @@
       "milan": {
         "played": false,
         "why": "Donnarumma's back-up at Milan: bench for the Oct 2018 derby and no Inter game in either Milan season https://www.inter.it/en/news/2018-10-21-the-official-line-ups-for-inter-vs-milan https://aws.fbref.com/en/players/e358587b/matchlogs/2018-2019/defense/Pepe-Reina-Match-Logs https://aws.fbref.com/en/players/e358587b/matchlogs/2019-2020/misc/Pepe-Reina-Match-Logs"
+      },
+      "northwest": {
+        "played": true,
+        "year": 2008,
+        "proof": "Liverpool 2-1 Man United, 13 Sep 2008, started https://www.lfchistory.net/SeasonArchive/Game/5117"
+      },
+      "klassiker": {
+        "played": false,
+        "why": "Bayern played Dortmund 4 times in his 2014-15 season; his 3 Bundesliga games were v Freiburg, Bremen and Augsburg, and Neuer kept goal in the Supercup and cup semi https://datencenter.dfb.de/en/data-center/people/pepe-reina/player https://aws.fbref.com/en/matches/9a99ec0f/Der-Klassiker-Dortmund-Bayern-Munich-August-13-2014-DFL-Supercup"
       }
     },
     "philippe-coutinho": {
@@ -1369,6 +1634,23 @@
         "proof": "Arsenal 4-2 Tottenham, 2 Dec 2018, 90 min https://aws.fbref.com/en/players/d5dd5f1f/matchlogs/2018-2019/Pierre-Emerick-Aubameyang-Match-Logs"
       }
     },
+    "pierre-emile-hojbjerg": {
+      "classique": {
+        "played": true,
+        "year": 2026,
+        "proof": "PSG 5-0 Marseille, 8 Feb 2026, started https://africa.espn.com/football/match/_/gameId/746595/marseille-paris-saint-germain"
+      },
+      "klassiker": {
+        "played": true,
+        "year": 2014,
+        "proof": "Dortmund 2-0 Bayern, DFL-Supercup 13 Aug 2014, 58 min https://aws.fbref.com/en/matches/9a99ec0f/Der-Klassiker-Dortmund-Bayern-Munich-August-13-2014-DFL-Supercup"
+      },
+      "nld": {
+        "played": true,
+        "year": 2020,
+        "proof": "Tottenham 2-0 Arsenal, 6 Dec 2020, 90 min https://aws.fbref.com/en/players/8b04d6c1/matchlogs/2020-2021/Pierre-Hojbjerg-Match-Logs"
+      }
+    },
     "raheem-sterling": {
       "nld": {
         "played": true,
@@ -1401,6 +1683,11 @@
         "played": true,
         "year": 1983,
         "proof": "Liverpool 2-1 Man United, League Cup final, 26 Mar 1983, started https://www.mufcinfo.com/manupag/finals/final_appearences_line_ups/leaguecuplineups/1983leaguecupfinalvliverpool.htm"
+      },
+      "manc": {
+        "played": true,
+        "year": 1982,
+        "proof": "Man United v Man City, 23 Oct 1982, started https://www.11v11.com/matches/manchester-united-v-manchester-city-23-october-1982-86363/"
       }
     },
     "richard-wright": {
@@ -1432,6 +1719,11 @@
       "ditalia": {
         "played": false,
         "why": "Not in Inter's squad for Inter 2-2 Juventus, 3 Dec 2000, the only Juventus game before he left for Leeds https://www.inter.it/en/match_center/2597"
+      },
+      "northwest": {
+        "played": true,
+        "year": 2008,
+        "proof": "Liverpool 2-1 Man United, 13 Sep 2008, started https://www.lfchistory.net/SeasonArchive/Game/5117"
       }
     },
     "robinho": {
@@ -1612,6 +1904,50 @@
         "why": "No Man United game in his one City season, 2009-10 https://aws.fbref.com/en/players/b46e497d/matchlogs/2009-2010/Sylvinho-Match-Logs"
       }
     },
+    "thiago-alcantara": {
+      "mersey": {
+        "played": true,
+        "year": 2020,
+        "proof": "Everton 2-2 Liverpool, 17 Oct 2020, 90 min https://aws.fbref.com/en/players/77e84962/matchlogs/2020-2021/Thiago-Alcantara-Match-Logs"
+      },
+      "clasico": {
+        "played": true,
+        "year": 2013,
+        "proof": "Real Madrid 2-1 Barcelona, 2 Mar 2013, 84 min https://aws.fbref.com/en/players/77e84962/matchlogs/2012-2013/Thiago-Alcantara-Match-Logs"
+      },
+      "klassiker": {
+        "played": true,
+        "year": 2015,
+        "proof": "Dortmund 0-1 Bayern, 4 Apr 2015, 22 min https://aws.fbref.com/en/players/77e84962/matchlogs/2014-2015/Thiago-Alcantara-Match-Logs"
+      },
+      "northwest": {
+        "played": true,
+        "year": 2022,
+        "proof": "Liverpool 4-0 Man United, 19 Apr 2022, 80 min https://www.sportsmole.co.uk/football/liverpool/title-race/result/liverpool-4-0-man-united-highlights-man-of-the-match-stats_483728.html"
+      }
+    },
+    "thiago-motta": {
+      "madrid": {
+        "played": true,
+        "year": 2008,
+        "proof": "Atlético 0-2 Real Madrid, 20 Jan 2008, started https://www.soccer-spain.com/ssdocs/reports2007/div1/day20/report5.html"
+      },
+      "ditalia": {
+        "played": true,
+        "year": 2011,
+        "proof": "Juventus 1-0 Inter, 13 Feb 2011, 90 min https://aws.fbref.com/en/players/57ef0d97/matchlogs/2010-2011/Thiago-Motta-Match-Logs"
+      },
+      "classique": {
+        "played": true,
+        "year": 2015,
+        "proof": "PSG 2-1 Marseille, 4 Oct 2015, 90 min https://aws.fbref.com/en/players/57ef0d97/matchlogs/2015-2016/Thiago-Motta-Match-Logs"
+      },
+      "milan": {
+        "played": true,
+        "year": 2009,
+        "proof": "Milan 0-4 Inter, 29 Aug 2009, scored https://www.inter.it/it/notizie/2020-04-01-inter-classics-derby-0-4-2009-2010"
+      }
+    },
     "thomas-gravesen": {
       "clasico": {
         "played": true,
@@ -1627,6 +1963,18 @@
         "played": true,
         "year": 2006,
         "proof": "Celtic 2-0 Rangers, 23 Sep 2006 (scored) https://thecelticwiki.com/?p=13030"
+      }
+    },
+    "trevor-steven": {
+      "mersey": {
+        "played": true,
+        "year": 1986,
+        "proof": "Liverpool 3-1 Everton, FA Cup final 10 May 1986, started https://www.11v11.com/matches/liverpool-v-everton-10-may-1986-215625/"
+      },
+      "oldfirm": {
+        "played": true,
+        "year": 1993,
+        "proof": "Rangers 1-0 Celtic, 2 Jan 1993, scored https://www.thecelticwiki.com/?p=11305"
       }
     },
     "xabi-alonso": {
@@ -1649,6 +1997,11 @@
         "played": true,
         "year": 2008,
         "proof": "Liverpool 2-1 Man United, 13 Sep 2008, started https://www.lfchistory.net/SeasonArchive/Game/5117"
+      },
+      "clasico": {
+        "played": true,
+        "year": 2012,
+        "proof": "Barcelona 2-2 Real Madrid, 7 Oct 2012, 90 min https://aws.fbref.com/en/players/dc001a06/matchlogs/2012-2013/Xabi-Alonso-Match-Logs"
       }
     },
     "xherdan-shaqiri": {
@@ -1698,6 +2051,16 @@
         "played": true,
         "year": 2016,
         "proof": "Liverpool 0-0 Man United, 17 Oct 2016, 90 min https://aws.fbref.com/en/players/4cde5509/matchlogs/2016-2017/Zlatan-Ibrahimovic-Match-Logs"
+      },
+      "classique": {
+        "played": true,
+        "year": 2013,
+        "proof": "PSG v Marseille, 6 Oct 2013, 75 min https://aws.fbref.com/en/players/4cde5509/matchlogs/2013-2014/Zlatan-Ibrahimovic-Match-Logs"
+      },
+      "ditalia": {
+        "played": true,
+        "year": 2006,
+        "proof": "Inter 1-2 Juventus, 12 Feb 2006, scored https://www.inter.it/en/match_center/3560"
       }
     }
   }
