@@ -20,6 +20,7 @@ workspace can't reach Wikipedia.
 from __future__ import annotations
 
 import argparse
+import itertools
 import json
 import pathlib
 import random
@@ -59,6 +60,39 @@ POOL = {
     "Q29108": "Zenit", "Q19628": "Olympiacos",
 }
 
+# Well-known clubs beyond POOL: every men's club in the data at fame 4+, plus
+# the money moves a table remembers (MLS, Gulf, China, Mexico).
+EXTRA = {
+    "Q13361030": "New York City FC", "Q327238": "Toronto FC", "Q15214308": "Orlando City",
+    "Q308683": "Chicago Fire", "Q632511": "Seattle Sounders", "Q196107": "Vancouver Whitecaps",
+    "Q283545": "Al Sadd", "Q1056948": "Al-Duhail", "Q428211": "Al-Gharafa", "Q812720": "Al Ain",
+    "Q130521": "Guangzhou Evergrande", "Q564216": "Shanghai SIPG", "Q459090": "Club América",
+    "Q768253": "Monterrey", "Q849823": "Tigres", "Q19498": "Sheffield Wednesday", "Q19607": "Sheffield United",
+}
+TIDY = [(r" (Calcio|Balompié|Paulista|Rotterdam|Istanbul|1909|1913)\b", ""),
+        (r"\s*\b(F\.?C\.?|A\.?F\.?C\.?|S\.?K\.?|J\.?K\.?|CFC|BC|UD|S\.?A\.?D\.?)$", ""),
+        (r" F\.R\.$", ""),
+        (r"^(R\.?S\.?C\.?|GNK|HNK|FK|RC|AS|OGC|CR|SS|U\.?C\.?|ACF|TSG 1899|Sociedade Esportiva) ", ""),
+        (r"^Clube Atlético ", "Atlético "), (r"^Tokyo$", "FC Tokyo"),
+        (r" de Barcelona$", ""), (r" de Vigo$", " Vigo")]
+
+
+def tidy(name: str) -> str:
+    for pat, sub in TIDY:
+        name = re.sub(pat, sub, name).strip()
+    return name
+
+
+def _widen_pool() -> None:
+    clubs = json.loads((SEED / "clubs.json").read_text())["clubs"]
+    for qid, name, _country, fame, *_rest in clubs:
+        if fame >= 4 and _rest[-1] == "m" and qid not in POOL:
+            POOL[qid] = tidy(name)
+    POOL.update({q: n for q, n in EXTRA.items() if q not in POOL})
+
+
+_widen_pool()
+
 MIN_FAME = 3  # at least one answer a table could know
 
 
@@ -97,7 +131,11 @@ def final_titles() -> dict[str, list[str]]:
     """Competition → Wikipedia article titles of its finals (redirects resolve the old names)."""
     cl = [f"{y} European Cup final" if y < 1993 else f"{y} UEFA Champions League final" for y in range(1956, 2027)]
     wc = [f"{y} FIFA World Cup final" for y in (1930, 1934, 1938, *range(1954, 2023, 4))]
-    return {"cl": cl, "wc": wc}
+    uel = [f"{y} UEFA Cup final" if y < 2010 else f"{y} UEFA Europa League final" for y in range(1972, 2027)]
+    euro = ["1960 European Nations' Cup final", *(f"UEFA Euro {y} final" for y in range(1964, 2025, 4))]
+    fac = [f"{y} FA Cup final" for y in range(1946, 2027)]
+    lc = [f"{y} Football League Cup final" for y in range(1961, 2027)]
+    return {"cl": cl, "wc": wc, "uel": uel, "euro": euro, "fac": fac, "lc": lc}
 
 
 TEAM = re.compile(r"\|\s*team([12])\s*=\s*([^\n]*)")
@@ -118,7 +156,7 @@ def final_scorers(titles: list[str]) -> list[tuple[int, str, str | None]]:
     pages = wikitext(titles)
     out = []
     for t, text in pages.items():
-        year = int(t[:4])
+        year = int(re.search(r"\d{4}", t).group())
         # One box per match (a replayed final has two).
         for box in FOOTBALL_BOX.split(text)[1:]:
             box = box[:6000]
@@ -171,7 +209,11 @@ def main() -> None:
                   f"{len(per)} in our player data")
         everyone = sorted(set().union(*scored.values()))
         b = careers_b(players, everyone)
-        label = {"cl": "Scored in a European Cup or Champions League final", "wc": "Scored in a World Cup final"}
+        label = {
+            "cl": "a European Cup or Champions League final", "wc": "a World Cup final",
+            "uel": "a UEFA Cup or Europa League final", "euro": "a European Championship final",
+            "fac": "an FA Cup final", "lc": "a League Cup final",
+        }
 
         def stats(pid: str) -> dict[str, int]:
             p = by_id[pid]
@@ -217,24 +259,40 @@ def main() -> None:
                     m |= eras(i, comp, club)
                 out.append({
                     "kind": "final",
-                    "q": f"{label[comp]} AND played for {name}",
+                    "q": f"Scored in {label[comp]} AND played for {name}",
                     "answers": sorted(s),
                     "names": [by_id[i]["name"] for i in sorted(s)],
                     "difficulty": 1 if top >= 5 else 2 if top == 4 else 3,
                     "eras": m or 31,
                 })
-        both = sorted(set(scored["cl"]) & set(scored["wc"]))
-        m = 0
-        for i in both:
-            m |= eras(i, "cl") | eras(i, "wc")
-        out.append({
-            "kind": "final",
-            "q": "Scored in a World Cup final AND a European Cup or Champions League final",
-            "answers": both,
-            "names": [by_id[i]["name"] for i in both],
-            "difficulty": 2,
-            "eras": m or 31,
-        })
+        def add(q: str, ids, comps_: tuple[str, ...]) -> None:
+            ids = sorted(ids)
+            m = 0
+            for i in ids:
+                for c in comps_:
+                    m |= eras(i, c)
+            top = max(by_id[i]["fame"] for i in ids)
+            out.append({"kind": "final", "q": q, "answers": ids, "names": [by_id[i]["name"] for i in ids],
+                        "difficulty": 1 if top >= 5 else 2 if top == 4 else 3, "eras": m or 31})
+
+        # Finals in two, three or four competitions ("FA Cup, League Cup, UEFA
+        # Cup AND Champions League" → Gerrard). Up to six answers: naming one is enough.
+        seen: set[frozenset] = set()
+        for n in (4, 3, 2):
+            for combo in itertools.combinations(scored, n):
+                ids = set.intersection(*(set(scored[c]) for c in combo))
+                # Biggest combinations first; a smaller one with the same answers adds nothing.
+                if 1 <= len(ids) <= 6 and max(by_id[i]["fame"] for i in ids) >= MIN_FAME \
+                        and frozenset(ids) not in seen:
+                    seen.add(frozenset(ids))
+                    words = [label[c].split(" ", 1)[1] if c != combo[0] else label[c] for c in combo]
+                    add("Scored in " + ", ".join(words[:-1]) + " AND " + words[-1], ids, combo)
+
+        # The same final, for two different clubs (Ronaldo: United and Real).
+        for comp in ("cl", "uel", "fac", "lc"):
+            ids = {i for i, rows in scored[comp].items() if len({tm for _, tm in rows if tm}) >= 2}
+            if 1 <= len(ids) <= 6:
+                add(f"Scored in {label[comp]} for TWO different clubs", ids, (comp,))
 
     random.Random(7).shuffle(out)
     note = (f"Half-Time Teasers: {sum(t['kind'] == 'curated' for t in out)} hand-checked, "
