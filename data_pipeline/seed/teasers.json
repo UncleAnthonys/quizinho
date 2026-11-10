@@ -1,5 +1,5 @@
 {
-  "_note": "Half-Time Teasers: 4 hand-checked, 83 final-scorer teasers checked against Wikipedia. Built 2026-11-10 11:56 UTC.",
+  "_note": "Half-Time Teasers: 4 hand-checked, 83 final-scorer teasers checked against Wikipedia. Built 2026-11-10 11:58 UTC.",
   "teasers": [
     {"kind": "final", "q": "Scored in a League Cup final AND played for Monaco", "answers": ["dimitar-berbatov", "john-arne-riise", "yaya-toure"], "names": ["Dimitar Berbatov", "John Arne Riise", "Yaya Touré"], "difficulty": 2, "eras": 14},
     {"kind": "final", "q": "Scored in a European Championship final AND played for Galatasaray", "answers": ["juan-mata-pata"], "names": ["Juan Mata"], "difficulty": 2, "eras": 24},
