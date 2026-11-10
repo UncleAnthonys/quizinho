@@ -147,6 +147,23 @@ def final_titles() -> dict[str, list[str]]:
 
 
 AUDIT: list[str] = []
+
+# Finals the audit flagged, checked by hand: Wikipedia's box for these is missing
+# or doesn't template every goal. (year, player id, club qid). Only players in our
+# data are listed.
+MANUAL_SCORERS = {
+    "fac": [(1974, "kevin-keegan", "Q1130849"), (1974, "steve-heighway", "Q1130849")],  # nufc.com/html/fac1974.html
+    "lc": [
+        (1966, "bobby-moore", "Q18747"), (1966, "jeff-astle", "Q18744"), (1966, "martin-peters", "Q18747"),
+        (1968, "terry-cooper", "Q1128631"),
+        (1978, "john-robertson", "Q19490"),  # replay penalty
+        (1979, "garry-birtles", "Q19490"), (1979, "tony-woodcock", "Q19490"),
+    ],
+}
+# The rest of the audit, checked and fine: 2001 UEFA Cup final (the ninth goal
+# is Geli's golden own goal, rightly not counted).
+AUDIT_OK = {"2001 UEFA Cup final", "1974 FA Cup final", "1966 Football League Cup final",
+            "1968 Football League Cup final", "1978 Football League Cup final", "1979 Football League Cup final"}
 SCORE = re.compile(r"\|\s*score\s*=\s*(?:\[\[[^\]|]*\|)?(\d+)\s*[–-]\s*(\d+)")
 MINUTE = re.compile(r"^\d+(\+\d+)?'?$")
 TEAM = re.compile(r"\|\s*team([12])\s*=\s*([^\n]*)")
@@ -247,6 +264,9 @@ def main() -> None:
                         # The box names the team with a template ({{fb-rt|PSG}}) rather than
                         # a link: take the club he was at that season from his career.
                         club = club_in(pid, year)
+                    per.setdefault(pid, []).append((year, club))
+            for year, pid, club in MANUAL_SCORERS.get(comp, []):
+                if (year, club) not in per.get(pid, []):
                     per.setdefault(pid, []).append((year, club))
             scored[comp] = per
             print(f"{comp}: {len({y for y, _, _ in rows})} finals, {len({n for _, n, _ in rows})} scorers, "
@@ -357,6 +377,7 @@ def main() -> None:
             if 1 <= len(ids) <= 6:
                 add(f"Scored in {label[comp]} for TWO different clubs", ids, (comp,))
 
+    AUDIT[:] = [a for a in AUDIT if a.split(":")[0] not in AUDIT_OK]
     for line in AUDIT:
         print(f"::warning title=Teaser audit::{line}")
     print(f"Audit: {len(AUDIT)} finals to check by hand")
