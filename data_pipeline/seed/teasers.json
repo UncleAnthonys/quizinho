@@ -1,5 +1,5 @@
 {
-  "_note": "Half-Time Teasers: 4 hand-checked, 140 final-scorer teasers checked against Wikipedia. Built 2026-11-10 12:07 UTC.",
+  "_note": "Half-Time Teasers: 4 hand-checked, 140 final-scorer teasers checked against Wikipedia. Built 2026-11-10 12:08 UTC.",
   "teasers": [
     {"kind": "final", "q": "Scored in a World Cup final AND played for Torino", "answers": ["silvio-piola"], "names": ["Silvio Piola"], "difficulty": 4, "eras": 1},
     {"kind": "final", "q": "Scored in an FA Cup final AND played for PSV", "answers": ["ruud-van-nistelrooy"], "names": ["Ruud van Nistelrooy"], "difficulty": 1, "eras": 6},
@@ -146,5 +146,5 @@
     {"kind": "final", "q": "Scored in a World Cup final AND played for West Bromwich Albion", "answers": ["geoff-hurst"], "names": ["Geoff Hurst"], "difficulty": 4, "eras": 1},
     {"kind": "final", "q": "Scored in an FA Cup final AND played for Napoli", "answers": ["kevin-de-bruyne"], "names": ["Kevin De Bruyne"], "difficulty": 1, "eras": 24}
   ],
-  "audit": ["2001 UEFA Cup final: score 5-4 but 8 goals read", "1974 FA Cup final: score 3-0 but 1 goals read", "1966 Football League Cup final: no match box found", "1968 Football League Cup final: no match box found", "1978 Football League Cup final: no match box found", "1979 Football League Cup final: no match box found"]
+  "audit": []
 }
