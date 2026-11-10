@@ -377,6 +377,23 @@
         "proof": "Man City 3-1 Man United, 9 Nov 2002 https://mufcinfo.com/manupag/a-z_player_archive/a-z_player_archive_pages/forlan_diego.html"
       }
     },
+    "dietmar-hamann": {
+      "manc": {
+        "played": true,
+        "year": 2008,
+        "proof": "Man City 0-1 Man United, 30 Nov 2008, 45 min https://aws.fbref.com/en/matches/168617fe/Manchester-Derby-Manchester-City-Manchester-United-November-30-2008-Premier-League"
+      },
+      "mersey": {
+        "played": true,
+        "year": 2001,
+        "proof": "Everton 2-3 Liverpool, 16 Apr 2001, 90 min https://fbref.com/en/matches/39f54bd0/Merseyside-Derby-Everton-Live"
+      },
+      "klassiker": {
+        "played": true,
+        "year": 1997,
+        "proof": "Dortmund 1-1 Bayern, 19 Apr 1997, 90 min https://aws.fbref.com/en/players/01c05efb/matchlogs/1996-1997/c20/summary/Dietmar-Hamann-Match-Logs"
+      }
+    },
     "edgar-davids": {
       "clasico": {
         "played": true,
@@ -446,6 +463,11 @@
         "played": true,
         "year": 2018,
         "proof": "Juventus 1-0 Inter, 7 Dec 2018, 90 min https://fbref.com/en/players/a65ce836/matchlogs/2018-2019/Emre-Can-Match-Logs"
+      },
+      "northwest": {
+        "played": true,
+        "year": 2017,
+        "proof": "Liverpool 0-0 Man United, 14 Oct 2017, 90 min https://aws.fbref.com/en/players/a65ce836/matchlogs/2017-2018/Emre-Can-Match-Logs"
       }
     },
     "fernando-torres": {
@@ -551,6 +573,23 @@
         "played": true,
         "year": 2017,
         "proof": "Man United 1-1 Liverpool, 15 Jan 2017, 90 min https://aws.fbref.com/en/players/dd0daf32/matchlogs/2016-2017/Henrikh-Mkhitaryan-Match-Logs"
+      }
+    },
+    "ilkay-gundogan": {
+      "clasico": {
+        "played": true,
+        "year": 2023,
+        "proof": "Barcelona 1-2 Real Madrid, 28 Oct 2023, 90 min https://aws.fbref.com/en/players/819b3158/matchlogs/2023-2024/Ilkay-Gundogan-Match-Logs"
+      },
+      "klassiker": {
+        "played": true,
+        "year": 2015,
+        "proof": "Bayern 5-1 Dortmund, 4 Oct 2015, 90 min https://aws.fbref.com/en/players/819b3158/matchlogs/2015-2016/Ilkay-Gundogan-Match-Logs"
+      },
+      "manc": {
+        "played": true,
+        "year": 2017,
+        "proof": "Man United 1-2 Man City, 10 Dec 2017, 45 min https://aws.fbref.com/en/players/819b3158/matchlogs/2017-2018/Ilkay-Gundogan-Match-Logs"
       }
     },
     "ivan-perisic": {
@@ -931,6 +970,27 @@
         "why": "Not in Milan's squad for either derby in his half-season there (26 Jan and 21 Feb 2021) https://www.inter.it/en/match_center/4655 https://www.acmilan.com/en/news/articles/serie-a/2021-02-21/inter-come-out-on-top-in-milan-derby"
       }
     },
+    "mark-hughes": {
+      "manc": {
+        "played": true,
+        "year": 1994,
+        "proof": "Man United 5-0 Man City, 10 Nov 1994, 90 min https://aws.fbref.com/en/matches/45c9f128/Manchester-Derby-Manchester-United-Manchester-City-November-10-1994-Premier-League"
+      },
+      "mersey": {
+        "played": true,
+        "year": 2000,
+        "proof": "Everton 0-0 Liverpool, 21 Apr 2000, 80 min https://aws.fbref.com/en/matches/94518dd0/Merseyside-Derby-Everton-Liverpool-April-21-2000-Premier-League"
+      },
+      "klassiker": {
+        "played": true,
+        "year": 1987,
+        "proof": "Bayern 1-3 Dortmund, 28 Nov 1987, 90 min https://statmuse.com/fc/match/11-28-1987-fcb-vs-bvb-47494"
+      },
+      "clasico": {
+        "played": null,
+        "why": "Not in Barcelona's side for the 3-2 win over Real Madrid (31 Jan 1987); no line-up found for the other 1986-87 Clásico https://statmuse.com/fc/match/1-31-1987-fcb-vs-rma-28923"
+      }
+    },
     "mark-van-bommel": {
       "clasico": {
         "played": true,
@@ -985,6 +1045,11 @@
         "played": true,
         "year": 2025,
         "proof": "Man City 3-0 Man United, 14 Sep 2025, started https://www.11v11.com/matches/manchester-city-v-manchester-united-14-september-2025-389976/"
+      },
+      "northwest": {
+        "played": true,
+        "year": 2024,
+        "proof": "Man United 0-3 Liverpool, 1 Sep 2024, 68 min https://aws.fbref.com/en/players/d6e53a3a/matchlogs/2024-2025/Matthijs-de-Ligt-Match-Logs"
       }
     },
     "memphis-depay": {
@@ -1063,6 +1128,16 @@
       "clasico": {
         "played": false,
         "why": "Never played for Barcelona's first team"
+      },
+      "oldfirm": {
+        "played": true,
+        "year": 2002,
+        "proof": "Celtic 3-3 Rangers, 6 Oct 2002 (scored) https://www.thecelticwiki.com/?p=12516"
+      },
+      "classique": {
+        "played": true,
+        "year": 2001,
+        "proof": "PSG 0-0 Marseille, 29 Nov 2001, 90 min https://statmuse.com/fc/match/11-29-2001-psg-vs-om-91275"
       }
     },
     "nicolas-anelka": {
