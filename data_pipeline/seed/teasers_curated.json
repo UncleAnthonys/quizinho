@@ -1294,6 +1294,90 @@
           "Merseyside derby: Liverpool 1-1 Everton, 27 Sep 2014 (sub) https://aws.fbref.com/en/players/06420c93/matchlogs/2014-2015/c9/summary/Samuel-Etoo-Match-Logs"
         ]
       }
+    },
+    {
+      "q": "Played in Der Klassiker (Bayern v Dortmund), the Madrid derby AND the Merseyside derby",
+      "eras": 28,
+      "difficulty": 2,
+      "answers": [
+        "james-rodriguez",
+        "xabi-alonso"
+      ],
+      "names": [
+        "James Rodríguez",
+        "Xabi Alonso"
+      ],
+      "proof": {
+        "james-rodriguez": [
+          "Der Klassiker: Dortmund 1-3 Bayern, 4 Nov 2017 https://aws.fbref.com/en/players/715bf047/matchlogs/2017-2018/James-Rodriguez-Match-Logs",
+          "Madrid derby: Real Madrid 0-1 Atlético, 27 Feb 2016 https://aws.fbref.com/en/players/715bf047/matchlogs/2015-2016/James-Rodriguez-Match-Logs",
+          "Merseyside derby: Everton 2-2 Liverpool, 17 Oct 2020 https://aws.fbref.com/en/players/715bf047/matchlogs/2020-2021/James-Rodriguez-Match-Logs"
+        ],
+        "xabi-alonso": [
+          "Der Klassiker: Bayern 5-1 Dortmund, 4 Oct 2015 https://aws.fbref.com/en/players/dc001a06/matchlogs/2015-2016/Xabi-Alonso-Match-Logs",
+          "Madrid derby: Atlético 2-2 Real Madrid, 2 Mar 2014 https://aws.fbref.com/en/players/dc001a06/matchlogs/2013-2014/Xabi-Alonso-Match-Logs",
+          "Merseyside derby: Everton 3-0 Liverpool, 9 Sep 2006 https://aws.fbref.com/en/players/dc001a06/matchlogs/2006-2007/Xabi-Alonso-Match-Logs"
+        ]
+      },
+      "unconfirmed": [
+        "nuri-sahin"
+      ]
+    },
+    {
+      "q": "Played in El Clásico, the Madrid derby AND the Manchester derby",
+      "eras": 24,
+      "difficulty": 2,
+      "answers": [
+        "sergio-aguero",
+        "rodri"
+      ],
+      "names": [
+        "Sergio Agüero",
+        "Rodri"
+      ],
+      "proof": {
+        "sergio-aguero": [
+          "El Clásico: Barcelona 1-2 Real Madrid, 24 Oct 2021 (scored) https://aws.fbref.com/en/matches/5225b8b5/",
+          "Madrid derby: Real Madrid 2-0 Atlético, 7 Nov 2010 https://aws.fbref.com/en/players/4d034881/matchlogs/2010-2011/Sergio-Aguero-Match-Logs",
+          "Manchester derby: Man City 1-0 Man United, 2 Nov 2014 (scored) https://www.sportsmole.co.uk/football/man-city/result/aguero-wins-derby-for-city_186086.html"
+        ],
+        "rodri": [
+          "El Clásico: Barcelona 1-2 Real Madrid, 25 Oct 2026 (started) https://www.si.com/soccer/barcelona-vs-real-madrid-player-ratings-mbappe-100-los-blancos-stun-camp-nou",
+          "Madrid derby: Real Madrid 0-0 Atlético, 29 Sep 2018 https://aws.fbref.com/en/players/6434f10d/matchlogs/2018-2019/Rodri-Match-Logs",
+          "Manchester derby: Man United 2-1 Man City, 14 Jan 2023 https://aws.fbref.com/en/players/6434f10d/matchlogs/2022-2023/Rodri-Match-Logs"
+        ]
+      },
+      "ruled_out": {
+        "memphis-depay": "El Clásico (Barcelona) and the Madrid derby (Atlético), but never played in a Manchester derby: absent or on the bench every time"
+      }
+    },
+    {
+      "q": "Played in El Clásico, the Merseyside derby AND the North London derby",
+      "eras": 7,
+      "difficulty": 2,
+      "answers": [
+        "gary-lineker",
+        "nicolas-anelka"
+      ],
+      "names": [
+        "Gary Lineker",
+        "Nicolas Anelka"
+      ],
+      "proof": {
+        "gary-lineker": [
+          "El Clásico: Barcelona 3-2 Real Madrid, Jan 1987 (hat-trick) https://www.fourfourtwo.com/features/players-who-scored-a-hat-trick-in-el-clasico",
+          "Merseyside derby: Everton 2-3 Liverpool, 21 Sep 1985 (scored) https://www.11v11.com/matches/everton-v-liverpool-21-september-1985-87725/",
+          "North London derby: Tottenham 3-1 Arsenal, FA Cup semi-final, 14 Apr 1991 (2 goals) https://www.pastemagazine.com/soccer/arsenal/throwback-thursday-tottenham-v-arsenal-fa-cup-semi"
+        ],
+        "nicolas-anelka": [
+          "El Clásico: Barcelona 2-2 Real Madrid, 13 Oct 1999 https://worldfootball.net/report/primera-division-1999-2000-fc-barcelona-real-madrid",
+          "Merseyside derby: Liverpool 1-1 Everton, 23 Feb 2002 https://aws.fbref.com/en/matches/eb996343/",
+          "North London derby: Arsenal 0-0 Tottenham, 14 Nov 1998 https://aws.fbref.com/en/players/931ed5e9/matchlogs/1998-1999/Nicolas-Anelka-Match-Logs"
+        ]
+      },
+      "ruled_out": {
+        "mikel-arteta": "Everton and Arsenal, but never played for Barcelona's first team"
+      }
     }
   ]
 }
