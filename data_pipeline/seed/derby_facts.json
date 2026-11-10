@@ -82,6 +82,9 @@
     }
   },
   "difficulty": {
+    "clasico+milan+nld": 2,
+    "manc+mersey+milan": 2,
+    "manc+mersey+oldfirm": 2,
     "mersey+milan+nld": 3,
     "milan+nld+oldfirm": 3
   },
@@ -186,6 +189,28 @@
         "played": true,
         "year": 1999,
         "proof": "Rangers 2-2 Celtic, 3 Jan 1999, started https://www.thecelticwiki.com/?p=12033"
+      }
+    },
+    "arturo-vidal": {
+      "clasico": {
+        "played": true,
+        "year": 2018,
+        "proof": "Barcelona 5-1 Real Madrid, 28 Oct 2018, 71 min https://aws.fbref.com/en/players/67cdbc0e/matchlogs/2018-2019/Arturo-Vidal-Match-Logs"
+      },
+      "klassiker": {
+        "played": true,
+        "year": 2017,
+        "proof": "Bayern 4-1 Dortmund, 8 Apr 2017, 90 min https://aws.fbref.com/en/players/67cdbc0e/matchlogs/2016-2017/Arturo-Vidal-Match-Logs"
+      },
+      "milan": {
+        "played": true,
+        "year": 2021,
+        "proof": "Inter v Milan, 7 Nov 2021, 23 min https://aws.fbref.com/en/players/67cdbc0e/matchlogs/2021-2022/misc/Arturo-Vidal-Match-Logs"
+      },
+      "ditalia": {
+        "played": true,
+        "year": 2022,
+        "proof": "Inter 2-1 Juventus, Supercoppa, 12 Jan 2022 https://aws.fbref.com/en/players/67cdbc0e/matchlogs/2021-2022/misc/Arturo-Vidal-Match-Logs"
       }
     },
     "ashley-young": {
@@ -406,6 +431,23 @@
         "proof": "Arsenal 5-2 Tottenham, 26 Feb 2012 (90 min, scored) https://fbref.com/en/matches/30fbb04f/"
       }
     },
+    "emre-can": {
+      "mersey": {
+        "played": true,
+        "year": 2016,
+        "proof": "Everton 0-1 Liverpool, 19 Dec 2016, 90 min https://aws.fbref.com/en/players/a65ce836/matchlogs/2016-2017/Emre-Can-Match-Logs"
+      },
+      "klassiker": {
+        "played": true,
+        "year": 2021,
+        "proof": "Dortmund 2-3 Bayern, 4 Dec 2021, 90 min https://aws.fbref.com/en/players/a65ce836/matchlogs/2021-2022/misc/Emre-Can-Match-Logs"
+      },
+      "ditalia": {
+        "played": true,
+        "year": 2018,
+        "proof": "Juventus 1-0 Inter, 7 Dec 2018, 90 min https://fbref.com/en/players/a65ce836/matchlogs/2018-2019/Emre-Can-Match-Logs"
+      }
+    },
     "fernando-torres": {
       "madrid": {
         "played": true,
@@ -575,6 +617,16 @@
         "played": true,
         "year": 2020,
         "proof": "Man United 0-0 Man City, 12 Dec 2020 (90 min) https://aws.fbref.com/en/players/bd6351cd/matchlogs/2020-2021/Joao-Cancelo-Match-Logs"
+      },
+      "klassiker": {
+        "played": true,
+        "year": 2023,
+        "proof": "Bayern 4-2 Dortmund, 1 Apr 2023 https://aws.fbref.com/en/players/bd6351cd/matchlogs/2022-2023/Joao-Cancelo-Match-Logs"
+      },
+      "ditalia": {
+        "played": true,
+        "year": 2018,
+        "proof": "Juventus 1-0 Inter, 7 Dec 2018, 90 min https://aws.fbref.com/en/players/bd6351cd/matchlogs/2018-2019/misc/Joao-Cancelo-Match-Logs"
       }
     },
     "john-stones": {
@@ -591,6 +643,10 @@
       "milan": {
         "played": false,
         "why": "Not in Inter's squad for his only chance so far, Milan 3-1 Inter, 31 Oct 2026 (recheck after the Feb 2027 derby) https://www.inter.it/en/news/ac-milan-inter-official-line-ups-serie-a-2026-27"
+      },
+      "ditalia": {
+        "played": false,
+        "why": "No Juventus game yet since joining Inter in July 2026 (recheck after the 2026-27 derbies) https://www.thestar.com.my/sport/football/2026/07/31/soccer-england-defender-stones-joins-inter-milan-on-two-year-deal"
       }
     },
     "jurgen-klinsmann": {
@@ -701,6 +757,11 @@
         "played": true,
         "year": 2002,
         "proof": "Man City 3-1 Man United, 9 Nov 2002 (started) https://bbcbreakingnews.pages.dev/sport2/hi/football/eng_prem/2388563.stm"
+      },
+      "northwest": {
+        "played": true,
+        "year": 2002,
+        "proof": "Man United 0-1 Liverpool, 22 Jan 2002, started https://www.11v11.com/matches/manchester-united-v-liverpool-22-january-2002-11118/"
       }
     },
     "louis-saha": {
@@ -805,6 +866,28 @@
         "proof": "Arsenal 5-2 Tottenham, 17 Nov 2012 (scored) https://www.sportsmole.co.uk/football/arsenal/result/result-10-man-tottenham-beaten-at-arsenal_55003.html"
       }
     },
+    "manuel-akanji": {
+      "manc": {
+        "played": true,
+        "year": 2022,
+        "proof": "Man City 6-3 Man United, 2 Oct 2022, 90 min https://aws.fbref.com/en/players/89ac64a6/matchlogs/2022-2023/Manuel-Akanji-Match-Logs"
+      },
+      "klassiker": {
+        "played": true,
+        "year": 2018,
+        "proof": "Dortmund 3-2 Bayern, 10 Nov 2018, 90 min https://aws.fbref.com/en/players/89ac64a6/matchlogs/2018-2019/Manuel-Akanji-Match-Logs"
+      },
+      "milan": {
+        "played": true,
+        "year": 2026,
+        "proof": "Milan 3-1 Inter, 31 Oct 2026, started https://www.inter.it/en/news/ac-milan-inter-official-line-ups-serie-a-2026-27"
+      },
+      "ditalia": {
+        "played": true,
+        "year": 2026,
+        "proof": "Inter 3-2 Juventus, 14 Feb 2026, full match https://www.bluewin.ch/en/sport/football/sommer-and-akanji-win-the-derby-ditalia-in-extremis-3097235.html"
+      }
+    },
     "mario-balotelli": {
       "milan": {
         "played": true,
@@ -842,6 +925,27 @@
         "played": true,
         "year": 2016,
         "proof": "Inter 2-1 Juventus, 18 Sep 2016, 73 min https://aws.fbref.com/en/players/afa0d4e0/matchlogs/2016-2017/Mario-Mandzukic-Match-Logs"
+      },
+      "milan": {
+        "played": false,
+        "why": "Not in Milan's squad for either derby in his half-season there (26 Jan and 21 Feb 2021) https://www.inter.it/en/match_center/4655 https://www.acmilan.com/en/news/articles/serie-a/2021-02-21/inter-come-out-on-top-in-milan-derby"
+      }
+    },
+    "mark-van-bommel": {
+      "clasico": {
+        "played": true,
+        "year": 2006,
+        "proof": "Barcelona 1-1 Real Madrid, 1 Apr 2006, 56 min https://fbref.com/en/players/f23bcfa3/matchlogs/2005-2006/misc/Mark-van-Bommel-Match-Logs"
+      },
+      "milan": {
+        "played": true,
+        "year": 2012,
+        "proof": "Milan 0-1 Inter, 15 Jan 2012, 90 min https://aws.fbref.com/en/players/f23bcfa3/matchlogs/2011-2012/Mark-van-Bommel-Match-Logs"
+      },
+      "klassiker": {
+        "played": true,
+        "year": 2010,
+        "proof": "Bayern v Dortmund, 13 Feb 2010, 90 min https://aws.fbref.com/en/players/f23bcfa3/matchlogs/2009-2010/Mark-van-Bommel-Match-Logs"
       }
     },
     "mateo-kovacic": {
@@ -864,6 +968,23 @@
         "played": true,
         "year": 2016,
         "proof": "Atlético 0-3 Real Madrid, 19 Nov 2016, 90 min https://aws.fbref.com/en/players/79c0821a/matchlogs/2016-2017/Mateo-Kovacic-Match-Logs"
+      }
+    },
+    "matthijs-de-ligt": {
+      "klassiker": {
+        "played": true,
+        "year": 2023,
+        "proof": "Bayern 4-2 Dortmund, 1 Apr 2023, 90 min https://aws.fbref.com/en/players/d6e53a3a/matchlogs/2022-2023/Matthijs-de-Ligt-Match-Logs"
+      },
+      "ditalia": {
+        "played": true,
+        "year": 2021,
+        "proof": "Inter 1-2 Juventus, Coppa Italia semi, 2 Feb 2021, 90 min https://aws.fbref.com/en/players/d6e53a3a/matchlogs/2020-2021/misc/Matthijs-de-Ligt-Match-Logs"
+      },
+      "manc": {
+        "played": true,
+        "year": 2025,
+        "proof": "Man City 3-0 Man United, 14 Sep 2025, started https://www.11v11.com/matches/manchester-city-v-manchester-united-14-september-2025-389976/"
       }
     },
     "memphis-depay": {
@@ -1080,6 +1201,54 @@
         "played": true,
         "year": 1986,
         "proof": "4 games v Everton for Liverpool https://www.lfchistory.net/Players/Player/Profile/436"
+      }
+    },
+    "pepe-reina": {
+      "clasico": {
+        "played": true,
+        "year": 2001,
+        "proof": "Real Madrid 2-2 Barcelona, 3 Mar 2001, 90 min https://aws.fbref.com/en/players/e358587b/matchlogs/2000-2001/Pepe-Reina-Match-Logs"
+      },
+      "mersey": {
+        "played": true,
+        "year": 2006,
+        "proof": "Everton 3-0 Liverpool, 9 Sep 2006, started https://www.lfchistory.net/games/4996"
+      },
+      "milan": {
+        "played": false,
+        "why": "Donnarumma's back-up at Milan: bench for the Oct 2018 derby and no Inter game in either Milan season https://www.inter.it/en/news/2018-10-21-the-official-line-ups-for-inter-vs-milan https://aws.fbref.com/en/players/e358587b/matchlogs/2018-2019/defense/Pepe-Reina-Match-Logs https://aws.fbref.com/en/players/e358587b/matchlogs/2019-2020/misc/Pepe-Reina-Match-Logs"
+      }
+    },
+    "philippe-coutinho": {
+      "clasico": {
+        "played": true,
+        "year": 2018,
+        "proof": "Barcelona 5-1 Real Madrid, 28 Oct 2018, 73 min https://aws.fbref.com/en/players/0ef89a37/matchlogs/2018-2019/Philippe-Coutinho-Match-Logs"
+      },
+      "mersey": {
+        "played": true,
+        "year": 2014,
+        "proof": "Liverpool 1-1 Everton, 27 Sep 2014, 31 min https://aws.fbref.com/en/players/0ef89a37/matchlogs/2014-2015/Philippe-Coutinho-Match-Logs"
+      },
+      "milan": {
+        "played": true,
+        "year": 2010,
+        "proof": "Inter 0-1 Milan, 14 Nov 2010, 54 min (on for Obi) https://statmuse.com/fc/match/11-14-2010-int-vs-mil-81837"
+      },
+      "ditalia": {
+        "played": true,
+        "year": 2010,
+        "proof": "Inter v Juventus, 3 Oct 2010, 90 min https://aws.fbref.com/en/players/0ef89a37/matchlogs/2010-2011/Philippe-Coutinho-Match-Logs"
+      },
+      "northwest": {
+        "played": true,
+        "year": 2016,
+        "proof": "Liverpool 0-0 Man United, 17 Oct 2016, 90 min https://aws.fbref.com/en/players/0ef89a37/matchlogs/2016-2017/Philippe-Coutinho-Match-Logs"
+      },
+      "klassiker": {
+        "played": true,
+        "year": 2019,
+        "proof": "Bayern 4-0 Dortmund, 9 Nov 2019, 21 min https://aws.fbref.com/en/players/0ef89a37/matchlogs/2019-2020/Philippe-Coutinho-Match-Logs"
       }
     },
     "philippe-senderos": {
@@ -1407,6 +1576,33 @@
         "proof": "Liverpool 2-1 Man United, 13 Sep 2008, started https://www.lfchistory.net/SeasonArchive/Game/5117"
       }
     },
+    "xherdan-shaqiri": {
+      "mersey": {
+        "played": true,
+        "year": 2018,
+        "proof": "Liverpool 1-0 Everton, 2 Dec 2018, 70 min https://aws.fbref.com/en/players/6421ec64/matchlogs/2018-2019/Xherdan-Shaqiri-Match-Logs"
+      },
+      "northwest": {
+        "played": true,
+        "year": 2018,
+        "proof": "Liverpool 3-1 Man United, 16 Dec 2018, 21 min (2 goals) https://aws.fbref.com/en/players/6421ec64/matchlogs/2018-2019/Xherdan-Shaqiri-Match-Logs"
+      },
+      "milan": {
+        "played": true,
+        "year": 2015,
+        "proof": "Inter 0-0 Milan, 19 Apr 2015 (on 76') https://www.inter.it/en/match_center/4076"
+      },
+      "klassiker": {
+        "played": true,
+        "year": 2013,
+        "proof": "Dortmund 1-1 Bayern, 4 May 2013, 90 min https://aws.fbref.com/en/players/6421ec64/matchlogs/2012-2013/Xherdan-Shaqiri-Match-Logs"
+      },
+      "ditalia": {
+        "played": true,
+        "year": 2015,
+        "proof": "Inter 1-2 Juventus, 16 May 2015, started https://inter.it/en/match_center/4081"
+      }
+    },
     "zlatan-ibrahimovic": {
       "clasico": {
         "played": true,
@@ -1422,6 +1618,11 @@
         "played": true,
         "year": 2016,
         "proof": "Man United 1-2 Man City, 10 Sep 2016 (90 min, scored) https://fbref.com/en/matches/a5978934/"
+      },
+      "northwest": {
+        "played": true,
+        "year": 2016,
+        "proof": "Liverpool 0-0 Man United, 17 Oct 2016, 90 min https://aws.fbref.com/en/players/4cde5509/matchlogs/2016-2017/Zlatan-Ibrahimovic-Match-Logs"
       }
     }
   }
