@@ -253,7 +253,9 @@ def derby_teasers(players: list[dict], curated: list[dict], shown) -> list[dict]
         if not 1 <= len(yes) <= 6:
             continue
         found.append((ks, yes, unsure, [p for p in cands if p not in yes and p not in unsure]))
-    found.sort(key=lambda f: (len(f[1]), f[0]))  # fewest answers first: those are the best
+    # Combos given a difficulty by hand were reviewed, so they win any clash; then
+    # fewest answers first: those are the best.
+    found.sort(key=lambda f: ("+".join(sorted(f[0])) not in src.get("difficulty", {}), len(f[1]), f[0]))
     used: dict[str, int] = {}
     out = []
     sets = set()
