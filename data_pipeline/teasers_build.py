@@ -86,18 +86,20 @@ def tidy(name: str) -> str:
     return name
 
 
-OBSCURE_LEAGUES = {"QAT", "KSA", "UAE", "CHN", "JPN"}
+KNOWN_LEAGUES = {"GBR", "ESP", "ITA", "GER", "FRA", "NED", "POR"}
 
 
 def _widen_pool() -> None:
     clubs = json.loads((SEED / "clubs.json").read_text())["clubs"]
     for qid, name, _country, fame, *_rest in clubs:
-        if fame >= 4 and _rest[-1] == "m" and qid not in POOL:
+        # Lower-profile British clubs too (Charlton, Ipswich, Sheffield Wednesday): fame 3+.
+        if (fame >= 4 or (fame >= 3 and _country == "GBR")) and _rest[-1] == "m" and qid not in POOL:
             POOL[qid] = tidy(name)
     POOL.update({q: n for q, n in EXTRA.items() if q not in POOL})
-    # Leagues a table can't tell apart (Al Sadd, Al-Duhail, Al-Gharafa…): leave them out.
+    # Only clubs a British table knows: the UK and Europe's main leagues. A Brazilian's
+    # boyhood club (Vinícius at Flamengo), MLS, Turkey, the Gulf etc. are left out.
     country = {c[0]: c[2] for c in clubs}
-    for q in [q for q in POOL if country.get(q) in OBSCURE_LEAGUES]:
+    for q in [q for q in POOL if country.get(q) not in KNOWN_LEAGUES]:
         del POOL[q]
 
 
