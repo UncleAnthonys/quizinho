@@ -145,6 +145,11 @@
         "played": true,
         "year": 2022,
         "proof": "PSG 1-0 Marseille, 16 Oct 2022, 78 min https://aws.fbref.com/en/players/2c0f8e9e/matchlogs/2022-2023/Alexis-Sanchez-Match-Logs"
+      },
+      "ditalia": {
+        "played": true,
+        "year": 2021,
+        "proof": "Inter 2-0 Juventus, 17 Jan 2021, 50 min https://aws.fbref.com/en/players/2c0f8e9e/matchlogs/2020-2021/misc/Alexis-Sanchez-Match-Logs"
       }
     },
     "andrei-kanchelskis": {
@@ -311,6 +316,11 @@
         "played": true,
         "year": 2002,
         "proof": "Liverpool 1-2 Man United, 1 Dec 2002 https://aws.fbref.com/en/players/d87d0dfc/matchlogs/2002-2003/Diego-Forlan-Match-Logs"
+      },
+      "manc": {
+        "played": true,
+        "year": 2002,
+        "proof": "Man City 3-1 Man United, 9 Nov 2002 https://mufcinfo.com/manupag/a-z_player_archive/a-z_player_archive_pages/forlan_diego.html"
       }
     },
     "edgar-davids": {
@@ -764,6 +774,11 @@
         "played": true,
         "year": 2014,
         "proof": "Liverpool 1-1 Everton, 27 Sep 2014, started https://www.11v11.com/matches/liverpool-v-everton-27-september-2014-310529/"
+      },
+      "ditalia": {
+        "played": true,
+        "year": 2009,
+        "proof": "Juventus 1-1 Inter, 18 Apr 2009 (scored) https://www.inter.it/en/match_center/3768"
       }
     },
     "mateo-kovacic": {
@@ -781,6 +796,11 @@
         "played": true,
         "year": 2023,
         "proof": "Man United 0-3 Man City, 29 Oct 2023 (40 min) https://aws.fbref.com/en/players/79c0821a/matchlogs/2023-2024/Mateo-Kovacic-Match-Logs"
+      },
+      "madrid": {
+        "played": true,
+        "year": 2016,
+        "proof": "Atlético 0-3 Real Madrid, 19 Nov 2016, 90 min https://aws.fbref.com/en/players/79c0821a/matchlogs/2016-2017/Mateo-Kovacic-Match-Logs"
       }
     },
     "memphis-depay": {
@@ -848,6 +868,11 @@
         "played": true,
         "year": 2003,
         "proof": "Liverpool 1-2 Man United, 9 Nov 2003, started https://www.lfchistory.net/SeasonArchive/Game/2457"
+      },
+      "ditalia": {
+        "played": true,
+        "year": 1998,
+        "proof": "Juventus 1-0 Inter, 25 Oct 1998, 37 min https://aws.fbref.com/en/matches/56864575/Derby-dItalia-Juventus-Internazionale-October-25-1998-Serie-A"
       }
     },
     "mikel-arteta": {
@@ -948,6 +973,11 @@
         "played": true,
         "year": 2006,
         "proof": "Milan 3-4 Inter, 28 Oct 2006 https://aws.fbref.com/en/players/f90f1086/matchlogs/2006-2007/Patrick-Vieira-Match-Logs"
+      },
+      "ditalia": {
+        "played": true,
+        "year": 2009,
+        "proof": "Juventus 1-1 Inter, 18 Apr 2009 (off the bench) https://www.inter.it/en/match_center/3768"
       }
     },
     "paul-ince": {
