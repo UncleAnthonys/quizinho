@@ -1,5 +1,5 @@
 {
-  "_note": "Derby appearances, each checked against a line-up or match report. played:false = has the clubs on paper but never played that derby (a red herring); why says so. teasers_build.py makes every three-derby question whose shortlist (players.json careers) is fully checked here.",
+  "_note": "Derby appearances, each checked against a line-up or match report. played:false = has the clubs on paper but never played that derby (a red herring); why says so. teasers_build.py makes every three-derby question whose shortlist (players.json careers) is fully checked here. difficulty: per-combo overrides (derby keys, sorted, joined with +); default 2, or 4 with an expert derby.",
   "derbies": {
     "clasico": {
       "name": "El Clásico",
@@ -80,6 +80,9 @@
       ],
       "expert": true
     }
+  },
+  "difficulty": {
+    "mersey+milan+nld": 3
   },
   "facts": {
     "achraf-hakimi": {

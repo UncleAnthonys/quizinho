@@ -259,7 +259,8 @@ def derby_teasers(players: list[dict], curated: list[dict], shown) -> list[dict]
             used[p] = used.get(p, 0) + 1
         names = [der[k]["name"] for k in ks]
         t = {"kind": "derby", "q": f"Played in {names[0]}, {names[1]} AND {names[2]}",
-             "eras": 0, "difficulty": 4 if any(der[k].get("expert") for k in ks) else 2,
+             "eras": 0, "difficulty": src.get("difficulty", {}).get("+".join(sorted(ks)),
+                                             4 if any(der[k].get("expert") for k in ks) else 2),
              "answers": yes, "names": [shown(p) for p in yes],
              "proof": {p: [f"{short[k]}: {facts[p][k]['proof']}" for k in ks] for p in yes}}
         for p in yes:
