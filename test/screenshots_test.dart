@@ -385,11 +385,26 @@ void main() {
             question: teaserQ,
             fraction: 0.55,
             seconds: 49,
-            bottom: Column(children: [
-              const TeamChip(name: 'Home answering', colorIndex: 0, size: 20),
-              const SizedBox(height: 10),
-              _picker(),
-            ])));
+            bottom: TeaserBuzzed(team: 'Home', colorIndex: 0, secondsLeft: 6, answerBox: _picker())));
+    await shot(
+        tester,
+        'teaser_phone',
+        TeaserHalfTime(
+            question: teaserQ,
+            fraction: 0.7,
+            seconds: 63,
+            bottom: TeaserPhoneBuzzer(team: 'Away', colorIndex: 1, onBuzz: () {})));
+    await shot(
+        tester,
+        'teaser_reveal',
+        Padding(
+          padding: const EdgeInsets.all(20),
+          child: Center(
+            child: TeaserReveal(
+                question: teaserQ,
+                answers: const ['Emmanuel Adebayor', 'Alexis Sánchez', 'Nicolas Anelka', 'Gabriel Jesus']),
+          ),
+        ));
 
     // Between games: the table after a round, with the teaser still open.
     Widget summary({required bool open}) => Padding(

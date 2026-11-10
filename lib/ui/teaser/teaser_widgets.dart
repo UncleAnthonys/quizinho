@@ -4,16 +4,19 @@ import '../../core/theme.dart';
 import '../widgets/common.dart';
 
 /// The Half-Time Teaser: one slow-burn question per tournament. Shown full
-/// screen at half-time with a clock, then kept open between games (never
-/// during one) behind [TeaserChip] until someone gets it or full time.
+/// screen at half-time with a 90-second clock (5 points), then kept open
+/// between games (never during one) behind [TeaserChip] for 3 points, until
+/// someone gets it, every team has had its one guess, or full time. A team
+/// buzzes, then has 10 seconds to answer.
 
 /// The question itself, as a card.
 class TeaserPrompt extends StatelessWidget {
-  const TeaserPrompt({super.key, required this.question, this.points = 3, this.compact = false});
+  const TeaserPrompt({super.key, required this.question, this.halfTime = false, this.compact = false});
 
   /// "Name a player who…" — the rest of the sentence.
   final String question;
-  final int points;
+  /// During the half-time clock: 5 points now, 3 later.
+  final bool halfTime;
   final bool compact;
 
   @override
@@ -31,12 +34,13 @@ class TeaserPrompt extends StatelessWidget {
           Text(question.toUpperCase(),
               textAlign: TextAlign.center, style: AppText.headline(compact ? 24 : 32, weight: FontWeight.w800)),
           SizedBox(height: compact ? 8 : 12),
-          Text('ONE NAME WINS +$points', style: AppText.label(compact ? 12 : 14, color: Palette.yellow)),
+          Text(halfTime ? '+5 IF YOU GET IT NOW · +3 LATER' : 'ONE NAME WINS +3 · ONE GUESS EACH',
+              textAlign: TextAlign.center, style: AppText.label(compact ? 12 : 14, color: Palette.yellow)),
         ]),
       );
 }
 
-/// Which team is answering. Teams that got it wrong are locked until the next game.
+/// Who's buzzing in. Each team gets one guess: a wrong one locks them out.
 class TeaserTeams extends StatelessWidget {
   const TeaserTeams({super.key, required this.teams, this.locked = const {}, this.onPick});
 
@@ -47,7 +51,7 @@ class TeaserTeams extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Column(mainAxisSize: MainAxisSize.min, children: [
-        Text('GOT IT? TAP YOUR TEAM', style: AppText.label(15, color: Palette.text)),
+        Text('GOT IT? BUZZ IN', style: AppText.label(15, color: Palette.text)),
         const SizedBox(height: 10),
         Wrap(spacing: 10, runSpacing: 10, alignment: WrapAlignment.center, children: [
           for (final (i, (name, color)) in teams.indexed)
@@ -65,7 +69,7 @@ class TeaserTeams extends StatelessWidget {
                     child: Column(children: [
                       Text(name.toUpperCase(), style: AppText.headline(26, color: Palette.onTeam(color))),
                       if (locked.contains(i))
-                        Text('LOCKED TILL NEXT GAME', style: AppText.label(11, color: Palette.onTeam(color))),
+                        Text('LOCKED OUT', style: AppText.label(12, color: Palette.onTeam(color))),
                     ]),
                   ),
                 ),
@@ -140,7 +144,7 @@ class TeaserHalfTime extends StatelessWidget {
           const SizedBox(height: 14),
           TimerBar(fraction: fraction, seconds: seconds),
           const SizedBox(height: 16),
-          TeaserPrompt(question: question),
+          TeaserPrompt(question: question, halfTime: true),
           const SizedBox(height: 18),
           Expanded(child: SingleChildScrollView(child: bottom)),
           if (onLater != null)
@@ -148,4 +152,57 @@ class TeaserHalfTime extends StatelessWidget {
           Text('It stays open between games until someone gets it', style: AppText.label(12)),
         ]),
       );
+}
+
+/// A team has buzzed: 10 seconds to give a name.
+class TeaserBuzzed extends StatelessWidget {
+  const TeaserBuzzed({super.key, required this.team, required this.colorIndex, required this.secondsLeft, required this.answerBox});
+  final String team;
+  final int colorIndex;
+  final double secondsLeft;
+  final Widget answerBox;
+
+  @override
+  Widget build(BuildContext context) => Column(mainAxisSize: MainAxisSize.min, children: [
+        TeamChip(name: '$team buzzed', colorIndex: colorIndex, size: 20),
+        const SizedBox(height: 10),
+        TimerBar(fraction: secondsLeft / 10, seconds: secondsLeft, height: 10),
+        const SizedBox(height: 10),
+        answerBox,
+      ]);
+}
+
+/// Nobody got it (every team guessed wrong, or full time): the answers.
+class TeaserReveal extends StatelessWidget {
+  const TeaserReveal({super.key, required this.question, required this.answers, this.headline = 'NOBODY GOT IT'});
+  final String question;
+  final List<String> answers;
+  final String headline;
+
+  @override
+  Widget build(BuildContext context) => Column(mainAxisSize: MainAxisSize.min, children: [
+        Text(headline, style: AppText.headline(34, color: Palette.gold)),
+        const SizedBox(height: 10),
+        TeaserPrompt(question: question, compact: true),
+        const SizedBox(height: 14),
+        Text(answers.length == 1 ? 'THE ANSWER' : 'ANY OF THESE', style: AppText.label(14)),
+        const SizedBox(height: 6),
+        for (final a in answers) Text(a.toUpperCase(), style: AppText.headline(28)),
+      ]);
+}
+
+/// A joined phone: its own buzzer for the teaser.
+class TeaserPhoneBuzzer extends StatelessWidget {
+  const TeaserPhoneBuzzer({super.key, required this.team, required this.colorIndex, this.onBuzz});
+  final String team;
+  final int colorIndex;
+  final VoidCallback? onBuzz;
+
+  @override
+  Widget build(BuildContext context) => Column(mainAxisSize: MainAxisSize.min, children: [
+        Text(team.toUpperCase(), style: AppText.label(15, color: Palette.team(colorIndex))),
+        const SizedBox(height: 8),
+        BigButton(label: 'I know it!', icon: Icons.front_hand, height: 96, color: Palette.team(colorIndex),
+            textColor: Palette.onTeam(colorIndex), onPressed: onBuzz),
+      ]);
 }
