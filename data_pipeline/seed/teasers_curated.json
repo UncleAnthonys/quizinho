@@ -4,10 +4,22 @@
     {
       "q": "Played in El Clásico, the Manchester derby AND the North London derby",
       "eras": 30,
-      "answers": ["emmanuel-adebayor", "alexis-sanchez", "nicolas-anelka", "gabriel-jesus"],
-      "names": ["Emmanuel Adebayor", "Alexis Sánchez", "Nicolas Anelka", "Gabriel Jesus"],
-      "ruled_out": {"sylvinho": "Clásico (Barça) and North London derby (Arsenal) yes, but never played a Manchester derby: no United game in his City season, 2009-10 https://aws.fbref.com/en/players/b46e497d/matchlogs/2009-2010/Sylvinho-Match-Logs"},
-      "difficulty": 2,
+      "answers": [
+        "emmanuel-adebayor",
+        "alexis-sanchez",
+        "nicolas-anelka",
+        "gabriel-jesus"
+      ],
+      "names": [
+        "Emmanuel Adebayor",
+        "Alexis Sánchez",
+        "Nicolas Anelka",
+        "Gabriel Jesus"
+      ],
+      "ruled_out": {
+        "sylvinho": "Clásico (Barça) and North London derby (Arsenal) yes, but never played a Manchester derby: no United game in his City season, 2009-10 https://aws.fbref.com/en/players/b46e497d/matchlogs/2009-2010/Sylvinho-Match-Logs"
+      },
+      "difficulty": 3,
       "proof": {
         "emmanuel-adebayor": [
           "El Clásico: Barcelona 1-1 Real Madrid, 3 May 2011 (36 min) https://fbref.com/en/matchs/af5c5e5a/",
@@ -34,10 +46,20 @@
     {
       "q": "Played in El Clásico, the Manchester derby AND the Merseyside derby",
       "eras": 6,
-      "answers": ["nicolas-anelka", "michael-owen", "steve-mcmanaman"],
-      "names": ["Nicolas Anelka", "Michael Owen", "Steve McManaman"],
-      "unconfirmed": ["mark-hughes"],
-      "difficulty": 2,
+      "answers": [
+        "nicolas-anelka",
+        "michael-owen",
+        "steve-mcmanaman"
+      ],
+      "names": [
+        "Nicolas Anelka",
+        "Michael Owen",
+        "Steve McManaman"
+      ],
+      "unconfirmed": [
+        "mark-hughes"
+      ],
+      "difficulty": 3,
       "proof": {
         "nicolas-anelka": [
           "El Clásico: Barcelona 2-2 Real Madrid, 13 Oct 1999 (started) https://worldfootball.net/report/primera-division-1999-2000-fc-barcelona-real-madrid",
@@ -59,9 +81,13 @@
     {
       "q": "Played in the Merseyside derby, the Old Firm, the North London derby AND the Manchester derby",
       "eras": 12,
-      "answers": ["kolo-toure"],
-      "names": ["Kolo Touré"],
-      "difficulty": 2,
+      "answers": [
+        "kolo-toure"
+      ],
+      "names": [
+        "Kolo Touré"
+      ],
+      "difficulty": 3,
       "proof": {
         "kolo-toure": [
           "Merseyside derby: 1 appearance v Everton, 90 min (Liverpool, 2013-14) https://lfchistory.net/players/1259",
@@ -74,9 +100,25 @@
     {
       "q": "Played in El Clásico, the Milan derby AND the Manchester derby",
       "eras": 30,
-      "answers": ["zlatan-ibrahimovic", "robinho", "alexis-sanchez", "laurent-blanc"],
-      "names": ["Zlatan Ibrahimović", "Robinho", "Alexis Sánchez", "Laurent Blanc"],
-      "difficulty": 2,
+      "answers": [
+        "zlatan-ibrahimovic",
+        "robinho",
+        "alexis-sanchez",
+        "laurent-blanc",
+        "david-beckham",
+        "mateo-kovacic",
+        "joao-cancelo"
+      ],
+      "names": [
+        "Zlatan Ibrahimović",
+        "Robinho",
+        "Alexis Sánchez",
+        "Laurent Blanc",
+        "David Beckham",
+        "Mateo Kovačić",
+        "João Cancelo"
+      ],
+      "difficulty": 3,
       "proof": {
         "zlatan-ibrahimovic": [
           "El Clásico: Barcelona 1-0 Real Madrid, 29 Nov 2009 (sub, scored) https://www.aljazeera.com/sports/2009/11/29/barca-edge-el-clasico",
@@ -97,6 +139,297 @@
           "El Clásico: Real Madrid 2-0 Barcelona, 7 Dec 1996 (90 min) https://aws.fbref.com/en/players/51a9b34c/matchlogs/1996-1997/Laurent-Blanc-Match-Logs",
           "Milan derby: Inter 1-2 Milan, 23 Oct 1999 (90 min) https://aws.fbref.com/fr/joueurs/51a9b34c/matchs/1999-2000/c11/summary/Journaux-de-match-Laurent-Blanc",
           "Manchester derby: Man City 3-1 Man United, 9 Nov 2002 (started) https://bbcbreakingnews.pages.dev/sport2/hi/football/eng_prem/2388563.stm"
+        ],
+        "david-beckham": [
+          "El Clásico: Barcelona 1-2 Real Madrid, 6 Dec 2003 (90 min) https://aws.fbref.com/en/players/53539318/matchlogs/2003-2004/David-Beckham-Match-Logs",
+          "Milan derby: Milan 1-2 Inter, 15 Feb 2009 (56 min) https://aws.fbref.com/en/players/53539318/matchlogs/2008-2009/David-Beckham-Match-Logs",
+          "Manchester derby: Man United 1-1 Man City, 9 Feb 2003 (90 min) https://aws.fbref.com/en/players/53539318/matchlogs/2002-2003/c9/summary/David-Beckham-Match-Logs"
+        ],
+        "mateo-kovacic": [
+          "El Clásico: Barcelona 1-1 Real Madrid, 3 Dec 2016 (85 min) https://aws.fbref.com/en/players/79c0821a/matchlogs/2016-2017/Mateo-Kovacic-Match-Logs",
+          "Milan derby: Milan 1-1 Inter, 23 Nov 2014 (89 min) https://aws.fbref.com/en/players/79c0821a/matchlogs/2014-2015/Mateo-Kovacic-Match-Logs",
+          "Manchester derby: Man United 0-3 Man City, 29 Oct 2023 (40 min) https://aws.fbref.com/en/players/79c0821a/matchlogs/2023-2024/Mateo-Kovacic-Match-Logs"
+        ],
+        "joao-cancelo": [
+          "El Clásico: Barcelona 1-2 Real Madrid, 28 Oct 2023 (76 min) https://aws.fbref.com/en/players/bd6351cd/matchlogs/2023-2024/Joao-Cancelo-Match-Logs",
+          "Milan derby: Inter 3-2 Milan, 15 Oct 2017 (18 min) https://fbref.com/en/matches/34f104ea/",
+          "Manchester derby: Man United 0-0 Man City, 12 Dec 2020 (90 min) https://aws.fbref.com/en/players/bd6351cd/matchlogs/2020-2021/Joao-Cancelo-Match-Logs"
+        ]
+      },
+      "ruled_out": {
+        "brahim-diaz": "Real Madrid and Milan, but no senior Manchester derby: his only one was an under-23 game (18 Nov 2017) https://aws.fbref.com/en/players/407feb71/matchlogs/2017-2018/Brahim-Diaz-Match-Logs"
+      }
+    },
+    {
+      "q": "Played in a North London derby, a Manchester derby AND a Merseyside derby",
+      "eras": 31,
+      "difficulty": 3,
+      "answers": [
+        "kolo-toure",
+        "nicolas-anelka",
+        "raheem-sterling",
+        "louis-saha",
+        "brian-kidd",
+        "paul-walsh"
+      ],
+      "names": [
+        "Kolo Touré",
+        "Nicolas Anelka",
+        "Raheem Sterling",
+        "Louis Saha",
+        "Brian Kidd",
+        "Paul Walsh"
+      ],
+      "ruled_out": {
+        "richard-wright": "Arsenal and Everton, but never played a first-team game for Man City (2012-16)"
+      },
+      "proof": {
+        "kolo-toure": [
+          "North London derby: Tottenham 2-2 Arsenal, 25 Apr 2004 https://fbref.com/en/matches/84bffb37/",
+          "Manchester derby: Man City 0-1 Man United, 17 Apr 2010 https://aws.fbref.com/en/matches/6f818c39/",
+          "Merseyside derby: 1 game v Everton for Liverpool https://lfchistory.net/players/1259"
+        ],
+        "nicolas-anelka": [
+          "North London derby: Arsenal 0-0 Tottenham, 14 Nov 1998 https://aws.fbref.com/en/players/931ed5e9/matchlogs/1998-1999/Nicolas-Anelka-Match-Logs",
+          "Manchester derby: Man City 3-1 Man United, 9 Nov 2002 (scored) https://www.rte.ie/sport/soccer/2002/1109/168427-manchester",
+          "Merseyside derby: Liverpool 1-1 Everton, 23 Feb 2002 https://aws.fbref.com/en/matches/eb996343/"
+        ],
+        "raheem-sterling": [
+          "North London derby: Arsenal 2-1 Tottenham, 15 Jan 2025 https://aws.fbref.com/en/players/b400bde0/matchlogs/2024-2025/misc/Raheem-Sterling-Match-Logs",
+          "Manchester derby: Man United 1-2 Man City, 10 Sep 2016 https://fbref.com/en/matches/a5978934/",
+          "Merseyside derby: Liverpool 1-1 Everton, 27 Sep 2014 https://aws.fbref.com/en/players/b400bde0/matchlogs/2014-2015/Raheem-Sterling-Match-Logs"
+        ],
+        "louis-saha": [
+          "North London derby: Arsenal 5-2 Tottenham, 26 Feb 2012 https://fbref.com/en/matches/30fbb04f/",
+          "Manchester derby: Man United 3-1 Man City, 9 Dec 2006 https://aws.fbref.com/en/players/7106e4fe/matchlogs/2006-2007/Louis-Saha-Match-Logs",
+          "Merseyside derby: Liverpool 1-0 Everton, 6 Feb 2010 https://aws.fbref.com/en/players/7106e4fe/matchlogs/2009-2010/Louis-Saha-Match-Logs"
+        ],
+        "brian-kidd": [
+          "North London derby: Arsenal 1-0 Tottenham, 26 Apr 1975 (scored) https://en.wikipedia.org/wiki/1974%E2%80%9375_Arsenal_F.C._season",
+          "Manchester derby: Man City 3-3 Man United, 6 Nov 1971 (scored) https://www.11v11.com/matches/manchester-city-v-manchester-united-06-november-1971-81339/",
+          "Merseyside derby: Liverpool 2-2 Everton, 20 Oct 1979 (scored) https://lfchistory.net/opposition/players/6250"
+        ],
+        "paul-walsh": [
+          "North London derby: Tottenham v Arsenal, 18 Oct 1989 (scored) https://www.11v11.com/matches/tottenham-hotspur-v-arsenal-18-october-1989-89448/",
+          "Manchester derby: Man United 5-0 Man City, 10 Nov 1994 https://aws.fbref.com/en/matches/45c9f128/",
+          "Merseyside derby: 4 games v Everton for Liverpool https://www.lfchistory.net/Players/Player/Profile/436"
+        ]
+      }
+    },
+    {
+      "q": "Played in a North London derby, a Manchester derby AND a Milan derby",
+      "eras": 30,
+      "difficulty": 3,
+      "answers": [
+        "alexis-sanchez",
+        "henrikh-mkhitaryan",
+        "patrick-vieira",
+        "christian-eriksen",
+        "kyle-walker",
+        "mikael-silvestre"
+      ],
+      "names": [
+        "Alexis Sánchez",
+        "Henrikh Mkhitaryan",
+        "Patrick Vieira",
+        "Christian Eriksen",
+        "Kyle Walker",
+        "Mikaël Silvestre"
+      ],
+      "proof": {
+        "alexis-sanchez": [
+          "North London derby: Arsenal 2-0 Tottenham, 18 Nov 2017 (scored) https://fourfourtwo.com/news/arsenal-2-tottenham-0-ozil-and-sanchez-come-trumps-wenger",
+          "Manchester derby: Man City 2-3 Man United, 7 Apr 2018 https://fbref.com/en/matches/50a03a01/",
+          "Milan derby: Inter 4-2 Milan, 9 Feb 2020 https://fbref.com/en/matches/b175fd39/"
+        ],
+        "henrikh-mkhitaryan": [
+          "North London derby: Arsenal 4-2 Tottenham, 2 Dec 2018 https://aws.fbref.com/en/players/dd0daf32/matchlogs/2018-2019/Henrikh-Mkhitaryan-Match-Logs",
+          "Manchester derby: Man United 1-2 Man City, 10 Sep 2016 https://fbref.com/en/matches/a5978934/",
+          "Milan derby: Milan 1-1 Inter, 2 Feb 2025 https://aws.fbref.com/en/matches/c14ebb74/"
+        ],
+        "patrick-vieira": [
+          "North London derby: Tottenham 2-2 Arsenal, 25 Apr 2004 (scored) https://fbref.com/en/matches/84bffb37/",
+          "Manchester derby: Man City 0-1 Man United, 17 Apr 2010 https://aws.fbref.com/en/matches/6f818c39/",
+          "Milan derby: Milan 3-4 Inter, 28 Oct 2006 https://aws.fbref.com/en/players/f90f1086/matchlogs/2006-2007/Patrick-Vieira-Match-Logs"
+        ],
+        "christian-eriksen": [
+          "North London derby: Arsenal 2-0 Tottenham, 18 Nov 2017 https://aws.fbref.com/en/matches/ae345878/",
+          "Manchester derby: Man City 6-3 Man United, 2 Oct 2022 https://aws.fbref.com/en/players/980522ec/matchlogs/2022-2023/Christian-Eriksen-Match-Logs",
+          "Milan derby: Inter 2-1 Milan, 26 Jan 2021, Coppa Italia (scored) https://www.inter.it/en/news/2021-01-26-eriksen-free-kick-inter-milan-coppa-italia"
+        ],
+        "kyle-walker": [
+          "North London derby: Arsenal 5-2 Tottenham, 26 Feb 2012 https://fbref.com/en/matches/30fbb04f/",
+          "Manchester derby: Man City 1-2 Man United, 7 Dec 2019 https://aws.fbref.com/en/players/86dd77d1/matchlogs/2019-2020/Kyle-Walker-Match-Logs",
+          "Milan derby: Milan 1-1 Inter, 2 Feb 2025 https://aws.fbref.com/en/matches/c14ebb74/"
+        ],
+        "mikael-silvestre": [
+          "North London derby: Arsenal 4-4 Tottenham, 29 Oct 2008 https://fbref.com/en/matches/19e3c095/",
+          "Manchester derby: Man City 3-1 Man United, 9 Nov 2002 https://bbcbreakingnews.pages.dev/sport2/hi/football/eng_prem/2388563.stm",
+          "Milan derby: Inter 2-2 Milan, 13 Mar 1999 https://aws.fbref.com/en/players/4dde97ea/matchlogs/1998-1999/Mikael-Silvestre-Match-Logs"
+        ]
+      }
+    },
+    {
+      "q": "Played for BOTH sides of the Milan derby AND both sides of El Clásico",
+      "eras": 6,
+      "difficulty": 3,
+      "answers": [
+        "ronaldo"
+      ],
+      "names": [
+        "Ronaldo"
+      ],
+      "proof": {
+        "ronaldo": [
+          "El Clásico for Barcelona: Barcelona 1-0 Real Madrid, 10 May 1997 (scored) https://aws.fbref.com/en/players/57feb553/matchlogs/1996-1997/Ronaldo-Match-Logs",
+          "El Clásico for Real Madrid: Real Madrid 1-1 Barcelona, 19 Apr 2003 (scored) https://aws.fbref.com/en/players/57feb553/matchlogs/2002-2003/Ronaldo-Match-Logs",
+          "Milan derby for Inter: Milan 2-2 Inter, 8 Nov 1998 (scored) https://aws.fbref.com/en/players/57feb553/matchlogs/1998-1999/Ronaldo-Match-Logs",
+          "Milan derby for Milan: Inter 2-1 Milan, 11 Mar 2007 (scored) https://aws.fbref.com/en/players/57feb553/matchlogs/2006-2007/Ronaldo-Match-Logs"
+        ]
+      }
+    },
+    {
+      "q": "Scored in a Manchester derby AND a Merseyside derby in the same calendar year",
+      "eras": 2,
+      "difficulty": 4,
+      "answers": [
+        "andrei-kanchelskis"
+      ],
+      "names": [
+        "Andrei Kanchelskis"
+      ],
+      "ruled_out": {
+        "nicolas-anelka": "Scored in the Manchester derby (Nov 2002) but never in a Merseyside derby"
+      },
+      "proof": {
+        "andrei-kanchelskis": [
+          "Manchester derby: Man City 0-3 Man United, 11 Feb 1995 (scored) https://www.11v11.com/matches/manchester-city-v-manchester-united-11-february-1995-22007/",
+          "Merseyside derby: Liverpool 1-2 Everton, 18 Nov 1995 (scored twice) https://www.11v11.com/matches/liverpool-v-everton-18-november-1995-22298/"
+        ]
+      }
+    },
+    {
+      "q": "Played under Arsène Wenger, Pep Guardiola AND José Mourinho",
+      "eras": 12,
+      "difficulty": 3,
+      "answers": [
+        "cesc-fabregas",
+        "alexis-sanchez"
+      ],
+      "names": [
+        "Cesc Fàbregas",
+        "Alexis Sánchez"
+      ],
+      "proof": {
+        "cesc-fabregas": [
+          "Wenger: Arsenal 2003-11",
+          "Guardiola: Barcelona 2011-12",
+          "Mourinho: Chelsea 2014-15"
+        ],
+        "alexis-sanchez": [
+          "Guardiola: Barcelona 2011-12",
+          "Wenger: Arsenal 2014-18",
+          "Mourinho: Man United 2018 (Jan-Dec)"
+        ]
+      }
+    },
+    {
+      "q": "Played under José Mourinho, Pep Guardiola AND Carlo Ancelotti",
+      "eras": 12,
+      "difficulty": 3,
+      "answers": [
+        "zlatan-ibrahimovic",
+        "arjen-robben",
+        "xabi-alonso"
+      ],
+      "names": [
+        "Zlatan Ibrahimović",
+        "Arjen Robben",
+        "Xabi Alonso"
+      ],
+      "unconfirmed": [
+        "brahim-diaz"
+      ],
+      "ruled_out": {
+        "deco": "Mourinho (Porto) and Ancelotti (Chelsea), but left Barcelona the summer Guardiola arrived",
+        "david-alaba": "Guardiola and Ancelotti, but left Real Madrid before Mourinho returned in 2026"
+      },
+      "proof": {
+        "zlatan-ibrahimovic": [
+          "Mourinho: Inter 2008-09, Man United 2016-18",
+          "Guardiola: Barcelona 2009-10",
+          "Ancelotti: PSG 2012-13"
+        ],
+        "arjen-robben": [
+          "Mourinho: Chelsea 2004-07",
+          "Guardiola: Bayern 2013-16",
+          "Ancelotti: Bayern 2016-17"
+        ],
+        "xabi-alonso": [
+          "Mourinho: Real Madrid 2010-13",
+          "Ancelotti: Real Madrid 2013-14",
+          "Guardiola: Bayern 2014-16"
+        ]
+      }
+    },
+    {
+      "q": "Played under José Mourinho, Pep Guardiola AND Louis van Gaal",
+      "eras": 28,
+      "difficulty": 3,
+      "answers": [
+        "arjen-robben",
+        "bastian-schweinsteiger",
+        "nathan-ake"
+      ],
+      "names": [
+        "Arjen Robben",
+        "Bastian Schweinsteiger",
+        "Nathan Aké"
+      ],
+      "ruled_out": {
+        "victor-valdes": "Van Gaal and Guardiola at Barcelona, but left Man United before Mourinho arrived",
+        "zlatan-ibrahimovic": "Mourinho and Guardiola, but joined Man United after Van Gaal left"
+      },
+      "proof": {
+        "arjen-robben": [
+          "Mourinho: Chelsea 2004-07",
+          "Van Gaal: Bayern 2009-11",
+          "Guardiola: Bayern 2013-16"
+        ],
+        "bastian-schweinsteiger": [
+          "Van Gaal: Bayern 2009-11 and Man United 2015-16",
+          "Guardiola: Bayern 2013-15",
+          "Mourinho: Man United, first game 30 Nov 2016 v West Ham (EFL Cup) https://www.irishtimes.com/sport/soccer/english-soccer/manchester-united-to-face-hull-after-overwhelming-west-ham-1.2888447"
+        ],
+        "nathan-ake": [
+          "Mourinho: Chelsea 2013-14, one first-team game https://www.fourfourtwo.com/us/news/ake-was-broken-after-mourinho-dropped-him-chelseas-first-team-squad",
+          "Guardiola: Man City 2020-",
+          "Van Gaal: Netherlands, 2022 World Cup"
+        ]
+      }
+    },
+    {
+      "q": "Played under Arsène Wenger, José Mourinho AND Antonio Conte",
+      "eras": 28,
+      "difficulty": 3,
+      "answers": [
+        "cesc-fabregas",
+        "alexis-sanchez"
+      ],
+      "names": [
+        "Cesc Fàbregas",
+        "Alexis Sánchez"
+      ],
+      "proof": {
+        "cesc-fabregas": [
+          "Wenger: Arsenal 2003-11",
+          "Mourinho: Chelsea 2014-15",
+          "Conte: Chelsea 2016-18"
+        ],
+        "alexis-sanchez": [
+          "Wenger: Arsenal 2014-18",
+          "Mourinho: Man United 2018",
+          "Conte: Inter 2019-21"
         ]
       }
     }
