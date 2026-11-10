@@ -385,7 +385,7 @@ void main() {
             question: teaserQ,
             fraction: 0.55,
             seconds: 49,
-            bottom: TeaserBuzzed(team: 'Home', colorIndex: 0, secondsLeft: 6, answerBox: _picker())));
+            bottom: TeaserBuzzed(team: 'Home', colorIndex: 0, secondsLeft: 11, answerBox: _picker())));
     await shot(
         tester,
         'teaser_phone',

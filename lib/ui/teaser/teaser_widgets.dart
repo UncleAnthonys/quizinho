@@ -7,7 +7,7 @@ import '../widgets/common.dart';
 /// screen at half-time with a 90-second clock (5 points), then kept open
 /// between games (never during one) behind [TeaserChip] for 3 points, until
 /// someone gets it, every team has had its one guess, or full time. A team
-/// buzzes, then has 10 seconds to answer.
+/// buzzes, then has 15 seconds to answer.
 
 /// The question itself, as a card.
 class TeaserPrompt extends StatelessWidget {
@@ -154,7 +154,7 @@ class TeaserHalfTime extends StatelessWidget {
       );
 }
 
-/// A team has buzzed: 10 seconds to give a name.
+/// A team has buzzed: 15 seconds to give a name.
 class TeaserBuzzed extends StatelessWidget {
   const TeaserBuzzed({super.key, required this.team, required this.colorIndex, required this.secondsLeft, required this.answerBox});
   final String team;
@@ -166,7 +166,7 @@ class TeaserBuzzed extends StatelessWidget {
   Widget build(BuildContext context) => Column(mainAxisSize: MainAxisSize.min, children: [
         TeamChip(name: '$team buzzed', colorIndex: colorIndex, size: 20),
         const SizedBox(height: 10),
-        TimerBar(fraction: secondsLeft / 10, seconds: secondsLeft, height: 10),
+        TimerBar(fraction: secondsLeft / 15, seconds: secondsLeft, height: 10),
         const SizedBox(height: 10),
         answerBox,
       ]);
