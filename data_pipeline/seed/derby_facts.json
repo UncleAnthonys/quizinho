@@ -82,13 +82,37 @@
     }
   },
   "difficulty": {
-    "mersey+milan+nld": 3
+    "mersey+milan+nld": 3,
+    "milan+nld+oldfirm": 3
   },
   "facts": {
+    "aaron-ramsey": {
+      "nld": {
+        "played": true,
+        "year": 2019,
+        "proof": "Tottenham 1-1 Arsenal, 2 Mar 2019 (scored) https://www.caughtoffside.com/2019/03/02/man-owns-wembley-these-arsenal-fans-react-to-aaron-ramsey-scoring-against-tottenham/amp/"
+      },
+      "oldfirm": {
+        "played": true,
+        "year": 2022,
+        "proof": "Rangers v Celtic, 3 Apr 2022 (scored) https://www.caughtoffside.com/2022/04/03/video-aaron-ramsey-scores-his-first-old-firm-derby-goal-in-massive-title-match/"
+      },
+      "ditalia": {
+        "played": true,
+        "year": 2020,
+        "proof": "Juventus 2-0 Inter, 8 Mar 2020, 90 min https://aws.fbref.com/en/players/ef619b0b/matchlogs/2019-2020/misc/Aaron-Ramsey-Match-Logs"
+      }
+    },
     "achraf-hakimi": {
       "clasico": {
         "played": false,
         "why": "No Barcelona game in his Real Madrid season, 2017-18 https://aws.fbref.com/en/players/e42d61c7/matchlogs/2017-2018/Achraf-Hakimi-Match-Logs"
+      }
+    },
+    "albert-gu-mundsson-1923": {
+      "nld": {
+        "played": false,
+        "why": "His two Arsenal games were First Division in Oct 1946, while Tottenham were in the Second Division https://en.wikipedia.org/wiki/Albert_Gu%C3%B0mundsson_(footballer,_born_1923)"
       }
     },
     "alexis-sanchez": {
@@ -111,6 +135,16 @@
         "played": true,
         "year": 2020,
         "proof": "Inter 4-2 Milan, 9 Feb 2020 (71 min) https://fbref.com/en/matches/b175fd39/"
+      },
+      "northwest": {
+        "played": true,
+        "year": 2018,
+        "proof": "Man United 2-1 Liverpool, 10 Mar 2018, 89 min https://aws.fbref.com/en/players/2c0f8e9e/matchlogs/2017-2018/Alexis-Sanchez-Match-Logs"
+      },
+      "classique": {
+        "played": true,
+        "year": 2022,
+        "proof": "PSG 1-0 Marseille, 16 Oct 2022, 78 min https://aws.fbref.com/en/players/2c0f8e9e/matchlogs/2022-2023/Alexis-Sanchez-Match-Logs"
       }
     },
     "andrei-kanchelskis": {
@@ -202,6 +236,15 @@
         "played": true,
         "year": 2002,
         "proof": "Tottenham 1-1 Arsenal, 15 Dec 2002 (scored) https://spursodyssey.com/0203/ar151202.html"
+      },
+      "northwest": {
+        "played": false,
+        "why": "Man United aren't among his Liverpool opponents https://www.lfchistory.net/Players/Player/Profile/451"
+      },
+      "klassiker": {
+        "played": true,
+        "year": 1995,
+        "proof": "Dortmund 3-1 Bayern, 1 Oct 1995, 90 min https://aws.fbref.com/en/matches/1f941879/Der-Klassiker-Dortmund-Bayern-Munich-October-1-1995-Bundesliga"
       }
     },
     "craig-bellamy": {
@@ -334,6 +377,11 @@
         "played": true,
         "year": 2009,
         "proof": "Man United 1-4 Liverpool, 14 Mar 2009 (scored) https://aws.fbref.com/en/players/bdf7b97d/matchlogs/2008-2009/Fernando-Torres-Match-Logs"
+      },
+      "mersey": {
+        "played": true,
+        "year": 2008,
+        "proof": "Everton 0-2 Liverpool, 27 Sep 2008 (2 goals) https://www.irishexaminer.com/sport/soccer/arid-30379370.html"
       }
     },
     "gabriel-jesus": {
@@ -395,6 +443,11 @@
         "played": true,
         "year": 2022,
         "proof": "Juventus 2-0 Inter, 6 Nov 2022, 80 min https://aws.fbref.com/en/players/dd0daf32/matchlogs/2022-2023/misc/Henrikh-Mkhitaryan-Match-Logs"
+      },
+      "northwest": {
+        "played": true,
+        "year": 2017,
+        "proof": "Man United 1-1 Liverpool, 15 Jan 2017, 90 min https://aws.fbref.com/en/players/dd0daf32/matchlogs/2016-2017/Henrikh-Mkhitaryan-Match-Logs"
       }
     },
     "ivan-perisic": {
@@ -510,6 +563,11 @@
         "played": true,
         "year": 2008,
         "proof": "Arsenal 1-1 Tottenham, League Cup semi-final, 9 Jan 2008 (on 77') https://spursodyssey.com/0708/ar090108.html"
+      },
+      "klassiker": {
+        "played": true,
+        "year": 2009,
+        "proof": "Bayern 3-1 Dortmund, 8 Feb 2009, 90 min https://aws.fbref.com/fr/matchs/17352854/Der-Klassiker-Bayern-Munich-Dortmund-8-Fevrier-2009-Bundesliga"
       }
     },
     "kolo-toure": {
@@ -725,6 +783,11 @@
         "played": true,
         "year": 2003,
         "proof": "Everton 0-3 Liverpool, 30 Aug 2003 (90 min, 2 goals) https://fbref.com/en/matches/b46993cc/"
+      },
+      "madrid": {
+        "played": true,
+        "year": 2005,
+        "proof": "Atlético 0-3 Real Madrid, 9 Jan 2005 (on for Zidane) https://www.soccer-spain.com/ssdocs/reports2004/div1/day18/report5.html"
       }
     },
     "mikael-silvestre": {
@@ -770,6 +833,44 @@
         "played": true,
         "year": 2002,
         "proof": "Liverpool 1-1 Everton, 23 Feb 2002 (90 min) https://aws.fbref.com/en/matches/eb996343/"
+      },
+      "northwest": {
+        "played": true,
+        "year": 2002,
+        "proof": "Man United 0-1 Liverpool, 22 Jan 2002 (on for Owen, 77') https://www.11v11.com/matches/manchester-united-v-liverpool-22-january-2002-11118/"
+      },
+      "ditalia": {
+        "played": false,
+        "why": "On the bench for Inter 1-2 Juventus, 30 Mar 2013, Juventus's only Inter game in his spell https://www.espn.nl/voetbal/lineups/_/wedstrijdId/351792"
+      },
+      "classique": {
+        "played": true,
+        "year": 2000,
+        "proof": "PSG 2-0 Marseille, 13 Oct 2000 https://en.psg.fr/teams/club/content/classique-act-100-34-2000-to-2011-olympique-de-marseille-paris-saint-germain-ligue-1-2020-2021"
+      },
+      "madrid": {
+        "played": false,
+        "why": "Injured for the Oct 1999 derby and not in the side for Atlético 1-1 Real, 18 Mar 2000, the only two in his Real season https://www.soccer-spain.com/ssdocs/reports1999/day10/report2.html https://aws.fbref.com/en/matches/79ab1416/El-Derbi-Madrileno-Atletico-Madrid-Real-Madrid-March-18-2000-La-Liga"
+      }
+    },
+    "nuri-sahin": {
+      "mersey": {
+        "played": true,
+        "year": 2012,
+        "proof": "Everton 2-2 Liverpool, 28 Oct 2012, 45 min https://aws.fbref.com/fr/joueurs/f4081572/matchs/2012-2013/Journaux-de-match-Nuri-Sahin"
+      },
+      "klassiker": {
+        "played": true,
+        "year": 2013,
+        "proof": "Dortmund 1-1 Bayern, 4 May 2013, 90 min https://aws.fbref.com/fr/joueurs/f4081572/matchs/2012-2013/Journaux-de-match-Nuri-Sahin"
+      },
+      "northwest": {
+        "played": false,
+        "why": "No Man United game in his half-season at Liverpool, 2012-13 https://aws.fbref.com/fr/joueurs/f4081572/matchs/2012-2013/Journaux-de-match-Nuri-Sahin"
+      },
+      "madrid": {
+        "played": false,
+        "why": "Unused sub for Real 4-1 Atlético, 26 Nov 2011, and not in the squad for Atlético 1-4 Real, 11 Apr 2012 https://espndeportes.espn.com/futbol/partido/_/juegoId/323904/atletico-madrid-real-madrid https://www.espn.com.br/futebol/partida/_/jogoId/323740/real-madrid-atletico-madrid"
       }
     },
     "ousmane-dembele": {
@@ -854,6 +955,11 @@
       "mersey": {
         "played": false,
         "why": "Three games on loan at Everton (Wigan, Chelsea, Sporting) and none was the Feb 2010 derby https://www.11v11.com/players/philippe-senderos-20441/team/everton/"
+      },
+      "oldfirm": {
+        "played": true,
+        "year": 2016,
+        "proof": "Celtic 5-1 Rangers, 10 Sep 2016 (debut, sent off) https://www.skysports.com/football/celtic-vs-rangers/report/357046"
       }
     },
     "pierre-emerick-aubameyang": {
@@ -871,6 +977,11 @@
         "played": true,
         "year": 2023,
         "proof": "PSG 4-0 Marseille, 24 Sep 2023, 74 min for Marseille https://www.fbref.com/en/matches/405fa974/"
+      },
+      "nld": {
+        "played": true,
+        "year": 2018,
+        "proof": "Arsenal 4-2 Tottenham, 2 Dec 2018, 90 min https://aws.fbref.com/en/players/d5dd5f1f/matchlogs/2018-2019/Pierre-Emerick-Aubameyang-Match-Logs"
       }
     },
     "raheem-sterling": {
@@ -910,6 +1021,15 @@
       "milan": {
         "played": false,
         "why": "Left Inter for Leeds in Dec 2000, before either 2000-01 derby (not in the squad on 7 Jan 2001) https://www.tuttofotosport.it/2026/06/01/milan-inter-2000-2001-2-2/"
+      },
+      "oldfirm": {
+        "played": true,
+        "year": 2010,
+        "proof": "Rangers 1-0 Celtic, 28 Feb 2010, started https://www.irishexaminer.com/sport/soccer/arid-30448056.html"
+      },
+      "ditalia": {
+        "played": false,
+        "why": "Not in Inter's squad for Inter 2-2 Juventus, 3 Dec 2000, the only Juventus game before he left for Leeds https://www.inter.it/en/match_center/2597"
       }
     },
     "robinho": {
@@ -990,6 +1110,11 @@
         "played": true,
         "year": 2014,
         "proof": "Liverpool 1-1 Everton, 27 Sep 2014 (sub) https://aws.fbref.com/en/players/06420c93/matchlogs/2014-2015/c9/summary/Samuel-Etoo-Match-Logs"
+      },
+      "milan": {
+        "played": true,
+        "year": 2009,
+        "proof": "Milan 0-4 Inter, 29 Aug 2009, started https://www.inter.it/en/match_center/3777"
       }
     },
     "sergio-aguero": {
@@ -1024,6 +1149,11 @@
         "played": true,
         "year": 1999,
         "proof": "Liverpool 3-2 Everton, 3 Apr 1999 (90 min) https://fbref.com/en/matchs/2a42b41e/"
+      },
+      "madrid": {
+        "played": true,
+        "year": 2000,
+        "proof": "Atlético 1-1 Real Madrid, 18 Mar 2000, 8 min https://aws.fbref.com/en/matches/79ab1416/El-Derbi-Madrileno-Atletico-Madrid-Real-Madrid-March-18-2000-La-Liga"
       }
     },
     "sylvinho": {
@@ -1047,6 +1177,11 @@
         "played": true,
         "year": 2006,
         "proof": "Everton 3-0 Liverpool, 9 Sep 2006 https://aws.fbref.com/en/players/dc001a06/matchlogs/2006-2007/Xabi-Alonso-Match-Logs"
+      },
+      "northwest": {
+        "played": true,
+        "year": 2008,
+        "proof": "Liverpool 2-1 Man United, 13 Sep 2008, started https://www.lfchistory.net/SeasonArchive/Game/5117"
       }
     },
     "zlatan-ibrahimovic": {

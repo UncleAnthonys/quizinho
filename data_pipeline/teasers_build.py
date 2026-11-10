@@ -242,19 +242,25 @@ def derby_teasers(players: list[dict], curated: list[dict], shown) -> list[dict]
         if len(side) != len(set(side)) or frozenset(ks) in done:
             continue
         cands = [pid for pid, c in clubs.items() if all(c & set(der[k]["clubs"]) for k in ks)]
-        if not cands or any(k not in facts.get(pid, {}) for pid in cands for k in ks):
+        def settled(pid: str) -> bool:  # all three checked, or one checked "never played"
+            f = facts.get(pid, {})
+            return all(k in f for k in ks) or any(f.get(k, {}).get("played") is False for k in ks)
+        if not cands or not all(settled(pid) for pid in cands):
             continue  # someone on the shortlist isn't checked yet
-        yes = [p for p in cands if all(facts[p][k]["played"] is True for k in ks)]
-        unsure = [p for p in cands if p not in yes and all(facts[p][k]["played"] is not False for k in ks)]
+        yes = [p for p in cands if all(facts[p].get(k, {}).get("played") is True for k in ks)]
+        unsure = [p for p in cands if p not in yes
+                  and all(facts[p].get(k, {}).get("played") is not False for k in ks)]
         if not 1 <= len(yes) <= 6:
             continue
         found.append((ks, yes, unsure, [p for p in cands if p not in yes and p not in unsure]))
     found.sort(key=lambda f: (len(f[1]), f[0]))  # fewest answers first: those are the best
     used: dict[str, int] = {}
     out = []
+    sets = set()
     for ks, yes, unsure, no in found:
-        if any(used.get(p, 0) >= DERBY_CAP for p in yes):
-            continue
+        if any(used.get(p, 0) >= DERBY_CAP for p in yes) or frozenset(yes) in sets:
+            continue  # one player everywhere, or the same answers as another question
+        sets.add(frozenset(yes))
         for p in yes:
             used[p] = used.get(p, 0) + 1
         names = [der[k]["name"] for k in ks]
@@ -270,7 +276,7 @@ def derby_teasers(players: list[dict], curated: list[dict], shown) -> list[dict]
             t["unconfirmed"] = unsure
         if no:
             t["ruled_out"] = {p: "; ".join(f"never played {der[k]['name']}: {facts[p][k]['why']}"
-                                            for k in ks if facts[p][k]["played"] is False) for p in no}
+                                            for k in ks if facts[p].get(k, {}).get("played") is False) for p in no}
         out.append(t)
     return out
 
