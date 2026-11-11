@@ -297,7 +297,9 @@ def trio_teasers(players: list[dict], wiki_stats: dict, shown) -> list[dict]:
     Wikidata and each player's Wikipedia infobox must both have league games at
     all three clubs, and agree on the whole answer set."""
     by_id = {p["id"]: p for p in players}
-    fame = {c[0]: c[3] for c in json.loads((SEED / "clubs.json").read_text())["clubs"]}
+    clubs = json.loads((SEED / "clubs.json").read_text())["clubs"]
+    fame = {c[0]: c[3] for c in clubs}
+    country = {c[0]: c[2] for c in clubs}
     big = {q for q in POOL if fame.get(q, 0) >= 4}
     a = {i: c & big for i, c in careers_a(players, wiki_stats, least=2).items() if len(c & big) >= 2}
     b = careers_b(players, sorted(a))
@@ -315,8 +317,14 @@ def trio_teasers(players: list[dict], wiki_stats: dict, shown) -> list[dict]:
         if s != loose or not 2 <= len(s) <= 6 or sum(fame[q] == 5 for q in t) < 2:
             continue
         known = sum(by_id[i]["fame"] >= 4 for i in s)
-        if known:
-            found.append((t, s, known, sum(fame[q] == 5 for q in t)))
+        if not known:
+            continue
+        # No British club: Expert only, and only with a superstar answer (Figo, Kroos)
+        # or two well-known ones and no Portuguese club (Götze and Perišić).
+        if not any(country.get(q) == "GBR" for q in t):
+            if max(by_id[i]["fame"] for i in s) < 5 and (known < 2 or any(country.get(q) == "POR" for q in t)):
+                continue
+        found.append((t, s, known, sum(fame[q] == 5 for q in t)))
     # Most-known answers first, then the biggest clubs; a player is in two at most.
     found.sort(key=lambda f: (-f[2], -f[3], f[0]))
     out, used, seen = [], {}, set()
@@ -338,9 +346,11 @@ def trio_teasers(players: list[dict], wiki_stats: dict, shown) -> list[dict]:
             "q": f"Played for {names[0]}, {names[1]} AND {names[2]}",
             "answers": ids,
             "names": [shown(i) for i in ids],
-            # A slow burn, so Medium by default; Hard when only one answer is at all well known
+            # A slow burn, so Medium by default; Expert with no British club; Hard when only
+            # one answer is at all well known
             # (Payet for Marseille, West Ham AND Saint-Étienne).
-            "difficulty": 3 if sum(by_id[i]["fame"] >= 3 for i in s) == 1 else 2,
+            "difficulty": 4 if not any(country.get(q) == "GBR" for q in t)
+            else 3 if sum(by_id[i]["fame"] >= 3 for i in s) == 1 else 2,
             "eras": m or 31,
         })
     return out
