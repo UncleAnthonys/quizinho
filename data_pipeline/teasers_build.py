@@ -288,6 +288,8 @@ def derby_teasers(players: list[dict], curated: list[dict], shown) -> list[dict]
 
 
 TRIO_CAP = 2  # club-trio questions per player
+# Trios kept on Expert though the rules below would drop them, reviewed by hand.
+TRIO_KEEP = {frozenset({"Q631", "Q7156", "Q75729"})}  # Inter, Barcelona AND Sporting: Figo
 
 
 def trio_teasers(players: list[dict], wiki_stats: dict, shown) -> list[dict]:
@@ -322,7 +324,8 @@ def trio_teasers(players: list[dict], wiki_stats: dict, shown) -> list[dict]:
         # No British club: Expert only, and only with a superstar answer (Figo, Kroos)
         # or two well-known ones and no Portuguese club (Götze and Perišić).
         if not any(country.get(q) == "GBR" for q in t):
-            if max(by_id[i]["fame"] for i in s) < 5 and (known < 2 or any(country.get(q) == "POR" for q in t)):
+            if frozenset(t) not in TRIO_KEEP and max(by_id[i]["fame"] for i in s) < 5 \
+                    and (known < 2 or any(country.get(q) == "POR" for q in t)):
                 continue
         found.append((t, s, known, sum(fame[q] == 5 for q in t)))
     # Most-known answers first, then the biggest clubs; a player is in two at most.
