@@ -15,6 +15,8 @@ import wave
 
 import numpy as np
 
+import crowd_sounds
+
 SR = 44_100
 OUT = pathlib.Path(__file__).resolve().parent.parent / "assets" / "sounds"
 rng = np.random.default_rng(7)
@@ -82,16 +84,6 @@ def main() -> None:
     save("spin_tick", click(1100, 0.025) + 0.3 * rng.normal(size=int(SR * 0.025)) * np.exp(-t(0.025) * 300), 0.5)
     save("countdown_beep", tone(880, 0.12) * env(int(SR * 0.12), 0.003, 0.04), 0.6)
 
-    # Referee whistle: two pea-whistle blasts
-    def blast(sec):
-        tt = t(sec)
-        trill = 0.55 + 0.45 * np.sign(np.sin(2 * np.pi * 34 * tt))
-        f = 3150 + 60 * np.sin(2 * np.pi * 34 * tt)
-        x = tone(f, sec) * trill + 0.08 * rng.normal(size=len(tt))
-        return x * env(len(tt), 0.01, 0.05)
-
-    save("whistle", np.concatenate([blast(0.22), np.zeros(int(SR * 0.08)), blast(0.55)]), 0.75)
-
     # Buzz-in: bright two-note boop
     save("buzz_in", np.concatenate([tone(660, 0.07, "square"), tone(990, 0.12, "square")]) * env(int(SR * 0.19)), 0.5)
 
@@ -113,23 +105,6 @@ def main() -> None:
     thump = np.sin(2 * np.pi * np.cumsum(np.linspace(90, 30, n)) / SR) * np.exp(-np.linspace(0, 7, n))
     save("boom", boom * 1.6 + thump, 0.95)
 
-    # Crowd cheer: swelling band-passed noise with fluttering "voices"
-    n = int(SR * 2.6)
-    base = bandpass(rng.normal(size=n), 300, 3200)
-    flutter = 0.7 + 0.3 * lowpass(rng.normal(size=n), 6) * 8
-    swell = np.minimum(1, np.linspace(0, 3, n)) * np.minimum(1, np.linspace(4, 0, n))
-    whoo = sum(
-        np.sin(2 * np.pi * np.cumsum(np.full(n, f) + 40 * np.sin(np.linspace(0, 3 + i, n))) / SR) * 0.04
-        for i, f in enumerate([520, 640, 760, 900])
-    )
-    save("cheer", (base * flutter + whoo) * swell, 0.8)
-
-    # Crowd groan: noise with falling filter
-    n = int(SR * 1.6)
-    g = lowpass(rng.normal(size=n), np.linspace(1200, 250, n))
-    vow = tone(np.linspace(240, 150, n), 1.6, "saw") * 0.25
-    save("groan", (g + lowpass(vow, 900)) * env(n, 0.15, 0.6), 0.7)
-
     # Reveal: whoosh into a hit
     n = int(SR * 0.5)
     whoosh = bandpass(rng.normal(size=n), 400, 4000) * np.linspace(0, 1, n) ** 2
@@ -150,15 +125,8 @@ def main() -> None:
     thud = np.sin(2 * np.pi * np.cumsum(np.linspace(160, 60, n)) / SR) * np.exp(-np.linspace(0, 14, n))
     save("kick", crack * 0.9 + thud, 0.9)
 
-    # Crowd "ooooh": swelling then falling vowel-ish band noise with low voices
-    n = int(SR * 1.5)
-    crowd = bandpass(rng.normal(size=n), 250, 1400)
-    voices = sum(
-        tone(np.linspace(f * 0.92, f * 1.08, n) * (1 - 0.12 * np.linspace(0, 1, n) ** 2), 1.5, "saw") * 0.05
-        for f in (190, 230, 280, 330)
-    )
-    shape = np.sin(np.linspace(0, np.pi, n)) ** 1.2
-    save("ooh", (crowd + lowpass(voices, 800)) * shape, 0.75)
+    # The whistle and the crowd: see crowd_sounds.py.
+    crowd_sounds.write_all(OUT)
 
     print("Wrote", sorted(p.name for p in OUT.glob("*.wav")))
 

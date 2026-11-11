@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart' show AssetManifest, rootBundle;
 
 import 'app_settings.dart';
+import 'web_sfx.dart';
 
 enum Sfx {
   tick('tick'),
@@ -67,18 +68,39 @@ class SoundService {
   /// Rapid-fire sounds get more players so overlapping plays don't cut off.
   static const _poolSizes = {Sfx.spinTick: 4, Sfx.tick: 3, Sfx.tickFast: 3};
 
+  /// Browsers: Web Audio, decoded up front (no lag, sounds overlap).
+  WebSfx? _web;
+
   Future<void> init() async {
     // Sounds load first, on their own: nothing about the audio session may
     // ever stop them loading.
-    try {
-      await AudioCache.instance.loadAll([for (final s in Sfx.values) s.asset]);
-      for (final s in Sfx.values) {
-        _pools[s] = [
-          for (var i = 0; i < (_poolSizes[s] ?? 2); i++) AudioPlayer()..setReleaseMode(ReleaseMode.stop),
-        ];
+    if (kIsWeb && WebSfx.supported) {
+      try {
+        final web = WebSfx();
+        await Future.wait([for (final s in Sfx.values) rootBundle.load('assets/${s.asset}').then((b) => web.load(s.file, b))]);
+        _web = web;
+      } catch (e) {
+        debugPrint('Web Audio unavailable, using <audio>: $e');
       }
-    } catch (e) {
-      debugPrint('Sound init failed: $e');
+    }
+    if (_web == null) {
+      try {
+        await AudioCache.instance.loadAll([for (final s in Sfx.values) s.asset]);
+        final mode = kIsWeb ? PlayerMode.mediaPlayer : PlayerMode.lowLatency;
+        for (final s in Sfx.values) {
+          final pool = <AudioPlayer>[];
+          for (var i = 0; i < (_poolSizes[s] ?? 2); i++) {
+            // Each player holds its sound ready, so a play is just "go".
+            final p = AudioPlayer()..setReleaseMode(ReleaseMode.stop);
+            await p.setPlayerMode(mode);
+            await p.setSource(AssetSource(s.asset));
+            pool.add(p);
+          }
+          _pools[s] = pool;
+        }
+      } catch (e) {
+        debugPrint('Sound init failed: $e');
+      }
     }
     try {
       // iPhone: share one record-capable audio session with the mic. The
@@ -164,6 +186,7 @@ class SoundService {
 
   void play(Sfx s, {double volume = 1.0}) {
     if (!_settings.soundOn || _clipPlaying) return;
+    if (_web?.play(s.file, volume) ?? false) return;
     final pool = _pools[s];
     if (pool == null || pool.isEmpty) return;
     final i = (_next[s] ?? 0) % pool.length;
@@ -173,9 +196,10 @@ class SoundService {
 
   Future<void> _play(AudioPlayer p, Sfx s, double volume) async {
     try {
-      await p.stop();
-      // lowLatency is a mobile-only mode; browsers use the standard player.
-      await p.play(AssetSource(s.asset), volume: volume, mode: kIsWeb ? PlayerMode.mediaPlayer : PlayerMode.lowLatency);
+      // The source is already loaded (see init): rewind if it's mid-play, then go.
+      if (p.state == PlayerState.playing) await p.stop();
+      await p.setVolume(volume);
+      await p.resume();
     } catch (e) {
       debugPrint('Sound ${s.file} failed: $e');
     }
