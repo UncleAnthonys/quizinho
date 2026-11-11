@@ -136,6 +136,13 @@
         "proof": "Milan 0-3 Inter, 21 Feb 2021, 82 min https://aws.fbref.com/en/players/e42d61c7/matchlogs/2020-2021/misc/Achraf-Hakimi-Match-Logs"
       }
     },
+    "adrien-rabiot": {
+      "milan": {
+        "played": true,
+        "year": 2025,
+        "proof": "Inter v Milan, 23 Nov 2025, started https://sempremilan.com/official-inter-ac-milan-starting-xis-2025-26"
+      }
+    },
     "albert-gu-mundsson-1923": {
       "nld": {
         "played": false,
@@ -445,6 +452,13 @@
         "proof": "Man City 0-1 Man United, 30 Nov 2008, 67 min https://aws.fbref.com/en/players/dea698d9/matchlogs/2008-2009/Cristiano-Ronaldo-Match-Logs"
       }
     },
+    "daniel-sturridge": {
+      "manc": {
+        "played": true,
+        "year": 2008,
+        "proof": "Man City 0-1 Man United, 30 Nov 2008, 15 min https://aws.fbref.com/en/matches/168617fe/Manchester-Derby-Manchester-City-Manchester-United-November-30-2008-Premier-League"
+      }
+    },
     "danilo": {
       "madrid": {
         "played": true,
@@ -564,6 +578,13 @@
       "milan": {
         "played": null,
         "why": "Didn't play either 2004-05 derby for Inter (bench 24 Oct 2004, not in squad 27 Feb 2005); no line-up found for Milan's 1996-97 and Nov 1997 derbies https://www.inter.it/it/match_center/3456 https://www.inter.it/it/match_center/3482"
+      }
+    },
+    "edwin-van-der-sar": {
+      "manc": {
+        "played": true,
+        "year": 2008,
+        "proof": "Man City 0-1 Man United, 30 Nov 2008, 90 min https://aws.fbref.com/en/matches/168617fe/Manchester-Derby-Manchester-City-Manchester-United-November-30-2008-Premier-League"
       }
     },
     "emerson-royal": {
@@ -859,6 +880,13 @@
         "played": true,
         "year": 2018,
         "proof": "Juventus 1-0 Inter, 7 Dec 2018, 90 min https://aws.fbref.com/en/players/bd6351cd/matchlogs/2018-2019/misc/Joao-Cancelo-Match-Logs"
+      }
+    },
+    "joe-hart": {
+      "manc": {
+        "played": true,
+        "year": 2012,
+        "proof": "Man City 1-0 Man United, 30 Apr 2012, 90 min https://aws.fbref.com/en/matches/7ba49451/Manchester-Derby-Manchester-City-Manchester-United-April-30-2012-Premier-League"
       }
     },
     "joey-barton": {
@@ -1359,6 +1387,13 @@
         "proof": "Man City 0-1 Man United, 5 May 2007 https://www.irishexaminer.com/sport/soccer/arid-30309510.html"
       }
     },
+    "michael-carrick": {
+      "nld": {
+        "played": true,
+        "year": 2005,
+        "proof": "Tottenham 1-1 Arsenal, 29 Oct 2005 (set up King's goal) https://thfcdb.com/matches/2005-06/arsenal-fc-29-oct-2005/"
+      }
+    },
     "michael-owen": {
       "clasico": {
         "played": true,
@@ -1775,6 +1810,13 @@
         "proof": "Liverpool 2-1 Man United, 13 Sep 2008, started https://www.lfchistory.net/SeasonArchive/Game/5117"
       }
     },
+    "robert-lewandowski": {
+      "clasico": {
+        "played": true,
+        "year": 2025,
+        "proof": "Real Madrid 2-5 Barcelona, Supercopa final 12 Jan 2025 (scored) https://tvpworld.com/84497377/lewandowski-strikes-as-barcelona-blitz-real-madrid-in-super-cup-"
+      }
+    },
     "robinho": {
       "clasico": {
         "played": true,
@@ -2028,6 +2070,18 @@
         "proof": "Celtic 2-0 Rangers, 23 Sep 2006 (scored) https://thecelticwiki.com/?p=13030"
       }
     },
+    "thomas-vermaelen": {
+      "clasico": {
+        "played": true,
+        "year": 2017,
+        "proof": "Real Madrid 0-3 Barcelona, 23 Dec 2017, started https://www.si.com/soccer/2017/12/24/video-thomas-vermaelens-kids-have-sweetest-reaction-seeing-daddy-lineup-clasico-clash"
+      },
+      "nld": {
+        "played": true,
+        "year": 2012,
+        "proof": "Arsenal 5-2 Tottenham, 17 Nov 2012 (captain) https://fbref.com/en/matches/f39b2855/North-London-Derby-Arsenal-Tottenham-Hotspur-November-17-2012-Premier-League"
+      }
+    },
     "trevor-steven": {
       "mersey": {
         "played": true,
@@ -2038,6 +2092,18 @@
         "played": true,
         "year": 1993,
         "proof": "Rangers 1-0 Celtic, 2 Jan 1993, scored https://www.thecelticwiki.com/?p=11305"
+      }
+    },
+    "wojciech-szczesny": {
+      "clasico": {
+        "played": true,
+        "year": 2025,
+        "proof": "Real Madrid 2-5 Barcelona, Supercopa final 12 Jan 2025 (sent off) https://tvpworld.com/84497377/lewandowski-strikes-as-barcelona-blitz-real-madrid-in-super-cup-"
+      },
+      "nld": {
+        "played": true,
+        "year": 2013,
+        "proof": "Arsenal 1-0 Tottenham, 1 Sep 2013, clean sheet https://thfcdb.com/matches/2013-14/arsenal-fc-01-sep-2013/"
       }
     },
     "xabi-alonso": {
