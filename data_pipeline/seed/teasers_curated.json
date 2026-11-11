@@ -1232,7 +1232,7 @@
       "prefix": "NAME A MANAGER WHO…"
     },
     {
-      "q": "Played in the Madrid derby, the Milan derby AND a Liverpool v Man United game",
+      "q": "Played in the Madrid derby, the Milan derby AND the North West derby (Liverpool v Man United)",
       "eras": 12,
       "difficulty": 2,
       "answers": [
@@ -1787,7 +1787,7 @@
       }
     },
     {
-      "q": "Played under Carlo Ancelotti, played in a Liverpool v Man United game AND was a club teammate of Lionel Messi",
+      "q": "Played under Carlo Ancelotti, played in the North West derby (Liverpool v Man United) AND was a club teammate of Lionel Messi",
       "eras": 28,
       "difficulty": 2,
       "answers": [
@@ -1803,17 +1803,17 @@
       "proof": {
         "zlatan-ibrahimovic": [
           "Under Ancelotti: PSG 2012-13",
-          "Liverpool v Man United game: Liverpool 0-0 Man United, 17 Oct 2016, 90 min https://aws.fbref.com/en/players/4cde5509/matchlogs/2016-2017/Zlatan-Ibrahimovic-Match-Logs",
+          "North West derby: Liverpool 0-0 Man United, 17 Oct 2016, 90 min https://aws.fbref.com/en/players/4cde5509/matchlogs/2016-2017/Zlatan-Ibrahimovic-Match-Logs",
           "Teammate of Lionel Messi: Barcelona 2009-10"
         ],
         "angel-di-maria": [
           "Under Ancelotti: Real Madrid 2013-14, PSG 2012-13",
-          "Liverpool v Man United game: Liverpool 1-2 Man United, 22 Mar 2015, 36 min https://aws.fbref.com/en/players/19cda00b/matchlogs/2014-2015/Angel-Di-Maria-Match-Logs",
+          "North West derby: Liverpool 1-2 Man United, 22 Mar 2015, 36 min https://aws.fbref.com/en/players/19cda00b/matchlogs/2014-2015/Angel-Di-Maria-Match-Logs",
           "Teammate of Lionel Messi: PSG 2021-22"
         ],
         "thiago-alcantara": [
           "Under Ancelotti: Bayern 2016-17",
-          "Liverpool v Man United game: Liverpool 4-0 Man United, 19 Apr 2022, 80 min https://www.sportsmole.co.uk/football/liverpool/title-race/result/liverpool-4-0-man-united-highlights-man-of-the-match-stats_483728.html",
+          "North West derby: Liverpool 4-0 Man United, 19 Apr 2022, 80 min https://www.sportsmole.co.uk/football/liverpool/title-race/result/liverpool-4-0-man-united-highlights-man-of-the-match-stats_483728.html",
           "Teammate of Lionel Messi: Barcelona 2009-13"
         ]
       },
@@ -2091,7 +2091,7 @@
       }
     },
     {
-      "q": "Played under Pep Guardiola, played in a Liverpool v Man United game AND was a club teammate of Mesut Özil",
+      "q": "Played under Pep Guardiola, played in the North West derby (Liverpool v Man United) AND was a club teammate of Mesut Özil",
       "eras": 12,
       "difficulty": 2,
       "answers": [
@@ -2105,12 +2105,12 @@
       "proof": {
         "xabi-alonso": [
           "Under Guardiola: Bayern 2014-16",
-          "Liverpool v Man United game: Liverpool 2-1 Man United, 13 Sep 2008, started https://www.lfchistory.net/SeasonArchive/Game/5117",
+          "North West derby: Liverpool 2-1 Man United, 13 Sep 2008, started https://www.lfchistory.net/SeasonArchive/Game/5117",
           "Teammate of Mesut Özil: Real Madrid 2009-13"
         ],
         "alexis-sanchez": [
           "Under Guardiola: Barcelona 2011-12",
-          "Liverpool v Man United game: Man United 2-1 Liverpool, 10 Mar 2018, 89 min https://aws.fbref.com/en/players/2c0f8e9e/matchlogs/2017-2018/Alexis-Sanchez-Match-Logs",
+          "North West derby: Man United 2-1 Liverpool, 10 Mar 2018, 89 min https://aws.fbref.com/en/players/2c0f8e9e/matchlogs/2017-2018/Alexis-Sanchez-Match-Logs",
           "Teammate of Mesut Özil: Arsenal 2014-18"
         ]
       },
