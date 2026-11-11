@@ -217,13 +217,13 @@ class Tournament extends ChangeNotifier {
 
   // ---- the Half-Time Teaser -------------------------------------------------
 
-  /// This match's teaser, picked at kick-off. Null = none (solo, the Warm-Up
-  /// Cup, women's-only).
+  /// This match's teaser, picked at kick-off (the Warm-Up Cup always has the
+  /// same one). Null = none (solo, women's-only).
   TeaserState? teaser;
 
   /// Whether this match gets a teaser at all.
   bool get wantsTeaser =>
-      teamCount > 1 && !config.warmUp && config.rounds == null && config.gender != FootballGender.women;
+      teamCount > 1 && config.rounds == null && config.gender != FootballGender.women;
 
   /// Half-time comes after this many rounds (3 of 6, 2 of 4, 4 of 9).
   int get halfTimeAfter => max(1, totalRounds ~/ 2);

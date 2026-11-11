@@ -5,6 +5,7 @@ import '../core/theme.dart';
 import '../data/teasers.dart';
 import '../domain/game_mode.dart';
 import '../domain/tournament.dart';
+import '../domain/warm_up_cup.dart';
 import '../games/bidding_war/bidding_war_screen.dart';
 import '../games/career_path/career_path_screen.dart';
 import '../games/checkout_501/checkout_screen.dart';
@@ -78,8 +79,15 @@ abstract final class MatchFlow {
     if (t.teaser != null || !t.wantsTeaser) return;
     try {
       final bank = await s.teasers;
-      final pick = TeaserPicker(bank: bank, history: s.settings.history, players: s.repo.players)
-          .pick(difficulty: t.config.difficulty, eras: t.config.eraMask);
+      final Teaser? pick;
+      if (t.config.warmUp) {
+        // The same teaser for everyone; seen, so the full game doesn't repeat it.
+        pick = bank.byId(WarmUpCup.teaser);
+        if (pick != null) s.settings.history.add(TeaserPicker.kind, pick.id);
+      } else {
+        pick = TeaserPicker(bank: bank, history: s.settings.history, players: s.repo.players)
+            .pick(difficulty: t.config.difficulty, eras: t.config.eraMask);
+      }
       if (pick == null || t.teaser != null) return;
       t.teaser = TeaserState(pick.id);
       for (final id in pick.answerIds) {

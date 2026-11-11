@@ -8,6 +8,7 @@ import 'package:quizinho/data/question_history.dart';
 import 'package:quizinho/data/teasers.dart';
 import 'package:quizinho/domain/player_index.dart';
 import 'package:quizinho/domain/tournament.dart';
+import 'package:quizinho/domain/warm_up_cup.dart';
 import 'package:quizinho/games/buzz_race_controller.dart';
 import 'package:quizinho/games/teaser/teaser_controller.dart';
 
@@ -137,6 +138,10 @@ void main() {
 
     test('the bank loads', () {
       expect(bank.teasers.length, greaterThan(100));
+    });
+
+    test('the Warm-Up Cup teaser is in the bank', () {
+      expect(bank.byId(WarmUpCup.teaser)?.answerIds, ['michael-owen']);
     });
 
     test('no repeats until the level runs dry, and no derby twice in a row', () {

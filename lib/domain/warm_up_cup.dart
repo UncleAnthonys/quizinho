@@ -19,4 +19,8 @@ abstract final class WarmUpCup {
 
   /// 28 answers: Henry, Vieira, Pires, Giroud, Saliba…
   static const bidding = 'nat:Q9617:FRA';
+
+  /// The Half-Time Teaser (after round 1): one famous answer, a proper
+  /// kick-yourself moment — Michael Owen (Liverpool, Real Madrid, Man United).
+  static const teaser = 'Has been a club teammate of Steven Gerrard, Zinedine Zidane AND Wayne Rooney';
 }
