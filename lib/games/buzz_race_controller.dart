@@ -23,12 +23,33 @@ class BuzzOutcome {
   bool get scored => team != null && points > 0;
 }
 
+/// What [BuzzBridge] needs to play a buzzer question across the room's
+/// phones: a buzzer game, or the Half-Time Teaser.
+abstract interface class BuzzTarget implements Listenable {
+  BuzzPhase get phase;
+  int? get answeringTeam;
+  BuzzOutcome? get outcome;
+  double get secondsLeft;
+  double get phaseSeconds;
+  bool canBuzz(int team);
+  void buzz(int team);
+  void submit(Player player);
+  void pass();
+
+  /// Tells this question apart from the last one ("2" = question 3).
+  String get tag;
+
+  /// "2/3", shown as "Q 2/3" on the phones ('' = not shown).
+  String get progress;
+  String get modeName;
+}
+
 /// Shared rules for buzzer games: first to buzz answers, a wrong answer locks
 /// that team out and lets the others steal, the question ends when someone
 /// scores, everyone is locked out, or time runs out.
 ///
 /// Time is driven externally through [advance] so tests are deterministic.
-abstract class BuzzRaceController<Q> extends ChangeNotifier {
+abstract class BuzzRaceController<Q> extends ChangeNotifier implements BuzzTarget {
   BuzzRaceController({
     required this.mode,
     required this.teamCount,
@@ -60,6 +81,13 @@ abstract class BuzzRaceController<Q> extends ChangeNotifier {
   int eventSerial = 0;
 
   Q get current => questions[questionIndex];
+
+  @override
+  String get tag => '$questionIndex';
+  @override
+  String get progress => '${questionIndex + 1}/${questions.length}';
+  @override
+  String get modeName => mode.name;
   bool get isLastQuestion => questionIndex == questions.length - 1;
   bool canBuzz(int team) => phase == BuzzPhase.open && !lockedOut.contains(team);
 

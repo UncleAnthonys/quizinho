@@ -18,6 +18,7 @@ import '../games/starting_xi/starting_xi_screen.dart' show XiLayout;
 import '../games/tic_tac_toe/tic_tac_toe_screen.dart' show TttLayout;
 import '../games/career_path/career_path_screen.dart' show CareerTrail;
 import '../games/club_connections/club_connections_screen.dart' show ClubsCard;
+import '../ui/teaser/teaser_widgets.dart' show TeaserPrompt;
 import '../ui/widgets/buzzer_pad.dart' show TeamBuzzer;
 import '../ui/widgets/common.dart';
 import '../ui/widgets/player_picker.dart';
@@ -277,6 +278,17 @@ class _GuestGameState extends State<_GuestGame> with SingleTickerProviderStateMi
   /// The question with the host's own widgets, so both screens look the same.
   Widget _question(Map<String, Object?> v, {bool compact = false}) {
     final q = asMap(v['question']);
+    if (q['teaser'] is String) {
+      return Padding(
+        padding: const EdgeInsets.fromLTRB(16, 6, 16, 6),
+        child: TeaserPrompt(
+          question: q['teaser']! as String,
+          prefix: '${q['prefix'] ?? 'NAME A PLAYER WHO…'}',
+          halfTime: q['worth'] == 5,
+          compact: compact,
+        ),
+      );
+    }
     final clubs = asList(q['clubs']);
     if (clubs.length == 2) return ClubsCard(a: '${clubs[0]}', b: '${clubs[1]}', compact: compact);
     final spells = [
@@ -385,7 +397,7 @@ class _GuestGameState extends State<_GuestGame> with SingleTickerProviderStateMi
     } else if (phase == 'open' && faceOff.isNotEmpty && !inFaceOff) {
       action = _status('FACE-OFF: ${faceOff.values.join(' v ')}\nOnly they can buzz');
     } else if (phase == 'open') {
-      action = _status('LOCKED OUT — WAIT FOR THE STEAL');
+      action = _status(v['mode'] == 'teaser' ? 'YOUR TEAM’S HAD ITS GUESS' : 'LOCKED OUT — WAIT FOR THE STEAL');
     } else if (result.isNotEmpty) {
       final scorer = (result['team'] as num?)?.toInt();
       final teamsV = asList(v['teams']);
@@ -444,13 +456,13 @@ class _GuestGameState extends State<_GuestGame> with SingleTickerProviderStateMi
         child: Row(children: [
           Text('${v['title'] ?? ''}', style: AppText.label(15, color: Palette.yellow)),
           const SizedBox(width: 8),
-          Text('Q ${v['n'] ?? ''}', style: AppText.label(15)),
+          if ('${v['n'] ?? ''}'.isNotEmpty) Text('Q ${v['n']}', style: AppText.label(15)),
         ]),
       ),
       // Above the answer box, compact while answering — like the host, so
       // it stays in view over the keyboard.
       question,
-      if (phase == 'open' || phase == 'answering')
+      if (phase == 'answering' || (phase == 'open' && asMap(v['question'])['noClock'] != true))
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 4),
           child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [

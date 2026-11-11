@@ -125,6 +125,48 @@ class RoundResult {
   final int? solo;
 }
 
+enum TeaserStatus { open, solved, revealed }
+
+/// Where the Half-Time Teaser is: shown at half-time, then open between
+/// games until someone gets it, every team has had its one guess, or full time.
+class TeaserState {
+  TeaserState(this.id);
+  final String id;
+  TeaserStatus status = TeaserStatus.open;
+
+  /// The half-time screen has been shown (from then on it's worth 3).
+  bool halfTimeDone = false;
+
+  /// Teams that have had their guess.
+  final Set<int> lockedOut = {};
+  int? winner;
+  String winningAnswer = '';
+  int points = 0;
+
+  bool get isOpen => status == TeaserStatus.open;
+
+  Map<String, Object?> toJson() => {
+        'id': id,
+        'status': status.name,
+        'halfTimeDone': halfTimeDone,
+        'lockedOut': lockedOut.toList(),
+        'winner': winner,
+        'answer': winningAnswer,
+        'points': points,
+      };
+
+  static TeaserState? fromJson(Object? v) {
+    if (v is! Map || v['id'] is! String) return null;
+    return TeaserState(v['id'] as String)
+      ..status = TeaserStatus.values.firstWhere((s) => s.name == v['status'], orElse: () => TeaserStatus.open)
+      ..halfTimeDone = v['halfTimeDone'] == true
+      ..lockedOut.addAll([for (final t in v['lockedOut'] as List? ?? const []) (t as num).toInt()])
+      ..winner = (v['winner'] as num?)?.toInt()
+      ..winningAnswer = '${v['answer'] ?? ''}'
+      ..points = (v['points'] as num?)?.toInt() ?? 0;
+  }
+}
+
 class RoundRecord {
   RoundRecord(this.mode, this.points, this.multiplier, this.headline);
   final GameModeId mode;
@@ -173,6 +215,38 @@ class Tournament extends ChangeNotifier {
   bool get isFinished => rounds.length >= totalRounds;
   bool get isFinalRound => rounds.length == totalRounds - 1;
 
+  // ---- the Half-Time Teaser -------------------------------------------------
+
+  /// This match's teaser, picked at kick-off. Null = none (solo, the Warm-Up
+  /// Cup, women's-only).
+  TeaserState? teaser;
+
+  /// Whether this match gets a teaser at all.
+  bool get wantsTeaser =>
+      teamCount > 1 && !config.warmUp && config.rounds == null && config.gender != FootballGender.women;
+
+  /// Half-time comes after this many rounds (3 of 6, 2 of 4, 4 of 9).
+  int get halfTimeAfter => max(1, totalRounds ~/ 2);
+
+  /// The round just played was the last of the first half.
+  bool get teaserDue => teaser != null && !teaser!.halfTimeDone && rounds.length >= halfTimeAfter && !isFinished;
+
+  /// Between games: still there to be had, for 3.
+  bool get teaserOpen => teaser != null && teaser!.halfTimeDone && teaser!.isOpen;
+
+  /// A team got the teaser.
+  void awardTeaser(int team, int points, String answer) {
+    final s = teaser;
+    if (s == null || !s.isOpen) return;
+    scores[team] += points;
+    s
+      ..status = TeaserStatus.solved
+      ..winner = team
+      ..winningAnswer = answer
+      ..points = points;
+    notifyListeners();
+  }
+
   // ---- saving, so a match survives the app being closed --------------------
 
   /// Everything needed to carry on this match later.
@@ -210,6 +284,7 @@ class Tournament extends ChangeNotifier {
         'picks': _picks,
         'turnIndex': {for (final e in _turnIndex.entries) '${e.key}': e.value},
         'holds': _holds,
+        if (teaser != null) 'teaser': teaser!.toJson(),
       };
 
   /// A match saved with [toJson]; null if it can't be read.
@@ -263,6 +338,7 @@ class Tournament extends ChangeNotifier {
       t._playerPoints.addAll(counts(j['playerPoints']));
       t._picks.addAll(counts(j['picks']));
       t._holds.addAll(counts(j['holds']));
+      t.teaser = TeaserState.fromJson(j['teaser']);
       for (final e in counts(j['turnIndex']).entries) {
         t._turnIndex[int.parse(e.key)] = e.value;
       }

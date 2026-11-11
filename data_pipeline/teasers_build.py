@@ -470,6 +470,45 @@ def main() -> None:
         + ",\n".join("    " + json.dumps(t, ensure_ascii=False) for t in out) + "\n  ],\n"
         + f'  "audit": {json.dumps(AUDIT, ensure_ascii=False)}\n}}\n',
         encoding="utf-8")
+    write_app_bank(out, note)
+
+
+def family(t: dict) -> str:
+    """What the picker spaces out: final scorers are filler, derby questions
+    no more than one in three, and the same shape not twice running."""
+    q = t["q"]
+    if t["kind"] == "final":
+        return "final"
+    if t["kind"] == "derby" or q.startswith("Played in"):
+        return "derby"
+    if q.startswith("Played under") and (" played in " in q):
+        return "mixed"
+    if q.startswith("Has been a club teammate of"):
+        return "teammates"
+    if q.startswith("Played under"):
+        return "managers"
+    return "other"
+
+
+def write_app_bank(out: list[dict], note: str) -> None:
+    """assets/db/teasers.json: what the app needs, nothing else (no proofs).
+    Red herrings keep their reason, without links, for the reveal."""
+    def why(s: str) -> str:
+        return re.sub(r"\s*https?://\S+", "", s).strip()
+    rows = []
+    for t in out:
+        row = {"q": t["q"], "f": family(t), "d": t["difficulty"], "e": t.get("eras", 31),
+               "a": t["answers"], "n": t["names"]}
+        if t.get("prefix"):
+            row["p"] = t["prefix"]
+        if t.get("unconfirmed"):
+            row["u"] = t["unconfirmed"]
+        if t.get("ruled_out"):
+            row["r"] = {k: why(v) for k, v in t["ruled_out"].items()}
+        rows.append(row)
+    path = ROOT.parent / "assets" / "db" / "teasers.json"
+    path.write_text(json.dumps({"_note": note, "teasers": rows}, ensure_ascii=False, separators=(",", ":")) + "\n",
+                    encoding="utf-8")
 
 
 if __name__ == "__main__":

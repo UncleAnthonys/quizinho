@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../core/app_services.dart';
 import '../core/theme.dart';
+import '../data/teasers.dart';
 import '../domain/game_mode.dart';
 import '../domain/tournament.dart';
 import '../games/bidding_war/bidding_war_screen.dart';
@@ -18,6 +19,7 @@ import 'screens/free_kick_screen.dart';
 import 'screens/round_intro_screen.dart';
 import 'screens/round_summary_screen.dart';
 import 'screens/winner_screen.dart';
+import 'teaser/teaser_screens.dart';
 
 /// Moves a match through: wheel → intro → game → summary → … → winner.
 /// Each step replaces the previous route so "back" never lands mid-game.
@@ -67,8 +69,32 @@ abstract final class MatchFlow {
     }
   }
 
+  /// Saves the match as it stands (after the teaser changes hands).
+  static void save(BuildContext context, Tournament t) => _save(AppScope.read(context), t);
+
+  /// Kick-off: picks this match's Half-Time Teaser. Its answers are kept out
+  /// of Career Path, so no earlier game gives it away.
+  static Future<void> _pickTeaser(AppServices s, Tournament t) async {
+    if (t.teaser != null || !t.wantsTeaser) return;
+    try {
+      final bank = await s.teasers;
+      final pick = TeaserPicker(bank: bank, history: s.settings.history, players: s.repo.players)
+          .pick(difficulty: t.config.difficulty, eras: t.config.eraMask);
+      if (pick == null || t.teaser != null) return;
+      t.teaser = TeaserState(pick.id);
+      for (final id in pick.answerIds) {
+        t.markUsed(GameModeId.careerPath, id);
+      }
+      _save(s, t);
+    } catch (e) {
+      debugPrint('No teaser this match: $e');
+    }
+  }
+
   static void toWheel(BuildContext context, Tournament t) {
-    _save(AppScope.read(context), t);
+    final services = AppScope.read(context);
+    if (t.rounds.isEmpty) _pickTeaser(services, t);
+    _save(services, t);
     _phones(context, t, t.rounds.isEmpty ? 'Kick-off — picking the first game' : 'Picking the next game');
     Navigator.of(context).pushReplacement(_route(_Guard(child: FreeKickScreen(tournament: t))));
   }
@@ -97,6 +123,13 @@ abstract final class MatchFlow {
     // Buzzer games put the question on the phones themselves.
     if (mode != GameModeId.clubConnections && mode != GameModeId.careerPath) _phones(context, t, mode.title);
     nav.pushReplacement(_route(_Guard(child: gameFor(mode, round))));
+  }
+
+  /// Half-time: the teaser, full screen.
+  static void toHalfTime(BuildContext context, Tournament t) {
+    t.teaser?.halfTimeDone = true;
+    _save(AppScope.read(context), t);
+    Navigator.of(context).pushReplacement(_route(_Guard(child: TeaserHalfTimeScreen(tournament: t))));
   }
 
   static void toWinner(BuildContext context, Tournament t) {

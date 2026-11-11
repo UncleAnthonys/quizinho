@@ -2,6 +2,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
 import '../data/football_repository.dart';
+import '../data/teasers.dart';
 import '../multiplayer/rest_room_link.dart';
 import '../multiplayer/room.dart';
 import '../multiplayer/room_link.dart';
@@ -37,6 +38,9 @@ class AppServices {
   bool get fullGame => purchases?.unlocked ?? true;
 
   late final ChallengeSource challenges = ChallengeSource(repo, history: settings.history);
+
+  /// The Half-Time Teasers, loaded the first time a match needs one.
+  late final Future<TeaserBank> teasers = TeaserBank.load();
 
   void haptic(HapticStrength s) {
     if (!settings.hapticsOn) return;

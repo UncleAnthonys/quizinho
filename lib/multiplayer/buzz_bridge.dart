@@ -36,7 +36,7 @@ class BuzzBridge extends ChangeNotifier {
   final bool Function() paused;
 
   final HostRoom room;
-  final BuzzRaceController controller;
+  final BuzzTarget controller;
   final Tournament tournament;
   final PlayerIndex players;
   final String title;
@@ -63,7 +63,7 @@ class BuzzBridge extends ChangeNotifier {
   static const _fairnessWindow = Duration(milliseconds: 200);
   final List<StreamSubscription<Object?>> _subs = [];
 
-  String get questionKey => '${tournament.rounds.length}-${controller.questionIndex}';
+  String get questionKey => '${tournament.rounds.length}-${controller.tag}';
 
   void start() {
     _subs.add(room.buzzes.listen(_onBuzz));
@@ -144,10 +144,10 @@ class BuzzBridge extends ChangeNotifier {
     final o = c.outcome;
     return {
       'kind': 'buzz',
-      'mode': c.mode.name,
+      'mode': c.modeName,
       'title': title,
       'q': questionKey,
-      'n': '${c.questionIndex + 1}/${c.questions.length}',
+      'n': c.progress,
       'prompt': prompt,
       // Nothing until the host's face-off intro is dismissed — no head start.
       'question': paused() ? const <String, Object?>{} : question(),

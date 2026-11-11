@@ -22,6 +22,9 @@ class QuestionHistory {
 
   Set<String> seen(String kind) => _list(kind).toSet();
 
+  /// Seen ids, oldest first.
+  List<String> order(String kind) => List.unmodifiable(_list(kind));
+
   void add(String kind, String id) {
     final list = _list(kind)
       ..remove(id)
