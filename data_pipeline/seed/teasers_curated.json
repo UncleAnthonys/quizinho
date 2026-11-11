@@ -1445,6 +1445,107 @@
           "North London derby: Arsenal 3-1 Tottenham, 1 Oct 2022, 70 min https://aws.fbref.com/en/players/6fe90922/matchlogs/2022-2023/Ivan-Perisic-Match-Logs"
         ]
       }
+    },
+    {
+      "q": "Played in Champions League finals for THREE different clubs",
+      "eras": 14,
+      "difficulty": 3,
+      "answers": [
+        "clarence-seedorf",
+        "patrice-evra"
+      ],
+      "names": [
+        "Clarence Seedorf",
+        "Patrice Evra"
+      ],
+      "proof": {
+        "clarence-seedorf": [
+          "Ajax 1995, Real Madrid 1998, AC Milan 2003, 2005 and 2007 https://www.uefa.com/uefachampionsleague/news/newsid=2249356.html",
+          "\"Only two players have played in three European Cup finals for three different clubs\" (FourFourTwo, Oct 2025) https://www.fourfourtwo.com/features/200-niche-surprising-and-mind-blowing-football-facts-to-help-you-ace-pub-quizzes"
+        ],
+        "patrice-evra": [
+          "Monaco 2004, Man United 2008, 2009 and 2011, Juventus 2015, played in all five https://ongoalsscored.com/?p=2546",
+          "\"Only two players have played in three European Cup finals for three different clubs\" (FourFourTwo, Oct 2025) https://www.fourfourtwo.com/features/200-niche-surprising-and-mind-blowing-football-facts-to-help-you-ace-pub-quizzes"
+        ]
+      },
+      "proof_note": "Checked up to the 2026 final (PSG v Arsenal): no one else has joined them.",
+      "ruled_out": {
+        "lucas-hernandez": "Played the 2016 final for Atlético (on in extra time) and 2025 for PSG (on 74'), but was an unused sub for Bayern in 2020 https://fcbayern.com/en/matches/profis/champions-league/2019-2020/champions-league-finale-paris-saint-germain-fc-bayern-23.08.2020/lineup https://www.si.com/soccer/psg-5-0-inter-player-ratings-5-31-25",
+        "mario-mandzukic": "Finals for two clubs only: Bayern 2012 and 2013, Juventus 2017",
+        "toni-kroos": "Finals for two clubs only: Bayern 2012 and 2013, Real Madrid 2014-2024",
+        "kai-havertz": "Finals for two clubs only: Chelsea 2021, Arsenal 2026"
+      }
+    },
+    {
+      "q": "Played under both Jürgen Klopp AND Pep Guardiola",
+      "eras": 28,
+      "difficulty": 2,
+      "answers": [
+        "mario-gotze",
+        "robert-lewandowski",
+        "ilkay-gundogan",
+        "xherdan-shaqiri",
+        "thiago-alcantara"
+      ],
+      "names": [
+        "Mario Götze",
+        "Robert Lewandowski",
+        "İlkay Gündoğan",
+        "Xherdan Shaqiri",
+        "Thiago Alcântara"
+      ],
+      "proof": {
+        "mario-gotze": [
+          "Klopp at Dortmund (116 games), Guardiola at Bayern (114) https://www.planetfootball.com/quick-reads/the-four-players-to-work-for-both-klopp-and-guardiola"
+        ],
+        "robert-lewandowski": [
+          "Klopp at Dortmund (187 games), Guardiola at Bayern (100) https://www.planetfootball.com/quick-reads/the-four-players-to-work-for-both-klopp-and-guardiola"
+        ],
+        "ilkay-gundogan": [
+          "Klopp at Dortmund (117 games), Guardiola at Man City (217) https://www.planetfootball.com/quick-reads/the-four-players-to-work-for-both-klopp-and-guardiola"
+        ],
+        "xherdan-shaqiri": [
+          "Guardiola at Bayern (42 games), Klopp at Liverpool (63) https://www.planetfootball.com/quick-reads/the-four-players-to-work-for-both-klopp-and-guardiola"
+        ],
+        "thiago-alcantara": [
+          "Guardiola at Barcelona and Bayern (145 games), Klopp at Liverpool (28 in that count) https://www.planetfootball.com/quick-reads/the-four-players-to-work-for-both-klopp-and-guardiola"
+        ]
+      },
+      "ruled_out": {
+        "sebastian-rode": "Bayern under Guardiola, but joined Dortmund in 2016 under Tuchel, after Klopp left",
+        "pierre-emile-hojbjerg": "Bayern under Guardiola, never played for Klopp",
+        "raheem-sterling": "Left Liverpool in July 2015, three months before Klopp arrived; Guardiola at Man City"
+      }
+    },
+    {
+      "q": "Played under both Arsène Wenger AND Sir Alex Ferguson",
+      "eras": 14,
+      "difficulty": 2,
+      "answers": [
+        "robin-van-persie",
+        "mikael-silvestre",
+        "danny-welbeck"
+      ],
+      "names": [
+        "Robin van Persie",
+        "Mikaël Silvestre",
+        "Danny Welbeck"
+      ],
+      "proof": {
+        "robin-van-persie": [
+          "Wenger at Arsenal 2004-12, Ferguson at Man United 2012-13 https://www.sportskeeda.com/football/3-players-who-have-played-under-wenger-and-ferguson"
+        ],
+        "mikael-silvestre": [
+          "Ferguson at Man United 1999-2008, Wenger at Arsenal 2008-10 https://www.sportskeeda.com/football/3-players-who-have-played-under-wenger-and-ferguson"
+        ],
+        "danny-welbeck": [
+          "Ferguson at Man United 2008-13, Wenger at Arsenal 2014-18 https://www.sportskeeda.com/football/3-players-who-have-played-under-wenger-and-ferguson"
+        ]
+      },
+      "ruled_out": {
+        "alexis-sanchez": "Wenger at Arsenal, but joined United in 2018, five years after Ferguson retired",
+        "andy-cole": "Played for Arsenal (1990) under George Graham, not Wenger"
+      }
     }
   ]
 }
