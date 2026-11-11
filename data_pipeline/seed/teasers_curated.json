@@ -1546,6 +1546,134 @@
         "alexis-sanchez": "Wenger at Arsenal, but joined United in 2018, five years after Ferguson retired",
         "andy-cole": "Played for Arsenal (1990) under George Graham, not Wenger"
       }
+    },
+    {
+      "q": "Scored in a Champions League final his team WON, and in one his team LOST, for different clubs",
+      "eras": 24,
+      "difficulty": 3,
+      "answers": [
+        "mario-mandzukic",
+        "kai-havertz"
+      ],
+      "names": [
+        "Mario Mandžukić",
+        "Kai Havertz"
+      ],
+      "proof": {
+        "mario-mandzukic": [
+          "Scored for Bayern in the 2013 win over Dortmund and for Juventus in the 2017 defeat to Real Madrid https://www.planetfootball.com/champions-league/players-who-scored-multiple-champions-league-finals"
+        ],
+        "kai-havertz": [
+          "Scored the winner for Chelsea against Man City in 2021, and scored for Arsenal in the 2026 final PSG won on penalties https://www.planetfootball.com/champions-league/players-who-scored-multiple-champions-league-finals https://www.uefa.com/uefachampionsleague/news/02a5-20c02e59f219-15e92acdc717-1000--paris-retain-champions-league-holders-edge-arsenal-on-penalties/"
+        ]
+      },
+      "proof_note": "Only nine players have scored in more than one Champions League final (UEFA, 2026); these are the only two who did it for different clubs with one win and one defeat.",
+      "ruled_out": {
+        "cristiano-ronaldo": "Scored in finals for Man United (2008) and Real Madrid (2014, 2017), but won all of them",
+        "gareth-bale": "Scored in the 2014 and 2018 finals, both for Real Madrid, both won"
+      }
+    },
+    {
+      "q": "Won the Champions League AND the Europa League, with different clubs",
+      "eras": 28,
+      "difficulty": 3,
+      "answers": [
+        "thibaut-courtois",
+        "lucas-hernandez",
+        "juan-mata-pata",
+        "pedro",
+        "ivan-rakitic",
+        "fernando-torres"
+      ],
+      "names": [
+        "Thibaut Courtois",
+        "Lucas Hernández",
+        "Juan Mata",
+        "Pedro",
+        "Ivan Rakitić",
+        "Fernando Torres"
+      ],
+      "proof": {
+        "thibaut-courtois": [
+          "Europa League: Atlético 2012; Champions League: Real Madrid 2022, 2024 https://www.uefa.com/uefachampionsleague/news/0299-1dc4bce10371-74b5d5e2e70b-1000--who-has-won-more-than-one-of-the-current-uefa-club-competiti/"
+        ],
+        "lucas-hernandez": [
+          "Europa League: Atlético 2018; Champions League: PSG 2025 https://www.uefa.com/uefachampionsleague/news/0299-1dc4bce10371-74b5d5e2e70b-1000--who-has-won-more-than-one-of-the-current-uefa-club-competiti/"
+        ],
+        "juan-mata-pata": [
+          "Champions League: Chelsea 2012; Europa League: Chelsea 2013 and Man United 2017 https://www.uefa.com/uefachampionsleague/news/0299-1dc4bce10371-74b5d5e2e70b-1000--who-has-won-more-than-one-of-the-current-uefa-club-competiti/"
+        ],
+        "pedro": [
+          "Champions League: Barcelona 2009, 2011, 2015; Europa League: Chelsea 2019 https://www.uefa.com/uefachampionsleague/news/0299-1dc4bce10371-74b5d5e2e70b-1000--who-has-won-more-than-one-of-the-current-uefa-club-competiti/"
+        ],
+        "ivan-rakitic": [
+          "Europa League: Sevilla 2014, 2023; Champions League: Barcelona 2015 https://www.uefa.com/uefachampionsleague/news/0299-1dc4bce10371-74b5d5e2e70b-1000--who-has-won-more-than-one-of-the-current-uefa-club-competiti/"
+        ],
+        "fernando-torres": [
+          "Champions League: Chelsea 2012; Europa League: Chelsea 2013 and Atlético 2018 https://www.uefa.com/uefachampionsleague/news/0299-1dc4bce10371-74b5d5e2e70b-1000--who-has-won-more-than-one-of-the-current-uefa-club-competiti/"
+        ]
+      },
+      "proof_note": "UEFA's list (31 May 2026) counts only players who appeared in the winning final, and only the Europa League from 2009-10: 16 players have won both, and these six did it with different clubs.",
+      "ruled_out": {
+        "mateo-kovacic": "Won both, but both with Chelsea (Champions League 2021, Europa League 2019) https://www.uefa.com/uefachampionsleague/news/0299-1dc4bce10371-74b5d5e2e70b-1000--who-has-won-more-than-one-of-the-current-uefa-club-competiti/",
+        "daniel-alves": "Won the UEFA Cup with Sevilla (2006, 2007), before it became the Europa League",
+        "deco": "Won the UEFA Cup with Porto (2003), before it became the Europa League"
+      }
+    },
+    {
+      "q": "Won the Europa League AND the Conference League, with two different ENGLISH clubs",
+      "eras": 24,
+      "difficulty": 3,
+      "answers": [
+        "emerson-palmieri",
+        "jadon-sancho"
+      ],
+      "names": [
+        "Emerson Palmieri",
+        "Jadon Sancho"
+      ],
+      "proof": {
+        "emerson-palmieri": [
+          "Europa League: Chelsea 2019; Conference League: West Ham 2023 https://www.uefa.com/uefachampionsleague/news/0299-1dc4bce10371-74b5d5e2e70b-1000--who-has-won-more-than-one-of-the-current-uefa-club-competiti/"
+        ],
+        "jadon-sancho": [
+          "Conference League: Chelsea 2025; Europa League: Aston Villa 2026 https://www.uefa.com/uefachampionsleague/news/0299-1dc4bce10371-74b5d5e2e70b-1000--who-has-won-more-than-one-of-the-current-uefa-club-competiti/"
+        ]
+      },
+      "proof_note": "UEFA's list (31 May 2026): seven players have won both, and only these two did it with two English clubs.",
+      "ruled_out": {
+        "henrikh-mkhitaryan": "Won both, but the Conference League with Roma (2022)",
+        "chris-smalling": "Won both, but the Conference League with Roma (2022)",
+        "daichi-kamada": "Conference League with Crystal Palace (2026), but the Europa League with Eintracht Frankfurt (2022)",
+        "yeremy-pino": "Conference League with Crystal Palace (2026), but the Europa League with Villarreal (2021)"
+      }
+    },
+    {
+      "q": "Won the Europa League AND the Conference League under José Mourinho",
+      "eras": 24,
+      "difficulty": 3,
+      "answers": [
+        "henrikh-mkhitaryan",
+        "chris-smalling"
+      ],
+      "names": [
+        "Henrikh Mkhitaryan",
+        "Chris Smalling"
+      ],
+      "proof": {
+        "henrikh-mkhitaryan": [
+          "Europa League: Man United 2017; Conference League: Roma 2022, both under Mourinho https://www.uefa.com/uefachampionsleague/news/0299-1dc4bce10371-74b5d5e2e70b-1000--who-has-won-more-than-one-of-the-current-uefa-club-competiti/"
+        ],
+        "chris-smalling": [
+          "Europa League: Man United 2017; Conference League: Roma 2022, both under Mourinho https://www.uefa.com/uefachampionsleague/news/0299-1dc4bce10371-74b5d5e2e70b-1000--who-has-won-more-than-one-of-the-current-uefa-club-competiti/"
+        ]
+      },
+      "proof_note": "Of the seven players to win both (UEFA, 31 May 2026), only these two won them both under Mourinho.",
+      "ruled_out": {
+        "paul-pogba": "Won the 2017 Europa League with United, but never played for Roma",
+        "tammy-abraham": "Won the 2022 Conference League with Roma, but never played for United",
+        "emerson-palmieri": "Won both, with Chelsea (Sarri) and West Ham (Moyes)"
+      }
     }
   ]
 }
