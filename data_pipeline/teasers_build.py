@@ -15,8 +15,6 @@ The kinds:
            Scorers come from each final's Wikipedia article; the club must be
            in both Wikidata and the player's Wikipedia infobox, with league
            games, and the two sources must agree on the whole answer set.
-  trio     "Played for A, B AND C": three well-known clubs, 2-6 answers, the
-           same two-source check as the finals (see trio_teasers).
 
 Writes seed/teasers.json. Runs in GitHub Actions (teasers.yml): the dev
 workspace can't reach Wikipedia.
@@ -149,9 +147,9 @@ def final_titles() -> dict[str, list[str]]:
     euro = ["1960 European Nations' Cup final", "1964 European Nations' Cup final",
             *(f"UEFA Euro {y} final" for y in range(1968, 2025, 4))]
     fac = [f"{y} FA Cup final" for y in range(1946, 2027)]
-    # Only the finals a table remembers the scorers of: no League Cup, UEFA Cup,
-    # Euros or FA Cup (the lists stay for MANUAL_SCORERS and the audit history).
-    return {"cl": cl, "wc": wc}
+    # Finals a table remembers the scorers of: no League Cup or UEFA Cup (the
+    # lists stay for MANUAL_SCORERS and the audit history).
+    return {"cl": cl, "wc": wc, "euro": euro, "fac": fac}
 
 
 AUDIT: list[str] = []
@@ -285,78 +283,6 @@ def derby_teasers(players: list[dict], curated: list[dict], shown) -> list[dict]
             t["ruled_out"] = {p: "; ".join(f"never played {der[k]['name']}: {facts[p][k]['why']}"
                                             for k in ks if facts[p].get(k, {}).get("played") is False) for p in no}
         out.append(t)
-    return out
-
-
-TRIO_CAP = 2  # club-trio questions per player
-# Trios kept on Expert though the rules below would drop them, reviewed by hand.
-TRIO_KEEP = {frozenset({"Q631", "Q7156", "Q75729"})}  # Inter, Barcelona AND Sporting: Figo
-
-
-def trio_teasers(players: list[dict], wiki_stats: dict, shown) -> list[dict]:
-    """"Played for A, B AND C": three well-known clubs (fame 4+, two of them
-    fame 5), two to six answers, at least one of them famous. Two clubs would
-    just be Club Connections; three makes a slow burn with more than one way in.
-    Wikidata and each player's Wikipedia infobox must both have league games at
-    all three clubs, and agree on the whole answer set."""
-    by_id = {p["id"]: p for p in players}
-    clubs = json.loads((SEED / "clubs.json").read_text())["clubs"]
-    fame = {c[0]: c[3] for c in clubs}
-    country = {c[0]: c[2] for c in clubs}
-    big = {q for q in POOL if fame.get(q, 0) >= 4}
-    a = {i: c & big for i, c in careers_a(players, wiki_stats, least=2).items() if len(c & big) >= 2}
-    b = careers_b(players, sorted(a))
-    sides = []
-    for src in (a, b):
-        who: dict[tuple, set[str]] = {}
-        for pid, cl in src.items():
-            for t in itertools.combinations(sorted(cl & big), 3):
-                who.setdefault(t, set()).add(pid)
-        sides.append(who)
-    found = []
-    for t in set(sides[0]) | set(sides[1]):
-        s = sides[0].get(t, set()) & sides[1].get(t, set())
-        loose = sides[0].get(t, set()) | sides[1].get(t, set())
-        if s != loose or not 2 <= len(s) <= 6 or sum(fame[q] == 5 for q in t) < 2:
-            continue
-        known = sum(by_id[i]["fame"] >= 4 for i in s)
-        if not known:
-            continue
-        # No British club: Expert only, and only with a superstar answer (Figo, Kroos)
-        # or two well-known ones and no Portuguese club (Götze and Perišić).
-        if not any(country.get(q) == "GBR" for q in t):
-            if frozenset(t) not in TRIO_KEEP and max(by_id[i]["fame"] for i in s) < 5 \
-                    and (known < 2 or any(country.get(q) == "POR" for q in t)):
-                continue
-        found.append((t, s, known, sum(fame[q] == 5 for q in t)))
-    # Most-known answers first, then the biggest clubs; a player is in two at most.
-    found.sort(key=lambda f: (-f[2], -f[3], f[0]))
-    out, used, seen = [], {}, set()
-    for t, s, known, nbig in found:
-        if frozenset(s) in seen or any(used.get(i, 0) >= TRIO_CAP for i in s):
-            continue
-        seen.add(frozenset(s))
-        for i in s:
-            used[i] = used.get(i, 0) + 1
-        ids = sorted(s)
-        m = 0
-        for i in ids:
-            for e in by_id[i].get("career", []):
-                if e[0] in t and e[1]:
-                    m |= era_mask(e[1], e[2] or e[1])
-        names = [POOL[q] for q in t]
-        out.append({
-            "kind": "trio",
-            "q": f"Played for {names[0]}, {names[1]} AND {names[2]}",
-            "answers": ids,
-            "names": [shown(i) for i in ids],
-            # A slow burn, so Medium by default; Expert with no British club; Hard when only
-            # one answer is at all well known
-            # (Payet for Marseille, West Ham AND Saint-Étienne).
-            "difficulty": 4 if not any(country.get(q) == "GBR" for q in t)
-            else 3 if sum(by_id[i]["fame"] >= 3 for i in s) == 1 else 2,
-            "eras": m or 31,
-        })
     return out
 
 
@@ -528,9 +454,6 @@ def main() -> None:
             if 1 <= len(ids) <= 6:
                 add(f"Scored in {label[comp]} for TWO different clubs", ids, (comp,))
 
-        trios = trio_teasers(players, wiki_stats, shown)
-        out += trios
-        print(f"{len(trios)} club-trio teasers")
 
     AUDIT[:] = [a for a in AUDIT if a.split(":")[0] not in AUDIT_OK]
     for line in AUDIT:
@@ -539,8 +462,7 @@ def main() -> None:
     random.Random(7).shuffle(out)
     note = (f"Half-Time Teasers: {sum(t['kind'] == 'curated' for t in out)} hand-checked, "
             f"{sum(t['kind'] == 'derby' for t in out)} from checked derby line-ups, "
-            f"{sum(t['kind'] == 'final' for t in out)} final-scorer and "
-            f"{sum(t['kind'] == 'trio' for t in out)} club-trio teasers checked against Wikipedia. "
+            f"{sum(t['kind'] == 'final' for t in out)} final-scorer teasers checked against Wikipedia. "
             f"Built {time.strftime('%Y-%m-%d %H:%M UTC', time.gmtime())}.")
     print(note)
     (SEED / "teasers.json").write_text(
