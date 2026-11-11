@@ -24,6 +24,9 @@ class _RoundSummaryScreenState extends State<RoundSummaryScreen> {
   /// The teaser panel is open (the table makes way for it).
   bool _teaserOpen = false;
 
+  /// The teaser's been settled between games: its result goes under the table.
+  bool _teaserResult = false;
+
   /// Someone's answering the teaser: nobody moves on until they're done.
   bool _teaserBusy = false;
 
@@ -93,7 +96,7 @@ class _RoundSummaryScreenState extends State<RoundSummaryScreen> {
   Widget build(BuildContext context) {
     final last = t.rounds.last;
     final standings = t.standings;
-    final table = ListView(children: [
+    final rows = [
       for (final (pos, team) in standings.indexed)
         Container(
           margin: const EdgeInsets.only(bottom: 8),
@@ -114,7 +117,7 @@ class _RoundSummaryScreenState extends State<RoundSummaryScreen> {
             Text('${t.scores[team]}', style: AppText.headline(36)),
           ]),
         ),
-    ]);
+    ];
     // Between games (not at half-time, which has its own screen).
     final showTeaser = t.teaser != null && t.teaser!.halfTimeDone && !t.teaserDue;
     final teaser = showTeaser
@@ -124,6 +127,10 @@ class _RoundSummaryScreenState extends State<RoundSummaryScreen> {
             revealNow: _revealed,
             onOpenChanged: (open) => setState(() => _teaserOpen = open),
             onBusyChanged: (busy) => setState(() => _teaserBusy = busy),
+            onResult: () => setState(() {
+              _teaserResult = true;
+              _teaserOpen = false;
+            }),
           )
         : null;
     return Scaffold(
@@ -133,17 +140,22 @@ class _RoundSummaryScreenState extends State<RoundSummaryScreen> {
             padding: const EdgeInsets.all(20),
             child: Column(children: [
               const Align(alignment: Alignment.centerLeft, child: ExitMatchButton()),
-              if (!_teaserOpen) ...[
+              if (_teaserOpen && !_teaserResult)
+                Expanded(child: SingleChildScrollView(child: teaser))
+              else ...[
                 Text('ROUND ${t.rounds.length} OF ${t.totalRounds}', style: AppText.label(16)),
                 Text(last.mode.title.toUpperCase(), style: AppText.headline(40, color: last.mode.color)),
                 if (last.multiplier > 1) Text('DOUBLE POINTS', style: AppText.label(15, color: Palette.gold)),
                 const SizedBox(height: 24),
                 Text('THE TABLE', style: AppText.label(14)),
                 const SizedBox(height: 8),
-                Expanded(child: table),
-                if (teaser != null) teaser,
-              ] else
-                Expanded(child: SingleChildScrollView(child: teaser)),
+                if (_teaserResult)
+                  Expanded(child: ListView(children: [...rows, if (teaser != null) teaser]))
+                else ...[
+                  Expanded(child: ListView(children: rows)),
+                  if (teaser != null) teaser,
+                ],
+              ],
               _button(),
             ]),
           ),

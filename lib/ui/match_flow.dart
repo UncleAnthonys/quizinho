@@ -103,7 +103,7 @@ abstract final class MatchFlow {
     final services = AppScope.read(context);
     if (t.rounds.isEmpty) _pickTeaser(services, t);
     _save(services, t);
-    _phones(context, t, t.rounds.isEmpty ? 'Kick-off — picking the first game' : 'Picking the next game');
+    _phones(context, t, t.rounds.isEmpty ? 'Kick-off - picking the first game' : 'Picking the next game');
     Navigator.of(context).pushReplacement(_route(_Guard(child: FreeKickScreen(tournament: t))));
   }
 

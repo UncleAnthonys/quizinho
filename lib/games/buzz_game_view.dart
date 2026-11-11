@@ -288,7 +288,7 @@ class BuzzGameView extends StatelessWidget {
                       padding: const EdgeInsets.fromLTRB(12, 2, 12, 0),
                       child: TimerBar(fraction: c.secondsLeft / c.phaseSeconds, seconds: c.secondsLeft, height: 10),
                     ),
-                    TextButton(onPressed: c.giveUp, child: Text('NOBODY KNOWS — SKIP', style: AppText.label(13))),
+                    TextButton(onPressed: c.giveUp, child: Text('NOBODY KNOWS - SKIP', style: AppText.label(13))),
                   ]),
                 )
               : Column(children: [
@@ -347,7 +347,7 @@ class BuzzGameView extends StatelessWidget {
                 ]),
               ),
             ),
-            TextButton(onPressed: c.giveUp, child: Text('NOBODY KNOWS — SKIP', style: AppText.label(14))),
+            TextButton(onPressed: c.giveUp, child: Text('NOBODY KNOWS - SKIP', style: AppText.label(14))),
           ]);
         }
         return Column(children: [
@@ -364,7 +364,7 @@ class BuzzGameView extends StatelessWidget {
               ),
             ),
           ),
-          TextButton(onPressed: c.giveUp, child: Text('NOBODY KNOWS — SKIP', style: AppText.label(14))),
+          TextButton(onPressed: c.giveUp, child: Text('NOBODY KNOWS - SKIP', style: AppText.label(14))),
         ]);
     }
     if (c.phase == BuzzPhase.answering) {
@@ -496,7 +496,7 @@ class FaceOffIntro extends StatelessWidget {
     required this.questionNumber,
     this.onReady,
     this.showButton = true,
-    this.message = 'Step up to the phone.\nEveryone else — hands off, no helping!',
+    this.message = 'Step up to the phone.\nEveryone else - hands off, no helping!',
   });
 
   /// (player name, team colour, team name) for each side.
@@ -552,7 +552,7 @@ class FaceOffIntro extends StatelessWidget {
         ),
         if (showButton) ...[
           const SizedBox(height: 16),
-          BigButton(label: 'Ready — show question', icon: Icons.visibility_rounded, onPressed: onReady),
+          BigButton(label: 'Ready - show question', icon: Icons.visibility_rounded, onPressed: onReady),
         ],
       ]),
     );
@@ -621,12 +621,12 @@ class _TableFaceOffIntro extends StatelessWidget {
                     Text('FACE-OFF', style: AppText.headline(96, color: Palette.danger)),
                     Text('QUESTION $questionNumber', style: AppText.label(22)),
                     const SizedBox(height: 10),
-                    Text('Everyone else — hands off!', style: AppText.headline(30, weight: FontWeight.w700)),
+                    Text('Everyone else - hands off!', style: AppText.headline(30, weight: FontWeight.w700)),
                   ]),
                 ),
               ),
               const SizedBox(height: 10),
-              BigButton(label: 'Ready — show question', icon: Icons.visibility_rounded, onPressed: onReady, height: 72),
+              BigButton(label: 'Ready - show question', icon: Icons.visibility_rounded, onPressed: onReady, height: 72),
             ]),
           ),
         ),

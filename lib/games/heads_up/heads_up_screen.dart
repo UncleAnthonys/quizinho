@@ -192,7 +192,7 @@ class _HeadsUpScreenState extends State<HeadsUpScreen>
                 style: AppText.headline(52, color: Palette.onTeam(colour))),
           ),
           Text(
-            _holder == null ? 'One player guesses, the rest describe' : '${_t.teamName(team).toUpperCase()} — DESCRIBE!',
+            _holder == null ? 'One player guesses, the rest describe' : '${_t.teamName(team).toUpperCase()} - DESCRIBE!',
             style: AppText.label(15, color: Palette.onTeam(colour)),
           ),
         ]),
@@ -213,7 +213,7 @@ class _HeadsUpScreenState extends State<HeadsUpScreen>
         padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(color: Colors.black.withValues(alpha: 0.3), borderRadius: BorderRadius.circular(14)),
         child: Text(
-          '${c.turnSeconds} seconds. Tilt the phone DOWN for correct, UP to pass — or tap the buttons.',
+          '${c.turnSeconds} seconds. Tilt the phone DOWN for correct, UP to pass - or tap the buttons.',
           style: const TextStyle(fontSize: 15, height: 1.4),
         ),
       ),

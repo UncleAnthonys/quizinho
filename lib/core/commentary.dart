@@ -37,7 +37,7 @@ class Commentary {
       'Where on earth did THAT come from?!',
       'Proper football knowledge, that.',
       'Somebody’s done their homework!',
-      'An absolute anorak — and I mean that as a compliment.',
+      'An absolute anorak - and I mean that as a compliment.',
     ],
     GameEvent.steal: [
       'Daylight robbery!',
@@ -91,7 +91,7 @@ class Commentary {
     'They’ll be singing about this one for years.',
   ];
   static const drawLines = [
-    'All square! Honours even — for now.',
+    'All square! Honours even - for now.',
     'Nothing to separate them. Rematch?',
   ];
 

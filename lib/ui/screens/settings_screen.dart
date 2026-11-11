@@ -100,7 +100,7 @@ class SettingsScreen extends StatelessWidget {
             const SizedBox(height: 4),
             Text(
               s.repo.dataStatus == 'wikidata'
-                  ? 'Club careers from Wikidata (free, open football data). It isn’t perfect — if you’re sure an answer is right, use “Not listed?” and let the room vote.'
+                  ? 'Club careers from Wikidata (free, open football data). It isn’t perfect - if you’re sure an answer is right, use “Not listed?” and let the room vote.'
                   : s.repo.dataStatus == 'verified'
                   ? 'All challenges checked against sources.'
                   : 'This is an early demo set written from general knowledge and not yet fact-checked. '

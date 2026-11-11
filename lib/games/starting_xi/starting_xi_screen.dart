@@ -165,7 +165,7 @@ class _StartingXiScreenState extends State<StartingXiScreen>
       ScaffoldMessenger.of(context)
         ..hideCurrentSnackBar()
         ..showSnackBar(SnackBar(
-          content: Text('${p.name} is already on the board — someone else!'),
+          content: Text('${p.name} is already on the board - someone else!'),
           duration: const Duration(milliseconds: 1400),
         ));
     }
@@ -395,7 +395,7 @@ class XiLayout extends StatelessWidget {
               if (data['who'] != null)
                 Text('${data['teamName'] ?? ''}'.toUpperCase(), style: AppText.label(18, color: Palette.onTeam(colour))),
               const SizedBox(height: 6),
-              Text(startLabel ?? 'TAP WHEN READY — ${seconds}s ON THE CLOCK',
+              Text(startLabel ?? 'TAP WHEN READY - ${seconds}s ON THE CLOCK',
                   style: AppText.label(15, color: Palette.onTeam(colour))),
             ]),
           ),

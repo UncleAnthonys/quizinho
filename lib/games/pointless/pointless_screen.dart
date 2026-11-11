@@ -80,7 +80,7 @@ class _PointlessScreenState extends State<PointlessScreen>
       stage: TurnStage.answer,
       title: 'POINTLESS · ANSWER ${c.goNumber} OF ${c.answersPerTeam}',
       headline: c.category.prompt,
-      sub: 'Confer — the most obscure right answer wins',
+      sub: 'Confer - the most obscure right answer wins',
       game: 'pt',
       board: _view(c),
       left: c.secondsLeft,
@@ -104,9 +104,9 @@ class _PointlessScreenState extends State<PointlessScreen>
         case PtEvent.wrong || PtEvent.timeUp:
           s.sound.play(Sfx.wrong);
           s.haptic(HapticStrength.heavy);
-          say(_pick(const ['Not on the list — that’s the full 100.', 'Ouch. 100 points.', 'Wrong! Maximum score.']));
+          say(_pick(const ['Not on the list - that’s the full 100.', 'Ouch. 100 points.', 'Wrong! Maximum score.']));
         case PtEvent.duplicate:
-          _toast('Already said — pick another!');
+          _toast('Already said - pick another!');
           _pickerKey++;
         case PtEvent.scored || PtEvent.pointless:
           s.haptic(HapticStrength.light); // the column does the rest
@@ -355,7 +355,7 @@ class PtLayout extends StatelessWidget {
         ]),
         typing
             ? const SizedBox.shrink()
-            : Text('Confer — the most obscure right answer wins.', textAlign: TextAlign.center, style: AppText.label(13)),
+            : Text('Confer - the most obscure right answer wins.', textAlign: TextAlign.center, style: AppText.label(13)),
         const SizedBox(height: 8),
         answerBox,
       ]);
@@ -408,7 +408,7 @@ class PtLayout extends StatelessWidget {
           ),
       ],
       const SizedBox(height: 10),
-      Text('EVERY ANSWER (${all.length}) — LOWEST FIRST', style: AppText.label(13)),
+      Text('EVERY ANSWER (${all.length}) - LOWEST FIRST', style: AppText.label(13)),
       const SizedBox(height: 6),
       Wrap(spacing: 6, runSpacing: 6, children: [
         for (final e in all)

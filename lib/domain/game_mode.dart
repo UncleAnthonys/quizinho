@@ -8,9 +8,9 @@ enum GameModeId {
     rules: [
       'Two clubs appear. Hit your buzzer as soon as you know a player who played for both.',
       'Get it right: 2 points. Get it wrong: you’re locked out and the others can steal.',
-      'Name a rare pick — a player most people wouldn’t think of — for a bonus point.',
+      'Name a rare pick - a player most people wouldn’t think of - for a bonus point.',
     ],
-    whoPlays: 'Anyone can buzz — unless it says FACE-OFF, then only the two named players.',
+    whoPlays: 'Anyone can buzz - unless it says FACE-OFF, then only the two named players.',
   ),
   careerPath(
     title: 'Career Path',
@@ -21,7 +21,7 @@ enum GameModeId {
       'Buzz as early as you dare: 5 points on the first clue, dropping each reveal.',
       'Wrong answers lock your team out of that player.',
     ],
-    whoPlays: 'Teams can confer — except on FACE-OFF questions, where it’s just the named players.',
+    whoPlays: 'Teams can confer - except on FACE-OFF questions, where it’s just the named players.',
   ),
   startingXi(
     title: 'Starting XI Bomb',
@@ -30,9 +30,9 @@ enum GameModeId {
     rules: [
       'Name one player from the starting XI, then the bomb passes on.',
       'Wrong answer or time up: the bomb goes off and you lose a life.',
-      'Last team standing — or most named if the XI is finished — wins the round: +3.',
+      'Last team standing - or most named if the XI is finished - wins the round: +3.',
     ],
-    whoPlays: 'Teams take turns — on your own phone if you’ve joined, otherwise pass the phone to whoever is named.',
+    whoPlays: 'Teams take turns - on your own phone if you’ve joined, otherwise pass the phone to whoever is named.',
   ),
   wildcard(
     title: 'Wildcard',
@@ -50,7 +50,7 @@ enum GameModeId {
       'Right: the square is yours. Wrong or too slow: your turn’s over.',
       'Three in a row = 3 bonus points. Every square you own is worth 1. Each player once per grid.',
     ],
-    whoPlays: 'Teams take turns — the named player picks the square and answers.',
+    whoPlays: 'Teams take turns - the named player picks the square and answers.',
   ),
   biddingWar(
     title: 'Bidding War',
@@ -58,7 +58,7 @@ enum GameModeId {
     playable: true,
     rules: [
       'A category appears. Teams take turns bidding how many answers they can name.',
-      'Raise the bid — or think they’re bluffing? Hit CHALLENGE.',
+      'Raise the bid - or think they’re bluffing? Hit CHALLENGE.',
       'The top bidder gets 60 seconds to name that many. Do it: +3. Fail: +3 to the challenger.',
       '3+ teams: think they can do it? DROP OUT and let the next team decide. The last team left has to raise or challenge.',
     ],
@@ -69,9 +69,9 @@ enum GameModeId {
     tagline: 'Think of the answers nobody else would',
     playable: true,
     rules: [
-      'A category appears. Teams take turns — confer, then give ONE answer.',
+      'A category appears. Teams take turns - confer, then give ONE answer.',
       'A right answer scores how many of 100 people would have said it. The more obscure, the lower.',
-      'A wrong answer or running out of time scores 100. Two answers each — lowest total wins +3, and every POINTLESS answer is +1.',
+      'A wrong answer or running out of time scores 100. Two answers each - lowest total wins +3, and every POINTLESS answer is +1.',
     ],
     whoPlays: 'Each team confers, then one person types or says the answer.',
   ),
@@ -80,16 +80,16 @@ enum GameModeId {
     tagline: 'Check out from 501 with players’ apps + goals',
     playable: true,
     rules: [
-      'Every team starts on 501. Take turns naming a player — their league apps + goals for the club come off your score.',
+      'Every team starts on 501. Take turns naming a player - their league apps + goals for the club come off your score.',
       'Over 180 is a BUST: your score stays.',
-      'Finish anywhere from 0 to −10 to check out; further below is a bust. Everyone gets the same number of darts — if two teams check out on the same dart, closest to 0 wins +3.',
-      'Once a player is named they’re gone for everyone — steal the one they wanted!',
+      'Finish anywhere from 0 to −10 to check out; further below is a bust. Everyone gets the same number of darts - if two teams check out on the same dart, closest to 0 wins +3.',
+      'Once a player is named they’re gone for everyone - steal the one they wanted!',
     ],
     whoPlays: 'Each team confers, then names one player per turn.',
   ),
   headsUp(
     title: 'On Your Head',
-    tagline: 'Phone on your forehead — your team describes',
+    tagline: 'Phone on your forehead - your team describes',
     playable: true,
     rules: [
       'One player holds the phone to their forehead. Their team describes the name on screen.',

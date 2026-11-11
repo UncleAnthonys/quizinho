@@ -35,17 +35,8 @@ class _RoundIntroScreenState extends State<RoundIntroScreen> {
         child: SafeArea(
           child: Column(children: [
             Scoreboard(tournament: tournament),
-            // Everything shrinks to fit above the button — nothing hides behind it.
             Expanded(
-              child: LayoutBuilder(
-                builder: (context, box) => Padding(
-                  padding: const EdgeInsets.fromLTRB(20, 24, 20, 12),
-                  child: FittedBox(
-                    fit: BoxFit.scaleDown,
-                    alignment: Alignment.topCenter,
-                    child: SizedBox(
-                      width: box.maxWidth - 40,
-                      child: Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+              child: ListView(padding: const EdgeInsets.fromLTRB(20, 24, 20, 12), children: [
                 Icon(mode.icon, color: mode.color, size: 56),
                 const SizedBox(height: 8),
                 Text(mode.title.toUpperCase(), textAlign: TextAlign.center, style: AppText.headline(48, color: mode.color)),
@@ -95,27 +86,7 @@ class _RoundIntroScreenState extends State<RoundIntroScreen> {
                     Expanded(child: Text(mode.whoPlays, style: const TextStyle(fontSize: 16, color: Palette.text))),
                   ]),
                 ),
-                // Table mode is for sharing one phone — not when everyone's on their own.
-                if ((mode == GameModeId.clubConnections || mode == GameModeId.careerPath) &&
-                    AppScope.of(context).room == null)
-                  const Padding(
-                    padding: EdgeInsets.only(top: 12),
-                    child: Row(children: [
-                      Icon(Icons.screen_rotation_rounded, color: Palette.yellow),
-                      SizedBox(width: 10),
-                      Expanded(
-                        child: Text(
-                          'Sat opposite each other? Turn the phone sideways and lay it flat — a buzzer at each end.',
-                          style: TextStyle(fontSize: 15, color: Palette.muted, height: 1.35),
-                        ),
-                      ),
-                    ]),
-                  ),
-                      ]),
-                    ),
-                  ),
-                ),
-              ),
+              ]),
             ),
             Padding(
               padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),

@@ -142,7 +142,7 @@ class _VoiceTestScreenState extends State<VoiceTestScreen> {
     if (started != true && mounted) {
       setState(() => _listening = false);
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Text('Voice isn’t available — turn on Voice answers in Settings and allow the microphone.')));
+          content: Text('Voice isn’t available - turn on Voice answers in Settings and allow the microphone.')));
     }
   }
 
@@ -159,7 +159,7 @@ class _VoiceTestScreenState extends State<VoiceTestScreen> {
   String _report() {
     final platform = kIsWeb ? 'web' : defaultTargetPlatform.name;
     final good = _results.where((r) => r.ok).length;
-    final b = StringBuffer('Quizinho voice test (random untuned names) — $platform — $good/${_results.length} recognised\n');
+    final b = StringBuffer('Quizinho voice test (random untuned names) - $platform - $good/${_results.length} recognised\n');
     if (_model.isNotEmpty) b.writeln(_model);
     for (final r in _results) {
       b.writeln('${r.ok ? 'OK  ' : 'MISS'} ${r.player.name} [${r.player.id}, ${r.player.nationality ?? '?'}] | heard: '
@@ -174,7 +174,7 @@ class _VoiceTestScreenState extends State<VoiceTestScreen> {
     await Clipboard.setData(ClipboardData(text: '${_report()}\n$details'));
     if (!mounted) return;
     ScaffoldMessenger.of(context)
-        .showSnackBar(const SnackBar(content: Text('Results copied — paste them into the chat with Claude.')));
+        .showSnackBar(const SnackBar(content: Text('Results copied - paste them into the chat with Claude.')));
   }
 
   @override
@@ -204,8 +204,8 @@ class _VoiceTestScreenState extends State<VoiceTestScreen> {
       body: PitchBackground(
         child: ListView(padding: const EdgeInsets.all(16), children: [
           Text(
-            'A fresh random set of well-known players every time — none of them hand-tuned. '
-            'Say each name the way you would in a game — no need to say it "properly". '
+            'A fresh random set of well-known players every time - none of them hand-tuned. '
+            'Say each name the way you would in a game - no need to say it "properly". '
             'Then copy the results and paste them to Claude.',
             style: AppText.label(14),
           ),

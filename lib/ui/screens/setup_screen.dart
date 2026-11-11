@@ -111,7 +111,7 @@ class _SetupScreenState extends State<SetupScreen> {
       } catch (e) {
         if (mounted) {
           ScaffoldMessenger.of(context)
-              .showSnackBar(const SnackBar(content: Text('Couldn’t open a room — check your connection.')));
+              .showSnackBar(const SnackBar(content: Text('Couldn’t open a room - check your connection.')));
         }
         return;
       } finally {
@@ -191,7 +191,7 @@ class _SetupScreenState extends State<SetupScreen> {
                     _players.every((p) => p.isNotEmpty)
                         ? (_players.every((p) => p.length == 1)
                             ? 'Names added. Face-offs start when a team has 2+ players.'
-                            : 'Face-offs on. First name is captain (C) — tap a name to swap.')
+                            : 'Face-offs on. First name is captain (C) - tap a name to swap.')
                         : 'Add player names to unlock face-offs and phone buzzers.',
                     style: const TextStyle(color: Palette.muted, fontSize: 13),
                   ),

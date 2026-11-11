@@ -98,7 +98,7 @@ class HomeScreen extends StatelessWidget {
                 const Padding(
                   padding: EdgeInsets.only(top: 8),
                   child: Text(
-                    'Football data: early demo set — not yet fact-checked.',
+                    'Football data: early demo set - not yet fact-checked.',
                     textAlign: TextAlign.center,
                     style: TextStyle(color: Palette.muted, fontSize: 12),
                   ),

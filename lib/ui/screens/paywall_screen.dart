@@ -74,14 +74,14 @@ class _PaywallScreenState extends State<PaywallScreen> {
                 const SizedBox(height: 6),
                 Text(
                   widget.afterWarmUp
-                      ? 'That was the Warm-Up Cup — the same challenges for everyone. '
+                      ? 'That was the Warm-Up Cup - the same challenges for everyone. '
                           'The full game is a fresh match every time.'
                       : 'The Warm-Up Cup is free. The full game is a fresh match every time.',
                   textAlign: TextAlign.center,
                   style: AppText.label(15, color: Palette.text),
                 ),
                 const SizedBox(height: 22),
-                const _Perk(Icons.all_inclusive_rounded, 'Unlimited matches', 'Every one different — nothing repeats for ages'),
+                const _Perk(Icons.all_inclusive_rounded, 'Unlimited matches', 'Every one different - nothing repeats for ages'),
                 const _Perk(Icons.shuffle_rounded, 'Random challenges', 'From 24,000+ players, 4,000 clubs and every era'),
                 const _Perk(Icons.sports_esports_rounded, 'All 8 games', 'Plus Solo Survival, wildcards and face-offs'),
                 const _Perk(Icons.tune_rounded, 'Your rules', 'Easy to Expert, match length, men’s and women’s'),

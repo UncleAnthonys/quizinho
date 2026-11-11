@@ -160,7 +160,7 @@ class _TicTacToeScreenState extends State<TicTacToeScreen>
       ScaffoldMessenger.of(context)
         ..hideCurrentSnackBar()
         ..showSnackBar(SnackBar(
-          content: Text('${p.name} has already been used on this grid — someone else!'),
+          content: Text('${p.name} has already been used on this grid - someone else!'),
           duration: const Duration(milliseconds: 1600),
         ));
     } else if (r == TttSubmit.claimed && who != null) {
@@ -257,7 +257,7 @@ class _TicTacToeScreenState extends State<TicTacToeScreen>
         OutlinedButton.icon(
           onPressed: c.pass,
           icon: const Icon(Icons.skip_next_rounded),
-          label: Text("DON'T KNOW ANY — PASS", style: AppText.label(15, color: Palette.text)),
+          label: Text("DON'T KNOW ANY - PASS", style: AppText.label(15, color: Palette.text)),
           style: OutlinedButton.styleFrom(
             foregroundColor: Palette.text,
             side: const BorderSide(color: Palette.line),
@@ -345,7 +345,7 @@ class TttLayout extends StatelessWidget {
     final banner = phase == 'finished'
         ? Center(
             child: Text(
-              data['winner'] != null ? '${'${data['winner']}'.toUpperCase()} GET THREE IN A ROW!' : 'NO LINE — SQUARES DECIDE IT',
+              data['winner'] != null ? '${'${data['winner']}'.toUpperCase()} GET THREE IN A ROW!' : 'NO LINE - SQUARES DECIDE IT',
               textAlign: TextAlign.center,
               style: AppText.headline(26, color: Palette.yellow),
             ),

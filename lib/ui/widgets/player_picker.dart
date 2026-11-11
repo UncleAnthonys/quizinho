@@ -182,7 +182,7 @@ class _PlayerPickerState extends State<PlayerPicker> {
     if (!started && mounted) {
       setState(() {
         _listening = false;
-        _voiceNote = 'Mic not available — type the name';
+        _voiceNote = 'Mic not available - type the name';
       });
     }
   }
@@ -240,7 +240,7 @@ class _PlayerPickerState extends State<PlayerPicker> {
       if (found != null) {
         i += used;
         _consumed = i;
-        if (_voiceNote != 'Got it — next!') setState(() => _voiceNote = 'Got it — next!');
+        if (_voiceNote != 'Got it - next!') setState(() => _voiceNote = 'Got it - next!');
         widget.onPick(found);
       } else {
         i++;
@@ -271,13 +271,13 @@ class _PlayerPickerState extends State<PlayerPicker> {
     if (_silentRestarts >= 10) {
       setState(() {
         _listening = false;
-        _voiceNote = 'Mic not hearing anything — tap it to retry, or type';
+        _voiceNote = 'Mic not hearing anything - tap it to retry, or type';
       });
       return;
     }
     if (alternatives.isNotEmpty) {
       _suggestFrom(alternatives);
-      _voiceNote = _results.isEmpty ? 'Didn’t recognise that — say it again or type' : 'Did you mean…? Tap it, or say it again';
+      _voiceNote = _results.isEmpty ? 'Didn’t recognise that - say it again or type' : 'Did you mean…? Tap it, or say it again';
     }
     setState(() => _listening = false);
     // Keep the mic open for the whole answer clock.
@@ -316,10 +316,10 @@ class _PlayerPickerState extends State<PlayerPicker> {
     setState(() {
       _results = [for (final p in matches.take(4)) PlayerMatch(p, 0)];
       _typedNote = matches.isNotEmpty
-          ? 'More than one “$text” — which one?'
+          ? 'More than one “$text” - which one?'
           : widget.index.isFirstNameOnly(text)
-              ? 'Surname needed — first names don’t count'
-              : 'Not recognised — check the spelling, or use “Not listed?”';
+              ? 'Surname needed - first names don’t count'
+              : 'Not recognised - check the spelling, or use “Not listed?”';
     });
   }
 
@@ -455,7 +455,7 @@ class _PlayerPickerState extends State<PlayerPicker> {
           Text('“$typed”', textAlign: TextAlign.center, style: AppText.headline(30)),
           const SizedBox(height: 6),
           const Text(
-            'Not in our database. Everyone else — is it right?',
+            'Not in our database. Everyone else - is it right?',
             textAlign: TextAlign.center,
             style: TextStyle(color: Palette.muted),
           ),

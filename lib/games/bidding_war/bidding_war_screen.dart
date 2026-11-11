@@ -88,7 +88,7 @@ class _BiddingWarScreenState extends State<BiddingWarScreen>
           },
         );
       case BidPhase.countdown:
-        p.idle('${_t.teamName(holder!)} challenged — name ${c.currentBid}!', game: 'bid', board: _view(c));
+        p.idle('${_t.teamName(holder!)} challenged - name ${c.currentBid}!', game: 'bid', board: _view(c));
       case BidPhase.answering:
         final clubs = c.category.answersAreClubs;
         p.show(
@@ -97,7 +97,7 @@ class _BiddingWarScreenState extends State<BiddingWarScreen>
           stage: TurnStage.answer,
           title: 'BIDDING WAR · ${c.correctCount} / ${c.currentBid}',
           headline: c.category.prompt,
-          sub: 'Name ${c.currentBid} — keep them coming',
+          sub: 'Name ${c.currentBid} - keep them coming',
           game: 'bid',
           board: _view(c),
           left: c.secondsLeft,
@@ -139,7 +139,7 @@ class _BiddingWarScreenState extends State<BiddingWarScreen>
           _toast('Already got that one!');
         case BidEvent.wrong:
           s.sound.play(Sfx.wrong, volume: 0.5);
-          _toast('Not on the list — keep going!');
+          _toast('Not on the list - keep going!');
         case BidEvent.completed:
           s.sound.play(Sfx.fanfare);
           s.sound.play(Sfx.cheer);
@@ -512,7 +512,7 @@ class _BidControlsState extends State<BidControls> {
       if (d['canChallenge'] == true) ...[
         const SizedBox(height: 10),
         BigButton(
-          label: 'Challenge — prove it!',
+          label: 'Challenge - prove it!',
           icon: Icons.gavel_rounded,
           color: Palette.danger,
           textColor: Colors.white,
@@ -522,7 +522,7 @@ class _BidControlsState extends State<BidControls> {
       if (d['canPass'] == true) ...[
         const SizedBox(height: 6),
         Center(
-          child: TextButton(onPressed: widget.onPass, child: Text('DROP OUT — LET THE NEXT TEAM DECIDE', style: AppText.label(15))),
+          child: TextButton(onPressed: widget.onPass, child: Text('DROP OUT - LET THE NEXT TEAM DECIDE', style: AppText.label(15))),
         ),
       ],
     ]);

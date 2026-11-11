@@ -149,7 +149,7 @@ class _JoinScreenState extends State<JoinScreen> {
           TeamChip(name: t.name, colorIndex: t.colorIndex, size: 22),
           const SizedBox(height: 8),
           if (t.players.isEmpty)
-            Text('No names on this team yet — add them on the main phone.', style: AppText.label(13))
+            Text('No names on this team yet - add them on the main phone.', style: AppText.label(13))
           else
             Wrap(spacing: 8, runSpacing: 8, children: [
               for (final (j, n) in t.players.indexed)
@@ -383,7 +383,7 @@ class _GuestGameState extends State<_GuestGame> with SingleTickerProviderStateMi
                 if ('${v['q']}' == q && v['phase'] == 'open') {
                   setState(() => _buzzedOn = null);
                   ScaffoldMessenger.maybeOf(context)?.showSnackBar(const SnackBar(
-                      content: Text('The main phone didn’t get that — keep it open and buzz again')));
+                      content: Text('The main phone didn’t get that - keep it open and buzz again')));
                 }
               });
             },
@@ -397,7 +397,7 @@ class _GuestGameState extends State<_GuestGame> with SingleTickerProviderStateMi
     } else if (phase == 'open' && faceOff.isNotEmpty && !inFaceOff) {
       action = _status('FACE-OFF: ${faceOff.values.join(' v ')}\nOnly they can buzz');
     } else if (phase == 'open') {
-      action = _status(v['mode'] == 'teaser' ? 'YOUR TEAM’S HAD ITS GUESS' : 'LOCKED OUT — WAIT FOR THE STEAL');
+      action = _status(v['mode'] == 'teaser' ? 'YOUR TEAM’S HAD ITS GUESS' : 'LOCKED OUT - WAIT FOR THE STEAL');
     } else if (result.isNotEmpty) {
       final scorer = (result['team'] as num?)?.toInt();
       final teamsV = asList(v['teams']);
@@ -440,7 +440,7 @@ class _GuestGameState extends State<_GuestGame> with SingleTickerProviderStateMi
             showButton: false,
             message: faceOff['${me.team}'] == me.name
                 ? 'You’re up! Buzz on this phone\nwhen the question appears.'
-                : 'Hands off — no helping!',
+                : 'Hands off - no helping!',
           ),
         ),
       ]);
@@ -568,7 +568,7 @@ class _GuestGameState extends State<_GuestGame> with SingleTickerProviderStateMi
             OutlinedButton.icon(
               onPressed: () => widget.room.pass(q),
               icon: const Icon(Icons.skip_next_rounded),
-              label: Text("DON'T KNOW ANY — PASS", style: AppText.label(15, color: Palette.text)),
+              label: Text("DON'T KNOW ANY - PASS", style: AppText.label(15, color: Palette.text)),
               style: OutlinedButton.styleFrom(
                 foregroundColor: Palette.text,
                 side: const BorderSide(color: Palette.line),
@@ -643,10 +643,10 @@ class _VoiceBoost extends StatelessWidget {
         valueListenable: HintedSpeech.status,
         builder: (context, s, _) {
           final (text, colour) = switch (s) {
-            'ready' => ('Full voice — unusual names should work too', Palette.green),
+            'ready' => ('Full voice - unusual names should work too', Palette.green),
             'downloading' => ('Tuning voice to footballer names… type unusual names for now', Palette.gold),
             'checking' => ('Checking voice…', Palette.muted),
-            _ => ('Basic voice — may mishear unusual names, so type those', Palette.muted),
+            _ => ('Basic voice - may mishear unusual names, so type those', Palette.muted),
           };
           return Padding(
             padding: const EdgeInsets.fromLTRB(16, 0, 16, 2),

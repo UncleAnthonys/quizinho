@@ -78,7 +78,7 @@ class _CheckoutScreenState extends State<CheckoutScreen>
       stage: TurnStage.answer,
       title: 'FOOTBALL 501 · DART ${c.dartNumber}/${c.maxTurns}',
       headline: c.category.prompt,
-      sub: 'You’re on ${max(0, c.remaining[team])} — apps + goals come off. Over ${CheckoutController.maxDart} = bust.',
+      sub: 'You’re on ${max(0, c.remaining[team])} - apps + goals come off. Over ${CheckoutController.maxDart} = bust.',
       game: 'co',
       board: _view(c),
       left: c.secondsLeft,
@@ -97,10 +97,10 @@ class _CheckoutScreenState extends State<CheckoutScreen>
       final s = services;
       switch (c.lastEvent) {
         case CoEvent.duplicate:
-          _toast('Already used — that player’s gone! Pick another.');
+          _toast('Already used - that player’s gone! Pick another.');
           _pickerKey++;
         case CoEvent.noStats:
-          _toast('No league numbers on record for them at this club yet — pick another.');
+          _toast('No league numbers on record for them at this club yet - pick another.');
           _pickerKey++;
         case CoEvent.thrown:
           final t = c.lastThrow!;
@@ -390,7 +390,7 @@ class CoLayout extends StatelessWidget {
       ]),
       Text(
         checkedOut
-            ? 'LAST DART! They’ve checked out — finish closer to 0 to win it.'
+            ? 'LAST DART! They’ve checked out - finish closer to 0 to win it.'
             : on <= CheckoutController.maxDart
                 ? 'Finish between 0 and −${CheckoutController.checkoutWindow} to check out!'
                 : 'Over ${CheckoutController.maxDart} = bust. Players named are gone for everyone.',
@@ -409,8 +409,8 @@ class CoLayout extends StatelessWidget {
     final (headline, colour) = switch ('${t['outcome']}') {
       'checkout' => ('CHECKED OUT!', Palette.yellow),
       'scored' => ('${t['before']} → ${t['after']}', _oche),
-      'bust' => ('BUST — OVER 180', Palette.danger),
-      'overshoot' => ('BUST — TOO FAR (${_int(t['before']) - value})', Palette.danger),
+      'bust' => ('BUST - OVER 180', Palette.danger),
+      'overshoot' => ('BUST - TOO FAR (${_int(t['before']) - value})', Palette.danger),
       'wrong' => (label == 'Passed' ? 'PASSED' : 'NEVER PLAYED FOR THEM', Palette.danger),
       _ => ('OUT OF TIME', Palette.danger),
     };

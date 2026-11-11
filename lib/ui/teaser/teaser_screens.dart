@@ -160,8 +160,13 @@ class TeaserBetweenGames extends StatefulWidget {
     required this.tournament,
     required this.onOpenChanged,
     required this.onBusyChanged,
+    required this.onResult,
     this.revealNow = false,
   });
+
+  /// Solved, or everyone's guessed wrong (between games): the result sits
+  /// under the table rather than in place of it.
+  final VoidCallback onResult;
   final Tournament tournament;
 
   /// Someone's answering: the summary screen holds "Next challenge".
@@ -214,6 +219,7 @@ class _TeaserBetweenGamesState extends State<TeaserBetweenGames>
     widget.onBusyChanged(phase == BuzzPhase.answering);
     // A phone buzzed, or it's been solved/revealed: show it.
     if (phase != BuzzPhase.open) _setOpen(true);
+    if (phase == BuzzPhase.resolved && !widget.revealNow) widget.onResult();
   }
 
   @override
@@ -251,13 +257,9 @@ class _TeaserBetweenGamesState extends State<TeaserBetweenGames>
         if (c.phase == BuzzPhase.open)
           TextButton(
             onPressed: () => _setOpen(false),
-            child: Text('NOT YET — KEEP THINKING', style: AppText.label(13)),
+            child: Text('NOT YET - KEEP THINKING', style: AppText.label(13)),
           )
-        else if (c.phase == BuzzPhase.resolved && !widget.revealNow)
-          TextButton(
-            onPressed: () => _setOpen(false),
-            child: Text('BACK TO THE TABLE', style: AppText.label(13)),
-          ),
+
       ]),
     );
   }

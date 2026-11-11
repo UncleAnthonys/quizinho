@@ -49,7 +49,7 @@ class Purchases extends ChangeNotifier {
       final store = _store ??= InAppPurchase.instance;
       _sub ??= store.purchaseStream.listen(_onUpdates, onError: (Object e) {
         busy = false;
-        error = 'Something went wrong — try again.';
+        error = 'Something went wrong - try again.';
         notifyListeners();
       });
       if (product != null || !await store.isAvailable()) return;
@@ -69,7 +69,7 @@ class Purchases extends ChangeNotifier {
     final store = _store;
     final p = product;
     if (store == null || p == null) {
-      error = 'Can’t reach the App Store right now — check your connection and try again.';
+      error = 'Can’t reach the App Store right now - check your connection and try again.';
       notifyListeners();
       return;
     }
@@ -80,7 +80,7 @@ class Purchases extends ChangeNotifier {
       await store.buyNonConsumable(purchaseParam: PurchaseParam(productDetails: p));
     } catch (e) {
       busy = false;
-      error = 'Purchase didn’t start — try again.';
+      error = 'Purchase didn’t start - try again.';
       notifyListeners();
     }
   }
@@ -98,7 +98,7 @@ class Purchases extends ChangeNotifier {
       await store.restorePurchases();
     } catch (e) {
       busy = false;
-      error = 'Couldn’t restore — try again.';
+      error = 'Couldn’t restore - try again.';
       notifyListeners();
       return;
     }
@@ -128,7 +128,7 @@ class Purchases extends ChangeNotifier {
             busy = false;
           case PurchaseStatus.error:
             busy = false;
-            error = p.error?.message ?? 'Purchase failed — you haven’t been charged.';
+            error = p.error?.message ?? 'Purchase failed - you haven’t been charged.';
         }
       }
       if (p.pendingCompletePurchase) await _store?.completePurchase(p);

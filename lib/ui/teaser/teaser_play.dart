@@ -83,7 +83,7 @@ class TeaserPlay extends StatelessWidget {
       if (c.clockDone)
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 10),
-          child: Text('TIME! IT STAYS OPEN BETWEEN GAMES — FOR 3 POINTS',
+          child: Text('TIME! IT STAYS OPEN BETWEEN GAMES - FOR 3 POINTS',
               textAlign: TextAlign.center, style: AppText.headline(22, color: Palette.gold)),
         )
       else
@@ -103,7 +103,7 @@ class TeaserPlay extends StatelessWidget {
         if (c.canOverrule)
           TextButton(
             onPressed: c.overrule,
-            child: Text('HOLD ON — THAT’S RIGHT (COUNT IT)', style: AppText.label(13, color: Palette.yellow)),
+            child: Text('HOLD ON - THAT’S RIGHT (COUNT IT)', style: AppText.label(13, color: Palette.yellow)),
           ),
       ]),
     );
@@ -145,7 +145,7 @@ class TeaserPlay extends StatelessWidget {
         for (final (name, why) in herrings)
           Padding(
             padding: const EdgeInsets.only(bottom: 4),
-            child: Text('$name — $why', textAlign: TextAlign.center, style: AppText.label(13, color: Palette.text)),
+            child: Text('$name - $why', textAlign: TextAlign.center, style: AppText.label(13, color: Palette.text)),
           ),
       ],
     ]);
