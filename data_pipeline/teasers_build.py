@@ -149,8 +149,8 @@ def final_titles() -> dict[str, list[str]]:
     euro = ["1960 European Nations' Cup final", "1964 European Nations' Cup final",
             *(f"UEFA Euro {y} final" for y in range(1968, 2025, 4))]
     fac = [f"{y} FA Cup final" for y in range(1946, 2027)]
-    lc = [f"{y} Football League Cup final" if y < 2017 else f"{y} EFL Cup final" for y in range(1961, 2027)]
-    return {"cl": cl, "wc": wc, "uel": uel, "euro": euro, "fac": fac, "lc": lc}
+    # No League Cup: nobody remembers who scored in those finals.
+    return {"cl": cl, "wc": wc, "uel": uel, "euro": euro, "fac": fac}
 
 
 AUDIT: list[str] = []
@@ -338,7 +338,9 @@ def trio_teasers(players: list[dict], wiki_stats: dict, shown) -> list[dict]:
             "q": f"Played for {names[0]}, {names[1]} AND {names[2]}",
             "answers": ids,
             "names": [shown(i) for i in ids],
-            "difficulty": (1 if nbig == 3 else 2) if known >= 2 else 3,
+            # A slow burn, so Medium by default; Hard when only one answer is at all well known
+            # (Payet for Marseille, West Ham AND Saint-Étienne).
+            "difficulty": 3 if sum(by_id[i]["fame"] >= 3 for i in s) == 1 else 2,
             "eras": m or 31,
         })
     return out
@@ -506,7 +508,7 @@ def main() -> None:
                     add("Scored in " + ", ".join(words[:-1]) + " AND " + words[-1], ids, combo)
 
         # The same final, for two different clubs (Ronaldo: United and Real).
-        for comp in ("cl", "uel", "fac", "lc"):
+        for comp in ("cl", "uel", "fac"):
             ids = {i for i, rows in scored[comp].items() if len({tm for _, tm in rows if tm}) >= 2}
             if 1 <= len(ids) <= 6:
                 add(f"Scored in {label[comp]} for TWO different clubs", ids, (comp,))
