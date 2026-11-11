@@ -149,8 +149,9 @@ def final_titles() -> dict[str, list[str]]:
     euro = ["1960 European Nations' Cup final", "1964 European Nations' Cup final",
             *(f"UEFA Euro {y} final" for y in range(1968, 2025, 4))]
     fac = [f"{y} FA Cup final" for y in range(1946, 2027)]
-    # No League Cup: nobody remembers who scored in those finals.
-    return {"cl": cl, "wc": wc, "uel": uel, "euro": euro, "fac": fac}
+    # Only the finals a table remembers the scorers of: no League Cup, UEFA Cup,
+    # Euros or FA Cup (the lists stay for MANUAL_SCORERS and the audit history).
+    return {"cl": cl, "wc": wc}
 
 
 AUDIT: list[str] = []
@@ -472,20 +473,21 @@ def main() -> None:
                 if any(tm == club for i in s for _, tm in per[i]):
                     continue
                 top = max(by_id[i]["fame"] for i in s)
-                # A club they only passed through takes some thinking (Best at Fulham):
-                # medium to expert by how famous the answer is. A club they're known
-                # for (Bale at Southampton, Gerrard at LA Galaxy) is an easy-mode teaser.
+                # A club they only passed through (Best at Fulham) or one they're known
+                # for (Bale at Southampton). Remembering final scorers is never Easy:
+                # Medium for a superstar, Hard for a well-known name, else Expert.
                 if all(passing_through(i, club) for i in s):
-                    level = {5: 2, 4: 3}.get(top, 4)
+                    known = False
                 elif all(known_for(i, club) and by_id[i]["fame"] >= 4 for i in s):
-                    level = 1
+                    known = True
                 else:
                     continue
-                # Two club questions per player per level at most (Diego Costa passed through a lot of clubs).
-                if any(used.get((i, level == 1), 0) >= 2 for i in s):
+                level = {5: 2, 4: 3}.get(top, 4)
+                # Two club questions per player of each sort at most (Diego Costa passed through a lot of clubs).
+                if any(used.get((i, known), 0) >= 2 for i in s):
                     continue
                 for i in s:
-                    used[(i, level == 1)] = used.get((i, level == 1), 0) + 1
+                    used[(i, known)] = used.get((i, known), 0) + 1
                 m = 0
                 for i in s:
                     m |= eras(i, comp, club)
@@ -521,7 +523,7 @@ def main() -> None:
                     add("Scored in " + ", ".join(words[:-1]) + " AND " + words[-1], ids, combo)
 
         # The same final, for two different clubs (Ronaldo: United and Real).
-        for comp in ("cl", "uel", "fac"):
+        for comp in [c for c in ("cl", "uel", "fac") if c in scored]:
             ids = {i for i, rows in scored[comp].items() if len({tm for _, tm in rows if tm}) >= 2}
             if 1 <= len(ids) <= 6:
                 add(f"Scored in {label[comp]} for TWO different clubs", ids, (comp,))
