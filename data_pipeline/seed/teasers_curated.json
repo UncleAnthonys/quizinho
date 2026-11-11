@@ -1232,7 +1232,7 @@
       "prefix": "NAME A MANAGER WHO…"
     },
     {
-      "q": "Played in the Madrid derby, the Milan derby AND the North West derby (Liverpool v Man United)",
+      "q": "Played in the Madrid derby, the Milan derby AND a Liverpool v Man United game",
       "eras": 12,
       "difficulty": 2,
       "answers": [
@@ -1674,6 +1674,793 @@
         "tammy-abraham": "Won the 2022 Conference League with Roma, but never played for United",
         "emerson-palmieri": "Won both, with Chelsea (Sarri) and West Ham (Moyes)"
       }
+    },
+    {
+      "q": "Played under Sir Alex Ferguson, played in the Merseyside derby AND was a club teammate of Zinedine Zidane",
+      "eras": 14,
+      "difficulty": 3,
+      "answers": [
+        "michael-owen"
+      ],
+      "names": [
+        "Michael Owen"
+      ],
+      "proof": {
+        "michael-owen": [
+          "Under Ferguson: Man United 2009-12",
+          "Merseyside derby: Everton 0-3 Liverpool, 30 Aug 2003 (90 min, 2 goals) https://fbref.com/en/matches/b46993cc/",
+          "Teammate of Zinedine Zidane: Real Madrid 2004-05"
+        ]
+      },
+      "proof_note": "Manager and teammate overlaps checked against club spells by season; derby appearances have a match report each.",
+      "ruled_out": {
+        "david-beckham": "Ferguson and Zidane yes, but never played for Liverpool or Everton",
+        "steve-mcmanaman": "Merseyside derbies and Zidane at Real, but never played for Ferguson"
+      }
+    },
+    {
+      "q": "Played under Arsène Wenger, played in the Old Firm AND was a club teammate of Cristiano Ronaldo",
+      "eras": 28,
+      "difficulty": 3,
+      "answers": [
+        "aaron-ramsey"
+      ],
+      "names": [
+        "Aaron Ramsey"
+      ],
+      "proof": {
+        "aaron-ramsey": [
+          "Under Wenger: Arsenal 2008-18",
+          "Old Firm: Rangers v Celtic, 3 Apr 2022 (scored) https://www.caughtoffside.com/2022/04/03/video-aaron-ramsey-scores-his-first-old-firm-derby-goal-in-massive-title-match/",
+          "Teammate of Cristiano Ronaldo: Juventus 2019-21"
+        ]
+      },
+      "proof_note": "Manager and teammate overlaps checked against club spells by season; derby appearances have a match report each.",
+      "ruled_out": {
+        "gerard-pique": "Ronaldo at United, but never played for Wenger or in Scotland"
+      }
+    },
+    {
+      "q": "Played under Roberto Mancini, played in the North London derby AND was a club teammate of Cristiano Ronaldo",
+      "eras": 12,
+      "difficulty": 3,
+      "answers": [
+        "emmanuel-adebayor"
+      ],
+      "names": [
+        "Emmanuel Adebayor"
+      ],
+      "proof": {
+        "emmanuel-adebayor": [
+          "Under Mancini: Man City 2009-11",
+          "North London derby: Arsenal 5-2 Tottenham, 26 Feb 2012 (90 min, scored) https://fbref.com/en/matches/30fbb04f/",
+          "Teammate of Cristiano Ronaldo: Real Madrid 2011 (loan)"
+        ]
+      },
+      "proof_note": "Manager and teammate overlaps checked against club spells by season; derby appearances have a match report each.",
+      "ruled_out": {
+        "carlos-tevez": "Mancini at City and Ronaldo at United, but never played for Arsenal or Spurs"
+      }
+    },
+    {
+      "q": "Played under Pep Guardiola, played in the Merseyside derby AND was a club teammate of Cristiano Ronaldo",
+      "eras": 12,
+      "difficulty": 2,
+      "answers": [
+        "xabi-alonso"
+      ],
+      "names": [
+        "Xabi Alonso"
+      ],
+      "proof": {
+        "xabi-alonso": [
+          "Under Guardiola: Bayern 2014-16",
+          "Merseyside derby: Everton 3-0 Liverpool, 9 Sep 2006 https://aws.fbref.com/en/players/dc001a06/matchlogs/2006-2007/Xabi-Alonso-Match-Logs",
+          "Teammate of Cristiano Ronaldo: Real Madrid 2009-14"
+        ]
+      },
+      "proof_note": "Manager and teammate overlaps checked against club spells by season; derby appearances have a match report each.",
+      "ruled_out": {
+        "thiago-alcantara": "Guardiola and Merseyside derbies, but never a club teammate of Ronaldo"
+      }
+    },
+    {
+      "q": "Played under Rafael Benítez, played in the North London derby AND was a club teammate of David Beckham",
+      "eras": 12,
+      "difficulty": 3,
+      "answers": [
+        "robbie-keane"
+      ],
+      "names": [
+        "Robbie Keane"
+      ],
+      "proof": {
+        "robbie-keane": [
+          "Under Benítez: Liverpool 2008-09",
+          "North London derby: Many for Tottenham, e.g. Arsenal 1-1 Tottenham, 22 Apr 2006 (scored) https://spursodyssey.com/0506/ar220406.html",
+          "Teammate of David Beckham: LA Galaxy 2011-12"
+        ]
+      },
+      "proof_note": "Manager and teammate overlaps checked against club spells by season; derby appearances have a match report each.",
+      "ruled_out": {
+        "peter-crouch": "Benítez and North London derbies, but never played with Beckham at club level"
+      }
+    },
+    {
+      "q": "Played under Carlo Ancelotti, played in a Liverpool v Man United game AND was a club teammate of Lionel Messi",
+      "eras": 28,
+      "difficulty": 2,
+      "answers": [
+        "zlatan-ibrahimovic",
+        "angel-di-maria",
+        "thiago-alcantara"
+      ],
+      "names": [
+        "Zlatan Ibrahimović",
+        "Ángel Di María",
+        "Thiago Alcântara"
+      ],
+      "proof": {
+        "zlatan-ibrahimovic": [
+          "Under Ancelotti: PSG 2012-13",
+          "Liverpool v Man United game: Liverpool 0-0 Man United, 17 Oct 2016, 90 min https://aws.fbref.com/en/players/4cde5509/matchlogs/2016-2017/Zlatan-Ibrahimovic-Match-Logs",
+          "Teammate of Lionel Messi: Barcelona 2009-10"
+        ],
+        "angel-di-maria": [
+          "Under Ancelotti: Real Madrid 2013-14, PSG 2012-13",
+          "Liverpool v Man United game: Liverpool 1-2 Man United, 22 Mar 2015, 36 min https://aws.fbref.com/en/players/19cda00b/matchlogs/2014-2015/Angel-Di-Maria-Match-Logs",
+          "Teammate of Lionel Messi: PSG 2021-22"
+        ],
+        "thiago-alcantara": [
+          "Under Ancelotti: Bayern 2016-17",
+          "Liverpool v Man United game: Liverpool 4-0 Man United, 19 Apr 2022, 80 min https://www.sportsmole.co.uk/football/liverpool/title-race/result/liverpool-4-0-man-united-highlights-man-of-the-match-stats_483728.html",
+          "Teammate of Lionel Messi: Barcelona 2009-13"
+        ]
+      },
+      "proof_note": "Manager and teammate overlaps checked against club spells by season; derby appearances have a match report each.",
+      "ruled_out": {
+        "luis-suarez": "Liverpool v Man United and Messi, but never played for Ancelotti"
+      }
+    },
+    {
+      "q": "Played under Carlo Ancelotti, played in the Merseyside derby AND was a club teammate of Neymar",
+      "eras": 24,
+      "difficulty": 3,
+      "answers": [
+        "lucas-digne",
+        "andre-gomes",
+        "moise-kean"
+      ],
+      "names": [
+        "Lucas Digne",
+        "André Gomes",
+        "Moise Kean"
+      ],
+      "proof": {
+        "lucas-digne": [
+          "Under Ancelotti: Everton 2019-21",
+          "Merseyside derby: Everton 0-0 Liverpool, 21 Jun 2020, 90 min https://fbref.com/en/matches/603174fb/Everton-Liverpool-June-21-2020-Premier-League",
+          "Teammate of Neymar: Barcelona 2016-17"
+        ],
+        "andre-gomes": [
+          "Under Ancelotti: Everton 2019-21",
+          "Merseyside derby: Everton 0-0 Liverpool, 21 Jun 2020, 90 min https://fbref.com/en/matches/603174fb/Everton-Liverpool-June-21-2020-Premier-League",
+          "Teammate of Neymar: Barcelona 2016-17"
+        ],
+        "moise-kean": [
+          "Under Ancelotti: Everton 2019-20",
+          "Merseyside derby: Everton 0-0 Liverpool, 21 Jun 2020 (on 89') https://fbref.com/en/matches/603174fb/Everton-Liverpool-June-21-2020-Premier-League",
+          "Teammate of Neymar: PSG 2020-21"
+        ]
+      },
+      "proof_note": "Manager and teammate overlaps checked against club spells by season; derby appearances have a match report each.",
+      "ruled_out": {
+        "philippe-coutinho": "Merseyside derbies and Neymar, but never played for Ancelotti"
+      }
+    },
+    {
+      "q": "Played under Sir Alex Ferguson, played in the Milan derby AND was a club teammate of Zlatan Ibrahimović",
+      "eras": 24,
+      "difficulty": 3,
+      "answers": [
+        "ashley-young"
+      ],
+      "names": [
+        "Ashley Young"
+      ],
+      "proof": {
+        "ashley-young": [
+          "Under Ferguson: Man United 2011-13",
+          "Milan derby: Milan 0-3 Inter, 21 Feb 2021, 80 min https://aws.fbref.com/en/players/be927d03/matchlogs/2020-2021/misc/Ashley-Young-Match-Logs",
+          "Teammate of Zlatan Ibrahimović: Man United 2016-18"
+        ]
+      },
+      "proof_note": "Manager and teammate overlaps checked against club spells by season; derby appearances have a match report each.",
+      "ruled_out": {
+        "paul-pogba": "Ferguson and Zlatan at United, but never played in a Milan derby"
+      }
+    },
+    {
+      "q": "Played under Arsène Wenger, played in the Manchester derby AND was a club teammate of Lionel Messi",
+      "eras": 8,
+      "difficulty": 3,
+      "answers": [
+        "alexis-sanchez"
+      ],
+      "names": [
+        "Alexis Sánchez"
+      ],
+      "proof": {
+        "alexis-sanchez": [
+          "Under Wenger: Arsenal 2014-18",
+          "Manchester derby: Man City 2-3 Man United, 7 Apr 2018 (81 min) https://fbref.com/en/matches/50a03a01/",
+          "Teammate of Lionel Messi: Barcelona 2011-14"
+        ]
+      },
+      "proof_note": "Manager and teammate overlaps checked against club spells by season; derby appearances have a match report each.",
+      "ruled_out": {
+        "thierry-henry": "Wenger and Messi, but never played in a Manchester derby"
+      }
+    },
+    {
+      "q": "Played under Antonio Conte, played in the Manchester derby AND was a club teammate of Harry Kane",
+      "eras": 24,
+      "difficulty": 3,
+      "answers": [
+        "christian-eriksen",
+        "sergio-reguilon"
+      ],
+      "names": [
+        "Christian Eriksen",
+        "Sergio Reguilón"
+      ],
+      "proof": {
+        "christian-eriksen": [
+          "Under Conte: Inter 2020-21",
+          "Manchester derby: Man City 6-3 Man United, 2 Oct 2022 https://aws.fbref.com/en/players/980522ec/matchlogs/2022-2023/Christian-Eriksen-Match-Logs",
+          "Teammate of Harry Kane: Tottenham 2013-20"
+        ],
+        "sergio-reguilon": [
+          "Under Conte: Tottenham 2021-22",
+          "Manchester derby: Man United 0-3 Man City, 29 Oct 2023 (on 73') https://www.11v11.com/matches/manchester-united-v-manchester-city-29-october-2023-381645/",
+          "Teammate of Harry Kane: Tottenham 2020-23"
+        ]
+      },
+      "proof_note": "Manager and teammate overlaps checked against club spells by season; derby appearances have a match report each.",
+      "ruled_out": {
+        "kyle-walker": "Kane at Spurs and Manchester derbies, but never played for Conte"
+      }
+    },
+    {
+      "q": "Played under Arsène Wenger, played in El Clásico AND was a club teammate of Sergio Ramos",
+      "eras": 12,
+      "difficulty": 2,
+      "answers": [
+        "mesut-ozil",
+        "emmanuel-adebayor",
+        "jose-antonio-reyes",
+        "lassana-diarra",
+        "julio-baptista"
+      ],
+      "names": [
+        "Mesut Özil",
+        "Emmanuel Adebayor",
+        "José Antonio Reyes",
+        "Lassana Diarra",
+        "Júlio Baptista"
+      ],
+      "proof": {
+        "mesut-ozil": [
+          "Under Wenger: Arsenal 2013-18",
+          "El Clásico: Barcelona 5-0 Real Madrid, 29 Nov 2010 and the other 2010-11 Clásicos https://aws.fbref.com/en/players/16380240/matchlogs/2010-2011/Mesut-Ozil-Match-Logs",
+          "Teammate of Sergio Ramos: Real Madrid 2010-13"
+        ],
+        "emmanuel-adebayor": [
+          "Under Wenger: Arsenal 2006-09",
+          "El Clásico: Barcelona 1-1 Real Madrid, 3 May 2011 (36 min) https://fbref.com/en/matchs/af5c5e5a/",
+          "Teammate of Sergio Ramos: Real Madrid 2011 (loan)"
+        ],
+        "jose-antonio-reyes": [
+          "Under Wenger: Arsenal 2004-06",
+          "El Clásico: Real Madrid 2-0 Barcelona, 22 Oct 2006 (on 80') https://www.espn.co.uk/football/match/_/gameId/203834/barcelona-real-madrid",
+          "Teammate of Sergio Ramos: Real Madrid 2006-07 (loan)"
+        ],
+        "lassana-diarra": [
+          "Under Wenger: Arsenal 2007-08",
+          "El Clásico: Barcelona 5-0 Real Madrid, 29 Nov 2010, 46 min https://aws.fbref.com/en/players/79584585/matchlogs/2010-2011/misc/Lassana-Diarra-Match-Logs",
+          "Teammate of Sergio Ramos: Real Madrid 2009-12"
+        ],
+        "julio-baptista": [
+          "Under Wenger: Arsenal 2006-07 (loan)",
+          "El Clásico: Barcelona 0-1 Real Madrid, 23 Dec 2007 (scored the winner) https://www.aljazeera.com/sports/2007/12/23/madrids-beast-sinks-barca",
+          "Teammate of Sergio Ramos: Real Madrid 2005-08"
+        ]
+      },
+      "proof_note": "Manager and teammate overlaps checked against club spells by season; derby appearances have a match report each.",
+      "ruled_out": {
+        "cesc-fabregas": "Wenger and El Clásico, but Ramos was never a club teammate"
+      }
+    },
+    {
+      "q": "Played under Antonio Conte, played in the Merseyside derby AND was a club teammate of Zlatan Ibrahimović",
+      "eras": 24,
+      "difficulty": 3,
+      "answers": [
+        "romelu-lukaku",
+        "ashley-young"
+      ],
+      "names": [
+        "Romelu Lukaku",
+        "Ashley Young"
+      ],
+      "proof": {
+        "romelu-lukaku": [
+          "Under Conte: Inter 2019-21",
+          "Merseyside derby: Everton 0-1 Liverpool, 19 Dec 2016, 90 min https://aws.fbref.com/en/players/5eae500a/matchlogs/2016-2017/Romelu-Lukaku-Match-Logs",
+          "Teammate of Zlatan Ibrahimović: Man United 2017-18"
+        ],
+        "ashley-young": [
+          "Under Conte: Inter 2020-21",
+          "Merseyside derby: Liverpool 2-0 Everton, 21 Oct 2023, 36 min https://aws.fbref.com/en/players/be927d03/matchlogs/2023-2024/Ashley-Young-Match-Logs",
+          "Teammate of Zlatan Ibrahimović: Man United 2016-18"
+        ]
+      },
+      "proof_note": "Manager and teammate overlaps checked against club spells by season; derby appearances have a match report each.",
+      "ruled_out": {
+        "paul-pogba": "Conte at Juventus and Zlatan at United, but never a Merseyside derby"
+      }
+    },
+    {
+      "q": "Played under Mauricio Pochettino, played in the Manchester derby AND was a club teammate of Luis Suárez",
+      "eras": 24,
+      "difficulty": 3,
+      "answers": [
+        "raheem-sterling",
+        "christian-eriksen"
+      ],
+      "names": [
+        "Raheem Sterling",
+        "Christian Eriksen"
+      ],
+      "proof": {
+        "raheem-sterling": [
+          "Under Pochettino: Chelsea 2023-24",
+          "Manchester derby: Man United 1-2 Man City, 10 Sep 2016 https://fbref.com/en/matches/a5978934/",
+          "Teammate of Luis Suárez: Liverpool 2012-14"
+        ],
+        "christian-eriksen": [
+          "Under Pochettino: Tottenham 2014-19",
+          "Manchester derby: Man City 6-3 Man United, 2 Oct 2022 https://aws.fbref.com/en/players/980522ec/matchlogs/2022-2023/Christian-Eriksen-Match-Logs",
+          "Teammate of Luis Suárez: Ajax 2010-11"
+        ]
+      },
+      "proof_note": "Manager and teammate overlaps checked against club spells by season; derby appearances have a match report each.",
+      "ruled_out": {
+        "steven-gerrard": "Suárez at Liverpool, but never played for Pochettino or in a Manchester derby"
+      }
+    },
+    {
+      "q": "Played under Arsène Wenger, played in the Manchester derby AND was a club teammate of Ronaldinho",
+      "eras": 6,
+      "difficulty": 3,
+      "answers": [
+        "nicolas-anelka"
+      ],
+      "names": [
+        "Nicolas Anelka"
+      ],
+      "proof": {
+        "nicolas-anelka": [
+          "Under Wenger: Arsenal 1997-99",
+          "Manchester derby: Man City 3-1 Man United, 9 Nov 2002 (scored) https://www.rte.ie/sport/soccer/2002/1109/168427-manchester",
+          "Teammate of Ronaldinho: PSG 2001"
+        ]
+      },
+      "proof_note": "Manager and teammate overlaps checked against club spells by season; derby appearances have a match report each.",
+      "ruled_out": {
+        "thierry-henry": "Wenger and Ronaldinho, but never played in a Manchester derby"
+      }
+    },
+    {
+      "q": "Played under Thomas Tuchel, played in the Manchester derby AND was a club teammate of Luka Modrić",
+      "eras": 24,
+      "difficulty": 3,
+      "answers": [
+        "angel-di-maria",
+        "mateo-kovacic"
+      ],
+      "names": [
+        "Ángel Di María",
+        "Mateo Kovačić"
+      ],
+      "proof": {
+        "angel-di-maria": [
+          "Under Tuchel: PSG 2018-20",
+          "Manchester derby: Man City 1-0 Man United, 2 Nov 2014, 90 min https://aws.fbref.com/en/players/19cda00b/matchlogs/2014-2015/Angel-Di-Maria-Match-Logs",
+          "Teammate of Luka Modrić: Real Madrid 2012-14"
+        ],
+        "mateo-kovacic": [
+          "Under Tuchel: Chelsea 2021-22",
+          "Manchester derby: Man United 0-3 Man City, 29 Oct 2023 (40 min) https://aws.fbref.com/en/players/79c0821a/matchlogs/2023-2024/Mateo-Kovacic-Match-Logs",
+          "Teammate of Luka Modrić: Real Madrid 2015-19"
+        ]
+      },
+      "proof_note": "Manager and teammate overlaps checked against club spells by season; derby appearances have a match report each.",
+      "ruled_out": {
+        "kylian-mbappe": "Tuchel at PSG and Modrić at Real, but never a Manchester derby"
+      }
+    },
+    {
+      "q": "Played under Pep Guardiola, played in a Liverpool v Man United game AND was a club teammate of Mesut Özil",
+      "eras": 12,
+      "difficulty": 2,
+      "answers": [
+        "xabi-alonso",
+        "alexis-sanchez"
+      ],
+      "names": [
+        "Xabi Alonso",
+        "Alexis Sánchez"
+      ],
+      "proof": {
+        "xabi-alonso": [
+          "Under Guardiola: Bayern 2014-16",
+          "Liverpool v Man United game: Liverpool 2-1 Man United, 13 Sep 2008, started https://www.lfchistory.net/SeasonArchive/Game/5117",
+          "Teammate of Mesut Özil: Real Madrid 2009-13"
+        ],
+        "alexis-sanchez": [
+          "Under Guardiola: Barcelona 2011-12",
+          "Liverpool v Man United game: Man United 2-1 Liverpool, 10 Mar 2018, 89 min https://aws.fbref.com/en/players/2c0f8e9e/matchlogs/2017-2018/Alexis-Sanchez-Match-Logs",
+          "Teammate of Mesut Özil: Arsenal 2014-18"
+        ]
+      },
+      "proof_note": "Manager and teammate overlaps checked against club spells by season; derby appearances have a match report each.",
+      "ruled_out": {
+        "cesc-fabregas": "Guardiola at Barcelona, but Özil wasn't at Arsenal until after he left, and he never played Liverpool v United"
+      }
+    },
+    {
+      "q": "Played under Jürgen Klopp, played in the North London derby AND was a club teammate of Zlatan Ibrahimović",
+      "eras": 8,
+      "difficulty": 3,
+      "answers": [
+        "henrikh-mkhitaryan",
+        "sokratis-papastathopoulos"
+      ],
+      "names": [
+        "Henrikh Mkhitaryan",
+        "Sokratis Papastathopoulos"
+      ],
+      "proof": {
+        "henrikh-mkhitaryan": [
+          "Under Klopp: Dortmund 2013-15",
+          "North London derby: Arsenal 4-2 Tottenham, 2 Dec 2018 https://aws.fbref.com/en/players/dd0daf32/matchlogs/2018-2019/Henrikh-Mkhitaryan-Match-Logs",
+          "Teammate of Zlatan Ibrahimović: Man United 2016-18"
+        ],
+        "sokratis-papastathopoulos": [
+          "Under Klopp: Dortmund 2013-15",
+          "North London derby: Arsenal 4-2 Tottenham, 2 Dec 2018, started https://www.si.com/soccer/2018/12/02/arsenal-4-2-tottenham-report-ratings-reaction-gunners-prevail-stunning-north-london-derby",
+          "Teammate of Zlatan Ibrahimović: AC Milan 2010-11"
+        ]
+      },
+      "proof_note": "Manager and teammate overlaps checked against club spells by season; derby appearances have a match report each.",
+      "ruled_out": {
+        "pierre-emerick-aubameyang": "Klopp at Dortmund and North London derbies, but never a club teammate of Zlatan"
+      }
+    },
+    {
+      "q": "Played under José Mourinho, played in the Merseyside derby AND was a club teammate of Ronaldinho",
+      "eras": 12,
+      "difficulty": 3,
+      "answers": [
+        "samuel-etoo"
+      ],
+      "names": [
+        "Samuel Eto'o"
+      ],
+      "proof": {
+        "samuel-etoo": [
+          "Under Mourinho: Inter 2009-10, Chelsea 2013-14",
+          "Merseyside derby: Liverpool 1-1 Everton, 27 Sep 2014 (sub) https://aws.fbref.com/en/players/06420c93/matchlogs/2014-2015/c9/summary/Samuel-Etoo-Match-Logs",
+          "Teammate of Ronaldinho: Barcelona 2004-08"
+        ]
+      },
+      "proof_note": "Manager and teammate overlaps checked against club spells by season; derby appearances have a match report each.",
+      "ruled_out": {
+        "deco": "Mourinho and Ronaldinho, but never played in a Merseyside derby"
+      }
+    },
+    {
+      "q": "Played under Diego Simeone, played in the Merseyside derby AND was a club teammate of Lionel Messi",
+      "eras": 24,
+      "difficulty": 3,
+      "answers": [
+        "luis-suarez"
+      ],
+      "names": [
+        "Luis Suárez"
+      ],
+      "proof": {
+        "luis-suarez": [
+          "Under Simeone: Atlético 2020-22",
+          "Merseyside derby: Everton 3-3 Liverpool, 23 Nov 2013 (scored) https://aws.fbref.com/en/players/a6154613/matchlogs/2013-2014/Luis-Suarez-Match-Logs",
+          "Teammate of Lionel Messi: Barcelona 2014-20"
+        ]
+      },
+      "proof_note": "Manager and teammate overlaps checked against club spells by season; derby appearances have a match report each.",
+      "ruled_out": {
+        "antoine-griezmann": "Simeone and Messi, but never played in England"
+      }
+    },
+    {
+      "q": "Has been a club teammate of Cristiano Ronaldo, Ronaldinho AND Zlatan Ibrahimović",
+      "eras": 4,
+      "difficulty": 3,
+      "answers": [
+        "ricardo-quaresma"
+      ],
+      "names": [
+        "Ricardo Quaresma"
+      ],
+      "proof": {
+        "ricardo-quaresma": [
+          "Cristiano Ronaldo: Sporting 2002-03",
+          "Ronaldinho: Barcelona 2003-04",
+          "Zlatan Ibrahimović: Inter 2008-09"
+        ]
+      },
+      "proof_note": "Every player in our data who overlapped with all three at club level, checked season by season."
+    },
+    {
+      "q": "Has been a club teammate of Frank Lampard, Cristiano Ronaldo AND Kylian Mbappé",
+      "eras": 12,
+      "difficulty": 3,
+      "answers": [
+        "ricardo-carvalho"
+      ],
+      "names": [
+        "Ricardo Carvalho"
+      ],
+      "proof": {
+        "ricardo-carvalho": [
+          "Frank Lampard: Chelsea 2004-10",
+          "Cristiano Ronaldo: Real Madrid 2010-13",
+          "Kylian Mbappé: Monaco 2015-16"
+        ]
+      },
+      "proof_note": "Every player in our data who overlapped with all three at club level, checked season by season."
+    },
+    {
+      "q": "Has been a club teammate of Steven Gerrard, Zinedine Zidane AND Wayne Rooney",
+      "eras": 14,
+      "difficulty": 2,
+      "answers": [
+        "michael-owen"
+      ],
+      "names": [
+        "Michael Owen"
+      ],
+      "proof": {
+        "michael-owen": [
+          "Steven Gerrard: Liverpool 1998-2004",
+          "Zinedine Zidane: Real Madrid 2004-05",
+          "Wayne Rooney: Man United 2009-12"
+        ]
+      },
+      "proof_note": "Every player in our data who overlapped with all three at club level, checked season by season."
+    },
+    {
+      "q": "Has been a club teammate of Thierry Henry, Cristiano Ronaldo AND Luka Modrić",
+      "eras": 12,
+      "difficulty": 3,
+      "answers": [
+        "emmanuel-adebayor"
+      ],
+      "names": [
+        "Emmanuel Adebayor"
+      ],
+      "proof": {
+        "emmanuel-adebayor": [
+          "Thierry Henry: Arsenal 2006-07",
+          "Cristiano Ronaldo: Real Madrid 2011",
+          "Luka Modrić: Tottenham 2011-12"
+        ]
+      },
+      "proof_note": "Every player in our data who overlapped with all three at club level, checked season by season."
+    },
+    {
+      "q": "Has been a club teammate of Cesc Fàbregas, Gareth Bale AND Kevin De Bruyne",
+      "eras": 28,
+      "difficulty": 2,
+      "answers": [
+        "thibaut-courtois",
+        "eden-hazard",
+        "mateo-kovacic"
+      ],
+      "names": [
+        "Thibaut Courtois",
+        "Eden Hazard",
+        "Mateo Kovačić"
+      ],
+      "proof": {
+        "thibaut-courtois": [
+          "Cesc Fàbregas: Chelsea 2014-18",
+          "Gareth Bale: Real Madrid 2018-22",
+          "Kevin De Bruyne: Genk 2009-11, Chelsea 2012-14"
+        ],
+        "eden-hazard": [
+          "Cesc Fàbregas: Chelsea 2014-19",
+          "Gareth Bale: Real Madrid 2019-22",
+          "Kevin De Bruyne: Chelsea 2012-14"
+        ],
+        "mateo-kovacic": [
+          "Cesc Fàbregas: Chelsea 2018-19",
+          "Gareth Bale: Real Madrid 2015-19",
+          "Kevin De Bruyne: Man City 2023-25"
+        ]
+      },
+      "proof_note": "Every player in our data who overlapped with all three at club level, checked season by season."
+    },
+    {
+      "q": "Has been a club teammate of Thierry Henry, Sergio Agüero AND Luis Suárez",
+      "eras": 12,
+      "difficulty": 3,
+      "answers": [
+        "kolo-toure"
+      ],
+      "names": [
+        "Kolo Touré"
+      ],
+      "proof": {
+        "kolo-toure": [
+          "Thierry Henry: Arsenal 2002-07",
+          "Sergio Agüero: Man City 2011-13",
+          "Luis Suárez: Liverpool 2013-14"
+        ]
+      },
+      "proof_note": "Every player in our data who overlapped with all three at club level, checked season by season."
+    },
+    {
+      "q": "Has been a club teammate of Mohamed Salah, Manuel Neuer AND Cristiano Ronaldo",
+      "eras": 24,
+      "difficulty": 2,
+      "answers": [
+        "sadio-mane",
+        "emre-can"
+      ],
+      "names": [
+        "Sadio Mané",
+        "Emre Can"
+      ],
+      "proof": {
+        "sadio-mane": [
+          "Mohamed Salah: Liverpool 2017-22",
+          "Manuel Neuer: Bayern 2022-23",
+          "Cristiano Ronaldo: Al-Nassr 2023-"
+        ],
+        "emre-can": [
+          "Mohamed Salah: Liverpool 2017-18",
+          "Manuel Neuer: Bayern 2012-13",
+          "Cristiano Ronaldo: Juventus 2018-20"
+        ]
+      },
+      "proof_note": "Every player in our data who overlapped with all three at club level, checked season by season."
+    },
+    {
+      "q": "Has been a club teammate of Thierry Henry, Lionel Messi AND Eden Hazard",
+      "eras": 12,
+      "difficulty": 2,
+      "answers": [
+        "cesc-fabregas",
+        "samuel-etoo",
+        "pedro"
+      ],
+      "names": [
+        "Cesc Fàbregas",
+        "Samuel Eto'o",
+        "Pedro"
+      ],
+      "proof": {
+        "cesc-fabregas": [
+          "Thierry Henry: Arsenal 2003-07",
+          "Lionel Messi: Barcelona 2011-14",
+          "Eden Hazard: Chelsea 2014-19"
+        ],
+        "samuel-etoo": [
+          "Thierry Henry: Barcelona 2007-09",
+          "Lionel Messi: Barcelona 2004-09",
+          "Eden Hazard: Chelsea 2013-14"
+        ],
+        "pedro": [
+          "Thierry Henry: Barcelona 2008-10",
+          "Lionel Messi: Barcelona 2008-15",
+          "Eden Hazard: Chelsea 2015-19"
+        ]
+      },
+      "proof_note": "Every player in our data who overlapped with all three at club level, checked season by season."
+    },
+    {
+      "q": "Has been a club teammate of Didier Drogba, Iker Casillas AND Ronaldinho",
+      "eras": 14,
+      "difficulty": 3,
+      "answers": [
+        "nicolas-anelka"
+      ],
+      "names": [
+        "Nicolas Anelka"
+      ],
+      "proof": {
+        "nicolas-anelka": [
+          "Didier Drogba: Chelsea 2008-12",
+          "Iker Casillas: Real Madrid 1999-2000",
+          "Ronaldinho: PSG 2001"
+        ]
+      },
+      "proof_note": "Every player in our data who overlapped with all three at club level, checked season by season."
+    },
+    {
+      "q": "Has been a club teammate of Kylian Mbappé, Wayne Rooney AND Eden Hazard",
+      "eras": 24,
+      "difficulty": 3,
+      "answers": [
+        "radamel-falcao",
+        "idrissa-gueye"
+      ],
+      "names": [
+        "Radamel Falcao",
+        "Idrissa Gueye"
+      ],
+      "proof": {
+        "radamel-falcao": [
+          "Kylian Mbappé: Monaco 2015-18",
+          "Wayne Rooney: Man United 2014-15",
+          "Eden Hazard: Chelsea 2015-16"
+        ],
+        "idrissa-gueye": [
+          "Kylian Mbappé: PSG 2019-22",
+          "Wayne Rooney: Everton 2017-18",
+          "Eden Hazard: Lille 2010-12"
+        ]
+      },
+      "proof_note": "Every player in our data who overlapped with all three at club level, checked season by season."
+    },
+    {
+      "q": "Has been a club teammate of Thierry Henry, Frank Lampard AND Francesco Totti",
+      "eras": 14,
+      "difficulty": 3,
+      "answers": [
+        "ashley-cole"
+      ],
+      "names": [
+        "Ashley Cole"
+      ],
+      "proof": {
+        "ashley-cole": [
+          "Thierry Henry: Arsenal 1999-2006",
+          "Frank Lampard: Chelsea 2006-14",
+          "Francesco Totti: Roma 2014-16"
+        ]
+      },
+      "proof_note": "Every player in our data who overlapped with all three at club level, checked season by season."
+    },
+    {
+      "q": "Has been a club teammate of Zlatan Ibrahimović, Kaká AND Steven Gerrard",
+      "eras": 12,
+      "difficulty": 3,
+      "answers": [
+        "mario-balotelli"
+      ],
+      "names": [
+        "Mario Balotelli"
+      ],
+      "proof": {
+        "mario-balotelli": [
+          "Zlatan Ibrahimović: Inter 2007-09",
+          "Kaká: AC Milan 2013-14",
+          "Steven Gerrard: Liverpool 2014-15"
+        ]
+      },
+      "proof_note": "Every player in our data who overlapped with all three at club level, checked season by season."
     }
   ]
 }

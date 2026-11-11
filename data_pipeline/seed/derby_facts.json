@@ -44,7 +44,7 @@
       ]
     },
     "northwest": {
-      "name": "the North West derby (Liverpool v Man United)",
+      "name": "a Liverpool v Man United game",
       "clubs": [
         "Q1130849",
         "Q18656"
@@ -196,6 +196,13 @@
         "proof": "Inter 2-0 Juventus, 17 Jan 2021, 50 min https://aws.fbref.com/en/players/2c0f8e9e/matchlogs/2020-2021/misc/Alexis-Sanchez-Match-Logs"
       }
     },
+    "andre-gomes": {
+      "mersey": {
+        "played": true,
+        "year": 2020,
+        "proof": "Everton 0-0 Liverpool, 21 Jun 2020, 90 min https://fbref.com/en/matches/603174fb/Everton-Liverpool-June-21-2020-Premier-League"
+      }
+    },
     "andrei-kanchelskis": {
       "manc": {
         "played": true,
@@ -332,6 +339,13 @@
         "played": true,
         "year": 1979,
         "proof": "Liverpool 2-2 Everton, 20 Oct 1979 (scored) https://lfchistory.net/opposition/players/6250"
+      }
+    },
+    "cesc-fabregas": {
+      "nld": {
+        "played": true,
+        "year": 2010,
+        "proof": "Arsenal 2-3 Tottenham, 20 Nov 2010 (scored) https://worldsoccertalk.com/news/arsenal-2-3-tottenham-hotspur-spotlight-match-review-20101121-CMS-26733.html"
       }
     },
     "christian-eriksen": {
@@ -884,6 +898,20 @@
         "why": "No Juventus game yet since joining Inter in July 2026 (recheck after the 2026-27 derbies) https://www.thestar.com.my/sport/football/2026/07/31/soccer-england-defender-stones-joins-inter-milan-on-two-year-deal"
       }
     },
+    "jose-antonio-reyes": {
+      "clasico": {
+        "played": true,
+        "year": 2006,
+        "proof": "Real Madrid 2-0 Barcelona, 22 Oct 2006 (on 80') https://www.espn.co.uk/football/match/_/gameId/203834/barcelona-real-madrid"
+      }
+    },
+    "julio-baptista": {
+      "clasico": {
+        "played": true,
+        "year": 2007,
+        "proof": "Barcelona 0-1 Real Madrid, 23 Dec 2007 (scored the winner) https://www.aljazeera.com/sports/2007/12/23/madrids-beast-sinks-barca"
+      }
+    },
     "jurgen-klinsmann": {
       "klassiker": {
         "played": true,
@@ -1040,6 +1068,13 @@
         "played": true,
         "year": 2010,
         "proof": "Liverpool 1-0 Everton, 6 Feb 2010 https://aws.fbref.com/en/players/7106e4fe/matchlogs/2009-2010/Louis-Saha-Match-Logs"
+      }
+    },
+    "lucas-digne": {
+      "mersey": {
+        "played": true,
+        "year": 2020,
+        "proof": "Everton 0-0 Liverpool, 21 Jun 2020, 90 min https://fbref.com/en/matches/603174fb/Everton-Liverpool-June-21-2020-Premier-League"
       }
     },
     "lucas-hernandez": {
@@ -1300,6 +1335,13 @@
         "why": "Absent or on the bench for every Manchester derby"
       }
     },
+    "mesut-ozil": {
+      "clasico": {
+        "played": true,
+        "year": 2010,
+        "proof": "Barcelona 5-0 Real Madrid, 29 Nov 2010 and the other 2010-11 Clásicos https://aws.fbref.com/en/players/16380240/matchlogs/2010-2011/Mesut-Ozil-Match-Logs"
+      }
+    },
     "michael-ball": {
       "oldfirm": {
         "played": true,
@@ -1390,6 +1432,13 @@
         "played": true,
         "year": 2006,
         "proof": "Everton 3-0 Liverpool, 9 Sep 2006, 89 min https://fbref.com/en/matches/880e137f/Merseyside-Derby-Everton-Live"
+      }
+    },
+    "moise-kean": {
+      "mersey": {
+        "played": true,
+        "year": 2020,
+        "proof": "Everton 0-0 Liverpool, 21 Jun 2020 (on 89') https://fbref.com/en/matches/603174fb/Everton-Liverpool-June-21-2020-Premier-League"
       }
     },
     "nicolas-anelka": {
@@ -1858,6 +1907,20 @@
         "played": true,
         "year": 2014,
         "proof": "Man City 1-0 Man United, 2 Nov 2014 (scored) https://www.sportsmole.co.uk/football/man-city/result/aguero-wins-derby-for-city_186086.html"
+      }
+    },
+    "sergio-reguilon": {
+      "manc": {
+        "played": true,
+        "year": 2023,
+        "proof": "Man United 0-3 Man City, 29 Oct 2023 (on 73') https://www.11v11.com/matches/manchester-united-v-manchester-city-29-october-2023-381645/"
+      }
+    },
+    "sokratis-papastathopoulos": {
+      "nld": {
+        "played": true,
+        "year": 2018,
+        "proof": "Arsenal 4-2 Tottenham, 2 Dec 2018, started https://www.si.com/soccer/2018/12/02/arsenal-4-2-tottenham-report-ratings-reaction-gunners-prevail-stunning-north-london-derby"
       }
     },
     "steve-mcmanaman": {
