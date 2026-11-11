@@ -1449,7 +1449,7 @@
     {
       "q": "Played in Champions League finals for THREE different clubs",
       "eras": 14,
-      "difficulty": 3,
+      "difficulty": 2,
       "answers": [
         "clarence-seedorf",
         "patrice-evra"
@@ -1550,7 +1550,7 @@
     {
       "q": "Scored in a Champions League final his team WON, and in one his team LOST, for different clubs",
       "eras": 24,
-      "difficulty": 3,
+      "difficulty": 2,
       "answers": [
         "mario-mandzukic",
         "kai-havertz"
@@ -1576,7 +1576,7 @@
     {
       "q": "Won the Champions League AND the Europa League, with different clubs",
       "eras": 28,
-      "difficulty": 3,
+      "difficulty": 2,
       "answers": [
         "thibaut-courtois",
         "lucas-hernandez",
@@ -1623,7 +1623,7 @@
     {
       "q": "Won the Europa League AND the Conference League, with two different ENGLISH clubs",
       "eras": 24,
-      "difficulty": 3,
+      "difficulty": 2,
       "answers": [
         "emerson-palmieri",
         "jadon-sancho"
@@ -1651,7 +1651,7 @@
     {
       "q": "Won the Europa League AND the Conference League under José Mourinho",
       "eras": 24,
-      "difficulty": 3,
+      "difficulty": 2,
       "answers": [
         "henrikh-mkhitaryan",
         "chris-smalling"
@@ -1678,7 +1678,7 @@
     {
       "q": "Played under Sir Alex Ferguson, played in the Merseyside derby AND was a club teammate of Zinedine Zidane",
       "eras": 14,
-      "difficulty": 3,
+      "difficulty": 2,
       "answers": [
         "michael-owen"
       ],
@@ -1701,7 +1701,7 @@
     {
       "q": "Played under Arsène Wenger, played in the Old Firm AND was a club teammate of Cristiano Ronaldo",
       "eras": 28,
-      "difficulty": 3,
+      "difficulty": 2,
       "answers": [
         "aaron-ramsey"
       ],
@@ -1723,7 +1723,7 @@
     {
       "q": "Played under Roberto Mancini, played in the North London derby AND was a club teammate of Cristiano Ronaldo",
       "eras": 12,
-      "difficulty": 3,
+      "difficulty": 2,
       "answers": [
         "emmanuel-adebayor"
       ],
@@ -1767,7 +1767,7 @@
     {
       "q": "Played under Rafael Benítez, played in the North London derby AND was a club teammate of David Beckham",
       "eras": 12,
-      "difficulty": 3,
+      "difficulty": 2,
       "answers": [
         "robbie-keane"
       ],
@@ -1861,7 +1861,7 @@
     {
       "q": "Played under Sir Alex Ferguson, played in the Milan derby AND was a club teammate of Zlatan Ibrahimović",
       "eras": 24,
-      "difficulty": 3,
+      "difficulty": 2,
       "answers": [
         "ashley-young"
       ],
@@ -1883,7 +1883,7 @@
     {
       "q": "Played under Arsène Wenger, played in the Manchester derby AND was a club teammate of Lionel Messi",
       "eras": 8,
-      "difficulty": 3,
+      "difficulty": 2,
       "answers": [
         "alexis-sanchez"
       ],
@@ -1905,7 +1905,7 @@
     {
       "q": "Played under Antonio Conte, played in the Manchester derby AND was a club teammate of Harry Kane",
       "eras": 24,
-      "difficulty": 3,
+      "difficulty": 2,
       "answers": [
         "christian-eriksen",
         "sergio-reguilon"
@@ -1984,7 +1984,7 @@
     {
       "q": "Played under Antonio Conte, played in the Merseyside derby AND was a club teammate of Zlatan Ibrahimović",
       "eras": 24,
-      "difficulty": 3,
+      "difficulty": 2,
       "answers": [
         "romelu-lukaku",
         "ashley-young"
@@ -2013,7 +2013,7 @@
     {
       "q": "Played under Mauricio Pochettino, played in the Manchester derby AND was a club teammate of Luis Suárez",
       "eras": 24,
-      "difficulty": 3,
+      "difficulty": 2,
       "answers": [
         "raheem-sterling",
         "christian-eriksen"
@@ -2042,7 +2042,7 @@
     {
       "q": "Played under Arsène Wenger, played in the Manchester derby AND was a club teammate of Ronaldinho",
       "eras": 6,
-      "difficulty": 3,
+      "difficulty": 2,
       "answers": [
         "nicolas-anelka"
       ],
@@ -2064,7 +2064,7 @@
     {
       "q": "Played under Thomas Tuchel, played in the Manchester derby AND was a club teammate of Luka Modrić",
       "eras": 24,
-      "difficulty": 3,
+      "difficulty": 2,
       "answers": [
         "angel-di-maria",
         "mateo-kovacic"
@@ -2122,7 +2122,7 @@
     {
       "q": "Played under Jürgen Klopp, played in the North London derby AND was a club teammate of Zlatan Ibrahimović",
       "eras": 8,
-      "difficulty": 3,
+      "difficulty": 2,
       "answers": [
         "henrikh-mkhitaryan",
         "sokratis-papastathopoulos"
@@ -2151,7 +2151,7 @@
     {
       "q": "Played under José Mourinho, played in the Merseyside derby AND was a club teammate of Ronaldinho",
       "eras": 12,
-      "difficulty": 3,
+      "difficulty": 2,
       "answers": [
         "samuel-etoo"
       ],
@@ -2173,7 +2173,7 @@
     {
       "q": "Played under Diego Simeone, played in the Merseyside derby AND was a club teammate of Lionel Messi",
       "eras": 24,
-      "difficulty": 3,
+      "difficulty": 2,
       "answers": [
         "luis-suarez"
       ],
@@ -2195,7 +2195,7 @@
     {
       "q": "Has been a club teammate of Cristiano Ronaldo, Ronaldinho AND Zlatan Ibrahimović",
       "eras": 4,
-      "difficulty": 3,
+      "difficulty": 2,
       "answers": [
         "ricardo-quaresma"
       ],
@@ -2214,7 +2214,7 @@
     {
       "q": "Has been a club teammate of Frank Lampard, Cristiano Ronaldo AND Kylian Mbappé",
       "eras": 12,
-      "difficulty": 3,
+      "difficulty": 2,
       "answers": [
         "ricardo-carvalho"
       ],
@@ -2252,7 +2252,7 @@
     {
       "q": "Has been a club teammate of Thierry Henry, Cristiano Ronaldo AND Luka Modrić",
       "eras": 12,
-      "difficulty": 3,
+      "difficulty": 2,
       "answers": [
         "emmanuel-adebayor"
       ],
@@ -2304,7 +2304,7 @@
     {
       "q": "Has been a club teammate of Thierry Henry, Sergio Agüero AND Luis Suárez",
       "eras": 12,
-      "difficulty": 3,
+      "difficulty": 2,
       "answers": [
         "kolo-toure"
       ],
@@ -2382,7 +2382,7 @@
     {
       "q": "Has been a club teammate of Didier Drogba, Iker Casillas AND Ronaldinho",
       "eras": 14,
-      "difficulty": 3,
+      "difficulty": 2,
       "answers": [
         "nicolas-anelka"
       ],
@@ -2401,7 +2401,7 @@
     {
       "q": "Has been a club teammate of Kylian Mbappé, Wayne Rooney AND Eden Hazard",
       "eras": 24,
-      "difficulty": 3,
+      "difficulty": 2,
       "answers": [
         "radamel-falcao",
         "idrissa-gueye"
@@ -2427,7 +2427,7 @@
     {
       "q": "Has been a club teammate of Thierry Henry, Frank Lampard AND Francesco Totti",
       "eras": 14,
-      "difficulty": 3,
+      "difficulty": 2,
       "answers": [
         "ashley-cole"
       ],
@@ -2446,7 +2446,7 @@
     {
       "q": "Has been a club teammate of Zlatan Ibrahimović, Kaká AND Steven Gerrard",
       "eras": 12,
-      "difficulty": 3,
+      "difficulty": 2,
       "answers": [
         "mario-balotelli"
       ],
@@ -2465,7 +2465,7 @@
     {
       "q": "Played under Antonio Conte, played in the Manchester derby AND was a club teammate of Lionel Messi",
       "eras": 24,
-      "difficulty": 3,
+      "difficulty": 2,
       "answers": [
         "alexis-sanchez",
         "sergio-reguilon"
@@ -2494,7 +2494,7 @@
     {
       "q": "Played under Jürgen Klopp, played in the Milan derby AND was a club teammate of Lionel Messi",
       "eras": 24,
-      "difficulty": 3,
+      "difficulty": 2,
       "answers": [
         "philippe-coutinho"
       ],
@@ -2516,7 +2516,7 @@
     {
       "q": "Played under Zinedine Zidane, played in the Milan derby AND was a club teammate of Lionel Messi",
       "eras": 24,
-      "difficulty": 3,
+      "difficulty": 2,
       "answers": [
         "achraf-hakimi"
       ],
@@ -2538,7 +2538,7 @@
     {
       "q": "Played under Louis van Gaal, played in the Milan derby AND was a club teammate of Lionel Messi",
       "eras": 12,
-      "difficulty": 3,
+      "difficulty": 2,
       "answers": [
         "mark-van-bommel"
       ],
@@ -2560,7 +2560,7 @@
     {
       "q": "Played under Arsène Wenger, played in the Old Firm AND was a club teammate of Lionel Messi",
       "eras": 6,
-      "difficulty": 3,
+      "difficulty": 2,
       "answers": [
         "giovanni-van-bronckhorst"
       ],
@@ -2633,7 +2633,7 @@
     {
       "q": "Played under Hansi Flick, played in the North London derby AND was a club teammate of Cristiano Ronaldo",
       "eras": 24,
-      "difficulty": 3,
+      "difficulty": 2,
       "answers": [
         "wojciech-szczesny"
       ],
@@ -2655,7 +2655,7 @@
     {
       "q": "Played under Louis van Gaal, played in the Manchester derby AND was a club teammate of Zinedine Zidane",
       "eras": 15,
-      "difficulty": 3,
+      "difficulty": 2,
       "answers": [
         "edwin-van-der-sar"
       ],
@@ -2713,7 +2713,7 @@
     {
       "q": "Played under Hansi Flick, played in the Merseyside derby AND was a club teammate of Zlatan Ibrahimović",
       "eras": 28,
-      "difficulty": 3,
+      "difficulty": 2,
       "answers": [
         "thiago-alcantara"
       ],
@@ -2735,7 +2735,7 @@
     {
       "q": "Played under José Mourinho, played in the Merseyside derby AND was a club teammate of Robert Lewandowski",
       "eras": 12,
-      "difficulty": 3,
+      "difficulty": 2,
       "answers": [
         "xabi-alonso",
         "nuri-sahin"
@@ -2764,7 +2764,7 @@
     {
       "q": "Played under Arsène Wenger, played in El Clásico AND was a club teammate of Francesco Totti",
       "eras": 28,
-      "difficulty": 3,
+      "difficulty": 2,
       "answers": [
         "wojciech-szczesny",
         "thomas-vermaelen",
@@ -2800,7 +2800,7 @@
     {
       "q": "Played under Arsène Wenger, played in the Merseyside derby AND was a club teammate of Ronaldinho",
       "eras": 14,
-      "difficulty": 3,
+      "difficulty": 2,
       "answers": [
         "nicolas-anelka",
         "mikel-arteta"
@@ -2829,7 +2829,7 @@
     {
       "q": "Played under Brendan Rodgers, played in the Manchester derby AND was a club teammate of Zlatan Ibrahimović",
       "eras": 12,
-      "difficulty": 3,
+      "difficulty": 2,
       "answers": [
         "mario-balotelli"
       ],
@@ -2851,7 +2851,7 @@
     {
       "q": "Played under José Mourinho, played in the Madrid derby AND was a club teammate of Andrés Iniesta",
       "eras": 14,
-      "difficulty": 3,
+      "difficulty": 2,
       "answers": [
         "samuel-etoo",
         "thiago-motta"
@@ -2916,7 +2916,7 @@
     {
       "q": "Played under Jürgen Klopp, played in the North London derby AND was a club teammate of Romelu Lukaku",
       "eras": 24,
-      "difficulty": 3,
+      "difficulty": 2,
       "answers": [
         "henrikh-mkhitaryan",
         "ivan-perisic"
@@ -2945,7 +2945,7 @@
     {
       "q": "Played under Thomas Tuchel, played in El Clásico AND was a club teammate of Erling Haaland",
       "eras": 24,
-      "difficulty": 3,
+      "difficulty": 2,
       "answers": [
         "ilkay-gundogan",
         "mateo-kovacic"
@@ -2974,7 +2974,7 @@
     {
       "q": "Played under Jürgen Klopp, played in the Old Firm AND was a club teammate of Robin van Persie",
       "eras": 28,
-      "difficulty": 3,
+      "difficulty": 2,
       "answers": [
         "kolo-toure",
         "alex-oxlade-chamberlain"
@@ -3003,7 +3003,7 @@
     {
       "q": "Played under Mikel Arteta, played in El Clásico AND was a club teammate of Manuel Neuer",
       "eras": 28,
-      "difficulty": 3,
+      "difficulty": 2,
       "answers": [
         "mesut-ozil"
       ],
@@ -3025,7 +3025,7 @@
     {
       "q": "Played under Sir Alex Ferguson, played in the Milan derby AND was a club teammate of Sergio Agüero",
       "eras": 12,
-      "difficulty": 3,
+      "difficulty": 2,
       "answers": [
         "diego-forlan"
       ],
@@ -3047,7 +3047,7 @@
     {
       "q": "Played under Sir Alex Ferguson, played in the Merseyside derby AND was a club teammate of Alan Shearer",
       "eras": 14,
-      "difficulty": 3,
+      "difficulty": 2,
       "answers": [
         "michael-owen",
         "louis-saha"
@@ -3076,7 +3076,7 @@
     {
       "q": "Played under Brendan Rodgers, played in the Manchester derby AND was a club teammate of Declan Rice",
       "eras": 28,
-      "difficulty": 3,
+      "difficulty": 2,
       "answers": [
         "raheem-sterling",
         "joe-hart"
@@ -3105,7 +3105,7 @@
     {
       "q": "Played under Carlo Ancelotti, played in the Manchester derby AND was a club teammate of Sadio Mané",
       "eras": 28,
-      "difficulty": 3,
+      "difficulty": 2,
       "answers": [
         "cristiano-ronaldo",
         "daniel-sturridge"
@@ -3134,7 +3134,7 @@
     {
       "q": "Played under Mauricio Pochettino, played in the Milan derby AND was a club teammate of Marcus Rashford",
       "eras": 24,
-      "difficulty": 3,
+      "difficulty": 2,
       "answers": [
         "christian-eriksen"
       ],
@@ -3156,7 +3156,7 @@
     {
       "q": "Played under Harry Redknapp, played in the Milan derby AND was a club teammate of Franck Ribéry",
       "eras": 28,
-      "difficulty": 3,
+      "difficulty": 2,
       "answers": [
         "kevin-prince-boateng"
       ],
@@ -3178,7 +3178,7 @@
     {
       "q": "Played under Zinedine Zidane, played in the Merseyside derby AND was a club teammate of Robert Lewandowski",
       "eras": 24,
-      "difficulty": 3,
+      "difficulty": 2,
       "answers": [
         "james-rodriguez"
       ],
@@ -3200,7 +3200,7 @@
     {
       "q": "Played under Luis Enrique, played in the North London derby AND was a club teammate of Mohamed Salah",
       "eras": 12,
-      "difficulty": 3,
+      "difficulty": 2,
       "answers": [
         "thomas-vermaelen"
       ],
@@ -3222,7 +3222,7 @@
     {
       "q": "Played under Sir Alex Ferguson, played in the North London derby AND was a club teammate of Frank Lampard",
       "eras": 14,
-      "difficulty": 3,
+      "difficulty": 2,
       "answers": [
         "michael-carrick"
       ],
@@ -3244,7 +3244,7 @@
     {
       "q": "Has been a club teammate of Cristiano Ronaldo, Romelu Lukaku AND Lionel Messi",
       "eras": 24,
-      "difficulty": 3,
+      "difficulty": 2,
       "answers": [
         "achraf-hakimi"
       ],
@@ -3263,7 +3263,7 @@
     {
       "q": "Has been a club teammate of Mesut Özil, Lionel Messi AND Francesco Totti",
       "eras": 8,
-      "difficulty": 3,
+      "difficulty": 2,
       "answers": [
         "thomas-vermaelen"
       ],
@@ -3282,7 +3282,7 @@
     {
       "q": "Has been a club teammate of Lionel Messi, Miroslav Klose AND Zlatan Ibrahimović",
       "eras": 12,
-      "difficulty": 3,
+      "difficulty": 2,
       "answers": [
         "mark-van-bommel"
       ],
@@ -3301,7 +3301,7 @@
     {
       "q": "Has been a club teammate of Mesut Özil, Francesco Totti AND Cristiano Ronaldo",
       "eras": 28,
-      "difficulty": 3,
+      "difficulty": 2,
       "answers": [
         "wojciech-szczesny",
         "fernando-gago"
@@ -3327,7 +3327,7 @@
     {
       "q": "Has been a club teammate of Zlatan Ibrahimović, Lionel Messi AND Erling Haaland",
       "eras": 24,
-      "difficulty": 3,
+      "difficulty": 2,
       "answers": [
         "gianluigi-donnarumma"
       ],
@@ -3346,7 +3346,7 @@
     {
       "q": "Has been a club teammate of Gianluigi Buffon, Robert Lewandowski AND Lionel Messi",
       "eras": 24,
-      "difficulty": 3,
+      "difficulty": 2,
       "answers": [
         "arturo-vidal",
         "juan-bernat"
@@ -3372,7 +3372,7 @@
     {
       "q": "Has been a club teammate of George Weah, Zlatan Ibrahimović AND Lionel Messi",
       "eras": 7,
-      "difficulty": 3,
+      "difficulty": 2,
       "answers": [
         "lilian-thuram"
       ],
@@ -3410,7 +3410,7 @@
     {
       "q": "Has been a club teammate of Luis Suárez, Robert Lewandowski AND Cristiano Ronaldo",
       "eras": 24,
-      "difficulty": 3,
+      "difficulty": 2,
       "answers": [
         "joao-felix",
         "nuri-sahin"
@@ -3455,7 +3455,7 @@
     {
       "q": "Has been a club teammate of Antoine Griezmann, Lionel Messi AND Kevin De Bruyne",
       "eras": 28,
-      "difficulty": 3,
+      "difficulty": 2,
       "answers": [
         "claudio-bravo"
       ],
@@ -3474,7 +3474,7 @@
     {
       "q": "Has been a club teammate of Manuel Neuer, Antoine Griezmann AND Cristiano Ronaldo",
       "eras": 24,
-      "difficulty": 3,
+      "difficulty": 2,
       "answers": [
         "mario-mandzukic"
       ],
@@ -3538,7 +3538,7 @@
     {
       "q": "Has been a club teammate of David Beckham, Neymar AND Olivier Giroud",
       "eras": 28,
-      "difficulty": 3,
+      "difficulty": 2,
       "answers": [
         "thiago-silva"
       ],
@@ -3557,7 +3557,7 @@
     {
       "q": "Has been a club teammate of Cristiano Ronaldo, Steven Gerrard AND Declan Rice",
       "eras": 12,
-      "difficulty": 3,
+      "difficulty": 2,
       "answers": [
         "alvaro-arbeloa"
       ],
@@ -3609,7 +3609,7 @@
     {
       "q": "Has been a club teammate of Francesco Totti, Olivier Giroud AND Kylian Mbappé",
       "eras": 24,
-      "difficulty": 3,
+      "difficulty": 2,
       "answers": [
         "antonio-rudiger",
         "alessandro-florenzi"
@@ -3635,7 +3635,7 @@
     {
       "q": "Has been a club teammate of Luis Suárez, David Beckham AND Manuel Neuer",
       "eras": 12,
-      "difficulty": 3,
+      "difficulty": 2,
       "answers": [
         "klaas-jan-huntelaar"
       ],
@@ -3654,7 +3654,7 @@
     {
       "q": "Has been a club teammate of Frank Lampard, Zlatan Ibrahimović AND Mesut Özil",
       "eras": 24,
-      "difficulty": 3,
+      "difficulty": 2,
       "answers": [
         "david-luiz"
       ],
@@ -3673,7 +3673,7 @@
     {
       "q": "Has been a club teammate of Luka Modrić, Zlatan Ibrahimović AND Franck Ribéry",
       "eras": 28,
-      "difficulty": 3,
+      "difficulty": 2,
       "answers": [
         "kevin-prince-boateng"
       ],
@@ -3711,7 +3711,7 @@
     {
       "q": "Has been a club teammate of Zlatan Ibrahimović, Iker Casillas AND Didier Drogba",
       "eras": 12,
-      "difficulty": 3,
+      "difficulty": 2,
       "answers": [
         "wesley-sneijder"
       ],
@@ -3749,7 +3749,7 @@
     {
       "q": "Has been a club teammate of Eden Hazard, Robert Lewandowski AND Mesut Özil",
       "eras": 28,
-      "difficulty": 3,
+      "difficulty": 2,
       "answers": [
         "pierre-emerick-aubameyang"
       ],
@@ -3768,7 +3768,7 @@
     {
       "q": "Has been a club teammate of Wayne Rooney, Ronaldo AND Son Heung-min",
       "eras": 12,
-      "difficulty": 3,
+      "difficulty": 2,
       "answers": [
         "ruud-van-nistelrooy"
       ],
@@ -3787,7 +3787,7 @@
     {
       "q": "Has been a club teammate of Iker Casillas, Mohamed Salah AND Manuel Neuer",
       "eras": 24,
-      "difficulty": 3,
+      "difficulty": 2,
       "answers": [
         "luis-diaz"
       ],
@@ -3806,7 +3806,7 @@
     {
       "q": "Has been a club teammate of Franck Ribéry, Robin van Persie AND Frank Lampard",
       "eras": 12,
-      "difficulty": 3,
+      "difficulty": 2,
       "answers": [
         "samir-nasri"
       ],
@@ -3825,7 +3825,7 @@
     {
       "q": "Has been a club teammate of Michael Owen, Frank Lampard AND Mohamed Salah",
       "eras": 28,
-      "difficulty": 3,
+      "difficulty": 2,
       "answers": [
         "james-milner"
       ],
@@ -3915,7 +3915,7 @@
     {
       "q": "Has been a club teammate of Kevin De Bruyne, Manuel Neuer AND Harry Kane",
       "eras": 24,
-      "difficulty": 3,
+      "difficulty": 2,
       "answers": [
         "ivan-perisic",
         "leroy-sane"
@@ -3967,7 +3967,7 @@
     {
       "q": "Has been a club teammate of Karim Benzema, Harry Kane AND Olivier Giroud",
       "eras": 28,
-      "difficulty": 3,
+      "difficulty": 2,
       "answers": [
         "hugo-lloris"
       ],

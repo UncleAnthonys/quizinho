@@ -401,14 +401,14 @@ def main() -> None:
                 top = max(by_id[i]["fame"] for i in s)
                 # A club they only passed through (Best at Fulham) or one they're known
                 # for (Bale at Southampton). Remembering final scorers is never Easy:
-                # Medium for a superstar, Hard for a well-known name, else Expert.
+                # Medium when the answer is a name people know (a kick-yourself moment), Hard for a fame-3 name, else Expert.
                 if all(passing_through(i, club) for i in s):
                     known = False
                 elif all(known_for(i, club) and by_id[i]["fame"] >= 4 for i in s):
                     known = True
                 else:
                     continue
-                level = {5: 2, 4: 3}.get(top, 4)
+                level = 2 if top >= 4 else 3 if top == 3 else 4
                 # Two club questions per player of each sort at most (Diego Costa passed through a lot of clubs).
                 if any(used.get((i, known), 0) >= 2 for i in s):
                     continue
@@ -433,7 +433,7 @@ def main() -> None:
                     m |= eras(i, c)
             top = max(by_id[i]["fame"] for i in ids)
             out.append({"kind": "final", "q": q, "answers": ids, "names": [shown(i) for i in ids],
-                        "difficulty": {5: 2, 4: 3}.get(top, 4), "eras": m or 31})
+                        "difficulty": 2 if top >= 4 else 3 if top == 3 else 4, "eras": m or 31})
 
         # Finals in two, three or four competitions ("FA Cup, League Cup, UEFA
         # Cup AND Champions League" → Gerrard). Up to six answers: naming one is enough.
