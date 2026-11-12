@@ -39,7 +39,7 @@ def main() -> int:
     # players can be matched without guessing from names.
     linked = sorted({
         m.strip().replace("_", " ") for text in pages.values() for line in text.splitlines()
-        if re.match(r"^\|\s*[A-Z]{1,3}\s*\|", line) or "flagicon" in line
+        if re.match(r"^\|\s*(?:[A-Z]{1,3}|\{\{abbr\|[A-Z]{1,3}\|[^}]*\}\})\s*\|", line) or "flagicon" in line
         for m in LINK.findall(line) if ":" not in m
     })
     qids = club_qids(linked)

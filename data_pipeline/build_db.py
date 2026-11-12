@@ -483,6 +483,14 @@ GRID_STARS = {
 }
 
 
+# Cups whose winners make a category: anyone in the winning side on the day
+# of a final (seed/final_winners.json), at any club.
+GRID_CUPS = {
+    "cl": "Champions League winner", "uel": "Europa League winner", "wc": "World Cup winner",
+    "euro": "Euros winner", "fac": "FA Cup winner",
+}
+
+
 def _overlap(s1: int, e1: int, s2: int, e2: int) -> bool:
     """Spells (in years) that shared at least one season: a year-only overlap
     (left in 2008, other arrived in 2008) isn't enough."""
@@ -530,6 +538,18 @@ def generate_grid_categories(clubs, players):
             pid for pid, p in players.items() if any(
                 s["club"] == c and (y := _years(s)) and _overlap(*y, a, b) for s in p["spells"] for c, a, b in jobs)
         }
+    # Cup winners: in the winning side's line-up on the day of the final
+    # (starters and substitutes; finals_squads.py reads them from Wikipedia).
+    winners_path = SEED / "final_winners.json"
+    if winners_path.exists():
+        finals = json.loads(winners_path.read_text(encoding="utf-8"))["finals"]
+        by_qid = {p["wikidata"]: p["id"] for p in json.loads((SEED / "players.json").read_text(encoding="utf-8"))["players"]}
+        for comp, label in GRID_CUPS.items():
+            cid = f"cup:{comp}"
+            cats.append({"id": cid, "label": label, "kind": "cup"})
+            own[cid] = set()
+            members[cid] = {by_qid[q] for f in finals.get(comp, {}).values() for q in f["players"]
+                            if q in by_qid and by_qid[q] in players}
     rosters = []
     for cat in cats:
         cid = cat["id"]

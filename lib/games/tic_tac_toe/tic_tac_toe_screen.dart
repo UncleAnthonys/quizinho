@@ -263,7 +263,7 @@ class _TicTacToeScreenState extends State<TicTacToeScreen>
           const SizedBox(height: 8),
         ],
         const Text(
-          'Tap an empty square, then name a player who played for both clubs.\n'
+          'Tap an empty square, then name a player who fits both.\n'
           'Once you pick a square you\'re locked in. A footballer can only be used once.',
           textAlign: TextAlign.center,
           style: TextStyle(color: Palette.muted, height: 1.4),
