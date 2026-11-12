@@ -245,6 +245,7 @@ class _GuestGameState extends State<_GuestGame> with SingleTickerProviderStateMi
       'buzz' => _buzz(v, colour),
       'turn' => _turn(v, colour),
       'main' => _center('EYES ON THE MAIN SCREEN', '${v['what'] ?? ''}', scores: v['teams']),
+      'rules' => _rules(v),
       'closed' => _center('FULL TIME', 'Thanks for playing!'),
       _ => _center('YOU’RE IN', 'Waiting for kick-off on the main phone…'),
     };
@@ -326,6 +327,35 @@ class _GuestGameState extends State<_GuestGame> with SingleTickerProviderStateMi
           const Spacer(),
         ]),
       );
+
+  /// The rules for the game about to start, read along with the main phone.
+  Widget _rules(Map<String, Object?> v) {
+    final colour = Color((v['color'] as num?)?.toInt() ?? 0xFFFFCC29);
+    final rules = [for (final r in asList(v['rules'])) '$r'];
+    return ListView(padding: const EdgeInsets.fromLTRB(20, 16, 20, 20), children: [
+      _scores(v['teams'], round: '${widget.room.view['round'] ?? ''}'),
+      const SizedBox(height: 16),
+      Text('${v['title'] ?? ''}'.toUpperCase(), textAlign: TextAlign.center, style: AppText.headline(40, color: colour)),
+      if (v['double'] == true) Text('DOUBLE POINTS', textAlign: TextAlign.center, style: AppText.label(15, color: Palette.gold)),
+      Text('${v['tagline'] ?? ''}', textAlign: TextAlign.center, style: const TextStyle(color: Palette.muted, fontSize: 16)),
+      const SizedBox(height: 18),
+      for (final (i, r) in rules.indexed)
+        Padding(
+          padding: const EdgeInsets.only(bottom: 12),
+          child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            CircleAvatar(radius: 13, backgroundColor: colour, child: Text('${i + 1}', style: AppText.headline(15, color: Palette.pitchDeep))),
+            const SizedBox(width: 12),
+            Expanded(child: Text(r, style: const TextStyle(fontSize: 16, height: 1.4))),
+          ]),
+        ),
+      if (v['who'] != null) ...[
+        const SizedBox(height: 4),
+        Text('${v['who']}', textAlign: TextAlign.center, style: AppText.label(14, color: Palette.text)),
+      ],
+      const SizedBox(height: 18),
+      Text('Kicking off on the main phone…', textAlign: TextAlign.center, style: AppText.label(13)),
+    ]);
+  }
 
   Widget _buzz(Map<String, Object?> v, int colour) {
     _syncClock(v);

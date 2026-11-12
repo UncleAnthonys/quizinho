@@ -33,6 +33,16 @@ abstract final class MatchFlow {
             FadeTransition(opacity: animation, child: child),
       );
 
+  /// Joined phones show the rules card for [mode], as the main phone does.
+  static void _rules(BuildContext context, Tournament t, GameModeId mode, int multiplier) =>
+      AppScope.read(context).room?.showRules(t,
+          title: mode.title,
+          tagline: mode.tagline,
+          rules: mode.rules,
+          whoPlays: mode.whoPlays,
+          color: mode.color.toARGB32(),
+          doublePoints: multiplier > 1);
+
   /// Joined phones show "eyes on the main screen" with the scores.
   static void _phones(BuildContext context, Tournament t, String what) =>
       AppScope.read(context).room?.showMainScreen(t, what);
@@ -61,7 +71,7 @@ abstract final class MatchFlow {
     final nav = Navigator.of(context);
     if (mode != null) {
       final multiplier = (pending!['multiplier'] as num?)?.toInt() ?? 1;
-      _phones(context, t, 'Back on: ${mode.title}');
+      _rules(context, t, mode, multiplier);
       nav.push(_route(_Guard(child: RoundIntroScreen(tournament: t, mode: mode, multiplier: multiplier))));
     } else if (t.isFinished) {
       nav.push(_route(WinnerScreen(tournament: t)));
@@ -110,7 +120,7 @@ abstract final class MatchFlow {
 
   static void toIntro(BuildContext context, Tournament t, GameModeId mode, int multiplier) {
     _save(AppScope.read(context), t, pending: mode, multiplier: multiplier);
-    _phones(context, t, 'Next up: ${mode.title}${multiplier > 1 ? ' — double points' : ''}');
+    _rules(context, t, mode, multiplier);
     Navigator.of(context).pushReplacement(
         _route(_Guard(child: RoundIntroScreen(tournament: t, mode: mode, multiplier: multiplier))));
   }

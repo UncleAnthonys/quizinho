@@ -151,6 +151,27 @@ class HostRoom extends ChangeNotifier {
         'teams': teamsView(t),
       });
 
+  /// The rules card for the game about to start, so joined phones can read
+  /// along with the main phone.
+  Future<void> showRules(Tournament t,
+          {required String title,
+          required String tagline,
+          required List<String> rules,
+          String whoPlays = '',
+          int color = 0xFFFFCC29,
+          bool doublePoints = false}) =>
+      show({
+        'kind': 'rules',
+        'title': title,
+        'tagline': tagline,
+        'rules': rules,
+        if (whoPlays.isNotEmpty) 'who': whoPlays,
+        'color': color,
+        if (doublePoints) 'double': true,
+        'round': '${t.roundNumber.clamp(1, t.totalRounds)}/${t.totalRounds}',
+        'teams': teamsView(t),
+      });
+
   /// The party's over: phones show "Full time", then the room is deleted
   /// from the database a few seconds later (so they've seen it).
   Future<void> end() async {
