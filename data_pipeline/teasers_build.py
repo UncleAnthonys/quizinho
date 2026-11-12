@@ -455,6 +455,12 @@ def main() -> None:
                 add(f"Scored in {label[comp]} for TWO different clubs", ids, (comp,))
 
 
+    # A Medium teaser with a household name among its answers (Busquets and
+    # Ramos → Messi) is gettable on Easy and too gettable for Hard: level 1.
+    for t in out:
+        if t["difficulty"] == 2 and any(by_id[i]["fame"] >= 5 for i in t["answers"] if i in by_id):
+            t["difficulty"] = 1
+
     AUDIT[:] = [a for a in AUDIT if a.split(":")[0] not in AUDIT_OK]
     for line in AUDIT:
         print(f"::warning title=Teaser audit::{line}")

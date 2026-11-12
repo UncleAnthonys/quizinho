@@ -148,6 +148,10 @@ class _SetupScreenState extends State<SetupScreen> {
   }
 
   Future<void> _start() async {
+    // A name still in its box gets added (it adds itself on losing focus).
+    FocusManager.instance.primaryFocus?.unfocus();
+    await Future<void>.delayed(Duration.zero);
+    if (!mounted) return;
     final services = AppScope.read(context);
     await services.room?.setTeams(_teamsNow());
     final config = TournamentConfig(
@@ -414,8 +418,21 @@ class _PlayerNamesState extends State<_PlayerNames> {
   static const _maxPlayers = 10;
   final _field = TextEditingController();
 
+  /// Leaving the box adds the name: the browser's Done tick, or tapping
+  /// anywhere else, shouldn't quietly drop someone who's been typed in.
+  final _focus = FocusNode();
+
+  @override
+  void initState() {
+    super.initState();
+    _focus.addListener(() {
+      if (mounted && !_focus.hasFocus) _add();
+    });
+  }
+
   @override
   void dispose() {
+    _focus.dispose();
     _field.dispose();
     super.dispose();
   }
@@ -460,6 +477,7 @@ class _PlayerNamesState extends State<_PlayerNames> {
             height: 44,
             child: TextField(
               controller: _field,
+              focusNode: _focus,
               textCapitalization: TextCapitalization.words,
               maxLength: 14,
               textInputAction: TextInputAction.done,

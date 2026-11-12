@@ -558,6 +558,7 @@ class _GuestGameState extends State<_GuestGame> with SingleTickerProviderStateMi
           bottom = _status('${whoName.toUpperCase()} IS PICKING A SQUARE');
         } else if (choosing) {
           bottom = Column(children: [
+            if (v['left'] != null) ...[clock(), const SizedBox(height: 8)],
             const Text(
               'Tap an empty square, then name a player who played for both clubs.\n'
               'Once you pick a square you\'re locked in. Each player once per grid.',

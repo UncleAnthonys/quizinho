@@ -123,8 +123,8 @@ class _TicTacToeScreenState extends State<TicTacToeScreen>
       game: 'ttt',
       board: _view(c),
       extra: extra,
-      left: answering ? c.secondsLeft : null,
-      total: answering ? c.answerSeconds.toDouble() : null,
+      left: c.clockRunning ? c.secondsLeft : null,
+      total: c.clockRunning ? c.phaseSeconds.toDouble() : null,
       index: services.repo.players,
       answers: sq == null ? const {} : c.grid.answers[sq],
       onPick: (pl) => _submit(c, pl),
@@ -140,7 +140,7 @@ class _TicTacToeScreenState extends State<TicTacToeScreen>
     }
     _syncPhones(c);
     handleEvent(c.eventSerial, c.lastEvent);
-    if (c.phase == TttPhase.answering) {
+    if (c.clockRunning) {
       final sec = c.secondsLeft.ceil();
       if (sec != _lastSecond) {
         _lastSecond = sec;
@@ -239,6 +239,10 @@ class _TicTacToeScreenState extends State<TicTacToeScreen>
     if (c.phase == TttPhase.choosing) {
       final left = c.turnsUntilStall;
       return Column(children: [
+        if (c.clockRunning) ...[
+          TimerBar(fraction: c.fractionLeft, seconds: c.secondsLeft),
+          const SizedBox(height: 8),
+        ],
         const Text(
           'Tap an empty square, then name a player who played for both clubs.\n'
           'Once you pick a square you\'re locked in. Each player once per grid.',

@@ -87,13 +87,21 @@ class TicTacToeController extends ChangeNotifier {
     required this.teamCount,
     int startTeam = 0,
     this.answerSeconds = 20,
+    this.chooseSeconds = 20,
     this.maxTurns = 18,
     this.stallLaps = 2,
-  }) : currentTeam = startTeam % teamCount;
+  }) : currentTeam = startTeam % teamCount {
+    _startChoosing();
+  }
 
   final TicTacToeGrid grid;
   final int teamCount;
   final int answerSeconds;
+
+  /// To pick a square, so nobody sits on their turn. Run out and the turn
+  /// passes. Solo has no clock here.
+  final int chooseSeconds;
+  bool get _chooseClock => !_solo && chooseSeconds > 0;
 
   /// Stops a stalemate dragging on: after this many turns, most squares wins.
   final int maxTurns;
@@ -131,7 +139,10 @@ class TicTacToeController extends ChangeNotifier {
   int eventSerial = 0;
 
   bool canChoose(int square) => phase == TttPhase.choosing && owner[square] == null;
-  double get fractionLeft => answerSeconds == 0 ? 0 : (secondsLeft / answerSeconds).clamp(0.0, 1.0);
+  /// The clock running now: picking a square, or naming a player.
+  int get phaseSeconds => phase == TttPhase.answering ? answerSeconds : (_chooseClock ? chooseSeconds : 0);
+  bool get clockRunning => phase == TttPhase.answering || (phase == TttPhase.choosing && _chooseClock);
+  double get fractionLeft => phaseSeconds == 0 ? 0 : (secondsLeft / phaseSeconds).clamp(0.0, 1.0);
   int squaresOf(int team) => owner.where((o) => o == team).length;
 
   void choose(int square) {
@@ -146,11 +157,18 @@ class TicTacToeController extends ChangeNotifier {
   int get turnsUntilStall => stallLaps * teamCount - dryTurns;
 
   void advance(Duration elapsed) {
-    if (phase != TttPhase.answering) return;
+    if (!clockRunning) return;
     secondsLeft -= elapsed.inMicroseconds / 1e6;
     if (secondsLeft <= 0) {
       secondsLeft = 0;
-      _miss(timeout: true);
+      if (phase == TttPhase.answering) {
+        _miss(timeout: true);
+      } else {
+        // Too long picking: the turn goes.
+        _emit(GameEvent.timeUp);
+        dryTurns++;
+        _nextTurn();
+      }
       return;
     }
     notifyListeners();
@@ -244,9 +262,12 @@ class TicTacToeController extends ChangeNotifier {
     }
     currentTeam = (currentTeam + 1) % teamCount;
     phase = TttPhase.choosing;
+    _startChoosing();
     turnSerial++;
     notifyListeners();
   }
+
+  void _startChoosing() => secondsLeft = _chooseClock ? chooseSeconds.toDouble() : 0;
 
   void _finish() {
     phase = TttPhase.finished;

@@ -78,6 +78,24 @@ void main() {
       expect(c.currentTeam, 0);
     });
 
+    test('taking too long to pick a square passes the turn', () {
+      final c = TicTacToeController(grid: grid(), teamCount: 2, chooseSeconds: 5);
+      c.advance(secs(4));
+      expect(c.currentTeam, 0);
+      c.advance(secs(1.1));
+      expect(c.currentTeam, 1);
+      expect(c.phase, TttPhase.choosing);
+      expect(c.secondsLeft, 5);
+      expect(c.dryTurns, 1);
+    });
+
+    test('solo has no clock for picking', () {
+      final c = TicTacToeController(grid: grid(), teamCount: 1, chooseSeconds: 5);
+      c.advance(secs(60));
+      expect(c.phase, TttPhase.choosing);
+      expect(c.clockRunning, isFalse);
+    });
+
     test('a player can only be used once per grid', () {
       final g = TicTacToeGrid(
         rows: grid().rows,
