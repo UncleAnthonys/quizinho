@@ -113,7 +113,9 @@ class DemoPilot {
       ],
       length: MatchLength.short,
       difficulty: Difficulty.easy,
-      questionsPerRound: 2,
+      // One career per video (it takes a while to unfold); two club pairs.
+      questionsPerRound: game == GameModeId.careerPath ? 1 : 2,
+      careerRevealSeconds: 4,
       answerSeconds: 12,
     );
     final t = Tournament(config, random: Random(_seed))..scriptedSpins.add(game);
@@ -225,13 +227,21 @@ class DemoPilot {
       _qStart = _now();
       _wrongAt = null;
       _answered = false;
-      // One question in two (roughly): the first team gets it wrong and the
-      // other steals it — the best bit of the game.
-      _wrongFirst = c.questionIndex == 0 ? _rnd.nextBool() : !_wrongFirstLast;
+      // Usually the first team gets it wrong and the other steals it — the
+      // best bit of the game. Two questions: one of each.
+      _wrongFirst = c.questionIndex == 0 ? _rnd.nextInt(10) < 7 : !_wrongFirstLast;
       _wrongFirstLast = _wrongFirst;
       _firstTeam = _rnd.nextInt(t.teamCount);
-      _buzzAfterClubs = 2;
-      _buzzAfterMs = 4000 + _rnd.nextInt(2500);
+      // Buzz late enough that viewers have a fair go: Career Path waits for
+      // most of the clubs (the famous ones come last); a wrong guess comes
+      // around halfway and the steal a club or two later.
+      if (c is CareerPathController) {
+        final n = c.clueCount;
+        int at(double f, int lo) => min(n, max(lo, (n * f).round()));
+        _buzzAfterClubs = _wrongFirst ? min(at(0.5, 3), max(1, n - 1)) : at(0.75, 3);
+        _stealAfterClubs = max(min(n, _buzzAfterClubs + 1), at(0.8, 3));
+      }
+      _buzzAfterMs = 8000 + _rnd.nextInt(2500);
       headline.value = _hook(c.mode);
       caption.value = 'Q${c.questionIndex + 1} · Get it before they buzz';
     }
@@ -243,15 +253,16 @@ class DemoPilot {
         final now = _now();
         final int team;
         if (c.lockedOut.isEmpty) {
-          // Career Path: buzz a beat after the 2nd or 3rd club appears.
-          final target = c is CareerPathController ? min(_buzzAfterClubs, c.clueCount) : 0;
           final ready = c is CareerPathController
-              ? c.revealed > target || (c.revealed == target && c.phaseSeconds - c.secondsLeft >= 1.2)
+              ? _clubShown(c, _buzzAfterClubs)
               : now.difference(_qStart).inMilliseconds >= _buzzAfterMs;
           if (!ready) return true;
           team = _firstTeam;
         } else {
-          if (now.difference(_wrongAt ?? now).inMilliseconds < 1300) return true;
+          final ready = c is CareerPathController
+              ? _clubShown(c, _stealAfterClubs) && now.difference(_wrongAt ?? now).inMilliseconds >= 1500
+              : now.difference(_wrongAt ?? now).inMilliseconds >= 3000;
+          if (!ready) return true;
           final free = [for (var i = 0; i < t.teamCount; i++) if (!c.lockedOut.contains(i)) i];
           if (free.isEmpty) return true;
           team = free.first;
@@ -281,12 +292,18 @@ class DemoPilot {
   }
 
   bool _wrongFirstLast = false;
+  int _stealAfterClubs = 3;
+
+  /// Club [n] has been on screen for a couple of seconds (or a later one is up).
+  static bool _clubShown(CareerPathController c, int n) =>
+      c.revealed > n || (c.revealed == n && c.phaseSeconds - c.secondsLeft >= 2.0);
 
   void _onPhase(BuzzRaceController<Object?> c, Tournament t) {
     switch (c.phase) {
       case BuzzPhase.answering:
         _answered = false;
         caption.value = '${t.teamName(c.answeringTeam!)} BUZZED!';
+        if (c is CareerPathController) _log('buzz', {'club': c.revealed, 'of': c.clueCount});
       case BuzzPhase.open:
         if (c.lockedOut.isNotEmpty) {
           _wrongAt = _now();

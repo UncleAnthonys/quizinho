@@ -51,7 +51,11 @@ class _CareerPathScreenState extends State<CareerPathScreen>
       setState(() => _empty = true);
       return;
     }
-    final c = CareerPathController(teamCount: t.teamCount, questions: qs, answerSeconds: t.config.answerSeconds);
+    final c = CareerPathController(
+        teamCount: t.teamCount,
+        questions: qs,
+        answerSeconds: t.config.answerSeconds,
+        revealSeconds: t.config.careerRevealSeconds);
     _faces.sync(c);
     c.addListener(() {
       _faces.sync(c);

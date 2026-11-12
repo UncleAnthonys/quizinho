@@ -61,6 +61,7 @@ class TournamentConfig {
     this.gender = FootballGender.men,
     this.warmUp = false,
     this.rounds,
+    this.careerRevealSeconds = 6,
   })  : modes = modes ?? {...GameModeId.concreteGames, GameModeId.wildcard},
         eras = (eras == null || eras.isEmpty) ? Era.values.toSet() : eras;
 
@@ -74,6 +75,9 @@ class TournamentConfig {
 
   /// Solo play: how many games in the run (overrides [length]). Not saved.
   final int? rounds;
+
+  /// Career Path: seconds between clubs. Not saved (the demo video shortens it).
+  final double careerRevealSeconds;
   final int answerSeconds;
   final int bombSeconds;
   final int bombLives;
