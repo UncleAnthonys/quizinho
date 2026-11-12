@@ -236,7 +236,8 @@ class _TicTacToeScreenState extends State<TicTacToeScreen>
                 data: _view(c),
                 multiplier: widget.round.multiplier,
                 typing: typing,
-                onTap: c.choose,
+                // A joined phone has this turn: it picks the square, not the host.
+                onTap: _phones?.remote == null ? c.choose : null,
                 onReveal: (i) => _answers(c, i),
                 bottom: _bottom(c),
               ),
