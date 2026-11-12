@@ -175,6 +175,7 @@ class SoundService {
       await p.stop();
       final done = p.onPlayerComplete.first;
       _clipPlaying = true;
+      onPlay?.call(c.asset, 1);
       await p.play(AssetSource(c.asset));
       await done.timeout(const Duration(seconds: 12), onTimeout: () {});
     } catch (e) {
@@ -184,8 +185,12 @@ class SoundService {
     }
   }
 
+  /// Told about every sound played (the demo video adds them back in later).
+  static void Function(String asset, double volume)? onPlay;
+
   void play(Sfx s, {double volume = 1.0}) {
     if (!_settings.soundOn || _clipPlaying) return;
+    onPlay?.call(s.asset, volume);
     if (_web?.play(s.file, volume) ?? false) return;
     final pool = _pools[s];
     if (pool == null || pool.isEmpty) return;

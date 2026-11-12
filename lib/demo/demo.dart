@@ -9,6 +9,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/scheduler.dart';
 
 import '../core/app_services.dart';
+import '../core/sound_service.dart';
 import '../core/theme.dart';
 import '../data/models.dart';
 import '../domain/game_mode.dart';
@@ -27,7 +28,9 @@ import '../ui/widgets/player_picker.dart';
 /// Demo video mode (web only): `?demo=1` plays one round by itself, with real
 /// taps and typing, framed 9:16 with captions for TikTok / Reels / Shorts.
 /// `seed=20261112` picks the teams, game and answers; `game=careerPath` forces
-/// the game. Recorded daily by .github/workflows/demo-video.yml.
+/// the game; `slow=6` runs everything 6x slower so a machine without a
+/// graphics card can draw every frame (the recorder speeds the video back up).
+/// Sounds are logged with their time rather than recorded. Recorded daily by .github/workflows/demo-video.yml.
 final bool demoMode = kIsWeb && Uri.base.queryParameters.containsKey('demo');
 
 /// Starts the scripted match once the first frame is up.
@@ -93,9 +96,13 @@ class DemoPilot {
     if (_started) return;
     _started = true;
     final q = Uri.base.queryParameters;
-    final now = DateTime.now();
-    _seed = int.tryParse(q['seed'] ?? '') ?? (now.year * 10000 + now.month * 100 + now.day);
+    final today = DateTime.now();
+    _seed = int.tryParse(q['seed'] ?? '') ?? (today.year * 10000 + today.month * 100 + today.day);
     _rnd = Random(_seed);
+    _slow = (double.tryParse(q['slow'] ?? '') ?? 1).clamp(1, 20).toDouble();
+    timeDilation = _slow;
+    _clock.start();
+    SoundService.onPlay = (asset, volume) => _log('sfx', {'a': asset, 'v': volume, 't': _ms});
     _services = AppScope.read(context);
     final game = GameModeId.fromName(q['game'] ?? '') ?? _games[_seed % _games.length];
     final names = _teamNames[_rnd.nextInt(_teamNames.length)];
@@ -110,7 +117,7 @@ class DemoPilot {
       answerSeconds: 12,
     );
     final t = Tournament(config, random: Random(_seed))..scriptedSpins.add(game);
-    _log('ready', {'seed': _seed, 'game': game.name, 'teams': [names.$1, names.$2]});
+    _log('ready', {'seed': _seed, 'game': game.name, 'teams': [names.$1, names.$2], 'slow': _slow});
     unawaited(_run(context, t));
   }
 
@@ -118,22 +125,22 @@ class DemoPilot {
     // Gives the recorder time to start before anything moves.
     await _wait(3000);
     if (!context.mounted) return;
-    _log('go');
-    final began = DateTime.now();
+    _log('go', {'t': _ms});
+    final began = _now();
     var frames = 0, slow = 0;
     SchedulerBinding.instance.addTimingsCallback((ts) {
       frames += ts.length;
       slow += ts.where((f) => f.totalSpan.inMilliseconds > 40).length;
     });
     _fps = () => {
-          'fps': (frames / max(1, DateTime.now().difference(began).inMilliseconds) * 1000).toStringAsFixed(1),
+          'fps': (frames / max(1, _now().difference(began).inMilliseconds) * 1000).toStringAsFixed(1),
           'slowFrames': slow,
           'frames': frames,
         };
     caption.value = 'Kick it to pick the game';
     MatchFlow.toWheel(context, t);
-    final end = DateTime.now().add(const Duration(minutes: 3));
-    while (!_done && DateTime.now().isBefore(end)) {
+    final end = _now().add(const Duration(minutes: 3));
+    while (!_done && _now().isBefore(end)) {
       await _wait(120);
       if (_busy) continue;
       _busy = true;
@@ -180,8 +187,8 @@ class DemoPilot {
     for (final b in _all<BigButton>()) {
       final w = b.widget as BigButton;
       if (w.onPressed == null || _tapped.contains(b) || !_hittable(b)) continue;
-      final first = _seen.putIfAbsent(w.label, DateTime.now);
-      if (DateTime.now().difference(first).inMilliseconds < dwell) return;
+      final first = _seen.putIfAbsent(w.label, _now);
+      if (_now().difference(first).inMilliseconds < dwell) return;
       _tapped.add(b);
       _seen.clear();
       await _tap(b);
@@ -215,7 +222,7 @@ class DemoPilot {
     final key = '${identityHashCode(c)}-${c.questionIndex}';
     if (key != _qKey) {
       _qKey = key;
-      _qStart = DateTime.now();
+      _qStart = _now();
       _wrongAt = null;
       _answered = false;
       // One question in two (roughly): the first team gets it wrong and the
@@ -233,7 +240,7 @@ class DemoPilot {
 
     switch (c.phase) {
       case BuzzPhase.open:
-        final now = DateTime.now();
+        final now = _now();
         final int team;
         if (c.lockedOut.isEmpty) {
           // Career Path: buzz a beat after the 2nd or 3rd club appears.
@@ -282,7 +289,7 @@ class DemoPilot {
         caption.value = '${t.teamName(c.answeringTeam!)} BUZZED!';
       case BuzzPhase.open:
         if (c.lockedOut.isNotEmpty) {
-          _wrongAt = DateTime.now();
+          _wrongAt = _now();
           final other = [for (var i = 0; i < t.teamCount; i++) if (!c.lockedOut.contains(i)) t.teamName(i)];
           caption.value = 'WRONG! ${other.isEmpty ? '' : '${other.first} can steal it'}';
         }
@@ -321,11 +328,11 @@ class DemoPilot {
 
   Future<void> _finish(Element summary) async {
     if (_summaryAt == null) {
-      _summaryAt = DateTime.now();
+      _summaryAt = _now();
       headline.value = 'WHO\'S WINNING\nYOUR QUIZ NIGHT?';
       caption.value = 'Play it with your mates';
     }
-    if (DateTime.now().difference(_summaryAt!).inMilliseconds < 3000) return;
+    if (_now().difference(_summaryAt!).inMilliseconds < 3000) return;
     _done = true;
     _log('end', _fps());
   }
@@ -376,7 +383,7 @@ class DemoPilot {
   Future<void> _tapAt(Offset p) async {
     final id = ++_pointer;
     touches.value = [...touches.value, (p, id)];
-    Timer(const Duration(milliseconds: 650), () => touches.value = [...touches.value.where((t) => t.$2 != id)]);
+    Timer(Duration(milliseconds: (650 * _slow).round()), () => touches.value = [...touches.value.where((t) => t.$2 != id)]);
     GestureBinding.instance.handlePointerEvent(
         PointerDownEvent(pointer: id, position: p, kind: PointerDeviceKind.touch, viewId: _viewId));
     await _wait(90);
@@ -426,7 +433,12 @@ class DemoPilot {
     return null;
   }
 
-  static Future<void> _wait(int ms) => Future<void>.delayed(Duration(milliseconds: ms));
+  /// Demo time: real time divided by the slow-down.
+  double _slow = 1;
+  final _clock = Stopwatch();
+  int get _ms => _clock.elapsedMilliseconds ~/ _slow;
+  DateTime _now() => DateTime.fromMillisecondsSinceEpoch(_ms);
+  Future<void> _wait(int ms) => Future<void>.delayed(Duration(milliseconds: (ms * _slow).round()));
 }
 
 /// The 9:16 video frame: hook at the top, the app in the middle, a footer,

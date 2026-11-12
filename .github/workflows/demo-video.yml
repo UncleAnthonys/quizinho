@@ -1,6 +1,6 @@
 # Records a daily 9:16 gameplay video for TikTok / Reels / Shorts: the web
-# build's ?demo=1 mode plays one round by itself, Chrome is filmed with
-# sound. Each video is published as a GitHub pre-release (repo → Releases),
+# build's ?demo=1 mode plays one round by itself (slowed down so every frame
+# gets drawn), Chrome is filmed and the video sped back up, sounds mixed in. Each video is published as a GitHub pre-release (repo → Releases),
 # with the post caption as its notes; kept 30 days.
 name: Daily demo video
 
@@ -24,7 +24,7 @@ permissions:
 jobs:
   record:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 45
     steps:
       - uses: actions/checkout@v4
       - uses: subosito/flutter-action@v2
@@ -40,7 +40,7 @@ jobs:
       - name: Screen, sound and browser
         run: |
           sudo apt-get update -q
-          sudo apt-get install -y -q xvfb pulseaudio ffmpeg fonts-noto-color-emoji
+          sudo apt-get install -y -q xvfb ffmpeg fonts-noto-color-emoji
           pip install -q playwright
           python3 -m playwright install --with-deps chromium
 
@@ -52,9 +52,6 @@ jobs:
           SEED="${SEED:-$(date -u +%Y%m%d)}"
           echo "SEED=$SEED" >> "$GITHUB_ENV"
           Xvfb :99 -screen 0 1080x1920x24 -nolisten tcp &
-          pulseaudio --start --exit-idle-time=-1
-          pactl load-module module-null-sink sink_name=qdemo
-          pactl set-default-sink qdemo
           python3 -m http.server 8080 -d build/web >/dev/null 2>&1 &
           sleep 2
           URL="http://localhost:8080/?demo=1&seed=$SEED${GAME:+&game=$GAME}"
