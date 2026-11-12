@@ -134,6 +134,7 @@ class _TeaserHalfTimeScreenState extends State<TeaserHalfTimeScreen>
                     controller: c,
                     remoteAnswerer: teaserBridge?.remote?.name,
                     onPlayHere: teaserBridge?.localBuzz,
+                    showQuestion: false,
                   ),
                 ),
               ),

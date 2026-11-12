@@ -137,10 +137,7 @@ class _CareerPathScreenState extends State<CareerPathScreen>
       remoteAnswerer: _bridge?.remote?.name,
       phoneTeams: _bridge?.phoneTeams() ?? const {},
       awaitingFaceOff: _faces.awaitingReady,
-      onFaceOffReady: () {
-        services.sound.play(Sfx.kick);
-        setState(_faces.ready);
-      },
+      onFaceOffReady: () => setState(_faces.ready),
       question: (compact) => Column(children: [
         if (!resolved)
           Text(

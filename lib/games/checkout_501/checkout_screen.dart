@@ -111,7 +111,7 @@ class _CheckoutScreenState extends State<CheckoutScreen>
               s.haptic(HapticStrength.heavy);
               say(_pick(const ['GAME SHOT! And the leg!', 'CHECKED OUT! What a finish!', 'Bullseye! They’re out!']));
             case CoOutcome.scored:
-              s.sound.play(Sfx.kick);
+              s.sound.play(Sfx.correct, volume: 0.7);
               s.haptic(HapticStrength.medium);
               if (t.value == 180) say('ONE HUNDRED AND EIGHTYYYY!');
             case CoOutcome.bust || CoOutcome.overshoot:

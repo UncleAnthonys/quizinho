@@ -129,7 +129,7 @@ class _BiddingWarScreenState extends State<BiddingWarScreen>
           s.haptic(HapticStrength.heavy);
           say(_pick(const ['PROVE IT!', 'Put your money where your mouth is!', 'Called the bluff!']));
         case BidEvent.go:
-          s.sound.play(Sfx.kick);
+          break;
         case BidEvent.correct:
           s.sound.play(Sfx.correct, volume: 0.8);
           s.haptic(HapticStrength.light);

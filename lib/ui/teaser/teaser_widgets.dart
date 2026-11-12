@@ -178,8 +178,12 @@ class TeaserBuzzed extends StatelessWidget {
 
 /// Nobody got it (every team guessed wrong, or full time): the answers.
 class TeaserReveal extends StatelessWidget {
-  const TeaserReveal({super.key, required this.question, required this.answers, this.headline = 'NOBODY GOT IT'});
+  const TeaserReveal(
+      {super.key, required this.question, required this.answers, this.headline = 'NOBODY GOT IT', this.showQuestion = true});
   final String question;
+
+  /// False where the question is already on screen (half-time).
+  final bool showQuestion;
   final List<String> answers;
   final String headline;
 
@@ -187,8 +191,10 @@ class TeaserReveal extends StatelessWidget {
   Widget build(BuildContext context) => Column(mainAxisSize: MainAxisSize.min, children: [
         Text(headline, style: AppText.headline(34, color: Palette.gold)),
         const SizedBox(height: 10),
-        TeaserPrompt(question: question, compact: true),
-        const SizedBox(height: 14),
+        if (showQuestion) ...[
+          TeaserPrompt(question: question, compact: true),
+          const SizedBox(height: 14),
+        ],
         Text(answers.length == 1 ? 'THE ANSWER' : 'ANY OF THESE', style: AppText.label(14)),
         const SizedBox(height: 6),
         for (final a in answers) Text(a.toUpperCase(), style: AppText.headline(28)),

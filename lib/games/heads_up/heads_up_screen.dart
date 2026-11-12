@@ -79,7 +79,6 @@ class _HeadsUpScreenState extends State<HeadsUpScreen>
       _lastPhase = c.phase;
       _tilt.enabled = c.phase == HeadsUpPhase.playing;
       if (c.phase == HeadsUpPhase.ready) _holder = _t.fairRandomPlayer(c.currentTeam);
-      if (c.phase == HeadsUpPhase.playing) services.sound.play(Sfx.kick);
       if (c.phase == HeadsUpPhase.turnOver && from == HeadsUpPhase.playing) {
         services.sound.play(Sfx.buzzIn);
         services.haptic(HapticStrength.heavy);

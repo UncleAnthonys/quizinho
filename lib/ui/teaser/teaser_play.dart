@@ -13,8 +13,11 @@ import 'teaser_widgets.dart';
 /// The working part of the teaser, used at half-time and between games:
 /// team buzzers, the answer box, the host's calls, and the result.
 class TeaserPlay extends StatelessWidget {
-  const TeaserPlay({super.key, required this.controller, this.remoteAnswerer, this.onPlayHere});
+  const TeaserPlay({super.key, required this.controller, this.remoteAnswerer, this.onPlayHere, this.showQuestion = true});
   final TeaserController controller;
+
+  /// False where the question is already on screen above (half-time).
+  final bool showQuestion;
 
   /// Answering on their own phone (null = on this one).
   final String? remoteAnswerer;
@@ -98,7 +101,7 @@ class TeaserPlay extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(bottom: 10),
       child: Column(mainAxisSize: MainAxisSize.min, children: [
-        Text('✗ ${c.lastMiss}${team == null ? '' : ' — ${t.teamName(team).toUpperCase()} HAVE HAD THEIR GUESS'}',
+        Text('✗ ${c.lastMiss}${team == null ? '' : ' - ${t.teamName(team).toUpperCase()} HAVE HAD THEIR GUESS'}',
             textAlign: TextAlign.center, style: AppText.label(14, color: Palette.danger)),
         if (c.canOverrule)
           TextButton(
@@ -136,8 +139,7 @@ class TeaserPlay extends StatelessWidget {
     final c = controller;
     final herrings = _herrings(c, AppScope.read(context).repo.players);
     return Column(mainAxisSize: MainAxisSize.min, children: [
-      if (c.lastMiss != null && c.canOverrule) _miss(),
-      TeaserReveal(question: c.teaser.question, answers: c.teaser.answerNames),
+      TeaserReveal(question: c.teaser.question, answers: c.teaser.answerNames, showQuestion: showQuestion),
       if (herrings.isNotEmpty) ...[
         const SizedBox(height: 12),
         Text('NOT THESE', style: AppText.label(13)),
@@ -148,6 +150,8 @@ class TeaserPlay extends StatelessWidget {
             child: Text('$name - $why', textAlign: TextAlign.center, style: AppText.label(13, color: Palette.text)),
           ),
       ],
+      // The last wrong guess, in case our data missed it: small, under the answer.
+      if (c.lastMiss != null && c.canOverrule) ...[const SizedBox(height: 12), _miss()],
     ]);
   }
 
