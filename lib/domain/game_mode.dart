@@ -42,7 +42,7 @@ enum GameModeId {
     whoPlays: 'Whatever the wildcard decides.',
   ),
   ticTacToe(
-    title: 'Tic-Tac-Toe',
+    title: 'Noughts & Crosses',
     tagline: 'Name a player who played for both clubs to claim the square',
     playable: true,
     rules: [

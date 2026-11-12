@@ -122,7 +122,7 @@ class _TicTacToeScreenState extends State<TicTacToeScreen>
       team: c.currentTeam,
       name: _turnPlayer,
       stage: answering ? TurnStage.answer : TurnStage.choose,
-      title: 'TIC-TAC-TOE',
+      title: 'NOUGHTS & CROSSES',
       headline: answering && sq != null
           ? '${c.stealing ? 'STEAL: ' : ''}${c.grid.rows[sq ~/ 3].name.toUpperCase()}  +  ${c.grid.cols[sq % 3].name.toUpperCase()}'
           : '',
@@ -390,7 +390,7 @@ class TttLayout extends StatelessWidget {
       Padding(
         padding: const EdgeInsets.fromLTRB(16, 4, 16, 0),
         child: Row(children: [
-          Text('TIC-TAC-TOE', style: AppText.label(15, color: Palette.yellow)),
+          Text('NOUGHTS & CROSSES', style: AppText.label(15, color: Palette.yellow)),
           const Spacer(),
           if (multiplier > 1) Text('x$multiplier POINTS', style: AppText.label(15, color: Palette.gold)),
         ]),

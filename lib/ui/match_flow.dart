@@ -227,7 +227,7 @@ extension GameModeStyle on GameModeId {
         GameModeId.careerPath => 'CAREER PATH',
         GameModeId.startingXi => 'XI BOMB',
         GameModeId.wildcard => 'WILDCARD',
-        GameModeId.ticTacToe => 'TIC-TAC-TOE',
+        GameModeId.ticTacToe => 'NOUGHTS & CROSSES',
         GameModeId.biddingWar => 'BIDDING WAR',
         GameModeId.pointless => 'POINTLESS',
         GameModeId.checkout501 => '501',
