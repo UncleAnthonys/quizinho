@@ -103,12 +103,27 @@ class TeaserPlay extends StatelessWidget {
       child: Column(mainAxisSize: MainAxisSize.min, children: [
         Text('✗ ${c.lastMiss}${team == null ? '' : ' - ${t.teamName(team).toUpperCase()} HAVE HAD THEIR GUESS'}',
             textAlign: TextAlign.center, style: AppText.label(14, color: Palette.danger)),
-        if (c.canOverrule)
-          TextButton(
-            onPressed: c.overrule,
-            child: Text('HOLD ON - THAT’S RIGHT (COUNT IT)', style: AppText.label(13, color: Palette.yellow)),
-          ),
+        if (c.canOverrule) _countIt(),
       ]),
+    );
+  }
+
+  /// "We missed Gary Cahill? Count it": small, for when our data is missing a
+  /// right answer. The host taps it to give the points.
+  Widget _countIt() {
+    final c = controller;
+    return TextButton(
+      onPressed: c.overrule,
+      style: TextButton.styleFrom(padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4), minimumSize: Size.zero),
+      child: Text.rich(
+        TextSpan(children: [
+          TextSpan(text: 'We missed ${c.lastMiss}? ', style: const TextStyle(color: Palette.muted, fontSize: 12)),
+          const TextSpan(
+              text: 'Count it',
+              style: TextStyle(color: Palette.muted, fontSize: 12, fontWeight: FontWeight.w600, decoration: TextDecoration.underline)),
+        ]),
+        textAlign: TextAlign.center,
+      ),
     );
   }
 
@@ -151,7 +166,7 @@ class TeaserPlay extends StatelessWidget {
           ),
       ],
       // The last wrong guess, in case our data missed it: small, under the answer.
-      if (c.lastMiss != null && c.canOverrule) ...[const SizedBox(height: 12), _miss()],
+      if (c.lastMiss != null && c.canOverrule) ...[const SizedBox(height: 12), _countIt()],
     ]);
   }
 
