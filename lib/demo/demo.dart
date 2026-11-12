@@ -105,6 +105,7 @@ class DemoPilot {
       length: MatchLength.short,
       difficulty: Difficulty.easy,
       questionsPerRound: 2,
+      answerSeconds: 12,
     );
     final t = Tournament(config, random: Random(_seed))..scriptedSpins.add(game);
     _log('ready', {'seed': _seed, 'game': game.name, 'teams': [names.$1, names.$2]});
@@ -384,11 +385,11 @@ class DemoPilot {
         TextEditingValue(text: text, selection: TextSelection.collapsed(offset: text.length)),
         SelectionChangedCause.keyboard,
       );
-      await _wait(70 + _rnd.nextInt(70));
-      if (i >= 4 && i < name.length && _rnd.nextInt(3) > 0) {
+      await _wait(45 + _rnd.nextInt(50));
+      if (i >= 3 && i < name.length) {
         final hit = _suggestion(picker, name);
         if (hit != null) {
-          await _wait(350);
+          await _wait(300);
           await _tap(hit);
           return;
         }
@@ -425,13 +426,17 @@ class DemoFrame extends StatelessWidget {
   Widget build(BuildContext context) {
     final pilot = DemoPilot.instance;
     final size = MediaQuery.sizeOf(context);
-    // Laid out on a 540×960 canvas (1080×1920 at 2x), scaled to the window.
-    final s = size.width / 540;
+    // Laid out on a 540×960 canvas (1080×1920 at 2x), scaled to fit the window.
+    final s = min(size.width / 540, size.height / 960);
     const appW = 400.0, appH = 720.0, top = 160.0;
     final left = (540 - appW) / 2;
     return ColoredBox(
       color: const Color(0xFF031A10),
-      child: Stack(children: [
+      child: Center(
+        child: SizedBox(
+          width: 540 * s,
+          height: 960 * s,
+          child: Stack(children: [
         Positioned.fill(
           child: DecoratedBox(
             decoration: const BoxDecoration(
@@ -522,7 +527,9 @@ class DemoFrame extends StatelessWidget {
             ),
           ),
         ),
-      ]),
+          ]),
+        ),
+      ),
     );
   }
 }

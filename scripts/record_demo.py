@@ -65,7 +65,6 @@ def main() -> int:
         browser = p.chromium.launch(
             headless=False,
             args=[
-                "--kiosk",
                 f"--window-size={W // 2},{H // 2}",
                 "--window-position=0,0",
                 "--force-device-scale-factor=2",
@@ -80,6 +79,12 @@ def main() -> int:
         page.on("console", on_console)
         page.on("pageerror", lambda e: print("page error:", e, flush=True))
         page.on("response", lambda r: print("missing:", r.url, flush=True) if r.status >= 400 else None)
+        # True fullscreen: no tabs or address bar in shot.
+        cdp = ctx.new_cdp_session(page)
+        wid = cdp.send("Browser.getWindowForTarget")["windowId"]
+        cdp.send("Browser.setWindowBounds", {"windowId": wid, "bounds": {"windowState": "fullscreen"}})
+        page.wait_for_timeout(500)
+        print("page size:", page.evaluate("[innerWidth, innerHeight, devicePixelRatio]"), flush=True)
         page.goto(args.url)
         wait_for("ready", 120)
 
@@ -119,6 +124,14 @@ def main() -> int:
     )
     subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-ss", f"{length / 2:.2f}", "-i", video,
                     "-frames:v", "1", "-q:v", "3", os.path.join(args.out, "thumb.jpg")], check=True)
+    # How smooth it is: share of frames that actually changed.
+    dec = subprocess.run(["ffmpeg", "-i", video, "-vf", "mpdecimate", "-an", "-f", "null", "-"],
+                         capture_output=True, text=True).stderr
+    import re
+    kept = re.findall(r"frame=\s*(\d+)", dec)
+    total = int(length * 30)
+    if kept:
+        print(f"smoothness: {int(kept[-1])} distinct of ~{total} frames ({int(kept[-1]) / total:.0%})", flush=True)
     # Contact sheet: 12 frames across the video, for a quick look.
     subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-i", video, "-vf",
                     f"fps={12 / length:.4f},scale=270:-1,tile=6x2", "-frames:v", "1", "-q:v", "4",
