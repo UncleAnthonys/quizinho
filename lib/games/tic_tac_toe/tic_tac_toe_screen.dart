@@ -275,7 +275,18 @@ class _TicTacToeScreenState extends State<TicTacToeScreen>
           Text('1 STEAL LEFT - TAP ONE OF THEIR SQUARES AND NAME A DIFFERENT PLAYER',
               textAlign: TextAlign.center, style: AppText.label(13, color: Palette.yellow)),
         ],
-        if (c.dryTurns > 0) ...[
+        // Solo ends on lives; the party game on goes without a square.
+        if (_t.teamCount == 1 && c.misses > 0) ...[
+          const SizedBox(height: 8),
+          Text(
+            switch (TicTacToeController.soloLives - c.misses) {
+              1 => 'LAST LIFE',
+              final n => '$n LIVES LEFT',
+            },
+            textAlign: TextAlign.center,
+            style: AppText.label(14, color: Palette.gold),
+          ),
+        ] else if (_t.teamCount > 1 && c.dryTurns > 0 && left > 0) ...[
           const SizedBox(height: 8),
           Text(
             left == 1 ? 'NO SQUARE THIS TURN AND THE GAME ENDS' : '$left MORE TURNS WITHOUT A SQUARE ENDS THE GAME',
