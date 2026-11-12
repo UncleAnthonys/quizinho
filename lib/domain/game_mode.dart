@@ -46,11 +46,11 @@ enum GameModeId {
     tagline: 'Name a player who fits both to claim the square',
     playable: true,
     rules: [
-      'Clubs along the top and down the left, sometimes a country, a star, a manager or a cup. Pick a square, then name a player who fits both. Cup winners: in the winning side in the final.',
-      'Right: the square is yours (1 point). Wrong, or too slow: your turn’s over. Once a game, steal one of theirs by naming a different player.',
-      'First to three in a row - across, down or diagonally - wins the game and 3 bonus points. Each footballer can only be used once.',
+      'Pick a square, then name a player who fits both its headers.',
+      'Correct: the square is yours (1 point). Wrong or too slow: your go’s over. Each team gets one steal.',
+      'Three in a row wins the game (+3). Each player can only be used once.',
     ],
-    whoPlays: 'Teams take turns. Joined on your own phones? Each go moves to the next phone in the team.',
+    whoPlays: 'Teams take turns.',
   ),
   biddingWar(
     title: 'Bidding War',
