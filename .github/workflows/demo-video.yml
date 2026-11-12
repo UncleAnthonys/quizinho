@@ -44,6 +44,7 @@ jobs:
           python3 -m playwright install --with-deps chromium
 
       - name: Record
+        timeout-minutes: 25
         env:
           SEED: ${{ inputs.seed }}
           GAME: ${{ inputs.game }}

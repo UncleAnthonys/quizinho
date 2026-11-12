@@ -130,10 +130,15 @@ def main() -> int:
         rec = subprocess.Popen(cmd, stdin=subprocess.PIPE)
         t0 = time.time()
 
-        t_go = wait_for("go", 10 * args.slow)
-        t_end = wait_for("end", 240 * args.slow)
-        page.wait_for_timeout(int(500 * args.slow))
-        rec.communicate(b"q", timeout=30)
+        try:
+            t_go = wait_for("go", 40 * args.slow)
+            t_end = wait_for("end", 240 * args.slow)
+            page.wait_for_timeout(int(500 * args.slow))
+            rec.communicate(b"q", timeout=30)
+        finally:
+            # Never leave ffmpeg filming if the demo stalls (it would hang the job).
+            if rec.poll() is None:
+                rec.kill()
         page.screenshot(path=os.path.join(args.out, "last_frame.png"))
         browser.close()
 

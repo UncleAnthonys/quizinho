@@ -130,7 +130,14 @@ class DemoPilot {
     // Straight into the question: no free kick, no rules screen. The video
     // starts the moment the question is up.
     MatchFlow.toGame(context, t, game, 1);
-    while (_live<BuzzGameView>() == null) {
+    // Any game's screen: a buzzer game or the Noughts & Crosses board.
+    final giveUp = _now().add(const Duration(seconds: 30));
+    while (_live<BuzzGameView>() == null && _live<TttLayout>() == null) {
+      if (_now().isAfter(giveUp)) {
+        _log('error', {'error': 'The ${game.name} screen never appeared'});
+        _log('end', {'timeout': true});
+        return;
+      }
       await _wait(20);
     }
     _log('go', {'t': _ms});
