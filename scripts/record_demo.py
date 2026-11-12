@@ -79,6 +79,7 @@ def main() -> int:
         page = ctx.new_page()
         page.on("console", on_console)
         page.on("pageerror", lambda e: print("page error:", e, flush=True))
+        page.on("response", lambda r: print("missing:", r.url, flush=True) if r.status >= 400 else None)
         page.goto(args.url)
         wait_for("ready", 120)
 
@@ -118,6 +119,10 @@ def main() -> int:
     )
     subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-ss", f"{length / 2:.2f}", "-i", video,
                     "-frames:v", "1", "-q:v", "3", os.path.join(args.out, "thumb.jpg")], check=True)
+    # Contact sheet: 12 frames across the video, for a quick look.
+    subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-i", video, "-vf",
+                    f"fps={12 / length:.4f},scale=270:-1,tile=6x2", "-frames:v", "1", "-q:v", "4",
+                    os.path.join(args.out, "sheet.jpg")], check=True)
     os.remove(raw)
 
     ready = next(ev for _, ev in events if ev.get("e") == "ready")

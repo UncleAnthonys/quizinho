@@ -162,7 +162,7 @@ class DemoPilot {
     }
     // Free kick: let the wall sit a moment, then shoot; then "Let's go".
     // Intro: time to read it. Answer shown: time to take it in.
-    final dwell = kick != null ? 1500 : (intro != null ? 3000 : 3000);
+    final dwell = kick != null ? 900 : (intro != null ? 2200 : 2400);
     for (final b in _all<BigButton>()) {
       final w = b.widget as BigButton;
       if (w.onPressed == null || _tapped.contains(b) || !_hittable(b)) continue;
@@ -209,7 +209,7 @@ class DemoPilot {
       _wrongFirst = c.questionIndex == 0 ? _rnd.nextBool() : !_wrongFirstLast;
       _wrongFirstLast = _wrongFirst;
       _firstTeam = _rnd.nextInt(t.teamCount);
-      _buzzAfterClubs = 2 + _rnd.nextInt(2);
+      _buzzAfterClubs = 2;
       _buzzAfterMs = 4000 + _rnd.nextInt(2500);
       headline.value = _hook(c.mode);
       caption.value = 'Q${c.questionIndex + 1} · Get it before they buzz';
@@ -225,12 +225,12 @@ class DemoPilot {
           // Career Path: buzz a beat after the 2nd or 3rd club appears.
           final target = c is CareerPathController ? min(_buzzAfterClubs, c.clueCount) : 0;
           final ready = c is CareerPathController
-              ? c.revealed > target || (c.revealed == target && c.phaseSeconds - c.secondsLeft >= 1.8)
+              ? c.revealed > target || (c.revealed == target && c.phaseSeconds - c.secondsLeft >= 1.2)
               : now.difference(_qStart).inMilliseconds >= _buzzAfterMs;
           if (!ready) return true;
           team = _firstTeam;
         } else {
-          if (now.difference(_wrongAt ?? now).inMilliseconds < 1700) return true;
+          if (now.difference(_wrongAt ?? now).inMilliseconds < 1300) return true;
           final free = [for (var i = 0; i < t.teamCount; i++) if (!c.lockedOut.contains(i)) i];
           if (free.isEmpty) return true;
           team = free.first;
@@ -244,7 +244,7 @@ class DemoPilot {
       case BuzzPhase.answering:
         if (_answered) return true;
         _answered = true;
-        await _wait(800);
+        await _wait(500);
         final wrong = _wrongFirst && c.lockedOut.isEmpty && t.teamCount > 1;
         final player = wrong ? _wrongAnswer(c) : _rightAnswer(c);
         if (player == null) {
@@ -311,7 +311,7 @@ class DemoPilot {
       headline.value = 'WHO\'S WINNING\nYOUR QUIZ NIGHT?';
       caption.value = 'Play it with your mates';
     }
-    if (DateTime.now().difference(_summaryAt!).inMilliseconds < 4000) return;
+    if (DateTime.now().difference(_summaryAt!).inMilliseconds < 3000) return;
     _done = true;
     _log('end');
   }
