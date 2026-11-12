@@ -202,13 +202,16 @@ def main() -> int:
         "game": game,
         "teams": ready.get("teams"),
         "questions": questions,
+        "moves": [ev for _, ev in events if ev.get("e") == "ttt"],
+        "voiceover": [ev["text"] for _, ev in events if ev.get("e") == "say"],
         "seconds": round(length, 1),
         "errors": errors,
     }
     with open(os.path.join(args.out, "meta.json"), "w") as f:
         json.dump(meta, f, indent=2, ensure_ascii=False)
     print(json.dumps(meta, ensure_ascii=False))
-    return 1 if errors or not questions else 0
+    moves = [ev for _, ev in events if ev.get("e") == "ttt"]
+    return 1 if errors or not (questions or moves) else 0
 
 
 if __name__ == "__main__":

@@ -381,13 +381,14 @@ class DemoPilot {
   static List<T?> _list<T>(Object? v) => v is List ? [for (final x in v) x is T ? x : null] : const [];
 
   /// Square [i]'s tap target on the board (squares are built 0-8 in order).
+  /// (The board's own middle is a gap between squares, so test the square.)
   Element? _square(int i) {
-    final board = _live<TttBoard>();
+    final board = _all<TttBoard>().firstOrNull;
     if (board == null) return null;
     final squares = _all<GestureDetector>(under: board)
         .where((e) => (e.widget as GestureDetector).child is AnimatedContainer)
         .toList();
-    return i < squares.length ? squares[i] : null;
+    return i < squares.length && _hittable(squares[i]) ? squares[i] : null;
   }
 
   /// Off script: win if we can, block if we must, else centre, corners, edges.
@@ -437,15 +438,19 @@ class DemoPilot {
       }
       await _say('$name go for ${rows[sq ~/ 3]} and ${cols[sq % 3]}.');
       await _wait(500);
-      final target = _square(sq);
-      if (target == null) break;
-      await _tap(target);
       Element? picker;
-      for (var i = 0; i < 40 && picker == null; i++) {
-        await _wait(100);
-        picker = _live<PlayerPicker>();
+      for (var attempt = 0; attempt < 3 && picker == null; attempt++) {
+        final target = _square(sq);
+        if (target != null) await _tap(target);
+        for (var i = 0; i < 20 && picker == null; i++) {
+          await _wait(100);
+          picker = _live<PlayerPicker>();
+        }
       }
-      if (picker == null) break;
+      if (picker == null) {
+        _log('error', {'error': 'Square $sq would not open the answer box'});
+        break;
+      }
       final isAnswer = (picker.widget as PlayerPicker).isAnswer ?? ((Player _) => false);
       bool fresh(Player p) => isAnswer(p) && !taken.contains(p.name);
       final wrong = step != null && step.$2;
