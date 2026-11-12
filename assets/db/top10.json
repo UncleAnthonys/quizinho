@@ -1,0 +1,1761 @@
+{
+"_note": "Top 10 lists from Wikipedia record tables: 28 lists, 2 dropped. Built 2026-11-12.",
+"dropped": [
+"mufc-clean-sheets: row 6 names nobody we know: Alf Steward",
+"celtic-sales: row 3 names nobody we know: Jota (footballer, born March 1999)"
+],
+"lists": [
+{
+"id": "pl-goals",
+"q": "Premier League all-time top scorers",
+"d": 1,
+"asof": "Nov 2026",
+"src": "Premier League records and statistics",
+"e": [
+[
+1,
+"alan-shearer",
+"Alan Shearer",
+"260 goals"
+],
+[
+2,
+"harry-kane",
+"Harry Kane",
+"213 goals"
+],
+[
+3,
+"wayne-rooney",
+"Wayne Rooney",
+"208 goals"
+],
+[
+4,
+"mohamed-salah",
+"Mohamed Salah",
+"193 goals"
+],
+[
+5,
+"andy-cole",
+"Andy Cole",
+"187 goals"
+],
+[
+6,
+"sergio-aguero",
+"Sergio Agüero",
+"184 goals"
+],
+[
+7,
+"frank-lampard",
+"Frank Lampard",
+"177 goals"
+],
+[
+8,
+"thierry-henry",
+"Thierry Henry",
+"175 goals"
+],
+[
+9,
+"robbie-fowler",
+"Robbie Fowler",
+"163 goals"
+],
+[
+10,
+"jermain-defoe",
+"Jermain Defoe",
+"162 goals"
+]
+]
+},
+{
+"id": "pl-assists",
+"q": "Most Premier League assists",
+"d": 2,
+"asof": "Nov 2026",
+"src": "Premier League records and statistics",
+"e": [
+[
+1,
+"ryan-giggs",
+"Ryan Giggs",
+"162 assists"
+],
+[
+2,
+"kevin-de-bruyne",
+"Kevin De Bruyne",
+"119 assists"
+],
+[
+3,
+"cesc-fabregas",
+"Cesc Fàbregas",
+"111 assists"
+],
+[
+4,
+"wayne-rooney",
+"Wayne Rooney",
+"103 assists"
+],
+[
+5,
+"frank-lampard",
+"Frank Lampard",
+"102 assists"
+],
+[
+6,
+"dennis-bergkamp",
+"Dennis Bergkamp",
+"94 assists"
+],
+[
+6,
+"mohamed-salah",
+"Mohamed Salah",
+"94 assists"
+],
+[
+8,
+"david-silva",
+"David Silva",
+"93 assists"
+],
+[
+9,
+"steven-gerrard",
+"Steven Gerrard",
+"92 assists"
+],
+[
+10,
+"james-milner",
+"James Milner",
+"90 assists"
+]
+]
+},
+{
+"id": "pl-clean-sheets",
+"q": "Most Premier League clean sheets",
+"d": 2,
+"asof": "Nov 2026",
+"src": "Premier League records and statistics",
+"e": [
+[
+1,
+"petr-cech",
+"Petr Čech"
+],
+[
+2,
+"david-james",
+"David James"
+],
+[
+3,
+"mark-schwarzer",
+"Mark Schwarzer"
+],
+[
+4,
+"david-de-gea",
+"David de Gea"
+],
+[
+5,
+"david-seaman",
+"David Seaman"
+],
+[
+6,
+"nigel-martyn",
+"Nigel Martyn"
+],
+[
+7,
+"pepe-reina",
+"Pepe Reina"
+],
+[
+8,
+"edwin-van-der-sar",
+"Edwin van der Sar"
+],
+[
+9,
+"tim-howard",
+"Tim Howard"
+],
+[
+10,
+"brad-friedel",
+"Brad Friedel"
+]
+]
+},
+{
+"id": "pl-penalties",
+"q": "Most Premier League penalties scored",
+"d": 3,
+"asof": "Nov 2026",
+"src": "Premier League records and statistics",
+"e": [
+[
+1,
+"alan-shearer",
+"Alan Shearer"
+],
+[
+2,
+"frank-lampard",
+"Frank Lampard"
+],
+[
+3,
+"mohamed-salah",
+"Mohamed Salah"
+],
+[
+4,
+"harry-kane",
+"Harry Kane"
+],
+[
+5,
+"steven-gerrard",
+"Steven Gerrard"
+],
+[
+6,
+"mark-noble",
+"Mark Noble"
+],
+[
+7,
+"sergio-aguero",
+"Sergio Agüero"
+],
+[
+8,
+"jamie-vardy",
+"Jamie Vardy"
+],
+[
+9,
+"matt-le-tissier",
+"Matt Le Tissier"
+],
+[
+10,
+"bruno-fernandes",
+"Bruno Fernandes"
+]
+]
+},
+{
+"id": "ucl-goals",
+"q": "Champions League all-time top scorers",
+"d": 1,
+"asof": "Nov 2026",
+"src": "List of UEFA Champions League top scorers",
+"e": [
+[
+1,
+"cristiano-ronaldo",
+"Cristiano Ronaldo",
+"140 goals"
+],
+[
+2,
+"lionel-messi",
+"Lionel Messi",
+"129 goals"
+],
+[
+3,
+"robert-lewandowski",
+"Robert Lewandowski",
+"109 goals"
+],
+[
+4,
+"karim-benzema",
+"Karim Benzema",
+"90 goals"
+],
+[
+5,
+"kylian-mbappe",
+"Kylian Mbappé",
+"74 goals"
+],
+[
+6,
+"raul",
+"Raúl",
+"71 goals"
+],
+[
+7,
+"erling-haaland",
+"Erling Haaland",
+"62 goals"
+],
+[
+8,
+"harry-kane",
+"Harry Kane",
+"58 goals"
+],
+[
+9,
+"thomas-muller",
+"Thomas Müller",
+"57 goals"
+],
+[
+10,
+"ruud-van-nistelrooy",
+"Ruud van Nistelrooy",
+"56 goals"
+]
+]
+},
+{
+"id": "eng-caps",
+"q": "Most England caps",
+"d": 1,
+"asof": "Nov 2026",
+"src": "England national football team records and statistics",
+"e": [
+[
+1,
+"peter-shilton",
+"Peter Shilton",
+"125 caps"
+],
+[
+1,
+"harry-kane",
+"Harry Kane",
+"125 caps"
+],
+[
+3,
+"wayne-rooney",
+"Wayne Rooney",
+"120 caps"
+],
+[
+4,
+"david-beckham",
+"David Beckham",
+"115 caps"
+],
+[
+5,
+"steven-gerrard",
+"Steven Gerrard",
+"114 caps"
+],
+[
+6,
+"bobby-moore",
+"Bobby Moore",
+"108 caps"
+],
+[
+7,
+"ashley-cole",
+"Ashley Cole",
+"107 caps"
+],
+[
+8,
+"bobby-charlton",
+"Bobby Charlton",
+"106 caps"
+],
+[
+8,
+"frank-lampard",
+"Frank Lampard",
+"106 caps"
+],
+[
+10,
+"billy-wright",
+"Billy Wright",
+"105 caps"
+]
+]
+},
+{
+"id": "eng-goals",
+"q": "England's all-time top scorers",
+"d": 1,
+"asof": "Nov 2026",
+"src": "England national football team records and statistics",
+"e": [
+[
+1,
+"harry-kane",
+"Harry Kane",
+"91 goals"
+],
+[
+2,
+"wayne-rooney",
+"Wayne Rooney",
+"53 goals"
+],
+[
+3,
+"bobby-charlton",
+"Bobby Charlton",
+"49 goals"
+],
+[
+4,
+"gary-lineker",
+"Gary Lineker",
+"48 goals"
+],
+[
+5,
+"jimmy-greaves",
+"Jimmy Greaves",
+"44 goals"
+],
+[
+6,
+"michael-owen",
+"Michael Owen",
+"40 goals"
+],
+[
+7,
+"nat-lofthouse",
+"Nat Lofthouse",
+"30 goals"
+],
+[
+7,
+"alan-shearer",
+"Alan Shearer",
+"30 goals"
+],
+[
+7,
+"tom-finney",
+"Tom Finney",
+"30 goals"
+],
+[
+10,
+"vivian-woodward",
+"Vivian Woodward",
+"29 goals"
+]
+]
+},
+{
+"id": "eng-clean-sheets",
+"q": "Most England clean sheets",
+"d": 3,
+"asof": "Nov 2026",
+"src": "England national football team records and statistics",
+"e": [
+[
+1,
+"peter-shilton",
+"Peter Shilton",
+"66 clean sheets"
+],
+[
+2,
+"joe-hart",
+"Joe Hart",
+"43 clean sheets"
+],
+[
+3,
+"jordan-pickford",
+"Jordan Pickford",
+"41 clean sheets"
+],
+[
+4,
+"david-seaman",
+"David Seaman",
+"40 clean sheets"
+],
+[
+5,
+"gordon-banks",
+"Gordon Banks",
+"35 clean sheets"
+],
+[
+6,
+"ray-clemence",
+"Ray Clemence",
+"27 clean sheets"
+],
+[
+7,
+"chris-woods",
+"Chris Woods",
+"26 clean sheets"
+],
+[
+8,
+"paul-robinson",
+"Paul Robinson",
+"24 clean sheets"
+],
+[
+9,
+"david-james",
+"David James",
+"21 clean sheets"
+],
+[
+10,
+"nigel-martyn",
+"Nigel Martyn",
+"13 clean sheets"
+]
+]
+},
+{
+"id": "intl-caps",
+"q": "Most international caps (men)",
+"d": 3,
+"asof": "Nov 2026",
+"src": "List of men's footballers with 100 or more international caps",
+"e": [
+[
+1,
+"cristiano-ronaldo",
+"Cristiano Ronaldo"
+],
+[
+2,
+"lionel-messi",
+"Lionel Messi"
+],
+[
+3,
+"luka-modric",
+"Luka Modrić"
+],
+[
+4,
+"bader-al-mutawa",
+"Bader Al-Mutawa"
+],
+[
+5,
+"soh-chin-aun",
+"Soh Chin Aun"
+],
+[
+6,
+"hassan-al-haidos",
+"Hassan Al Haidos"
+],
+[
+7,
+"ahmed-mubarak",
+"Ahmed Mubarak"
+],
+[
+8,
+"ahmed-hassan",
+"Ahmed Hassan"
+],
+[
+9,
+"andres-guardado",
+"Andrés Guardado"
+],
+[
+10,
+"sergio-ramos",
+"Sergio Ramos"
+]
+]
+},
+{
+"id": "mufc-apps",
+"q": "Most appearances for Manchester United",
+"d": 2,
+"asof": "Nov 2026",
+"src": "Manchester United F.C. records and statistics",
+"e": [
+[
+1,
+"ryan-giggs",
+"Ryan Giggs"
+],
+[
+2,
+"bobby-charlton",
+"Bobby Charlton"
+],
+[
+3,
+"paul-scholes",
+"Paul Scholes"
+],
+[
+4,
+"bill-foulkes",
+"Bill Foulkes"
+],
+[
+5,
+"gary-neville",
+"Gary Neville"
+],
+[
+6,
+"wayne-rooney",
+"Wayne Rooney"
+],
+[
+7,
+"david-de-gea",
+"David de Gea"
+],
+[
+8,
+"alex-stepney",
+"Alex Stepney"
+],
+[
+9,
+"tony-dunne",
+"Tony Dunne"
+],
+[
+10,
+"denis-irwin",
+"Denis Irwin"
+]
+]
+},
+{
+"id": "mufc-goals",
+"q": "Manchester United's all-time top scorers",
+"d": 2,
+"asof": "Nov 2026",
+"src": "Manchester United F.C. records and statistics",
+"e": [
+[
+1,
+"wayne-rooney",
+"Wayne Rooney"
+],
+[
+2,
+"bobby-charlton",
+"Bobby Charlton"
+],
+[
+3,
+"denis-law",
+"Denis Law"
+],
+[
+4,
+"jack-rowley",
+"Jack Rowley"
+],
+[
+5,
+"dennis-viollet",
+"Dennis Viollet"
+],
+[
+6,
+"george-best",
+"George Best"
+],
+[
+7,
+"joe-spence",
+"Joe Spence"
+],
+[
+8,
+"ryan-giggs",
+"Ryan Giggs"
+],
+[
+9,
+"mark-hughes",
+"Mark Hughes"
+],
+[
+10,
+"paul-scholes",
+"Paul Scholes"
+]
+]
+},
+{
+"id": "mufc-assists",
+"q": "Most assists for Manchester United",
+"d": 3,
+"asof": "Nov 2026",
+"src": "Manchester United F.C. records and statistics",
+"e": [
+[
+1,
+"ryan-giggs",
+"Ryan Giggs"
+],
+[
+2,
+"wayne-rooney",
+"Wayne Rooney"
+],
+[
+3,
+"david-beckham",
+"David Beckham"
+],
+[
+4,
+"bruno-fernandes",
+"Bruno Fernandes"
+],
+[
+5,
+"paul-scholes",
+"Paul Scholes"
+],
+[
+6,
+"marcus-rashford",
+"Marcus Rashford"
+],
+[
+7,
+"bobby-charlton",
+"Bobby Charlton"
+],
+[
+8,
+"cristiano-ronaldo",
+"Cristiano Ronaldo"
+],
+[
+9,
+"nani",
+"Nani"
+],
+[
+10,
+"eric-cantona",
+"Eric Cantona"
+]
+]
+},
+{
+"id": "cfc-apps",
+"q": "Most appearances for Chelsea",
+"d": 2,
+"asof": "Nov 2026",
+"src": "List of Chelsea F.C. records and statistics",
+"e": [
+[
+1,
+"ron-harris",
+"Ron Harris"
+],
+[
+2,
+"peter-bonetti",
+"Peter Bonetti"
+],
+[
+3,
+"john-terry",
+"John Terry"
+],
+[
+4,
+"frank-lampard",
+"Frank Lampard"
+],
+[
+5,
+"john-hollins",
+"John Hollins"
+],
+[
+6,
+"cesar-azpilicueta",
+"César Azpilicueta"
+],
+[
+7,
+"petr-cech",
+"Petr Čech"
+],
+[
+8,
+"dennis-wise",
+"Dennis Wise"
+],
+[
+9,
+"steve-clarke",
+"Steve Clarke"
+],
+[
+10,
+"kerry-dixon",
+"Kerry Dixon"
+]
+]
+},
+{
+"id": "cfc-signings",
+"q": "Chelsea's most expensive signings",
+"d": 3,
+"asof": "Nov 2026",
+"src": "List of Chelsea F.C. records and statistics",
+"e": [
+[
+1,
+"morgan-rogers",
+"Morgan Rogers"
+],
+[
+2,
+"enzo-fernandez",
+"Enzo Fernández"
+],
+[
+3,
+"moises-caicedo",
+"Moisés Caicedo"
+],
+[
+4,
+"romelu-lukaku",
+"Romelu Lukaku"
+],
+[
+5,
+"kepa-arrizabalaga",
+"Kepa Arrizabalaga"
+],
+[
+6,
+"wesley-fofana",
+"Wesley Fofana"
+],
+[
+7,
+"kai-havertz",
+"Kai Havertz"
+],
+[
+8,
+"mykhailo-mudryk",
+"Mykhailo Mudryk"
+],
+[
+9,
+"alvaro-morata",
+"Álvaro Morata"
+],
+[
+10,
+"christian-pulisic",
+"Christian Pulisic"
+]
+]
+},
+{
+"id": "thfc-sales",
+"q": "Tottenham's biggest sales",
+"d": 2,
+"asof": "Nov 2026",
+"src": "List of Tottenham Hotspur F.C. records and statistics",
+"e": [
+[
+1,
+"harry-kane",
+"Harry Kane"
+],
+[
+2,
+"gareth-bale",
+"Gareth Bale"
+],
+[
+3,
+"luka-vuskovic",
+"Luka Vušković"
+],
+[
+4,
+"kyle-walker",
+"Kyle Walker"
+],
+[
+5,
+"brennan-johnson",
+"Brennan Johnson"
+],
+[
+6,
+"cristian-romero",
+"Cristian Romero"
+],
+[
+7,
+"luka-modric",
+"Luka Modrić"
+],
+[
+8,
+"dimitar-berbatov",
+"Dimitar Berbatov"
+],
+[
+9,
+"steven-bergwijn",
+"Steven Bergwijn"
+],
+[
+10,
+"djed-spence",
+"Djed Spence"
+]
+]
+},
+{
+"id": "mcfc-assists",
+"q": "Most assists for Manchester City",
+"d": 2,
+"asof": "Nov 2026",
+"src": "List of Manchester City F.C. records and statistics",
+"e": [
+[
+1,
+"kevin-de-bruyne",
+"Kevin De Bruyne"
+],
+[
+2,
+"david-silva",
+"David Silva"
+],
+[
+3,
+"bernardo-silva",
+"Bernardo Silva"
+],
+[
+4,
+"raheem-sterling",
+"Raheem Sterling"
+],
+[
+5,
+"phil-foden",
+"Phil Foden"
+],
+[
+6,
+"sergio-aguero",
+"Sergio Agüero"
+],
+[
+7,
+"riyad-mahrez",
+"Riyad Mahrez"
+],
+[
+8,
+"ilkay-gundogan",
+"İlkay Gündoğan"
+],
+[
+9,
+"gabriel-jesus",
+"Gabriel Jesus"
+],
+[
+10,
+"leroy-sane",
+"Leroy Sané"
+]
+]
+},
+{
+"id": "mcfc-signings",
+"q": "Manchester City's most expensive signings",
+"d": 3,
+"asof": "Nov 2026",
+"src": "List of Manchester City F.C. records and statistics",
+"e": [
+[
+1,
+"enzo-fernandez",
+"Enzo Fernández"
+],
+[
+2,
+"elliot-anderson",
+"Elliot Anderson"
+],
+[
+3,
+"jack-grealish",
+"Jack Grealish"
+],
+[
+4,
+"ayyoub-bouaddi",
+"Ayyoub Bouaddi"
+],
+[
+5,
+"josko-gvardiol",
+"Joško Gvardiol"
+],
+[
+6,
+"antoine-semenyo",
+"Antoine Semenyo"
+],
+[
+7,
+"iliman-ndiaye",
+"Iliman Ndiaye"
+],
+[
+8,
+"rodri",
+"Rodri"
+],
+[
+9,
+"ruben-dias",
+"Rúben Dias"
+],
+[
+10,
+"riyad-mahrez",
+"Riyad Mahrez"
+]
+]
+},
+{
+"id": "efc-sales",
+"q": "Everton's biggest sales",
+"d": 2,
+"asof": "Nov 2026",
+"src": "List of Everton F.C. records and statistics",
+"e": [
+[
+1,
+"romelu-lukaku",
+"Romelu Lukaku"
+],
+[
+2,
+"richarlison",
+"Richarlison"
+],
+[
+3,
+"amadou-onana",
+"Amadou Onana"
+],
+[
+4,
+"john-stones",
+"John Stones"
+],
+[
+5,
+"anthony-gordon",
+"Anthony Gordon"
+],
+[
+6,
+"wayne-rooney",
+"Wayne Rooney"
+],
+[
+7,
+"idrissa-gueye",
+"Idrissa Gueye"
+],
+[
+8,
+"marouane-fellaini",
+"Marouane Fellaini"
+],
+[
+9,
+"lucas-digne",
+"Lucas Digne"
+],
+[
+10,
+"moise-kean",
+"Moise Kean"
+]
+]
+},
+{
+"id": "nufc-sales",
+"q": "Newcastle's biggest sales",
+"d": 3,
+"asof": "Nov 2026",
+"src": "List of Newcastle United F.C. records and statistics",
+"e": [
+[
+1,
+"alexander-isak",
+"Alexander Isak"
+],
+[
+2,
+"sandro-tonali",
+"Sandro Tonali"
+],
+[
+3,
+"bruno-guimaraes",
+"Bruno Guimarães"
+],
+[
+4,
+"anthony-gordon",
+"Anthony Gordon"
+],
+[
+5,
+"elliot-anderson",
+"Elliot Anderson"
+],
+[
+6,
+"andy-carroll",
+"Andy Carroll"
+],
+[
+7,
+"yankuba-minteh",
+"Yankuba Minteh"
+],
+[
+8,
+"ayoze-perez",
+"Ayoze Pérez"
+],
+[
+9,
+"moussa-sissoko",
+"Moussa Sissoko"
+],
+[
+10,
+"aleksandar-mitrovic",
+"Aleksandar Mitrovic"
+]
+]
+},
+{
+"id": "rmcf-apps",
+"q": "Most appearances for Real Madrid",
+"d": 3,
+"asof": "Nov 2026",
+"src": "List of Real Madrid CF records and statistics",
+"e": [
+[
+1,
+"raul",
+"Raúl"
+],
+[
+2,
+"iker-casillas",
+"Iker Casillas"
+],
+[
+3,
+"manuel-sanchis-hontiyuelo",
+"Manuel Sanchís Hontiyuelo"
+],
+[
+4,
+"sergio-ramos",
+"Sergio Ramos"
+],
+[
+5,
+"karim-benzema",
+"Karim Benzema"
+],
+[
+6,
+"santillana",
+"Santillana"
+],
+[
+7,
+"fernando-hierro",
+"Fernando Hierro"
+],
+[
+8,
+"paco-gento",
+"Paco Gento"
+],
+[
+9,
+"luka-modric",
+"Luka Modrić"
+],
+[
+10,
+"jose-antonio-camacho",
+"José Antonio Camacho"
+]
+]
+},
+{
+"id": "rmcf-goals",
+"q": "Real Madrid's all-time top scorers",
+"d": 3,
+"asof": "Nov 2026",
+"src": "List of Real Madrid CF records and statistics",
+"e": [
+[
+1,
+"cristiano-ronaldo",
+"Cristiano Ronaldo"
+],
+[
+2,
+"karim-benzema",
+"Karim Benzema"
+],
+[
+3,
+"raul",
+"Raúl"
+],
+[
+4,
+"alfredo-di-stefano",
+"Alfredo Di Stéfano"
+],
+[
+5,
+"santillana",
+"Santillana"
+],
+[
+6,
+"ferenc-puskas",
+"Ferenc Puskás"
+],
+[
+7,
+"hugo-sanchez",
+"Hugo Sánchez"
+],
+[
+8,
+"paco-gento",
+"Paco Gento"
+],
+[
+9,
+"pirri",
+"Pirri"
+],
+[
+10,
+"emilio-butragueno",
+"Emilio Butragueño"
+]
+]
+},
+{
+"id": "rmcf-assists",
+"q": "Most assists for Real Madrid",
+"d": 3,
+"asof": "Nov 2026",
+"src": "List of Real Madrid CF records and statistics",
+"e": [
+[
+1,
+"michel",
+"Míchel",
+"201 assists"
+],
+[
+2,
+"paco-gento",
+"Paco Gento",
+"165 assists"
+],
+[
+3,
+"karim-benzema",
+"Karim Benzema",
+"148 assists"
+],
+[
+4,
+"alfredo-di-stefano",
+"Alfredo Di Stéfano",
+"137 assists"
+],
+[
+5,
+"ferenc-puskas",
+"Ferenc Puskás",
+"133 assists"
+],
+[
+6,
+"juanito-1954",
+"Juanito",
+"123 assists"
+],
+[
+7,
+"amancio-amaro",
+"Amancio Amaro",
+"120 assists"
+],
+[
+8,
+"cristiano-ronaldo",
+"Cristiano Ronaldo",
+"119 assists"
+],
+[
+9,
+"raul",
+"Raúl",
+"115 assists"
+],
+[
+10,
+"emilio-butragueno",
+"Emilio Butragueño",
+"109 assists"
+]
+]
+},
+{
+"id": "fcb-goals",
+"q": "Barcelona's all-time top scorers",
+"d": 3,
+"asof": "Nov 2026",
+"src": "List of FC Barcelona records and statistics",
+"e": [
+[
+1,
+"lionel-messi",
+"Lionel Messi"
+],
+[
+2,
+"cesar-rodriguez-alvarez",
+"César Rodríguez Álvarez"
+],
+[
+3,
+"luis-suarez",
+"Luis Suárez"
+],
+[
+4,
+"laszlo-kubala",
+"László Kubala"
+],
+[
+5,
+"josep-samitier",
+"Josep Samitier"
+],
+[
+6,
+"josep-escola",
+"Josep Escolà"
+],
+[
+7,
+"paulino-alcantara",
+"Paulino Alcántara"
+],
+[
+8,
+"samuel-etoo",
+"Samuel Eto'o"
+],
+[
+9,
+"rivaldo",
+"Rivaldo"
+],
+[
+10,
+"mariano-martin",
+"Mariano Martín"
+]
+]
+},
+{
+"id": "juve-apps",
+"q": "Most appearances for Juventus",
+"d": 3,
+"asof": "Nov 2026",
+"src": "List of Juventus FC records and statistics",
+"e": [
+[
+1,
+"alessandro-del-piero",
+"Alessandro Del Piero",
+"705 apps"
+],
+[
+2,
+"gianluigi-buffon",
+"Gianluigi Buffon",
+"685 apps"
+],
+[
+3,
+"giorgio-chiellini",
+"Giorgio Chiellini",
+"561 apps"
+],
+[
+4,
+"gaetano-scirea",
+"Gaetano Scirea",
+"552 apps"
+],
+[
+5,
+"giuseppe-furino",
+"Giuseppe Furino",
+"528 apps"
+],
+[
+6,
+"leonardo-bonucci",
+"Leonardo Bonucci",
+"502 apps"
+],
+[
+7,
+"roberto-bettega",
+"Roberto Bettega",
+"482 apps"
+],
+[
+8,
+"dino-zoff",
+"Dino Zoff",
+"479 apps"
+],
+[
+9,
+"giampiero-boniperti",
+"Giampiero Boniperti",
+"459 apps"
+],
+[
+10,
+"sandro-salvadore",
+"Sandro Salvadore",
+"450 apps"
+]
+]
+},
+{
+"id": "juve-goals",
+"q": "Juventus's all-time top scorers",
+"d": 3,
+"asof": "Nov 2026",
+"src": "List of Juventus FC records and statistics",
+"e": [
+[
+1,
+"alessandro-del-piero",
+"Alessandro Del Piero"
+],
+[
+2,
+"giampiero-boniperti",
+"Giampiero Boniperti"
+],
+[
+3,
+"roberto-bettega",
+"Roberto Bettega"
+],
+[
+4,
+"david-trezeguet",
+"David Trezeguet"
+],
+[
+5,
+"omar-sivori",
+"Omar Sívori"
+],
+[
+6,
+"felice-borel",
+"Felice Borel"
+],
+[
+7,
+"pietro-anastasi",
+"Pietro Anastasi"
+],
+[
+8,
+"john-hansen",
+"John Hansen"
+],
+[
+9,
+"roberto-baggio",
+"Roberto Baggio"
+],
+[
+10,
+"paulo-dybala",
+"Paulo Dybala"
+]
+]
+},
+{
+"id": "fcbayern-apps",
+"q": "Most appearances for Bayern Munich",
+"d": 3,
+"asof": "Nov 2026",
+"src": "List of FC Bayern Munich records and statistics",
+"e": [
+[
+1,
+"thomas-muller",
+"Thomas Müller"
+],
+[
+2,
+"sepp-maier",
+"Sepp Maier"
+],
+[
+3,
+"oliver-kahn",
+"Oliver Kahn"
+],
+[
+4,
+"gerd-muller",
+"Gerd Müller"
+],
+[
+5,
+"manuel-neuer",
+"Manuel Neuer"
+],
+[
+6,
+"franz-beckenbauer",
+"Franz Beckenbauer"
+],
+[
+7,
+"georg-schwarzenbeck",
+"Georg Schwarzenbeck"
+],
+[
+8,
+"klaus-augenthaler",
+"Klaus Augenthaler"
+],
+[
+9,
+"philipp-lahm",
+"Philipp Lahm"
+],
+[
+10,
+"joshua-kimmich",
+"Joshua Kimmich"
+]
+]
+},
+{
+"id": "laliga-goals",
+"q": "La Liga all-time top scorers",
+"d": 2,
+"asof": "Nov 2026",
+"src": "List of La Liga top scorers",
+"e": [
+[
+1,
+"lionel-messi",
+"Lionel Messi",
+"474 goals"
+],
+[
+2,
+"cristiano-ronaldo",
+"Cristiano Ronaldo",
+"311 goals"
+],
+[
+3,
+"telmo-zarra",
+"Telmo Zarra",
+"251 goals"
+],
+[
+4,
+"karim-benzema",
+"Karim Benzema",
+"238 goals"
+],
+[
+5,
+"hugo-sanchez",
+"Hugo Sánchez",
+"234 goals"
+],
+[
+6,
+"raul",
+"Raúl",
+"228 goals"
+],
+[
+7,
+"alfredo-di-stefano",
+"Alfredo Di Stéfano",
+"227 goals"
+],
+[
+8,
+"cesar-rodriguez-alvarez",
+"César Rodríguez Álvarez",
+"221 goals"
+],
+[
+9,
+"quini",
+"Quini",
+"219 goals"
+],
+[
+10,
+"pahino",
+"Pahiño",
+"212 goals"
+]
+]
+},
+{
+"id": "bundesliga-goals",
+"q": "Bundesliga all-time top scorers",
+"d": 3,
+"asof": "Nov 2026",
+"src": "List of Bundesliga top scorers",
+"e": [
+[
+1,
+"gerd-muller",
+"Gerd Müller",
+"365 goals"
+],
+[
+2,
+"robert-lewandowski",
+"Robert Lewandowski",
+"312 goals"
+],
+[
+3,
+"klaus-fischer",
+"Klaus Fischer",
+"268 goals"
+],
+[
+4,
+"jupp-heynckes",
+"Jupp Heynckes",
+"220 goals"
+],
+[
+5,
+"manfred-burgsmuller",
+"Manfred Burgsmüller",
+"213 goals"
+],
+[
+6,
+"claudio-pizarro",
+"Claudio Pizarro",
+"197 goals"
+],
+[
+7,
+"ulf-kirsten",
+"Ulf Kirsten",
+"181 goals"
+],
+[
+8,
+"stefan-kuntz",
+"Stefan Kuntz",
+"179 goals"
+],
+[
+9,
+"dieter-muller",
+"Dieter Müller",
+"177 goals"
+],
+[
+9,
+"klaus-allofs",
+"Klaus Allofs",
+"177 goals"
+]
+]
+}
+]
+}

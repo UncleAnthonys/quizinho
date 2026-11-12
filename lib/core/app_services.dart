@@ -3,6 +3,7 @@ import 'package:flutter/widgets.dart';
 
 import '../data/football_repository.dart';
 import '../data/teasers.dart';
+import '../data/top10.dart';
 import '../multiplayer/rest_room_link.dart';
 import '../multiplayer/room.dart';
 import '../multiplayer/room_link.dart';
@@ -41,6 +42,7 @@ class AppServices {
 
   /// The Half-Time Teasers, loaded the first time a match needs one.
   late final Future<TeaserBank> teasers = TeaserBank.load();
+  late final Future<Top10Bank> top10 = Top10Bank.load();
 
   void haptic(HapticStrength s) {
     if (!settings.hapticsOn) return;

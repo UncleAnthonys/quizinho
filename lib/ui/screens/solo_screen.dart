@@ -20,6 +20,7 @@ const soloGames = [
   GameModeId.checkout501,
   GameModeId.startingXi,
   GameModeId.ticTacToe,
+  GameModeId.top10,
 ];
 
 /// How each game is scored when you play it alone — all out of 100.
@@ -30,6 +31,7 @@ String soloScoring(GameModeId m) => switch (m) {
       GameModeId.checkout501 => 'Check out from 501 in as few darts as you can.',
       GameModeId.startingXi => 'Name as much of the XI as you can. 3 lives.',
       GameModeId.ticTacToe => 'Fill the whole grid yourself. 3 lives; a line is a bonus.',
+      GameModeId.top10 => 'Name as many of the ten as you can. 3 lives; 10 for each one.',
       _ => '',
     };
 
@@ -47,9 +49,9 @@ class _SoloScreenState extends State<SoloScreen> {
   late final Set<Era> _eras = {...AppScope.read(context).settings.lastConfig().eras};
   FootballGender _gender = FootballGender.men;
 
-  /// Starting XI is men's football only for now.
+  /// Starting XI and Top 10 are men's football only for now.
   List<GameModeId> get _games =>
-      [for (final g in soloGames) if (g != GameModeId.startingXi || _gender == FootballGender.men) g];
+      [for (final g in soloGames) if (g.hasWomensGame || _gender == FootballGender.men) g];
 
   Future<void> _play(List<GameModeId> games, {required bool cup}) async {
     if (!await MatchAccess.allowed(context) || !mounted) return;

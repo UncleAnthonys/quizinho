@@ -97,6 +97,17 @@ enum GameModeId {
       'Every team gets one go. Most correct cards wins 3 points.',
     ],
     whoPlays: 'The named player guesses; their teammates describe. Other teams keep quiet!',
+  ),
+  top10(
+    title: 'Top 10',
+    tagline: 'Name as many of the ten as you can',
+    playable: true,
+    soloOnly: true,
+    rules: [
+      'A Top 10 from the record books: all-time scorers, most caps, most appearances.',
+      'Name as many of the ten as you can. Each one is worth 10.',
+      'A name that isn’t on the list costs a life. Three gone and the rest come out.',
+    ],
   );
 
   const GameModeId({
@@ -105,7 +116,11 @@ enum GameModeId {
     required this.playable,
     this.rules = const [],
     this.whoPlays = '',
+    this.soloOnly = false,
   });
+
+  /// Played on your own only (Top 10): never on the party wheel.
+  final bool soloOnly;
 
   final String title;
 
@@ -118,11 +133,11 @@ enum GameModeId {
   final String whoPlays;
 
   /// Has women's questions. Line-ups and Heads Up packs are men's only so far.
-  bool get hasWomensGame => this != GameModeId.startingXi && this != GameModeId.headsUp;
+  bool get hasWomensGame => this != GameModeId.startingXi && this != GameModeId.headsUp && this != GameModeId.top10;
 
   /// Real games (not the wildcard wrapper) available today.
   static List<GameModeId> get concreteGames =>
-      values.where((m) => m.playable && m != GameModeId.wildcard).toList();
+      values.where((m) => m.playable && !m.soloOnly && m != GameModeId.wildcard).toList();
 
   static GameModeId? fromName(String name) {
     for (final m in values) {

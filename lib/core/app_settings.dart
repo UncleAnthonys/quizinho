@@ -138,7 +138,7 @@ class AppSettings extends ChangeNotifier {
     final modes = modeNames?.map(GameModeId.fromName).whereType<GameModeId>().where((m) => m.playable).toSet();
     // Games added since the last save are switched on automatically.
     final known = (_prefs.getStringList('knownModes') ?? _modesBeforeTracking).toSet();
-    modes?.addAll(GameModeId.values.where((m) => m.playable && !known.contains(m.name)));
+    modes?.addAll(GameModeId.values.where((m) => m.playable && !m.soloOnly && !known.contains(m.name)));
     return TournamentConfig(
       teams: [
         for (var i = 0; i < names.length; i++)
@@ -173,6 +173,6 @@ class AppSettings extends ChangeNotifier {
     await _prefs.setInt('bombLives', c.bombLives);
     await _prefs.setInt('headsUpSeconds', c.headsUpSeconds);
     await _prefs.setInt('eras', c.eraMask);
-    await _prefs.setStringList('knownModes', [for (final m in GameModeId.values) if (m.playable) m.name]);
+    await _prefs.setStringList('knownModes', [for (final m in GameModeId.values) if (m.playable && !m.soloOnly) m.name]);
   }
 }

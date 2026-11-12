@@ -38,8 +38,12 @@ def tables(text: str):
         headers = [re.sub(r".*\|", "", h).strip() for h in re.findall(r"^!\s*(.*)$", body, re.M)]
         rows = []
         for chunk in re.split(r"\n\|-[^\n]*", body)[1:]:
+            lines = chunk.strip("\n").split("\n")
+            # A header row is all "!" cells; a data row has at least one "|" cell.
+            if not any(l.startswith("|") and not l.startswith(("|}", "|+")) for l in lines):
+                continue
             cells = []
-            for line in chunk.strip("\n").split("\n"):
+            for line in lines:
                 if line.startswith("|") and not line.startswith("|}") and not line.startswith("|+"):
                     cells += [c for c in re.split(r"\|\|", line[1:])]
                 elif line.startswith("!"):

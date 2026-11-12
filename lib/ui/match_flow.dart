@@ -15,6 +15,7 @@ import '../games/heads_up/heads_up_screen.dart';
 import '../games/pointless/pointless_screen.dart';
 import '../games/starting_xi/starting_xi_screen.dart';
 import '../games/tic_tac_toe/tic_tac_toe_screen.dart';
+import '../games/top10/top10_screen.dart';
 import '../multiplayer/room.dart';
 import 'screens/free_kick_screen.dart';
 import 'screens/round_intro_screen.dart';
@@ -156,6 +157,7 @@ abstract final class MatchFlow {
         GameModeId.biddingWar => BiddingWarScreen(round: round),
         GameModeId.pointless => PointlessScreen(round: round),
         GameModeId.checkout501 => CheckoutScreen(round: round),
+        GameModeId.top10 => Top10Screen(round: round),
         _ => throw ArgumentError('${mode.title} is not playable yet'),
       };
 }
@@ -207,6 +209,7 @@ extension GameModeStyle on GameModeId {
         GameModeId.pointless => const Color(0xFF29C5FF), // studio blue
         GameModeId.checkout501 => const Color(0xFF2EE6C9), // oche teal
         GameModeId.headsUp => const Color(0xFF3DFFB0), // mint
+        GameModeId.top10 => const Color(0xFFFFD34D), // gold
       };
 
   IconData get icon => switch (this) {
@@ -219,6 +222,7 @@ extension GameModeStyle on GameModeId {
         GameModeId.pointless => Icons.trending_down_rounded,
         GameModeId.checkout501 => Icons.adjust_rounded,
         GameModeId.headsUp => Icons.screen_rotation_rounded,
+        GameModeId.top10 => Icons.format_list_numbered_rounded,
       };
 
   /// Short label that fits on a wheel segment.
@@ -232,5 +236,6 @@ extension GameModeStyle on GameModeId {
         GameModeId.pointless => 'POINTLESS',
         GameModeId.checkout501 => '501',
         GameModeId.headsUp => 'ON YOUR HEAD',
+        GameModeId.top10 => 'TOP 10',
       };
 }
