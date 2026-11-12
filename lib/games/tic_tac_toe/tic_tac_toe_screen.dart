@@ -331,9 +331,17 @@ class _TicTacToeScreenState extends State<TicTacToeScreen>
     // finished
     final missed = _showMissed
         ? Text('TAP A SQUARE TO SEE ITS ANSWERS', textAlign: TextAlign.center, style: AppText.label(13, color: Palette.yellow))
-        : TextButton(
-            onPressed: () => setState(() => _showMissed = true),
-            child: Text('SEE WHAT YOU MISSED', style: AppText.label(14, color: Palette.yellow)),
+        : Center(
+            child: OutlinedButton.icon(
+              onPressed: () => setState(() => _showMissed = true),
+              icon: const Icon(Icons.visibility_rounded, size: 20),
+              label: Text('SEE WHAT YOU MISSED', style: AppText.label(15, color: Palette.yellow)),
+              style: OutlinedButton.styleFrom(
+                foregroundColor: Palette.yellow,
+                side: const BorderSide(color: Palette.yellow),
+                padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
+              ),
+            ),
           );
     final standings = List.generate(_t.teamCount, (i) => i)..sort((a, b) => c.squaresOf(b).compareTo(c.squaresOf(a)));
     if (_t.teamCount == 1) {
