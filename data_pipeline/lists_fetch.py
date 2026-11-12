@@ -47,6 +47,18 @@ ARTICLES = [
     "List of Bundesliga top scorers",
     "Premier League Golden Boot",
     "List of Premier League hat-tricks",
+    "List of Liverpool F.C. records and statistics",
+    "List of Arsenal F.C. records and statistics",
+    "List of Chelsea F.C. records and statistics",
+    "List of Tottenham Hotspur F.C. records and statistics",
+    "List of Manchester City F.C. records and statistics",
+    "List of Newcastle United F.C. records and statistics",
+    "List of Everton F.C. records and statistics",
+    "List of West Ham United F.C. records and statistics",
+    "List of FC Bayern Munich records and statistics",
+    "List of Celtic F.C. records and statistics",
+    "List of Rangers F.C. records and statistics",
+    "List of Ballon d'Or winners",
 ]
 
 
