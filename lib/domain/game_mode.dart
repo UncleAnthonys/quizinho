@@ -108,6 +108,10 @@ enum GameModeId {
   });
 
   final String title;
+
+  /// Its name when you play it on your own: solo Noughts & Crosses is Pack
+  /// the Box (fill the whole grid yourself).
+  String get soloTitle => this == GameModeId.ticTacToe ? 'Pack the Box' : title;
   final String tagline;
   final bool playable;
   final List<String> rules;

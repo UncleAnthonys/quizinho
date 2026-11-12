@@ -29,7 +29,7 @@ String soloScoring(GameModeId m) => switch (m) {
       GameModeId.pointless => '3 categories, one answer each. The more obscure, the more you score.',
       GameModeId.checkout501 => 'Check out from 501 in as few darts as you can.',
       GameModeId.startingXi => 'Name as much of the XI as you can. 3 lives.',
-      GameModeId.ticTacToe => 'Fill the grid. 3 lives; a line is a bonus.',
+      GameModeId.ticTacToe => 'Fill the whole grid yourself. 3 lives; a line is a bonus.',
       _ => '',
     };
 
@@ -219,7 +219,7 @@ class _GameTile extends StatelessWidget {
           const SizedBox(width: 12),
           Expanded(
             child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Text(mode.title.toUpperCase(), style: AppText.headline(22, color: mode.color)),
+              Text(mode.soloTitle.toUpperCase(), style: AppText.headline(22, color: mode.color)),
               Text(soloScoring(mode), style: const TextStyle(color: Palette.muted, fontSize: 13)),
             ]),
           ),
@@ -323,7 +323,7 @@ class _SoloIntro extends StatelessWidget {
                 const SizedBox(height: 12),
                 Icon(mode.icon, color: mode.color, size: 56),
                 const SizedBox(height: 8),
-                Text(mode.title.toUpperCase(), textAlign: TextAlign.center, style: AppText.headline(44, color: mode.color)),
+                Text(mode.soloTitle.toUpperCase(), textAlign: TextAlign.center, style: AppText.headline(44, color: mode.color)),
                 Text(mode.tagline, textAlign: TextAlign.center, style: const TextStyle(color: Palette.muted, fontSize: 16)),
                 const SizedBox(height: 20),
                 Text(soloScoring(mode), textAlign: TextAlign.center, style: const TextStyle(fontSize: 18, height: 1.4)),
@@ -393,7 +393,7 @@ class _SoloResultsState extends State<_SoloResults> {
       body: PitchBackground(
         child: SafeArea(
           child: ListView(padding: const EdgeInsets.fromLTRB(20, 24, 20, 24), children: [
-            Text(cup ? 'SOLO CUP' : single!.key.title.toUpperCase(),
+            Text(cup ? 'SOLO CUP' : single!.key.soloTitle.toUpperCase(),
                 textAlign: TextAlign.center, style: AppText.label(16, color: Palette.yellow)),
             const SizedBox(height: 8),
             Text('$headline', textAlign: TextAlign.center, style: AppText.headline(96, color: Palette.yellow)),
@@ -418,7 +418,7 @@ class _SoloResultsState extends State<_SoloResults> {
                   child: Row(children: [
                     Icon(e.key.icon, color: e.key.color),
                     const SizedBox(width: 10),
-                    Expanded(child: Text(e.key.title.toUpperCase(), style: AppText.headline(20, color: e.key.color))),
+                    Expanded(child: Text(e.key.soloTitle.toUpperCase(), style: AppText.headline(20, color: e.key.color))),
                     if (_newBests.contains(e.key.name))
                       Padding(
                         padding: const EdgeInsets.only(right: 8),

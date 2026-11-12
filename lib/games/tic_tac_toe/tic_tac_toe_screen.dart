@@ -390,7 +390,7 @@ class TttLayout extends StatelessWidget {
       Padding(
         padding: const EdgeInsets.fromLTRB(16, 4, 16, 0),
         child: Row(children: [
-          Text('NOUGHTS & CROSSES', style: AppText.label(15, color: Palette.yellow)),
+          Text(data['solo'] == true ? 'PACK THE BOX' : 'NOUGHTS & CROSSES', style: AppText.label(15, color: Palette.yellow)),
           const Spacer(),
           if (multiplier > 1) Text('x$multiplier POINTS', style: AppText.label(15, color: Palette.gold)),
         ]),
@@ -432,6 +432,7 @@ class TttBoard extends StatelessWidget {
         if (c.stealing) 'stealing': true,
         'phase': c.phase.name,
         'team': c.currentTeam,
+        if (t.teamCount == 1) 'solo': true,
         if (c.winner != null) 'winner': t.teamName(c.winner!),
       };
 
