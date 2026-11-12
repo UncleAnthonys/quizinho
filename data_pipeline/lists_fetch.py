@@ -74,6 +74,46 @@ ARTICLES += PL_SEASONS + UCL_SEASONS
 # Champions League hat-tricks.
 ARTICLES += [f"{y} Ballon d'Or" for y in range(1956, 2026) if y != 2020]
 ARTICLES += ["List of England national football team captains", "List of UEFA Champions League hat-tricks"]
+# Round three: records pages for the wider list (some titles are guesses;
+# a missing one is just skipped).
+ARTICLES += [
+    "FIFA World Cup records and statistics",
+    "UEFA Champions League records and statistics",
+    "UEFA Europa League records and statistics",
+    "List of European Cup and UEFA Champions League winning players",
+    "List of European Cup and UEFA Champions League finals",
+    "Scotland national football team records and statistics",
+    "Wales national football team records and statistics",
+    "Republic of Ireland national football team records and statistics",
+    "Northern Ireland national football team records and statistics",
+    "List of Premier League managers",
+    "List of Premier League-winning players",
+    "List of Premier League winning players",
+    "FA Cup records and statistics",
+    "List of FA Cup winning players",
+    "Premier League Player of the Month",
+    "Premier League Golden Glove",
+    "Premier League Playmaker of the Season",
+    "List of men's footballers with the most official appearances",
+    "List of men's footballers with 500 or more goals",
+    "List of English football transfer records",
+    "List of most expensive transfers involving English clubs",
+    "List of Premier League red cards",
+    "List of Premier League own goals",
+    "Manchester derby",
+    "North London derby",
+    "Merseyside derby",
+    "North West derby",
+    "Tyne–Wear derby",
+    "Old Firm",
+    "El Clásico",
+    "Derby della Madonnina",
+    "Der Klassiker",
+    "Liverpool F.C.–Manchester United F.C. rivalry",
+    "Arsenal F.C.–Chelsea F.C. rivalry",
+    "Chelsea F.C.–Tottenham Hotspur F.C. rivalry",
+    "List of Premier League clubs",
+]
 
 
 def main() -> int:
