@@ -420,7 +420,7 @@ class DemoPilot {
       final step = turn < _tttPlan.length ? _tttPlan[turn] : null;
       final steal = step != null && step.$3 && stealable.isNotEmpty;
       final sq = steal
-          ? (stealable.contains(step!.$1) ? step.$1 : stealable.first)
+          ? (stealable.contains(step.$1) ? step.$1 : stealable.first)
           : (step != null && owner[step.$1] == null ? step.$1 : _bestSquare(owner, team));
       if (sq == null) break;
       final rows = _list<String>(d['rows']), cols = _list<String>(d['cols']);
