@@ -13,7 +13,7 @@ on:
         description: "Seed (blank = today's date). Changes teams, answers and which game."
         required: false
       game:
-        description: "Force a game (careerPath or clubConnections; blank = by seed)"
+        description: "Force a game (careerPath, clubConnections or ticTacToe; blank = by seed)"
         required: false
 
 permissions:
@@ -39,7 +39,8 @@ jobs:
         run: |
           sudo apt-get update -q
           sudo apt-get install -y -q xvfb ffmpeg fonts-noto-color-emoji
-          pip install -q playwright
+          pip install -q playwright piper-tts
+          python3 -m piper.download_voices en_GB-northern_english_male-medium --data-dir voices
           python3 -m playwright install --with-deps chromium
 
       - name: Record
@@ -53,7 +54,8 @@ jobs:
           python3 -m http.server 8080 -d build/web >/dev/null 2>&1 &
           sleep 2
           URL="http://localhost:8080/?demo=1&seed=$SEED${GAME:+&game=$GAME}"
-          DISPLAY=:99 bash scripts/ci_run.sh "Record" python3 scripts/record_demo.py --url "$URL" --out out
+          DISPLAY=:99 bash scripts/ci_run.sh "Record" python3 scripts/record_demo.py --url "$URL" --out out \
+            --voice voices/en_GB-northern_english_male-medium.onnx
 
       - name: Summary
         if: always()

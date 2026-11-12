@@ -32,7 +32,33 @@ HASHTAGS = "#football #footballquiz #soccer #quiz #footballtiktok #premierleague
 HOOKS = {
     "careerPath": "Guess the player from his clubs 👀 Did you get it before they buzzed?",
     "clubConnections": "Name a player who played for both clubs ⚽ Could you beat the buzzer?",
+    "ticTacToe": "Football noughts and crosses ❌⭕ Name a player for both clubs, or steal their square. Who'd you have gone for?",
 }
+
+
+def voiceover(lines: list[tuple[int, str]], model: str, folder: str) -> list[tuple[int, str, float]]:
+    """Voices each (ms, text) line with Piper. A line that would talk over
+    the one before starts when it ends instead. Returns (ms, wav, volume)."""
+    import wave
+
+    from piper import PiperVoice, SynthesisConfig
+
+    os.makedirs(folder, exist_ok=True)
+    v = PiperVoice.load(model)
+    cfg = SynthesisConfig(length_scale=0.88)  # a touch quicker: commentary pace
+    out, free = [], 0
+    for i, (ms, text) in enumerate(lines):
+        path = os.path.join(folder, f"{i:02d}.wav")
+        with wave.open(path, "wb") as w:
+            v.synthesize_wav(text, w, syn_config=cfg)
+        with wave.open(path, "rb") as w:
+            dur = int(w.getnframes() * 1000 / w.getframerate())
+        at = max(ms, free)
+        if at > ms + 300:
+            print(f"voice line {i} pushed back {at - ms} ms: {text}", flush=True)
+        out.append((at, path, 1.0))
+        free = at + dur + 80
+    return out
 
 
 def main() -> int:
@@ -41,6 +67,7 @@ def main() -> int:
     ap.add_argument("--out", required=True)
     ap.add_argument("--slow", type=float, default=6, help="Slow-down factor (matches ?slow= in the URL)")
     ap.add_argument("--assets", default="assets", help="The app's assets folder (for the sounds)")
+    ap.add_argument("--voice", default="", help="Piper voice model (.onnx) for the voiceover ('' = none)")
     args = ap.parse_args()
     os.makedirs(args.out, exist_ok=True)
     raw = os.path.join(args.out, "raw.mkv")
@@ -118,14 +145,18 @@ def main() -> int:
     start = max(0.0, t_go - t0)
     length = (t_end - t_go) / args.slow + 0.4
     go_ms = next(ev for _, ev in events if ev.get("e") == "go").get("t", 0)
-    sounds = [ev for _, ev in events if ev.get("e") == "sfx"]
-    sounds = [(ev["t"] - go_ms, ev["a"], ev.get("v", 1)) for ev in sounds
-              if 0 <= ev["t"] - go_ms < length * 1000 and os.path.exists(os.path.join(args.assets, ev["a"]))]
+    lines = [(ev["t"] - go_ms, ev["text"]) for _, ev in events if ev.get("e") == "say"]
+    voice = voiceover(lines, args.voice, os.path.join(args.out, "voice")) if args.voice and lines else []
+    # Game sounds sit under the voice.
+    duck = 0.45 if voice else 1.0
+    sounds = [(ev["t"] - go_ms, os.path.join(args.assets, ev["a"]), ev.get("v", 1) * duck)
+              for _, ev in events if ev.get("e") == "sfx"]
+    sounds = [x for x in sounds + voice if 0 <= x[0] < length * 1000 and os.path.exists(x[1])]
 
     video = os.path.join(args.out, "quizinho-demo.mp4")
     cmd = ["ffmpeg", "-y", "-loglevel", "error", "-ss", f"{start:.2f}", "-i", raw]
-    for _, asset, _ in sounds:
-        cmd += ["-i", os.path.join(args.assets, asset)]
+    for _, path, _ in sounds:
+        cmd += ["-i", path]
     filters = [f"[0:v]setpts=(PTS-STARTPTS)/{args.slow:g},fps=30,trim=duration={length:.2f},format=yuv420p[v]"]
     if sounds:
         for i, (ms, _, vol) in enumerate(sounds, start=1):
@@ -139,7 +170,7 @@ def main() -> int:
     cmd += ["-c:v", "libx264", "-preset", "veryfast", "-crf", "20", "-profile:v", "high",
             "-r", "30", "-movflags", "+faststart", video]
     subprocess.run(cmd, check=True)
-    print(f"sounds mixed in: {len(sounds)}", flush=True)
+    print(f"sounds mixed in: {len(sounds)} ({len(voice)} voiceover lines)", flush=True)
     subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-ss", f"{length / 2:.2f}", "-i", video,
                     "-frames:v", "1", "-q:v", "3", os.path.join(args.out, "thumb.jpg")], check=True)
     # Contact sheet: 12 frames across the video, for a quick look.

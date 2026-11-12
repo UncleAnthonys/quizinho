@@ -17,6 +17,7 @@ import '../domain/tournament.dart';
 import '../games/buzz_game_view.dart';
 import '../games/buzz_race_controller.dart';
 import '../games/career_path/career_path_controller.dart';
+import '../games/tic_tac_toe/tic_tac_toe_screen.dart';
 import '../ui/match_flow.dart';
 import '../ui/screens/round_summary_screen.dart';
 import '../ui/widgets/buzzer_pad.dart';
@@ -88,7 +89,7 @@ class DemoPilot {
     ('NEVER MIND THE BALLACKS', 'GIRLS ON TOUR'),
   ];
 
-  static const _games = [GameModeId.careerPath, GameModeId.clubConnections];
+  static const _games = [GameModeId.careerPath, GameModeId.clubConnections, GameModeId.ticTacToe];
 
   void start(BuildContext context) {
     if (_started) return;
@@ -173,6 +174,13 @@ class DemoPilot {
     final view = _live<BuzzGameView>();
     if (view != null && await _playBuzz(view.widget as BuzzGameView)) return;
 
+    final ttt = _live<TicTacToeScreen>();
+    if (ttt != null && !_tttPlayed) {
+      _tttPlayed = true;
+      await _playTtt(ttt.widget as TicTacToeScreen);
+      return;
+    }
+
     // The answer's up: a moment to take it in, then Next / Finish.
     const dwell = 2200;
     for (final b in _all<BigButton>()) {
@@ -190,6 +198,7 @@ class DemoPilot {
   String _hook(GameModeId mode) => switch (mode) {
         GameModeId.careerPath => 'GUESS THE PLAYER\nFROM HIS CLUBS',
         GameModeId.clubConnections => 'NAME A PLAYER WHO\nPLAYED FOR BOTH',
+        GameModeId.ticTacToe => 'FOOTBALL\nNOUGHTS & CROSSES',
         _ => mode.title.toUpperCase(),
       };
 
@@ -232,7 +241,11 @@ class DemoPilot {
       }
       _buzzAfterMs = 8000 + _rnd.nextInt(2500);
       headline.value = _hook(c.mode);
-      caption.value = 'Q${c.questionIndex + 1} · Get it before they buzz';
+      _sayLater(c.questionIndex > 0
+          ? 'Question two.'
+          : c is CareerPathController
+              ? 'Guess the player from his clubs. First to buzz gets it.'
+              : 'Name a player who played for both clubs. First to buzz gets it.');
     }
     if (c.phase != _lastPhase) _onPhase(c, t);
     _lastPhase = c.phase;
@@ -291,18 +304,22 @@ class DemoPilot {
     switch (c.phase) {
       case BuzzPhase.answering:
         _answered = false;
-        caption.value = '${t.teamName(c.answeringTeam!)} BUZZED!';
+        _sayLater('${_n(t.teamName(c.answeringTeam!))} buzz!');
         if (c is CareerPathController) _log('buzz', {'club': c.revealed, 'of': c.clueCount});
       case BuzzPhase.open:
         if (c.lockedOut.isNotEmpty) {
           _wrongAt = _now();
           final other = [for (var i = 0; i < t.teamCount; i++) if (!c.lockedOut.contains(i)) t.teamName(i)];
-          caption.value = 'WRONG! ${other.isEmpty ? '' : '${other.first} can steal it'}';
+          final miss = c.lastMiss;
+          _sayLater('${miss == null || miss == 'Time ran out' ? 'Time\'s up' : '$miss? Wrong'}!'
+              '${other.isEmpty ? '' : ' ${_n(other.first)} can steal it.'}');
         }
       case BuzzPhase.resolved:
         final o = c.outcome;
         final answer = _rightAnswer(c);
-        caption.value = o != null && o.scored ? 'Did you get it before them?' : 'Nobody got it. Would you?';
+        _sayLater(o != null && o.scored
+            ? 'It\'s ${answer?.name ?? o.player?.name}! Did you get it?'
+            : 'Nobody got it. It was ${answer?.name}.');
         _log('question', {
           'mode': c.mode.name,
           'n': c.questionIndex + 1,
@@ -315,18 +332,181 @@ class DemoPilot {
     }
   }
 
-  Player? _rightAnswer(BuzzRaceController<Object?> c) {
-    final all = _services!.repo.players.all.where(c.isRightAnswer).toList()
-      ..sort((a, b) => b.fame.compareTo(a.fame));
-    return all.firstOrNull;
+  Player? _rightAnswer(BuzzRaceController<Object?> c) => _mostFamous(c.isRightAnswer);
+  Player? _wrongAnswer(BuzzRaceController<Object?> c) => _famousMiss(c.isRightAnswer);
+
+  /// The best-known player [ok] accepts (viewers should know the answer).
+  Player? _mostFamous(bool Function(Player) ok) {
+    Player? best;
+    for (final p in _services!.repo.players.all) {
+      if (ok(p) && (best == null || p.fame > best.fame)) best = p;
+    }
+    return best;
   }
 
-  /// A believable miss: someone famous who isn't the answer.
-  Player? _wrongAnswer(BuzzRaceController<Object?> c) {
-    final famous = _services!.repo.players.all.where((p) => p.fame >= 4 && !p.women && !c.isRightAnswer(p)).toList();
+  /// A believable miss: someone famous who isn't an answer.
+  Player? _famousMiss(bool Function(Player) answer) {
+    final famous = _services!.repo.players.all.where((p) => p.fame >= 4 && !p.women && !answer(p)).toList();
     if (famous.isEmpty) return null;
     return famous[_rnd.nextInt(famous.length)];
   }
+
+  // ---- Noughts & Crosses -----------------------------------------------------
+
+  bool _tttPlayed = false;
+
+  /// A game that shows everything off: centre, corners, a threat and a block,
+  /// a wrong answer, then a steal of the centre that sets up three in a row.
+  /// (square, wrong answer, steal); squares are 0-8, left to right.
+  static const _tttPlan = [
+    (4, false, false),
+    (0, false, false),
+    (2, false, false),
+    (6, false, false),
+    (3, true, false),
+    (4, false, true),
+    (8, false, false),
+    (3, false, false),
+  ];
+
+  Map<String, Object?>? _ttt() => (_all<TttLayout>().firstOrNull?.widget as TttLayout?)?.data;
+
+  static List<T?> _list<T>(Object? v) => v is List ? [for (final x in v) x is T ? x : null] : const [];
+
+  /// Square [i]'s tap target on the board (squares are built 0-8 in order).
+  Element? _square(int i) {
+    final board = _live<TttBoard>();
+    if (board == null) return null;
+    final squares = _all<GestureDetector>(under: board)
+        .where((e) => (e.widget as GestureDetector).child is AnimatedContainer)
+        .toList();
+    return i < squares.length ? squares[i] : null;
+  }
+
+  /// Off script: win if we can, block if we must, else centre, corners, edges.
+  static int? _bestSquare(List<int?> owner, int team) {
+    final empty = [for (var i = 0; i < 9; i++) if (owner[i] == null) i];
+    if (empty.isEmpty) return null;
+    int? finish(bool Function(int? o) mine) {
+      for (final i in empty) {
+        for (final l in _lines.where((l) => l.contains(i))) {
+          if (l.where((j) => j != i).every((j) => mine(owner[j]))) return i;
+        }
+      }
+      return null;
+    }
+
+    return finish((o) => o == team) ??
+        finish((o) => o != null && o != team) ??
+        [4, 0, 2, 6, 8, 1, 3, 5, 7].firstWhere(empty.contains);
+  }
+
+  static const _lines = [
+    [0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 3, 6], [1, 4, 7], [2, 5, 8], [0, 4, 8], [2, 4, 6], //
+  ];
+
+  Future<void> _playTtt(TicTacToeScreen screen) async {
+    final t = screen.round.tournament;
+    headline.value = _hook(GameModeId.ticTacToe);
+    await _say('Football noughts and crosses. Name a player who played for both clubs to win the square.');
+    await _spoken();
+    for (var turn = 0; turn < 14; turn++) {
+      var d = _ttt();
+      if (d == null || d['phase'] != 'choosing') break;
+      final team = (d['team'] as num?)?.toInt() ?? 0;
+      final name = _n(t.teamName(team));
+      final owner = [for (final o in _list<num>(d['owner'])) o?.toInt()];
+      final stealable = {for (final i in _list<num>(d['stealable'])) if (i != null) i.toInt()};
+      final step = turn < _tttPlan.length ? _tttPlan[turn] : null;
+      final steal = step != null && step.$3 && stealable.isNotEmpty;
+      final sq = steal
+          ? (stealable.contains(step!.$1) ? step.$1 : stealable.first)
+          : (step != null && owner[step.$1] == null ? step.$1 : _bestSquare(owner, team));
+      if (sq == null) break;
+      final rows = _list<String>(d['rows']), cols = _list<String>(d['cols']);
+      final taken = {for (final c in _list<String>(d['claimed'])) if (c != null) c};
+      if (steal) {
+        await _say('Steal! $name can take a square by naming a different player.');
+      }
+      await _say('$name go for ${rows[sq ~/ 3]} and ${cols[sq % 3]}.');
+      await _wait(500);
+      final target = _square(sq);
+      if (target == null) break;
+      await _tap(target);
+      Element? picker;
+      for (var i = 0; i < 40 && picker == null; i++) {
+        await _wait(100);
+        picker = _live<PlayerPicker>();
+      }
+      if (picker == null) break;
+      final isAnswer = (picker.widget as PlayerPicker).isAnswer ?? ((Player _) => false);
+      bool fresh(Player p) => isAnswer(p) && !taken.contains(p.name);
+      final wrong = step != null && step.$2;
+      final player = (wrong ? null : _mostFamous(fresh)) ?? _famousMiss(isAnswer);
+      if (player == null) break;
+      await _spoken();
+      await _type(player.name);
+      for (var i = 0; i < 60; i++) {
+        await _wait(100);
+        if (_ttt()?['phase'] != 'answering') break;
+      }
+      d = _ttt();
+      if (d == null) break;
+      final now = [for (final o in _list<num>(d['owner'])) o?.toInt()];
+      final got = sq < now.length && now[sq] == team && _list<String>(d['claimed'])[sq] == player.name;
+      _log('ttt', {'square': sq, 'player': player.name, 'claimed': got, 'steal': steal});
+      if (d['phase'] == 'finished') {
+        final winner = d['winner'];
+        await _say(winner != null
+            ? '${player.name}! Three in a row! ${_n('$winner')} win it!'
+            : '${got ? '${player.name}. ' : ''}That\'s the game.');
+        await _spoken();
+        break;
+      }
+      await _say(got
+          ? (steal ? '${player.name}! Stolen, and now it\'s locked.' : '${player.name}. Square taken.')
+          : '${player.name}? Never played for both. Wrong!');
+      await _spoken();
+    }
+  }
+
+  // ---- the voiceover -------------------------------------------------------
+
+  /// Lines are said one after another, never over each other.
+  Future<void> _speech = Future<void>.value();
+  int _speechEnds = 0;
+
+  /// Says [text] (logged; the recorder voices it) and shows it as the
+  /// subtitle once the line before has finished. Completes as it starts.
+  Future<void> _say(String text) {
+    final next = _speech.then((_) async {
+      while (_ms < _speechEnds) {
+        await _wait(40);
+      }
+      caption.value = text;
+      _log('say', {'text': text, 't': _ms});
+      final words = text.split(RegExp(r'\s+')).where((w) => w.isNotEmpty).length;
+      _speechEnds = _ms + 450 + words * 330;
+    });
+    _speech = next;
+    return next;
+  }
+
+  void _sayLater(String text) => unawaited(_say(text));
+
+  /// Waits until everything said so far has been said.
+  Future<void> _spoken() async {
+    await _speech;
+    while (_ms < _speechEnds) {
+      await _wait(40);
+    }
+  }
+
+  /// A team name as it should be read out: "FIVE-A-SIDE FC" → "Five-A-Side F.C.".
+  static String _n(String name) => name
+      .split(' ')
+      .map((w) => w == 'FC' ? 'F.C.' : w.split('-').map((p) => p.isEmpty ? p : p[0] + p.substring(1).toLowerCase()).join('-'))
+      .join(' ');
 
   // ---- the end -------------------------------------------------------------
 
@@ -336,9 +516,11 @@ class DemoPilot {
     if (_summaryAt == null) {
       _summaryAt = _now();
       headline.value = 'WHO\'S WINNING\nYOUR QUIZ NIGHT?';
-      caption.value = 'Play it with your mates';
+      await _say('Who\'s winning your quiz night? Play Quizinho with your mates.');
+      await _spoken();
+      _summaryAt = _now();
     }
-    if (_now().difference(_summaryAt!).inMilliseconds < 3000) return;
+    if (_now().difference(_summaryAt!).inMilliseconds < 1200) return;
     _done = true;
     _log('end', _fps());
   }
@@ -493,20 +675,7 @@ class DemoFrame extends StatelessWidget {
                   fit: BoxFit.scaleDown,
                   child: Text(h,
                       textAlign: TextAlign.center,
-                      style: AppText.headline(34 * s, color: Palette.yellow).copyWith(height: 1.0)),
-                ),
-              ),
-              SizedBox(height: 6 * s),
-              ValueListenableBuilder(
-                valueListenable: pilot.caption,
-                builder: (context, c, _) => AnimatedSwitcher(
-                  duration: const Duration(milliseconds: 200),
-                  child: Text(c,
-                      key: ValueKey(c),
-                      textAlign: TextAlign.center,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: AppText.headline(20 * s, color: Colors.white)),
+                      style: AppText.headline(40 * s, color: Palette.yellow).copyWith(height: 1.0)),
                 ),
               ),
             ]),
@@ -546,6 +715,40 @@ class DemoFrame extends StatelessWidget {
           child: IgnorePointer(
             child: Text('QUIZINHO · THE FOOTBALL PARTY GAME',
                 textAlign: TextAlign.center, style: AppText.label(15 * s, color: Colors.white70)),
+          ),
+        ),
+        // Subtitles: what's being said, big, over the lower part of the game
+        // (above where the platforms put their own caption and buttons).
+        Positioned(
+          left: 34 * s,
+          right: 34 * s,
+          top: 590 * s,
+          child: IgnorePointer(
+            child: ValueListenableBuilder(
+              valueListenable: pilot.caption,
+              builder: (context, c, _) => AnimatedSwitcher(
+                duration: const Duration(milliseconds: 180),
+                transitionBuilder: (child, a) => ScaleTransition(
+                  scale: Tween(begin: 0.85, end: 1.0).animate(a),
+                  child: FadeTransition(opacity: a, child: child),
+                ),
+                child: c.isEmpty
+                    ? const SizedBox.shrink()
+                    : Container(
+                        key: ValueKey(c),
+                        padding: EdgeInsets.symmetric(horizontal: 16 * s, vertical: 10 * s),
+                        decoration: BoxDecoration(
+                          color: Colors.black.withValues(alpha: 0.82),
+                          borderRadius: BorderRadius.circular(16 * s),
+                          border: Border.all(color: Palette.yellow, width: 2 * s),
+                        ),
+                        child: Text(c.toUpperCase(),
+                            textAlign: TextAlign.center,
+                            maxLines: 3,
+                            style: AppText.headline(25 * s, color: Colors.white).copyWith(height: 1.1)),
+                      ),
+              ),
+            ),
           ),
         ),
         Positioned.fill(
