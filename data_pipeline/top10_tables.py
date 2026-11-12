@@ -11,6 +11,7 @@ import re
 
 HERE = pathlib.Path(__file__).parent
 LINK = re.compile(r"\[\[([^\]|#]+)(?:\|[^\]]*)?\]\]")
+ROWSPAN = re.compile(r'rowspan\s*=\s*"?(\d+)', re.I)
 HEADING = re.compile(r"^(=+)\s*(.*?)\s*\1\s*$", re.M)
 
 
@@ -37,6 +38,9 @@ def tables(text: str):
         cap = (re.search(r"^\|\+\s*(.*)$", body, re.M) or [None, ""])[1]
         headers = [re.sub(r".*\|", "", h).strip() for h in re.findall(r"^!\s*(.*)$", body, re.M)]
         rows = []
+        # A cell spanning rows ("|rowspan=3 align=center|10" for three players
+        # level on 14) is copied into the rows below it, in the same column.
+        spans: dict[int, list] = {}  # column -> [rows left, cell]
         for chunk in re.split(r"\n\|-[^\n]*", body)[1:]:
             lines = chunk.strip("\n").split("\n")
             # A header row is all "!" cells; a data row has at least one "|" cell.
@@ -49,13 +53,31 @@ def tables(text: str):
                 elif line.startswith("!"):
                     cells += [c for c in re.split(r"!!", line[1:])]
             if cells:
-                rows.append(cells)
+                full, col = [], 0
+                for cell in cells:
+                    while col in spans:
+                        full.append(spans[col][1])
+                        spans[col][0] -= 1
+                        if spans[col][0] == 0:
+                            del spans[col]
+                        col += 1
+                    full.append(cell)
+                    if (m := ROWSPAN.search(cell.split("|")[0] if "|" in cell and "[[" not in cell.split("|")[0] else "")) and int(m.group(1)) > 1:
+                        spans[col] = [int(m.group(1)) - 1, cell]
+                    col += 1
+                while col in spans:
+                    full.append(spans[col][1])
+                    spans[col][0] -= 1
+                    if spans[col][0] == 0:
+                        del spans[col]
+                    col += 1
+                rows.append(full)
         yield " > ".join(heads), cap, headers, rows
 
 
 def strip_attr(cell: str) -> str:
     # 'style="..."|value' -> 'value' (not inside links/templates)
-    m = re.match(r'^\s*(?:[a-z-]+\s*=\s*"[^"]*"\s*)+\|(.*)$', cell, re.S)
+    m = re.match(r'^\s*(?:[a-z-]+\s*=\s*(?:"[^"]*"|[^\s|"]+)\s*)+\|(.*)$', cell, re.S)
     return (m.group(1) if m else cell).strip()
 
 

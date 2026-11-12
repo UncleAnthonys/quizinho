@@ -17,8 +17,9 @@ class Top10Controller extends ChangeNotifier {
   final Top10List list;
   int lives;
 
-  /// Places found, by index into [Top10List.entries].
-  final Set<int> found = {};
+  /// Places found, by index into [Top10List.entries], with the name given
+  /// (a shared 10th place can be filled by any of its players).
+  final Map<int, String> found = {};
 
   /// Wrong names, newest last ("✗ Gary Cahill").
   final List<String> misses = [];
@@ -42,9 +43,9 @@ class Top10Controller extends ChangeNotifier {
   Top10Answer submit(Player p) {
     if (finished) return Top10Answer.ignored;
     final i = list.indexOf(p.id);
-    if (i != null && found.contains(i)) return Top10Answer.alreadyFound;
+    if (i != null && found.containsKey(i)) return Top10Answer.alreadyFound;
     if (i != null) {
-      found.add(i);
+      found[i] = p.name;
       lastFound = i;
       _emit(won ? GameEvent.complete : GameEvent.correct);
       if (won) finished = true;

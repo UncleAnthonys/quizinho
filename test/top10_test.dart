@@ -54,6 +54,18 @@ void main() {
     expect(seen.length, greaterThan(5));
   });
 
+  test('a shared 10th place takes any of its players, once', () {
+    final list = Top10List(id: 'y', prompt: 'T', level: 1, entries: [
+      for (var i = 0; i < 9; i++) Top10Entry(rank: i + 1, playerId: 'p$i', name: 'P$i'),
+      const Top10Entry(rank: 10, playerId: 'beattie', name: 'James Beattie', alternates: [('keane', 'Robbie Keane')]),
+    ]);
+    final c = Top10Controller(list: list);
+    expect(c.submit(p('keane')), Top10Answer.found);
+    expect(c.found[9], 'keane');
+    expect(c.submit(p('beattie')), Top10Answer.alreadyFound);
+    expect(c.score, 10);
+  });
+
   test('Top 10 is solo only', () {
     expect(GameModeId.concreteGames, isNot(contains(GameModeId.top10)));
     expect(GameModeId.top10.soloOnly, isTrue);

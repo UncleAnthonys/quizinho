@@ -138,7 +138,7 @@ class _Top10ScreenState extends State<Top10Screen> with TickerProviderStateMixin
         separatorBuilder: (_, __) => const SizedBox(height: 5),
         itemBuilder: (context, i) {
           final e = c.list.entries[i];
-          final got = c.found.contains(i);
+          final got = c.found.containsKey(i);
           final shown = got || c.finished;
           final fresh = c.lastFound == i;
           return AnimatedContainer(
@@ -156,7 +156,7 @@ class _Top10ScreenState extends State<Top10Screen> with TickerProviderStateMixin
               ),
               Expanded(
                 child: Text(
-                  shown ? e.name.toUpperCase() : '',
+                  !shown ? '' : (got ? c.found[i]! : [for (final a in e.all) a.$2].join(' / ')).toUpperCase(),
                   overflow: TextOverflow.ellipsis,
                   style: AppText.headline(20, color: got ? Palette.text : Palette.muted),
                 ),

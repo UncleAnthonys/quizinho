@@ -1,8 +1,26 @@
 {
-"_note": "Top 10 lists from Wikipedia record tables: 28 lists, 2 dropped. Built 2026-11-12.",
+"_note": "Top 10 lists from Wikipedia record tables: 78 lists, 20 dropped. Built 2026-11-12.",
 "dropped": [
 "mufc-clean-sheets: row 6 names nobody we know: Alf Steward",
-"celtic-sales: row 3 names nobody we know: Jota (footballer, born March 1999)"
+"celtic-sales: row 3 names nobody we know: Jota (footballer, born March 1999)",
+"pl-1992: row 3 names nobody we know: Dean Holdsworth",
+"pl-1993: row 7 names nobody we know: Mark Bright",
+"pl-1995: row 6 names nobody we know: Chris Armstrong (footballer, born 1971)",
+"pl-1996: someone level at 10th we don't know",
+"pl-1997: row 9 names nobody we know: Darren Huckerby",
+"pl-1998: row 9 names nobody we know: Julian Joachim",
+"pl-1999: row 4 names nobody we know: Michael Bridges",
+"pl-2000: row 2 names nobody we know: Marcus Stewart",
+"pl-2025: row 9 names nobody we know: Eli Junior Kroupi",
+"ucl-1992: row 8 names nobody we know: Zé Carlos (footballer, born 1965)",
+"ucl-1993: row 5 names nobody we know: Bernd Hobsch",
+"ucl-1994: someone level at 10th we don't know",
+"ucl-1995: row 9 names nobody we know: Mike Newell (footballer)",
+"ucl-1996: row 3 names nobody we know: Artur Duarte de Oliveira",
+"ucl-1997: row 8 names nobody we know: Oktay Derelioğlu",
+"ucl-1998: someone level at 10th we don't know",
+"ucl-2006: row 7 names nobody we know: Nicolae Dică",
+"ucl-2025: only 9 rows"
 ],
 "lists": [
 {
@@ -153,52 +171,62 @@
 [
 1,
 "petr-cech",
-"Petr Čech"
+"Petr Čech",
+"202 clean sheets"
 ],
 [
 2,
 "david-james",
-"David James"
+"David James",
+"169 clean sheets"
 ],
 [
 3,
 "mark-schwarzer",
-"Mark Schwarzer"
+"Mark Schwarzer",
+"152 clean sheets"
 ],
 [
 4,
 "david-de-gea",
-"David de Gea"
+"David de Gea",
+"147 clean sheets"
 ],
 [
 5,
 "david-seaman",
-"David Seaman"
+"David Seaman",
+"141 clean sheets"
 ],
 [
 6,
 "nigel-martyn",
-"Nigel Martyn"
+"Nigel Martyn",
+"137 clean sheets"
 ],
 [
 7,
 "pepe-reina",
-"Pepe Reina"
+"Pepe Reina",
+"136 clean sheets"
 ],
 [
 8,
 "edwin-van-der-sar",
-"Edwin van der Sar"
+"Edwin van der Sar",
+"132 clean sheets"
 ],
 [
-9,
+8,
 "tim-howard",
-"Tim Howard"
+"Tim Howard",
+"132 clean sheets"
 ],
 [
-10,
+8,
 "brad-friedel",
-"Brad Friedel"
+"Brad Friedel",
+"132 clean sheets"
 ]
 ]
 },
@@ -212,52 +240,62 @@
 [
 1,
 "alan-shearer",
-"Alan Shearer"
+"Alan Shearer",
+"56 pens"
 ],
 [
 2,
 "frank-lampard",
-"Frank Lampard"
+"Frank Lampard",
+"43 pens"
 ],
 [
 3,
 "mohamed-salah",
-"Mohamed Salah"
+"Mohamed Salah",
+"35 pens"
 ],
 [
 4,
 "harry-kane",
-"Harry Kane"
+"Harry Kane",
+"33 pens"
 ],
 [
 5,
 "steven-gerrard",
-"Steven Gerrard"
+"Steven Gerrard",
+"32 pens"
 ],
 [
 6,
 "mark-noble",
-"Mark Noble"
+"Mark Noble",
+"28 pens"
 ],
 [
 7,
 "sergio-aguero",
-"Sergio Agüero"
+"Sergio Agüero",
+"27 pens"
 ],
 [
-8,
+7,
 "jamie-vardy",
-"Jamie Vardy"
+"Jamie Vardy",
+"27 pens"
 ],
 [
 9,
 "matt-le-tissier",
-"Matt Le Tissier"
+"Matt Le Tissier",
+"25 pens"
 ],
 [
-10,
+9,
 "bruno-fernandes",
-"Bruno Fernandes"
+"Bruno Fernandes",
+"25 pens"
 ]
 ]
 },
@@ -464,7 +502,13 @@
 10,
 "vivian-woodward",
 "Vivian Woodward",
-"29 goals"
+"29 goals",
+[
+[
+"frank-lampard",
+"Frank Lampard"
+]
+]
 ]
 ]
 },
@@ -547,52 +591,62 @@
 [
 1,
 "cristiano-ronaldo",
-"Cristiano Ronaldo"
+"Cristiano Ronaldo",
+"234 caps"
 ],
 [
 2,
 "lionel-messi",
-"Lionel Messi"
+"Lionel Messi",
+"208 caps"
 ],
 [
 3,
 "luka-modric",
-"Luka Modrić"
+"Luka Modrić",
+"206 caps"
 ],
 [
 4,
 "bader-al-mutawa",
-"Bader Al-Mutawa"
+"Bader Al-Mutawa",
+"202 caps"
 ],
 [
 5,
 "soh-chin-aun",
-"Soh Chin Aun"
+"Soh Chin Aun",
+"195 caps"
 ],
 [
 6,
 "hassan-al-haidos",
-"Hassan Al Haidos"
+"Hassan Al Haidos",
+"193 caps"
 ],
 [
-7,
+6,
 "ahmed-mubarak",
-"Ahmed Mubarak"
+"Ahmed Mubarak",
+"193 caps"
 ],
 [
 8,
 "ahmed-hassan",
-"Ahmed Hassan"
+"Ahmed Hassan",
+"184 caps"
 ],
 [
 9,
 "andres-guardado",
-"Andrés Guardado"
+"Andrés Guardado",
+"182 caps"
 ],
 [
 10,
 "sergio-ramos",
-"Sergio Ramos"
+"Sergio Ramos",
+"180 caps"
 ]
 ]
 },
@@ -960,52 +1014,68 @@
 [
 1,
 "kevin-de-bruyne",
-"Kevin De Bruyne"
+"Kevin De Bruyne",
+"176 assists"
 ],
 [
 2,
 "david-silva",
-"David Silva"
+"David Silva",
+"122 assists"
 ],
 [
 3,
 "bernardo-silva",
-"Bernardo Silva"
+"Bernardo Silva",
+"77 assists"
 ],
 [
 4,
 "raheem-sterling",
-"Raheem Sterling"
+"Raheem Sterling",
+"74 assists"
 ],
 [
 5,
 "phil-foden",
-"Phil Foden"
+"Phil Foden",
+"70 assists"
 ],
 [
 6,
 "sergio-aguero",
-"Sergio Agüero"
+"Sergio Agüero",
+"63 assists"
 ],
 [
 7,
 "riyad-mahrez",
-"Riyad Mahrez"
+"Riyad Mahrez",
+"55 assists"
 ],
 [
 8,
 "ilkay-gundogan",
-"İlkay Gündoğan"
+"İlkay Gündoğan",
+"45 assists"
 ],
 [
 9,
 "gabriel-jesus",
-"Gabriel Jesus"
+"Gabriel Jesus",
+"41 assists"
 ],
 [
-10,
+9,
 "leroy-sane",
-"Leroy Sané"
+"Leroy Sané",
+"41 assists",
+[
+[
+"yaya-toure",
+"Yaya Touré"
+]
+]
 ]
 ]
 },
@@ -1554,7 +1624,7 @@
 "Roberto Baggio"
 ],
 [
-10,
+9,
 "paulo-dybala",
 "Paulo Dybala"
 ]
@@ -1754,6 +1824,3840 @@
 "klaus-allofs",
 "Klaus Allofs",
 "177 goals"
+]
+]
+},
+{
+"id": "pl-1994",
+"q": "Top scorers in the 1994–95 Premier League",
+"d": 3,
+"src": "1994–95 FA Premier League",
+"e": [
+[
+1,
+"alan-shearer",
+"Alan Shearer"
+],
+[
+2,
+"robbie-fowler",
+"Robbie Fowler"
+],
+[
+3,
+"les-ferdinand",
+"Les Ferdinand"
+],
+[
+4,
+"stan-collymore",
+"Stan Collymore"
+],
+[
+5,
+"andy-cole",
+"Andy Cole"
+],
+[
+6,
+"jurgen-klinsmann",
+"Jürgen Klinsmann"
+],
+[
+7,
+"matt-le-tissier",
+"Matt Le Tissier"
+],
+[
+8,
+"teddy-sheringham",
+"Teddy Sheringham"
+],
+[
+9,
+"ian-wright",
+"Ian Wright"
+],
+[
+10,
+"uwe-rosler",
+"Uwe Rösler"
+]
+]
+},
+{
+"id": "pl-2001",
+"q": "Top scorers in the 2001–02 Premier League",
+"d": 3,
+"src": "2001–02 FA Premier League",
+"e": [
+[
+1,
+"thierry-henry",
+"Thierry Henry",
+"24 goals"
+],
+[
+2,
+"jimmy-floyd-hasselbaink",
+"Jimmy Floyd Hasselbaink",
+"23 goals"
+],
+[
+2,
+"ruud-van-nistelrooy",
+"Ruud van Nistelrooy",
+"23 goals"
+],
+[
+2,
+"alan-shearer",
+"Alan Shearer",
+"23 goals"
+],
+[
+5,
+"michael-owen",
+"Michael Owen",
+"19 goals"
+],
+[
+6,
+"ole-gunnar-solskjaer",
+"Ole Gunnar Solskjær",
+"17 goals"
+],
+[
+7,
+"robbie-fowler",
+"Robbie Fowler",
+"15 goals"
+],
+[
+8,
+"ei-ur-gu-johnsen",
+"Eiður Guðjohnsen",
+"14 goals"
+],
+[
+8,
+"marians-pahars",
+"Marians Pahars",
+"14 goals"
+],
+[
+10,
+"andy-cole",
+"Andy Cole",
+"13 goals"
+]
+]
+},
+{
+"id": "pl-2002",
+"q": "Top scorers in the 2002–03 Premier League",
+"d": 3,
+"src": "2002–03 FA Premier League",
+"e": [
+[
+1,
+"ruud-van-nistelrooy",
+"Ruud van Nistelrooy",
+"25 goals"
+],
+[
+2,
+"thierry-henry",
+"Thierry Henry",
+"24 goals"
+],
+[
+3,
+"james-beattie",
+"James Beattie",
+"23 goals"
+],
+[
+4,
+"mark-viduka",
+"Mark Viduka",
+"20 goals"
+],
+[
+5,
+"michael-owen",
+"Michael Owen",
+"19 goals"
+],
+[
+6,
+"alan-shearer",
+"Alan Shearer",
+"17 goals"
+],
+[
+7,
+"nicolas-anelka",
+"Nicolas Anelka",
+"15 goals"
+],
+[
+8,
+"gianfranco-zola",
+"Gianfranco Zola",
+"14 goals"
+],
+[
+8,
+"robert-pires",
+"Robert Pires",
+"14 goals"
+],
+[
+8,
+"harry-kewell",
+"Harry Kewell",
+"14 goals",
+[
+[
+"paul-scholes",
+"Paul Scholes"
+]
+]
+]
+]
+},
+{
+"id": "pl-2003",
+"q": "Top scorers in the 2003–04 Premier League",
+"d": 3,
+"src": "2003–04 FA Premier League",
+"e": [
+[
+1,
+"thierry-henry",
+"Thierry Henry",
+"30 goals"
+],
+[
+2,
+"alan-shearer",
+"Alan Shearer",
+"22 goals"
+],
+[
+3,
+"louis-saha",
+"Louis Saha",
+"20 goals"
+],
+[
+3,
+"ruud-van-nistelrooy",
+"Ruud van Nistelrooy",
+"20 goals"
+],
+[
+5,
+"mikael-forssell",
+"Mikael Forssell",
+"17 goals"
+],
+[
+6,
+"nicolas-anelka",
+"Nicolas Anelka",
+"16 goals"
+],
+[
+6,
+"juan-pablo-angel",
+"Juan Pablo Ángel",
+"16 goals"
+],
+[
+6,
+"michael-owen",
+"Michael Owen",
+"16 goals"
+],
+[
+6,
+"yakubu",
+"Yakubu",
+"16 goals"
+],
+[
+10,
+"james-beattie",
+"James Beattie",
+"14 goals",
+[
+[
+"robbie-keane",
+"Robbie Keane"
+],
+[
+"robert-pires",
+"Robert Pires"
+]
+]
+]
+]
+},
+{
+"id": "pl-2004",
+"q": "Top scorers in the 2004–05 Premier League",
+"d": 3,
+"src": "2004–05 FA Premier League",
+"e": [
+[
+1,
+"thierry-henry",
+"Thierry Henry",
+"25 goals"
+],
+[
+2,
+"andrew-johnson",
+"Andrew Johnson",
+"21 goals"
+],
+[
+3,
+"robert-pires",
+"Robert Pires",
+"14 goals"
+],
+[
+4,
+"jermain-defoe",
+"Jermain Defoe",
+"13 goals"
+],
+[
+4,
+"jimmy-floyd-hasselbaink",
+"Jimmy Floyd Hasselbaink",
+"13 goals"
+],
+[
+4,
+"frank-lampard",
+"Frank Lampard",
+"13 goals"
+],
+[
+4,
+"yakubu",
+"Yakubu",
+"13 goals"
+],
+[
+8,
+"andy-cole",
+"Andy Cole",
+"12 goals"
+],
+[
+8,
+"peter-crouch",
+"Peter Crouch",
+"12 goals"
+],
+[
+8,
+"ei-ur-gu-johnsen",
+"Eiður Guðjohnsen",
+"12 goals"
+]
+]
+},
+{
+"id": "pl-2005",
+"q": "Top scorers in the 2005–06 Premier League",
+"d": 2,
+"src": "2005–06 FA Premier League",
+"e": [
+[
+1,
+"thierry-henry",
+"Thierry Henry",
+"27 goals"
+],
+[
+2,
+"ruud-van-nistelrooy",
+"Ruud van Nistelrooy",
+"21 goals"
+],
+[
+3,
+"darren-bent",
+"Darren Bent",
+"18 goals"
+],
+[
+4,
+"robbie-keane",
+"Robbie Keane",
+"16 goals"
+],
+[
+4,
+"frank-lampard",
+"Frank Lampard",
+"16 goals"
+],
+[
+4,
+"wayne-rooney",
+"Wayne Rooney",
+"16 goals"
+],
+[
+7,
+"marlon-harewood",
+"Marlon Harewood",
+"14 goals"
+],
+[
+8,
+"craig-bellamy",
+"Craig Bellamy",
+"13 goals"
+],
+[
+8,
+"yakubu",
+"Yakubu",
+"13 goals"
+],
+[
+10,
+"henri-camara",
+"Henri Camara",
+"12 goals",
+[
+[
+"didier-drogba",
+"Didier Drogba"
+]
+]
+]
+]
+},
+{
+"id": "pl-2006",
+"q": "Top scorers in the 2006–07 Premier League",
+"d": 2,
+"src": "2006–07 FA Premier League",
+"e": [
+[
+1,
+"didier-drogba",
+"Didier Drogba",
+"20 goals"
+],
+[
+2,
+"benni-mccarthy",
+"Benni McCarthy",
+"18 goals"
+],
+[
+3,
+"cristiano-ronaldo",
+"Cristiano Ronaldo",
+"17 goals"
+],
+[
+4,
+"wayne-rooney",
+"Wayne Rooney",
+"14 goals"
+],
+[
+4,
+"mark-viduka",
+"Mark Viduka",
+"14 goals"
+],
+[
+6,
+"darren-bent",
+"Darren Bent",
+"13 goals"
+],
+[
+6,
+"kevin-doyle",
+"Kevin Doyle",
+"13 goals"
+],
+[
+8,
+"dimitar-berbatov",
+"Dimitar Berbatov",
+"12 goals"
+],
+[
+8,
+"dirk-kuyt",
+"Dirk Kuyt",
+"12 goals"
+],
+[
+8,
+"yakubu",
+"Yakubu",
+"12 goals"
+]
+]
+},
+{
+"id": "pl-2007",
+"q": "Top scorers in the 2007–08 Premier League",
+"d": 2,
+"src": "2007–08 Premier League",
+"e": [
+[
+1,
+"cristiano-ronaldo",
+"Cristiano Ronaldo",
+"31 goals"
+],
+[
+2,
+"emmanuel-adebayor",
+"Emmanuel Adebayor",
+"24 goals"
+],
+[
+2,
+"fernando-torres",
+"Fernando Torres",
+"24 goals"
+],
+[
+4,
+"roque-santa-cruz",
+"Roque Santa Cruz",
+"19 goals"
+],
+[
+5,
+"benjani-mwaruwari",
+"Benjani Mwaruwari",
+"15 goals"
+],
+[
+5,
+"dimitar-berbatov",
+"Dimitar Berbatov",
+"15 goals"
+],
+[
+5,
+"robbie-keane",
+"Robbie Keane",
+"15 goals"
+],
+[
+5,
+"yakubu",
+"Yakubu",
+"15 goals"
+],
+[
+9,
+"carlos-tevez",
+"Carlos Tevez",
+"14 goals"
+],
+[
+10,
+"john-carew",
+"John Carew",
+"13 goals"
+]
+]
+},
+{
+"id": "pl-2008",
+"q": "Top scorers in the 2008–09 Premier League",
+"d": 2,
+"src": "2008–09 Premier League",
+"e": [
+[
+1,
+"nicolas-anelka",
+"Nicolas Anelka",
+"19 goals"
+],
+[
+2,
+"cristiano-ronaldo",
+"Cristiano Ronaldo",
+"18 goals"
+],
+[
+3,
+"steven-gerrard",
+"Steven Gerrard",
+"16 goals"
+],
+[
+4,
+"robinho",
+"Robinho",
+"14 goals"
+],
+[
+4,
+"fernando-torres",
+"Fernando Torres",
+"14 goals"
+],
+[
+6,
+"gabriel-agbonlahor",
+"Gabriel Agbonlahor",
+"12 goals"
+],
+[
+6,
+"darren-bent",
+"Darren Bent",
+"12 goals"
+],
+[
+6,
+"kevin-davies",
+"Kevin Davies",
+"12 goals"
+],
+[
+6,
+"dirk-kuyt",
+"Dirk Kuyt",
+"12 goals"
+],
+[
+6,
+"frank-lampard",
+"Frank Lampard",
+"12 goals",
+[
+[
+"wayne-rooney",
+"Wayne Rooney"
+]
+]
+]
+]
+},
+{
+"id": "pl-2009",
+"q": "Top scorers in the 2009–10 Premier League",
+"d": 2,
+"src": "2009–10 Premier League",
+"e": [
+[
+1,
+"didier-drogba",
+"Didier Drogba",
+"29 goals"
+],
+[
+2,
+"wayne-rooney",
+"Wayne Rooney",
+"26 goals"
+],
+[
+3,
+"darren-bent",
+"Darren Bent",
+"24 goals"
+],
+[
+4,
+"carlos-tevez",
+"Carlos Tevez",
+"23 goals"
+],
+[
+5,
+"frank-lampard",
+"Frank Lampard",
+"22 goals"
+],
+[
+6,
+"fernando-torres",
+"Fernando Torres",
+"18 goals"
+],
+[
+6,
+"jermain-defoe",
+"Jermain Defoe",
+"18 goals"
+],
+[
+8,
+"cesc-fabregas",
+"Cesc Fàbregas",
+"15 goals"
+],
+[
+9,
+"emmanuel-adebayor",
+"Emmanuel Adebayor",
+"14 goals"
+],
+[
+10,
+"gabriel-agbonlahor",
+"Gabriel Agbonlahor",
+"13 goals",
+[
+[
+"louis-saha",
+"Louis Saha"
+]
+]
+]
+]
+},
+{
+"id": "pl-2010",
+"q": "Top scorers in the 2010–11 Premier League",
+"d": 2,
+"src": "2010–11 Premier League",
+"e": [
+[
+1,
+"dimitar-berbatov",
+"Dimitar Berbatov"
+],
+[
+2,
+"carlos-tevez",
+"Carlos Tevez"
+],
+[
+3,
+"robin-van-persie",
+"Robin van Persie"
+],
+[
+4,
+"darren-bent",
+"Darren Bent"
+],
+[
+5,
+"peter-odemwingie",
+"Peter Odemwingie"
+],
+[
+6,
+"dj-campbell",
+"DJ Campbell"
+],
+[
+7,
+"andy-carroll",
+"Andy Carroll"
+],
+[
+8,
+"javier-hernandez",
+"Javier Hernández"
+],
+[
+9,
+"dirk-kuyt",
+"Dirk Kuyt"
+],
+[
+10,
+"florent-malouda",
+"Florent Malouda"
+]
+]
+},
+{
+"id": "pl-2011",
+"q": "Top scorers in the 2011–12 Premier League",
+"d": 2,
+"src": "2011–12 Premier League",
+"e": [
+[
+1,
+"robin-van-persie",
+"Robin van Persie",
+"30 goals"
+],
+[
+2,
+"wayne-rooney",
+"Wayne Rooney",
+"27 goals"
+],
+[
+3,
+"sergio-aguero",
+"Sergio Agüero",
+"23 goals"
+],
+[
+4,
+"clint-dempsey",
+"Clint Dempsey",
+"17 goals"
+],
+[
+4,
+"emmanuel-adebayor",
+"Emmanuel Adebayor",
+"17 goals"
+],
+[
+4,
+"yakubu",
+"Yakubu",
+"17 goals"
+],
+[
+7,
+"demba-ba",
+"Demba Ba",
+"16 goals"
+],
+[
+8,
+"grant-holt",
+"Grant Holt",
+"15 goals"
+],
+[
+9,
+"edin-dzeko",
+"Edin Džeko",
+"14 goals"
+],
+[
+10,
+"mario-balotelli",
+"Mario Balotelli",
+"13 goals",
+[
+[
+"papiss-cisse",
+"Papiss Cissé"
+]
+]
+]
+]
+},
+{
+"id": "pl-2012",
+"q": "Top scorers in the 2012–13 Premier League",
+"d": 2,
+"src": "2012–13 Premier League",
+"e": [
+[
+1,
+"robin-van-persie",
+"Robin van Persie",
+"26 goals"
+],
+[
+2,
+"luis-suarez",
+"Luis Suárez",
+"23 goals"
+],
+[
+3,
+"gareth-bale",
+"Gareth Bale",
+"21 goals"
+],
+[
+4,
+"christian-benteke",
+"Christian Benteke",
+"19 goals"
+],
+[
+5,
+"miguel-perez-cuesta",
+"Miguel Pérez Cuesta",
+"18 goals"
+],
+[
+6,
+"romelu-lukaku",
+"Romelu Lukaku",
+"17 goals"
+],
+[
+7,
+"demba-ba",
+"Demba Ba",
+"15 goals"
+],
+[
+7,
+"dimitar-berbatov",
+"Dimitar Berbatov",
+"15 goals"
+],
+[
+7,
+"rickie-lambert",
+"Rickie Lambert",
+"15 goals"
+],
+[
+7,
+"frank-lampard",
+"Frank Lampard",
+"15 goals"
+]
+]
+},
+{
+"id": "pl-2013",
+"q": "Top scorers in the 2013–14 Premier League",
+"d": 2,
+"src": "2013–14 Premier League",
+"e": [
+[
+1,
+"luis-suarez",
+"Luis Suárez",
+"31 goals"
+],
+[
+2,
+"daniel-sturridge",
+"Daniel Sturridge",
+"21 goals"
+],
+[
+3,
+"yaya-toure",
+"Yaya Touré",
+"20 goals"
+],
+[
+4,
+"sergio-aguero",
+"Sergio Agüero",
+"17 goals"
+],
+[
+4,
+"wayne-rooney",
+"Wayne Rooney",
+"17 goals"
+],
+[
+6,
+"wilfried-bony",
+"Wilfried Bony",
+"16 goals"
+],
+[
+6,
+"edin-dzeko",
+"Edin Džeko",
+"16 goals"
+],
+[
+6,
+"olivier-giroud",
+"Olivier Giroud",
+"16 goals"
+],
+[
+9,
+"romelu-lukaku",
+"Romelu Lukaku",
+"15 goals"
+],
+[
+9,
+"jay-rodriguez",
+"Jay Rodriguez",
+"15 goals"
+]
+]
+},
+{
+"id": "pl-2014",
+"q": "Top scorers in the 2014–15 Premier League",
+"d": 2,
+"src": "2014–15 Premier League",
+"e": [
+[
+1,
+"sergio-aguero",
+"Sergio Agüero",
+"26 goals"
+],
+[
+2,
+"harry-kane",
+"Harry Kane",
+"21 goals"
+],
+[
+3,
+"diego-costa",
+"Diego Costa",
+"20 goals"
+],
+[
+4,
+"charlie-austin",
+"Charlie Austin",
+"18 goals"
+],
+[
+5,
+"alexis-sanchez",
+"Alexis Sánchez",
+"16 goals"
+],
+[
+6,
+"saido-berahino",
+"Saido Berahino",
+"14 goals"
+],
+[
+6,
+"olivier-giroud",
+"Olivier Giroud",
+"14 goals"
+],
+[
+6,
+"eden-hazard",
+"Eden Hazard",
+"14 goals"
+],
+[
+9,
+"christian-benteke",
+"Christian Benteke",
+"13 goals"
+],
+[
+10,
+"graziano-pelle",
+"Graziano Pellè",
+"12 goals",
+[
+[
+"wayne-rooney",
+"Wayne Rooney"
+],
+[
+"david-silva",
+"David Silva"
+]
+]
+]
+]
+},
+{
+"id": "pl-2015",
+"q": "Top scorers in the 2015–16 Premier League",
+"d": 2,
+"src": "2015–16 Premier League",
+"e": [
+[
+1,
+"harry-kane",
+"Harry Kane",
+"25 goals"
+],
+[
+2,
+"sergio-aguero",
+"Sergio Agüero",
+"24 goals"
+],
+[
+2,
+"jamie-vardy",
+"Jamie Vardy",
+"24 goals"
+],
+[
+4,
+"romelu-lukaku",
+"Romelu Lukaku",
+"18 goals"
+],
+[
+5,
+"riyad-mahrez",
+"Riyad Mahrez",
+"17 goals"
+],
+[
+6,
+"olivier-giroud",
+"Olivier Giroud",
+"16 goals"
+],
+[
+7,
+"jermain-defoe",
+"Jermain Defoe",
+"15 goals"
+],
+[
+7,
+"odion-ighalo",
+"Odion Ighalo",
+"15 goals"
+],
+[
+9,
+"troy-deeney",
+"Troy Deeney",
+"13 goals"
+],
+[
+9,
+"alexis-sanchez",
+"Alexis Sánchez",
+"13 goals"
+]
+]
+},
+{
+"id": "pl-2016",
+"q": "Top scorers in the 2016–17 Premier League",
+"d": 2,
+"src": "2016–17 Premier League",
+"e": [
+[
+1,
+"harry-kane",
+"Harry Kane",
+"29 goals"
+],
+[
+2,
+"romelu-lukaku",
+"Romelu Lukaku",
+"25 goals"
+],
+[
+3,
+"alexis-sanchez",
+"Alexis Sánchez",
+"24 goals"
+],
+[
+4,
+"sergio-aguero",
+"Sergio Agüero",
+"20 goals"
+],
+[
+4,
+"diego-costa",
+"Diego Costa",
+"20 goals"
+],
+[
+6,
+"dele-alli",
+"Dele Alli",
+"18 goals"
+],
+[
+7,
+"zlatan-ibrahimovic",
+"Zlatan Ibrahimović",
+"17 goals"
+],
+[
+8,
+"eden-hazard",
+"Eden Hazard",
+"16 goals"
+],
+[
+8,
+"joshua-king",
+"Joshua King",
+"16 goals"
+],
+[
+10,
+"christian-benteke",
+"Christian Benteke",
+"15 goals",
+[
+[
+"jermain-defoe",
+"Jermain Defoe"
+],
+[
+"fernando-llorente",
+"Fernando Llorente"
+]
+]
+]
+]
+},
+{
+"id": "pl-2017",
+"q": "Top scorers in the 2017–18 Premier League",
+"d": 2,
+"src": "2017–18 Premier League",
+"e": [
+[
+1,
+"mohamed-salah",
+"Mohamed Salah",
+"32 goals"
+],
+[
+2,
+"harry-kane",
+"Harry Kane",
+"30 goals"
+],
+[
+3,
+"sergio-aguero",
+"Sergio Agüero",
+"21 goals"
+],
+[
+4,
+"jamie-vardy",
+"Jamie Vardy",
+"20 goals"
+],
+[
+5,
+"raheem-sterling",
+"Raheem Sterling",
+"18 goals"
+],
+[
+6,
+"romelu-lukaku",
+"Romelu Lukaku",
+"16 goals"
+],
+[
+7,
+"roberto-firmino",
+"Roberto Firmino",
+"15 goals"
+],
+[
+8,
+"alexandre-lacazette",
+"Alexandre Lacazette",
+"14 goals"
+],
+[
+9,
+"gabriel-jesus",
+"Gabriel Jesus",
+"13 goals"
+],
+[
+10,
+"eden-hazard",
+"Eden Hazard",
+"12 goals",
+[
+[
+"riyad-mahrez",
+"Riyad Mahrez"
+],
+[
+"glenn-murray",
+"Glenn Murray"
+],
+[
+"son-heung-min",
+"Son Heung-min"
+]
+]
+]
+]
+},
+{
+"id": "pl-2018",
+"q": "Top scorers in the 2018–19 Premier League",
+"d": 2,
+"src": "2018–19 Premier League",
+"e": [
+[
+1,
+"pierre-emerick-aubameyang",
+"Pierre-Emerick Aubameyang",
+"22 goals"
+],
+[
+1,
+"sadio-mane",
+"Sadio Mané",
+"22 goals"
+],
+[
+1,
+"mohamed-salah",
+"Mohamed Salah",
+"22 goals"
+],
+[
+4,
+"sergio-aguero",
+"Sergio Agüero",
+"21 goals"
+],
+[
+5,
+"jamie-vardy",
+"Jamie Vardy",
+"18 goals"
+],
+[
+6,
+"harry-kane",
+"Harry Kane",
+"17 goals"
+],
+[
+6,
+"raheem-sterling",
+"Raheem Sterling",
+"17 goals"
+],
+[
+8,
+"eden-hazard",
+"Eden Hazard",
+"16 goals"
+],
+[
+9,
+"callum-wilson",
+"Callum Wilson",
+"14 goals"
+],
+[
+10,
+"raul-jimenez",
+"Raúl Jiménez",
+"13 goals",
+[
+[
+"alexandre-lacazette",
+"Alexandre Lacazette"
+],
+[
+"glenn-murray",
+"Glenn Murray"
+],
+[
+"paul-pogba",
+"Paul Pogba"
+],
+[
+"richarlison",
+"Richarlison"
+],
+[
+"gylfi-sigur-sson",
+"Gylfi Sigurðsson"
+]
+]
+]
+]
+},
+{
+"id": "pl-2019",
+"q": "Top scorers in the 2019–20 Premier League",
+"d": 2,
+"src": "2019–20 Premier League",
+"e": [
+[
+1,
+"jamie-vardy",
+"Jamie Vardy",
+"23 goals"
+],
+[
+2,
+"pierre-emerick-aubameyang",
+"Pierre-Emerick Aubameyang",
+"22 goals"
+],
+[
+2,
+"danny-ings",
+"Danny Ings",
+"22 goals"
+],
+[
+4,
+"raheem-sterling",
+"Raheem Sterling",
+"20 goals"
+],
+[
+5,
+"mohamed-salah",
+"Mohamed Salah",
+"19 goals"
+],
+[
+6,
+"harry-kane",
+"Harry Kane",
+"18 goals"
+],
+[
+6,
+"sadio-mane",
+"Sadio Mané",
+"18 goals"
+],
+[
+8,
+"raul-jimenez",
+"Raúl Jiménez",
+"17 goals"
+],
+[
+8,
+"anthony-martial",
+"Anthony Martial",
+"17 goals"
+],
+[
+8,
+"marcus-rashford",
+"Marcus Rashford",
+"17 goals"
+]
+]
+},
+{
+"id": "pl-2020",
+"q": "Top scorers in the 2020–21 Premier League",
+"d": 2,
+"src": "2020–21 Premier League",
+"e": [
+[
+1,
+"harry-kane",
+"Harry Kane",
+"23 goals"
+],
+[
+2,
+"mohamed-salah",
+"Mohamed Salah",
+"22 goals"
+],
+[
+3,
+"bruno-fernandes",
+"Bruno Fernandes",
+"18 goals"
+],
+[
+4,
+"patrick-bamford",
+"Patrick Bamford",
+"17 goals"
+],
+[
+4,
+"son-heung-min",
+"Son Heung-min",
+"17 goals"
+],
+[
+6,
+"dominic-calvert-lewin",
+"Dominic Calvert-Lewin",
+"16 goals"
+],
+[
+7,
+"jamie-vardy",
+"Jamie Vardy",
+"15 goals"
+],
+[
+8,
+"ollie-watkins",
+"Ollie Watkins",
+"14 goals"
+],
+[
+9,
+"ilkay-gundogan",
+"İlkay Gündoğan",
+"13 goals"
+],
+[
+9,
+"alexandre-lacazette",
+"Alexandre Lacazette",
+"13 goals"
+]
+]
+},
+{
+"id": "pl-2021",
+"q": "Top scorers in the 2021–22 Premier League",
+"d": 2,
+"src": "2021–22 Premier League",
+"e": [
+[
+1,
+"mohamed-salah",
+"Mohamed Salah",
+"23 goals"
+],
+[
+1,
+"son-heung-min",
+"Son Heung-min",
+"23 goals"
+],
+[
+3,
+"cristiano-ronaldo",
+"Cristiano Ronaldo",
+"18 goals"
+],
+[
+4,
+"harry-kane",
+"Harry Kane",
+"17 goals"
+],
+[
+5,
+"sadio-mane",
+"Sadio Mané",
+"16 goals"
+],
+[
+6,
+"kevin-de-bruyne",
+"Kevin De Bruyne",
+"15 goals"
+],
+[
+6,
+"diogo-jota",
+"Diogo Jota",
+"15 goals"
+],
+[
+6,
+"jamie-vardy",
+"Jamie Vardy",
+"15 goals"
+],
+[
+9,
+"wilfried-zaha",
+"Wilfried Zaha",
+"14 goals"
+],
+[
+10,
+"raheem-sterling",
+"Raheem Sterling",
+"13 goals"
+]
+]
+},
+{
+"id": "pl-2022",
+"q": "Top scorers in the 2022–23 Premier League",
+"d": 2,
+"src": "2022–23 Premier League",
+"e": [
+[
+1,
+"erling-haaland",
+"Erling Haaland",
+"36 goals"
+],
+[
+2,
+"harry-kane",
+"Harry Kane",
+"30 goals"
+],
+[
+3,
+"ivan-toney",
+"Ivan Toney",
+"20 goals"
+],
+[
+4,
+"mohamed-salah",
+"Mohamed Salah",
+"19 goals"
+],
+[
+5,
+"callum-wilson",
+"Callum Wilson",
+"18 goals"
+],
+[
+6,
+"marcus-rashford",
+"Marcus Rashford",
+"17 goals"
+],
+[
+7,
+"gabriel-martinelli",
+"Gabriel Martinelli",
+"15 goals"
+],
+[
+7,
+"martin-odegaard",
+"Martin Ødegaard",
+"15 goals"
+],
+[
+7,
+"ollie-watkins",
+"Ollie Watkins",
+"15 goals"
+],
+[
+10,
+"aleksandar-mitrovic",
+"Aleksandar Mitrovic",
+"14 goals",
+[
+[
+"bukayo-saka",
+"Bukayo Saka"
+]
+]
+]
+]
+},
+{
+"id": "pl-2023",
+"q": "Top scorers in the 2023–24 Premier League",
+"d": 2,
+"src": "2023–24 Premier League",
+"e": [
+[
+1,
+"erling-haaland",
+"Erling Haaland",
+"27 goals"
+],
+[
+2,
+"cole-palmer",
+"Cole Palmer",
+"22 goals"
+],
+[
+3,
+"alexander-isak",
+"Alexander Isak",
+"21 goals"
+],
+[
+4,
+"phil-foden",
+"Phil Foden",
+"19 goals"
+],
+[
+4,
+"dominic-solanke",
+"Dominic Solanke",
+"19 goals"
+],
+[
+4,
+"ollie-watkins",
+"Ollie Watkins",
+"19 goals"
+],
+[
+7,
+"mohamed-salah",
+"Mohamed Salah",
+"18 goals"
+],
+[
+8,
+"son-heung-min",
+"Son Heung-min",
+"17 goals"
+],
+[
+9,
+"jarrod-bowen",
+"Jarrod Bowen",
+"16 goals"
+],
+[
+9,
+"jean-philippe-mateta",
+"Jean-Philippe Mateta",
+"16 goals",
+[
+[
+"bukayo-saka",
+"Bukayo Saka"
+]
+]
+]
+]
+},
+{
+"id": "pl-2024",
+"q": "Top scorers in the 2024–25 Premier League",
+"d": 2,
+"src": "2024–25 Premier League",
+"e": [
+[
+1,
+"mohamed-salah",
+"Mohamed Salah",
+"29 goals"
+],
+[
+2,
+"alexander-isak",
+"Alexander Isak",
+"23 goals"
+],
+[
+3,
+"erling-haaland",
+"Erling Haaland",
+"22 goals"
+],
+[
+4,
+"bryan-mbeumo",
+"Bryan Mbeumo",
+"20 goals"
+],
+[
+4,
+"chris-wood",
+"Chris Wood",
+"20 goals"
+],
+[
+6,
+"yoane-wissa",
+"Yoane Wissa",
+"19 goals"
+],
+[
+7,
+"ollie-watkins",
+"Ollie Watkins",
+"16 goals"
+],
+[
+8,
+"matheus-cunha",
+"Matheus Cunha",
+"15 goals"
+],
+[
+8,
+"cole-palmer",
+"Cole Palmer",
+"15 goals"
+],
+[
+10,
+"jorgen-strand-larsen",
+"Jørgen Strand Larsen",
+"14 goals",
+[
+[
+"jean-philippe-mateta",
+"Jean-Philippe Mateta"
+]
+]
+]
+]
+},
+{
+"id": "ucl-1999",
+"q": "Top scorers in the 1999–00 Champions League",
+"d": 3,
+"src": "1999–00 UEFA Champions League",
+"e": [
+[
+1,
+"mario-jardel",
+"Mário Jardel",
+"10 goals"
+],
+[
+1,
+"rivaldo",
+"Rivaldo",
+"10 goals"
+],
+[
+1,
+"raul",
+"Raúl",
+"10 goals"
+],
+[
+4,
+"simone-inzaghi",
+"Simone Inzaghi",
+"9 goals"
+],
+[
+5,
+"serhii-rebrov",
+"Serhii Rebrov",
+"8 goals"
+],
+[
+5,
+"tore-andre-flo",
+"Tore André Flo",
+"8 goals"
+],
+[
+7,
+"paulo-sergio",
+"Paulo Sérgio",
+"7 goals"
+],
+[
+7,
+"patrick-kluivert",
+"Patrick Kluivert",
+"7 goals"
+],
+[
+9,
+"luis-enrique",
+"Luis Enrique",
+"6 goals"
+],
+[
+9,
+"gabriel-batistuta",
+"Gabriel Batistuta",
+"6 goals",
+[
+[
+"roy-keane",
+"Roy Keane"
+],
+[
+"fernando-morientes",
+"Fernando Morientes"
+]
+]
+]
+]
+},
+{
+"id": "ucl-2000",
+"q": "Top scorers in the 2000–01 Champions League",
+"d": 3,
+"src": "2000–01 UEFA Champions League",
+"e": [
+[
+1,
+"raul",
+"Raúl",
+"7 goals"
+],
+[
+2,
+"marco-simone",
+"Marco Simone",
+"6 goals"
+],
+[
+2,
+"rivaldo",
+"Rivaldo",
+"6 goals"
+],
+[
+2,
+"giovane-elber",
+"Giovane Élber",
+"6 goals"
+],
+[
+2,
+"paul-scholes",
+"Paul Scholes",
+"6 goals"
+],
+[
+2,
+"lee-bowyer",
+"Lee Bowyer",
+"6 goals"
+],
+[
+2,
+"ivan-helguera",
+"Iván Helguera",
+"6 goals"
+],
+[
+2,
+"mario-jardel",
+"Mário Jardel",
+"6 goals"
+],
+[
+9,
+"filippo-inzaghi",
+"Filippo Inzaghi",
+"5 goals"
+],
+[
+9,
+"claudio-lopez",
+"Claudio López",
+"5 goals",
+[
+[
+"frode-johnsen",
+"Frode Johnsen"
+],
+[
+"christian-correa-dionisio",
+"Christian Corrêa Dionisio"
+],
+[
+"walter-pandiani",
+"Walter Pandiani"
+],
+[
+"teddy-sheringham",
+"Teddy Sheringham"
+],
+[
+"nicolas-anelka",
+"Nicolas Anelka"
+],
+[
+"juan-sanchez-romero",
+"Juan Sánchez Romero"
+],
+[
+"tomasz-radzinski",
+"Tomasz Radzinski"
+],
+[
+"andriy-shevchenko",
+"Andriy Shevchenko"
+],
+[
+"luis-figo",
+"Luís Figo"
+],
+[
+"mehmet-scholl",
+"Mehmet Scholl"
+],
+[
+"alan-smith",
+"Alan Smith"
+]
+]
+]
+]
+},
+{
+"id": "ucl-2001",
+"q": "Top scorers in the 2001–02 Champions League",
+"d": 3,
+"src": "2001–02 UEFA Champions League",
+"e": [
+[
+1,
+"ruud-van-nistelrooy",
+"Ruud van Nistelrooy",
+"10 goals"
+],
+[
+2,
+"david-trezeguet",
+"David Trezeguet",
+"8 goals"
+],
+[
+3,
+"ole-gunnar-solskjaer",
+"Ole Gunnar Solskjær",
+"7 goals"
+],
+[
+3,
+"thierry-henry",
+"Thierry Henry",
+"7 goals"
+],
+[
+5,
+"giovane-elber",
+"Giovane Élber",
+"6 goals"
+],
+[
+5,
+"diego-tristan",
+"Diego Tristán",
+"6 goals"
+],
+[
+5,
+"michalis-konstantinou",
+"Michalis Konstantinou",
+"6 goals"
+],
+[
+5,
+"raul",
+"Raúl",
+"6 goals"
+],
+[
+5,
+"patrick-kluivert",
+"Patrick Kluivert",
+"6 goals"
+],
+[
+5,
+"michael-ballack",
+"Michael Ballack",
+"6 goals"
+]
+]
+},
+{
+"id": "ucl-2002",
+"q": "Top scorers in the 2002–03 Champions League",
+"d": 3,
+"src": "2002–03 UEFA Champions League",
+"e": [
+[
+1,
+"ruud-van-nistelrooy",
+"Ruud van Nistelrooy",
+"12 goals"
+],
+[
+2,
+"filippo-inzaghi",
+"Filippo Inzaghi",
+"10 goals"
+],
+[
+3,
+"roy-makaay",
+"Roy Makaay",
+"9 goals"
+],
+[
+3,
+"hernan-crespo",
+"Hernán Crespo",
+"9 goals"
+],
+[
+3,
+"raul",
+"Raúl",
+"9 goals"
+],
+[
+6,
+"jan-koller",
+"Jan Koller",
+"8 goals"
+],
+[
+7,
+"javier-saviola",
+"Javier Saviola",
+"7 goals"
+],
+[
+7,
+"thierry-henry",
+"Thierry Henry",
+"7 goals"
+],
+[
+9,
+"ronaldo",
+"Ronaldo",
+"6 goals"
+],
+[
+9,
+"alan-shearer",
+"Alan Shearer",
+"6 goals"
+]
+]
+},
+{
+"id": "ucl-2003",
+"q": "Top scorers in the 2003–04 Champions League",
+"d": 3,
+"src": "2003–04 UEFA Champions League",
+"e": [
+[
+1,
+"fernando-morientes",
+"Fernando Morientes",
+"9 goals"
+],
+[
+2,
+"dado-prso",
+"Dado Pršo",
+"7 goals"
+],
+[
+3,
+"roy-makaay",
+"Roy Makaay",
+"6 goals"
+],
+[
+3,
+"walter-pandiani",
+"Walter Pandiani",
+"6 goals"
+],
+[
+5,
+"didier-drogba",
+"Didier Drogba",
+"5 goals"
+],
+[
+5,
+"hakan-sukur",
+"Hakan Şükür",
+"5 goals"
+],
+[
+5,
+"juninho-pernambucano",
+"Juninho Pernambucano",
+"5 goals"
+],
+[
+5,
+"thierry-henry",
+"Thierry Henry",
+"5 goals"
+],
+[
+9,
+"david-trezeguet",
+"David Trezeguet",
+"4 goals"
+],
+[
+9,
+"wesley-sonck",
+"Wesley Sonck",
+"4 goals",
+[
+[
+"ruud-van-nistelrooy",
+"Ruud van Nistelrooy"
+],
+[
+"albert-luque",
+"Albert Luque"
+],
+[
+"benni-mccarthy",
+"Benni McCarthy"
+],
+[
+"ronaldo",
+"Ronaldo"
+],
+[
+"andriy-shevchenko",
+"Andriy Shevchenko"
+],
+[
+"kaka",
+"Kaká"
+],
+[
+"ludovic-giuly",
+"Ludovic Giuly"
+],
+[
+"robert-pires",
+"Robert Pires"
+],
+[
+"frank-lampard",
+"Frank Lampard"
+]
+]
+]
+]
+},
+{
+"id": "ucl-2004",
+"q": "Top scorers in the 2004–05 Champions League",
+"d": 3,
+"src": "2004–05 UEFA Champions League",
+"e": [
+[
+1,
+"ruud-van-nistelrooy",
+"Ruud van Nistelrooy",
+"8 goals"
+],
+[
+2,
+"adriano",
+"Adriano",
+"7 goals"
+],
+[
+2,
+"roy-makaay",
+"Roy Makaay",
+"7 goals"
+],
+[
+4,
+"sylvain-wiltord",
+"Sylvain Wiltord",
+"6 goals"
+],
+[
+4,
+"hernan-crespo",
+"Hernán Crespo",
+"6 goals"
+],
+[
+4,
+"andriy-shevchenko",
+"Andriy Shevchenko",
+"6 goals"
+],
+[
+7,
+"ivan-klasnic",
+"Ivan Klasnić",
+"5 goals"
+],
+[
+7,
+"obafemi-martins",
+"Obafemi Martins",
+"5 goals"
+],
+[
+7,
+"tuncay-sanli",
+"Tuncay Şanlı",
+"5 goals"
+],
+[
+7,
+"didier-drogba",
+"Didier Drogba",
+"5 goals",
+[
+[
+"thierry-henry",
+"Thierry Henry"
+],
+[
+"michael-essien",
+"Michael Essien"
+],
+[
+"luis-garcia",
+"Luis García"
+]
+]
+]
+]
+},
+{
+"id": "ucl-2005",
+"q": "Top scorers in the 2005–06 Champions League",
+"d": 3,
+"src": "2005–06 UEFA Champions League",
+"e": [
+[
+1,
+"andriy-shevchenko",
+"Andriy Shevchenko",
+"9 goals"
+],
+[
+2,
+"ronaldinho",
+"Ronaldinho",
+"7 goals"
+],
+[
+3,
+"david-trezeguet",
+"David Trezeguet",
+"6 goals"
+],
+[
+3,
+"samuel-etoo",
+"Samuel Eto'o",
+"6 goals"
+],
+[
+5,
+"adriano",
+"Adriano",
+"5 goals"
+],
+[
+5,
+"johan-micoud",
+"Johan Micoud",
+"5 goals"
+],
+[
+5,
+"thierry-henry",
+"Thierry Henry",
+"5 goals"
+],
+[
+5,
+"kaka",
+"Kaká",
+"5 goals"
+],
+[
+9,
+"julio-ricardo-cruz",
+"Julio Ricardo Cruz",
+"4 goals"
+],
+[
+9,
+"filippo-inzaghi",
+"Filippo Inzaghi",
+"4 goals",
+[
+[
+"vincenzo-iaquinta",
+"Vincenzo Iaquinta"
+],
+[
+"john-carew",
+"John Carew"
+],
+[
+"peter-lovenkrands",
+"Peter Løvenkrands"
+],
+[
+"juninho-pernambucano",
+"Juninho Pernambucano"
+]
+]
+]
+]
+},
+{
+"id": "ucl-2007",
+"q": "Top scorers in the 2007–08 Champions League",
+"d": 3,
+"src": "2007–08 UEFA Champions League",
+"e": [
+[
+1,
+"cristiano-ronaldo",
+"Cristiano Ronaldo",
+"8 goals"
+],
+[
+2,
+"lionel-messi",
+"Lionel Messi",
+"6 goals"
+],
+[
+2,
+"fernando-torres",
+"Fernando Torres",
+"6 goals"
+],
+[
+2,
+"didier-drogba",
+"Didier Drogba",
+"6 goals"
+],
+[
+2,
+"steven-gerrard",
+"Steven Gerrard",
+"6 goals"
+],
+[
+6,
+"ryan-babel",
+"Ryan Babel",
+"5 goals"
+],
+[
+6,
+"zlatan-ibrahimovic",
+"Zlatan Ibrahimović",
+"5 goals"
+],
+[
+6,
+"frederic-kanoute",
+"Frédéric Kanouté",
+"5 goals"
+],
+[
+6,
+"raul",
+"Raúl",
+"5 goals"
+],
+[
+6,
+"deivid-de-souza",
+"Deivid de Souza",
+"5 goals",
+[
+[
+"dirk-kuyt",
+"Dirk Kuyt"
+]
+]
+]
+]
+},
+{
+"id": "ucl-2008",
+"q": "Top scorers in the 2008–09 Champions League",
+"d": 3,
+"src": "2008–09 UEFA Champions League",
+"e": [
+[
+1,
+"lionel-messi",
+"Lionel Messi",
+"9 goals"
+],
+[
+2,
+"steven-gerrard",
+"Steven Gerrard",
+"7 goals"
+],
+[
+2,
+"miroslav-klose",
+"Miroslav Klose",
+"7 goals"
+],
+[
+4,
+"lisandro-lopez",
+"Lisandro López",
+"6 goals"
+],
+[
+5,
+"emmanuel-adebayor",
+"Emmanuel Adebayor",
+"5 goals"
+],
+[
+5,
+"alessandro-del-piero",
+"Alessandro Del Piero",
+"5 goals"
+],
+[
+5,
+"didier-drogba",
+"Didier Drogba",
+"5 goals"
+],
+[
+5,
+"robin-van-persie",
+"Robin van Persie",
+"5 goals"
+],
+[
+5,
+"thierry-henry",
+"Thierry Henry",
+"5 goals"
+],
+[
+5,
+"karim-benzema",
+"Karim Benzema",
+"5 goals"
+]
+]
+},
+{
+"id": "ucl-2009",
+"q": "Top scorers in the 2009–10 Champions League",
+"d": 3,
+"src": "2009–10 UEFA Champions League",
+"e": [
+[
+1,
+"lionel-messi",
+"Lionel Messi",
+"8 goals"
+],
+[
+2,
+"cristiano-ronaldo",
+"Cristiano Ronaldo",
+"7 goals"
+],
+[
+2,
+"ivica-olic",
+"Ivica Olić",
+"7 goals"
+],
+[
+4,
+"diego-milito",
+"Diego Milito",
+"6 goals"
+],
+[
+5,
+"nicklas-bendtner",
+"Nicklas Bendtner",
+"5 goals"
+],
+[
+5,
+"wayne-rooney",
+"Wayne Rooney",
+"5 goals"
+],
+[
+5,
+"marouane-chamakh",
+"Marouane Chamakh",
+"5 goals"
+],
+[
+8,
+"michael-owen",
+"Michael Owen",
+"4 goals"
+],
+[
+8,
+"stevan-jovetic",
+"Stevan Jovetić",
+"4 goals"
+],
+[
+8,
+"edin-dzeko",
+"Edin Džeko",
+"4 goals",
+[
+[
+"cesc-fabregas",
+"Cesc Fàbregas"
+],
+[
+"radamel-falcao",
+"Radamel Falcao"
+],
+[
+"pedro",
+"Pedro"
+],
+[
+"arjen-robben",
+"Arjen Robben"
+],
+[
+"miralem-pjanic",
+"Miralem Pjanić"
+],
+[
+"zlatan-ibrahimovic",
+"Zlatan Ibrahimović"
+],
+[
+"milos-krasic",
+"Miloš Krasić"
+]
+]
+]
+]
+},
+{
+"id": "ucl-2010",
+"q": "Top scorers in the 2010–11 Champions League",
+"d": 3,
+"src": "2010–11 UEFA Champions League",
+"e": [
+[
+1,
+"lionel-messi",
+"Lionel Messi",
+"12 goals"
+],
+[
+2,
+"mario-gomez",
+"Mario Gómez",
+"8 goals"
+],
+[
+2,
+"samuel-etoo",
+"Samuel Eto'o",
+"8 goals"
+],
+[
+4,
+"nicolas-anelka",
+"Nicolas Anelka",
+"7 goals"
+],
+[
+5,
+"karim-benzema",
+"Karim Benzema",
+"6 goals"
+],
+[
+5,
+"roberto-soldado",
+"Roberto Soldado",
+"6 goals"
+],
+[
+5,
+"cristiano-ronaldo",
+"Cristiano Ronaldo",
+"6 goals"
+],
+[
+8,
+"pedro",
+"Pedro",
+"5 goals"
+],
+[
+8,
+"raul",
+"Raúl",
+"5 goals"
+],
+[
+10,
+"eduardo-da-silva",
+"Eduardo da Silva",
+"4 goals",
+[
+[
+"marco-borriello",
+"Marco Borriello"
+],
+[
+"javier-hernandez",
+"Javier Hernández"
+],
+[
+"peter-crouch",
+"Peter Crouch"
+],
+[
+"zlatan-ibrahimovic",
+"Zlatan Ibrahimović"
+],
+[
+"gareth-bale",
+"Gareth Bale"
+],
+[
+"luiz-adriano",
+"Luiz Adriano"
+],
+[
+"wayne-rooney",
+"Wayne Rooney"
+],
+[
+"jefferson-farfan",
+"Jefferson Farfán"
+],
+[
+"david-villa",
+"David Villa"
+]
+]
+]
+]
+},
+{
+"id": "ucl-2011",
+"q": "Top scorers in the 2011–12 Champions League",
+"d": 3,
+"src": "2011–12 UEFA Champions League",
+"e": [
+[
+1,
+"lionel-messi",
+"Lionel Messi",
+"14 goals"
+],
+[
+2,
+"mario-gomez",
+"Mario Gómez",
+"12 goals"
+],
+[
+3,
+"cristiano-ronaldo",
+"Cristiano Ronaldo",
+"10 goals"
+],
+[
+4,
+"karim-benzema",
+"Karim Benzema",
+"7 goals"
+],
+[
+5,
+"didier-drogba",
+"Didier Drogba",
+"6 goals"
+],
+[
+6,
+"jose-callejon",
+"José Callejón",
+"5 goals"
+],
+[
+6,
+"roberto-soldado",
+"Roberto Soldado",
+"5 goals"
+],
+[
+6,
+"bafetimbi-gomis",
+"Bafétimbi Gomis",
+"5 goals"
+],
+[
+6,
+"alexander-frei",
+"Alexander Frei",
+"5 goals"
+],
+[
+6,
+"seydou-doumbia",
+"Seydou Doumbia",
+"5 goals",
+[
+[
+"roman-shirokov",
+"Roman Shirokov"
+],
+[
+"edinson-cavani",
+"Edinson Cavani"
+],
+[
+"zlatan-ibrahimovic",
+"Zlatan Ibrahimović"
+]
+]
+]
+]
+},
+{
+"id": "ucl-2012",
+"q": "Top scorers in the 2012–13 Champions League",
+"d": 3,
+"src": "2012–13 UEFA Champions League",
+"e": [
+[
+1,
+"cristiano-ronaldo",
+"Cristiano Ronaldo",
+"12 goals"
+],
+[
+2,
+"robert-lewandowski",
+"Robert Lewandowski",
+"10 goals"
+],
+[
+3,
+"burak-yilmaz",
+"Burak Yılmaz",
+"8 goals"
+],
+[
+3,
+"lionel-messi",
+"Lionel Messi",
+"8 goals"
+],
+[
+3,
+"thomas-muller",
+"Thomas Müller",
+"8 goals"
+],
+[
+6,
+"oscar",
+"Oscar",
+"5 goals"
+],
+[
+6,
+"jonas",
+"Jonas",
+"5 goals"
+],
+[
+6,
+"alan-osorio-da-costa-silva",
+"Alan Osório da Costa Silva",
+"5 goals"
+],
+[
+6,
+"karim-benzema",
+"Karim Benzema",
+"5 goals"
+],
+[
+6,
+"ezequiel-lavezzi",
+"Ezequiel Lavezzi",
+"5 goals"
+]
+]
+},
+{
+"id": "ucl-2013",
+"q": "Top scorers in the 2013–14 Champions League",
+"d": 3,
+"src": "2013–14 UEFA Champions League",
+"e": [
+[
+1,
+"cristiano-ronaldo",
+"Cristiano Ronaldo",
+"17 goals"
+],
+[
+2,
+"zlatan-ibrahimovic",
+"Zlatan Ibrahimović",
+"10 goals"
+],
+[
+3,
+"diego-costa",
+"Diego Costa",
+"8 goals"
+],
+[
+3,
+"lionel-messi",
+"Lionel Messi",
+"8 goals"
+],
+[
+5,
+"sergio-aguero",
+"Sergio Agüero",
+"6 goals"
+],
+[
+5,
+"robert-lewandowski",
+"Robert Lewandowski",
+"6 goals"
+],
+[
+5,
+"gareth-bale",
+"Gareth Bale",
+"6 goals"
+],
+[
+8,
+"alvaro-negredo",
+"Álvaro Negredo",
+"5 goals"
+],
+[
+8,
+"arturo-vidal",
+"Arturo Vidal",
+"5 goals"
+],
+[
+8,
+"thomas-muller",
+"Thomas Müller",
+"5 goals",
+[
+[
+"marco-reus",
+"Marco Reus"
+],
+[
+"karim-benzema",
+"Karim Benzema"
+]
+]
+]
+]
+},
+{
+"id": "ucl-2014",
+"q": "Top scorers in the 2014–15 Champions League",
+"d": 3,
+"src": "2014–15 UEFA Champions League",
+"e": [
+[
+1,
+"neymar",
+"Neymar",
+"10 goals"
+],
+[
+1,
+"cristiano-ronaldo",
+"Cristiano Ronaldo",
+"10 goals"
+],
+[
+1,
+"lionel-messi",
+"Lionel Messi",
+"10 goals"
+],
+[
+4,
+"luiz-adriano",
+"Luiz Adriano",
+"9 goals"
+],
+[
+5,
+"jackson-martinez",
+"Jackson Martínez",
+"7 goals"
+],
+[
+5,
+"thomas-muller",
+"Thomas Müller",
+"7 goals"
+],
+[
+5,
+"luis-suarez",
+"Luis Suárez",
+"7 goals"
+],
+[
+5,
+"carlos-tevez",
+"Carlos Tevez",
+"7 goals"
+],
+[
+9,
+"sergio-aguero",
+"Sergio Agüero",
+"6 goals"
+],
+[
+9,
+"karim-benzema",
+"Karim Benzema",
+"6 goals",
+[
+[
+"edinson-cavani",
+"Edinson Cavani"
+],
+[
+"robert-lewandowski",
+"Robert Lewandowski"
+]
+]
+]
+]
+},
+{
+"id": "ucl-2015",
+"q": "Top scorers in the 2015–16 Champions League",
+"d": 3,
+"src": "2015–16 UEFA Champions League",
+"e": [
+[
+1,
+"cristiano-ronaldo",
+"Cristiano Ronaldo",
+"16 goals"
+],
+[
+2,
+"robert-lewandowski",
+"Robert Lewandowski",
+"9 goals"
+],
+[
+3,
+"luis-suarez",
+"Luis Suárez",
+"8 goals"
+],
+[
+3,
+"thomas-muller",
+"Thomas Müller",
+"8 goals"
+],
+[
+5,
+"antoine-griezmann",
+"Antoine Griezmann",
+"7 goals"
+],
+[
+6,
+"lionel-messi",
+"Lionel Messi",
+"6 goals"
+],
+[
+6,
+"artem-dzyuba",
+"Artem Dzyuba",
+"6 goals"
+],
+[
+8,
+"olivier-giroud",
+"Olivier Giroud",
+"5 goals"
+],
+[
+8,
+"javier-hernandez",
+"Javier Hernández",
+"5 goals"
+],
+[
+8,
+"willian",
+"Willian",
+"5 goals",
+[
+[
+"zlatan-ibrahimovic",
+"Zlatan Ibrahimović"
+]
+]
+]
+]
+},
+{
+"id": "ucl-2016",
+"q": "Top scorers in the 2016–17 Champions League",
+"d": 3,
+"src": "2016–17 UEFA Champions League",
+"e": [
+[
+1,
+"cristiano-ronaldo",
+"Cristiano Ronaldo",
+"12 goals"
+],
+[
+2,
+"lionel-messi",
+"Lionel Messi",
+"11 goals"
+],
+[
+3,
+"edinson-cavani",
+"Edinson Cavani",
+"8 goals"
+],
+[
+3,
+"robert-lewandowski",
+"Robert Lewandowski",
+"8 goals"
+],
+[
+5,
+"pierre-emerick-aubameyang",
+"Pierre-Emerick Aubameyang",
+"7 goals"
+],
+[
+6,
+"kylian-mbappe",
+"Kylian Mbappé",
+"6 goals"
+],
+[
+6,
+"antoine-griezmann",
+"Antoine Griezmann",
+"6 goals"
+],
+[
+8,
+"sergio-aguero",
+"Sergio Agüero",
+"5 goals"
+],
+[
+8,
+"dries-mertens",
+"Dries Mertens",
+"5 goals"
+],
+[
+8,
+"radamel-falcao",
+"Radamel Falcao",
+"5 goals",
+[
+[
+"karim-benzema",
+"Karim Benzema"
+],
+[
+"gonzalo-higuain",
+"Gonzalo Higuaín"
+]
+]
+]
+]
+},
+{
+"id": "ucl-2017",
+"q": "Top scorers in the 2017–18 Champions League",
+"d": 3,
+"src": "2017–18 UEFA Champions League",
+"e": [
+[
+1,
+"cristiano-ronaldo",
+"Cristiano Ronaldo",
+"15 goals"
+],
+[
+2,
+"mohamed-salah",
+"Mohamed Salah",
+"10 goals"
+],
+[
+2,
+"sadio-mane",
+"Sadio Mané",
+"10 goals"
+],
+[
+2,
+"roberto-firmino",
+"Roberto Firmino",
+"10 goals"
+],
+[
+5,
+"wissam-ben-yedder",
+"Wissam Ben Yedder",
+"8 goals"
+],
+[
+5,
+"edin-dzeko",
+"Edin Džeko",
+"8 goals"
+],
+[
+7,
+"harry-kane",
+"Harry Kane",
+"7 goals"
+],
+[
+7,
+"edinson-cavani",
+"Edinson Cavani",
+"7 goals"
+],
+[
+9,
+"neymar",
+"Neymar",
+"6 goals"
+],
+[
+9,
+"lionel-messi",
+"Lionel Messi",
+"6 goals"
+]
+]
+},
+{
+"id": "ucl-2018",
+"q": "Top scorers in the 2018–19 Champions League",
+"d": 3,
+"src": "2018–19 UEFA Champions League",
+"e": [
+[
+1,
+"lionel-messi",
+"Lionel Messi",
+"12 goals"
+],
+[
+2,
+"robert-lewandowski",
+"Robert Lewandowski",
+"8 goals"
+],
+[
+3,
+"sergio-aguero",
+"Sergio Agüero",
+"6 goals"
+],
+[
+3,
+"cristiano-ronaldo",
+"Cristiano Ronaldo",
+"6 goals"
+],
+[
+3,
+"moussa-marega",
+"Moussa Marega",
+"6 goals"
+],
+[
+3,
+"dusan-tadic",
+"Dušan Tadić",
+"6 goals"
+],
+[
+7,
+"andrej-kramaric",
+"Andrej Kramarić",
+"5 goals"
+],
+[
+7,
+"paulo-dybala",
+"Paulo Dybala",
+"5 goals"
+],
+[
+7,
+"neymar",
+"Neymar",
+"5 goals"
+],
+[
+7,
+"edin-dzeko",
+"Edin Džeko",
+"5 goals",
+[
+[
+"lucas-moura",
+"Lucas Moura"
+],
+[
+"harry-kane",
+"Harry Kane"
+],
+[
+"raheem-sterling",
+"Raheem Sterling"
+],
+[
+"mohamed-salah",
+"Mohamed Salah"
+]
+]
+]
+]
+},
+{
+"id": "ucl-2019",
+"q": "Top scorers in the 2019–20 Champions League",
+"d": 3,
+"src": "2019–20 UEFA Champions League",
+"e": [
+[
+1,
+"robert-lewandowski",
+"Robert Lewandowski",
+"15 goals"
+],
+[
+2,
+"erling-haaland",
+"Erling Haaland",
+"10 goals"
+],
+[
+3,
+"serge-gnabry",
+"Serge Gnabry",
+"9 goals"
+],
+[
+4,
+"harry-kane",
+"Harry Kane",
+"6 goals"
+],
+[
+4,
+"dries-mertens",
+"Dries Mertens",
+"6 goals"
+],
+[
+4,
+"gabriel-jesus",
+"Gabriel Jesus",
+"6 goals"
+],
+[
+4,
+"memphis-depay",
+"Memphis Depay",
+"6 goals"
+],
+[
+4,
+"raheem-sterling",
+"Raheem Sterling",
+"6 goals"
+],
+[
+9,
+"son-heung-min",
+"Son Heung-min",
+"5 goals"
+],
+[
+9,
+"mauro-icardi",
+"Mauro Icardi",
+"5 goals",
+[
+[
+"josip-ilicic",
+"Josip Iličić"
+],
+[
+"lautaro-martinez",
+"Lautaro Martínez"
+],
+[
+"luis-suarez",
+"Luis Suárez"
+],
+[
+"karim-benzema",
+"Karim Benzema"
+],
+[
+"kylian-mbappe",
+"Kylian Mbappé"
+]
+]
+]
+]
+},
+{
+"id": "ucl-2020",
+"q": "Top scorers in the 2020–21 Champions League",
+"d": 3,
+"src": "2020–21 UEFA Champions League",
+"e": [
+[
+1,
+"erling-haaland",
+"Erling Haaland",
+"10 goals"
+],
+[
+2,
+"kylian-mbappe",
+"Kylian Mbappé",
+"8 goals"
+],
+[
+3,
+"olivier-giroud",
+"Olivier Giroud",
+"6 goals"
+],
+[
+3,
+"youssef-en-nesyri",
+"Youssef En-Nesyri",
+"6 goals"
+],
+[
+3,
+"marcus-rashford",
+"Marcus Rashford",
+"6 goals"
+],
+[
+3,
+"alvaro-morata",
+"Álvaro Morata",
+"6 goals"
+],
+[
+3,
+"neymar",
+"Neymar",
+"6 goals"
+],
+[
+3,
+"mohamed-salah",
+"Mohamed Salah",
+"6 goals"
+],
+[
+3,
+"karim-benzema",
+"Karim Benzema",
+"6 goals"
+],
+[
+10,
+"ciro-immobile",
+"Ciro Immobile",
+"5 goals",
+[
+[
+"robert-lewandowski",
+"Robert Lewandowski"
+],
+[
+"lionel-messi",
+"Lionel Messi"
+],
+[
+"alassane-plea",
+"Alassane Pléa"
+],
+[
+"sergio-oliveira",
+"Sérgio Oliveira"
+]
+]
+]
+]
+},
+{
+"id": "ucl-2021",
+"q": "Top scorers in the 2021–22 Champions League",
+"d": 3,
+"src": "2021–22 UEFA Champions League",
+"e": [
+[
+1,
+"karim-benzema",
+"Karim Benzema",
+"15 goals"
+],
+[
+2,
+"robert-lewandowski",
+"Robert Lewandowski",
+"13 goals"
+],
+[
+3,
+"sebastien-haller",
+"Sébastien Haller",
+"11 goals"
+],
+[
+4,
+"mohamed-salah",
+"Mohamed Salah",
+"8 goals"
+],
+[
+5,
+"christopher-nkunku",
+"Christopher Nkunku",
+"7 goals"
+],
+[
+5,
+"riyad-mahrez",
+"Riyad Mahrez",
+"7 goals"
+],
+[
+7,
+"cristiano-ronaldo",
+"Cristiano Ronaldo",
+"6 goals"
+],
+[
+7,
+"darwin-nunez",
+"Darwin Núñez",
+"6 goals"
+],
+[
+7,
+"kylian-mbappe",
+"Kylian Mbappé",
+"6 goals"
+],
+[
+7,
+"leroy-sane",
+"Leroy Sané",
+"6 goals",
+[
+[
+"arnaut-danjuma",
+"Arnaut Danjuma"
+]
+]
+]
+]
+},
+{
+"id": "ucl-2022",
+"q": "Top scorers in the 2022–23 Champions League",
+"d": 3,
+"src": "2022–23 UEFA Champions League",
+"e": [
+[
+1,
+"erling-haaland",
+"Erling Haaland",
+"12 goals"
+],
+[
+2,
+"mohamed-salah",
+"Mohamed Salah",
+"8 goals"
+],
+[
+3,
+"kylian-mbappe",
+"Kylian Mbappé",
+"7 goals"
+],
+[
+3,
+"vinicius-junior",
+"Vinícius Júnior",
+"7 goals"
+],
+[
+5,
+"joao-mario",
+"João Mário",
+"6 goals"
+],
+[
+6,
+"victor-osimhen",
+"Victor Osimhen",
+"5 goals"
+],
+[
+6,
+"robert-lewandowski",
+"Robert Lewandowski",
+"5 goals"
+],
+[
+6,
+"mehdi-taremi",
+"Mehdi Taremi",
+"5 goals"
+],
+[
+6,
+"rodrygo",
+"Rodrygo",
+"5 goals"
+],
+[
+6,
+"rafa-silva",
+"Rafa Silva",
+"5 goals",
+[
+[
+"olivier-giroud",
+"Olivier Giroud"
+]
+]
+]
+]
+},
+{
+"id": "ucl-2023",
+"q": "Top scorers in the 2023–24 Champions League",
+"d": 3,
+"src": "2023–24 UEFA Champions League",
+"e": [
+[
+1,
+"harry-kane",
+"Harry Kane",
+"8 goals"
+],
+[
+1,
+"kylian-mbappe",
+"Kylian Mbappé",
+"8 goals"
+],
+[
+3,
+"erling-haaland",
+"Erling Haaland",
+"6 goals"
+],
+[
+3,
+"antoine-griezmann",
+"Antoine Griezmann",
+"6 goals"
+],
+[
+3,
+"vinicius-junior",
+"Vinícius Júnior",
+"6 goals"
+],
+[
+6,
+"joselu",
+"Joselu",
+"5 goals"
+],
+[
+6,
+"julian-alvarez",
+"Julián Alvarez",
+"5 goals"
+],
+[
+6,
+"rasmus-hojlund",
+"Rasmus Højlund",
+"5 goals"
+],
+[
+6,
+"galeno",
+"Galeno",
+"5 goals"
+],
+[
+6,
+"alvaro-morata",
+"Álvaro Morata",
+"5 goals",
+[
+[
+"phil-foden",
+"Phil Foden"
+],
+[
+"rodrygo",
+"Rodrygo"
+]
+]
+]
+]
+},
+{
+"id": "ucl-2024",
+"q": "Top scorers in the 2024–25 Champions League",
+"d": 3,
+"src": "2024–25 UEFA Champions League",
+"e": [
+[
+1,
+"serhou-guirassy",
+"Serhou Guirassy",
+"13 goals"
+],
+[
+1,
+"raphinha",
+"Raphinha",
+"13 goals"
+],
+[
+3,
+"robert-lewandowski",
+"Robert Lewandowski",
+"11 goals"
+],
+[
+3,
+"harry-kane",
+"Harry Kane",
+"11 goals"
+],
+[
+5,
+"lautaro-martinez",
+"Lautaro Martínez",
+"9 goals"
+],
+[
+6,
+"erling-haaland",
+"Erling Haaland",
+"8 goals"
+],
+[
+6,
+"vinicius-junior",
+"Vinícius Júnior",
+"8 goals"
+],
+[
+6,
+"ousmane-dembele",
+"Ousmane Dembélé",
+"8 goals"
+],
+[
+9,
+"jonathan-david",
+"Jonathan David",
+"7 goals"
+],
+[
+9,
+"julian-alvarez",
+"Julián Alvarez",
+"7 goals",
+[
+[
+"vangelis-pavlidis",
+"Vangelis Pavlidis"
+],
+[
+"kylian-mbappe",
+"Kylian Mbappé"
+]
+]
 ]
 ]
 }

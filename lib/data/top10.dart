@@ -8,11 +8,19 @@ import 'question_history.dart';
 
 /// One place on a Top 10: who, and their figure ("260 goals").
 class Top10Entry {
-  const Top10Entry({required this.rank, required this.playerId, required this.name, this.figure = ''});
+  const Top10Entry(
+      {required this.rank, required this.playerId, required this.name, this.figure = '', this.alternates = const []});
   final int rank;
   final String playerId;
   final String name;
   final String figure;
+
+  /// Level with 10th beyond the ten (Keane and Pirès with Beattie on 14):
+  /// any of them fills this slot. (id, name).
+  final List<(String, String)> alternates;
+
+  /// Everyone who fills this slot: (id, name).
+  List<(String, String)> get all => [(playerId, name), ...alternates];
 }
 
 /// A Top 10 list read from a Wikipedia record table (assets/db/top10.json,
@@ -33,6 +41,9 @@ class Top10List {
               playerId: '${e[1]}',
               name: '${e[2]}',
               figure: e.length > 3 ? '${e[3]}' : '',
+              alternates: e.length > 4
+                  ? [for (final a in e[4] as List) ('${(a as List)[0]}', '${a[1]}')]
+                  : const [],
             ),
         ],
       );
@@ -49,7 +60,7 @@ class Top10List {
 
   int? indexOf(String playerId) {
     for (final (i, e) in entries.indexed) {
-      if (e.playerId == playerId) return i;
+      if (e.all.any((a) => a.$1 == playerId)) return i;
     }
     return null;
   }
