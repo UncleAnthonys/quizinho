@@ -209,6 +209,37 @@ def country_code(qid: str, countries: dict) -> str | None:
     return FIFA.get(code, code) if code else None
 
 
+# A senior national side: not youth, Olympic, B, futsal, beach or amateur.
+NOT_SENIOR = re.compile(r"under-?\d|\bU-?\d|\byouth\b|olympic|\bB\b|\bfutsal\b|\bbeach\b|\bamateur\b|"
+                        r"\bmilitary\b|\buniversit|\bstudent|\bschool|\bunder\b|\breserve", re.I)
+NATIONAL = re.compile(r"\bnational\b.*\bteam\b", re.I)
+HOME_NATIONS = [("Northern Ireland", "NIR"), ("Republic of Ireland", "IRL"), ("England", "ENG"),
+                ("Scotland", "SCO"), ("Wales", "WAL")]
+
+
+def senior_nations(spells_raw: list[dict], clubs_raw: dict, countries: dict) -> dict[str, str]:
+    """Player QID -> FIFA code of the senior national team they played for."""
+    nation_of: dict[str, str] = {}
+    for cid, c in clubs_raw.items():
+        name = c.get("name") or ""
+        if not NATIONAL.search(name) or NOT_SENIOR.search(name):
+            continue
+        code = next((k for n, k in HOME_NATIONS if name.startswith(n)), None)
+        if code is None and c.get("country"):
+            code = country_code(c["country"], countries)
+        if code and code != "GBR":
+            nation_of[cid] = code
+    best: dict[str, tuple] = {}
+    for sp in spells_raw:
+        code = nation_of.get(sp["team"])
+        if not code:
+            continue
+        key = (sp.get("apps") or 0, sp.get("end") or "9999")
+        if sp["player"] not in best or key > best[sp["player"]][0]:
+            best[sp["player"]] = (key, code)
+    return {pid: code for pid, (_, code) in best.items()}
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--report", action="store_true")
@@ -256,6 +287,9 @@ def main() -> int:
         keep_clubs[cid] = {**c, "name": short, "formal": name, "women": women}
 
     # ---- spells -----------------------------------------------------------
+    # The senior national team each player represented: the nationality a
+    # football fan means (Giggs is Wales, not "GBR"). Most caps wins.
+    capped = senior_nations(spells_raw, clubs_raw, countries)
     by_player: dict[str, list[dict]] = defaultdict(list)
     new_moves: list[dict] = []
     for s in spells_raw:
@@ -336,7 +370,9 @@ def main() -> int:
             if pid in used_slugs:
                 pid = f"{slug(name)}-{p['id'].lower()}"
         used_slugs[pid] = p["id"]
-        nat = next((code for n in p.get("nationalities", []) if (code := country_code(n, countries))), None)
+        stored = next((code for n in p.get("nationalities", []) if (code := country_code(n, countries))), None)
+        nat = capped.get(p["id"]) or stored
+        stats["nat_from_caps" if p["id"] in capped else "nat_stored" if stored else "nat_none"] += 1
         aliases = [a for a in p.get("aliases", []) if good_alias(a, name)][:6]
         for fam in p.get("family_names", [])[:1]:
             if fam and fam not in aliases and fam.lower() not in name.lower().split()[-1:]:
