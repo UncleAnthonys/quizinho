@@ -277,7 +277,7 @@ class _SetupScreenState extends State<SetupScreen> {
                 const SizedBox(height: 18),
                 _section('GAMES'),
                 Wrap(spacing: 8, runSpacing: 8, children: [
-                  for (final m in GameModeId.values.where((m) => !m.soloOnly))
+                  for (final m in GameModeId.values)
                     FilterChip(
                       avatar: Icon(m.icon, size: 18, color: m.playable ? m.color : Palette.muted),
                       label: Text(m.playable ? m.title : '${m.title} · soon'),

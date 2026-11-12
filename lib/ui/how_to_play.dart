@@ -25,7 +25,7 @@ void showHowToPlay(BuildContext context) => showModalBottomSheet<void>(
             style: TextStyle(fontSize: 16, height: 1.5),
           ),
           const SizedBox(height: 16),
-          for (final m in GameModeId.values.where((m) => m.playable && !m.soloOnly)) ...[
+          for (final m in GameModeId.values.where((m) => m.playable)) ...[
             Row(children: [
               Icon(m.icon, color: m.color),
               const SizedBox(width: 8),

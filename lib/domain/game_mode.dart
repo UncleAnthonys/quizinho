@@ -116,11 +116,7 @@ enum GameModeId {
     required this.playable,
     this.rules = const [],
     this.whoPlays = '',
-    this.soloOnly = false,
   });
-
-  /// Played on your own only (Top 10): never on the party wheel.
-  final bool soloOnly;
 
   final String title;
 
@@ -137,7 +133,7 @@ enum GameModeId {
 
   /// Real games (not the wildcard wrapper) available today.
   static List<GameModeId> get concreteGames =>
-      values.where((m) => m.playable && !m.soloOnly && m != GameModeId.wildcard).toList();
+      values.where((m) => m.playable && m != GameModeId.wildcard).toList();
 
   static GameModeId? fromName(String name) {
     for (final m in values) {
