@@ -41,7 +41,7 @@ double gridWeight(Club c) {
   if (isNationCategory(c)) return _nationWeight;
   final k = c.country;
   final big = c.fame >= 5;
-  if (_home.contains(k)) return big ? 6 : (c.fame == 4 ? 2.5 : 1.2);
+  if (_home.contains(k)) return big ? 6 : (c.fame == 4 ? 2.5 : 0.5);
   if (_bigLeagues.contains(k)) return big ? 4 : 0.5;
   if (_nextLeagues.contains(k)) return big ? 2 : 0.2;
   return big ? 0.4 : 0.1;
@@ -50,6 +50,9 @@ double gridWeight(Club c) {
 /// About six grids in ten have a nation (usually one), never more than two.
 const double _nationWeight = 0.3;
 const int _maxNations = 2;
+
+/// English clubs on one side of the grid, at most (so 4 of the 6).
+const int _maxEnglishASide = 2;
 
 /// Nation x club pairs fit for a grid: not a nation with its own league's
 /// clubs (Spain x Barcelona, England x Chelsea), which are too easy.
@@ -134,6 +137,9 @@ TicTacToeGrid? generateTicTacToeGrid(
       final cols = pick(common, 3)!;
       if ([...rows, ...cols].where((id) => _farAway(clubs[id]!)).length > 1) continue;
       if ([...rows, ...cols].where((id) => isNationCategory(clubs[id]!)).length > _maxNations) continue;
+      // Never an all-English grid: two English clubs a side at most.
+      int english(List<String> ids) => ids.where((id) => _home.contains(clubs[id]!.country)).length;
+      if (english(rows) > _maxEnglishASide || english(cols) > _maxEnglishASide) continue;
       if (!rows.every((r) => cols.every((c) => fair(r, c)))) continue;
       final grid = TicTacToeGrid(
         rows: [for (final r in rows) clubs[r]!],

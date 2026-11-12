@@ -85,6 +85,8 @@ void main() {
             random: Random(seed), minFame: 4, maxLevel: 3, minKnownAnswers: 1, answerFame: fame)!;
         final six = [...g.rows, ...g.cols];
         expect(six.where((c) => !europe.contains(c.country)).length, lessThanOrEqualTo(1));
+        expect(g.rows.where((c) => c.country == 'GBR').length, lessThanOrEqualTo(2));
+        expect(g.cols.where((c) => c.country == 'GBR').length, lessThanOrEqualTo(2));
         english += six.where((c) => c.country == 'GBR').length;
         total += 6;
       }
