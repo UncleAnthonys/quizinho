@@ -555,10 +555,7 @@ class _GuestGameState extends State<_GuestGame> with SingleTickerProviderStateMi
         if (stage == 'wait') {
           bottom = _status('${v['headline'] ?? ''}'.toUpperCase());
         } else if (choosing && !mine) {
-          final whoTeamName = whoTeam != null && whoTeam < teamsV.length ? '${asMap(teamsV[whoTeam])['name'] ?? ''}' : '';
-          bottom = _status(whoTeamName.isEmpty
-              ? '${whoName.toUpperCase()} IS PICKING A SQUARE'
-              : '${whoTeamName.toUpperCase()} ARE PICKING A SQUARE${whoName.isEmpty ? '' : ' - ${whoName.toUpperCase()} ON THE PHONE'}');
+          bottom = _status('${whoName.toUpperCase()} IS PICKING A SQUARE');
         } else if (choosing) {
           bottom = Column(children: [
             if (v['left'] != null) ...[clock(), const SizedBox(height: 8)],

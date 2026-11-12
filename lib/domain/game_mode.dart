@@ -50,7 +50,7 @@ enum GameModeId {
       'Right: the square is yours. Wrong, or too slow to pick or answer: your turn’s over.',
       'Three in a row wins it: 3 bonus points on top of 1 a square. No line? Most squares wins. A footballer can only be used once.',
     ],
-    whoPlays: 'Teams take turns and talk it over - the named player holds the phone.',
+    whoPlays: 'Teams take turns, a different player each go - the named player picks the square and answers.',
   ),
   biddingWar(
     title: 'Bidding War',
