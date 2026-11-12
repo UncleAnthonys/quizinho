@@ -486,8 +486,10 @@ class TttBoard extends StatelessWidget {
   static Map<String, Object?> snapshot(TicTacToeController c, Tournament t) => {
         'rows': [for (final r in c.grid.rows) r.name],
         'cols': [for (final k in c.grid.cols) k.name],
-        'owner': [...c.owner],
-        'claimed': [...c.claimedWith],
+        // No nulls: the rooms database drops them from lists, and an empty
+        // grid would reach joined phones as no grid at all. -1 / '' = empty.
+        'owner': [for (final o in c.owner) o ?? -1],
+        'claimed': [for (final n in c.claimedWith) n ?? ''],
         if (c.selected != null) 'selected': c.selected,
         if (c.winningLine != null) 'line': c.winningLine,
         'colours': [for (final team in t.config.teams) team.colorIndex],
@@ -507,8 +509,8 @@ class TttBoard extends StatelessWidget {
   Widget build(BuildContext context) {
     final rows = [for (final r in _list<String>(data['rows'])) r ?? ''];
     final cols = [for (final k in _list<String>(data['cols'])) k ?? ''];
-    final owner = [for (final o in _list<num>(data['owner'])) o?.toInt()];
-    final claimed = _list<String>(data['claimed']);
+    final owner = [for (final o in _list<num>(data['owner'])) (o == null || o < 0) ? null : o.toInt()];
+    final claimed = [for (final n in _list<String>(data['claimed'])) (n == null || n.isEmpty) ? null : n];
     final colours = [for (final c in _list<num>(data['colours'])) c?.toInt() ?? 0];
     final line = [for (final i in _list<num>(data['line'])) i?.toInt()];
     final selectedSq = (data['selected'] as num?)?.toInt();

@@ -4,7 +4,9 @@ import 'dart:math';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:quizinho/data/json_football_repository.dart';
 import 'package:quizinho/data/models.dart';
+import 'package:quizinho/domain/tournament.dart';
 import 'package:quizinho/games/tic_tac_toe/tic_tac_toe_controller.dart';
+import 'package:quizinho/games/tic_tac_toe/tic_tac_toe_screen.dart';
 
 Duration secs(double s) => Duration(microseconds: (s * 1e6).round());
 
@@ -96,6 +98,16 @@ void main() {
       }
       expect(english / total, greaterThan(0.4));
     });
+  });
+
+  test('the board sent to phones has no nulls (the rooms database drops them)', () {
+    final t = Tournament(TournamentConfig(teams: [TeamSetup(name: 'A', colorIndex: 0), TeamSetup(name: 'B', colorIndex: 1)]));
+    final c = TicTacToeController(grid: grid(), teamCount: 2);
+    final snap = TttBoard.snapshot(c, t);
+    for (final v in snap.values) {
+      if (v is List) expect(v.contains(null), isFalse, reason: '$v');
+    }
+    expect((snap['owner'] as List).length, 9);
   });
 
   group('rules', () {

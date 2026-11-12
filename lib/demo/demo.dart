@@ -427,7 +427,7 @@ class DemoPilot {
       if (d == null || d['phase'] != 'choosing') break;
       final team = (d['team'] as num?)?.toInt() ?? 0;
       final name = _n(t.teamName(team));
-      final owner = [for (final o in _list<num>(d['owner'])) o?.toInt()];
+      final owner = [for (final o in _list<num>(d['owner'])) (o == null || o < 0) ? null : o.toInt()];
       final stealable = {for (final i in _list<num>(d['stealable'])) if (i != null) i.toInt()};
       final step = turn < _tttPlan.length ? _tttPlan[turn] : null;
       final steal = step != null && step.$3 && stealable.isNotEmpty;
@@ -436,7 +436,7 @@ class DemoPilot {
           : (step != null && owner[step.$1] == null ? step.$1 : _bestSquare(owner, team));
       if (sq == null) break;
       final rows = _list<String>(d['rows']), cols = _list<String>(d['cols']);
-      _tttUsed.addAll([for (final c in _list<String>(d['claimed'])) if (c != null) c]);
+      _tttUsed.addAll([for (final c in _list<String>(d['claimed'])) if (c != null && c.isNotEmpty) c]);
       if (steal) {
         await _say('Steal! Name a different player to take their square.');
       }
@@ -479,7 +479,7 @@ class DemoPilot {
       if (player == null) break;
       d = _ttt();
       if (d == null) break;
-      final now = [for (final o in _list<num>(d['owner'])) o?.toInt()];
+      final now = [for (final o in _list<num>(d['owner'])) (o == null || o < 0) ? null : o.toInt()];
       final got = sq < now.length && now[sq] == team && _list<String>(d['claimed'])[sq] == player.name;
       _log('ttt', {'square': sq, 'player': player.name, 'claimed': got, 'steal': steal});
       if (d['phase'] == 'finished') {
