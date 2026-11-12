@@ -46,9 +46,9 @@ enum GameModeId {
     tagline: 'Name a player who played for both clubs to claim the square',
     playable: true,
     rules: [
-      'Three clubs along the top, three down the side. Pick a square, then name a player who played for both its clubs.',
-      'Right: 1 point and the square is yours. Wrong, or too slow: your turn’s over.',
-      'Get three in a line - across, down or diagonal - to win the game, plus 3 bonus points. No line? Most squares wins. Each footballer can only be used once.',
+      'Clubs along the top and down the left. Pick a square, then name a player who played for both clubs.',
+      'Right: the square is yours (1 point). Wrong, or too slow: your turn’s over.',
+      'First to three in a row - across, down or diagonally - wins the game and 3 bonus points. Each footballer can only be used once.',
     ],
     whoPlays: 'Teams take turns. Joined on your own phones? Each go moves to the next phone in the team.',
   ),
