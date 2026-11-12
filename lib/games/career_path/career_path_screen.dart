@@ -138,7 +138,7 @@ class _CareerPathScreenState extends State<CareerPathScreen>
       phoneTeams: _bridge?.phoneTeams() ?? const {},
       awaitingFaceOff: _faces.awaitingReady,
       onFaceOffReady: () {
-        services.sound.play(Sfx.whistle);
+        services.sound.play(Sfx.kick);
         setState(_faces.ready);
       },
       question: (compact) => Column(children: [

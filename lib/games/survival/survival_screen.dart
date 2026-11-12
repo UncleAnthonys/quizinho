@@ -64,7 +64,7 @@ class _SurvivalScreenState extends State<SurvivalScreen>
           if (mounted) c.next();
         });
       } else if (c.phase == SurvivalPhase.wrong) {
-        s.sound.play(c.lastAnswer == null ? Sfx.whistle : Sfx.wrong);
+        s.sound.play(Sfx.wrong);
         s.haptic(HapticStrength.heavy);
       }
     }

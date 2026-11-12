@@ -73,7 +73,8 @@ mixin GameScreenSupport<W extends StatefulWidget> on State<W>, TickerProviderSta
         s.sound.play(Sfx.wrong);
         s.haptic(HapticStrength.heavy);
       case GameEvent.timeUp:
-        s.sound.play(Sfx.whistle);
+        // A go running out of time. The whistle is kept for kick-off and full time.
+        s.sound.play(Sfx.wrong);
         s.haptic(HapticStrength.heavy);
       case GameEvent.nobodyGotIt:
         s.sound.play(Sfx.groan);
