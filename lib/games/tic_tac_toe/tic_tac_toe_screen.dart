@@ -30,6 +30,9 @@ class _TicTacToeScreenState extends State<TicTacToeScreen>
   String? _turnPlayer;
   int _turnFor = -1;
   int _pickerKey = 0;
+
+  /// After the game: answer counts on the squares, tap one to see them.
+  bool _showMissed = false;
   int _lastSecond = -1;
 
   Tournament get _t => widget.round.tournament;
@@ -234,6 +237,7 @@ class _TicTacToeScreenState extends State<TicTacToeScreen>
                 multiplier: widget.round.multiplier,
                 typing: typing,
                 onTap: c.choose,
+                onReveal: (i) => _answers(c, i),
                 bottom: _bottom(c),
               ),
             ),
@@ -244,8 +248,11 @@ class _TicTacToeScreenState extends State<TicTacToeScreen>
   }
 
   /// Everything both the host and joined phones draw.
-  Map<String, Object?> _view(TicTacToeController c) =>
-      {...TttBoard.snapshot(c, _t), 'who': _turnPlayer ?? _t.teamName(c.currentTeam)};
+  Map<String, Object?> _view(TicTacToeController c) => {
+        ...TttBoard.snapshot(c, _t),
+        'who': _turnPlayer ?? _t.teamName(c.currentTeam),
+        if (_showMissed && c.phase == TttPhase.finished) 'counts': [for (final a in c.grid.answers) a.length],
+      };
 
   Widget _bottom(TicTacToeController c) {
     if (_phones?.remote case final m?) {
@@ -322,11 +329,18 @@ class _TicTacToeScreenState extends State<TicTacToeScreen>
       ]);
     }
     // finished
+    final missed = _showMissed
+        ? Text('TAP A SQUARE TO SEE ITS ANSWERS', textAlign: TextAlign.center, style: AppText.label(13, color: Palette.yellow))
+        : TextButton(
+            onPressed: () => setState(() => _showMissed = true),
+            child: Text('SEE WHAT YOU MISSED', style: AppText.label(14, color: Palette.yellow)),
+          );
     final standings = List.generate(_t.teamCount, (i) => i)..sort((a, b) => c.squaresOf(b).compareTo(c.squaresOf(a)));
     if (_t.teamCount == 1) {
       return Column(children: [
         SoloScore(score: c.result().solo ?? 0),
-        const SizedBox(height: 12),
+        missed,
+        const SizedBox(height: 8),
         BigButton(label: 'Finish round', icon: Icons.flag, onPressed: () => widget.round.onComplete(c.result())),
       ]);
     }
@@ -343,9 +357,45 @@ class _TicTacToeScreenState extends State<TicTacToeScreen>
             ),
           ]),
         ),
-      const SizedBox(height: 12),
+      const SizedBox(height: 6),
+      missed,
+      const SizedBox(height: 8),
       BigButton(label: 'Finish round', icon: Icons.flag, onPressed: () => widget.round.onComplete(c.result())),
     ]);
+  }
+
+  /// Every answer for square [i], best-known first; the one named is marked.
+  void _answers(TicTacToeController c, int i) {
+    final players = services.repo.players;
+    final named = c.claimedWith[i];
+    final names = [for (final id in c.grid.answers[i]) if (players.byId(id) case final p?) p]
+      ..sort((a, b) => b.fame != a.fame ? b.fame.compareTo(a.fame) : a.name.compareTo(b.name));
+    showModalBottomSheet<void>(
+      context: context,
+      backgroundColor: Palette.pitchDeep,
+      isScrollControlled: true,
+      builder: (context) => SafeArea(
+        child: ConstrainedBox(
+          constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.7),
+          child: ListView(padding: const EdgeInsets.fromLTRB(20, 18, 20, 20), shrinkWrap: true, children: [
+            Text('${c.grid.rows[i ~/ 3].name.toUpperCase()}  +  ${c.grid.cols[i % 3].name.toUpperCase()}',
+                textAlign: TextAlign.center, style: AppText.headline(22, color: Palette.yellow)),
+            const SizedBox(height: 4),
+            Text(names.length == 1 ? 'THE ONLY ANSWER IN OUR DATABASE' : '${names.length} ANSWERS IN OUR DATABASE',
+                textAlign: TextAlign.center, style: AppText.label(13)),
+            const SizedBox(height: 12),
+            Wrap(alignment: WrapAlignment.center, spacing: 6, runSpacing: 6, children: [
+              for (final p in names)
+                Chip(
+                  label: Text(p.name),
+                  backgroundColor: p.name == named ? Palette.yellow : Palette.card,
+                  labelStyle: TextStyle(color: p.name == named ? Palette.pitchDeep : Palette.text),
+                ),
+            ]),
+          ]),
+        ),
+      ),
+    );
   }
 }
 
@@ -359,10 +409,12 @@ class TttLayout extends StatelessWidget {
     this.multiplier = 1,
     this.typing = false,
     this.onTap,
+    this.onReveal,
   });
   final Map<String, Object?> data;
   final Widget bottom;
   final int multiplier;
+  final void Function(int square)? onReveal;
 
   /// Keyboard up: the board gives way to the answer box.
   final bool typing;
@@ -399,7 +451,7 @@ class TttLayout extends StatelessWidget {
         child: ListView(padding: const EdgeInsets.fromLTRB(12, 4, 12, 16), children: [
           typing ? const SizedBox.shrink() : banner,
           typing ? const SizedBox.shrink() : const SizedBox(height: 8),
-          typing ? const SizedBox.shrink() : TttBoard(data: data, onTap: onTap),
+          typing ? const SizedBox.shrink() : TttBoard(data: data, onTap: onTap, onReveal: onReveal),
           typing ? const SizedBox.shrink() : const SizedBox(height: 12),
           bottom,
         ]),
@@ -411,12 +463,16 @@ class TttLayout extends StatelessWidget {
 /// The grid, drawn from a plain snapshot ([snapshot]) so joined phones draw
 /// exactly what the host does.
 class TttBoard extends StatelessWidget {
-  const TttBoard({super.key, required this.data, this.onTap});
+  const TttBoard({super.key, required this.data, this.onTap, this.onReveal});
 
   /// From [snapshot]: rows, cols (club names), owner/claimed per square,
   /// selected, line (winning squares), colours (per team), choosing.
   final Map<String, Object?> data;
   final void Function(int square)? onTap;
+
+  /// After the game, with the answers out ('counts' in [data]): the host taps
+  /// a square to see who'd have counted.
+  final void Function(int square)? onReveal;
 
   static Map<String, Object?> snapshot(TicTacToeController c, Tournament t) => {
         'rows': [for (final r in c.grid.rows) r.name],
@@ -450,6 +506,7 @@ class TttBoard extends StatelessWidget {
     final choosing = data['choosing'] == true;
     final stealable = {for (final i in _list<num>(data['stealable'])) i?.toInt()};
     final locked = {for (final i in _list<num>(data['locked'])) i?.toInt()};
+    final counts = data['counts'] == null ? null : [for (final n in _list<num>(data['counts'])) n?.toInt() ?? 0];
     bool canChoose(int i) => choosing && i < owner.length && (owner[i] == null || stealable.contains(i));
 
     Widget clubLabel(String name) => Container(
@@ -478,8 +535,12 @@ class TttBoard extends StatelessWidget {
       final winning = line.contains(i);
       final colour = ownerTeam == null || ownerTeam >= colours.length ? null : colours[ownerTeam];
       final tap = onTap;
+      final count = counts != null && i < counts.length ? counts[i] : null;
+      final reveal = onReveal;
       return GestureDetector(
-        onTap: canChoose(i) && tap != null ? () => tap(i) : null,
+        onTap: canChoose(i) && tap != null
+            ? () => tap(i)
+            : (count != null && reveal != null ? () => reveal(i) : null),
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 250),
           alignment: Alignment.center,
@@ -493,8 +554,14 @@ class TttBoard extends StatelessWidget {
             ),
           ),
           child: colour == null
-              ? Icon(selected ? Icons.mic_rounded : Icons.add_rounded,
-                  color: (canChoose(i) && tap != null) || selected ? Palette.yellow : Palette.muted, size: 30)
+              ? (count != null
+                  // Missed: how many would have counted.
+                  ? Column(mainAxisSize: MainAxisSize.min, children: [
+                      Text('$count', style: AppText.headline(30, color: Palette.yellow)),
+                      Text(count == 1 ? 'ANSWER' : 'ANSWERS', style: AppText.label(11, color: Palette.yellow)),
+                    ])
+                  : Icon(selected ? Icons.mic_rounded : Icons.add_rounded,
+                      color: (canChoose(i) && tap != null) || selected ? Palette.yellow : Palette.muted, size: 30))
               : Stack(children: [
                   Positioned.fill(
                     child: Padding(
@@ -505,6 +572,13 @@ class TttBoard extends StatelessWidget {
                       ),
                     ),
                   ),
+                  // The other answers that would have counted.
+                  if (count != null && count > 1)
+                    Positioned(
+                      top: 0,
+                      left: 2,
+                      child: Text('+${count - 1}', style: AppText.label(12, color: Palette.onTeam(colour))),
+                    ),
                   // Theirs and up for stealing, or stolen and locked.
                   if (stealable.contains(i) || locked.contains(i))
                     Positioned(
