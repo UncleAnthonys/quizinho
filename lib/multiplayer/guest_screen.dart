@@ -16,6 +16,7 @@ import '../games/checkout_501/checkout_screen.dart' show CoLayout;
 import '../games/pointless/pointless_screen.dart' show PtLayout;
 import '../games/starting_xi/starting_xi_screen.dart' show XiLayout;
 import '../games/tic_tac_toe/tic_tac_toe_screen.dart' show TttLayout;
+import '../games/top10/top10_screen.dart' show Top10Layout;
 import '../games/career_path/career_path_screen.dart' show CareerTrail;
 import '../games/club_connections/club_connections_screen.dart' show ClubsCard;
 import '../ui/teaser/teaser_widgets.dart' show TeaserPrompt;
@@ -617,6 +618,20 @@ class _GuestGameState extends State<_GuestGame> with SingleTickerProviderStateMi
               typing: answerTyping.value && stage == 'answer',
               bottom: bottom,
               onTap: mine && choosing ? (i) => widget.room.answer(q, 'choice:$i') : null,
+            ),
+          ),
+        ]);
+      case 'top10':
+        return Column(children: [
+          scores,
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(16, 6, 16, 12),
+              child: Top10Layout(
+                data: board,
+                typing: answerTyping.value && stage == 'answer',
+                bottom: stage == 'wait' ? _status('${v['headline'] ?? ''}'.toUpperCase()) : clockAndBox(),
+              ),
             ),
           ),
         ]);

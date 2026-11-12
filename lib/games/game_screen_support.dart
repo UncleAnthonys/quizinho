@@ -36,6 +36,19 @@ mixin GameScreenSupport<W extends StatefulWidget> on State<W>, TickerProviderSta
   /// The room's phones for this round — none in solo play (one team).
   HostRoom? roomFor(Tournament t) => t.teamCount > 1 ? services.room : null;
 
+  /// Whose go it is in a turn game: round the team's players who've joined
+  /// on their own phone. Nobody joined: the team's go on this phone (null).
+  String? phoneTurnPlayer(Tournament t, int team) {
+    final room = roomFor(t);
+    final names = t.config.teams[team].players;
+    if (room == null || !names.any((n) => room.memberFor(team, n) != null)) return null;
+    for (var i = 0; i < names.length; i++) {
+      final n = t.nextTurnPlayer(team);
+      if (n != null && room.memberFor(team, n) != null) return n;
+    }
+    return null;
+  }
+
   /// Start calling [onTick] every frame with the time since the last frame.
   void startClock(void Function(Duration dt) onTick) {
     _ticker?.dispose();

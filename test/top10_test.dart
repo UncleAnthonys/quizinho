@@ -66,8 +66,25 @@ void main() {
     expect(c.score, 10);
   });
 
-  test('Top 10 is solo only', () {
-    expect(GameModeId.concreteGames, isNot(contains(GameModeId.top10)));
-    expect(GameModeId.top10.soloOnly, isTrue);
+  test('teams take turns: a point each, lives, ends when all are out', () {
+    final c = Top10Controller(list: _list, teamCount: 2, answerSeconds: 10);
+    expect(c.submit(p('p0')), Top10Answer.found);
+    expect(c.currentTeam, 1, reason: 'the turn moves on after a right answer');
+    c.submit(p('nope'));
+    expect(c.livesLeft, [3, 2]);
+    expect(c.currentTeam, 0);
+    c.advance(const Duration(seconds: 11)); // too slow
+    expect(c.livesLeft, [2, 2]);
+    for (var i = 0; i < 4; i++) {
+      c.pass();
+    }
+    expect(c.finished, isTrue);
+    expect(c.result().points, {0: 1, 1: 0});
+    expect(c.result().solo, isNull);
+  });
+
+  test('Top 10 is on the party wheel too, men only', () {
+    expect(GameModeId.concreteGames, contains(GameModeId.top10));
+    expect(GameModeId.top10.hasWomensGame, isFalse);
   });
 }

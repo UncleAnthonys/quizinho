@@ -102,12 +102,12 @@ enum GameModeId {
     title: 'Top 10',
     tagline: 'Name as many of the ten as you can',
     playable: true,
-    soloOnly: true,
     rules: [
-      'A Top 10 from the record books: all-time scorers, most caps, most appearances.',
-      'Name as many of the ten as you can. Each one is worth 10.',
-      'A name that isn’t on the list costs a life. Three gone and the rest come out.',
+      'A Top 10 from the record books. Take turns to name one of the ten.',
+      'Correct: 1 point. Wrong, too slow or a pass costs a life (3 each).',
+      'It ends when all ten are found or every team is out of lives.',
     ],
+    whoPlays: 'Teams take turns.',
   );
 
   const GameModeId({
