@@ -136,7 +136,7 @@ class _TicTacToeScreenState extends State<TicTacToeScreen>
   void _onChange(TicTacToeController c) {
     if (c.turnSerial != _turnFor) {
       _turnFor = c.turnSerial;
-      _turnPlayer = _t.nextTurnPlayer(c.currentTeam);
+      _turnPlayer = _phonePlayer(c.currentTeam);
     }
     _syncPhones(c);
     handleEvent(c.eventSerial, c.lastEvent);
@@ -150,6 +150,19 @@ class _TicTacToeScreenState extends State<TicTacToeScreen>
       _lastSecond = -1;
     }
     if (mounted) setState(() {});
+  }
+
+  /// Whose go it is: round the team's players who've joined on their own
+  /// phone. Nobody joined: it's the team's go on this phone, no name.
+  String? _phonePlayer(int team) {
+    final room = roomFor(_t);
+    final names = _t.config.teams[team].players;
+    if (room == null || !names.any((n) => room.memberFor(team, n) != null)) return null;
+    for (var i = 0; i < names.length; i++) {
+      final n = _t.nextTurnPlayer(team);
+      if (n != null && room.memberFor(team, n) != null) return n;
+    }
+    return null;
   }
 
   void _submit(TicTacToeController c, Player p) {

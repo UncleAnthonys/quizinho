@@ -47,10 +47,10 @@ enum GameModeId {
     playable: true,
     rules: [
       'Three clubs across, three down. Pick a square, then name a player who played for both clubs.',
-      'Right: the square is yours. Wrong, or too slow to pick or answer: your turn’s over.',
-      'Three in a row wins it: 3 bonus points on top of 1 a square. No line? Most squares wins. A footballer can only be used once.',
+      'Right: 1 point and the square is yours. Wrong, or too slow: your turn’s over.',
+      'Get three in a line to win the game, plus 3 bonus points. No line? Most squares wins. Each footballer can only be used once.',
     ],
-    whoPlays: 'Teams take turns, a different player each go - the named player picks the square and answers.',
+    whoPlays: 'Teams take turns. Joined on your own phones? Each go moves to the next phone in the team.',
   ),
   biddingWar(
     title: 'Bidding War',
