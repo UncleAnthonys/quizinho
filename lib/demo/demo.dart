@@ -18,8 +18,6 @@ import '../games/buzz_game_view.dart';
 import '../games/buzz_race_controller.dart';
 import '../games/career_path/career_path_controller.dart';
 import '../ui/match_flow.dart';
-import '../ui/screens/free_kick_screen.dart';
-import '../ui/screens/round_intro_screen.dart';
 import '../ui/screens/round_summary_screen.dart';
 import '../ui/widgets/buzzer_pad.dart';
 import '../ui/widgets/common.dart';
@@ -111,22 +109,29 @@ class DemoPilot {
         TeamSetup(name: names.$1, colorIndex: 0),
         TeamSetup(name: names.$2, colorIndex: 1),
       ],
-      length: MatchLength.short,
       difficulty: Difficulty.easy,
       // One career per video (it takes a while to unfold); two club pairs.
       questionsPerRound: game == GameModeId.careerPath ? 1 : 2,
       careerRevealSeconds: 4,
       answerSeconds: 12,
     );
-    final t = Tournament(config, random: Random(_seed))..scriptedSpins.add(game);
+    final t = Tournament(config, random: Random(_seed));
     _log('ready', {'seed': _seed, 'game': game.name, 'teams': [names.$1, names.$2], 'slow': _slow});
-    unawaited(_run(context, t));
+    headline.value = _hook(game);
+    caption.value = '';
+    unawaited(_run(context, t, game));
   }
 
-  Future<void> _run(BuildContext context, Tournament t) async {
+  Future<void> _run(BuildContext context, Tournament t, GameModeId game) async {
     // Gives the recorder time to start before anything moves.
     await _wait(3000);
     if (!context.mounted) return;
+    // Straight into the question: no free kick, no rules screen. The video
+    // starts the moment the question is up.
+    MatchFlow.toGame(context, t, game, 1);
+    while (_live<BuzzGameView>() == null) {
+      await _wait(20);
+    }
     _log('go', {'t': _ms});
     final began = _now();
     var frames = 0, slow = 0;
@@ -139,8 +144,6 @@ class DemoPilot {
           'slowFrames': slow,
           'frames': frames,
         };
-    caption.value = 'Kick it to pick the game';
-    MatchFlow.toWheel(context, t);
     final end = _now().add(const Duration(minutes: 3));
     while (!_done && _now().isBefore(end)) {
       await _wait(120);
@@ -162,7 +165,6 @@ class DemoPilot {
   /// When each button (by label) first became tappable, and which were tapped.
   final Map<String, DateTime> _seen = {};
   final Set<Element> _tapped = {};
-  Object? _scene;
 
   Future<void> _step() async {
     final summary = _live<RoundSummaryScreen>();
@@ -171,21 +173,8 @@ class DemoPilot {
     final view = _live<BuzzGameView>();
     if (view != null && await _playBuzz(view.widget as BuzzGameView)) return;
 
-    final kick = _live<FreeKickScreen>();
-    final intro = _live<RoundIntroScreen>();
-    final scene = kick ?? intro ?? view;
-    if (scene != _scene) {
-      _scene = scene;
-      _seen.clear();
-      if (intro != null) {
-        final mode = (intro.widget as RoundIntroScreen).mode;
-        headline.value = _hook(mode);
-        caption.value = '${mode.title} · 2 teams, 1 phone';
-      }
-    }
-    // Free kick: let the wall sit a moment, then shoot; then "Let's go".
-    // Intro: time to read it. Answer shown: time to take it in.
-    final dwell = kick != null ? 900 : (intro != null ? 2200 : 2400);
+    // The answer's up: a moment to take it in, then Next / Finish.
+    const dwell = 2200;
     for (final b in _all<BigButton>()) {
       final w = b.widget as BigButton;
       if (w.onPressed == null || _tapped.contains(b) || !_hittable(b)) continue;
