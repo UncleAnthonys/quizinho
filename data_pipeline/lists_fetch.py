@@ -62,6 +62,16 @@ ARTICLES = [
 ]
 
 
+def season(y: int) -> str:
+    return f"{y}\u2013{str(y + 1)[2:]}"
+
+
+# Finished seasons: their "Top scorers" tables make a Top 10 each.
+PL_SEASONS = [f"{season(y)} {'FA ' if y < 2007 else ''}Premier League" for y in range(1992, 2026)]
+UCL_SEASONS = [f"{season(y)} UEFA Champions League" for y in range(1992, 2026)]
+ARTICLES += PL_SEASONS + UCL_SEASONS
+
+
 def main() -> int:
     pages = wikitext(ARTICLES)
     linked = sorted({m.strip().replace("_", " ") for t in pages.values() for m in LINK.findall(t) if ":" not in m})
