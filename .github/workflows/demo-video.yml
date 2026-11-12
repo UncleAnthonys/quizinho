@@ -1,0 +1,81 @@
+# Records a daily 9:16 gameplay video for TikTok / Reels / Shorts: the web
+# build's ?demo=1 mode plays one round by itself, Chrome is filmed with
+# sound. The video, post caption and answers are attached to the run
+# (Actions → Daily demo video → the run → Artifacts), kept 30 days.
+name: Daily demo video
+
+on:
+  schedule:
+    - cron: "23 7 * * *" # every day, ~7:23 UTC
+  push:
+    branches: [demo-video] # TEMP: testing on the branch
+  workflow_dispatch:
+    inputs:
+      seed:
+        description: "Seed (blank = today's date). Changes teams, answers and which game."
+        required: false
+      game:
+        description: "Force a game (careerPath or clubConnections; blank = by seed)"
+        required: false
+
+permissions:
+  contents: read
+
+jobs:
+  record:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+      - name: Platform folders (if not committed yet)
+        run: bash scripts/bootstrap_platforms.sh
+      - run: flutter pub get
+      - name: Build web
+        run: bash scripts/ci_run.sh "Web build" flutter build web --release --base-href "/"
+
+      - name: Screen, sound and browser
+        run: |
+          sudo apt-get update -q
+          sudo apt-get install -y -q xvfb pulseaudio ffmpeg fonts-noto-color-emoji
+          pip install -q playwright
+          python3 -m playwright install --with-deps chromium
+
+      - name: Record
+        env:
+          SEED: ${{ inputs.seed }}
+          GAME: ${{ inputs.game }}
+        run: |
+          SEED="${SEED:-$(date -u +%Y%m%d)}"
+          echo "SEED=$SEED" >> "$GITHUB_ENV"
+          Xvfb :99 -screen 0 1080x1920x24 -nolisten tcp &
+          pulseaudio --start --exit-idle-time=-1
+          pactl load-module module-null-sink sink_name=qdemo
+          pactl set-default-sink qdemo
+          python3 -m http.server 8080 -d build/web >/dev/null 2>&1 &
+          sleep 2
+          URL="http://localhost:8080/?demo=1&seed=$SEED${GAME:+&game=$GAME}"
+          DISPLAY=:99 bash scripts/ci_run.sh "Record" python3 scripts/record_demo.py --url "$URL" --out out
+
+      - name: Summary
+        if: always()
+        run: |
+          {
+            echo "### Quizinho demo video ($SEED)"
+            echo '```'
+            cat out/caption.txt 2>/dev/null || echo "(no caption)"
+            echo '```'
+            echo '```json'
+            cat out/meta.json 2>/dev/null || true
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: quizinho-video-${{ env.SEED }}
+          path: out/
+          retention-days: 30

@@ -26,7 +26,10 @@ class AppSettings extends ChangeNotifier {
   bool get soundOn => _prefs.getBool('soundOn') ?? true;
   bool get commentaryOn => _prefs.getBool('commentaryOn') ?? true;
   bool get hapticsOn => _prefs.getBool('hapticsOn') ?? true;
-  bool get voiceOn => _prefs.getBool('voiceOn') ?? true;
+  bool get voiceOn => !forceVoiceOff && (_prefs.getBool('voiceOn') ?? true);
+
+  /// Turns voice answers off for this run without saving it (demo videos).
+  static bool forceVoiceOff = false;
 
   set soundOn(bool v) => _setBool('soundOn', v);
   set commentaryOn(bool v) => _setBool('commentaryOn', v);

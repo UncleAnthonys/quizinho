@@ -421,9 +421,14 @@ class Tournament extends ChangeNotifier {
     return segs.isEmpty ? GameModeId.concreteGames : segs;
   }
 
+  /// Where the next spins land, in order, before the wheel goes random again
+  /// (the demo video picks its game this way). Not saved.
+  final List<GameModeId> scriptedSpins = [];
+
   /// Picks where the wheel lands. Avoids the same game twice in a row when
   /// there is a choice, and never opens a match on the double-points wildcard.
   GameModeId spin() {
+    if (scriptedSpins.isNotEmpty) return _lastGame = scriptedSpins.removeAt(0);
     if (config.warmUp) return WarmUpCup.games[min(rounds.length, WarmUpCup.games.length - 1)];
     var segs = wheelSegments;
     if (rounds.isEmpty && segs.length > 1) segs = segs.where((m) => m != GameModeId.wildcard).toList();

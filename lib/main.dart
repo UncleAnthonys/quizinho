@@ -11,6 +11,7 @@ import 'core/purchases.dart';
 import 'core/sound_service.dart';
 import 'core/theme.dart';
 import 'core/voice_service.dart';
+import 'demo/demo.dart';
 import 'data/open_repository.dart';
 import 'multiplayer/guest_screen.dart';
 import 'multiplayer/room.dart' show normaliseRoomCode;
@@ -22,6 +23,7 @@ Future<void> main() async {
   if (!kIsWeb) await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 
   try {
+    if (demoMode) AppSettings.forceVoiceOff = true;
     final settings = await AppSettings.load();
     final repo = await openFootballRepository();
     final sound = SoundService(settings);
@@ -91,9 +93,11 @@ class _QuizinhoAppState extends State<QuizinhoApp> {
           title: 'Quizinho',
           debugShowCheckedModeBanner: false,
           theme: buildTheme(),
-          builder: (context, child) => _PhoneFrame(child: child!),
+          builder: (context, child) => demoMode ? DemoFrame(child: child!) : _PhoneFrame(child: child!),
           // A phone that scanned the QR code (…?join=ABCD) goes straight to joining.
-          home: _joinCode == null ? const HomeScreen() : JoinScreen(code: _joinCode),
+          home: demoMode
+              ? const DemoStart()
+              : (_joinCode == null ? const HomeScreen() : JoinScreen(code: _joinCode)),
         ),
       );
 }
