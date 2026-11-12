@@ -82,7 +82,8 @@ void main() {
       expect(c.submit(player('p4')), TttSubmit.claimed);
       expect(c.owner[4], 0);
       expect(c.currentTeam, 1);
-      expect(c.canChoose(4), isFalse);
+      expect(c.canChoose(4), isTrue, reason: 'theirs now, so only as a steal');
+      expect(c.canSteal(4), isTrue);
     });
 
     test('wrong answer or timeout ends the turn without claiming', () {
@@ -94,6 +95,37 @@ void main() {
       c.advance(secs(10.1));
       expect(c.owner[0], isNull);
       expect(c.currentTeam, 0);
+    });
+
+    test('one steal a game: a different player takes their square, which then locks', () {
+      final g = TicTacToeGrid(
+        rows: grid().rows,
+        cols: grid().cols,
+        answers: [for (var i = 0; i < 9; i++) {'p$i', 'q$i'}],
+      );
+      final c = TicTacToeController(grid: g, teamCount: 2)..choose(0);
+      c.submit(player('p0')); // team 0 owns square 0
+      expect(c.canSteal(0), isTrue);
+      c.choose(0);
+      expect(c.stealing, isTrue);
+      expect(c.submit(player('p0')), TttSubmit.alreadyUsed);
+      expect(c.submit(player('q0')), TttSubmit.claimed);
+      expect(c.owner[0], 1);
+      expect(c.stealsLeft, [1, 0]);
+      expect(c.canSteal(0), isFalse, reason: 'locked once stolen');
+      c.choose(4);
+      c.submit(player('p4'));
+      expect(c.canSteal(4), isFalse, reason: 'team 1 has used its steal');
+    });
+
+    test('a missed steal is used up; solo has none', () {
+      final c = make()..choose(0);
+      c.submit(player('p0'));
+      c.choose(0);
+      c.submit(player('p8'));
+      expect(c.owner[0], 0);
+      expect(c.stealsLeft[1], 0);
+      expect(TicTacToeController(grid: grid(), teamCount: 1).stealsLeft, [0]);
     });
 
     test('taking too long to pick a square passes the turn', () {

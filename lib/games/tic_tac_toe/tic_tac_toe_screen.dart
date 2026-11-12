@@ -118,7 +118,7 @@ class _TicTacToeScreenState extends State<TicTacToeScreen>
       stage: answering ? TurnStage.answer : TurnStage.choose,
       title: 'TIC-TAC-TOE',
       headline: answering && sq != null
-          ? '${c.grid.rows[sq ~/ 3].name.toUpperCase()}  +  ${c.grid.cols[sq % 3].name.toUpperCase()}'
+          ? '${c.stealing ? 'STEAL: ' : ''}${c.grid.rows[sq ~/ 3].name.toUpperCase()}  +  ${c.grid.cols[sq % 3].name.toUpperCase()}'
           : '',
       game: 'ttt',
       board: _view(c),
@@ -262,6 +262,11 @@ class _TicTacToeScreenState extends State<TicTacToeScreen>
           textAlign: TextAlign.center,
           style: TextStyle(color: Palette.muted, height: 1.4),
         ),
+        if (List.generate(9, c.canSteal).contains(true)) ...[
+          const SizedBox(height: 8),
+          Text('1 STEAL LEFT - TAP ONE OF THEIR SQUARES AND NAME A DIFFERENT PLAYER',
+              textAlign: TextAlign.center, style: AppText.label(13, color: Palette.yellow)),
+        ],
         if (c.dryTurns > 0) ...[
           const SizedBox(height: 8),
           Text(
@@ -287,6 +292,9 @@ class _TicTacToeScreenState extends State<TicTacToeScreen>
       final sq = c.selected!;
       final colour = _t.config.teams[c.currentTeam].colorIndex;
       return Column(children: [
+        if (c.stealing)
+          Text('STEAL - NAME A DIFFERENT PLAYER (NOT ${(c.claimedWith[sq] ?? '').toUpperCase()})',
+              textAlign: TextAlign.center, style: AppText.label(13, color: Palette.yellow)),
         Text(
           '${c.grid.rows[sq ~/ 3].name.toUpperCase()}  +  ${c.grid.cols[sq % 3].name.toUpperCase()}',
           textAlign: TextAlign.center,
@@ -413,6 +421,9 @@ class TttBoard extends StatelessWidget {
         if (c.winningLine != null) 'line': c.winningLine,
         'colours': [for (final team in t.config.teams) team.colorIndex],
         'choosing': c.phase == TttPhase.choosing,
+        'stealable': [for (var i = 0; i < 9; i++) if (c.canSteal(i)) i],
+        'locked': [for (var i = 0; i < 9; i++) if (c.locked[i]) i],
+        if (c.stealing) 'stealing': true,
         'phase': c.phase.name,
         'team': c.currentTeam,
         if (c.winner != null) 'winner': t.teamName(c.winner!),
@@ -430,7 +441,9 @@ class TttBoard extends StatelessWidget {
     final line = [for (final i in _list<num>(data['line'])) i?.toInt()];
     final selectedSq = (data['selected'] as num?)?.toInt();
     final choosing = data['choosing'] == true;
-    bool canChoose(int i) => choosing && i < owner.length && owner[i] == null;
+    final stealable = {for (final i in _list<num>(data['stealable'])) i?.toInt()};
+    final locked = {for (final i in _list<num>(data['locked'])) i?.toInt()};
+    bool canChoose(int i) => choosing && i < owner.length && (owner[i] == null || stealable.contains(i));
 
     Widget clubLabel(String name) => Container(
           alignment: Alignment.center,
@@ -475,13 +488,25 @@ class TttBoard extends StatelessWidget {
           child: colour == null
               ? Icon(selected ? Icons.mic_rounded : Icons.add_rounded,
                   color: (canChoose(i) && tap != null) || selected ? Palette.yellow : Palette.muted, size: 30)
-              : Padding(
-                  padding: const EdgeInsets.all(6),
-                  child: FittedBox(
-                    fit: BoxFit.scaleDown,
-                    child: _ClaimName(i < claimed.length ? claimed[i] ?? '' : '', color: Palette.onTeam(colour)),
+              : Stack(children: [
+                  Positioned.fill(
+                    child: Padding(
+                      padding: const EdgeInsets.all(6),
+                      child: FittedBox(
+                        fit: BoxFit.scaleDown,
+                        child: _ClaimName(i < claimed.length ? claimed[i] ?? '' : '', color: Palette.onTeam(colour)),
+                      ),
+                    ),
                   ),
-                ),
+                  // Theirs and up for stealing, or stolen and locked.
+                  if (stealable.contains(i) || locked.contains(i))
+                    Positioned(
+                      top: 0,
+                      right: 0,
+                      child: Icon(locked.contains(i) ? Icons.lock_rounded : Icons.swap_vert_rounded,
+                          size: 18, color: Palette.onTeam(colour)),
+                    ),
+                ]),
         ),
       );
     }

@@ -47,7 +47,7 @@ enum GameModeId {
     playable: true,
     rules: [
       'Clubs along the top and down the left. Pick a square, then name a player who played for both clubs.',
-      'Right: the square is yours (1 point). Wrong, or too slow: your turn’s over.',
+      'Right: the square is yours (1 point). Wrong, or too slow: your turn’s over. Once a game, steal one of theirs by naming a different player.',
       'First to three in a row - across, down or diagonally - wins the game and 3 bonus points. Each footballer can only be used once.',
     ],
     whoPlays: 'Teams take turns. Joined on your own phones? Each go moves to the next phone in the team.',

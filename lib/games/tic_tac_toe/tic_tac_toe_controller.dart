@@ -148,6 +148,7 @@ class TicTacToeController extends ChangeNotifier {
     int startTeam = 0,
     this.answerSeconds = 20,
     this.chooseSeconds = 20,
+    this.steals = 1,
     this.maxTurns = 18,
     this.stallLaps = 2,
   }) : currentTeam = startTeam % teamCount {
@@ -162,6 +163,22 @@ class TicTacToeController extends ChangeNotifier {
   /// passes. Solo has no clock here.
   final int chooseSeconds;
   bool get _chooseClock => !_solo && chooseSeconds > 0;
+
+  /// Steals each team gets a game: take a square the other side owns by
+  /// naming a different player for it. A stolen square is locked. Not solo.
+  final int steals;
+  late final List<int> stealsLeft = List<int>.filled(teamCount, _solo ? 0 : steals);
+  final List<bool> locked = List<bool>.filled(9, false);
+
+  /// This turn's square is a steal.
+  bool stealing = false;
+
+  bool canSteal(int square) =>
+      phase == TttPhase.choosing &&
+      owner[square] != null &&
+      owner[square] != currentTeam &&
+      !locked[square] &&
+      stealsLeft[currentTeam] > 0;
 
   /// Stops a stalemate dragging on: after this many turns, most squares wins.
   final int maxTurns;
@@ -198,7 +215,7 @@ class TicTacToeController extends ChangeNotifier {
   GameEvent? lastEvent;
   int eventSerial = 0;
 
-  bool canChoose(int square) => phase == TttPhase.choosing && owner[square] == null;
+  bool canChoose(int square) => phase == TttPhase.choosing && (owner[square] == null || canSteal(square));
   /// The clock running now: picking a square, or naming a player.
   int get phaseSeconds => phase == TttPhase.answering ? answerSeconds : (_chooseClock ? chooseSeconds : 0);
   bool get clockRunning => phase == TttPhase.answering || (phase == TttPhase.choosing && _chooseClock);
@@ -207,6 +224,7 @@ class TicTacToeController extends ChangeNotifier {
 
   void choose(int square) {
     if (!canChoose(square)) return;
+    stealing = owner[square] != null;
     selected = square;
     phase = TttPhase.answering;
     secondsLeft = answerSeconds.toDouble();
@@ -282,6 +300,10 @@ class TicTacToeController extends ChangeNotifier {
 
   void _claim(int sq, String name) {
     dryTurns = 0;
+    if (stealing) {
+      stealsLeft[currentTeam]--;
+      locked[sq] = true;
+    }
     owner[sq] = currentTeam;
     claimedWith[sq] = name;
     _emit(GameEvent.correct);
@@ -307,6 +329,8 @@ class TicTacToeController extends ChangeNotifier {
   }
 
   void _miss({bool timeout = false}) {
+    // A steal that misses is used up.
+    if (stealing) stealsLeft[currentTeam]--;
     _emit(timeout ? GameEvent.timeUp : GameEvent.wrong);
     dryTurns++;
     misses++;
@@ -316,6 +340,7 @@ class TicTacToeController extends ChangeNotifier {
   void _nextTurn() {
     turns++;
     selected = null;
+    stealing = false;
     if (_solo ? misses >= soloLives : (turns >= maxTurns || dryTurns >= stallLaps * teamCount)) {
       _finish();
       return;
@@ -332,6 +357,7 @@ class TicTacToeController extends ChangeNotifier {
   void _finish() {
     phase = TttPhase.finished;
     selected = null;
+    stealing = false;
     _emit(GameEvent.complete);
     notifyListeners();
   }
