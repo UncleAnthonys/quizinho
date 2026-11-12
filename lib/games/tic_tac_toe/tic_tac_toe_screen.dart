@@ -270,14 +270,8 @@ class _TicTacToeScreenState extends State<TicTacToeScreen>
           TimerBar(fraction: c.fractionLeft, seconds: c.secondsLeft),
           const SizedBox(height: 8),
         ],
-        const Text(
-          'Tap an empty square, then name a player who fits both.\n'
-          'Once you pick a square you\'re locked in. A footballer can only be used once.',
-          textAlign: TextAlign.center,
-          style: TextStyle(color: Palette.muted, height: 1.4),
-        ),
+        // (How to play is in the rules; mid-game only what matters now.)
         if (List.generate(9, c.canSteal).contains(true)) ...[
-          const SizedBox(height: 8),
           Text('1 STEAL LEFT - TAP ONE OF THEIR SQUARES AND NAME A DIFFERENT PLAYER',
               textAlign: TextAlign.center, style: AppText.label(13, color: Palette.yellow)),
         ],
@@ -457,7 +451,9 @@ class TttLayout extends StatelessWidget {
         ]),
       ),
       Expanded(
-        child: ListView(padding: const EdgeInsets.fromLTRB(12, 4, 12, 16), children: [
+        // Keyed on typing: the keyboard opening or closing starts the page at
+        // the top, so the heading never sits half under the title.
+        child: ListView(key: ValueKey(typing), padding: const EdgeInsets.fromLTRB(12, 4, 12, 16), children: [
           typing ? const SizedBox.shrink() : banner,
           typing ? const SizedBox.shrink() : const SizedBox(height: 8),
           typing ? const SizedBox.shrink() : TttBoard(data: data, onTap: onTap, onReveal: onReveal),

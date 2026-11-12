@@ -591,13 +591,6 @@ class _GuestGameState extends State<_GuestGame> with SingleTickerProviderStateMi
             Text('YOUR GO - TAP A SQUARE', textAlign: TextAlign.center, style: AppText.headline(24, color: Palette.yellow)),
             const SizedBox(height: 6),
             if (v['left'] != null) ...[clock(), const SizedBox(height: 8)],
-            const Text(
-              'Tap an empty square, then name a player who fits both.\n'
-              'Once you pick a square you\'re locked in. A footballer can only be used once.',
-              textAlign: TextAlign.center,
-              style: TextStyle(color: Palette.muted, height: 1.4),
-            ),
-            const SizedBox(height: 10),
             OutlinedButton.icon(
               onPressed: () => widget.room.pass(q),
               icon: const Icon(Icons.skip_next_rounded),
