@@ -1,8 +1,17 @@
 {
-"_note": "Top 10 lists from Wikipedia record tables: 78 lists, 20 dropped. Built 2026-11-12.",
+"_note": "Top 10 lists from Wikipedia record tables: 109 lists, 29 dropped. Built 2026-11-12.",
 "dropped": [
 "mufc-clean-sheets: row 6 names nobody we know: Alf Steward",
 "celtic-sales: row 3 names nobody we know: Jota (footballer, born March 1999)",
+"ballon-dor-1990: row 1 names nobody we know: Lothar Matthäus",
+"ballon-dor-1991: row 4 names nobody we know: Lothar Matthäus",
+"ballon-dor-1999: row 10 names nobody we know: Lothar Matthäus",
+"ballon-dor-2010: only 3 rows",
+"ballon-dor-2011: only 3 rows",
+"ballon-dor-2012: only 3 rows",
+"ballon-dor-2013: only 3 rows",
+"ballon-dor-2014: only 3 rows",
+"ballon-dor-2015: only 3 rows",
 "pl-1992: row 3 names nobody we know: Dean Holdsworth",
 "pl-1993: row 7 names nobody we know: Mark Bright",
 "pl-1995: row 6 names nobody we know: Chris Armstrong (footballer, born 1971)",
@@ -23,6 +32,74 @@
 "ucl-2025: only 9 rows"
 ],
 "lists": [
+{
+"id": "pl-season-goals",
+"q": "Most Premier League goals in a season (best season each)",
+"d": 2,
+"src": "Premier League season articles",
+"e": [
+[
+1,
+"erling-haaland",
+"Erling Haaland",
+"36 (2022–23)"
+],
+[
+2,
+"alan-shearer",
+"Alan Shearer",
+"34 (1994–95)"
+],
+[
+2,
+"andy-cole",
+"Andy Cole",
+"34 (1993–94)"
+],
+[
+4,
+"mohamed-salah",
+"Mohamed Salah",
+"32 (2017–18)"
+],
+[
+5,
+"cristiano-ronaldo",
+"Cristiano Ronaldo",
+"31 (2007–08)"
+],
+[
+5,
+"luis-suarez",
+"Luis Suárez",
+"31 (2013–14)"
+],
+[
+7,
+"kevin-phillips",
+"Kevin Phillips",
+"30 (1999–00)"
+],
+[
+7,
+"thierry-henry",
+"Thierry Henry",
+"30 (2003–04)"
+],
+[
+7,
+"robin-van-persie",
+"Robin van Persie",
+"30 (2011–12)"
+],
+[
+7,
+"harry-kane",
+"Harry Kane",
+"30 (2017–18)"
+]
+]
+},
 {
 "id": "pl-goals",
 "q": "Premier League all-time top scorers",
@@ -604,7 +681,7 @@
 3,
 "luka-modric",
 "Luka Modrić",
-"206 caps"
+"207 caps"
 ],
 [
 4,
@@ -1824,6 +1901,1866 @@
 "klaus-allofs",
 "Klaus Allofs",
 "177 goals"
+]
+]
+},
+{
+"id": "pl-hat-tricks",
+"q": "Most Premier League hat-tricks",
+"d": 2,
+"asof": "Nov 2026",
+"src": "List of Premier League hat-tricks",
+"e": [
+[
+1,
+"sergio-aguero",
+"Sergio Agüero",
+"12 hat-tricks"
+],
+[
+2,
+"alan-shearer",
+"Alan Shearer",
+"11 hat-tricks"
+],
+[
+3,
+"robbie-fowler",
+"Robbie Fowler",
+"9 hat-tricks"
+],
+[
+4,
+"erling-haaland",
+"Erling Haaland",
+"8 hat-tricks"
+],
+[
+4,
+"thierry-henry",
+"Thierry Henry",
+"8 hat-tricks"
+],
+[
+4,
+"harry-kane",
+"Harry Kane",
+"8 hat-tricks"
+],
+[
+4,
+"michael-owen",
+"Michael Owen",
+"8 hat-tricks"
+],
+[
+8,
+"wayne-rooney",
+"Wayne Rooney",
+"7 hat-tricks"
+],
+[
+9,
+"luis-suarez",
+"Luis Suárez",
+"6 hat-tricks"
+],
+[
+10,
+"dimitar-berbatov",
+"Dimitar Berbatov",
+"5 hat-tricks",
+[
+[
+"andy-cole",
+"Andy Cole"
+],
+[
+"ruud-van-nistelrooy",
+"Ruud van Nistelrooy"
+],
+[
+"robin-van-persie",
+"Robin van Persie"
+],
+[
+"raheem-sterling",
+"Raheem Sterling"
+],
+[
+"ian-wright",
+"Ian Wright"
+]
+]
+]
+]
+},
+{
+"id": "pl-free-kicks",
+"q": "Most Premier League free-kick goals",
+"d": 2,
+"asof": "Nov 2026",
+"src": "Premier League records and statistics",
+"e": [
+[
+1,
+"david-beckham",
+"David Beckham",
+"18 free kicks"
+],
+[
+2,
+"james-ward-prowse",
+"James Ward-Prowse",
+"17 free kicks"
+],
+[
+3,
+"gianfranco-zola",
+"Gianfranco Zola",
+"12 free kicks"
+],
+[
+3,
+"cristiano-ronaldo",
+"Cristiano Ronaldo",
+"12 free kicks"
+],
+[
+3,
+"thierry-henry",
+"Thierry Henry",
+"12 free kicks"
+],
+[
+6,
+"laurent-robert",
+"Laurent Robert",
+"11 free kicks"
+],
+[
+6,
+"sebastian-larsson",
+"Sebastian Larsson",
+"11 free kicks"
+],
+[
+8,
+"ian-harte",
+"Ian Harte",
+"10 free kicks"
+],
+[
+8,
+"morten-gamst-pedersen",
+"Morten Gamst Pedersen",
+"10 free kicks"
+],
+[
+10,
+"james-maddison",
+"James Maddison",
+"9 free kicks",
+[
+[
+"jamie-redknapp",
+"Jamie Redknapp"
+],
+[
+"nolberto-solano",
+"Nolberto Solano"
+],
+[
+"frank-lampard",
+"Frank Lampard"
+]
+]
+]
+]
+},
+{
+"id": "wc-goals",
+"q": "World Cup all-time top scorers",
+"d": 2,
+"asof": "Nov 2026",
+"src": "List of FIFA World Cup top goalscorers",
+"e": [
+[
+1,
+"kylian-mbappe",
+"Kylian Mbappé",
+"22 goals"
+],
+[
+2,
+"lionel-messi",
+"Lionel Messi",
+"21 goals"
+],
+[
+3,
+"miroslav-klose",
+"Miroslav Klose",
+"16 goals"
+],
+[
+4,
+"ronaldo",
+"Ronaldo",
+"15 goals"
+],
+[
+5,
+"gerd-muller",
+"Gerd Müller",
+"14 goals"
+],
+[
+5,
+"harry-kane",
+"Harry Kane",
+"14 goals"
+],
+[
+7,
+"just-fontaine",
+"Just Fontaine",
+"13 goals"
+],
+[
+8,
+"pele",
+"Pelé",
+"12 goals"
+],
+[
+9,
+"sandor-kocsis",
+"Sándor Kocsis",
+"11 goals"
+],
+[
+9,
+"jurgen-klinsmann",
+"Jürgen Klinsmann",
+"11 goals",
+[
+[
+"cristiano-ronaldo",
+"Cristiano Ronaldo"
+]
+]
+]
+]
+},
+{
+"id": "eng-captains",
+"q": "Most games as England captain",
+"d": 2,
+"asof": "Nov 2026",
+"src": "List of England national football team captains",
+"e": [
+[
+1,
+"harry-kane",
+"Harry Kane",
+"99 as captain"
+],
+[
+2,
+"billy-wright",
+"Billy Wright",
+"90 as captain"
+],
+[
+2,
+"bobby-moore",
+"Bobby Moore",
+"90 as captain"
+],
+[
+4,
+"bryan-robson",
+"Bryan Robson",
+"65 as captain"
+],
+[
+5,
+"david-beckham",
+"David Beckham",
+"59 as captain"
+],
+[
+6,
+"steven-gerrard",
+"Steven Gerrard",
+"38 as captain"
+],
+[
+7,
+"alan-shearer",
+"Alan Shearer",
+"34 as captain"
+],
+[
+7,
+"john-terry",
+"John Terry",
+"34 as captain"
+],
+[
+9,
+"kevin-keegan",
+"Kevin Keegan",
+"31 as captain"
+],
+[
+10,
+"emlyn-hughes",
+"Emlyn Hughes",
+"23 as captain",
+[
+[
+"wayne-rooney",
+"Wayne Rooney"
+]
+]
+]
+]
+},
+{
+"id": "ballon-dor-1992",
+"q": "1992 Ballon d'Or: the top 10",
+"d": 3,
+"src": "1992 Ballon d'Or",
+"e": [
+[
+1,
+"marco-van-basten",
+"Marco van Basten"
+],
+[
+2,
+"hristo-stoichkov",
+"Hristo Stoichkov"
+],
+[
+3,
+"dennis-bergkamp",
+"Dennis Bergkamp"
+],
+[
+4,
+"thomas-hassler",
+"Thomas Häßler"
+],
+[
+5,
+"peter-schmeichel",
+"Peter Schmeichel"
+],
+[
+6,
+"brian-laudrup",
+"Brian Laudrup"
+],
+[
+7,
+"michael-laudrup",
+"Michael Laudrup"
+],
+[
+8,
+"ronald-koeman",
+"Ronald Koeman"
+],
+[
+9,
+"stephane-chapuisat",
+"Stéphane Chapuisat"
+],
+[
+10,
+"frank-rijkaard",
+"Frank Rijkaard",
+"",
+[
+[
+"enzo-scifo",
+"Enzo Scifo"
+]
+]
+]
+]
+},
+{
+"id": "ballon-dor-1993",
+"q": "1993 Ballon d'Or: the top 10",
+"d": 3,
+"src": "1993 Ballon d'Or",
+"e": [
+[
+1,
+"roberto-baggio",
+"Roberto Baggio"
+],
+[
+2,
+"dennis-bergkamp",
+"Dennis Bergkamp"
+],
+[
+3,
+"eric-cantona",
+"Eric Cantona"
+],
+[
+4,
+"alen-boksic",
+"Alen Bokšić"
+],
+[
+5,
+"michael-laudrup",
+"Michael Laudrup"
+],
+[
+6,
+"franco-baresi",
+"Franco Baresi"
+],
+[
+7,
+"paolo-maldini",
+"Paolo Maldini"
+],
+[
+8,
+"emil-kostadinov",
+"Emil Kostadinov"
+],
+[
+9,
+"stephane-chapuisat",
+"Stéphane Chapuisat"
+],
+[
+9,
+"ryan-giggs",
+"Ryan Giggs"
+]
+]
+},
+{
+"id": "ballon-dor-1994",
+"q": "1994 Ballon d'Or: the top 10",
+"d": 3,
+"src": "1994 Ballon d'Or",
+"e": [
+[
+1,
+"hristo-stoichkov",
+"Hristo Stoichkov"
+],
+[
+2,
+"roberto-baggio",
+"Roberto Baggio"
+],
+[
+3,
+"paolo-maldini",
+"Paolo Maldini"
+],
+[
+4,
+"gheorghe-hagi",
+"Gheorghe Hagi"
+],
+[
+4,
+"tomas-brolin",
+"Tomas Brolin"
+],
+[
+6,
+"jurgen-klinsmann",
+"Jürgen Klinsmann"
+],
+[
+7,
+"thomas-ravelli",
+"Thomas Ravelli"
+],
+[
+8,
+"jari-litmanen",
+"Jari Litmanen"
+],
+[
+9,
+"marcel-desailly",
+"Marcel Desailly"
+],
+[
+9,
+"dejan-savicevic",
+"Dejan Savićević"
+]
+]
+},
+{
+"id": "ballon-dor-1995",
+"q": "1995 Ballon d'Or: the top 10",
+"d": 3,
+"src": "1995 Ballon d'Or",
+"e": [
+[
+1,
+"george-weah",
+"George Weah"
+],
+[
+2,
+"jurgen-klinsmann",
+"Jürgen Klinsmann"
+],
+[
+3,
+"jari-litmanen",
+"Jari Litmanen"
+],
+[
+4,
+"alessandro-del-piero",
+"Alessandro Del Piero"
+],
+[
+5,
+"patrick-kluivert",
+"Patrick Kluivert"
+],
+[
+6,
+"gianfranco-zola",
+"Gianfranco Zola"
+],
+[
+7,
+"paolo-maldini",
+"Paolo Maldini"
+],
+[
+8,
+"marc-overmars",
+"Marc Overmars"
+],
+[
+9,
+"matthias-sammer",
+"Matthias Sammer"
+],
+[
+10,
+"michael-laudrup",
+"Michael Laudrup"
+]
+]
+},
+{
+"id": "ballon-dor-1996",
+"q": "1996 Ballon d'Or: the top 10",
+"d": 3,
+"src": "1996 Ballon d'Or",
+"e": [
+[
+1,
+"matthias-sammer",
+"Matthias Sammer"
+],
+[
+2,
+"ronaldo",
+"Ronaldo"
+],
+[
+3,
+"alan-shearer",
+"Alan Shearer"
+],
+[
+4,
+"alessandro-del-piero",
+"Alessandro Del Piero"
+],
+[
+5,
+"jurgen-klinsmann",
+"Jürgen Klinsmann"
+],
+[
+6,
+"davor-suker",
+"Davor Šuker"
+],
+[
+7,
+"eric-cantona",
+"Eric Cantona"
+],
+[
+8,
+"marcel-desailly",
+"Marcel Desailly"
+],
+[
+9,
+"youri-djorkaeff",
+"Youri Djorkaeff"
+],
+[
+10,
+"karel-poborsky",
+"Karel Poborský"
+]
+]
+},
+{
+"id": "ballon-dor-1997",
+"q": "1997 Ballon d'Or: the top 10",
+"d": 3,
+"src": "1997 Ballon d'Or",
+"e": [
+[
+1,
+"ronaldo",
+"Ronaldo"
+],
+[
+2,
+"predrag-mijatovic",
+"Predrag Mijatović"
+],
+[
+3,
+"zinedine-zidane",
+"Zinedine Zidane"
+],
+[
+4,
+"dennis-bergkamp",
+"Dennis Bergkamp"
+],
+[
+5,
+"roberto-carlos",
+"Roberto Carlos"
+],
+[
+6,
+"andreas-moller",
+"Andreas Möller"
+],
+[
+7,
+"raul",
+"Raúl"
+],
+[
+8,
+"peter-schmeichel",
+"Peter Schmeichel"
+],
+[
+9,
+"jurgen-kohler",
+"Jürgen Kohler"
+],
+[
+10,
+"matthias-sammer",
+"Matthias Sammer",
+"",
+[
+[
+"christian-vieri",
+"Christian Vieri"
+]
+]
+]
+]
+},
+{
+"id": "ballon-dor-1998",
+"q": "1998 Ballon d'Or: the top 10",
+"d": 3,
+"src": "1998 Ballon d'Or",
+"e": [
+[
+1,
+"zinedine-zidane",
+"Zinedine Zidane"
+],
+[
+2,
+"davor-suker",
+"Davor Šuker"
+],
+[
+3,
+"ronaldo",
+"Ronaldo"
+],
+[
+4,
+"michael-owen",
+"Michael Owen"
+],
+[
+5,
+"rivaldo",
+"Rivaldo"
+],
+[
+6,
+"gabriel-batistuta",
+"Gabriel Batistuta"
+],
+[
+7,
+"lilian-thuram",
+"Lilian Thuram"
+],
+[
+8,
+"edgar-davids",
+"Edgar Davids"
+],
+[
+8,
+"dennis-bergkamp",
+"Dennis Bergkamp"
+],
+[
+10,
+"marcel-desailly",
+"Marcel Desailly"
+]
+]
+},
+{
+"id": "ballon-dor-2000",
+"q": "2000 Ballon d'Or: the top 10",
+"d": 2,
+"src": "2000 Ballon d'Or",
+"e": [
+[
+1,
+"luis-figo",
+"Luís Figo"
+],
+[
+2,
+"zinedine-zidane",
+"Zinedine Zidane"
+],
+[
+3,
+"andriy-shevchenko",
+"Andriy Shevchenko"
+],
+[
+4,
+"thierry-henry",
+"Thierry Henry"
+],
+[
+5,
+"alessandro-nesta",
+"Alessandro Nesta"
+],
+[
+5,
+"rivaldo",
+"Rivaldo"
+],
+[
+7,
+"gabriel-batistuta",
+"Gabriel Batistuta"
+],
+[
+8,
+"gaizka-mendieta",
+"Gaizka Mendieta"
+],
+[
+9,
+"raul",
+"Raúl"
+],
+[
+10,
+"paolo-maldini",
+"Paolo Maldini",
+"",
+[
+[
+"david-beckham",
+"David Beckham"
+]
+]
+]
+]
+},
+{
+"id": "ballon-dor-2001",
+"q": "2001 Ballon d'Or: the top 10",
+"d": 2,
+"src": "2001 Ballon d'Or",
+"e": [
+[
+1,
+"michael-owen",
+"Michael Owen"
+],
+[
+2,
+"raul",
+"Raúl"
+],
+[
+3,
+"oliver-kahn",
+"Oliver Kahn"
+],
+[
+4,
+"david-beckham",
+"David Beckham"
+],
+[
+5,
+"francesco-totti",
+"Francesco Totti"
+],
+[
+6,
+"luis-figo",
+"Luís Figo"
+],
+[
+7,
+"rivaldo",
+"Rivaldo"
+],
+[
+8,
+"andriy-shevchenko",
+"Andriy Shevchenko"
+],
+[
+9,
+"thierry-henry",
+"Thierry Henry"
+],
+[
+9,
+"zinedine-zidane",
+"Zinedine Zidane"
+]
+]
+},
+{
+"id": "ballon-dor-2002",
+"q": "2002 Ballon d'Or: the top 10",
+"d": 2,
+"src": "2002 Ballon d'Or",
+"e": [
+[
+1,
+"ronaldo",
+"Ronaldo"
+],
+[
+2,
+"roberto-carlos",
+"Roberto Carlos"
+],
+[
+3,
+"oliver-kahn",
+"Oliver Kahn"
+],
+[
+4,
+"zinedine-zidane",
+"Zinedine Zidane"
+],
+[
+5,
+"michael-ballack",
+"Michael Ballack"
+],
+[
+6,
+"thierry-henry",
+"Thierry Henry"
+],
+[
+7,
+"raul",
+"Raúl"
+],
+[
+8,
+"rivaldo",
+"Rivaldo"
+],
+[
+9,
+"yildiray-basturk",
+"Yıldıray Baştürk"
+],
+[
+10,
+"alessandro-del-piero",
+"Alessandro Del Piero"
+]
+]
+},
+{
+"id": "ballon-dor-2003",
+"q": "2003 Ballon d'Or: the top 10",
+"d": 2,
+"src": "2003 Ballon d'Or",
+"e": [
+[
+1,
+"pavel-nedved",
+"Pavel Nedvěd"
+],
+[
+2,
+"thierry-henry",
+"Thierry Henry"
+],
+[
+3,
+"paolo-maldini",
+"Paolo Maldini"
+],
+[
+4,
+"andriy-shevchenko",
+"Andriy Shevchenko"
+],
+[
+5,
+"zinedine-zidane",
+"Zinedine Zidane"
+],
+[
+6,
+"ruud-van-nistelrooy",
+"Ruud van Nistelrooy"
+],
+[
+7,
+"raul",
+"Raúl"
+],
+[
+8,
+"roberto-carlos",
+"Roberto Carlos"
+],
+[
+9,
+"gianluigi-buffon",
+"Gianluigi Buffon"
+],
+[
+10,
+"david-beckham",
+"David Beckham"
+]
+]
+},
+{
+"id": "ballon-dor-2004",
+"q": "2004 Ballon d'Or: the top 10",
+"d": 2,
+"src": "2004 Ballon d'Or",
+"e": [
+[
+1,
+"andriy-shevchenko",
+"Andriy Shevchenko"
+],
+[
+2,
+"deco",
+"Deco"
+],
+[
+3,
+"ronaldinho",
+"Ronaldinho"
+],
+[
+4,
+"thierry-henry",
+"Thierry Henry"
+],
+[
+5,
+"theodoros-zagorakis",
+"Theodoros Zagorakis"
+],
+[
+6,
+"adriano",
+"Adriano"
+],
+[
+7,
+"pavel-nedved",
+"Pavel Nedvěd"
+],
+[
+8,
+"wayne-rooney",
+"Wayne Rooney"
+],
+[
+9,
+"ricardo-carvalho",
+"Ricardo Carvalho"
+],
+[
+9,
+"ruud-van-nistelrooy",
+"Ruud van Nistelrooy"
+]
+]
+},
+{
+"id": "ballon-dor-2005",
+"q": "2005 Ballon d'Or: the top 10",
+"d": 2,
+"src": "2005 Ballon d'Or",
+"e": [
+[
+1,
+"ronaldinho",
+"Ronaldinho"
+],
+[
+2,
+"frank-lampard",
+"Frank Lampard"
+],
+[
+3,
+"steven-gerrard",
+"Steven Gerrard"
+],
+[
+4,
+"thierry-henry",
+"Thierry Henry"
+],
+[
+5,
+"andriy-shevchenko",
+"Andriy Shevchenko"
+],
+[
+6,
+"paolo-maldini",
+"Paolo Maldini"
+],
+[
+7,
+"adriano",
+"Adriano"
+],
+[
+8,
+"zlatan-ibrahimovic",
+"Zlatan Ibrahimović"
+],
+[
+9,
+"kaka",
+"Kaká"
+],
+[
+10,
+"samuel-etoo",
+"Samuel Eto'o",
+"",
+[
+[
+"john-terry",
+"John Terry"
+]
+]
+]
+]
+},
+{
+"id": "ballon-dor-2006",
+"q": "2006 Ballon d'Or: the top 10",
+"d": 2,
+"src": "2006 Ballon d'Or",
+"e": [
+[
+1,
+"fabio-cannavaro",
+"Fabio Cannavaro"
+],
+[
+2,
+"gianluigi-buffon",
+"Gianluigi Buffon"
+],
+[
+3,
+"thierry-henry",
+"Thierry Henry"
+],
+[
+4,
+"ronaldinho",
+"Ronaldinho"
+],
+[
+5,
+"zinedine-zidane",
+"Zinedine Zidane"
+],
+[
+6,
+"samuel-etoo",
+"Samuel Eto'o"
+],
+[
+7,
+"miroslav-klose",
+"Miroslav Klose"
+],
+[
+8,
+"didier-drogba",
+"Didier Drogba"
+],
+[
+9,
+"andrea-pirlo",
+"Andrea Pirlo"
+],
+[
+10,
+"jens-lehmann",
+"Jens Lehmann"
+]
+]
+},
+{
+"id": "ballon-dor-2007",
+"q": "2007 Ballon d'Or: the top 10",
+"d": 2,
+"src": "2007 Ballon d'Or",
+"e": [
+[
+1,
+"kaka",
+"Kaká"
+],
+[
+2,
+"cristiano-ronaldo",
+"Cristiano Ronaldo"
+],
+[
+3,
+"lionel-messi",
+"Lionel Messi"
+],
+[
+4,
+"didier-drogba",
+"Didier Drogba"
+],
+[
+5,
+"andrea-pirlo",
+"Andrea Pirlo"
+],
+[
+6,
+"ruud-van-nistelrooy",
+"Ruud van Nistelrooy"
+],
+[
+7,
+"zlatan-ibrahimovic",
+"Zlatan Ibrahimović"
+],
+[
+8,
+"cesc-fabregas",
+"Cesc Fàbregas"
+],
+[
+9,
+"robinho",
+"Robinho"
+],
+[
+10,
+"francesco-totti",
+"Francesco Totti"
+]
+]
+},
+{
+"id": "ballon-dor-2008",
+"q": "2008 Ballon d'Or: the top 10",
+"d": 2,
+"src": "2008 Ballon d'Or",
+"e": [
+[
+1,
+"cristiano-ronaldo",
+"Cristiano Ronaldo"
+],
+[
+2,
+"lionel-messi",
+"Lionel Messi"
+],
+[
+3,
+"fernando-torres",
+"Fernando Torres"
+],
+[
+4,
+"iker-casillas",
+"Iker Casillas"
+],
+[
+5,
+"xavi-hernandez",
+"Xavi Hernández"
+],
+[
+6,
+"andrey-arshavin",
+"Andrey Arshavin"
+],
+[
+7,
+"david-villa",
+"David Villa"
+],
+[
+8,
+"zlatan-ibrahimovic",
+"Zlatan Ibrahimović"
+],
+[
+9,
+"kaka",
+"Kaká"
+],
+[
+10,
+"steven-gerrard",
+"Steven Gerrard"
+]
+]
+},
+{
+"id": "ballon-dor-2009",
+"q": "2009 Ballon d'Or: the top 10",
+"d": 2,
+"src": "2009 Ballon d'Or",
+"e": [
+[
+1,
+"lionel-messi",
+"Lionel Messi"
+],
+[
+2,
+"cristiano-ronaldo",
+"Cristiano Ronaldo"
+],
+[
+3,
+"xavi-hernandez",
+"Xavi Hernández"
+],
+[
+4,
+"andres-iniesta",
+"Andrés Iniesta"
+],
+[
+5,
+"samuel-etoo",
+"Samuel Eto'o"
+],
+[
+6,
+"kaka",
+"Kaká"
+],
+[
+7,
+"zlatan-ibrahimovic",
+"Zlatan Ibrahimović"
+],
+[
+8,
+"wayne-rooney",
+"Wayne Rooney"
+],
+[
+9,
+"didier-drogba",
+"Didier Drogba"
+],
+[
+10,
+"steven-gerrard",
+"Steven Gerrard"
+]
+]
+},
+{
+"id": "ballon-dor-2016",
+"q": "2016 Ballon d'Or: the top 10",
+"d": 1,
+"src": "2016 Ballon d'Or",
+"e": [
+[
+1,
+"cristiano-ronaldo",
+"Cristiano Ronaldo"
+],
+[
+2,
+"lionel-messi",
+"Lionel Messi"
+],
+[
+3,
+"antoine-griezmann",
+"Antoine Griezmann"
+],
+[
+4,
+"luis-suarez",
+"Luis Suárez"
+],
+[
+5,
+"neymar",
+"Neymar"
+],
+[
+6,
+"gareth-bale",
+"Gareth Bale"
+],
+[
+7,
+"riyad-mahrez",
+"Riyad Mahrez"
+],
+[
+8,
+"jamie-vardy",
+"Jamie Vardy"
+],
+[
+9,
+"gianluigi-buffon",
+"Gianluigi Buffon"
+],
+[
+9,
+"pepe",
+"Pepe"
+]
+]
+},
+{
+"id": "ballon-dor-2017",
+"q": "2017 Ballon d'Or: the top 10",
+"d": 1,
+"src": "2017 Ballon d'Or",
+"e": [
+[
+1,
+"cristiano-ronaldo",
+"Cristiano Ronaldo"
+],
+[
+2,
+"lionel-messi",
+"Lionel Messi"
+],
+[
+3,
+"neymar",
+"Neymar"
+],
+[
+4,
+"gianluigi-buffon",
+"Gianluigi Buffon"
+],
+[
+5,
+"luka-modric",
+"Luka Modrić"
+],
+[
+6,
+"sergio-ramos",
+"Sergio Ramos"
+],
+[
+7,
+"kylian-mbappe",
+"Kylian Mbappé"
+],
+[
+8,
+"ngolo-kante",
+"N'Golo Kanté"
+],
+[
+9,
+"robert-lewandowski",
+"Robert Lewandowski"
+],
+[
+10,
+"harry-kane",
+"Harry Kane"
+]
+]
+},
+{
+"id": "ballon-dor-2018",
+"q": "2018 Ballon d'Or: the top 10",
+"d": 1,
+"src": "2018 Ballon d'Or",
+"e": [
+[
+1,
+"luka-modric",
+"Luka Modrić"
+],
+[
+2,
+"cristiano-ronaldo",
+"Cristiano Ronaldo"
+],
+[
+3,
+"antoine-griezmann",
+"Antoine Griezmann"
+],
+[
+4,
+"kylian-mbappe",
+"Kylian Mbappé"
+],
+[
+5,
+"lionel-messi",
+"Lionel Messi"
+],
+[
+6,
+"mohamed-salah",
+"Mohamed Salah"
+],
+[
+7,
+"raphael-varane",
+"Raphaël Varane"
+],
+[
+8,
+"eden-hazard",
+"Eden Hazard"
+],
+[
+9,
+"kevin-de-bruyne",
+"Kevin De Bruyne"
+],
+[
+10,
+"harry-kane",
+"Harry Kane"
+]
+]
+},
+{
+"id": "ballon-dor-2019",
+"q": "2019 Ballon d'Or: the top 10",
+"d": 1,
+"src": "2019 Ballon d'Or",
+"e": [
+[
+1,
+"lionel-messi",
+"Lionel Messi"
+],
+[
+2,
+"virgil-van-dijk",
+"Virgil van Dijk"
+],
+[
+3,
+"cristiano-ronaldo",
+"Cristiano Ronaldo"
+],
+[
+4,
+"sadio-mane",
+"Sadio Mané"
+],
+[
+5,
+"mohamed-salah",
+"Mohamed Salah"
+],
+[
+6,
+"kylian-mbappe",
+"Kylian Mbappé"
+],
+[
+7,
+"alisson-becker",
+"Alisson Becker"
+],
+[
+8,
+"robert-lewandowski",
+"Robert Lewandowski"
+],
+[
+9,
+"bernardo-silva",
+"Bernardo Silva"
+],
+[
+10,
+"riyad-mahrez",
+"Riyad Mahrez"
+]
+]
+},
+{
+"id": "ballon-dor-2021",
+"q": "2021 Ballon d'Or: the top 10",
+"d": 1,
+"src": "2021 Ballon d'Or",
+"e": [
+[
+1,
+"lionel-messi",
+"Lionel Messi"
+],
+[
+2,
+"robert-lewandowski",
+"Robert Lewandowski"
+],
+[
+3,
+"jorginho-1991",
+"Jorginho"
+],
+[
+4,
+"karim-benzema",
+"Karim Benzema"
+],
+[
+5,
+"ngolo-kante",
+"N'Golo Kanté"
+],
+[
+6,
+"cristiano-ronaldo",
+"Cristiano Ronaldo"
+],
+[
+7,
+"mohamed-salah",
+"Mohamed Salah"
+],
+[
+8,
+"kevin-de-bruyne",
+"Kevin De Bruyne"
+],
+[
+9,
+"kylian-mbappe",
+"Kylian Mbappé"
+],
+[
+10,
+"gianluigi-donnarumma",
+"Gianluigi Donnarumma"
+]
+]
+},
+{
+"id": "ballon-dor-2022",
+"q": "2022 Ballon d'Or: the top 10",
+"d": 1,
+"src": "2022 Ballon d'Or",
+"e": [
+[
+1,
+"karim-benzema",
+"Karim Benzema"
+],
+[
+2,
+"sadio-mane",
+"Sadio Mané"
+],
+[
+3,
+"kevin-de-bruyne",
+"Kevin De Bruyne"
+],
+[
+4,
+"robert-lewandowski",
+"Robert Lewandowski"
+],
+[
+5,
+"mohamed-salah",
+"Mohamed Salah"
+],
+[
+6,
+"kylian-mbappe",
+"Kylian Mbappé"
+],
+[
+7,
+"thibaut-courtois",
+"Thibaut Courtois"
+],
+[
+8,
+"vinicius-junior",
+"Vinícius Júnior"
+],
+[
+9,
+"luka-modric",
+"Luka Modrić"
+],
+[
+10,
+"erling-haaland",
+"Erling Haaland"
+]
+]
+},
+{
+"id": "ballon-dor-2023",
+"q": "2023 Ballon d'Or: the top 10",
+"d": 1,
+"src": "2023 Ballon d'Or",
+"e": [
+[
+1,
+"lionel-messi",
+"Lionel Messi"
+],
+[
+2,
+"erling-haaland",
+"Erling Haaland"
+],
+[
+3,
+"kylian-mbappe",
+"Kylian Mbappé"
+],
+[
+4,
+"kevin-de-bruyne",
+"Kevin De Bruyne"
+],
+[
+5,
+"rodri",
+"Rodri"
+],
+[
+6,
+"vinicius-junior",
+"Vinícius Júnior"
+],
+[
+7,
+"julian-alvarez",
+"Julián Alvarez"
+],
+[
+8,
+"victor-osimhen",
+"Victor Osimhen"
+],
+[
+9,
+"bernardo-silva",
+"Bernardo Silva"
+],
+[
+10,
+"luka-modric",
+"Luka Modrić"
+]
+]
+},
+{
+"id": "ballon-dor-2024",
+"q": "2024 Ballon d'Or: the top 10",
+"d": 1,
+"src": "2024 Ballon d'Or",
+"e": [
+[
+1,
+"rodri",
+"Rodri"
+],
+[
+2,
+"vinicius-junior",
+"Vinícius Júnior"
+],
+[
+3,
+"jude-bellingham",
+"Jude Bellingham"
+],
+[
+4,
+"dani-carvajal",
+"Dani Carvajal"
+],
+[
+5,
+"erling-haaland",
+"Erling Haaland"
+],
+[
+6,
+"kylian-mbappe",
+"Kylian Mbappé"
+],
+[
+7,
+"lautaro-martinez",
+"Lautaro Martínez"
+],
+[
+8,
+"lamine-yamal",
+"Lamine Yamal"
+],
+[
+9,
+"toni-kroos",
+"Toni Kroos"
+],
+[
+10,
+"harry-kane",
+"Harry Kane"
+]
+]
+},
+{
+"id": "ballon-dor-2025",
+"q": "2025 Ballon d'Or: the top 10",
+"d": 1,
+"src": "2025 Ballon d'Or",
+"e": [
+[
+1,
+"ousmane-dembele",
+"Ousmane Dembélé"
+],
+[
+2,
+"lamine-yamal",
+"Lamine Yamal"
+],
+[
+3,
+"vitinha",
+"Vitinha"
+],
+[
+4,
+"mohamed-salah",
+"Mohamed Salah"
+],
+[
+5,
+"raphinha",
+"Raphinha"
+],
+[
+6,
+"achraf-hakimi",
+"Achraf Hakimi"
+],
+[
+7,
+"kylian-mbappe",
+"Kylian Mbappé"
+],
+[
+8,
+"cole-palmer",
+"Cole Palmer"
+],
+[
+9,
+"gianluigi-donnarumma",
+"Gianluigi Donnarumma"
+],
+[
+10,
+"nuno-mendes",
+"Nuno Mendes"
 ]
 ]
 },

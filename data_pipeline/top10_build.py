@@ -53,7 +53,20 @@ LISTS = [
     ("fcbayern-apps", "List of FC Bayern Munich records and statistics", 5, "Most appearances for Bayern Munich", 3, ""),
     ("laliga-goals", "List of La Liga top scorers", 0, "La Liga all-time top scorers", 2, "goals"),
     ("bundesliga-goals", "List of Bundesliga top scorers", 0, "Bundesliga all-time top scorers", 3, "goals"),
+    ("pl-hat-tricks", "List of Premier League hat-tricks", 2, "Most Premier League hat-tricks", 2, "hat-tricks"),
+    ("pl-free-kicks", PL, 3, "Most Premier League free-kick goals", 2, "free kicks"),
+    ("wc-goals", "List of FIFA World Cup top goalscorers", 2, "World Cup all-time top scorers", 2, "goals"),
+    ("eng-captains", "List of England national football team captains", 3, "Most games as England captain", 2, "as captain"),
 ]
+# Skip rows naming anyone in another table on the page (the captains
+# ranking mixes in the women's team, listed in its own chronology).
+EXCLUDE = {"eng-captains": 1}
+
+# Titles whose fetched qid is wrong (a disambiguation page).
+TITLE_QID = {"Luis Suárez": "Q26517"}
+
+LISTS += [(f"ballon-dor-{y}", f"{y} Ballon d'Or", 0, f"{y} Ballon d'Or: the top 10", 1 if y >= 2015 else 2 if y >= 2000 else 3, "")
+          for y in range(1990, 2026) if y != 2020]
 
 SCORERS = r"top (?:goal)?scorers|goalscorers"
 
@@ -126,9 +139,53 @@ def build_list(rows, qids, by_qid, unit: str):
     return entries, None
 
 
+def pl_season_record(pages, qids, by_qid):
+    """Most Premier League goals in a season, each player's best once
+    ("36 (2022\u201323)"), from every season's top-scorer table: a 30-goal
+    season is always in its season's top ten."""
+    best: dict[str, tuple[int, int, dict]] = {}
+    for y in range(1992, 2026):
+        page = pages.get(f"{_season(y)} {'FA ' if y < 2007 else ''}Premier League")
+        if not page:
+            return None, f"no page for {_season(y)}"
+        tabs = list(tables(page))
+        idx = next((n for n, (h, c, _, _) in enumerate(tabs) if re.search(SCORERS, f"{h} {c}", re.I)), None)
+        if idx is None:
+            return None, f"no scorers table for {_season(y)}"
+        for cells in tabs[idx][3]:
+            cells = [strip_attr(c) for c in cells]
+            links = [(k, l.strip()) for k, c in enumerate(cells) for l in LINK.findall(c) if ":" not in l]
+            if not links:
+                continue
+            k, l = links[0]
+            goals = next((n for c in cells[k + 1:] if (n := num(c)) is not None), None)
+            if goals is None:
+                continue
+            key = qids.get(l, l)
+            if key not in best or goals > best[key][0]:
+                best[key] = (goals, y, by_qid.get(qids.get(l)))
+    ranked = sorted(best.values(), key=lambda b: -b[0])
+    cut = ranked[9][0]
+    top = [b for b in ranked if b[0] >= cut]
+    if len(top) > 10 or any(p is None for _, _, p in top):
+        return None, "tie past 10th or a player we don't know"
+    entries, rank = [], 0
+    for i, (g, y, p) in enumerate(top):
+        rank = rank if i and g == top[i - 1][0] else i + 1
+        entries.append([rank, p["id"], p["name"], f"{g} ({_season(y)})"])
+    return entries, None
+
+
 def main() -> int:
     pages, qids, by_qid = load()
+    qids.update(TITLE_QID)
     out, dropped = [], []
+    entries, problem = pl_season_record(pages, qids, by_qid)
+    if problem:
+        dropped.append(f"pl-season-goals: {problem}")
+    else:
+        out.append({"id": "pl-season-goals", "q": "Most Premier League goals in a season (best season each)", "d": 2,
+                    "src": "Premier League season articles", "e": entries})
     for lid, article, idx, question, level, unit in LISTS + SEASONS:
         page = pages.get(article)
         if not page:
@@ -141,7 +198,11 @@ def main() -> int:
         if idx >= len(tabs):
             dropped.append(f"{lid}: no table {idx}")
             continue
-        entries, problem = build_list(tabs[idx][3], qids, by_qid, unit)
+        rows = tabs[idx][3]
+        if lid in EXCLUDE:
+            other = {l.strip() for r in tabs[EXCLUDE[lid]][3] for c in r for l in LINK.findall(strip_attr(c))}
+            rows = [r for r in rows if not any(l.strip() in other for c in r for l in LINK.findall(strip_attr(c)))]
+        entries, problem = build_list(rows, qids, by_qid, unit)
         if problem:
             dropped.append(f"{lid}: {problem}")
             continue

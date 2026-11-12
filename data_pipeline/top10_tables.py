@@ -78,7 +78,18 @@ def tables(text: str):
 def strip_attr(cell: str) -> str:
     # 'style="..."|value' -> 'value' (not inside links/templates)
     m = re.match(r'^\s*(?:[a-z-]+\s*=\s*(?:"[^"]*"|[^\s|"]+)\s*)+\|(.*)$', cell, re.S)
-    return (m.group(1) if m else cell).strip()
+    return _sortname((m.group(1) if m else cell).strip())
+
+
+def _sortname(cell: str) -> str:
+    """{{sortname|Lionel|Messi}} -> [[Lionel Messi]] (third arg: the article)."""
+    def link(m):
+        args = [a.strip() for a in m.group(1).split("|") if "=" not in a]
+        if len(args) < 2:
+            return m.group(0)
+        name = f"{args[0]} {args[1]}"
+        return f"[[{args[2]}|{name}]]" if len(args) > 2 and args[2] else f"[[{name}]]"
+    return re.sub(r"\{\{\s*sortname\s*\|([^{}]*)\}\}", link, cell, flags=re.I)
 
 
 def player_rows(rows, qids, by_qid):
