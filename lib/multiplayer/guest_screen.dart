@@ -555,13 +555,16 @@ class _GuestGameState extends State<_GuestGame> with SingleTickerProviderStateMi
         if (stage == 'wait') {
           bottom = _status('${v['headline'] ?? ''}'.toUpperCase());
         } else if (choosing && !mine) {
-          bottom = _status('${whoName.toUpperCase()} IS PICKING A SQUARE');
+          final whoTeamName = whoTeam != null && whoTeam < teamsV.length ? '${asMap(teamsV[whoTeam])['name'] ?? ''}' : '';
+          bottom = _status(whoTeamName.isEmpty
+              ? '${whoName.toUpperCase()} IS PICKING A SQUARE'
+              : '${whoTeamName.toUpperCase()} ARE PICKING A SQUARE${whoName.isEmpty ? '' : ' - ${whoName.toUpperCase()} ON THE PHONE'}');
         } else if (choosing) {
           bottom = Column(children: [
             if (v['left'] != null) ...[clock(), const SizedBox(height: 8)],
             const Text(
               'Tap an empty square, then name a player who played for both clubs.\n'
-              'Once you pick a square you\'re locked in. Each player once per grid.',
+              'Once you pick a square you\'re locked in. A footballer can only be used once.',
               textAlign: TextAlign.center,
               style: TextStyle(color: Palette.muted, height: 1.4),
             ),

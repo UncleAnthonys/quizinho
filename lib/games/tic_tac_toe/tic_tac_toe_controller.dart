@@ -80,7 +80,7 @@ enum TttPhase { choosing, answering, finished }
 enum TttSubmit { claimed, missed, alreadyUsed, ignored }
 
 /// Turn-based Tic-Tac-Toe for 2+ teams: pick a square, name a player for
-/// both clubs to claim it. Three in a row wins; each player once per grid.
+/// both clubs to claim it. Three in a row wins; each footballer once per grid.
 class TicTacToeController extends ChangeNotifier {
   TicTacToeController({
     required this.grid,

@@ -226,7 +226,7 @@ class _TicTacToeScreenState extends State<TicTacToeScreen>
 
   /// Everything both the host and joined phones draw.
   Map<String, Object?> _view(TicTacToeController c) =>
-      {...TttBoard.snapshot(c, _t), 'who': _turnPlayer ?? _t.teamName(c.currentTeam)};
+      {...TttBoard.snapshot(c, _t), 'who': _t.teamName(c.currentTeam), if (_turnPlayer != null) 'holder': _turnPlayer};
 
   Widget _bottom(TicTacToeController c) {
     if (_phones?.remote case final m?) {
@@ -245,7 +245,7 @@ class _TicTacToeScreenState extends State<TicTacToeScreen>
         ],
         const Text(
           'Tap an empty square, then name a player who played for both clubs.\n'
-          'Once you pick a square you\'re locked in. Each player once per grid.',
+          'Once you pick a square you\'re locked in. A footballer can only be used once.',
           textAlign: TextAlign.center,
           style: TextStyle(color: Palette.muted, height: 1.4),
         ),
@@ -354,10 +354,17 @@ class TttLayout extends StatelessWidget {
               style: AppText.headline(26, color: Palette.yellow),
             ),
           )
-        : Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-            TeamChip(name: '${data['who'] ?? ''}', colorIndex: team < colours.length ? colours[team] : 0, size: 20),
-            const SizedBox(width: 10),
-            Text(phase == 'choosing' ? 'PICK A SQUARE' : 'NAME A PLAYER', style: AppText.headline(22)),
+        : Column(children: [
+            // A team turn: everyone can help; the named player holds the phone.
+            Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+              TeamChip(name: '${data['who'] ?? ''}', colorIndex: team < colours.length ? colours[team] : 0, size: 20),
+              const SizedBox(width: 10),
+              Text(phase == 'choosing' ? 'PICK A SQUARE' : 'NAME A PLAYER', style: AppText.headline(22)),
+            ]),
+            if (data['holder'] != null) ...[
+              const SizedBox(height: 4),
+              Text('${'${data['holder']}'.toUpperCase()} ON THE PHONE', style: AppText.label(13)),
+            ],
           ]);
     return Column(children: [
       Padding(
