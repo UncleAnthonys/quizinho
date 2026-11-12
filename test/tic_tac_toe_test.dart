@@ -49,10 +49,28 @@ void main() {
       for (var seed = 0; seed < 10; seed++) {
         final g = generateTicTacToeGrid(conns,
             random: Random(seed), minFame: 4, maxLevel: 2, minKnownAnswers: 2, answerFame: fame)!;
-        for (final a in g.answers) {
-          expect(a.where((id) => fame(id) >= 3).length, greaterThanOrEqualTo(2));
+        for (final (i, a) in g.answers.indexed) {
+          // Between two English clubs a fame-2 name (Kevin Davies) counts as known.
+          final english = g.rows[i ~/ 3].country == 'GBR' && g.cols[i % 3].country == 'GBR';
+          expect(a.where((id) => fame(id) >= (english ? 2 : 3)).length, greaterThanOrEqualTo(2));
         }
       }
+    });
+
+    test('grids lean English, with one far-flung club at most', () async {
+      final conns = await repo.allClubConnections();
+      int fame(String id) => repo.players.byId(id)?.fame ?? 0;
+      const europe = {'GBR', 'ESP', 'ITA', 'GER', 'FRA', 'MCO', 'NED', 'POR'};
+      var english = 0, total = 0;
+      for (var seed = 0; seed < 40; seed++) {
+        final g = generateTicTacToeGrid(conns,
+            random: Random(seed), minFame: 4, maxLevel: 3, minKnownAnswers: 1, answerFame: fame)!;
+        final six = [...g.rows, ...g.cols];
+        expect(six.where((c) => !europe.contains(c.country)).length, lessThanOrEqualTo(1));
+        english += six.where((c) => c.country == 'GBR').length;
+        total += 6;
+      }
+      expect(english / total, greaterThan(0.5));
     });
   });
 

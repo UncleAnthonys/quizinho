@@ -20,13 +20,41 @@ class TicTacToeGrid {
   String get id => [...rows, ...cols].map((c) => c.id).join('-');
 }
 
+/// Where grid clubs come from. English (and Scottish) clubs are the heart of
+/// it; then the big names from Spain, Italy, Germany and France; Dutch and
+/// Portuguese giants now and then. Anywhere else (MLS, Japan, Brazil...) is
+/// rare: one club a grid at most, and only on squares a well-known name answers
+/// (Messi at Inter Miami, Iniesta at Vissel Kobe).
+const _home = {'GBR'};
+const _bigLeagues = {'ESP', 'ITA', 'GER', 'FRA', 'MCO'};
+const _nextLeagues = {'NED', 'POR'};
+
+bool _farAway(Club c) {
+  final k = c.country;
+  return !_home.contains(k) && !_bigLeagues.contains(k) && !_nextLeagues.contains(k);
+}
+
+/// How often [c] is picked, relative to others. A lesser club from a big
+/// league (Hellas Verona, Levante) comes up only now and then.
+double gridWeight(Club c) {
+  final k = c.country;
+  final big = c.fame >= 5;
+  if (_home.contains(k)) return big ? 6 : (c.fame == 4 ? 2.5 : 1.2);
+  if (_bigLeagues.contains(k)) return big ? 4 : 0.5;
+  if (_nextLeagues.contains(k)) return big ? 2 : 0.2;
+  return big ? 0.4 : 0.1;
+}
+
 /// Builds a grid where every square has at least one valid answer.
-/// [minFame] keeps clubs recognisable (5 = only giants). Lowers itself if
-/// nothing fits. Returns null only if the data can't support a grid at all.
+/// [minFame] keeps clubs recognisable (5 = only giants); English clubs get one
+/// step more (Charlton, Ipswich). Lowers itself if nothing fits. Returns null
+/// only if the data can't support a grid at all.
 ///
 /// [maxLevel] drops club pairs harder than that (level 4 = obscure leagues).
 /// With [answerFame], every square must also have at least [minKnownAnswers]
-/// well-known answers (fame 3+), so it's gettable rather than a trivia wall.
+/// well-known answers (fame 3+; 2+ between two English clubs, where a Kevin
+/// Davies is known to the people playing if not the wider world), so it's
+/// gettable rather than a trivia wall.
 TicTacToeGrid? generateTicTacToeGrid(
   List<ClubConnection> connections, {
   required Random random,
@@ -42,7 +70,8 @@ TicTacToeGrid? generateTicTacToeGrid(
   for (final c in connections) {
     if (c.answerIds.isEmpty || c.difficulty > maxLevel) continue;
     if (minKnownAnswers > 0 && answerFame != null) {
-      if (c.answerIds.where((id) => answerFame(id) >= 3).length < minKnownAnswers) continue;
+      final known = _home.contains(c.clubA.country) && _home.contains(c.clubB.country) ? 2 : 3;
+      if (c.answerIds.where((id) => answerFame(id) >= known).length < minKnownAnswers) continue;
     }
     clubs[c.clubA.id] = c.clubA;
     clubs[c.clubB.id] = c.clubB;
@@ -50,17 +79,48 @@ TicTacToeGrid? generateTicTacToeGrid(
     links.putIfAbsent(c.clubB.id, () => {})[c.clubA.id] = c;
   }
 
+  /// [n] of [from], weighted by [gridWeight], no repeats.
+  List<String>? pick(List<String> from, int n) {
+    final left = List.of(from);
+    final out = <String>[];
+    for (var i = 0; i < n; i++) {
+      if (left.isEmpty) return null;
+      final total = left.fold<double>(0, (a, id) => a + gridWeight(clubs[id]!));
+      var r = random.nextDouble() * total;
+      var chosen = left.last;
+      for (final id in left) {
+        r -= gridWeight(clubs[id]!);
+        if (r <= 0) {
+          chosen = id;
+          break;
+        }
+      }
+      out.add(chosen);
+      left.remove(chosen);
+    }
+    return out;
+  }
+
+  /// A far-away club's squares need a name people know.
+  bool fair(String a, String b) {
+    if (!_farAway(clubs[a]!) && !_farAway(clubs[b]!)) return true;
+    if (answerFame == null) return true;
+    return links[a]![b]!.answerIds.any((id) => answerFame(id) >= 4);
+  }
+
   for (var fame = minFame; fame >= 1; fame--) {
     final pool = [
       for (final id in links.keys)
-        if (clubs[id]!.fame >= fame && links[id]!.length >= 3) id,
+        if (clubs[id]!.fame >= (_home.contains(clubs[id]!.country) ? fame - 1 : fame) && links[id]!.length >= 3) id,
     ];
     if (pool.length < 6) continue;
     for (var i = 0; i < attempts; i++) {
-      final rows = (List.of(pool)..shuffle(random)).take(3).toList();
+      final rows = pick(pool, 3)!;
       final common = pool.where((id) => !rows.contains(id) && rows.every((r) => links[r]!.containsKey(id))).toList();
       if (common.length < 3) continue;
-      final cols = (common..shuffle(random)).take(3).toList();
+      final cols = pick(common, 3)!;
+      if ([...rows, ...cols].where((id) => _farAway(clubs[id]!)).length > 1) continue;
+      if (!rows.every((r) => cols.every((c) => fair(r, c)))) continue;
       final grid = TicTacToeGrid(
         rows: [for (final r in rows) clubs[r]!],
         cols: [for (final c in cols) clubs[c]!],
