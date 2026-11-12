@@ -10,7 +10,11 @@ import gzip
 import json
 import pathlib
 
-from wiki_stats_fetch import wikitext
+import re
+
+from wiki_stats_fetch import club_qids, wikitext
+
+LINK = re.compile(r"\[\[([^\]|#]+)")
 
 RAW = pathlib.Path(__file__).parent / "raw"
 
@@ -30,7 +34,17 @@ def final_titles() -> dict[str, list[str]]:
 def main() -> int:
     titles = final_titles()
     pages = wikitext(sorted({t for ts in titles.values() for t in ts}))
-    out = {"titles": titles, "pages": pages}
+    # Every article linked from a line-up row ("|GK ||'''1''' ||[[Dida (footballer...)|Dida]]")
+    # or a flag ("{{flagicon|BRA}} [[Cafu]]"), resolved to its Wikidata id so
+    # players can be matched without guessing from names.
+    linked = sorted({
+        m.strip().replace("_", " ") for text in pages.values() for line in text.splitlines()
+        if re.match(r"^\|\s*[A-Z]{1,3}\s*\|", line) or "flagicon" in line
+        for m in LINK.findall(line) if ":" not in m
+    })
+    qids = club_qids(linked)
+    print(f"linked {len(linked)} articles; {len(qids)} with a Wikidata id")
+    out = {"titles": titles, "pages": pages, "qids": qids}
     with gzip.open(RAW / "finals_wikitext.json.gz", "wt", encoding="utf-8") as f:
         json.dump(out, f, ensure_ascii=False)
     missing = [t for ts in titles.values() for t in ts if t not in pages]
