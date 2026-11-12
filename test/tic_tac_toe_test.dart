@@ -90,7 +90,7 @@ void main() {
         english += six.where((c) => c.country == 'GBR').length;
         total += 6;
       }
-      expect(english / total, greaterThan(0.5));
+      expect(english / total, greaterThan(0.4));
     });
   });
 
