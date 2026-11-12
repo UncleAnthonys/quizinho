@@ -1,0 +1,39 @@
+# Fetches the Wikipedia record-table articles behind Top 10 and commits them
+# (data_pipeline/raw/lists_wikitext.json.gz) so the lists can be built
+# offline. Run from the Actions tab.
+name: Fetch Top 10 lists
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: fetch-data
+  cancel-in-progress: false
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Fetch Top 10 lists
+        working-directory: data_pipeline
+        run: bash ../scripts/ci_run.sh "Lists" python3 lists_fetch.py
+      - name: Commit
+        run: |
+          git config user.name "quizinho-data-bot"
+          git config user.email "quizinho-data-bot@users.noreply.github.com"
+          git add data_pipeline/raw/lists_wikitext.json.gz
+          if git diff --cached --quiet; then
+            echo "No changes."
+          else
+            git commit -m "Data: record-table articles from Wikipedia (for Top 10)"
+            git pull --rebase origin main
+            git push
+          fi
