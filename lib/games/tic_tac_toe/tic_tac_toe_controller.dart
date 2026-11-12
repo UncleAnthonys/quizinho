@@ -303,8 +303,8 @@ class TicTacToeController extends ChangeNotifier {
         points: {
           for (var t = 0; t < teamCount; t++) t: squaresOf(t) + (winner == t ? lineBonus : 0),
         },
-        // Solo: 10 a square, 10 more for any line.
-        solo: teamCount == 1 ? min(100, squaresOf(0) * 10 + (winningLine != null ? 10 : 0)) : null,
+        // Solo (Pack the Box): the share of the nine you filled; all nine is 100.
+        solo: teamCount == 1 ? (squaresOf(0) * 100 / 9).round() : null,
       );
 
   /// Solo: wrong answers or passes allowed before the game ends.
@@ -321,14 +321,9 @@ class TicTacToeController extends ChangeNotifier {
     owner[sq] = currentTeam;
     claimedWith[sq] = name;
     _emit(GameEvent.correct);
-    for (final line in lines) {
+    // Solo fills the whole grid: a line means nothing there.
+    for (final line in _solo ? const <List<int>>[] : lines) {
       if (line.every((i) => owner[i] == currentTeam)) {
-        // Solo carries on to fill the grid; a line still counts.
-        if (_solo) {
-          winningLine ??= line;
-          winner = currentTeam;
-          continue;
-        }
         winningLine = line;
         winner = currentTeam;
         _finish();

@@ -175,6 +175,22 @@ void main() {
       expect(c.dryTurns, 1);
     });
 
+    test('Pack the Box: scored on squares filled, no line bonus', () {
+      final c = TicTacToeController(grid: grid(), teamCount: 1);
+      for (final i in [0, 1, 2]) {
+        c.choose(i);
+        c.submit(player('p$i'));
+      }
+      expect(c.winner, isNull, reason: 'a line means nothing in solo');
+      expect(c.phase, TttPhase.choosing);
+      expect(c.result().solo, 33);
+      for (var i = 3; i < 9; i++) {
+        c.choose(i);
+        c.submit(player('p$i'));
+      }
+      expect(c.result().solo, 100);
+    });
+
     test('solo has no clock for picking', () {
       final c = TicTacToeController(grid: grid(), teamCount: 1, chooseSeconds: 5);
       c.advance(secs(60));
