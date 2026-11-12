@@ -362,6 +362,10 @@ class DemoPilot {
 
   bool _tttPlayed = false;
 
+  /// Everyone named so far (a footballer counts once per grid, even after
+  /// his square is stolen and his name leaves the board).
+  final Set<String> _tttUsed = {};
+
   /// A game that shows everything off: centre, corners, a threat and a block,
   /// a wrong answer, then a steal of the centre that sets up three in a row.
   /// (square, wrong answer, steal); squares are 0-8, left to right.
@@ -416,7 +420,7 @@ class DemoPilot {
   Future<void> _playTtt(TicTacToeScreen screen) async {
     final t = screen.round.tournament;
     headline.value = _hook(GameModeId.ticTacToe);
-    await _say('Football noughts and crosses. Name a player who played for both clubs to win the square.');
+    await _say('Football noughts and crosses. Name a player for both clubs to win the square.');
     await _spoken();
     for (var turn = 0; turn < 14; turn++) {
       var d = _ttt();
@@ -432,12 +436,12 @@ class DemoPilot {
           : (step != null && owner[step.$1] == null ? step.$1 : _bestSquare(owner, team));
       if (sq == null) break;
       final rows = _list<String>(d['rows']), cols = _list<String>(d['cols']);
-      final taken = {for (final c in _list<String>(d['claimed'])) if (c != null) c};
+      _tttUsed.addAll([for (final c in _list<String>(d['claimed'])) if (c != null) c]);
       if (steal) {
-        await _say('Steal! $name can take a square by naming a different player.');
+        await _say('Steal! Name a different player to take their square.');
       }
-      await _say('$name go for ${rows[sq ~/ 3]} and ${cols[sq % 3]}.');
-      await _wait(500);
+      await _say('$name: ${rows[sq ~/ 3]} and ${cols[sq % 3]}.');
+      await _wait(300);
       Element? picker;
       for (var attempt = 0; attempt < 3 && picker == null; attempt++) {
         final target = _square(sq);
@@ -452,16 +456,27 @@ class DemoPilot {
         break;
       }
       final isAnswer = (picker.widget as PlayerPicker).isAnswer ?? ((Player _) => false);
-      bool fresh(Player p) => isAnswer(p) && !taken.contains(p.name);
+      bool fresh(Player p) => isAnswer(p) && !_tttUsed.contains(p.name);
       final wrong = step != null && step.$2;
-      final player = (wrong ? null : _mostFamous(fresh)) ?? _famousMiss(isAnswer);
-      if (player == null) break;
       await _spoken();
-      await _type(player.name);
-      for (var i = 0; i < 60; i++) {
-        await _wait(100);
+      // An answer the game turns down (already used) leaves the box open:
+      // name someone else.
+      Player? player;
+      for (var attempt = 0; attempt < 3; attempt++) {
+        player = (wrong ? null : _mostFamous(fresh)) ?? _famousMiss((p) => isAnswer(p) || _tttUsed.contains(p.name));
+        if (player == null) break;
+        _tttUsed.add(player.name);
+        await _type(player.name);
+        for (var i = 0; i < 25; i++) {
+          await _wait(100);
+          if (_ttt()?['phase'] != 'answering') break;
+        }
         if (_ttt()?['phase'] != 'answering') break;
+        // The answer box is new after a refusal; find it again.
+        picker = _live<PlayerPicker>();
+        if (picker == null) break;
       }
+      if (player == null) break;
       d = _ttt();
       if (d == null) break;
       final now = [for (final o in _list<num>(d['owner'])) o?.toInt()];
@@ -470,14 +485,14 @@ class DemoPilot {
       if (d['phase'] == 'finished') {
         final winner = d['winner'];
         await _say(winner != null
-            ? '${player.name}! Three in a row! ${_n('$winner')} win it!'
+            ? '${player.name}! Three in a row! ${_n('$winner')} win!'
             : '${got ? '${player.name}. ' : ''}That\'s the game.');
         await _spoken();
         break;
       }
       await _say(got
-          ? (steal ? '${player.name}! Stolen, and now it\'s locked.' : '${player.name}. Square taken.')
-          : '${player.name}? Never played for both. Wrong!');
+          ? (steal ? '${player.name}! Stolen!' : '${player.name}. Yes!')
+          : '${player.name}? Wrong!');
       await _spoken();
     }
   }
