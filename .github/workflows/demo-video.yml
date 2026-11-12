@@ -1,0 +1,95 @@
+# Records a daily 9:16 gameplay video for TikTok / Reels / Shorts: the web
+# build's ?demo=1 mode plays one round by itself (slowed down so every frame
+# gets drawn), Chrome is filmed and the video sped back up, sounds mixed in. Each video is published as a GitHub pre-release (repo → Releases),
+# with the post caption as its notes; kept 30 days.
+name: Daily demo video
+
+on:
+  schedule:
+    - cron: "23 7 * * *" # every day, ~7:23 UTC
+  workflow_dispatch:
+    inputs:
+      seed:
+        description: "Seed (blank = today's date). Changes teams, answers and which game."
+        required: false
+      game:
+        description: "Force a game (careerPath or clubConnections; blank = by seed)"
+        required: false
+
+permissions:
+  contents: write
+
+jobs:
+  record:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+      - name: Platform folders (if not committed yet)
+        run: bash scripts/bootstrap_platforms.sh
+      - run: flutter pub get
+      - name: Build web
+        run: bash scripts/ci_run.sh "Web build" flutter build web --release --base-href "/"
+
+      - name: Screen, sound and browser
+        run: |
+          sudo apt-get update -q
+          sudo apt-get install -y -q xvfb ffmpeg fonts-noto-color-emoji
+          pip install -q playwright
+          python3 -m playwright install --with-deps chromium
+
+      - name: Record
+        env:
+          SEED: ${{ inputs.seed }}
+          GAME: ${{ inputs.game }}
+        run: |
+          SEED="${SEED:-$(date -u +%Y%m%d)}"
+          echo "SEED=$SEED" >> "$GITHUB_ENV"
+          Xvfb :99 -screen 0 1080x1920x24 -nolisten tcp &
+          python3 -m http.server 8080 -d build/web >/dev/null 2>&1 &
+          sleep 2
+          URL="http://localhost:8080/?demo=1&seed=$SEED${GAME:+&game=$GAME}"
+          DISPLAY=:99 bash scripts/ci_run.sh "Record" python3 scripts/record_demo.py --url "$URL" --out out
+
+      - name: Summary
+        if: always()
+        run: |
+          {
+            echo "### Quizinho demo video ($SEED)"
+            echo '```'
+            cat out/caption.txt 2>/dev/null || echo "(no caption)"
+            echo '```'
+            echo '```json'
+            cat out/meta.json 2>/dev/null || true
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      # A release per day: the mp4 downloads straight to a phone, the caption
+      # is the release notes. Marked pre-release so it's never "the" release.
+      # Video releases older than 30 days are deleted.
+      - name: Publish
+        if: success()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          tag="video-$SEED-${{ github.run_number }}"
+          cp out/quizinho-demo.mp4 "out/quizinho-$SEED.mp4"
+          gh release create "$tag" "out/quizinho-$SEED.mp4" out/thumb.jpg out/meta.json \
+            --target "${{ github.sha }}" --prerelease \
+            --title "Daily video $SEED ($(jq -r .game out/meta.json))" --notes-file out/caption.txt
+          cutoff=$(date -u -d '30 days ago' +%s)
+          gh release list --limit 200 --json tagName,createdAt -q '.[] | select(.tagName | startswith("video-")) | "\(.tagName) \(.createdAt)"' |
+            while read -r t c; do
+              [ "$(date -u -d "$c" +%s)" -lt "$cutoff" ] && gh release delete "$t" --yes --cleanup-tag || true
+            done
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: quizinho-video-${{ env.SEED }}
+          path: out/
+          retention-days: 7
