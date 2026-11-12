@@ -57,17 +57,21 @@ void main() {
       }
     });
 
-    test('nation categories: right players, not their own league, two a grid at most', () async {
+    test('categories: right players, never their own clubs, two a grid at most', () async {
       String? nat(String id) => repo.players.byId(id)?.nationality;
-      final conns = [...await repo.allClubConnections(), ...gridNationPairs(await repo.nationClubPairs())];
+      final conns = [...await repo.allClubConnections(), ...await repo.categoryClubPairs()];
       final wales = conns.firstWhere((c) => c.clubA.id == 'nat:WAL' && c.clubB.name == 'Manchester United');
       expect(wales.answerIds, contains('ryan-giggs'));
       expect(wales.answerIds.every((id) => nat(id) == 'WAL'), isTrue);
       expect(conns.any((c) => c.clubA.id == 'nat:ENG' && c.clubB.country == 'GBR'), isFalse);
+      final fergie = conns.firstWhere((c) => c.clubA.id == 'mgr:sir-alex-ferguson' && c.clubB.name == 'Everton');
+      expect(fergie.clubA.name, 'Managed by Ferguson');
+      expect(fergie.answerIds, contains('wayne-rooney'));
+      expect(conns.any((c) => c.clubA.id == 'with:lionel-messi' && c.clubB.name == 'Barcelona'), isFalse);
       var withNation = 0;
       for (var seed = 0; seed < 30; seed++) {
         final g = generateTicTacToeGrid(conns, random: Random(seed), minFame: 4)!;
-        final n = [...g.rows, ...g.cols].where(isNationCategory).length;
+        final n = [...g.rows, ...g.cols].where(isGridCategory).length;
         expect(n, lessThanOrEqualTo(2));
         if (n > 0) withNation++;
         expect(g.answers.every((a) => a.isNotEmpty), isTrue);

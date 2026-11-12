@@ -57,7 +57,7 @@ class _TicTacToeScreenState extends State<TicTacToeScreen>
     final genders = _t.config.genderMask;
     final inEras = [
       ...await repo.allClubConnections(eras: _t.config.eraMask, genders: genders),
-      ...gridNationPairs(await repo.nationClubPairs(eras: _t.config.eraMask, genders: genders)),
+      ...await repo.categoryClubPairs(eras: _t.config.eraMask, genders: genders),
     ];
     // Grids this phone has played before come last.
     final history = services.challenges.history;
@@ -75,7 +75,7 @@ class _TicTacToeScreenState extends State<TicTacToeScreen>
     if (grid == null) {
       final all = [
         ...await repo.allClubConnections(genders: genders),
-        ...gridNationPairs(await repo.nationClubPairs(genders: genders)),
+        ...await repo.categoryClubPairs(genders: genders),
       ];
       grid = make(all) ??
           make(inEras, fresh: false) ??

@@ -40,6 +40,7 @@ InMemoryFootballRepository parseFootballJson(String source) {
       ),
   };
 
+  final labels = {for (final c in (doc['categories'] as List?) ?? const []) c[0] as String: c[1] as String};
   return InMemoryFootballRepository(
     players: players.values.toList(),
     clubs: clubs.values.toList(),
@@ -55,16 +56,16 @@ InMemoryFootballRepository parseFootballJson(String source) {
           eras: (c as List).length > 5 ? c[5] as int : Era.allMask,
         ),
     ],
-    nationPairs: [
-      for (final n in (doc['nations'] as List?) ?? const [])
-        if (clubs[n[1]] case final c?)
+    categoryPairs: [
+      for (final r in (doc['category_rosters'] as List?) ?? const [])
+        if ((clubs[r[1]], labels[r[0]]) case (final c?, final label?))
           ClubConnection(
-            id: 'nat:${n[0]}|${n[1]}',
-            clubA: nationCategory(n[0] as String, women: c.women),
+            id: '${r[0]}|${r[1]}',
+            clubA: gridCategory(r[0] as String, label, women: c.women),
             clubB: c,
             difficulty: 2,
-            answerIds: {for (final a in n[2] as List) a as String},
-            eras: n[3] as int,
+            answerIds: {for (final a in r[2] as List) a as String},
+            eras: r[3] as int,
           ),
     ],
     careers: [

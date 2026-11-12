@@ -233,21 +233,24 @@ class SqliteFootballRepository implements FootballRepository {
   }
 
   @override
-  Future<List<ClubConnection>> nationClubPairs({int eras = Era.allMask, int genders = 1}) async {
+  Future<List<ClubConnection>> categoryClubPairs({int eras = Era.allMask, int genders = 1}) async {
     final (where, args) = _filter('club_id', null, const {}, eras,
         genders: genders, womenCol: '(SELECT women FROM clubs WHERE clubs.id = club_id)');
     final List<Map<String, Object?>> rows;
     try {
-      rows = await _db.rawQuery('SELECT nation, club_id, eras, players FROM nation_rosters $where', args);
+      rows = await _db.rawQuery(
+          'SELECT category_id, label, club_id, eras, players FROM category_rosters '
+          'JOIN grid_categories ON grid_categories.id = category_id $where',
+          args);
     } on Exception {
-      return const []; // a database from before nation rosters
+      return const []; // a database from before grid categories
     }
     return [
       for (final r in rows)
         if (_clubs[r['club_id']] case final club?)
           ClubConnection(
-            id: 'nat:${r['nation']}|${r['club_id']}',
-            clubA: nationCategory(r['nation'] as String, women: club.women),
+            id: '${r['category_id']}|${r['club_id']}',
+            clubA: gridCategory(r['category_id'] as String, r['label'] as String, women: club.women),
             clubB: club,
             answerIds: (r['players'] as String).split(',').toSet(),
             difficulty: 2,

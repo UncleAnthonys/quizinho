@@ -30,6 +30,7 @@ import re
 import sqlite3
 import sys
 import unicodedata
+import unicodedata
 
 import spoken  # noqa: E402 — sibling module (run as data_pipeline/build_db.py)
 
@@ -86,11 +87,13 @@ CREATE TABLE career_challenges (
 CREATE INDEX idx_conn_diff ON club_connections(difficulty);
 CREATE INDEX idx_ans_conn ON connection_answers(connection_id);
 CREATE INDEX idx_career_diff ON career_challenges(difficulty);
--- Players of one nation who played for a club (Tic-Tac-Toe's nation rows).
+-- Noughts & Crosses rows and columns besides clubs (a nation, a star's
+-- teammates, a manager's players), and per club the players who fit both.
 -- players: comma-separated ids.
-CREATE TABLE nation_rosters (
-  nation TEXT NOT NULL, club_id TEXT NOT NULL REFERENCES clubs(id), eras INTEGER NOT NULL,
-  players TEXT NOT NULL, PRIMARY KEY (nation, club_id)
+CREATE TABLE grid_categories (id TEXT PRIMARY KEY, label TEXT NOT NULL, kind TEXT NOT NULL);
+CREATE TABLE category_rosters (
+  category_id TEXT NOT NULL REFERENCES grid_categories(id), club_id TEXT NOT NULL REFERENCES clubs(id),
+  eras INTEGER NOT NULL, players TEXT NOT NULL, PRIMARY KEY (category_id, club_id)
 );
 CREATE TABLE bidding_categories (
   id TEXT PRIMARY KEY, prompt TEXT NOT NULL, kind TEXT NOT NULL,
@@ -448,32 +451,106 @@ def generate_connections(clubs, players):
     return out
 
 
-# Nations a grid can use as a row or column ("Wales" x Man United). The app
-# holds the display names (gridNations in models.dart); keep the two in step.
+# ---- grid categories -----------------------------------------------------
+# Rows and columns for Noughts & Crosses besides clubs: a nation ("Wales"), a
+# star's teammates ("Played with Messi"), a manager's players ("Managed by
+# Ferguson"). Each comes with, per club, the players who fit both.
 GRID_NATIONS = {
-    "ENG", "SCO", "WAL", "IRL", "NIR", "FRA", "ESP", "ITA", "GER", "NED", "POR", "BEL", "DEN", "SWE", "NOR",
-    "CRO", "SRB", "BRA", "ARG", "URU", "COL", "USA", "NGA", "CIV", "SEN", "GHA", "CMR", "MAR", "AUS", "KOR",
+    "ENG": "England", "SCO": "Scotland", "WAL": "Wales", "IRL": "Republic of Ireland",
+    "NIR": "Northern Ireland", "FRA": "France", "ESP": "Spain", "ITA": "Italy", "GER": "Germany",
+    "NED": "Netherlands", "POR": "Portugal", "BEL": "Belgium", "DEN": "Denmark", "SWE": "Sweden",
+    "NOR": "Norway", "CRO": "Croatia", "SRB": "Serbia", "BRA": "Brazil", "ARG": "Argentina",
+    "URU": "Uruguay", "COL": "Colombia", "USA": "USA", "NGA": "Nigeria", "CIV": "Ivory Coast",
+    "SEN": "Senegal", "GHA": "Ghana", "CMR": "Cameroon", "MAR": "Morocco", "AUS": "Australia",
+    "KOR": "South Korea",
+}
+# Stars whose club teammates make a category, with the name the grid shows.
+GRID_STARS = {
+    "lionel-messi": "Messi", "cristiano-ronaldo": "Cristiano Ronaldo", "david-beckham": "Beckham",
+    "steven-gerrard": "Gerrard", "zinedine-zidane": "Zidane", "gianluigi-buffon": "Buffon",
+    "zlatan-ibrahimovic": "Ibrahimović", "thierry-henry": "Henry", "wayne-rooney": "Rooney",
+    "frank-lampard": "Lampard", "john-terry": "Terry", "didier-drogba": "Drogba", "ronaldinho": "Ronaldinho",
+    "kaka": "Kaká", "xavi-hernandez": "Xavi", "andres-iniesta": "Iniesta", "neymar": "Neymar",
+    "mohamed-salah": "Salah", "harry-kane": "Kane", "kevin-de-bruyne": "De Bruyne",
+    "robert-lewandowski": "Lewandowski", "kylian-mbappe": "Mbappé", "karim-benzema": "Benzema",
+    "luka-modric": "Modrić", "andrea-pirlo": "Pirlo", "francesco-totti": "Totti", "paolo-maldini": "Maldini",
+    "ronaldo": "Ronaldo (R9)", "paul-scholes": "Scholes", "ryan-giggs": "Giggs", "robin-van-persie": "Van Persie",
+    "sergio-aguero": "Agüero", "luis-suarez": "Suárez", "erling-haaland": "Haaland", "gareth-bale": "Bale",
+    "alan-shearer": "Shearer", "eric-cantona": "Cantona", "dennis-bergkamp": "Bergkamp", "roy-keane": "Roy Keane",
+    "michael-owen": "Owen", "fernando-torres": "Torres", "sergio-ramos": "Ramos", "luis-figo": "Figo",
+    "raul": "Raúl", "patrick-vieira": "Vieira", "cesc-fabregas": "Fàbregas", "yaya-toure": "Yaya Touré",
+    "vincent-kompany": "Kompany", "son-heung-min": "Son", "virgil-van-dijk": "Van Dijk",
 }
 
 
-def generate_nation_rosters(clubs, players):
-    """Every player of a grid nation at each club they played for, one-club
-    players included (Giggs: Wales x Man United)."""
-    rosters: dict[tuple[str, str], set[str]] = {}
-    for pid, p in players.items():
-        if p["nat"] not in GRID_NATIONS:
+def _overlap(s1: int, e1: int, s2: int, e2: int) -> bool:
+    """Spells (in years) that shared at least one season: a year-only overlap
+    (left in 2008, other arrived in 2008) isn't enough."""
+    return max(s1, s2) < min(e1, e2)
+
+
+def _years(spell) -> tuple[int, int] | None:
+    if spell["start"] is None:
+        return None
+    return spell["start"], spell["end"] or dt.date.today().year
+
+
+def generate_grid_categories(clubs, players):
+    """([{id, label, kind}], [{category, club, answers, eras}]): who fits each
+    category, then per club the ones who played there. A category is never
+    paired with its own clubs: Spain x Barcelona, Messi's teammates x
+    Barcelona, Ferguson's players x Man United would be too easy."""
+    members: dict[str, set[str]] = {}
+    own: dict[str, set[str]] = {}  # clubs a category isn't paired with
+    cats = []
+    for code, label in GRID_NATIONS.items():
+        cid = f"nat:{code}"
+        cats.append({"id": cid, "label": label, "kind": "nation"})
+        members[cid] = {pid for pid, p in players.items() if p["nat"] == code}
+        own[cid] = {c for c, club in clubs.items()
+                    if club["country"] == code or (code == "ENG" and club["country"] in ("GBR", "ENG"))}
+    for star, label in GRID_STARS.items():
+        if star not in players:
             continue
-        for cid in {s["club"] for s in p["spells"] if clubs[s["club"]]["fame"] >= CONNECTION_MIN_CLUB_FAME}:
-            rosters.setdefault((p["nat"], cid), set()).add(pid)
-    out = []
-    for (nat, cid), ids in sorted(rosters.items()):
-        if max(players[pid]["fame"] for pid in ids) < CONNECTION_MIN_ANSWER_FAME:
-            continue
-        eras = 0
-        for pid in ids:
-            eras |= spells_mask([s for s in players[pid]["spells"] if s["club"] == cid])
-        out.append({"nation": nat, "club": cid, "answers": sorted(ids), "eras": eras or 31})
-    return out
+        cid = f"with:{star}"
+        cats.append({"id": cid, "label": f"Played with {label}", "kind": "teammate"})
+        theirs = [(s["club"], y) for s in players[star]["spells"] if (y := _years(s))]
+        own[cid] = {c for c, _ in theirs}
+        members[cid] = {
+            pid for pid, p in players.items() if pid != star and any(
+                s["club"] == c and (y := _years(s)) and _overlap(*y, *ys) for s in p["spells"] for c, ys in theirs)
+        }
+    managers = json.loads((SEED / "grid_managers.json").read_text(encoding="utf-8"))["managers"]
+    for m in managers:
+        cid = f"mgr:{slug_id(m['name'])}"
+        cats.append({"id": cid, "label": f"Managed by {m['short']}", "kind": "manager"})
+        jobs = [(c, int(a[:4]), int(b[:4]) if b else dt.date.today().year) for c, a, b in m["spells"]]
+        own[cid] = {c for c, _, _ in jobs}
+        members[cid] = {
+            pid for pid, p in players.items() if any(
+                s["club"] == c and (y := _years(s)) and _overlap(*y, a, b) for s in p["spells"] for c, a, b in jobs)
+        }
+    rosters = []
+    for cat in cats:
+        cid = cat["id"]
+        by_club: dict[str, set[str]] = {}
+        for pid in members[cid]:
+            for s in players[pid]["spells"]:
+                c = s["club"]
+                if c not in own[cid] and clubs[c]["fame"] >= CONNECTION_MIN_CLUB_FAME:
+                    by_club.setdefault(c, set()).add(pid)
+        for c, ids in sorted(by_club.items()):
+            if max(players[pid]["fame"] for pid in ids) < CONNECTION_MIN_ANSWER_FAME:
+                continue
+            eras = 0
+            for pid in ids:
+                eras |= spells_mask([s for s in players[pid]["spells"] if s["club"] == c])
+            rosters.append({"category": cid, "club": c, "answers": sorted(ids), "eras": eras or 31})
+    return cats, rosters
+
+
+def slug_id(name: str) -> str:
+    return re.sub(r"[^a-z0-9]+", "-", unicodedata.normalize("NFKD", name).encode("ascii", "ignore").decode().lower()).strip("-")
 
 
 def generate_career_challenges(players, clubs):
@@ -740,7 +817,7 @@ def match_eras(m) -> int:
     return era_mask(year, year)
 
 
-def write_db(path: pathlib.Path, version: int, clubs, players, matches, connections, careers, bidding, checkouts, nations):
+def write_db(path: pathlib.Path, version: int, clubs, players, matches, connections, careers, bidding, checkouts, grid):
     if path.exists():
         path.unlink()
     con = sqlite3.connect(path)
@@ -777,8 +854,10 @@ def write_db(path: pathlib.Path, version: int, clubs, players, matches, connecti
         con.execute("INSERT INTO club_connections VALUES (?,?,?,?,?,?,?)",
                     (c["id"], c["a"], c["b"], len(c["answers"]), c["best"], c["difficulty"], c["eras"]))
         con.executemany("INSERT INTO connection_answers VALUES (?,?)", [(c["id"], pid) for pid in c["answers"]])
-    con.executemany("INSERT INTO nation_rosters VALUES (?,?,?,?)",
-                    [(n["nation"], n["club"], n["eras"], ",".join(n["answers"])) for n in nations])
+    cats, rosters = grid
+    con.executemany("INSERT INTO grid_categories VALUES (?,?,?)", [(c["id"], c["label"], c["kind"]) for c in cats])
+    con.executemany("INSERT INTO category_rosters VALUES (?,?,?,?)",
+                    [(r["category"], r["club"], r["eras"], ",".join(r["answers"])) for r in rosters])
     con.executemany("INSERT INTO career_challenges VALUES (?,?,?,?)",
                     [(c["player"], c["clues"], c["difficulty"], c["eras"]) for c in careers])
     for b in bidding:
@@ -797,7 +876,7 @@ def write_db(path: pathlib.Path, version: int, clubs, players, matches, connecti
     con.close()
 
 
-def write_json(path: pathlib.Path, version: int, clubs, players, matches, connections, careers, bidding, checkouts, nations):
+def write_json(path: pathlib.Path, version: int, clubs, players, matches, connections, careers, bidding, checkouts, grid):
     """Same content as the SQLite file, for the web build (no SQLite plugin in browsers)."""
     doc = {
         "db_version": version,
@@ -816,8 +895,9 @@ def write_json(path: pathlib.Path, version: int, clubs, players, matches, connec
             for c in careers
         ],
         "connections": [[c["id"], c["a"], c["b"], c["difficulty"], c["answers"], c["eras"]] for c in connections],
-        # nations: [nation, club, players, eras]
-        "nations": [[n["nation"], n["club"], n["answers"], n["eras"]] for n in nations],
+        # grid categories: [id, label, kind]; rosters: [category, club, players, eras]
+        "categories": [[c["id"], c["label"], c["kind"]] for c in grid[0]],
+        "category_rosters": [[r["category"], r["club"], r["answers"], r["eras"]] for r in grid[1]],
         # bidding: [id, prompt, difficulty, answers, eras, pointless scores, 1 if women's]
         "bidding": [[b["id"], b["prompt"], b["difficulty"], b["answers"], b["eras"],
                      [b["scores"][a] for a in b["answers"]], int(b["women"])] for b in bidding],
@@ -866,7 +946,7 @@ def main() -> int:
 
     connections = generate_connections(clubs, players)
     careers = generate_career_challenges(players, clubs)
-    nations = generate_nation_rosters(clubs, players)
+    grid = generate_grid_categories(clubs, players)
     countries_path = SEED / "countries.json"
     countries = json.loads(countries_path.read_text(encoding="utf-8"))["countries"] if countries_path.exists() else {}
     bidding = generate_bidding(clubs, players, connections, countries) + curated
@@ -876,13 +956,13 @@ def main() -> int:
     print(f"players={len(players)} clubs={len(clubs)} matches={len(matches)} "
           f"connections={len(connections)} {by_diff} careers={len(careers)} bidding={len(bidding)} "
           f"{ {d: sum(1 for b in bidding if b['difficulty'] == d) for d in (1, 2, 3)} } curated={len(curated)} "
-          f"checkouts={len(checkouts)} (women {sum(1 for c in checkouts if c['women'])}) nation_rosters={len(nations)}")
+          f"checkouts={len(checkouts)} (women {sum(1 for c in checkouts if c['women'])}) grid_categories={len(grid[0])} rosters={len(grid[1])}")
     if args.check:
         return 0
 
     ASSETS.mkdir(parents=True, exist_ok=True)
-    write_db(ASSETS / "football.db", args.version, clubs, players, matches, connections, careers, bidding, checkouts, nations)
-    write_json(ASSETS / "football.json", args.version, clubs, players, matches, connections, careers, bidding, checkouts, nations)
+    write_db(ASSETS / "football.db", args.version, clubs, players, matches, connections, careers, bidding, checkouts, grid)
+    write_json(ASSETS / "football.json", args.version, clubs, players, matches, connections, careers, bidding, checkouts, grid)
     (ASSETS / "football_db_version.txt").write_text(str(args.version), encoding="utf-8")
     print("wrote", ASSETS / "football.db", "version", args.version)
     return 0
