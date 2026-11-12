@@ -1,6 +1,17 @@
 {
-"_note": "Top 10 lists from Wikipedia record tables: 121 lists, 36 dropped. Built 2026-11-12.",
+"_note": "Top 10 lists from Wikipedia record tables: 146 lists, 47 dropped. Built 2026-11-12.",
 "dropped": [
+"pl-red-cards: 11 level on 10th",
+"pl-defender-goals: a player we don't know: Ian Marshall, Steve Watson",
+"pl-defender-assists: a player we don't know: Andy Hinchcliffe",
+"pl-goals-pt: a player we don't know: Daniel Podence",
+"pl-goals-de: a player we don't know: Kevin Schade",
+"pl-goals-gb-sct: a player we don't know: Don Hutchison, John Spencer",
+"pl-goals-ie: a player we don't know: Damien Duff",
+"pl-goals-gb-nir: a player we don't know: Iain Dowie, Michael Hughes, Jim Magilton, Steve Lomas, Gerry Taggart",
+"pl-goals-us: only 8 rows",
+"pl-assist-1990s: a player we don't know: Ruel Fox, Stuart Ripley",
+"pl-appearances-1990s: a player we don't know: Peter Atherton",
 "mufc-clean-sheets: row 6 names nobody we know: Alf Steward",
 "celtic-sales: row 3 names nobody we know: Jota (footballer, born March 1999)",
 "ucl-managers: row 4 names nobody we know: Arsène Wenger",
@@ -39,6 +50,1785 @@
 "ucl-2025: only 9 rows"
 ],
 "lists": [
+{
+"id": "pl-own-goals",
+"q": "Most Premier League own goals",
+"d": 2,
+"asof": "Nov 2026",
+"src": "premierleague.com stats",
+"e": [
+[
+1,
+"richard-dunne",
+"Richard Dunne",
+"10 own goals"
+],
+[
+2,
+"jamie-carragher",
+"Jamie Carragher",
+"7 own goals"
+],
+[
+2,
+"lewis-dunk",
+"Lewis Dunk",
+"7 own goals"
+],
+[
+2,
+"phil-jagielka",
+"Phil Jagielka",
+"7 own goals"
+],
+[
+2,
+"martin-skrtel",
+"Martin Škrtel",
+"7 own goals"
+],
+[
+6,
+"wes-brown",
+"Wes Brown",
+"6 own goals"
+],
+[
+6,
+"seamus-coleman",
+"Séamus Coleman",
+"6 own goals"
+],
+[
+6,
+"jonny-evans",
+"Jonny Evans",
+"6 own goals"
+],
+[
+6,
+"ryan-shawcross",
+"Ryan Shawcross",
+"6 own goals"
+],
+[
+6,
+"frank-sinclair",
+"Frank Sinclair",
+"6 own goals"
+]
+]
+},
+{
+"id": "pl-yellow-cards",
+"q": "Most Premier League yellow cards",
+"d": 3,
+"asof": "Nov 2026",
+"src": "premierleague.com stats",
+"e": [
+[
+1,
+"gareth-barry",
+"Gareth Barry",
+"123 yellows"
+],
+[
+2,
+"wayne-rooney",
+"Wayne Rooney",
+"102 yellows"
+],
+[
+3,
+"lee-bowyer",
+"Lee Bowyer",
+"99 yellows"
+],
+[
+3,
+"kevin-davies",
+"Kevin Davies",
+"99 yellows"
+],
+[
+5,
+"paul-scholes",
+"Paul Scholes",
+"97 yellows"
+],
+[
+6,
+"scott-parker",
+"Scott Parker",
+"92 yellows"
+],
+[
+7,
+"ashley-young",
+"Ashley Young",
+"91 yellows"
+],
+[
+8,
+"robbie-savage",
+"Robbie Savage",
+"89 yellows"
+],
+[
+9,
+"lee-cattermole",
+"Lee Cattermole",
+"88 yellows"
+],
+[
+10,
+"george-boateng",
+"George Boateng",
+"85 yellows",
+[
+[
+"kevin-nolan",
+"Kevin Nolan"
+]
+]
+]
+]
+},
+{
+"id": "pl-headers",
+"q": "Most Premier League headed goals (since 2006–07)",
+"d": 2,
+"asof": "Nov 2026",
+"src": "premierleague.com stats",
+"e": [
+[
+1,
+"peter-crouch",
+"Peter Crouch",
+"40 headers"
+],
+[
+1,
+"harry-kane",
+"Harry Kane",
+"40 headers"
+],
+[
+3,
+"christian-benteke",
+"Christian Benteke",
+"33 headers"
+],
+[
+4,
+"olivier-giroud",
+"Olivier Giroud",
+"32 headers"
+],
+[
+5,
+"chris-wood",
+"Chris Wood",
+"31 headers"
+],
+[
+6,
+"michail-antonio",
+"Michail Antonio",
+"25 headers"
+],
+[
+6,
+"dominic-calvert-lewin",
+"Dominic Calvert-Lewin",
+"25 headers"
+],
+[
+6,
+"romelu-lukaku",
+"Romelu Lukaku",
+"25 headers"
+],
+[
+6,
+"danny-welbeck",
+"Danny Welbeck",
+"25 headers"
+],
+[
+10,
+"andy-carroll",
+"Andy Carroll",
+"24 headers",
+[
+[
+"virgil-van-dijk",
+"Virgil van Dijk"
+]
+]
+]
+]
+},
+{
+"id": "pl-long-range",
+"q": "Most Premier League goals from outside the box (since 2006–07)",
+"d": 2,
+"asof": "Nov 2026",
+"src": "premierleague.com stats",
+"e": [
+[
+1,
+"kevin-de-bruyne",
+"Kevin De Bruyne",
+"30 goals"
+],
+[
+2,
+"harry-kane",
+"Harry Kane",
+"25 goals"
+],
+[
+3,
+"christian-eriksen",
+"Christian Eriksen",
+"23 goals"
+],
+[
+4,
+"wayne-rooney",
+"Wayne Rooney",
+"22 goals"
+],
+[
+5,
+"sergio-aguero",
+"Sergio Agüero",
+"21 goals"
+],
+[
+5,
+"james-maddison",
+"James Maddison",
+"21 goals"
+],
+[
+5,
+"gylfi-sigur-sson",
+"Gylfi Sigurðsson",
+"21 goals"
+],
+[
+5,
+"james-ward-prowse",
+"James Ward-Prowse",
+"21 goals"
+],
+[
+9,
+"steven-gerrard",
+"Steven Gerrard",
+"20 goals"
+],
+[
+10,
+"philippe-coutinho",
+"Philippe Coutinho",
+"19 goals",
+[
+[
+"frank-lampard",
+"Frank Lampard"
+],
+[
+"son-heung-min",
+"Son Heung-min"
+],
+[
+"ashley-young",
+"Ashley Young"
+]
+]
+]
+]
+},
+{
+"id": "pl-goals-no-title",
+"q": "Most Premier League goals without winning the title",
+"d": 2,
+"asof": "Nov 2026",
+"src": "premierleague.com stats",
+"e": [
+[
+1,
+"harry-kane",
+"Harry Kane",
+"213 goals"
+],
+[
+2,
+"robbie-fowler",
+"Robbie Fowler",
+"163 goals"
+],
+[
+3,
+"jermain-defoe",
+"Jermain Defoe",
+"162 goals"
+],
+[
+4,
+"les-ferdinand",
+"Les Ferdinand",
+"149 goals"
+],
+[
+5,
+"jimmy-floyd-hasselbaink",
+"Jimmy Floyd Hasselbaink",
+"127 goals"
+],
+[
+5,
+"son-heung-min",
+"Son Heung-min",
+"127 goals"
+],
+[
+7,
+"robbie-keane",
+"Robbie Keane",
+"126 goals"
+],
+[
+8,
+"romelu-lukaku",
+"Romelu Lukaku",
+"121 goals"
+],
+[
+9,
+"steven-gerrard",
+"Steven Gerrard",
+"120 goals"
+],
+[
+10,
+"emile-heskey",
+"Emile Heskey",
+"110 goals"
+]
+]
+},
+{
+"id": "pl-goals-br",
+"q": "Most Premier League goals by a Brazilian player",
+"d": 2,
+"asof": "Nov 2026",
+"src": "premierleague.com stats",
+"e": [
+[
+1,
+"roberto-firmino",
+"Roberto Firmino",
+"82 goals"
+],
+[
+2,
+"gabriel-jesus",
+"Gabriel Jesus",
+"79 goals"
+],
+[
+3,
+"richarlison",
+"Richarlison",
+"75 goals"
+],
+[
+4,
+"willian",
+"Willian",
+"47 goals"
+],
+[
+4,
+"philippe-coutinho",
+"Philippe Coutinho",
+"47 goals"
+],
+[
+6,
+"joao-pedro",
+"João Pedro",
+"42 goals"
+],
+[
+7,
+"gabriel-martinelli",
+"Gabriel Martinelli",
+"41 goals"
+],
+[
+8,
+"matheus-cunha",
+"Matheus Cunha",
+"40 goals"
+],
+[
+9,
+"bruno-guimaraes",
+"Bruno Guimarães",
+"32 goals"
+],
+[
+10,
+"juninho-paulista",
+"Juninho Paulista",
+"29 goals"
+]
+]
+},
+{
+"id": "pl-goals-fr",
+"q": "Most Premier League goals by a French player",
+"d": 2,
+"asof": "Nov 2026",
+"src": "premierleague.com stats",
+"e": [
+[
+1,
+"thierry-henry",
+"Thierry Henry",
+"175 goals"
+],
+[
+2,
+"nicolas-anelka",
+"Nicolas Anelka",
+"125 goals"
+],
+[
+3,
+"olivier-giroud",
+"Olivier Giroud",
+"90 goals"
+],
+[
+4,
+"louis-saha",
+"Louis Saha",
+"85 goals"
+],
+[
+5,
+"eric-cantona",
+"Eric Cantona",
+"70 goals"
+],
+[
+6,
+"anthony-martial",
+"Anthony Martial",
+"63 goals"
+],
+[
+7,
+"robert-pires",
+"Robert Pires",
+"62 goals"
+],
+[
+8,
+"alexandre-lacazette",
+"Alexandre Lacazette",
+"54 goals"
+],
+[
+9,
+"jean-philippe-mateta",
+"Jean-Philippe Mateta",
+"50 goals"
+],
+[
+10,
+"steed-malbranque",
+"Steed Malbranque",
+"39 goals"
+]
+]
+},
+{
+"id": "pl-goals-es",
+"q": "Most Premier League goals by a Spanish player",
+"d": 2,
+"asof": "Nov 2026",
+"src": "premierleague.com stats",
+"e": [
+[
+1,
+"fernando-torres",
+"Fernando Torres",
+"85 goals"
+],
+[
+2,
+"david-silva",
+"David Silva",
+"60 goals"
+],
+[
+3,
+"diego-costa",
+"Diego Costa",
+"53 goals"
+],
+[
+4,
+"juan-mata-pata",
+"Juan Mata Pata",
+"52 goals"
+],
+[
+5,
+"cesc-fabregas",
+"Cesc Fàbregas",
+"50 goals"
+],
+[
+6,
+"ayoze-perez",
+"Ayoze Pérez",
+"45 goals"
+],
+[
+7,
+"mikel-arteta",
+"Mikel Arteta",
+"41 goals"
+],
+[
+8,
+"pedro",
+"Pedro",
+"29 goals"
+],
+[
+9,
+"rodrigo",
+"Rodrigo",
+"27 goals"
+],
+[
+10,
+"marcos-alonso-mendoza",
+"Marcos Alonso Mendoza",
+"26 goals"
+]
+]
+},
+{
+"id": "pl-goals-nl",
+"q": "Most Premier League goals by a Dutch player",
+"d": 2,
+"asof": "Nov 2026",
+"src": "premierleague.com stats",
+"e": [
+[
+1,
+"robin-van-persie",
+"Robin van Persie",
+"144 goals"
+],
+[
+2,
+"jimmy-floyd-hasselbaink",
+"Jimmy Floyd Hasselbaink",
+"127 goals"
+],
+[
+3,
+"ruud-van-nistelrooy",
+"Ruud van Nistelrooy",
+"95 goals"
+],
+[
+4,
+"dennis-bergkamp",
+"Dennis Bergkamp",
+"87 goals"
+],
+[
+5,
+"dirk-kuyt",
+"Dirk Kuyt",
+"51 goals"
+],
+[
+6,
+"cody-gakpo",
+"Cody Gakpo",
+"33 goals"
+],
+[
+7,
+"virgil-van-dijk",
+"Virgil van Dijk",
+"31 goals"
+],
+[
+8,
+"georginio-wijnaldum",
+"Georginio Wijnaldum",
+"27 goals"
+],
+[
+9,
+"marc-overmars",
+"Marc Overmars",
+"25 goals"
+],
+[
+10,
+"bryan-roy",
+"Bryan Roy",
+"24 goals",
+[
+[
+"rafael-van-der-vaart",
+"Rafael van der Vaart"
+]
+]
+]
+]
+},
+{
+"id": "pl-goals-ar",
+"q": "Most Premier League goals by an Argentine player",
+"d": 2,
+"asof": "Nov 2026",
+"src": "premierleague.com stats",
+"e": [
+[
+1,
+"sergio-aguero",
+"Sergio Agüero",
+"184 goals"
+],
+[
+2,
+"carlos-tevez",
+"Carlos Tevez",
+"84 goals"
+],
+[
+3,
+"alexis-mac-allister",
+"Alexis Mac Allister",
+"29 goals"
+],
+[
+4,
+"manuel-lanzini",
+"Manuel Lanzini",
+"27 goals"
+],
+[
+5,
+"julian-alvarez",
+"Julián Alvarez",
+"20 goals"
+],
+[
+5,
+"hernan-crespo",
+"Hernán Crespo",
+"20 goals"
+],
+[
+5,
+"enzo-fernandez",
+"Enzo Fernández",
+"20 goals"
+],
+[
+8,
+"leonardo-ulloa",
+"Leonardo Ulloa",
+"19 goals"
+],
+[
+9,
+"emiliano-buendia",
+"Emiliano Buendía",
+"17 goals"
+],
+[
+9,
+"alejandro-garnacho",
+"Alejandro Garnacho",
+"17 goals",
+[
+[
+"erik-lamela",
+"Erik Lamela"
+]
+]
+]
+]
+},
+{
+"id": "pl-goals-be",
+"q": "Most Premier League goals by a Belgian player",
+"d": 3,
+"asof": "Nov 2026",
+"src": "premierleague.com stats",
+"e": [
+[
+1,
+"romelu-lukaku",
+"Romelu Lukaku",
+"121 goals"
+],
+[
+2,
+"christian-benteke",
+"Christian Benteke",
+"86 goals"
+],
+[
+3,
+"eden-hazard",
+"Eden Hazard",
+"85 goals"
+],
+[
+4,
+"kevin-de-bruyne",
+"Kevin De Bruyne",
+"72 goals"
+],
+[
+5,
+"leandro-trossard",
+"Leandro Trossard",
+"52 goals"
+],
+[
+6,
+"marouane-fellaini",
+"Marouane Fellaini",
+"37 goals"
+],
+[
+7,
+"kevin-mirallas",
+"Kevin Mirallas",
+"29 goals"
+],
+[
+8,
+"youri-tielemans",
+"Youri Tielemans",
+"27 goals"
+],
+[
+9,
+"divock-origi",
+"Divock Origi",
+"22 goals"
+],
+[
+10,
+"nacer-chadli",
+"Nacer Chadli",
+"21 goals"
+]
+]
+},
+{
+"id": "pl-goals-no",
+"q": "Most Premier League goals by a Norwegian player",
+"d": 3,
+"asof": "Nov 2026",
+"src": "premierleague.com stats",
+"e": [
+[
+1,
+"erling-haaland",
+"Erling Haaland",
+"121 goals"
+],
+[
+2,
+"ole-gunnar-solskjaer",
+"Ole Gunnar Solskjær",
+"91 goals"
+],
+[
+3,
+"joshua-king",
+"Joshua King",
+"53 goals"
+],
+[
+4,
+"steffen-iversen",
+"Steffen Iversen",
+"40 goals"
+],
+[
+5,
+"john-carew",
+"John Carew",
+"38 goals"
+],
+[
+5,
+"tore-andre-flo",
+"Tore André Flo",
+"38 goals"
+],
+[
+5,
+"martin-odegaard",
+"Martin Ødegaard",
+"38 goals"
+],
+[
+8,
+"morten-gamst-pedersen",
+"Morten Gamst Pedersen",
+"34 goals"
+],
+[
+9,
+"oyvind-leonhardsen",
+"Øyvind Leonhardsen",
+"30 goals"
+],
+[
+10,
+"egil-ostenstad",
+"Egil Østenstad",
+"29 goals"
+]
+]
+},
+{
+"id": "pl-goals-gb-wls",
+"q": "Most Premier League goals by a Welsh player",
+"d": 3,
+"asof": "Nov 2026",
+"src": "premierleague.com stats",
+"e": [
+[
+1,
+"ryan-giggs",
+"Ryan Giggs",
+"109 goals"
+],
+[
+2,
+"craig-bellamy",
+"Craig Bellamy",
+"81 goals"
+],
+[
+3,
+"gary-speed",
+"Gary Speed",
+"80 goals"
+],
+[
+4,
+"mark-hughes",
+"Mark Hughes",
+"64 goals"
+],
+[
+5,
+"john-hartson",
+"John Hartson",
+"55 goals"
+],
+[
+6,
+"gareth-bale",
+"Gareth Bale",
+"53 goals"
+],
+[
+7,
+"ian-rush",
+"Ian Rush",
+"48 goals"
+],
+[
+8,
+"dean-saunders",
+"Dean Saunders",
+"45 goals"
+],
+[
+9,
+"aaron-ramsey",
+"Aaron Ramsey",
+"40 goals"
+],
+[
+10,
+"harry-wilson",
+"Harry Wilson",
+"29 goals"
+]
+]
+},
+{
+"id": "pl-goals-ci",
+"q": "Most Premier League goals by an Ivorian player",
+"d": 3,
+"asof": "Nov 2026",
+"src": "premierleague.com stats",
+"e": [
+[
+1,
+"didier-drogba",
+"Didier Drogba",
+"104 goals"
+],
+[
+2,
+"wilfried-zaha",
+"Wilfried Zaha",
+"68 goals"
+],
+[
+3,
+"yaya-toure",
+"Yaya Touré",
+"62 goals"
+],
+[
+4,
+"salomon-kalou",
+"Salomon Kalou",
+"36 goals"
+],
+[
+5,
+"wilfried-bony",
+"Wilfried Bony",
+"35 goals"
+],
+[
+6,
+"nicolas-pepe",
+"Nicolas Pépé",
+"16 goals"
+],
+[
+7,
+"kolo-toure",
+"Kolo Touré",
+"12 goals"
+],
+[
+8,
+"amad-diallo",
+"Amad Diallo",
+"11 goals"
+],
+[
+9,
+"maxwel-cornet",
+"Maxwel Cornet",
+"10 goals"
+],
+[
+9,
+"sebastien-haller",
+"Sébastien Haller",
+"10 goals"
+]
+]
+},
+{
+"id": "pl-goals-africa",
+"q": "Most Premier League goals by an African player",
+"d": 2,
+"asof": "Nov 2026",
+"src": "premierleague.com stats",
+"e": [
+[
+1,
+"mohamed-salah",
+"Mohamed Salah",
+"193 goals"
+],
+[
+2,
+"sadio-mane",
+"Sadio Mané",
+"111 goals"
+],
+[
+3,
+"didier-drogba",
+"Didier Drogba",
+"104 goals"
+],
+[
+4,
+"emmanuel-adebayor",
+"Emmanuel Adebayor",
+"97 goals"
+],
+[
+5,
+"yakubu",
+"Yakubu",
+"95 goals"
+],
+[
+6,
+"riyad-mahrez",
+"Riyad Mahrez",
+"82 goals"
+],
+[
+7,
+"pierre-emerick-aubameyang",
+"Pierre-Emerick Aubameyang",
+"69 goals"
+],
+[
+8,
+"wilfried-zaha",
+"Wilfried Zaha",
+"68 goals"
+],
+[
+9,
+"yaya-toure",
+"Yaya Touré",
+"62 goals"
+],
+[
+10,
+"bryan-mbeumo",
+"Bryan Mbeumo",
+"57 goals"
+]
+]
+},
+{
+"id": "pl-goals-1990s",
+"q": "Most Premier League goals in the 1990s (1992–2000)",
+"d": 2,
+"asof": "Nov 2026",
+"src": "premierleague.com stats",
+"e": [
+[
+1,
+"alan-shearer",
+"Alan Shearer",
+"176 goals"
+],
+[
+2,
+"andy-cole",
+"Andy Cole",
+"123 goals"
+],
+[
+3,
+"les-ferdinand",
+"Les Ferdinand",
+"113 goals"
+],
+[
+3,
+"ian-wright",
+"Ian Wright",
+"113 goals"
+],
+[
+5,
+"robbie-fowler",
+"Robbie Fowler",
+"109 goals"
+],
+[
+6,
+"matt-le-tissier",
+"Matt Le Tissier",
+"99 goals"
+],
+[
+7,
+"dwight-yorke",
+"Dwight Yorke",
+"98 goals"
+],
+[
+8,
+"teddy-sheringham",
+"Teddy Sheringham",
+"92 goals"
+],
+[
+9,
+"dion-dublin",
+"Dion Dublin",
+"86 goals"
+],
+[
+10,
+"chris-sutton",
+"Chris Sutton",
+"81 goals"
+]
+]
+},
+{
+"id": "pl-goals-2000s",
+"q": "Most Premier League goals in the 2000s (2000–10)",
+"d": 2,
+"asof": "Nov 2026",
+"src": "premierleague.com stats",
+"e": [
+[
+1,
+"thierry-henry",
+"Thierry Henry",
+"157 goals"
+],
+[
+2,
+"frank-lampard",
+"Frank Lampard",
+"112 goals"
+],
+[
+3,
+"robbie-keane",
+"Robbie Keane",
+"109 goals"
+],
+[
+4,
+"wayne-rooney",
+"Wayne Rooney",
+"106 goals"
+],
+[
+5,
+"michael-owen",
+"Michael Owen",
+"99 goals"
+],
+[
+6,
+"jermain-defoe",
+"Jermain Defoe",
+"97 goals"
+],
+[
+7,
+"ruud-van-nistelrooy",
+"Ruud van Nistelrooy",
+"95 goals"
+],
+[
+8,
+"nicolas-anelka",
+"Nicolas Anelka",
+"93 goals"
+],
+[
+8,
+"jimmy-floyd-hasselbaink",
+"Jimmy Floyd Hasselbaink",
+"93 goals"
+],
+[
+10,
+"mark-viduka",
+"Mark Viduka",
+"92 goals"
+]
+]
+},
+{
+"id": "pl-assist-2000s",
+"q": "Most Premier League assists in the 2000s (2000–10)",
+"d": 3,
+"asof": "Nov 2026",
+"src": "premierleague.com stats",
+"e": [
+[
+1,
+"ryan-giggs",
+"Ryan Giggs",
+"84 assists"
+],
+[
+2,
+"frank-lampard",
+"Frank Lampard",
+"82 assists"
+],
+[
+3,
+"thierry-henry",
+"Thierry Henry",
+"66 assists"
+],
+[
+4,
+"cesc-fabregas",
+"Cesc Fàbregas",
+"59 assists"
+],
+[
+4,
+"steven-gerrard",
+"Steven Gerrard",
+"59 assists"
+],
+[
+6,
+"steed-malbranque",
+"Steed Malbranque",
+"52 assists"
+],
+[
+7,
+"wayne-rooney",
+"Wayne Rooney",
+"50 assists"
+],
+[
+8,
+"gareth-barry",
+"Gareth Barry",
+"46 assists"
+],
+[
+9,
+"dennis-bergkamp",
+"Dennis Bergkamp",
+"44 assists"
+],
+[
+10,
+"danny-murphy",
+"Danny Murphy",
+"43 assists"
+]
+]
+},
+{
+"id": "pl-appearances-2000s",
+"q": "Most Premier League appearances in the 2000s (2000–10)",
+"d": 3,
+"asof": "Nov 2026",
+"src": "premierleague.com stats",
+"e": [
+[
+1,
+"frank-lampard",
+"Frank Lampard",
+"350 apps"
+],
+[
+2,
+"jamie-carragher",
+"Jamie Carragher",
+"343 apps"
+],
+[
+3,
+"brad-friedel",
+"Brad Friedel",
+"337 apps"
+],
+[
+4,
+"gareth-barry",
+"Gareth Barry",
+"335 apps"
+],
+[
+5,
+"shay-given",
+"Shay Given",
+"334 apps"
+],
+[
+6,
+"emile-heskey",
+"Emile Heskey",
+"333 apps"
+],
+[
+7,
+"david-james",
+"David James",
+"329 apps"
+],
+[
+7,
+"mark-schwarzer",
+"Mark Schwarzer",
+"329 apps"
+],
+[
+9,
+"jussi-jaaskelainen",
+"Jussi Jääskeläinen",
+"326 apps"
+],
+[
+10,
+"steven-gerrard",
+"Steven Gerrard",
+"325 apps"
+]
+]
+},
+{
+"id": "pl-goals-2010s",
+"q": "Most Premier League goals in the 2010s (2010–20)",
+"d": 2,
+"asof": "Nov 2026",
+"src": "premierleague.com stats",
+"e": [
+[
+1,
+"sergio-aguero",
+"Sergio Agüero",
+"180 goals"
+],
+[
+2,
+"harry-kane",
+"Harry Kane",
+"143 goals"
+],
+[
+3,
+"romelu-lukaku",
+"Romelu Lukaku",
+"113 goals"
+],
+[
+4,
+"jamie-vardy",
+"Jamie Vardy",
+"103 goals"
+],
+[
+5,
+"wayne-rooney",
+"Wayne Rooney",
+"102 goals"
+],
+[
+6,
+"robin-van-persie",
+"Robin van Persie",
+"96 goals"
+],
+[
+7,
+"olivier-giroud",
+"Olivier Giroud",
+"86 goals"
+],
+[
+7,
+"raheem-sterling",
+"Raheem Sterling",
+"86 goals"
+],
+[
+9,
+"eden-hazard",
+"Eden Hazard",
+"85 goals"
+],
+[
+10,
+"sadio-mane",
+"Sadio Mané",
+"84 goals"
+]
+]
+},
+{
+"id": "pl-assist-2010s",
+"q": "Most Premier League assists in the 2010s (2010–20)",
+"d": 3,
+"asof": "Nov 2026",
+"src": "premierleague.com stats",
+"e": [
+[
+1,
+"david-silva",
+"David Silva",
+"93 assists"
+],
+[
+2,
+"kevin-de-bruyne",
+"Kevin De Bruyne",
+"66 assists"
+],
+[
+3,
+"christian-eriksen",
+"Christian Eriksen",
+"62 assists"
+],
+[
+4,
+"eden-hazard",
+"Eden Hazard",
+"54 assists"
+],
+[
+4,
+"mesut-ozil",
+"Mesut Özil",
+"54 assists"
+],
+[
+6,
+"wayne-rooney",
+"Wayne Rooney",
+"53 assists"
+],
+[
+7,
+"cesc-fabregas",
+"Cesc Fàbregas",
+"52 assists"
+],
+[
+7,
+"juan-mata-pata",
+"Juan Mata Pata",
+"52 assists"
+],
+[
+9,
+"james-milner",
+"James Milner",
+"48 assists"
+],
+[
+10,
+"chris-brunt",
+"Chris Brunt",
+"47 assists"
+]
+]
+},
+{
+"id": "pl-appearances-2010s",
+"q": "Most Premier League appearances in the 2010s (2010–20)",
+"d": 3,
+"asof": "Nov 2026",
+"src": "premierleague.com stats",
+"e": [
+[
+1,
+"ben-foster",
+"Ben Foster",
+"323 apps"
+],
+[
+2,
+"david-de-gea",
+"David de Gea",
+"313 apps"
+],
+[
+3,
+"david-silva",
+"David Silva",
+"309 apps"
+],
+[
+4,
+"jordan-henderson",
+"Jordan Henderson",
+"306 apps"
+],
+[
+5,
+"james-milner",
+"James Milner",
+"297 apps"
+],
+[
+6,
+"kyle-walker",
+"Kyle Walker",
+"290 apps"
+],
+[
+7,
+"gylfi-sigur-sson",
+"Gylfi Sigurðsson",
+"282 apps"
+],
+[
+8,
+"james-mcarthur",
+"James McArthur",
+"280 apps"
+],
+[
+8,
+"mark-noble",
+"Mark Noble",
+"280 apps"
+],
+[
+10,
+"cesar-azpilicueta",
+"César Azpilicueta",
+"271 apps",
+[
+[
+"gary-cahill",
+"Gary Cahill"
+],
+[
+"seamus-coleman",
+"Séamus Coleman"
+]
+]
+]
+]
+},
+{
+"id": "pl-goals-2020s",
+"q": "Most Premier League goals in the 2020s (since 2020)",
+"d": 2,
+"asof": "Nov 2026",
+"src": "premierleague.com stats",
+"e": [
+[
+1,
+"mohamed-salah",
+"Mohamed Salah",
+"118 goals"
+],
+[
+2,
+"erling-haaland",
+"Erling Haaland",
+"112 goals"
+],
+[
+3,
+"ollie-watkins",
+"Ollie Watkins",
+"91 goals"
+],
+[
+4,
+"son-heung-min",
+"Son Heung-min",
+"74 goals"
+],
+[
+5,
+"harry-kane",
+"Harry Kane",
+"70 goals"
+],
+[
+6,
+"jarrod-bowen",
+"Jarrod Bowen",
+"64 goals"
+],
+[
+7,
+"bruno-fernandes",
+"Bruno Fernandes",
+"63 goals"
+],
+[
+8,
+"phil-foden",
+"Phil Foden",
+"62 goals"
+],
+[
+9,
+"bukayo-saka",
+"Bukayo Saka",
+"59 goals"
+],
+[
+10,
+"alexander-isak",
+"Alexander Isak",
+"57 goals",
+[
+[
+"chris-wood",
+"Chris Wood"
+]
+]
+]
+]
+},
+{
+"id": "pl-assist-2020s",
+"q": "Most Premier League assists in the 2020s (since 2020)",
+"d": 3,
+"asof": "Nov 2026",
+"src": "premierleague.com stats",
+"e": [
+[
+1,
+"bruno-fernandes",
+"Bruno Fernandes",
+"65 assists"
+],
+[
+1,
+"mohamed-salah",
+"Mohamed Salah",
+"65 assists"
+],
+[
+3,
+"kevin-de-bruyne",
+"Kevin De Bruyne",
+"53 assists"
+],
+[
+4,
+"jarrod-bowen",
+"Jarrod Bowen",
+"45 assists"
+],
+[
+4,
+"bukayo-saka",
+"Bukayo Saka",
+"45 assists"
+],
+[
+6,
+"son-heung-min",
+"Son Heung-min",
+"42 assists"
+],
+[
+7,
+"trent-alexander-arnold",
+"Trent Alexander-Arnold",
+"38 assists"
+],
+[
+7,
+"james-maddison",
+"James Maddison",
+"38 assists"
+],
+[
+9,
+"ollie-watkins",
+"Ollie Watkins",
+"37 assists"
+],
+[
+9,
+"martin-odegaard",
+"Martin Ødegaard",
+"37 assists"
+]
+]
+},
+{
+"id": "pl-appearances-2020s",
+"q": "Most Premier League appearances in the 2020s (since 2020)",
+"d": 3,
+"asof": "Nov 2026",
+"src": "premierleague.com stats",
+"e": [
+[
+1,
+"ollie-watkins",
+"Ollie Watkins",
+"221 apps"
+],
+[
+2,
+"jarrod-bowen",
+"Jarrod Bowen",
+"218 apps"
+],
+[
+3,
+"jordan-pickford",
+"Jordan Pickford",
+"217 apps"
+],
+[
+3,
+"james-tarkowski",
+"James Tarkowski",
+"217 apps"
+],
+[
+5,
+"bruno-fernandes",
+"Bruno Fernandes",
+"216 apps"
+],
+[
+5,
+"tomas-soucek",
+"Tomáš Souček",
+"216 apps"
+],
+[
+7,
+"declan-rice",
+"Declan Rice",
+"214 apps"
+],
+[
+8,
+"emiliano-martinez",
+"Emiliano Martínez",
+"213 apps"
+],
+[
+9,
+"leandro-trossard",
+"Leandro Trossard",
+"208 apps"
+],
+[
+10,
+"mohamed-salah",
+"Mohamed Salah",
+"207 apps"
+]
+]
+},
 {
 "id": "pl-season-goals",
 "q": "Most Premier League goals in a season (best season each)",

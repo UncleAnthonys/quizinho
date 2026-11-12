@@ -11,9 +11,11 @@ otherwise the list shows ranks alone.
 from __future__ import annotations
 
 import datetime as dt
+import gzip
 import json
 import pathlib
 import re
+import unicodedata
 
 from top10_tables import LINK, load, strip_attr, tables
 
@@ -208,10 +210,121 @@ def season_record(pages, qids, by_qid, title):
     return entries, None
 
 
+AFRICA = set("DZ AO BJ BW BF BI CM CV CF TD KM CG CD CI DJ EG GQ ER SZ ET GA GM GH GN GW KE LS LR LY MG MW "
+               "ML MR MU MA MZ NA NE NG RW ST SN SC SL SO ZA SS SD TZ TG TN UG ZM ZW".split())
+SINCE_2006 = " (since 2006\u201307)"  # the feed only tracks these from then
+
+
+def _fold(t: str) -> str:
+    return unicodedata.normalize("NFKD", t).encode("ascii", "ignore").decode().lower()
+
+
+def feed_matcher(by_qid):
+    """Feed owner -> our player: same birth date and a shared name."""
+    raw = json.load(gzip.open(HERE / "raw" / "players.json.gz", "rt", encoding="utf-8"))
+    by_dob: dict[str, list[dict]] = {}
+    for r in raw:
+        if r["id"] in by_qid and r.get("dob"):
+            by_dob.setdefault(r["dob"], []).append(r)
+
+    def words(r):
+        p = by_qid[r["id"]]
+        names = [p["name"], r.get("name") or "", *p.get("aliases", []), *r.get("aliases", []), *r.get("family_names", [])]
+        return {w for n in names for w in re.findall(r"[a-z]+", _fold(n)) if len(w) > 2}
+
+    def match(owner):
+        ms = (owner.get("birth") or {}).get("date", {}).get("millis")
+        if ms is None:
+            return None
+        dob = dt.datetime.fromtimestamp(ms / 1000, dt.timezone.utc).date().isoformat()
+        name = owner["name"]
+        want = {w for w in re.findall(r"[a-z]+", _fold(f"{name.get('first', '')} {name.get('last', '')} {name['display']}")) if len(w) > 2}
+        hits = [r for r in by_dob.get(dob, []) if want & words(r)]
+        return by_qid[hits[0]["id"]] if len(hits) == 1 else None
+    return match
+
+
+def feed_list(rows, match, unit: str, keep=lambda o: True, max_alts: int = 8):
+    """(entries, problem) from feed rows (already ranked): the first ten that
+    pass keep(), with anyone level on 10th sharing the slot."""
+    rows = [r for r in rows if keep(r["owner"])]
+    if len(rows) < 11:
+        return None, f"only {len(rows)} rows"
+    cut = rows[9]["value"]
+    top, tied = rows[:10], [r for r in rows[10:] if r["value"] == cut]
+    if len(tied) > max_alts:
+        return None, f"{len(tied) + 1} level on 10th"
+    who = [match(r["owner"]) for r in top + tied]
+    if None in who:
+        return None, "a player we don't know: " + ", ".join(
+            r["owner"]["name"]["display"] for r, w in zip(top + tied, who) if w is None)
+    entries, rank = [], 0
+    for i, (r, p) in enumerate(zip(top, who)):
+        rank = rank if i and r["value"] == top[i - 1]["value"] else i + 1
+        alts = [[w["id"], w["name"]] for w in who[10:]] if i == 9 else []
+        entries.append([rank, p["id"], p["name"], f"{int(r['value']):,} {unit}"] + ([alts] if alts else []))
+    return entries, None
+
+
+def feed_lists(pages, qids, by_qid):
+    """Top 10s from the Premier League stats feed (raw/pl_stats.json.gz)."""
+    path = HERE / "raw" / "pl_stats.json.gz"
+    if not path.exists():
+        return [], ["pl stats: no feed data"]
+    feed = json.load(gzip.open(path, "rt", encoding="utf-8"))
+    al, dec = feed["all"], feed["decades"]
+    match = feed_matcher(by_qid)
+    nat = lambda *codes: (lambda o: (o.get("nationalTeam") or {}).get("isoCode") in codes)
+    pos = lambda code: (lambda o: (o.get("info") or {}).get("position") == code)
+    # Title winners: everyone in Wikipedia's list of Premier League winners.
+    winners = set()
+    page = pages.get("List of Premier League winning players")
+    if page:
+        for _, _, _, rows in tables(page):
+            for cells in rows:
+                for l in LINK.findall(" ".join(strip_attr(c) for c in cells)):
+                    if (q := qids.get(l.strip())) in by_qid:
+                        winners.add(by_qid[q]["id"])
+    specs = [
+        ("pl-own-goals", "Most Premier League own goals", 2, al["own_goals"], "own goals", None),
+        ("pl-red-cards", "Most Premier League red cards", 2, al["red_card"], "reds", None),
+        ("pl-yellow-cards", "Most Premier League yellow cards", 3, al["yellow_card"], "yellows", None),
+        ("pl-headers", "Most Premier League headed goals" + SINCE_2006, 2, al["att_hd_goal"], "headers", None),
+        ("pl-long-range", "Most Premier League goals from outside the box" + SINCE_2006, 2, al["att_obox_goal"], "goals", None),
+        ("pl-defender-goals", "Most Premier League goals by a defender", 3, al["goals"], "goals", pos("D")),
+        ("pl-defender-assists", "Most Premier League assists by a defender", 3, al["goal_assist"], "assists", pos("D")),
+        ("pl-goals-no-title", "Most Premier League goals without winning the title", 2, al["goals"], "goals",
+         lambda o: (p := match(o)) is not None and p["id"] not in winners),
+    ]
+    for code, label, d in [("BR", "Brazilian", 2), ("FR", "French", 2), ("ES", "Spanish", 2), ("NL", "Dutch", 2),
+                           ("AR", "Argentine", 2), ("PT", "Portuguese", 3), ("DE", "German", 3), ("BE", "Belgian", 3),
+                           ("NO", "Norwegian", 3), ("GB-SCT", "Scottish", 3), ("GB-WLS", "Welsh", 3), ("IE", "Irish", 3),
+                           ("GB-NIR", "Northern Irish", 3), ("US", "American", 3), ("CI", "Ivorian", 3)]:
+        specs.append((f"pl-goals-{code.lower()}", f"Most Premier League goals by {'an' if label[0] in 'AEIOU' else 'a'} {label} player", d, al["goals"], "goals", nat(code)))
+    specs.append(("pl-goals-africa", "Most Premier League goals by an African player", 2, al["goals"], "goals",
+                  lambda o: (o.get("nationalTeam") or {}).get("isoCode") in AFRICA))
+    for name, span in [("1990s", "1992\u20132000"), ("2000s", "2000\u201310"), ("2010s", "2010\u201320"), ("2020s", "since 2020")]:
+        for stat, what, unit in [("goals", "goals", "goals"), ("goal_assist", "assists", "assists"), ("appearances", "appearances", "apps")]:
+            specs.append((f"pl-{stat.split('_')[-1]}-{name}", f"Most Premier League {what} in the {name} ({span})",
+                          2 if stat == "goals" else 3, dec[name][stat], unit, None))
+    out, dropped = [], []
+    for lid, q, d, rows, unit, keep in specs:
+        entries, problem = feed_list(rows, match, unit, keep or (lambda o: True))
+        if problem:
+            dropped.append(f"{lid}: {problem}")
+        else:
+            out.append({"id": lid, "q": q, "d": d, "asof": dt.date.today().strftime("%b %Y"),
+                        "src": "premierleague.com stats", "e": entries})
+    return out, dropped
+
+
 def main() -> int:
     pages, qids, by_qid = load()
     qids.update(TITLE_QID)
     out, dropped = [], []
+    got, lost = feed_lists(pages, qids, by_qid)
+    out += got
+    dropped += lost
     for lid, q, d, title in [
         ("pl-season-goals", "Most Premier League goals in a season (best season each)", 2,
          lambda y: f"{_season(y)} {'FA ' if y < 2007 else ''}Premier League"),
