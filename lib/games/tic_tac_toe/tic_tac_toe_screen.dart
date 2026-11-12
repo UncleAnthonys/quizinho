@@ -112,7 +112,7 @@ class _TicTacToeScreenState extends State<TicTacToeScreen>
   void _syncPhones(TicTacToeController c) {
     final p = _phones;
     if (p == null) return;
-    final extra = [for (var i = 0; i < _t.teamCount; i++) '${c.squaresOf(i)} ▢'];
+    final extra = [for (var i = 0; i < _t.teamCount; i++) _scoreLine(c, i)];
     if (c.phase == TttPhase.finished) {
       p.idle(c.winner != null ? '${_t.teamName(c.winner!)} get three in a row!' : 'Squares decide it',
           game: 'ttt', board: _view(c), extra: extra);
@@ -228,7 +228,7 @@ class _TicTacToeScreenState extends State<TicTacToeScreen>
                 : Scoreboard(
                     tournament: _t,
                     highlightTeam: c.phase == TttPhase.finished ? null : c.currentTeam,
-                    extra: (i) => '${c.squaresOf(i)} ▢',
+                    extra: (i) => _scoreLine(c, i),
                   ),
             typing ? const SizedBox.shrink() : CommentaryBanner(text: commentaryText),
             Expanded(
@@ -248,6 +248,10 @@ class _TicTacToeScreenState extends State<TicTacToeScreen>
     );
   }
 
+  /// Under each team's score: squares and lives ("3 ▢  ♥♥").
+  String _scoreLine(TicTacToeController c, int team) =>
+      '${c.squaresOf(team)} ▢  ${c.livesLeft[team] > 0 ? '♥' * c.livesLeft[team] : 'OUT'}';
+
   /// Everything both the host and joined phones draw.
   Map<String, Object?> _view(TicTacToeController c) => {
         ...TttBoard.snapshot(c, _t),
@@ -264,7 +268,6 @@ class _TicTacToeScreenState extends State<TicTacToeScreen>
       );
     }
     if (c.phase == TttPhase.choosing) {
-      final left = c.turnsUntilStall;
       return Column(children: [
         if (c.clockRunning) ...[
           TimerBar(fraction: c.fractionLeft, seconds: c.secondsLeft),
@@ -275,24 +278,11 @@ class _TicTacToeScreenState extends State<TicTacToeScreen>
           Text('1 STEAL LEFT - TAP ONE OF THEIR SQUARES AND NAME A DIFFERENT PLAYER',
               textAlign: TextAlign.center, style: AppText.label(13, color: Palette.yellow)),
         ],
-        // Solo ends on lives; the party game on goes without a square.
-        if (_t.teamCount == 1 && c.misses > 0) ...[
+        // Lives are on the scoreboard; the last one gets a warning.
+        if (c.livesLeft[c.currentTeam] == 1) ...[
           const SizedBox(height: 8),
-          Text(
-            switch (TicTacToeController.soloLives - c.misses) {
-              1 => 'LAST LIFE',
-              final n => '$n LIVES LEFT',
-            },
-            textAlign: TextAlign.center,
-            style: AppText.label(14, color: Palette.gold),
-          ),
-        ] else if (_t.teamCount > 1 && c.dryTurns > 0 && left > 0) ...[
-          const SizedBox(height: 8),
-          Text(
-            left == 1 ? 'NO SQUARE THIS TURN AND THE GAME ENDS' : '$left MORE TURNS WITHOUT A SQUARE ENDS THE GAME',
-            textAlign: TextAlign.center,
-            style: AppText.label(14, color: Palette.gold),
-          ),
+          Text(_t.teamCount == 1 ? 'LAST LIFE' : '${_t.teamName(c.currentTeam).toUpperCase()} - LAST LIFE',
+              textAlign: TextAlign.center, style: AppText.label(14, color: Palette.gold)),
         ],
         const SizedBox(height: 10),
         OutlinedButton.icon(

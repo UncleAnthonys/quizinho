@@ -35,6 +35,39 @@ String soloScoring(GameModeId m) => switch (m) {
       _ => '',
     };
 
+/// The rules for each game played alone (the party rules talk about teams).
+List<String> soloRules(GameModeId m) => switch (m) {
+      GameModeId.clubConnections => [
+          'Two clubs appear. Name a player who played for both.',
+          '5 pairs. Quicker answers and rarer picks score more.',
+        ],
+      GameModeId.careerPath => [
+          'A player’s clubs appear one at a time. Name the player.',
+          '5 careers. The fewer clubs you need, the more you score.',
+        ],
+      GameModeId.pointless => [
+          'A category appears. Give one answer.',
+          '3 categories. The more obscure your answer, the more you score.',
+        ],
+      GameModeId.checkout501 => [
+          'Start on 501. Name a player: their league apps + goals for that club come off.',
+          'Over 180 is a bust. Check out between 0 and −10 in as few darts as you can.',
+        ],
+      GameModeId.startingXi => [
+          'A famous line-up with the names hidden. Name as many of the XI as you can.',
+          '3 lives.',
+        ],
+      GameModeId.ticTacToe => [
+          'Pick a square, then name a player who fits both its headers.',
+          'Fill all nine. 3 lives. A full grid is 100. Each player only once.',
+        ],
+      GameModeId.top10 => [
+          'Name as many of the ten as you can. Each one is worth 10.',
+          'A wrong name costs a life. 3 lives.',
+        ],
+      _ => [soloScoring(m)],
+    };
+
 /// Play on your own: the real games, scored out of 100 each so personal
 /// bests line up — one game, the Solo Cup (all six), or Survival.
 class SoloScreen extends StatefulWidget {
@@ -300,11 +333,22 @@ class SoloRun {
       };
 }
 
-class _SoloIntro extends StatelessWidget {
+/// Before a solo game: its rules (folded away behind "Rules" once you've
+/// played it alone before), then Kick off.
+class _SoloIntro extends StatefulWidget {
   const _SoloIntro({required this.mode, required this.step, required this.onGo});
   final GameModeId mode;
   final String step;
   final void Function(BuildContext context) onGo;
+
+  @override
+  State<_SoloIntro> createState() => _SoloIntroState();
+}
+
+class _SoloIntroState extends State<_SoloIntro> {
+  GameModeId get mode => widget.mode;
+  String get _seenKey => 'solo_${mode.name}';
+  late bool _showRules = !AppScope.read(context).settings.rulesSeen(_seenKey);
 
   @override
   Widget build(BuildContext context) => Scaffold(
@@ -321,14 +365,32 @@ class _SoloIntro extends StatelessWidget {
                   ),
                 ),
                 const Spacer(),
-                Text(step, style: AppText.label(15, color: Palette.text)),
+                Text(widget.step, style: AppText.label(15, color: Palette.text)),
                 const SizedBox(height: 12),
                 Icon(mode.icon, color: mode.color, size: 56),
                 const SizedBox(height: 8),
                 Text(mode.soloTitle.toUpperCase(), textAlign: TextAlign.center, style: AppText.headline(44, color: mode.color)),
                 Text(mode.tagline, textAlign: TextAlign.center, style: const TextStyle(color: Palette.muted, fontSize: 16)),
                 const SizedBox(height: 20),
-                Text(soloScoring(mode), textAlign: TextAlign.center, style: const TextStyle(fontSize: 18, height: 1.4)),
+                if (_showRules)
+                  for (final (i, r) in soloRules(mode).indexed)
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 12),
+                      child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                        CircleAvatar(
+                            radius: 13,
+                            backgroundColor: mode.color,
+                            child: Text('${i + 1}', style: AppText.headline(15, color: Palette.pitchDeep))),
+                        const SizedBox(width: 12),
+                        Expanded(child: Text(r, style: const TextStyle(fontSize: 17, height: 1.4))),
+                      ]),
+                    )
+                else
+                  TextButton.icon(
+                    onPressed: () => setState(() => _showRules = true),
+                    icon: const Icon(Icons.menu_book_rounded, color: Palette.yellow),
+                    label: Text('RULES', style: AppText.label(16, color: Palette.yellow)),
+                  ),
                 const Spacer(flex: 2),
                 BigButton(
                   label: 'Kick off',
@@ -337,7 +399,8 @@ class _SoloIntro extends StatelessWidget {
                     final s = AppScope.read(context);
                     s.sound.play(Sfx.whistle);
                     s.haptic(HapticStrength.medium);
-                    onGo(context);
+                    s.settings.markRulesSeen(_seenKey);
+                    widget.onGo(context);
                   },
                 ),
               ]),

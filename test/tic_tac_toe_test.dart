@@ -172,7 +172,7 @@ void main() {
       expect(c.currentTeam, 1);
       expect(c.phase, TttPhase.choosing);
       expect(c.secondsLeft, 5);
-      expect(c.dryTurns, 1);
+      expect(c.livesLeft, [2, 3]);
     });
 
     test('Pack the Box: scored on squares filled, no line bonus', () {
@@ -223,14 +223,22 @@ void main() {
       expect(c.result().points, {0: 3 + TicTacToeController.lineBonus, 1: 2});
     });
 
-    test('turn limit ends a long game', () {
-      final c = TicTacToeController(grid: grid(), teamCount: 2, maxTurns: 4, stallLaps: 99);
-      for (var i = 0; i < 4; i++) {
-        c.choose(0);
-        c.pass();
-      }
+    test('a team out of lives sits out; all out ends it', () {
+      final c = make(); // 2 teams, 3 lives each
+      c.pass(); // team 0: 2 left
+      c.choose(0);
+      c.submit(player('nobody')); // team 1: 2 left
+      c.pass(); // 0: 1
+      c.pass(); // 1: 1
+      c.pass(); // 0: out
+      expect(c.livesLeft, [0, 1]);
+      expect(c.currentTeam, 1);
+      c.choose(4);
+      c.submit(player('p4')); // a square; team 0 is out, so 1 goes again
+      expect(c.currentTeam, 1);
+      c.pass(); // 1: out
       expect(c.phase, TttPhase.finished);
-      expect(c.winner, isNull);
+      expect(c.result().points, {0: 0, 1: 1});
     });
 
     test('a team can pass without picking a square', () {
@@ -239,21 +247,13 @@ void main() {
       expect(c.currentTeam, 1);
     });
 
-    test('two laps with nobody claiming ends it; a claim resets the count', () {
-      final c = make(); // 2 teams, stallLaps 2 → 4 dry turns
-      c.pass();
-      c.choose(0);
+    test('Pack the Box ends after three lives', () {
+      final c = TicTacToeController(grid: grid(), teamCount: 1)..choose(0);
       c.submit(player('nobody'));
       c.pass();
-      expect(c.turnsUntilStall, 1);
-      c.choose(5);
-      c.submit(player('p5')); // claim resets
-      expect(c.turnsUntilStall, 4);
-      for (var i = 0; i < 4; i++) {
-        c.pass();
-      }
+      expect(c.phase, TttPhase.choosing);
+      c.pass();
       expect(c.phase, TttPhase.finished);
-      expect(c.result().points, {0: 0, 1: 1});
     });
   });
 }

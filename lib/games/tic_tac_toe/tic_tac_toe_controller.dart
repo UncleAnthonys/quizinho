@@ -163,8 +163,7 @@ class TicTacToeController extends ChangeNotifier {
     this.answerSeconds = 20,
     this.chooseSeconds = 20,
     this.steals = 1,
-    this.maxTurns = 18,
-    this.stallLaps = 2,
+    this.lives = 3,
   }) : currentTeam = startTeam % teamCount {
     _startChoosing();
   }
@@ -194,12 +193,10 @@ class TicTacToeController extends ChangeNotifier {
       !locked[square] &&
       stealsLeft[currentTeam] > 0;
 
-  /// Stops a stalemate dragging on: after this many turns, most squares wins.
-  final int maxTurns;
-
-  /// Game also ends when every team has gone this many times in a row
-  /// without claiming a square — nobody knows the rest, so move on.
-  final int stallLaps;
+  /// Lives per team (and solo): a wrong answer, a time-out or a pass costs
+  /// one. A team with none left sits out; when every team is out, it ends.
+  final int lives;
+  late final List<int> livesLeft = List<int>.filled(teamCount, lives);
 
   static const int lineBonus = 3;
   static const List<List<int>> lines = [
@@ -217,9 +214,6 @@ class TicTacToeController extends ChangeNotifier {
   int? selected;
   double secondsLeft = 0;
   int turns = 0;
-
-  /// Turns in a row that claimed nothing (misses, timeouts and passes).
-  int dryTurns = 0;
 
   /// Bumps every time a new team's turn starts.
   int turnSerial = 0;
@@ -245,9 +239,6 @@ class TicTacToeController extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// Turns left before a run of no claims ends the game.
-  int get turnsUntilStall => stallLaps * teamCount - dryTurns;
-
   void advance(Duration elapsed) {
     if (!clockRunning) return;
     secondsLeft -= elapsed.inMicroseconds / 1e6;
@@ -256,9 +247,9 @@ class TicTacToeController extends ChangeNotifier {
       if (phase == TttPhase.answering) {
         _miss(timeout: true);
       } else {
-        // Too long picking: the turn goes.
+        // Too long picking: a life, and the turn goes.
         _emit(GameEvent.timeUp);
-        dryTurns++;
+        livesLeft[currentTeam]--;
         _nextTurn();
       }
       return;
@@ -293,7 +284,7 @@ class TicTacToeController extends ChangeNotifier {
       _miss();
     } else if (phase == TttPhase.choosing) {
       _emit(GameEvent.nobodyGotIt);
-      dryTurns++;
+      livesLeft[currentTeam]--;
       _nextTurn();
     }
   }
@@ -307,13 +298,9 @@ class TicTacToeController extends ChangeNotifier {
         solo: teamCount == 1 ? (squaresOf(0) * 100 / 9).round() : null,
       );
 
-  /// Solo: wrong answers or passes allowed before the game ends.
-  static const int soloLives = 3;
-  int misses = 0;
   bool get _solo => teamCount == 1;
 
   void _claim(int sq, String name) {
-    dryTurns = 0;
     if (stealing) {
       stealsLeft[currentTeam]--;
       locked[sq] = true;
@@ -341,8 +328,7 @@ class TicTacToeController extends ChangeNotifier {
     // A steal that misses is used up.
     if (stealing) stealsLeft[currentTeam]--;
     _emit(timeout ? GameEvent.timeUp : GameEvent.wrong);
-    dryTurns++;
-    misses++;
+    livesLeft[currentTeam]--;
     _nextTurn();
   }
 
@@ -350,11 +336,14 @@ class TicTacToeController extends ChangeNotifier {
     turns++;
     selected = null;
     stealing = false;
-    if (_solo ? misses >= soloLives : (turns >= maxTurns || dryTurns >= stallLaps * teamCount)) {
+    if (livesLeft.every((l) => l <= 0)) {
       _finish();
       return;
     }
-    currentTeam = (currentTeam + 1) % teamCount;
+    // On to the next team with lives left (round again to this one if it's the last).
+    do {
+      currentTeam = (currentTeam + 1) % teamCount;
+    } while (livesLeft[currentTeam] <= 0);
     phase = TttPhase.choosing;
     _startChoosing();
     turnSerial++;
