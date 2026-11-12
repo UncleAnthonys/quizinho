@@ -21,6 +21,9 @@ class Top10Screen extends StatefulWidget {
 
 class _Top10ScreenState extends State<Top10Screen> with TickerProviderStateMixin<Top10Screen>, GameScreenSupport<Top10Screen> {
   static const _mode = GameModeId.top10;
+
+  /// Top 10's gold (as GameModeStyle.color in match_flow.dart).
+  static const _accent = Color(0xFFFFD34D);
   Top10Controller? _c;
   bool _empty = false;
   int _pickerKey = 0;
@@ -93,7 +96,7 @@ class _Top10ScreenState extends State<Top10Screen> with TickerProviderStateMixin
                           color: i < c.lives ? Palette.danger : Palette.muted, size: 24),
                     ),
                 ]),
-                Text('TOP 10', style: AppText.label(15, color: _mode.color)),
+                Text('TOP 10', style: AppText.label(15, color: _accent)),
                 const SizedBox(height: 2),
                 Text(c.list.prompt.toUpperCase(),
                     textAlign: TextAlign.center, style: AppText.headline(typing ? 22 : 28).copyWith(height: 1.05)),
@@ -107,7 +110,7 @@ class _Top10ScreenState extends State<Top10Screen> with TickerProviderStateMixin
                     key: ValueKey('top10-$_pickerKey'),
                     index: services.repo.players,
                     voice: services.voice,
-                    accent: _mode.color,
+                    accent: _accent,
                     hint: 'Name one of the ten…',
                     onPick: (p) => _submit(c, p),
                     isAnswer: (p) => c.list.indexOf(p.id) != null,
@@ -118,7 +121,7 @@ class _Top10ScreenState extends State<Top10Screen> with TickerProviderStateMixin
                       child: Text("I'M OUT - SHOW THE REST", style: AppText.label(13)),
                     ),
                 ] else ...[
-                  SoloScore(score: c.score, color: _mode.color),
+                  SoloScore(score: c.score, color: _accent),
                   const SizedBox(height: 8),
                   BigButton(label: 'Finish', icon: Icons.flag, onPressed: () => widget.round.onComplete(c.result())),
                 ],
@@ -142,14 +145,14 @@ class _Top10ScreenState extends State<Top10Screen> with TickerProviderStateMixin
             duration: const Duration(milliseconds: 250),
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
             decoration: BoxDecoration(
-              color: got ? _mode.color.withValues(alpha: 0.18) : Colors.black.withValues(alpha: 0.3),
+              color: got ? _accent.withValues(alpha: 0.18) : Colors.black.withValues(alpha: 0.3),
               borderRadius: BorderRadius.circular(10),
-              border: Border.all(color: fresh ? _mode.color : Palette.line, width: fresh ? 2 : 1),
+              border: Border.all(color: fresh ? _accent : Palette.line, width: fresh ? 2 : 1),
             ),
             child: Row(children: [
               SizedBox(
                 width: 30,
-                child: Text('${e.rank}', style: AppText.headline(20, color: got ? _mode.color : Palette.muted)),
+                child: Text('${e.rank}', style: AppText.headline(20, color: got ? _accent : Palette.muted)),
               ),
               Expanded(
                 child: Text(
