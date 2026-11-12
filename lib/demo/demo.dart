@@ -6,6 +6,7 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/scheduler.dart';
 
 import '../core/app_services.dart';
 import '../core/theme.dart';
@@ -75,6 +76,7 @@ class DemoPilot {
   bool _started = false;
   bool _done = false;
   bool _busy = false;
+  Map<String, Object?> Function() _fps = () => const {};
 
   static const _teamNames = [
     ('THE GAFFERS', 'SUNDAY LEAGUE'),
@@ -117,6 +119,17 @@ class DemoPilot {
     await _wait(3000);
     if (!context.mounted) return;
     _log('go');
+    final began = DateTime.now();
+    var frames = 0, slow = 0;
+    SchedulerBinding.instance.addTimingsCallback((ts) {
+      frames += ts.length;
+      slow += ts.where((f) => f.totalSpan.inMilliseconds > 40).length;
+    });
+    _fps = () => {
+          'fps': (frames / max(1, DateTime.now().difference(began).inMilliseconds) * 1000).toStringAsFixed(1),
+          'slowFrames': slow,
+          'frames': frames,
+        };
     caption.value = 'Kick it to pick the game';
     MatchFlow.toWheel(context, t);
     final end = DateTime.now().add(const Duration(minutes: 3));
@@ -132,7 +145,7 @@ class DemoPilot {
         _busy = false;
       }
     }
-    if (!_done) _log('end', {'timeout': true});
+    if (!_done) _log('end', {'timeout': true, ..._fps()});
   }
 
   // ---- what's on screen ----------------------------------------------------
@@ -314,7 +327,7 @@ class DemoPilot {
     }
     if (DateTime.now().difference(_summaryAt!).inMilliseconds < 3000) return;
     _done = true;
-    _log('end');
+    _log('end', _fps());
   }
 
   // ---- finding and touching widgets ----------------------------------------

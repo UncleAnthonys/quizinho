@@ -1,7 +1,7 @@
 # Records a daily 9:16 gameplay video for TikTok / Reels / Shorts: the web
 # build's ?demo=1 mode plays one round by itself, Chrome is filmed with
-# sound. The video, post caption and answers are attached to the run
-# (Actions → Daily demo video → the run → Artifacts), kept 30 days.
+# sound. Each video is published as a GitHub pre-release (repo → Releases),
+# with the post caption as its notes; kept 30 days.
 name: Daily demo video
 
 on:
@@ -76,14 +76,32 @@ jobs:
       - name: TEMP preview frames to the branch
         if: github.event_name == 'push'
         run: |
-          mkdir -p docs/demo && cp out/sheet.jpg out/thumb.jpg docs/demo/
-          ffmpeg -loglevel error -i out/quizinho-demo.mp4 -vf "fps=1,scale=360:-1" docs/demo/f%02d.jpg
+          mkdir -p docs/demo && cp out/sheet.jpg docs/demo/
           git config user.name "quizinho-data-bot"; git config user.email "quizinho-data-bot@users.noreply.github.com"
-          git add docs/demo && git commit -qm "TEMP demo preview frames [skip ci]" && git push -q
+          git add docs/demo && git commit -qm "TEMP demo preview [skip ci]" && git push -q
+
+      # A release per day: the mp4 downloads straight to a phone, the caption
+      # is the release notes. Marked pre-release so it's never "the" release.
+      # Video releases older than 30 days are deleted.
+      - name: Publish
+        if: success()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          tag="video-$SEED-${{ github.run_number }}"
+          cp out/quizinho-demo.mp4 "out/quizinho-$SEED.mp4"
+          gh release create "$tag" "out/quizinho-$SEED.mp4" out/thumb.jpg out/meta.json \
+            --target "${{ github.sha }}" --prerelease \
+            --title "Daily video $SEED ($(jq -r .game out/meta.json))" --notes-file out/caption.txt
+          cutoff=$(date -u -d '30 days ago' +%s)
+          gh release list --limit 200 --json tagName,createdAt -q '.[] | select(.tagName | startswith("video-")) | "\(.tagName) \(.createdAt)"' |
+            while read -r t c; do
+              [ "$(date -u -d "$c" +%s)" -lt "$cutoff" ] && gh release delete "$t" --yes --cleanup-tag || true
+            done
 
       - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: quizinho-video-${{ env.SEED }}
           path: out/
-          retention-days: 30
+          retention-days: 7

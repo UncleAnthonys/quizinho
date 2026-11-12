@@ -148,7 +148,10 @@ def main() -> int:
     )
     with open(os.path.join(args.out, "caption.txt"), "w") as f:
         f.write(caption)
+    end_ev = next(ev for _, ev in events if ev.get("e") == "end")
     meta = {
+        "fps": end_ev.get("fps"),
+        "slowFrames": end_ev.get("slowFrames"),
         "seed": ready.get("seed"),
         "game": game,
         "teams": ready.get("teams"),
