@@ -492,9 +492,13 @@ GRID_CUPS = {
 
 
 def _overlap(s1: int, e1: int, s2: int, e2: int) -> bool:
-    """Spells (in years) that shared at least one season: a year-only overlap
-    (left in 2008, other arrived in 2008) isn't enough."""
-    return max(s1, s2) < min(e1, e2)
+    """Spells (in years) that shared at least one season. A year-only overlap
+    at the edges (one left in 2008, the other arrived in 2008) isn't enough,
+    but a short spell inside the other one counts: a half-season loan in 2008
+    while the other was there 2005-2010."""
+    if max(s1, s2) < min(e1, e2):
+        return True
+    return (s1 == e1 and s2 < s1 < e2) or (s2 == e2 and s1 < s2 < e1)
 
 
 def _years(spell) -> tuple[int, int] | None:
@@ -521,7 +525,7 @@ def generate_grid_categories(clubs, players):
         if star not in players:
             continue
         cid = f"with:{star}"
-        cats.append({"id": cid, "label": f"Played with {label}", "kind": "teammate"})
+        cats.append({"id": cid, "label": f"Club teammate of {label}", "kind": "teammate"})
         theirs = [(s["club"], y) for s in players[star]["spells"] if (y := _years(s))]
         own[cid] = {c for c, _ in theirs}
         members[cid] = {
