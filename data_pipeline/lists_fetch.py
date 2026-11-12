@@ -70,6 +70,10 @@ def season(y: int) -> str:
 PL_SEASONS = [f"{season(y)} {'FA ' if y < 2007 else ''}Premier League" for y in range(1992, 2026)]
 UCL_SEASONS = [f"{season(y)} UEFA Champions League" for y in range(1992, 2026)]
 ARTICLES += PL_SEASONS + UCL_SEASONS
+# Each year's Ballon d'Or vote (none in 2020), England's captains, and
+# Champions League hat-tricks.
+ARTICLES += [f"{y} Ballon d'Or" for y in range(1956, 2026) if y != 2020]
+ARTICLES += ["List of England national football team captains", "List of UEFA Champions League hat-tricks"]
 
 
 def main() -> int:
