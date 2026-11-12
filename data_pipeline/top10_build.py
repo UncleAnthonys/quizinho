@@ -24,6 +24,7 @@ PL = "Premier League records and statistics"
 LISTS = [
     # (id, article, table index, question, level, unit)
     ("pl-goals", PL, 1, "Premier League all-time top scorers", 1, "goals"),
+    ("pl-apps", PL, 0, "Most Premier League appearances", 2, "apps"),
     ("pl-assists", PL, 4, "Most Premier League assists", 2, "assists"),
     ("pl-clean-sheets", PL, 5, "Most Premier League clean sheets", 2, "clean sheets"),
     ("pl-penalties", PL, 2, "Most Premier League penalties scored", 3, "pens"),
@@ -57,6 +58,23 @@ LISTS = [
     ("pl-free-kicks", PL, 3, "Most Premier League free-kick goals", 2, "free kicks"),
     ("wc-goals", "List of FIFA World Cup top goalscorers", 2, "World Cup all-time top scorers", 2, "goals"),
     ("eng-captains", "List of England national football team captains", 3, "Most games as England captain", 2, "as captain"),
+    ("ucl-assists", "UEFA Champions League records and statistics", 6, "Most Champions League assists", 2, "assists"),
+    ("ucl-managers", "UEFA Champions League records and statistics", 9, "Most Champions League games as a manager", 3, "games"),
+    ("pl-managers", "List of Premier League managers", 5, "Most Premier League games as a manager", 2, "games"),
+    ("pl-titles", "List of Premier League winning players", 0, "Most Premier League titles as a player", 2, "titles"),
+    ("pl-potm", "Premier League Player of the Month", 1, "Most Premier League Player of the Month awards", 2, "awards"),
+    ("sco-caps", "Scotland national football team records and statistics", 0, "Most Scotland caps", 2, "caps"),
+    ("sco-goals", "Scotland national football team records and statistics", 1, "Scotland's all-time top scorers", 2, "goals"),
+    ("wal-caps", "Wales national football team records and statistics", 0, "Most Wales caps", 2, "caps"),
+    ("wal-goals", "Wales national football team records and statistics", 1, "Wales's all-time top scorers", 2, "goals"),
+    ("nir-caps", "Northern Ireland national football team records and statistics", 0, "Most Northern Ireland caps", 3, "caps"),
+    ("nir-goals", "Northern Ireland national football team records and statistics", 1, "Northern Ireland's all-time top scorers", 3, ""),
+    ("man-derby-goals", "Manchester derby", 1, "Most goals in the Manchester derby", 3, ""),
+    ("nld-goals", "North London derby", 2, "Most goals in the North London derby (Premier League era)", 2, "goals"),
+    ("mersey-goals", "Merseyside derby", 2, "Most goals in the Merseyside derby", 3, ""),
+    ("clasico-goals", "El Clásico", 13, "Most goals in El Clásico", 2, "goals"),
+    ("milan-derby-goals", "Derby della Madonnina", 2, "Most goals in the Milan derby", 3, "goals"),
+    ("world-transfers", "List of most expensive association football transfers", 0, "The 10 most expensive transfers ever (a player's biggest)", 1, "\u20acm"),
 ]
 # Skip rows naming anyone in another table on the page (the captains
 # ranking mixes in the women's team, listed in its own chronology).
@@ -89,12 +107,21 @@ SEASONS = [
 
 
 def num(s: str) -> int | None:
-    s = re.sub(r"<ref.*", "", s).strip().replace(",", "")
+    s = re.sub(r"<ref.*|<!--.*|(?<=\d)\s*\{\{efn.*", "", s, flags=re.S).strip().replace(",", "")
     s = re.sub(r"'''|''", "", s).strip()
-    return int(s) if re.fullmatch(r"\d+", s) else None
+    if re.fullmatch(r"\d+", s):
+        return int(s)
+    return float(s) if re.fullmatch(r"\d+\.\d+", s) else None
 
 
-def build_list(rows, qids, by_qid, unit: str):
+# Lists whose figure isn't the first number after the name (the column).
+# Lists where a player can appear twice (a transfer each): keep the first.
+DEDUPE = {"world-transfers"}
+
+FIG_COL = {"wal-goals": 4, "clasico-goals": -1, "world-transfers": 5}
+
+
+def build_list(rows, qids, by_qid, unit: str, col: int | None = None, dedupe: bool = False):
     """(entries, problem): the first ten rows that link anything, all matched.
     Players level with 10th beyond the ten (Beattie, Keane and Pirès all on
     14) share the 10th slot: naming any of them fills it."""
@@ -107,7 +134,8 @@ def build_list(rows, qids, by_qid, unit: str):
             continue
         if len(picked) >= 10:
             k0 = links[0][0]
-            fig = next((n for c in cells[k0 + 1:] if (n := num(c)) is not None), None)
+            fig = (num(cells[col]) if -len(cells) <= col < len(cells) else None) if col is not None else \
+                next((n for c in cells[k0 + 1:] if (n := num(c)) is not None), None)
             who = next((by_qid[qids[l]] for _, l in links if qids.get(l) in by_qid), None)
             extra.append((who, fig))
             if fig is None or fig != picked[-1][1]:
@@ -118,8 +146,11 @@ def build_list(rows, qids, by_qid, unit: str):
             return None, f"row {len(picked) + 1} names nobody we know: {links[0][1]}"
         k, p = hit
         if any(e[0]["id"] == p["id"] for e in picked):
+            if dedupe:
+                continue
             return None, f"{p['name']} twice (a by-season table?)"
-        figure = next((n for c in cells[k + 1:] if (n := num(c)) is not None), None)
+        figure = (num(cells[col]) if -len(cells) <= col < len(cells) else None) if col is not None else \
+            next((n for c in cells[k + 1:] if (n := num(c)) is not None), None)
         picked.append((p, figure))
     if len(picked) < 10:
         return None, f"only {len(picked)} rows"
@@ -132,20 +163,20 @@ def build_list(rows, qids, by_qid, unit: str):
     for i, (p, f) in enumerate(picked):
         # Level on the figure: same place ("=4").
         rank = rank if ordered and i and f == figs[i - 1] else i + 1
-        shown = f"{f:,} {unit}".strip() if ordered and unit else ""
+        shown = (f"\u20ac{f:g}m" if unit == "\u20acm" else f"{f:,} {unit}".strip()) if ordered and unit else ""
         alts = [[w["id"], w["name"]] for w in tied] if i == 9 else []
         entries.append([rank, p["id"], p["name"], shown, alts] if alts else
                        [rank, p["id"], p["name"], shown] if shown else [rank, p["id"], p["name"]])
     return entries, None
 
 
-def pl_season_record(pages, qids, by_qid):
-    """Most Premier League goals in a season, each player's best once
-    ("36 (2022\u201323)"), from every season's top-scorer table: a 30-goal
-    season is always in its season's top ten."""
+def season_record(pages, qids, by_qid, title):
+    """Most goals in one season of a competition, each player's best once
+    ("36 (2022\u201323)"), from every season's top-scorer table (a record
+    season is always in its own season's top ten). title(y) -> article."""
     best: dict[str, tuple[int, int, dict]] = {}
     for y in range(1992, 2026):
-        page = pages.get(f"{_season(y)} {'FA ' if y < 2007 else ''}Premier League")
+        page = pages.get(title(y))
         if not page:
             return None, f"no page for {_season(y)}"
         tabs = list(tables(page))
@@ -166,13 +197,14 @@ def pl_season_record(pages, qids, by_qid):
                 best[key] = (goals, y, by_qid.get(qids.get(l)))
     ranked = sorted(best.values(), key=lambda b: -b[0])
     cut = ranked[9][0]
-    top = [b for b in ranked if b[0] >= cut]
-    if len(top) > 10 or any(p is None for _, _, p in top):
-        return None, "tie past 10th or a player we don't know"
+    top, tied = ranked[:10], [b for b in ranked[10:] if b[0] == cut]
+    if any(p is None for _, _, p in top + tied):
+        return None, "a player we don't know: " + ", ".join(str(y) for _, y, p in top + tied if p is None)
     entries, rank = [], 0
     for i, (g, y, p) in enumerate(top):
         rank = rank if i and g == top[i - 1][0] else i + 1
-        entries.append([rank, p["id"], p["name"], f"{g} ({_season(y)})"])
+        alts = [[w["id"], w["name"]] for _, _, w in tied] if i == 9 else []
+        entries.append([rank, p["id"], p["name"], f"{g} ({_season(y)})"] + ([alts] if alts else []))
     return entries, None
 
 
@@ -180,12 +212,17 @@ def main() -> int:
     pages, qids, by_qid = load()
     qids.update(TITLE_QID)
     out, dropped = [], []
-    entries, problem = pl_season_record(pages, qids, by_qid)
-    if problem:
-        dropped.append(f"pl-season-goals: {problem}")
-    else:
-        out.append({"id": "pl-season-goals", "q": "Most Premier League goals in a season (best season each)", "d": 2,
-                    "src": "Premier League season articles", "e": entries})
+    for lid, q, d, title in [
+        ("pl-season-goals", "Most Premier League goals in a season (best season each)", 2,
+         lambda y: f"{_season(y)} {'FA ' if y < 2007 else ''}Premier League"),
+        ("ucl-season-goals", "Most Champions League goals in a season (best season each)", 2,
+         lambda y: f"{_season(y)} UEFA Champions League"),
+    ]:
+        entries, problem = season_record(pages, qids, by_qid, title)
+        if problem:
+            dropped.append(f"{lid}: {problem}")
+        else:
+            out.append({"id": lid, "q": q, "d": d, "src": "season articles", "e": entries})
     for lid, article, idx, question, level, unit in LISTS + SEASONS:
         page = pages.get(article)
         if not page:
@@ -202,7 +239,7 @@ def main() -> int:
         if lid in EXCLUDE:
             other = {l.strip() for r in tabs[EXCLUDE[lid]][3] for c in r for l in LINK.findall(strip_attr(c))}
             rows = [r for r in rows if not any(l.strip() in other for c in r for l in LINK.findall(strip_attr(c)))]
-        entries, problem = build_list(rows, qids, by_qid, unit)
+        entries, problem = build_list(rows, qids, by_qid, unit, FIG_COL.get(lid), lid in DEDUPE)
         if problem:
             dropped.append(f"{lid}: {problem}")
             continue

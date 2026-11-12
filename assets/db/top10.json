@@ -1,8 +1,15 @@
 {
-"_note": "Top 10 lists from Wikipedia record tables: 109 lists, 29 dropped. Built 2026-11-12.",
+"_note": "Top 10 lists from Wikipedia record tables: 121 lists, 36 dropped. Built 2026-11-12.",
 "dropped": [
 "mufc-clean-sheets: row 6 names nobody we know: Alf Steward",
 "celtic-sales: row 3 names nobody we know: Jota (footballer, born March 1999)",
+"ucl-managers: row 4 names nobody we know: Arsène Wenger",
+"pl-managers: row 1 names nobody we know: Arsène Wenger",
+"sco-goals: row 8 names nobody we know: Robert Hamilton (Scottish footballer)",
+"nir-goals: row 3 names nobody we know: Billy Gillespie",
+"man-derby-goals: row 2 names nobody we know: Joe Hayes (footballer)",
+"mersey-goals: row 3 names nobody we know: Alex Young (footballer, born 1880)",
+"milan-derby-goals: row 6 names nobody we know: Enrico Candiani",
 "ballon-dor-1990: row 1 names nobody we know: Lothar Matthäus",
 "ballon-dor-1991: row 4 names nobody we know: Lothar Matthäus",
 "ballon-dor-1999: row 10 names nobody we know: Lothar Matthäus",
@@ -36,7 +43,7 @@
 "id": "pl-season-goals",
 "q": "Most Premier League goals in a season (best season each)",
 "d": 2,
-"src": "Premier League season articles",
+"src": "season articles",
 "e": [
 [
 1,
@@ -97,6 +104,80 @@
 "harry-kane",
 "Harry Kane",
 "30 (2017–18)"
+]
+]
+},
+{
+"id": "ucl-season-goals",
+"q": "Most Champions League goals in a season (best season each)",
+"d": 2,
+"src": "season articles",
+"e": [
+[
+1,
+"cristiano-ronaldo",
+"Cristiano Ronaldo",
+"17 (2013–14)"
+],
+[
+2,
+"karim-benzema",
+"Karim Benzema",
+"15 (2021–22)"
+],
+[
+2,
+"robert-lewandowski",
+"Robert Lewandowski",
+"15 (2019–20)"
+],
+[
+2,
+"kylian-mbappe",
+"Kylian Mbappé",
+"15 (2025–26)"
+],
+[
+5,
+"lionel-messi",
+"Lionel Messi",
+"14 (2011–12)"
+],
+[
+5,
+"harry-kane",
+"Harry Kane",
+"14 (2025–26)"
+],
+[
+7,
+"serhou-guirassy",
+"Serhou Guirassy",
+"13 (2024–25)"
+],
+[
+7,
+"raphinha",
+"Raphinha",
+"13 (2024–25)"
+],
+[
+9,
+"ruud-van-nistelrooy",
+"Ruud van Nistelrooy",
+"12 (2002–03)"
+],
+[
+9,
+"mario-gomez",
+"Mario Gómez",
+"12 (2011–12)",
+[
+[
+"erling-haaland",
+"Erling Haaland"
+]
+]
 ]
 ]
 },
@@ -166,6 +247,75 @@
 "jermain-defoe",
 "Jermain Defoe",
 "162 goals"
+]
+]
+},
+{
+"id": "pl-apps",
+"q": "Most Premier League appearances",
+"d": 2,
+"asof": "Nov 2026",
+"src": "Premier League records and statistics",
+"e": [
+[
+1,
+"james-milner",
+"James Milner",
+"658 apps"
+],
+[
+2,
+"gareth-barry",
+"Gareth Barry",
+"653 apps"
+],
+[
+3,
+"ryan-giggs",
+"Ryan Giggs",
+"632 apps"
+],
+[
+4,
+"frank-lampard",
+"Frank Lampard",
+"609 apps"
+],
+[
+5,
+"david-james",
+"David James",
+"572 apps"
+],
+[
+6,
+"gary-speed",
+"Gary Speed",
+"535 apps"
+],
+[
+7,
+"emile-heskey",
+"Emile Heskey",
+"516 apps"
+],
+[
+8,
+"mark-schwarzer",
+"Mark Schwarzer",
+"514 apps"
+],
+[
+9,
+"jamie-carragher",
+"Jamie Carragher",
+"508 apps"
+],
+[
+10,
+"phil-neville",
+"Phil Neville",
+"505 apps"
 ]
 ]
 },
@@ -2225,6 +2375,788 @@
 "Wayne Rooney"
 ]
 ]
+]
+]
+},
+{
+"id": "ucl-assists",
+"q": "Most Champions League assists",
+"d": 2,
+"asof": "Nov 2026",
+"src": "UEFA Champions League records and statistics",
+"e": [
+[
+1,
+"ryan-giggs",
+"Ryan Giggs",
+"41 assists"
+],
+[
+2,
+"cristiano-ronaldo",
+"Cristiano Ronaldo",
+"40 assists"
+],
+[
+3,
+"lionel-messi",
+"Lionel Messi",
+"39 assists"
+],
+[
+4,
+"angel-di-maria",
+"Ángel Di María",
+"38 assists"
+],
+[
+5,
+"david-beckham",
+"David Beckham",
+"36 assists"
+],
+[
+6,
+"luis-figo",
+"Luís Figo",
+"34 assists"
+],
+[
+7,
+"xavi-hernandez",
+"Xavi Hernández",
+"31 assists"
+],
+[
+8,
+"neymar",
+"Neymar",
+"30 assists"
+],
+[
+9,
+"kevin-de-bruyne",
+"Kevin De Bruyne",
+"28 assists"
+],
+[
+10,
+"raul",
+"Raúl",
+"27 assists",
+[
+[
+"karim-benzema",
+"Karim Benzema"
+]
+]
+]
+]
+},
+{
+"id": "pl-titles",
+"q": "Most Premier League titles as a player",
+"d": 2,
+"asof": "Nov 2026",
+"src": "List of Premier League winning players",
+"e": [
+[
+1,
+"ryan-giggs",
+"Ryan Giggs",
+"13 titles"
+],
+[
+2,
+"paul-scholes",
+"Paul Scholes",
+"11 titles"
+],
+[
+3,
+"gary-neville",
+"Gary Neville",
+"8 titles"
+],
+[
+4,
+"denis-irwin",
+"Denis Irwin",
+"7 titles"
+],
+[
+4,
+"roy-keane",
+"Roy Keane",
+"7 titles"
+],
+[
+6,
+"david-beckham",
+"David Beckham",
+"6 titles"
+],
+[
+6,
+"nicky-butt",
+"Nicky Butt",
+"6 titles"
+],
+[
+6,
+"phil-neville",
+"Phil Neville",
+"6 titles"
+],
+[
+6,
+"ole-gunnar-solskjaer",
+"Ole Gunnar Solskjær",
+"6 titles"
+],
+[
+6,
+"rio-ferdinand",
+"Rio Ferdinand",
+"6 titles",
+[
+[
+"kevin-de-bruyne",
+"Kevin De Bruyne"
+],
+[
+"ederson",
+"Ederson"
+],
+[
+"phil-foden",
+"Phil Foden"
+],
+[
+"bernardo-silva",
+"Bernardo Silva"
+],
+[
+"john-stones",
+"John Stones"
+],
+[
+"kyle-walker",
+"Kyle Walker"
+]
+]
+]
+]
+},
+{
+"id": "pl-potm",
+"q": "Most Premier League Player of the Month awards",
+"d": 2,
+"asof": "Nov 2026",
+"src": "Premier League Player of the Month",
+"e": [
+[
+1,
+"sergio-aguero",
+"Sergio Agüero",
+"7 awards"
+],
+[
+1,
+"harry-kane",
+"Harry Kane",
+"7 awards"
+],
+[
+1,
+"mohamed-salah",
+"Mohamed Salah",
+"7 awards"
+],
+[
+4,
+"bruno-fernandes",
+"Bruno Fernandes",
+"6 awards"
+],
+[
+4,
+"steven-gerrard",
+"Steven Gerrard",
+"6 awards"
+],
+[
+4,
+"cristiano-ronaldo",
+"Cristiano Ronaldo",
+"6 awards"
+],
+[
+7,
+"wayne-rooney",
+"Wayne Rooney",
+"5 awards"
+],
+[
+7,
+"robin-van-persie",
+"Robin van Persie",
+"5 awards"
+],
+[
+9,
+"dennis-bergkamp",
+"Dennis Bergkamp",
+"4 awards"
+],
+[
+9,
+"erling-haaland",
+"Erling Haaland",
+"4 awards",
+[
+[
+"thierry-henry",
+"Thierry Henry"
+],
+[
+"frank-lampard",
+"Frank Lampard"
+],
+[
+"marcus-rashford",
+"Marcus Rashford"
+],
+[
+"son-heung-min",
+"Son Heung-min"
+],
+[
+"paul-scholes",
+"Paul Scholes"
+],
+[
+"alan-shearer",
+"Alan Shearer"
+],
+[
+"jamie-vardy",
+"Jamie Vardy"
+]
+]
+]
+]
+},
+{
+"id": "sco-caps",
+"q": "Most Scotland caps",
+"d": 2,
+"asof": "Nov 2026",
+"src": "Scotland national football team records and statistics",
+"e": [
+[
+1,
+"kenny-dalglish",
+"Kenny Dalglish",
+"102 caps"
+],
+[
+2,
+"andy-robertson",
+"Andy Robertson",
+"101 caps"
+],
+[
+3,
+"john-mcginn",
+"John McGinn",
+"93 caps"
+],
+[
+4,
+"jim-leighton",
+"Jim Leighton",
+"91 caps"
+],
+[
+5,
+"craig-gordon",
+"Craig Gordon",
+"84 caps"
+],
+[
+6,
+"darren-fletcher",
+"Darren Fletcher",
+"80 caps"
+],
+[
+7,
+"alex-mcleish",
+"Alex McLeish",
+"77 caps"
+],
+[
+8,
+"paul-mcstay",
+"Paul McStay",
+"76 caps"
+],
+[
+9,
+"ryan-christie",
+"Ryan Christie",
+"74 caps"
+],
+[
+10,
+"scott-mctominay",
+"Scott McTominay",
+"73 caps"
+]
+]
+},
+{
+"id": "wal-caps",
+"q": "Most Wales caps",
+"d": 2,
+"asof": "Nov 2026",
+"src": "Wales national football team records and statistics",
+"e": [
+[
+1,
+"gareth-bale",
+"Gareth Bale",
+"111 caps"
+],
+[
+2,
+"chris-gunter",
+"Chris Gunter",
+"109 caps"
+],
+[
+2,
+"wayne-hennessey",
+"Wayne Hennessey",
+"109 caps"
+],
+[
+4,
+"ben-davies",
+"Ben Davies",
+"104 caps"
+],
+[
+5,
+"neville-southall",
+"Neville Southall",
+"92 caps"
+],
+[
+6,
+"ashley-williams",
+"Ashley Williams",
+"86 caps"
+],
+[
+6,
+"aaron-ramsey",
+"Aaron Ramsey",
+"86 caps"
+],
+[
+8,
+"gary-speed",
+"Gary Speed",
+"85 caps"
+],
+[
+9,
+"craig-bellamy",
+"Craig Bellamy",
+"78 caps"
+],
+[
+10,
+"joe-ledley",
+"Joe Ledley",
+"77 caps",
+[
+[
+"joe-allen",
+"Joe Allen"
+]
+]
+]
+]
+},
+{
+"id": "wal-goals",
+"q": "Wales's all-time top scorers",
+"d": 2,
+"asof": "Nov 2026",
+"src": "Wales national football team records and statistics",
+"e": [
+[
+1,
+"gareth-bale",
+"Gareth Bale",
+"41 goals"
+],
+[
+2,
+"ian-rush",
+"Ian Rush",
+"28 goals"
+],
+[
+3,
+"trevor-ford",
+"Trevor Ford",
+"23 goals"
+],
+[
+3,
+"ivor-allchurch",
+"Ivor Allchurch",
+"23 goals"
+],
+[
+5,
+"dean-saunders",
+"Dean Saunders",
+"22 goals"
+],
+[
+6,
+"aaron-ramsey",
+"Aaron Ramsey",
+"21 goals"
+],
+[
+7,
+"craig-bellamy",
+"Craig Bellamy",
+"19 goals"
+],
+[
+8,
+"harry-wilson",
+"Harry Wilson",
+"17 goals"
+],
+[
+9,
+"robert-earnshaw",
+"Robert Earnshaw",
+"16 goals"
+],
+[
+9,
+"cliff-jones",
+"Cliff Jones",
+"16 goals",
+[
+[
+"mark-hughes",
+"Mark Hughes"
+]
+]
+]
+]
+},
+{
+"id": "nir-caps",
+"q": "Most Northern Ireland caps",
+"d": 3,
+"asof": "Nov 2026",
+"src": "Northern Ireland national football team records and statistics",
+"e": [
+[
+1,
+"steven-davis",
+"Steven Davis",
+"140 caps"
+],
+[
+2,
+"pat-jennings",
+"Pat Jennings",
+"119 caps"
+],
+[
+3,
+"aaron-hughes",
+"Aaron Hughes",
+"112 caps"
+],
+[
+4,
+"jonny-evans",
+"Jonny Evans",
+"107 caps"
+],
+[
+5,
+"david-healy",
+"David Healy",
+"95 caps"
+],
+[
+6,
+"josh-magennis",
+"Josh Magennis",
+"93 caps"
+],
+[
+7,
+"mal-donaghy",
+"Mal Donaghy",
+"91 caps"
+],
+[
+8,
+"kyle-lafferty",
+"Kyle Lafferty",
+"89 caps"
+],
+[
+9,
+"sammy-mcilroy",
+"Sammy McIlroy",
+"88 caps"
+],
+[
+9,
+"maik-taylor",
+"Maik Taylor",
+"88 caps"
+]
+]
+},
+{
+"id": "nld-goals",
+"q": "Most goals in the North London derby (Premier League era)",
+"d": 2,
+"asof": "Nov 2026",
+"src": "North London derby",
+"e": [
+[
+1,
+"harry-kane",
+"Harry Kane",
+"14 goals"
+],
+[
+2,
+"emmanuel-adebayor",
+"Emmanuel Adebayor",
+"10 goals"
+],
+[
+3,
+"robert-pires",
+"Robert Pires",
+"8 goals"
+],
+[
+3,
+"son-heung-min",
+"Son Heung-min",
+"8 goals"
+],
+[
+5,
+"gareth-bale",
+"Gareth Bale",
+"5 goals"
+],
+[
+5,
+"thierry-henry",
+"Thierry Henry",
+"5 goals"
+],
+[
+5,
+"robin-van-persie",
+"Robin van Persie",
+"5 goals"
+],
+[
+5,
+"eberechi-eze",
+"Eberechi Eze",
+"5 goals"
+],
+[
+9,
+"pierre-emerick-aubameyang",
+"Pierre-Emerick Aubameyang",
+"4 goals"
+],
+[
+9,
+"freddie-ljungberg",
+"Freddie Ljungberg",
+"4 goals",
+[
+[
+"rafael-van-der-vaart",
+"Rafael van der Vaart"
+],
+[
+"patrick-vieira",
+"Patrick Vieira"
+],
+[
+"theo-walcott",
+"Theo Walcott"
+],
+[
+"ian-wright",
+"Ian Wright"
+]
+]
+]
+]
+},
+{
+"id": "clasico-goals",
+"q": "Most goals in El Clásico",
+"d": 2,
+"asof": "Nov 2026",
+"src": "El Clásico",
+"e": [
+[
+1,
+"lionel-messi",
+"Lionel Messi",
+"26 goals"
+],
+[
+2,
+"alfredo-di-stefano",
+"Alfredo Di Stéfano",
+"18 goals"
+],
+[
+2,
+"cristiano-ronaldo",
+"Cristiano Ronaldo",
+"18 goals"
+],
+[
+4,
+"karim-benzema",
+"Karim Benzema",
+"16 goals"
+],
+[
+5,
+"raul",
+"Raúl",
+"15 goals"
+],
+[
+6,
+"cesar-rodriguez-alvarez",
+"César Rodríguez Álvarez",
+"14 goals"
+],
+[
+6,
+"paco-gento",
+"Paco Gento",
+"14 goals"
+],
+[
+6,
+"ferenc-puskas",
+"Ferenc Puskás",
+"14 goals"
+],
+[
+9,
+"santillana",
+"Santillana",
+"12 goals"
+],
+[
+10,
+"luis-suarez",
+"Luis Suárez",
+"11 goals"
+]
+]
+},
+{
+"id": "world-transfers",
+"q": "The 10 most expensive transfers ever (a player's biggest)",
+"d": 1,
+"asof": "Nov 2026",
+"src": "List of most expensive association football transfers",
+"e": [
+[
+1,
+"neymar",
+"Neymar",
+"€222m"
+],
+[
+2,
+"kylian-mbappe",
+"Kylian Mbappé",
+"€180m"
+],
+[
+3,
+"enzo-fernandez",
+"Enzo Fernández",
+"€145.8m"
+],
+[
+4,
+"alexander-isak",
+"Alexander Isak",
+"€144.5m"
+],
+[
+5,
+"morgan-rogers",
+"Morgan Rogers",
+"€137.3m"
+],
+[
+6,
+"elliot-anderson",
+"Elliot Anderson",
+"€135.5m"
+],
+[
+7,
+"joao-felix",
+"João Félix",
+"€126m"
+],
+[
+8,
+"yan-diomande",
+"Yan Diomande",
+"€125m"
+],
+[
+8,
+"bradley-barcola",
+"Bradley Barcola",
+"€125m"
+],
+[
+10,
+"antoine-griezmann",
+"Antoine Griezmann",
+"€120m"
 ]
 ]
 },
@@ -4477,52 +5409,68 @@
 [
 1,
 "dimitar-berbatov",
-"Dimitar Berbatov"
+"Dimitar Berbatov",
+"20 goals"
 ],
 [
-2,
+1,
 "carlos-tevez",
-"Carlos Tevez"
+"Carlos Tevez",
+"20 goals"
 ],
 [
 3,
 "robin-van-persie",
-"Robin van Persie"
+"Robin van Persie",
+"18 goals"
 ],
 [
 4,
 "darren-bent",
-"Darren Bent"
+"Darren Bent",
+"17 goals"
 ],
 [
 5,
 "peter-odemwingie",
-"Peter Odemwingie"
+"Peter Odemwingie",
+"15 goals"
 ],
 [
 6,
 "dj-campbell",
-"DJ Campbell"
+"DJ Campbell",
+"13 goals"
 ],
 [
-7,
+6,
 "andy-carroll",
-"Andy Carroll"
+"Andy Carroll",
+"13 goals"
 ],
 [
-8,
+6,
 "javier-hernandez",
-"Javier Hernández"
+"Javier Hernández",
+"13 goals"
 ],
 [
-9,
+6,
 "dirk-kuyt",
-"Dirk Kuyt"
+"Dirk Kuyt",
+"13 goals"
 ],
 [
-10,
+6,
 "florent-malouda",
-"Florent Malouda"
+"Florent Malouda",
+"13 goals",
+[
+[
+"rafael-van-der-vaart",
+"Rafael van der Vaart"
+]
+]
 ]
 ]
 },

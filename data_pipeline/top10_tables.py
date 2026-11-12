@@ -49,7 +49,7 @@ def tables(text: str):
             cells = []
             for line in lines:
                 if line.startswith("|") and not line.startswith("|}") and not line.startswith("|+"):
-                    cells += [c for c in re.split(r"\|\|", line[1:])]
+                    cells += _split_cells(line[1:])
                 elif line.startswith("!"):
                     cells += [c for c in re.split(r"!!", line[1:])]
             if cells:
@@ -81,13 +81,33 @@ def strip_attr(cell: str) -> str:
     return _sortname((m.group(1) if m else cell).strip())
 
 
+def _split_cells(line: str) -> list[str]:
+    """Split a row line on || (not inside {{templates}} or [[links]])."""
+    out, depth, start, i = [], 0, 0, 0
+    while i < len(line):
+        two = line[i:i + 2]
+        if two in ("{{", "[["):
+            depth += 1
+            i += 2
+        elif two in ("}}", "]]"):
+            depth = max(0, depth - 1)
+            i += 2
+        elif two == "||" and depth == 0:
+            out.append(line[start:i])
+            i += 2
+            start = i
+        else:
+            i += 1
+    return out + [line[start:]]
+
+
 def _sortname(cell: str) -> str:
     """{{sortname|Lionel|Messi}} -> [[Lionel Messi]] (third arg: the article)."""
     def link(m):
         args = [a.strip() for a in m.group(1).split("|") if "=" not in a]
         if len(args) < 2:
             return m.group(0)
-        name = f"{args[0]} {args[1]}"
+        name = " ".join(a for a in args[:2] if a)
         return f"[[{args[2]}|{name}]]" if len(args) > 2 and args[2] else f"[[{name}]]"
     return re.sub(r"\{\{\s*sortname\s*\|([^{}]*)\}\}", link, cell, flags=re.I)
 
