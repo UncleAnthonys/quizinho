@@ -9,6 +9,7 @@ class InMemoryFootballRepository implements FootballRepository {
   InMemoryFootballRepository({
     required List<Player> players,
     this.connections = const [],
+    this.nationPairs = const [],
     this.careers = const [],
     this.matches = const [],
     this.bidding = const [],
@@ -26,6 +27,7 @@ class InMemoryFootballRepository implements FootballRepository {
   final String dataStatus;
 
   final List<ClubConnection> connections;
+  final List<ClubConnection> nationPairs;
   final List<CareerPath> careers;
   final List<HistoricMatch> matches;
   final List<BiddingCategory> bidding;
@@ -93,6 +95,10 @@ class InMemoryFootballRepository implements FootballRepository {
   @override
   Future<List<ClubConnection>> allClubConnections({int eras = Era.allMask, int genders = 1}) async =>
       [for (final c in connections) if ((c.eras & eras) != 0 && FootballGender.allows(genders, c.women)) c];
+
+  @override
+  Future<List<ClubConnection>> nationClubPairs({int eras = Era.allMask, int genders = 1}) async =>
+      [for (final c in nationPairs) if ((c.eras & eras) != 0 && FootballGender.allows(genders, c.women)) c];
 
   @override
   Future<ClubConnection?> clubConnectionById(String id) async => connections.where((c) => c.id == id).firstOrNull;

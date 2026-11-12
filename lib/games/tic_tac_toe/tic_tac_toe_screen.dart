@@ -55,7 +55,10 @@ class _TicTacToeScreenState extends State<TicTacToeScreen>
     final (minFame, maxLevel, known) = _settings(_t.config.difficulty);
     int fame(String id) => repo.players.byId(id)?.fame ?? 0;
     final genders = _t.config.genderMask;
-    final inEras = await repo.allClubConnections(eras: _t.config.eraMask, genders: genders);
+    final inEras = [
+      ...await repo.allClubConnections(eras: _t.config.eraMask, genders: genders),
+      ...gridNationPairs(await repo.nationClubPairs(eras: _t.config.eraMask, genders: genders)),
+    ];
     // Grids this phone has played before come last.
     final history = services.challenges.history;
     final unseen = {...used, ...history.seen('ttt')};
@@ -70,7 +73,10 @@ class _TicTacToeScreenState extends State<TicTacToeScreen>
     // Not enough in the chosen eras at this difficulty — widen rather than stall.
     var grid = make(inEras);
     if (grid == null) {
-      final all = await repo.allClubConnections(genders: genders);
+      final all = [
+        ...await repo.allClubConnections(genders: genders),
+        ...gridNationPairs(await repo.nationClubPairs(genders: genders)),
+      ];
       grid = make(all) ??
           make(inEras, fresh: false) ??
           make(all, fresh: false) ??

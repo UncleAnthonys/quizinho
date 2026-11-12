@@ -125,6 +125,25 @@ class CareerSpell {
 }
 
 /// "Name a player who played for both A and B."
+/// Nations a grid can use as a row or column ("Wales" x Man United), by FIFA
+/// code. The pipeline's GRID_NATIONS (build_db.py) lists the same codes.
+const gridNations = {
+  'ENG': 'England', 'SCO': 'Scotland', 'WAL': 'Wales', 'IRL': 'Republic of Ireland',
+  'NIR': 'Northern Ireland', 'FRA': 'France', 'ESP': 'Spain', 'ITA': 'Italy', 'GER': 'Germany',
+  'NED': 'Netherlands', 'POR': 'Portugal', 'BEL': 'Belgium', 'DEN': 'Denmark', 'SWE': 'Sweden',
+  'NOR': 'Norway', 'CRO': 'Croatia', 'SRB': 'Serbia', 'BRA': 'Brazil', 'ARG': 'Argentina',
+  'URU': 'Uruguay', 'COL': 'Colombia', 'USA': 'USA', 'NGA': 'Nigeria', 'CIV': 'Ivory Coast',
+  'SEN': 'Senegal', 'GHA': 'Ghana', 'CMR': 'Cameroon', 'MAR': 'Morocco', 'AUS': 'Australia',
+  'KOR': 'South Korea',
+};
+
+/// A nation as a grid row or column, dressed as a club ("nat:WAL").
+Club nationCategory(String code, {bool women = false}) =>
+    Club(id: 'nat:$code${women ? ':w' : ''}', name: gridNations[code] ?? code, fame: 5, country: code, women: women);
+
+/// A nation row or column rather than a club.
+bool isNationCategory(Club c) => c.id.startsWith('nat:');
+
 class ClubConnection {
   const ClubConnection({
     required this.id,

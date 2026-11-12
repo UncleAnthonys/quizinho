@@ -86,6 +86,12 @@ CREATE TABLE career_challenges (
 CREATE INDEX idx_conn_diff ON club_connections(difficulty);
 CREATE INDEX idx_ans_conn ON connection_answers(connection_id);
 CREATE INDEX idx_career_diff ON career_challenges(difficulty);
+-- Players of one nation who played for a club (Tic-Tac-Toe's nation rows).
+-- players: comma-separated ids.
+CREATE TABLE nation_rosters (
+  nation TEXT NOT NULL, club_id TEXT NOT NULL REFERENCES clubs(id), eras INTEGER NOT NULL,
+  players TEXT NOT NULL, PRIMARY KEY (nation, club_id)
+);
 CREATE TABLE bidding_categories (
   id TEXT PRIMARY KEY, prompt TEXT NOT NULL, kind TEXT NOT NULL,
   answer_count INTEGER NOT NULL, difficulty INTEGER NOT NULL, eras INTEGER NOT NULL,
@@ -442,6 +448,34 @@ def generate_connections(clubs, players):
     return out
 
 
+# Nations a grid can use as a row or column ("Wales" x Man United). The app
+# holds the display names (gridNations in models.dart); keep the two in step.
+GRID_NATIONS = {
+    "ENG", "SCO", "WAL", "IRL", "NIR", "FRA", "ESP", "ITA", "GER", "NED", "POR", "BEL", "DEN", "SWE", "NOR",
+    "CRO", "SRB", "BRA", "ARG", "URU", "COL", "USA", "NGA", "CIV", "SEN", "GHA", "CMR", "MAR", "AUS", "KOR",
+}
+
+
+def generate_nation_rosters(clubs, players):
+    """Every player of a grid nation at each club they played for, one-club
+    players included (Giggs: Wales x Man United)."""
+    rosters: dict[tuple[str, str], set[str]] = {}
+    for pid, p in players.items():
+        if p["nat"] not in GRID_NATIONS:
+            continue
+        for cid in {s["club"] for s in p["spells"] if clubs[s["club"]]["fame"] >= CONNECTION_MIN_CLUB_FAME}:
+            rosters.setdefault((p["nat"], cid), set()).add(pid)
+    out = []
+    for (nat, cid), ids in sorted(rosters.items()):
+        if max(players[pid]["fame"] for pid in ids) < CONNECTION_MIN_ANSWER_FAME:
+            continue
+        eras = 0
+        for pid in ids:
+            eras |= spells_mask([s for s in players[pid]["spells"] if s["club"] == cid])
+        out.append({"nation": nat, "club": cid, "answers": sorted(ids), "eras": eras or 31})
+    return out
+
+
 def generate_career_challenges(players, clubs):
     out = []
     for pid, p in players.items():
@@ -706,7 +740,7 @@ def match_eras(m) -> int:
     return era_mask(year, year)
 
 
-def write_db(path: pathlib.Path, version: int, clubs, players, matches, connections, careers, bidding, checkouts):
+def write_db(path: pathlib.Path, version: int, clubs, players, matches, connections, careers, bidding, checkouts, nations):
     if path.exists():
         path.unlink()
     con = sqlite3.connect(path)
@@ -743,6 +777,8 @@ def write_db(path: pathlib.Path, version: int, clubs, players, matches, connecti
         con.execute("INSERT INTO club_connections VALUES (?,?,?,?,?,?,?)",
                     (c["id"], c["a"], c["b"], len(c["answers"]), c["best"], c["difficulty"], c["eras"]))
         con.executemany("INSERT INTO connection_answers VALUES (?,?)", [(c["id"], pid) for pid in c["answers"]])
+    con.executemany("INSERT INTO nation_rosters VALUES (?,?,?,?)",
+                    [(n["nation"], n["club"], n["eras"], ",".join(n["answers"])) for n in nations])
     con.executemany("INSERT INTO career_challenges VALUES (?,?,?,?)",
                     [(c["player"], c["clues"], c["difficulty"], c["eras"]) for c in careers])
     for b in bidding:
@@ -761,7 +797,7 @@ def write_db(path: pathlib.Path, version: int, clubs, players, matches, connecti
     con.close()
 
 
-def write_json(path: pathlib.Path, version: int, clubs, players, matches, connections, careers, bidding, checkouts):
+def write_json(path: pathlib.Path, version: int, clubs, players, matches, connections, careers, bidding, checkouts, nations):
     """Same content as the SQLite file, for the web build (no SQLite plugin in browsers)."""
     doc = {
         "db_version": version,
@@ -780,6 +816,8 @@ def write_json(path: pathlib.Path, version: int, clubs, players, matches, connec
             for c in careers
         ],
         "connections": [[c["id"], c["a"], c["b"], c["difficulty"], c["answers"], c["eras"]] for c in connections],
+        # nations: [nation, club, players, eras]
+        "nations": [[n["nation"], n["club"], n["answers"], n["eras"]] for n in nations],
         # bidding: [id, prompt, difficulty, answers, eras, pointless scores, 1 if women's]
         "bidding": [[b["id"], b["prompt"], b["difficulty"], b["answers"], b["eras"],
                      [b["scores"][a] for a in b["answers"]], int(b["women"])] for b in bidding],
@@ -828,6 +866,7 @@ def main() -> int:
 
     connections = generate_connections(clubs, players)
     careers = generate_career_challenges(players, clubs)
+    nations = generate_nation_rosters(clubs, players)
     countries_path = SEED / "countries.json"
     countries = json.loads(countries_path.read_text(encoding="utf-8"))["countries"] if countries_path.exists() else {}
     bidding = generate_bidding(clubs, players, connections, countries) + curated
@@ -837,13 +876,13 @@ def main() -> int:
     print(f"players={len(players)} clubs={len(clubs)} matches={len(matches)} "
           f"connections={len(connections)} {by_diff} careers={len(careers)} bidding={len(bidding)} "
           f"{ {d: sum(1 for b in bidding if b['difficulty'] == d) for d in (1, 2, 3)} } curated={len(curated)} "
-          f"checkouts={len(checkouts)} (women {sum(1 for c in checkouts if c['women'])})")
+          f"checkouts={len(checkouts)} (women {sum(1 for c in checkouts if c['women'])}) nation_rosters={len(nations)}")
     if args.check:
         return 0
 
     ASSETS.mkdir(parents=True, exist_ok=True)
-    write_db(ASSETS / "football.db", args.version, clubs, players, matches, connections, careers, bidding, checkouts)
-    write_json(ASSETS / "football.json", args.version, clubs, players, matches, connections, careers, bidding, checkouts)
+    write_db(ASSETS / "football.db", args.version, clubs, players, matches, connections, careers, bidding, checkouts, nations)
+    write_json(ASSETS / "football.json", args.version, clubs, players, matches, connections, careers, bidding, checkouts, nations)
     (ASSETS / "football_db_version.txt").write_text(str(args.version), encoding="utf-8")
     print("wrote", ASSETS / "football.db", "version", args.version)
     return 0

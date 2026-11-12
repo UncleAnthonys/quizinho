@@ -57,6 +57,24 @@ void main() {
       }
     });
 
+    test('nation categories: right players, not their own league, two a grid at most', () async {
+      String? nat(String id) => repo.players.byId(id)?.nationality;
+      final conns = [...await repo.allClubConnections(), ...gridNationPairs(await repo.nationClubPairs())];
+      final wales = conns.firstWhere((c) => c.clubA.id == 'nat:WAL' && c.clubB.name == 'Manchester United');
+      expect(wales.answerIds, contains('ryan-giggs'));
+      expect(wales.answerIds.every((id) => nat(id) == 'WAL'), isTrue);
+      expect(conns.any((c) => c.clubA.id == 'nat:ENG' && c.clubB.country == 'GBR'), isFalse);
+      var withNation = 0;
+      for (var seed = 0; seed < 30; seed++) {
+        final g = generateTicTacToeGrid(conns, random: Random(seed), minFame: 4)!;
+        final n = [...g.rows, ...g.cols].where(isNationCategory).length;
+        expect(n, lessThanOrEqualTo(2));
+        if (n > 0) withNation++;
+        expect(g.answers.every((a) => a.isNotEmpty), isTrue);
+      }
+      expect(withNation, greaterThan(0));
+    });
+
     test('grids lean English, with one far-flung club at most', () async {
       final conns = await repo.allClubConnections();
       int fame(String id) => repo.players.byId(id)?.fame ?? 0;

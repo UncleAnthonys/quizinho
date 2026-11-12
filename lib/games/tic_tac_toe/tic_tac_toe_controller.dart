@@ -30,6 +30,7 @@ const _bigLeagues = {'ESP', 'ITA', 'GER', 'FRA', 'MCO'};
 const _nextLeagues = {'NED', 'POR'};
 
 bool _farAway(Club c) {
+  if (isNationCategory(c)) return false;
   final k = c.country;
   return !_home.contains(k) && !_bigLeagues.contains(k) && !_nextLeagues.contains(k);
 }
@@ -37,6 +38,7 @@ bool _farAway(Club c) {
 /// How often [c] is picked, relative to others. A lesser club from a big
 /// league (Hellas Verona, Levante) comes up only now and then.
 double gridWeight(Club c) {
+  if (isNationCategory(c)) return _nationWeight;
   final k = c.country;
   final big = c.fame >= 5;
   if (_home.contains(k)) return big ? 6 : (c.fame == 4 ? 2.5 : 1.2);
@@ -44,6 +46,17 @@ double gridWeight(Club c) {
   if (_nextLeagues.contains(k)) return big ? 2 : 0.2;
   return big ? 0.4 : 0.1;
 }
+
+/// About six grids in ten have a nation (usually one), never more than two.
+const double _nationWeight = 0.3;
+const int _maxNations = 2;
+
+/// Nation x club pairs fit for a grid: not a nation with its own league's
+/// clubs (Spain x Barcelona, England x Chelsea), which are too easy.
+List<ClubConnection> gridNationPairs(List<ClubConnection> pairs) => [
+      for (final p in pairs)
+        if (p.clubB.country != p.clubA.country && !(p.clubA.country == 'ENG' && p.clubB.country == 'GBR')) p,
+    ];
 
 /// Builds a grid where every square has at least one valid answer.
 /// [minFame] keeps clubs recognisable (5 = only giants); English clubs get one
@@ -120,6 +133,7 @@ TicTacToeGrid? generateTicTacToeGrid(
       if (common.length < 3) continue;
       final cols = pick(common, 3)!;
       if ([...rows, ...cols].where((id) => _farAway(clubs[id]!)).length > 1) continue;
+      if ([...rows, ...cols].where((id) => isNationCategory(clubs[id]!)).length > _maxNations) continue;
       if (!rows.every((r) => cols.every((c) => fair(r, c)))) continue;
       final grid = TicTacToeGrid(
         rows: [for (final r in rows) clubs[r]!],

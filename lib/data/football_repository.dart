@@ -38,6 +38,10 @@ abstract class FootballRepository {
   /// Every club pairing with its answers (for grid games like Tic-Tac-Toe).
   Future<List<ClubConnection>> allClubConnections({int eras = Era.allMask, int genders = 1});
 
+  /// Nation x club pairs: clubA is the nation ([nationCategory]), clubB the
+  /// club, answers the players from that nation who played there.
+  Future<List<ClubConnection>> nationClubPairs({int eras = Era.allMask, int genders = 1});
+
   /// A specific challenge by id (the hand-picked Warm-Up Cup). Null if gone.
   Future<ClubConnection?> clubConnectionById(String id);
   Future<CareerPath?> careerPathById(String playerId);

@@ -233,6 +233,30 @@ class SqliteFootballRepository implements FootballRepository {
   }
 
   @override
+  Future<List<ClubConnection>> nationClubPairs({int eras = Era.allMask, int genders = 1}) async {
+    final (where, args) = _filter('club_id', null, const {}, eras,
+        genders: genders, womenCol: '(SELECT women FROM clubs WHERE clubs.id = club_id)');
+    final List<Map<String, Object?>> rows;
+    try {
+      rows = await _db.rawQuery('SELECT nation, club_id, eras, players FROM nation_rosters $where', args);
+    } on Exception {
+      return const []; // a database from before nation rosters
+    }
+    return [
+      for (final r in rows)
+        if (_clubs[r['club_id']] case final club?)
+          ClubConnection(
+            id: 'nat:${r['nation']}|${r['club_id']}',
+            clubA: nationCategory(r['nation'] as String, women: club.women),
+            clubB: club,
+            answerIds: (r['players'] as String).split(',').toSet(),
+            difficulty: 2,
+            eras: r['eras'] as int,
+          ),
+    ];
+  }
+
+  @override
   Future<CareerPath?> pickCareerPath(
       {Set<int>? levels, Set<String> exclude = const {}, int eras = Era.allMask, int genders = 1}) async {
     final (where, args) = _filter('player_id', levels, exclude, eras,
