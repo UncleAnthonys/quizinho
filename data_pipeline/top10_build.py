@@ -647,7 +647,12 @@ def match_lists(by_qid, winners: set[str] = frozenset()):
                       pick(apps, lambda k: (p := who_c(k)) is not None and p["id"] not in winners), n(apps, "apps"), False))
     for dec, c in born.items():
         specs.append((f"pl-goals-born-{dec}s", f"Most Premier League goals by a player born in the {dec}s", 2, c, n(c, "goals"), False))
+    # Only established Premier League clubs: Blackburn's scorers, yes;
+    # Coventry's or Charlton's appearance makers, no.
+    pl_seasons = collections.Counter(t for y, ts in teams_in.items() for t in ts)
     for team in CLUB_LISTS:
+        if pl_seasons[team] < MIN_CLUB_SEASONS:
+            continue
         short = SHORT.get(team, team)
         sid = slug_id(team)
         specs.append((f"pl-club-goals-{sid}", f"{short}'s top Premier League scorers", 2 if team in BIG_SIX else 3,
@@ -705,6 +710,7 @@ CATEGORIES = [
      r"apps-no-|goal-gap|vs-former|scoring-run|first-10|debut|winning-goals|goals-over-30|london-clubs|free-kicks|penalties|big6-goals)",
      "quirky"),
 ]
+MIN_CLUB_SEASONS = 15  # Premier League seasons a club needs for its own Top 10s
 MIN_FAME = 1.7  # answers this obscure (Coventry's appearance makers) are a quiz for one fan
 
 
