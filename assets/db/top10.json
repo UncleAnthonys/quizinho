@@ -1,14 +1,15 @@
 {
-"_note": "Top 10 lists from Wikipedia record tables: 349 lists, 16 dropped. Built 2026-11-13.",
+"_note": "Top 10 lists from Wikipedia record tables: 327 lists, 41 dropped. Built 2026-11-13.",
 "dropped": [
 "pl-red-cards: 11 level on 10th",
 "pl-goals-us: only 8 rows",
 "pl-clubs-played: 16 level on 10th",
 "pl-relegations: 12 level on 10th",
 "pl-northwest-goals: 12 level on 10th",
+"pl-debut-goals: 21 level on 10th",
+"pl-first-10-goals: a player we don't know: Mick Quinn",
 "pl-london-clubs: 29 level on 10th",
 "pl-club-goals-coventry-city: a player we don't know: Mick Quinn",
-"pl-club-apps-ipswich-town: a player we don't know: Phil Whelan",
 "mufc-clean-sheets: row 6 names nobody we know: Alf Steward",
 "ballon-dor-2010: only 3 rows",
 "ballon-dor-2011: only 3 rows",
@@ -16,13 +17,37 @@
 "ballon-dor-2013: only 3 rows",
 "ballon-dor-2014: only 3 rows",
 "ballon-dor-2015: only 3 rows",
-"ucl-2025: only 9 rows"
+"ucl-2025: only 9 rows",
+"pl-goals-gb-sct: too obscure (answers' average fame 1.5)",
+"pl-promoted-apps: too obscure (answers' average fame 1.4)",
+"pl-club-apps-bolton-wanderers: too obscure (answers' average fame 1.6)",
+"pl-club-apps-middlesbrough: too obscure (answers' average fame 1.6)",
+"pl-club-apps-coventry-city: too obscure (answers' average fame 1.1)",
+"pl-club-goals-norwich-city: too obscure (answers' average fame 1.6)",
+"pl-club-apps-norwich-city: too obscure (answers' average fame 1.5)",
+"pl-club-apps-nottingham-forest: too obscure (answers' average fame 1.3)",
+"pl-club-goals-sheffield-wednesday: too obscure (answers' average fame 1.2)",
+"pl-club-apps-sheffield-wednesday: too obscure (answers' average fame 1.1)",
+"pl-club-goals-charlton-athletic: too obscure (answers' average fame 1.2)",
+"pl-club-apps-charlton-athletic: too obscure (answers' average fame 1.2)",
+"pl-club-goals-brentford: too obscure (answers' average fame 1.6)",
+"pl-club-apps-brentford: too obscure (answers' average fame 1.6)",
+"pl-club-goals-wimbledon: too obscure (answers' average fame 1.2)",
+"pl-club-apps-wimbledon: too obscure (answers' average fame 1.2)",
+"pl-club-goals-derby-county: too obscure (answers' average fame 1.4)",
+"pl-club-apps-derby-county: too obscure (answers' average fame 1.3)",
+"pl-club-goals-ipswich-town: too obscure (answers' average fame 1.2)",
+"pl-club-apps-ipswich-town: too obscure (answers' average fame 1.1)",
+"pl-club-goals-queens-park-rangers: too obscure (answers' average fame 1.2)",
+"pl-club-apps-queens-park-rangers: too obscure (answers' average fame 1.3)",
+"pl-club-apps-reading: too obscure (answers' average fame 1.5)",
+"nir-goals: too obscure (answers' average fame 1.4)"
 ],
 "lists": [
 {
 "id": "pl-own-goals",
 "q": "Most Premier League own goals",
-"d": 2,
+"d": 3,
 "asof": "Nov 2026",
 "src": "premierleague.com stats",
 "e": [
@@ -86,7 +111,8 @@
 "Frank Sinclair",
 "6 own goals"
 ]
-]
+],
+"c": "quirky"
 },
 {
 "id": "pl-yellow-cards",
@@ -161,7 +187,8 @@
 ]
 ]
 ]
-]
+],
+"c": "quirky"
 },
 {
 "id": "pl-headers",
@@ -236,7 +263,8 @@
 ]
 ]
 ]
-]
+],
+"c": "quirky"
 },
 {
 "id": "pl-long-range",
@@ -319,7 +347,8 @@
 ]
 ]
 ]
-]
+],
+"c": "quirky"
 },
 {
 "id": "pl-pen-saves",
@@ -388,12 +417,13 @@
 "Kasper Schmeichel",
 "7 saves"
 ]
-]
+],
+"c": "quirky"
 },
 {
 "id": "pl-woodwork",
 "q": "Most times hitting the woodwork in the Premier League (since 2006–07)",
-"d": 2,
+"d": 1,
 "asof": "Nov 2026",
 "src": "premierleague.com stats",
 "e": [
@@ -463,7 +493,8 @@
 ]
 ]
 ]
-]
+],
+"c": "quirky"
 },
 {
 "id": "pl-offsides",
@@ -532,7 +563,8 @@
 "Robin van Persie",
 "198 offsides"
 ]
-]
+],
+"c": "quirky"
 },
 {
 "id": "pl-big-chances-missed",
@@ -601,7 +633,8 @@
 "Gabriel Jesus",
 "102 missed"
 ]
-]
+],
+"c": "quirky"
 },
 {
 "id": "pl-errors",
@@ -670,7 +703,8 @@
 "Łukasz Fabiański",
 "19 errors"
 ]
-]
+],
+"c": "quirky"
 },
 {
 "id": "pl-goals-no-title",
@@ -739,7 +773,8 @@
 "Emile Heskey",
 "110 goals"
 ]
-]
+],
+"c": "quirky"
 },
 {
 "id": "pl-goals-br",
@@ -809,7 +844,8 @@
 "29 goals"
 ]
 ],
-"f": "goals-by-nation"
+"f": "goals-by-nation",
+"c": "nations"
 },
 {
 "id": "pl-goals-fr",
@@ -879,7 +915,8 @@
 "39 goals"
 ]
 ],
-"f": "goals-by-nation"
+"f": "goals-by-nation",
+"c": "nations"
 },
 {
 "id": "pl-goals-es",
@@ -949,7 +986,8 @@
 "26 goals"
 ]
 ],
-"f": "goals-by-nation"
+"f": "goals-by-nation",
+"c": "nations"
 },
 {
 "id": "pl-goals-nl",
@@ -1025,7 +1063,8 @@
 ]
 ]
 ],
-"f": "goals-by-nation"
+"f": "goals-by-nation",
+"c": "nations"
 },
 {
 "id": "pl-goals-ar",
@@ -1101,12 +1140,13 @@
 ]
 ]
 ],
-"f": "goals-by-nation"
+"f": "goals-by-nation",
+"c": "nations"
 },
 {
 "id": "pl-goals-pt",
 "q": "Most Premier League goals by a Portuguese player",
-"d": 3,
+"d": 2,
 "asof": "Nov 2026",
 "src": "premierleague.com stats",
 "e": [
@@ -1171,12 +1211,13 @@
 "12 goals"
 ]
 ],
-"f": "goals-by-nation"
+"f": "goals-by-nation",
+"c": "nations"
 },
 {
 "id": "pl-goals-de",
 "q": "Most Premier League goals by a German player",
-"d": 3,
+"d": 2,
 "asof": "Nov 2026",
 "src": "premierleague.com stats",
 "e": [
@@ -1241,12 +1282,13 @@
 "19 goals"
 ]
 ],
-"f": "goals-by-nation"
+"f": "goals-by-nation",
+"c": "nations"
 },
 {
 "id": "pl-goals-be",
 "q": "Most Premier League goals by a Belgian player",
-"d": 3,
+"d": 2,
 "asof": "Nov 2026",
 "src": "premierleague.com stats",
 "e": [
@@ -1311,7 +1353,8 @@
 "21 goals"
 ]
 ],
-"f": "goals-by-nation"
+"f": "goals-by-nation",
+"c": "nations"
 },
 {
 "id": "pl-goals-no",
@@ -1381,82 +1424,13 @@
 "29 goals"
 ]
 ],
-"f": "goals-by-nation"
-},
-{
-"id": "pl-goals-gb-sct",
-"q": "Most Premier League goals by a Scottish player",
-"d": 3,
-"asof": "Nov 2026",
-"src": "premierleague.com stats",
-"e": [
-[
-1,
-"duncan-ferguson",
-"Duncan Ferguson",
-"68 goals"
-],
-[
-2,
-"kevin-gallacher",
-"Kevin Gallacher",
-"56 goals"
-],
-[
-3,
-"steven-fletcher",
-"Steven Fletcher",
-"53 goals"
-],
-[
-4,
-"gary-mcallister",
-"Gary McAllister",
-"49 goals"
-],
-[
-5,
-"don-hutchison",
-"Don Hutchison",
-"37 goals"
-],
-[
-6,
-"paul-dickov",
-"Paul Dickov",
-"36 goals"
-],
-[
-6,
-"john-spencer",
-"John Spencer",
-"36 goals"
-],
-[
-8,
-"charlie-adam",
-"Charlie Adam",
-"33 goals"
-],
-[
-9,
-"james-morrison",
-"James Morrison",
-"32 goals"
-],
-[
-10,
-"robert-snodgrass",
-"Robert Snodgrass",
-"26 goals"
-]
-],
-"f": "goals-by-nation"
+"f": "goals-by-nation",
+"c": "nations"
 },
 {
 "id": "pl-goals-gb-wls",
 "q": "Most Premier League goals by a Welsh player",
-"d": 3,
+"d": 2,
 "asof": "Nov 2026",
 "src": "premierleague.com stats",
 "e": [
@@ -1521,7 +1495,8 @@
 "29 goals"
 ]
 ],
-"f": "goals-by-nation"
+"f": "goals-by-nation",
+"c": "nations"
 },
 {
 "id": "pl-goals-ie",
@@ -1591,7 +1566,8 @@
 "22 goals"
 ]
 ],
-"f": "goals-by-nation"
+"f": "goals-by-nation",
+"c": "nations"
 },
 {
 "id": "pl-goals-gb-nir",
@@ -1667,12 +1643,13 @@
 ]
 ]
 ],
-"f": "goals-by-nation"
+"f": "goals-by-nation",
+"c": "nations"
 },
 {
 "id": "pl-goals-ci",
 "q": "Most Premier League goals by an Ivorian player",
-"d": 3,
+"d": 2,
 "asof": "Nov 2026",
 "src": "premierleague.com stats",
 "e": [
@@ -1737,7 +1714,8 @@
 "10 goals"
 ]
 ],
-"f": "goals-by-nation"
+"f": "goals-by-nation",
+"c": "nations"
 },
 {
 "id": "pl-goals-africa",
@@ -1807,12 +1785,13 @@
 "57 goals"
 ]
 ],
-"f": "goals-by-nation"
+"f": "goals-by-nation",
+"c": "nations"
 },
 {
 "id": "pl-goals-1990s",
 "q": "Most Premier League goals in the 1990s (1992–2000)",
-"d": 2,
+"d": 3,
 "asof": "Nov 2026",
 "src": "premierleague.com stats",
 "e": [
@@ -1877,7 +1856,8 @@
 "81 goals"
 ]
 ],
-"f": "decade"
+"f": "decade",
+"c": "era"
 },
 {
 "id": "pl-assist-1990s",
@@ -1957,7 +1937,8 @@
 ]
 ]
 ],
-"f": "decade"
+"f": "decade",
+"c": "era"
 },
 {
 "id": "pl-appearances-1990s",
@@ -2027,7 +2008,8 @@
 "260 apps"
 ]
 ],
-"f": "decade"
+"f": "decade",
+"c": "era"
 },
 {
 "id": "pl-goals-2000s",
@@ -2097,12 +2079,13 @@
 "92 goals"
 ]
 ],
-"f": "decade"
+"f": "decade",
+"c": "era"
 },
 {
 "id": "pl-assist-2000s",
 "q": "Most Premier League assists in the 2000s (2000–10)",
-"d": 3,
+"d": 2,
 "asof": "Nov 2026",
 "src": "premierleague.com stats",
 "e": [
@@ -2167,7 +2150,8 @@
 "43 assists"
 ]
 ],
-"f": "decade"
+"f": "decade",
+"c": "era"
 },
 {
 "id": "pl-appearances-2000s",
@@ -2237,12 +2221,13 @@
 "325 apps"
 ]
 ],
-"f": "decade"
+"f": "decade",
+"c": "era"
 },
 {
 "id": "pl-goals-2010s",
 "q": "Most Premier League goals in the 2010s (2010–20)",
-"d": 2,
+"d": 1,
 "asof": "Nov 2026",
 "src": "premierleague.com stats",
 "e": [
@@ -2307,12 +2292,13 @@
 "84 goals"
 ]
 ],
-"f": "decade"
+"f": "decade",
+"c": "era"
 },
 {
 "id": "pl-assist-2010s",
 "q": "Most Premier League assists in the 2010s (2010–20)",
-"d": 3,
+"d": 2,
 "asof": "Nov 2026",
 "src": "premierleague.com stats",
 "e": [
@@ -2377,7 +2363,8 @@
 "47 assists"
 ]
 ],
-"f": "decade"
+"f": "decade",
+"c": "era"
 },
 {
 "id": "pl-appearances-2010s",
@@ -2457,7 +2444,8 @@
 ]
 ]
 ],
-"f": "decade"
+"f": "decade",
+"c": "era"
 },
 {
 "id": "pl-goals-2020s",
@@ -2533,12 +2521,13 @@
 ]
 ]
 ],
-"f": "decade"
+"f": "decade",
+"c": "era"
 },
 {
 "id": "pl-assist-2020s",
 "q": "Most Premier League assists in the 2020s (since 2020)",
-"d": 3,
+"d": 2,
 "asof": "Nov 2026",
 "src": "premierleague.com stats",
 "e": [
@@ -2603,12 +2592,13 @@
 "37 assists"
 ]
 ],
-"f": "decade"
+"f": "decade",
+"c": "era"
 },
 {
 "id": "pl-appearances-2020s",
 "q": "Most Premier League appearances in the 2020s (since 2020)",
-"d": 3,
+"d": 2,
 "asof": "Nov 2026",
 "src": "premierleague.com stats",
 "e": [
@@ -2673,7 +2663,8 @@
 "207 apps"
 ]
 ],
-"f": "decade"
+"f": "decade",
+"c": "era"
 },
 {
 "id": "pl-youngest-scorers",
@@ -2742,7 +2733,8 @@
 "Lewis Miley",
 "17 yrs 229 days"
 ]
-]
+],
+"c": "quirky"
 },
 {
 "id": "pl-oldest-scorers",
@@ -2811,7 +2803,8 @@
 "Jamie Vardy",
 "38 yrs 127 days"
 ]
-]
+],
+"c": "quirky"
 },
 {
 "id": "pl-sub-goals",
@@ -2910,7 +2903,8 @@
 ]
 ]
 ]
-]
+],
+"c": "quirky"
 },
 {
 "id": "pl-sub-apps",
@@ -2979,12 +2973,13 @@
 "Joe Cole",
 "123 apps"
 ]
-]
+],
+"c": "quirky"
 },
 {
 "id": "pl-late-goals",
 "q": "Most Premier League goals in the 90th minute or later",
-"d": 3,
+"d": 2,
 "asof": "Nov 2026",
 "src": "premierleague.com match data",
 "e": [
@@ -3058,12 +3053,13 @@
 ]
 ]
 ]
-]
+],
+"c": "quirky"
 },
 {
 "id": "pl-teen-goals",
 "q": "Most Premier League goals as a teenager",
-"d": 2,
+"d": 3,
 "asof": "Nov 2026",
 "src": "premierleague.com match data",
 "e": [
@@ -3127,12 +3123,13 @@
 "Raheem Sterling",
 "14 goals"
 ]
-]
+],
+"c": "quirky"
 },
 {
 "id": "pl-veteran-goals",
 "q": "Most Premier League goals aged 35 or over",
-"d": 3,
+"d": 2,
 "asof": "Nov 2026",
 "src": "premierleague.com match data",
 "e": [
@@ -3202,7 +3199,8 @@
 ]
 ]
 ]
-]
+],
+"c": "quirky"
 },
 {
 "id": "pl-defender-goals",
@@ -3271,7 +3269,8 @@
 "Julian Dicks",
 "24 goals"
 ]
-]
+],
+"c": "quirky"
 },
 {
 "id": "pl-no-goals",
@@ -3340,7 +3339,8 @@
 "Jordan Pickford",
 "372 apps"
 ]
-]
+],
+"c": "quirky"
 },
 {
 "id": "pl-clubs-scored",
@@ -3415,7 +3415,8 @@
 ]
 ]
 ]
-]
+],
+"c": "quirky"
 },
 {
 "id": "pl-promoted-goals",
@@ -3502,7 +3503,8 @@
 ]
 ]
 ]
-]
+],
+"c": "quirky"
 },
 {
 "id": "pl-big6-goals",
@@ -3571,7 +3573,8 @@
 "Robbie Fowler",
 "33 goals"
 ]
-]
+],
+"c": "quirky"
 },
 {
 "id": "pl-merseyside-goals",
@@ -3647,7 +3650,8 @@
 ]
 ]
 ],
-"f": "derby"
+"f": "derby",
+"c": "club"
 },
 {
 "id": "pl-manchester-goals",
@@ -3731,7 +3735,8 @@
 ]
 ]
 ],
-"f": "derby"
+"f": "derby",
+"c": "club"
 },
 {
 "id": "pl-tynewear-goals",
@@ -3811,12 +3816,13 @@
 ]
 ]
 ],
-"f": "derby"
+"f": "derby",
+"c": "club"
 },
 {
 "id": "pl-london-derby-goals",
 "q": "Most Premier League goals in London derbies",
-"d": 2,
+"d": 1,
 "asof": "Nov 2026",
 "src": "premierleague.com match data",
 "e": [
@@ -3881,12 +3887,105 @@
 "22 goals"
 ]
 ],
-"f": "derby"
+"f": "derby",
+"c": "club"
+},
+{
+"id": "pl-scoring-run",
+"q": "Most consecutive Premier League appearances scoring",
+"d": 2,
+"asof": "Nov 2026",
+"src": "premierleague.com match data",
+"e": [
+[
+1,
+"jamie-vardy",
+"Jamie Vardy",
+"11 games in a row"
+],
+[
+2,
+"ruud-van-nistelrooy",
+"Ruud van Nistelrooy",
+"10 games in a row"
+],
+[
+3,
+"daniel-sturridge",
+"Daniel Sturridge",
+"8 games in a row"
+],
+[
+3,
+"alexander-isak",
+"Alexander Isak",
+"8 games in a row"
+],
+[
+5,
+"ian-wright",
+"Ian Wright",
+"7 games in a row"
+],
+[
+5,
+"alan-shearer",
+"Alan Shearer",
+"7 games in a row"
+],
+[
+5,
+"mark-stein",
+"Mark Stein",
+"7 games in a row"
+],
+[
+5,
+"thierry-henry",
+"Thierry Henry",
+"7 games in a row"
+],
+[
+5,
+"emmanuel-adebayor",
+"Emmanuel Adebayor",
+"7 games in a row"
+],
+[
+5,
+"sergio-aguero",
+"Sergio Agüero",
+"7 games in a row",
+[
+[
+"romelu-lukaku",
+"Romelu Lukaku"
+],
+[
+"mohamed-salah",
+"Mohamed Salah"
+],
+[
+"joe-willock",
+"Joe Willock"
+],
+[
+"taiwo-awoniyi",
+"Taiwo Awoniyi"
+],
+[
+"erling-haaland",
+"Erling Haaland"
+]
+]
+]
+],
+"c": "quirky"
 },
 {
 "id": "pl-winning-goals",
 "q": "Most Premier League winning goals",
-"d": 2,
+"d": 1,
 "asof": "Nov 2026",
 "src": "premierleague.com match data",
 "e": [
@@ -3950,7 +4049,8 @@
 "Ryan Giggs",
 "43 winners"
 ]
-]
+],
+"c": "quirky"
 },
 {
 "id": "pl-goals-over-30",
@@ -4018,7 +4118,8 @@
 "Didier Drogba",
 "57 goals"
 ]
-]
+],
+"c": "quirky"
 },
 {
 "id": "pl-debut-season-goals",
@@ -4093,7 +4194,8 @@
 ]
 ]
 ]
-]
+],
+"c": "quirky"
 },
 {
 "id": "pl-vs-former-club",
@@ -4180,7 +4282,8 @@
 ]
 ]
 ]
-]
+],
+"c": "quirky"
 },
 {
 "id": "pl-fergie-goals",
@@ -4255,7 +4358,8 @@
 ]
 ]
 ]
-]
+],
+"c": "era"
 },
 {
 "id": "pl-wenger-goals",
@@ -4324,12 +4428,13 @@
 "Aaron Ramsey",
 "36 goals"
 ]
-]
+],
+"c": "era"
 },
 {
 "id": "pl-goal-gap",
 "q": "Longest gap between a player's first and last Premier League goals",
-"d": 3,
+"d": 2,
 "asof": "Nov 2026",
 "src": "premierleague.com match data",
 "e": [
@@ -4393,7 +4498,8 @@
 "Jermain Defoe",
 "16 yrs 158 days"
 ]
-]
+],
+"c": "quirky"
 },
 {
 "id": "pl-rel-goals",
@@ -4462,91 +4568,13 @@
 "Steven Fletcher",
 "20 goals"
 ]
-]
-},
-{
-"id": "pl-promoted-apps",
-"q": "Most Premier League appearances for newly promoted sides",
-"d": 3,
-"asof": "Nov 2026",
-"src": "premierleague.com match data",
-"e": [
-[
-1,
-"cameron-jerome",
-"Cameron Jerome",
-"127 apps"
 ],
-[
-2,
-"chris-powell",
-"Chris Powell",
-"121 apps"
-],
-[
-3,
-"bobby-de-cordova-reid",
-"Bobby De Cordova-Reid",
-"119 apps"
-],
-[
-4,
-"dean-gordon",
-"Dean Gordon",
-"116 apps"
-],
-[
-5,
-"joey-barton",
-"Joey Barton",
-"112 apps"
-],
-[
-6,
-"dara-oshea",
-"Dara O'Shea",
-"106 apps"
-],
-[
-7,
-"russell-hoult",
-"Russell Hoult",
-"105 apps"
-],
-[
-8,
-"kevin-nolan",
-"Kevin Nolan",
-"100 apps"
-],
-[
-8,
-"george-boyd",
-"George Boyd",
-"100 apps"
-],
-[
-10,
-"steve-stone",
-"Steve Stone",
-"99 apps",
-[
-[
-"gu-ni-bergsson",
-"Guðni Bergsson"
-],
-[
-"steven-caulker",
-"Steven Caulker"
-]
-]
-]
-]
+"c": "quirky"
 },
 {
 "id": "pl-goals-no-big6",
 "q": "Most Premier League goals by a player who never played for a Big Six club",
-"d": 2,
+"d": 3,
 "asof": "Nov 2026",
 "src": "premierleague.com match data",
 "e": [
@@ -4610,7 +4638,8 @@
 "Ollie Watkins",
 "91 goals"
 ]
-]
+],
+"c": "quirky"
 },
 {
 "id": "pl-apps-no-red",
@@ -4679,7 +4708,8 @@
 "Theo Walcott",
 "397 apps"
 ]
-]
+],
+"c": "quirky"
 },
 {
 "id": "pl-apps-non-english",
@@ -4748,12 +4778,13 @@
 "Jussi Jääskeläinen",
 "436 apps"
 ]
-]
+],
+"c": "nations"
 },
 {
 "id": "pl-goals-outside-europe",
 "q": "Most Premier League goals by a player from outside Europe",
-"d": 2,
+"d": 1,
 "asof": "Nov 2026",
 "src": "premierleague.com match data",
 "e": [
@@ -4817,7 +4848,8 @@
 "Chris Wood",
 "92 goals"
 ]
-]
+],
+"c": "nations"
 },
 {
 "id": "pl-apps-africa",
@@ -4886,12 +4918,13 @@
 "Abdoulaye Doucouré",
 "278 apps"
 ]
-]
+],
+"c": "nations"
 },
 {
 "id": "pl-goals-scandi",
 "q": "Most Premier League goals by a Scandinavian player",
-"d": 3,
+"d": 2,
 "asof": "Nov 2026",
 "src": "premierleague.com match data",
 "e": [
@@ -4965,12 +4998,13 @@
 ]
 ]
 ]
-]
+],
+"c": "nations"
 },
 {
 "id": "pl-apps-irish",
 "q": "Most Premier League appearances by an Irish player",
-"d": 3,
+"d": 2,
 "asof": "Nov 2026",
 "src": "premierleague.com match data",
 "e": [
@@ -5034,7 +5068,8 @@
 "Shane Long",
 "344 apps"
 ]
-]
+],
+"c": "nations"
 },
 {
 "id": "pl-assists-1992",
@@ -5113,7 +5148,8 @@
 ]
 ]
 ],
-"f": "pl-season-assists"
+"f": "pl-season-assists",
+"c": "era"
 },
 {
 "id": "pl-assists-1993",
@@ -5192,7 +5228,8 @@
 ]
 ]
 ],
-"f": "pl-season-assists"
+"f": "pl-season-assists",
+"c": "era"
 },
 {
 "id": "pl-assists-1994",
@@ -5261,7 +5298,8 @@
 "10 assists"
 ]
 ],
-"f": "pl-season-assists"
+"f": "pl-season-assists",
+"c": "era"
 },
 {
 "id": "pl-assists-1995",
@@ -5330,7 +5368,8 @@
 "9 assists"
 ]
 ],
-"f": "pl-season-assists"
+"f": "pl-season-assists",
+"c": "era"
 },
 {
 "id": "pl-assists-1996",
@@ -5417,7 +5456,8 @@
 ]
 ]
 ],
-"f": "pl-season-assists"
+"f": "pl-season-assists",
+"c": "era"
 },
 {
 "id": "pl-assists-1997",
@@ -5492,7 +5532,8 @@
 ]
 ]
 ],
-"f": "pl-season-assists"
+"f": "pl-season-assists",
+"c": "era"
 },
 {
 "id": "pl-assists-1998",
@@ -5579,7 +5620,8 @@
 ]
 ]
 ],
-"f": "pl-season-assists"
+"f": "pl-season-assists",
+"c": "era"
 },
 {
 "id": "pl-assists-1999",
@@ -5662,7 +5704,8 @@
 ]
 ]
 ],
-"f": "pl-season-assists"
+"f": "pl-season-assists",
+"c": "era"
 },
 {
 "id": "pl-assists-2000",
@@ -5745,7 +5788,8 @@
 ]
 ]
 ],
-"f": "pl-season-assists"
+"f": "pl-season-assists",
+"c": "era"
 },
 {
 "id": "pl-assists-2001",
@@ -5824,7 +5868,8 @@
 ]
 ]
 ],
-"f": "pl-season-assists"
+"f": "pl-season-assists",
+"c": "era"
 },
 {
 "id": "pl-assists-2002",
@@ -5911,7 +5956,8 @@
 ]
 ]
 ],
-"f": "pl-season-assists"
+"f": "pl-season-assists",
+"c": "era"
 },
 {
 "id": "pl-assists-2003",
@@ -5994,12 +6040,13 @@
 ]
 ]
 ],
-"f": "pl-season-assists"
+"f": "pl-season-assists",
+"c": "era"
 },
 {
 "id": "pl-assists-2004",
 "q": "Most assists in the 2004–05 Premier League",
-"d": 3,
+"d": 2,
 "src": "premierleague.com match data",
 "e": [
 [
@@ -6063,12 +6110,13 @@
 "9 assists"
 ]
 ],
-"f": "pl-season-assists"
+"f": "pl-season-assists",
+"c": "era"
 },
 {
 "id": "pl-assists-2005",
 "q": "Most assists in the 2005–06 Premier League",
-"d": 3,
+"d": 2,
 "src": "premierleague.com match data",
 "e": [
 [
@@ -6132,12 +6180,13 @@
 "8 assists"
 ]
 ],
-"f": "pl-season-assists"
+"f": "pl-season-assists",
+"c": "era"
 },
 {
 "id": "pl-assists-2006",
 "q": "Most assists in the 2006–07 Premier League",
-"d": 3,
+"d": 2,
 "src": "premierleague.com match data",
 "e": [
 [
@@ -6201,12 +6250,13 @@
 "7 assists"
 ]
 ],
-"f": "pl-season-assists"
+"f": "pl-season-assists",
+"c": "era"
 },
 {
 "id": "pl-assists-2007",
 "q": "Most assists in the 2007–08 Premier League",
-"d": 3,
+"d": 2,
 "src": "premierleague.com match data",
 "e": [
 [
@@ -6288,12 +6338,13 @@
 ]
 ]
 ],
-"f": "pl-season-assists"
+"f": "pl-season-assists",
+"c": "era"
 },
 {
 "id": "pl-assists-2008",
 "q": "Most assists in the 2008–09 Premier League",
-"d": 3,
+"d": 2,
 "src": "premierleague.com match data",
 "e": [
 [
@@ -6387,12 +6438,13 @@
 ]
 ]
 ],
-"f": "pl-season-assists"
+"f": "pl-season-assists",
+"c": "era"
 },
 {
 "id": "pl-assists-2009",
 "q": "Most assists in the 2009–10 Premier League",
-"d": 3,
+"d": 2,
 "src": "premierleague.com match data",
 "e": [
 [
@@ -6456,12 +6508,13 @@
 "8 assists"
 ]
 ],
-"f": "pl-season-assists"
+"f": "pl-season-assists",
+"c": "era"
 },
 {
 "id": "pl-assists-2010",
 "q": "Most assists in the 2010–11 Premier League",
-"d": 3,
+"d": 2,
 "src": "premierleague.com match data",
 "e": [
 [
@@ -6535,12 +6588,13 @@
 ]
 ]
 ],
-"f": "pl-season-assists"
+"f": "pl-season-assists",
+"c": "era"
 },
 {
 "id": "pl-assists-2011",
 "q": "Most assists in the 2011–12 Premier League",
-"d": 3,
+"d": 2,
 "src": "premierleague.com match data",
 "e": [
 [
@@ -6604,12 +6658,13 @@
 "9 assists"
 ]
 ],
-"f": "pl-season-assists"
+"f": "pl-season-assists",
+"c": "era"
 },
 {
 "id": "pl-assists-2012",
 "q": "Most assists in the 2012–13 Premier League",
-"d": 3,
+"d": 2,
 "src": "premierleague.com match data",
 "e": [
 [
@@ -6679,12 +6734,13 @@
 ]
 ]
 ],
-"f": "pl-season-assists"
+"f": "pl-season-assists",
+"c": "era"
 },
 {
 "id": "pl-assists-2013",
 "q": "Most assists in the 2013–14 Premier League",
-"d": 3,
+"d": 2,
 "src": "premierleague.com match data",
 "e": [
 [
@@ -6758,12 +6814,13 @@
 ]
 ]
 ],
-"f": "pl-season-assists"
+"f": "pl-season-assists",
+"c": "era"
 },
 {
 "id": "pl-assists-2014",
 "q": "Most assists in the 2014–15 Premier League",
-"d": 3,
+"d": 2,
 "src": "premierleague.com match data",
 "e": [
 [
@@ -6849,12 +6906,13 @@
 ]
 ]
 ],
-"f": "pl-season-assists"
+"f": "pl-season-assists",
+"c": "era"
 },
 {
 "id": "pl-assists-2015",
 "q": "Most assists in the 2015–16 Premier League",
-"d": 3,
+"d": 2,
 "src": "premierleague.com match data",
 "e": [
 [
@@ -6918,12 +6976,13 @@
 "9 assists"
 ]
 ],
-"f": "pl-season-assists"
+"f": "pl-season-assists",
+"c": "era"
 },
 {
 "id": "pl-assists-2016",
 "q": "Most assists in the 2016–17 Premier League",
-"d": 3,
+"d": 2,
 "src": "premierleague.com match data",
 "e": [
 [
@@ -6993,12 +7052,13 @@
 ]
 ]
 ],
-"f": "pl-season-assists"
+"f": "pl-season-assists",
+"c": "era"
 },
 {
 "id": "pl-assists-2017",
 "q": "Most assists in the 2017–18 Premier League",
-"d": 3,
+"d": 2,
 "src": "premierleague.com match data",
 "e": [
 [
@@ -7062,7 +7122,8 @@
 "9 assists"
 ]
 ],
-"f": "pl-season-assists"
+"f": "pl-season-assists",
+"c": "era"
 },
 {
 "id": "pl-assists-2018",
@@ -7153,12 +7214,13 @@
 ]
 ]
 ],
-"f": "pl-season-assists"
+"f": "pl-season-assists",
+"c": "era"
 },
 {
 "id": "pl-assists-2019",
 "q": "Most assists in the 2019–20 Premier League",
-"d": 3,
+"d": 2,
 "src": "premierleague.com match data",
 "e": [
 [
@@ -7222,12 +7284,13 @@
 "8 assists"
 ]
 ],
-"f": "pl-season-assists"
+"f": "pl-season-assists",
+"c": "era"
 },
 {
 "id": "pl-assists-2020",
 "q": "Most assists in the 2020–21 Premier League",
-"d": 3,
+"d": 2,
 "src": "premierleague.com match data",
 "e": [
 [
@@ -7301,12 +7364,13 @@
 ]
 ]
 ],
-"f": "pl-season-assists"
+"f": "pl-season-assists",
+"c": "era"
 },
 {
 "id": "pl-assists-2021",
 "q": "Most assists in the 2021–22 Premier League",
-"d": 3,
+"d": 2,
 "src": "premierleague.com match data",
 "e": [
 [
@@ -7388,12 +7452,13 @@
 ]
 ]
 ],
-"f": "pl-season-assists"
+"f": "pl-season-assists",
+"c": "era"
 },
 {
 "id": "pl-assists-2022",
 "q": "Most assists in the 2022–23 Premier League",
-"d": 3,
+"d": 2,
 "src": "premierleague.com match data",
 "e": [
 [
@@ -7483,7 +7548,8 @@
 ]
 ]
 ],
-"f": "pl-season-assists"
+"f": "pl-season-assists",
+"c": "era"
 },
 {
 "id": "pl-assists-2023",
@@ -7558,7 +7624,8 @@
 ]
 ]
 ],
-"f": "pl-season-assists"
+"f": "pl-season-assists",
+"c": "era"
 },
 {
 "id": "pl-assists-2024",
@@ -7653,7 +7720,8 @@
 ]
 ]
 ],
-"f": "pl-season-assists"
+"f": "pl-season-assists",
+"c": "era"
 },
 {
 "id": "pl-assists-2025",
@@ -7748,12 +7816,13 @@
 ]
 ]
 ],
-"f": "pl-season-assists"
+"f": "pl-season-assists",
+"c": "era"
 },
 {
 "id": "pl-apps-no-title",
 "q": "Most Premier League appearances without winning the title",
-"d": 2,
+"d": 3,
 "asof": "Nov 2026",
 "src": "premierleague.com match data",
 "e": [
@@ -7817,7 +7886,8 @@
 "Aaron Hughes",
 "455 apps"
 ]
-]
+],
+"c": "quirky"
 },
 {
 "id": "pl-goals-born-1970s",
@@ -7887,7 +7957,8 @@
 "110 goals"
 ]
 ],
-"f": "born-decade"
+"f": "born-decade",
+"c": "era"
 },
 {
 "id": "pl-goals-born-1980s",
@@ -7957,7 +8028,8 @@
 "103 goals"
 ]
 ],
-"f": "born-decade"
+"f": "born-decade",
+"c": "era"
 },
 {
 "id": "pl-goals-born-1990s",
@@ -8027,12 +8099,13 @@
 "90 goals"
 ]
 ],
-"f": "born-decade"
+"f": "born-decade",
+"c": "era"
 },
 {
 "id": "pl-goals-born-2000s",
 "q": "Most Premier League goals by a player born in the 2000s",
-"d": 2,
+"d": 3,
 "asof": "Nov 2026",
 "src": "premierleague.com match data",
 "e": [
@@ -8097,12 +8170,13 @@
 "30 goals"
 ]
 ],
-"f": "born-decade"
+"f": "born-decade",
+"c": "era"
 },
 {
 "id": "pl-club-goals-arsenal",
 "q": "Arsenal's top Premier League scorers",
-"d": 2,
+"d": 1,
 "asof": "Nov 2026",
 "src": "premierleague.com match data",
 "e": [
@@ -8167,12 +8241,13 @@
 "60 goals"
 ]
 ],
-"f": "club-scorers"
+"f": "club-scorers",
+"c": "club"
 },
 {
 "id": "pl-club-apps-arsenal",
 "q": "Most Premier League appearances for Arsenal",
-"d": 3,
+"d": 2,
 "asof": "Nov 2026",
 "src": "premierleague.com match data",
 "e": [
@@ -8237,7 +8312,8 @@
 "258 apps"
 ]
 ],
-"f": "club-apps"
+"f": "club-apps",
+"c": "club"
 },
 {
 "id": "pl-club-goals-aston-villa",
@@ -8307,7 +8383,8 @@
 "37 goals"
 ]
 ],
-"f": "club-scorers"
+"f": "club-scorers",
+"c": "club"
 },
 {
 "id": "pl-club-apps-aston-villa",
@@ -8377,7 +8454,8 @@
 "229 apps"
 ]
 ],
-"f": "club-apps"
+"f": "club-apps",
+"c": "club"
 },
 {
 "id": "pl-club-goals-blackburn-rovers",
@@ -8447,7 +8525,8 @@
 "24 goals"
 ]
 ],
-"f": "club-scorers"
+"f": "club-scorers",
+"c": "club"
 },
 {
 "id": "pl-club-apps-blackburn-rovers",
@@ -8517,7 +8596,8 @@
 "188 apps"
 ]
 ],
-"f": "club-apps"
+"f": "club-apps",
+"c": "club"
 },
 {
 "id": "pl-club-goals-bolton-wanderers",
@@ -8593,92 +8673,13 @@
 ]
 ]
 ],
-"f": "club-scorers"
-},
-{
-"id": "pl-club-apps-bolton-wanderers",
-"q": "Most Premier League appearances for Bolton",
-"d": 3,
-"asof": "Nov 2026",
-"src": "premierleague.com match data",
-"e": [
-[
-1,
-"jussi-jaaskelainen",
-"Jussi Jääskeläinen",
-"379 apps"
-],
-[
-2,
-"kevin-davies",
-"Kevin Davies",
-"316 apps"
-],
-[
-3,
-"kevin-nolan",
-"Kevin Nolan",
-"261 apps"
-],
-[
-4,
-"ricardo-gardner",
-"Ricardo Gardner",
-"251 apps"
-],
-[
-5,
-"ivan-campo",
-"Iván Campo",
-"172 apps"
-],
-[
-6,
-"bruno-ngotty",
-"Bruno Ngotty",
-"148 apps"
-],
-[
-7,
-"henrik-pedersen",
-"Henrik Pedersen",
-"143 apps"
-],
-[
-8,
-"stelios-giannakopoulos",
-"Stelios Giannakopoulos",
-"137 apps"
-],
-[
-9,
-"per-frandsen",
-"Per Frandsen",
-"134 apps"
-],
-[
-10,
-"gu-ni-bergsson",
-"Guðni Bergsson",
-"130 apps",
-[
-[
-"gary-cahill",
-"Gary Cahill"
-],
-[
-"fabrice-muamba",
-"Fabrice Muamba"
-]
-]
-]
-],
-"f": "club-apps"
+"f": "club-scorers",
+"c": "club"
 },
 {
 "id": "pl-club-goals-chelsea",
 "q": "Chelsea's top Premier League scorers",
-"d": 2,
+"d": 1,
 "asof": "Nov 2026",
 "src": "premierleague.com match data",
 "e": [
@@ -8743,12 +8744,13 @@
 "38 goals"
 ]
 ],
-"f": "club-scorers"
+"f": "club-scorers",
+"c": "club"
 },
 {
 "id": "pl-club-apps-chelsea",
 "q": "Most Premier League appearances for Chelsea",
-"d": 3,
+"d": 1,
 "asof": "Nov 2026",
 "src": "premierleague.com match data",
 "e": [
@@ -8813,7 +8815,8 @@
 "234 apps"
 ]
 ],
-"f": "club-apps"
+"f": "club-apps",
+"c": "club"
 },
 {
 "id": "pl-club-goals-crystal-palace",
@@ -8883,7 +8886,8 @@
 "18 goals"
 ]
 ],
-"f": "club-scorers"
+"f": "club-scorers",
+"c": "club"
 },
 {
 "id": "pl-club-apps-crystal-palace",
@@ -8953,7 +8957,8 @@
 "164 apps"
 ]
 ],
-"f": "club-apps"
+"f": "club-apps",
+"c": "club"
 },
 {
 "id": "pl-club-goals-everton",
@@ -9029,7 +9034,8 @@
 ]
 ]
 ],
-"f": "club-scorers"
+"f": "club-scorers",
+"c": "club"
 },
 {
 "id": "pl-club-apps-everton",
@@ -9105,7 +9111,8 @@
 ]
 ]
 ],
-"f": "club-apps"
+"f": "club-apps",
+"c": "club"
 },
 {
 "id": "pl-club-goals-fulham",
@@ -9175,7 +9182,8 @@
 "20 goals"
 ]
 ],
-"f": "club-scorers"
+"f": "club-scorers",
+"c": "club"
 },
 {
 "id": "pl-club-apps-fulham",
@@ -9245,7 +9253,8 @@
 "160 apps"
 ]
 ],
-"f": "club-apps"
+"f": "club-apps",
+"c": "club"
 },
 {
 "id": "pl-club-goals-leeds-united",
@@ -9321,7 +9330,8 @@
 ]
 ]
 ],
-"f": "club-scorers"
+"f": "club-scorers",
+"c": "club"
 },
 {
 "id": "pl-club-apps-leeds-united",
@@ -9391,7 +9401,8 @@
 "151 apps"
 ]
 ],
-"f": "club-apps"
+"f": "club-apps",
+"c": "club"
 },
 {
 "id": "pl-club-goals-leicester-city",
@@ -9461,7 +9472,8 @@
 "21 goals"
 ]
 ],
-"f": "club-scorers"
+"f": "club-scorers",
+"c": "club"
 },
 {
 "id": "pl-club-apps-leicester-city",
@@ -9531,12 +9543,13 @@
 "161 apps"
 ]
 ],
-"f": "club-apps"
+"f": "club-apps",
+"c": "club"
 },
 {
 "id": "pl-club-goals-liverpool",
 "q": "Liverpool's top Premier League scorers",
-"d": 2,
+"d": 1,
 "asof": "Nov 2026",
 "src": "premierleague.com match data",
 "e": [
@@ -9601,12 +9614,13 @@
 "50 goals"
 ]
 ],
-"f": "club-scorers"
+"f": "club-scorers",
+"c": "club"
 },
 {
 "id": "pl-club-apps-liverpool",
 "q": "Most Premier League appearances for Liverpool",
-"d": 3,
+"d": 2,
 "asof": "Nov 2026",
 "src": "premierleague.com match data",
 "e": [
@@ -9671,12 +9685,13 @@
 "265 apps"
 ]
 ],
-"f": "club-apps"
+"f": "club-apps",
+"c": "club"
 },
 {
 "id": "pl-club-goals-manchester-city",
 "q": "Man City's top Premier League scorers",
-"d": 2,
+"d": 1,
 "asof": "Nov 2026",
 "src": "premierleague.com match data",
 "e": [
@@ -9741,12 +9756,13 @@
 "50 goals"
 ]
 ],
-"f": "club-scorers"
+"f": "club-scorers",
+"c": "club"
 },
 {
 "id": "pl-club-apps-manchester-city",
 "q": "Most Premier League appearances for Man City",
-"d": 3,
+"d": 1,
 "asof": "Nov 2026",
 "src": "premierleague.com match data",
 "e": [
@@ -9811,12 +9827,13 @@
 "233 apps"
 ]
 ],
-"f": "club-apps"
+"f": "club-apps",
+"c": "club"
 },
 {
 "id": "pl-club-goals-manchester-united",
 "q": "Man United's top Premier League scorers",
-"d": 2,
+"d": 1,
 "asof": "Nov 2026",
 "src": "premierleague.com match data",
 "e": [
@@ -9881,12 +9898,13 @@
 "64 goals"
 ]
 ],
-"f": "club-scorers"
+"f": "club-scorers",
+"c": "club"
 },
 {
 "id": "pl-club-apps-manchester-united",
 "q": "Most Premier League appearances for Man United",
-"d": 3,
+"d": 1,
 "asof": "Nov 2026",
 "src": "premierleague.com match data",
 "e": [
@@ -9951,7 +9969,8 @@
 "293 apps"
 ]
 ],
-"f": "club-apps"
+"f": "club-apps",
+"c": "club"
 },
 {
 "id": "pl-club-goals-middlesbrough",
@@ -10021,77 +10040,8 @@
 "18 goals"
 ]
 ],
-"f": "club-scorers"
-},
-{
-"id": "pl-club-apps-middlesbrough",
-"q": "Most Premier League appearances for Middlesbrough",
-"d": 3,
-"asof": "Nov 2026",
-"src": "premierleague.com match data",
-"e": [
-[
-1,
-"mark-schwarzer",
-"Mark Schwarzer",
-"332 apps"
-],
-[
-2,
-"stewart-downing",
-"Stewart Downing",
-"211 apps"
-],
-[
-3,
-"robbie-mustoe",
-"Robbie Mustoe",
-"197 apps"
-],
-[
-4,
-"george-boateng",
-"George Boateng",
-"182 apps"
-],
-[
-5,
-"gareth-southgate",
-"Gareth Southgate",
-"160 apps"
-],
-[
-6,
-"colin-cooper",
-"Colin Cooper",
-"158 apps"
-],
-[
-7,
-"steve-vickers",
-"Steve Vickers",
-"156 apps"
-],
-[
-8,
-"franck-queudrue",
-"Franck Queudrue",
-"150 apps"
-],
-[
-9,
-"curtis-fleming",
-"Curtis Fleming",
-"146 apps"
-],
-[
-10,
-"ugo-ehiogu",
-"Ugo Ehiogu",
-"126 apps"
-]
-],
-"f": "club-apps"
+"f": "club-scorers",
+"c": "club"
 },
 {
 "id": "pl-club-goals-newcastle-united",
@@ -10161,7 +10111,8 @@
 "34 goals"
 ]
 ],
-"f": "club-scorers"
+"f": "club-scorers",
+"c": "club"
 },
 {
 "id": "pl-club-apps-newcastle-united",
@@ -10231,7 +10182,8 @@
 "211 apps"
 ]
 ],
-"f": "club-apps"
+"f": "club-apps",
+"c": "club"
 },
 {
 "id": "pl-club-goals-portsmouth",
@@ -10301,7 +10253,8 @@
 "9 goals"
 ]
 ],
-"f": "club-scorers"
+"f": "club-scorers",
+"c": "club"
 },
 {
 "id": "pl-club-apps-portsmouth",
@@ -10371,7 +10324,8 @@
 "87 apps"
 ]
 ],
-"f": "club-apps"
+"f": "club-apps",
+"c": "club"
 },
 {
 "id": "pl-club-goals-southampton",
@@ -10441,7 +10395,8 @@
 "25 goals"
 ]
 ],
-"f": "club-scorers"
+"f": "club-scorers",
+"c": "club"
 },
 {
 "id": "pl-club-apps-southampton",
@@ -10517,7 +10472,8 @@
 ]
 ]
 ],
-"f": "club-apps"
+"f": "club-apps",
+"c": "club"
 },
 {
 "id": "pl-club-goals-sunderland",
@@ -10587,7 +10543,8 @@
 "14 goals"
 ]
 ],
-"f": "club-scorers"
+"f": "club-scorers",
+"c": "club"
 },
 {
 "id": "pl-club-apps-sunderland",
@@ -10657,7 +10614,8 @@
 "122 apps"
 ]
 ],
-"f": "club-apps"
+"f": "club-apps",
+"c": "club"
 },
 {
 "id": "pl-club-goals-tottenham-hotspur",
@@ -10727,12 +10685,13 @@
 "36 goals"
 ]
 ],
-"f": "club-scorers"
+"f": "club-scorers",
+"c": "club"
 },
 {
 "id": "pl-club-apps-tottenham-hotspur",
 "q": "Most Premier League appearances for Tottenham",
-"d": 3,
+"d": 2,
 "asof": "Nov 2026",
 "src": "premierleague.com match data",
 "e": [
@@ -10797,7 +10756,8 @@
 "247 apps"
 ]
 ],
-"f": "club-apps"
+"f": "club-apps",
+"c": "club"
 },
 {
 "id": "pl-club-goals-west-ham-united",
@@ -10867,7 +10827,8 @@
 "27 goals"
 ]
 ],
-"f": "club-scorers"
+"f": "club-scorers",
+"c": "club"
 },
 {
 "id": "pl-club-apps-west-ham-united",
@@ -10937,7 +10898,8 @@
 "195 apps"
 ]
 ],
-"f": "club-apps"
+"f": "club-apps",
+"c": "club"
 },
 {
 "id": "pl-club-goals-wolverhampton-wanderers",
@@ -11007,7 +10969,8 @@
 "12 goals"
 ]
 ],
-"f": "club-scorers"
+"f": "club-scorers",
+"c": "club"
 },
 {
 "id": "pl-club-apps-wolverhampton-wanderers",
@@ -11077,7 +11040,8 @@
 "133 apps"
 ]
 ],
-"f": "club-apps"
+"f": "club-apps",
+"c": "club"
 },
 {
 "id": "pl-club-goals-stoke-city",
@@ -11157,7 +11121,8 @@
 ]
 ]
 ],
-"f": "club-scorers"
+"f": "club-scorers",
+"c": "club"
 },
 {
 "id": "pl-club-apps-stoke-city",
@@ -11227,7 +11192,8 @@
 "146 apps"
 ]
 ],
-"f": "club-apps"
+"f": "club-apps",
+"c": "club"
 },
 {
 "id": "pl-club-goals-wigan-athletic",
@@ -11303,7 +11269,8 @@
 ]
 ]
 ],
-"f": "club-scorers"
+"f": "club-scorers",
+"c": "club"
 },
 {
 "id": "pl-club-apps-wigan-athletic",
@@ -11383,77 +11350,8 @@
 ]
 ]
 ],
-"f": "club-apps"
-},
-{
-"id": "pl-club-apps-coventry-city",
-"q": "Most Premier League appearances for Coventry City",
-"d": 3,
-"asof": "Nov 2026",
-"src": "premierleague.com match data",
-"e": [
-[
-1,
-"steve-ogrizovic",
-"Steve Ogrizovic",
-"191 apps"
-],
-[
-1,
-"paul-telfer",
-"Paul Telfer",
-"191 apps"
-],
-[
-3,
-"richard-shaw",
-"Richard Shaw",
-"179 apps"
-],
-[
-4,
-"paul-williams-1971",
-"Paul Williams",
-"164 apps"
-],
-[
-5,
-"peter-ndlovu",
-"Peter Ndlovu",
-"154 apps"
-],
-[
-6,
-"brian-borrows",
-"Brian Borrows",
-"147 apps"
-],
-[
-7,
-"dion-dublin",
-"Dion Dublin",
-"145 apps"
-],
-[
-8,
-"noel-whelan",
-"Noel Whelan",
-"134 apps"
-],
-[
-9,
-"gary-mcallister",
-"Gary McAllister",
-"119 apps"
-],
-[
-10,
-"gary-breen",
-"Gary Breen",
-"116 apps"
-]
-],
-"f": "club-apps"
+"f": "club-apps",
+"c": "club"
 },
 {
 "id": "pl-club-goals-brighton-hove-albion",
@@ -11523,7 +11421,8 @@
 "15 goals"
 ]
 ],
-"f": "club-scorers"
+"f": "club-scorers",
+"c": "club"
 },
 {
 "id": "pl-club-apps-brighton-hove-albion",
@@ -11593,7 +11492,8 @@
 "112 apps"
 ]
 ],
-"f": "club-apps"
+"f": "club-apps",
+"c": "club"
 },
 {
 "id": "pl-club-goals-burnley",
@@ -11669,7 +11569,8 @@
 ]
 ]
 ],
-"f": "club-scorers"
+"f": "club-scorers",
+"c": "club"
 },
 {
 "id": "pl-club-apps-burnley",
@@ -11739,7 +11640,8 @@
 "141 apps"
 ]
 ],
-"f": "club-apps"
+"f": "club-apps",
+"c": "club"
 },
 {
 "id": "pl-club-goals-watford",
@@ -11815,7 +11717,8 @@
 ]
 ]
 ],
-"f": "club-scorers"
+"f": "club-scorers",
+"c": "club"
 },
 {
 "id": "pl-club-apps-watford",
@@ -11891,147 +11794,8 @@
 ]
 ]
 ],
-"f": "club-apps"
-},
-{
-"id": "pl-club-goals-norwich-city",
-"q": "Norwich City's top Premier League scorers",
-"d": 3,
-"asof": "Nov 2026",
-"src": "premierleague.com match data",
-"e": [
-[
-1,
-"chris-sutton",
-"Chris Sutton",
-"33 goals"
-],
-[
-2,
-"grant-holt",
-"Grant Holt",
-"23 goals"
-],
-[
-3,
-"teemu-pukki",
-"Teemu Pukki",
-"22 goals"
-],
-[
-4,
-"mark-robins",
-"Mark Robins",
-"19 goals"
-],
-[
-5,
-"efan-ekoku",
-"Efan Ekoku",
-"15 goals"
-],
-[
-6,
-"anthony-pilkington",
-"Anthony Pilkington",
-"14 goals"
-],
-[
-7,
-"wes-hoolahan",
-"Wes Hoolahan",
-"12 goals"
-],
-[
-7,
-"robert-snodgrass",
-"Robert Snodgrass",
-"12 goals"
-],
-[
-9,
-"ruel-fox",
-"Ruel Fox",
-"11 goals"
-],
-[
-10,
-"steve-morison",
-"Steve Morison",
-"10 goals"
-]
-],
-"f": "club-scorers"
-},
-{
-"id": "pl-club-apps-norwich-city",
-"q": "Most Premier League appearances for Norwich City",
-"d": 3,
-"asof": "Nov 2026",
-"src": "premierleague.com match data",
-"e": [
-[
-1,
-"russell-martin",
-"Russell Martin",
-"125 apps"
-],
-[
-2,
-"mark-bowen",
-"Mark Bowen",
-"119 apps"
-],
-[
-3,
-"john-ruddy",
-"John Ruddy",
-"117 apps"
-],
-[
-4,
-"wes-hoolahan",
-"Wes Hoolahan",
-"112 apps"
-],
-[
-5,
-"ian-crook",
-"Ian Crook",
-"106 apps"
-],
-[
-6,
-"bryan-gunn",
-"Bryan Gunn",
-"104 apps"
-],
-[
-6,
-"jonny-howson",
-"Jonny Howson",
-"104 apps"
-],
-[
-8,
-"bradley-johnson",
-"Bradley Johnson",
-"101 apps"
-],
-[
-8,
-"alexander-tettey",
-"Alexander Tettey",
-"101 apps"
-],
-[
-10,
-"john-polston",
-"John Polston",
-"96 apps"
-]
-],
-"f": "club-apps"
+"f": "club-apps",
+"c": "club"
 },
 {
 "id": "pl-club-goals-nottingham-forest",
@@ -12101,373 +11865,8 @@
 "12 goals"
 ]
 ],
-"f": "club-scorers"
-},
-{
-"id": "pl-club-apps-nottingham-forest",
-"q": "Most Premier League appearances for Nottingham Forest",
-"d": 3,
-"asof": "Nov 2026",
-"src": "premierleague.com match data",
-"e": [
-[
-1,
-"steve-chettle",
-"Steve Chettle",
-"174 apps"
-],
-[
-2,
-"mark-crossley",
-"Mark Crossley",
-"162 apps"
-],
-[
-3,
-"morgan-gibbs-white",
-"Morgan Gibbs-White",
-"152 apps"
-],
-[
-4,
-"neco-williams",
-"Neco Williams",
-"139 apps"
-],
-[
-5,
-"ian-woan",
-"Ian Woan",
-"132 apps"
-],
-[
-6,
-"scot-gemmill",
-"Scot Gemmill",
-"127 apps"
-],
-[
-7,
-"stuart-pearce",
-"Stuart Pearce",
-"123 apps"
-],
-[
-8,
-"ryan-yates",
-"Ryan Yates",
-"120 apps"
-],
-[
-9,
-"steve-stone",
-"Steve Stone",
-"118 apps"
-],
-[
-10,
-"des-lyttle",
-"Des Lyttle",
-"113 apps"
-]
-],
-"f": "club-apps"
-},
-{
-"id": "pl-club-goals-sheffield-wednesday",
-"q": "Sheffield Wednesday's top Premier League scorers",
-"d": 3,
-"asof": "Nov 2026",
-"src": "premierleague.com match data",
-"e": [
-[
-1,
-"mark-bright",
-"Mark Bright",
-"48 goals"
-],
-[
-2,
-"david-hirst",
-"David Hirst",
-"34 goals"
-],
-[
-3,
-"andy-booth",
-"Andy Booth",
-"25 goals"
-],
-[
-3,
-"benito-carbone",
-"Benito Carbone",
-"25 goals"
-],
-[
-5,
-"guy-whittingham",
-"Guy Whittingham",
-"22 goals"
-],
-[
-6,
-"chris-bart-williams",
-"Chris Bart-Williams",
-"16 goals"
-],
-[
-7,
-"gordon-watson",
-"Gordon Watson",
-"15 goals"
-],
-[
-7,
-"paolo-di-canio",
-"Paolo Di Canio",
-"15 goals"
-],
-[
-9,
-"mark-pembridge",
-"Mark Pembridge",
-"12 goals"
-],
-[
-10,
-"graham-hyde",
-"Graham Hyde",
-"11 goals"
-]
-],
-"f": "club-scorers"
-},
-{
-"id": "pl-club-apps-sheffield-wednesday",
-"q": "Most Premier League appearances for Sheffield Wednesday",
-"d": 3,
-"asof": "Nov 2026",
-"src": "premierleague.com match data",
-"e": [
-[
-1,
-"des-walker",
-"Des Walker",
-"264 apps"
-],
-[
-2,
-"peter-atherton",
-"Peter Atherton",
-"214 apps"
-],
-[
-3,
-"kevin-pressman",
-"Kevin Pressman",
-"207 apps"
-],
-[
-4,
-"ian-nolan",
-"Ian Nolan",
-"165 apps"
-],
-[
-5,
-"graham-hyde",
-"Graham Hyde",
-"159 apps"
-],
-[
-6,
-"mark-bright",
-"Mark Bright",
-"133 apps"
-],
-[
-7,
-"andy-booth",
-"Andy Booth",
-"115 apps"
-],
-[
-8,
-"guy-whittingham",
-"Guy Whittingham",
-"113 apps"
-],
-[
-9,
-"chris-bart-williams",
-"Chris Bart-Williams",
-"109 apps"
-],
-[
-10,
-"chris-waddle",
-"Chris Waddle",
-"108 apps"
-]
-],
-"f": "club-apps"
-},
-{
-"id": "pl-club-goals-charlton-athletic",
-"q": "Charlton Athletic's top Premier League scorers",
-"d": 3,
-"asof": "Nov 2026",
-"src": "premierleague.com match data",
-"e": [
-[
-1,
-"jason-euell",
-"Jason Euell",
-"34 goals"
-],
-[
-2,
-"darren-bent",
-"Darren Bent",
-"31 goals"
-],
-[
-3,
-"jonatan-johansson",
-"Jonatan Johansson",
-"27 goals"
-],
-[
-4,
-"shaun-bartlett",
-"Shaun Bartlett",
-"24 goals"
-],
-[
-5,
-"claus-jensen",
-"Claus Jensen",
-"16 goals"
-],
-[
-6,
-"graham-stuart",
-"Graham Stuart",
-"14 goals"
-],
-[
-6,
-"kevin-lisbie",
-"Kevin Lisbie",
-"14 goals"
-],
-[
-8,
-"matt-holland",
-"Matt Holland",
-"11 goals"
-],
-[
-9,
-"andy-hunt",
-"Andy Hunt",
-"10 goals"
-],
-[
-10,
-"clive-mendonca",
-"Clive Mendonca",
-"8 goals",
-[
-[
-"scott-parker",
-"Scott Parker"
-],
-[
-"talal-el-karkouri",
-"Talal El Karkouri"
-]
-]
-]
-],
-"f": "club-scorers"
-},
-{
-"id": "pl-club-apps-charlton-athletic",
-"q": "Most Premier League appearances for Charlton Athletic",
-"d": 3,
-"asof": "Nov 2026",
-"src": "premierleague.com match data",
-"e": [
-[
-1,
-"chris-powell",
-"Chris Powell",
-"187 apps"
-],
-[
-1,
-"luke-young",
-"Luke Young",
-"187 apps"
-],
-[
-3,
-"radostin-kishishev",
-"Radostin Kishishev",
-"179 apps"
-],
-[
-4,
-"dean-kiely",
-"Dean Kiely",
-"177 apps"
-],
-[
-5,
-"jonatan-johansson",
-"Jonatan Johansson",
-"148 apps"
-],
-[
-6,
-"jason-euell",
-"Jason Euell",
-"139 apps"
-],
-[
-7,
-"paul-konchesky",
-"Paul Konchesky",
-"138 apps"
-],
-[
-8,
-"hermann-hrei-arsson",
-"Hermann Hreiðarsson",
-"132 apps"
-],
-[
-9,
-"matt-holland",
-"Matt Holland",
-"126 apps"
-],
-[
-10,
-"shaun-bartlett",
-"Shaun Bartlett",
-"123 apps",
-[
-[
-"jonathan-fortune",
-"Jonathan Fortune"
-]
-]
-]
-],
-"f": "club-apps"
+"f": "club-scorers",
+"c": "club"
 },
 {
 "id": "pl-club-goals-bournemouth",
@@ -12537,7 +11936,8 @@
 "13 goals"
 ]
 ],
-"f": "club-scorers"
+"f": "club-scorers",
+"c": "club"
 },
 {
 "id": "pl-club-apps-bournemouth",
@@ -12607,153 +12007,8 @@
 "126 apps"
 ]
 ],
-"f": "club-apps"
-},
-{
-"id": "pl-club-goals-brentford",
-"q": "Brentford's top Premier League scorers",
-"d": 3,
-"asof": "Nov 2026",
-"src": "premierleague.com match data",
-"e": [
-[
-1,
-"yoane-wissa",
-"Yoane Wissa",
-"45 goals"
-],
-[
-2,
-"bryan-mbeumo",
-"Bryan Mbeumo",
-"42 goals"
-],
-[
-3,
-"ivan-toney",
-"Ivan Toney",
-"36 goals"
-],
-[
-4,
-"kevin-schade",
-"Kevin Schade",
-"24 goals"
-],
-[
-4,
-"igor-thiago",
-"Igor Thiago",
-"24 goals"
-],
-[
-6,
-"vitaly-janelt",
-"Vitaly Janelt",
-"12 goals"
-],
-[
-7,
-"christian-norgaard",
-"Christian Nørgaard",
-"11 goals"
-],
-[
-7,
-"mathias-jensen",
-"Mathias Jensen",
-"11 goals"
-],
-[
-9,
-"keane-lewis-potter",
-"Keane Lewis-Potter",
-"9 goals"
-],
-[
-10,
-"ethan-pinnock",
-"Ethan Pinnock",
-"8 goals",
-[
-[
-"dango-ouattara",
-"Dango Ouattara"
-]
-]
-]
-],
-"f": "club-scorers"
-},
-{
-"id": "pl-club-apps-brentford",
-"q": "Most Premier League appearances for Brentford",
-"d": 3,
-"asof": "Nov 2026",
-"src": "premierleague.com match data",
-"e": [
-[
-1,
-"vitaly-janelt",
-"Vitaly Janelt",
-"170 apps"
-],
-[
-2,
-"mathias-jensen",
-"Mathias Jensen",
-"166 apps"
-],
-[
-3,
-"yoane-wissa",
-"Yoane Wissa",
-"137 apps"
-],
-[
-4,
-"bryan-mbeumo",
-"Bryan Mbeumo",
-"136 apps"
-],
-[
-5,
-"mikkel-damsgaard",
-"Mikkel Damsgaard",
-"128 apps"
-],
-[
-6,
-"keane-lewis-potter",
-"Keane Lewis-Potter",
-"124 apps"
-],
-[
-7,
-"kristoffer-ajer",
-"Kristoffer Ajer",
-"122 apps"
-],
-[
-7,
-"christian-norgaard",
-"Christian Nørgaard",
-"122 apps"
-],
-[
-9,
-"ethan-pinnock",
-"Ethan Pinnock",
-"117 apps"
-],
-[
-10,
-"kevin-schade",
-"Kevin Schade",
-"112 apps"
-]
-],
-"f": "club-apps"
+"f": "club-apps",
+"c": "club"
 },
 {
 "id": "pl-club-goals-west-bromwich-albion",
@@ -12833,7 +12088,8 @@
 ]
 ]
 ],
-"f": "club-scorers"
+"f": "club-scorers",
+"c": "club"
 },
 {
 "id": "pl-club-apps-west-bromwich-albion",
@@ -12903,287 +12159,8 @@
 "108 apps"
 ]
 ],
-"f": "club-apps"
-},
-{
-"id": "pl-club-goals-wimbledon",
-"q": "Wimbledon's top Premier League scorers",
-"d": 3,
-"asof": "Nov 2026",
-"src": "premierleague.com match data",
-"e": [
-[
-1,
-"dean-holdsworth",
-"Dean Holdsworth",
-"58 goals"
-],
-[
-2,
-"robbie-earle",
-"Robbie Earle",
-"45 goals"
-],
-[
-3,
-"efan-ekoku",
-"Efan Ekoku",
-"37 goals"
-],
-[
-4,
-"marcus-gayle",
-"Marcus Gayle",
-"34 goals"
-],
-[
-5,
-"jason-euell",
-"Jason Euell",
-"22 goals"
-],
-[
-6,
-"john-fashanu",
-"John Fashanu",
-"17 goals"
-],
-[
-7,
-"carl-cort",
-"Carl Cort",
-"16 goals"
-],
-[
-8,
-"oyvind-leonhardsen",
-"Øyvind Leonhardsen",
-"13 goals"
-],
-[
-9,
-"neal-ardley",
-"Neal Ardley",
-"12 goals"
-],
-[
-9,
-"vinnie-jones",
-"Vinnie Jones",
-"12 goals"
-]
-],
-"f": "club-scorers"
-},
-{
-"id": "pl-club-apps-wimbledon",
-"q": "Most Premier League appearances for Wimbledon",
-"d": 3,
-"asof": "Nov 2026",
-"src": "premierleague.com match data",
-"e": [
-[
-1,
-"robbie-earle",
-"Robbie Earle",
-"244 apps"
-],
-[
-2,
-"marcus-gayle",
-"Marcus Gayle",
-"204 apps"
-],
-[
-3,
-"kenny-cunningham-1971",
-"Kenny Cunningham",
-"201 apps"
-],
-[
-4,
-"alan-kimble",
-"Alan Kimble",
-"181 apps"
-],
-[
-5,
-"neil-sullivan",
-"Neil Sullivan",
-"179 apps"
-],
-[
-6,
-"vinnie-jones",
-"Vinnie Jones",
-"177 apps"
-],
-[
-7,
-"neal-ardley",
-"Neal Ardley",
-"169 apps"
-],
-[
-8,
-"dean-holdsworth",
-"Dean Holdsworth",
-"168 apps"
-],
-[
-9,
-"chris-perry",
-"Chris Perry",
-"167 apps"
-],
-[
-10,
-"dean-blackwell",
-"Dean Blackwell",
-"157 apps"
-]
-],
-"f": "club-apps"
-},
-{
-"id": "pl-club-goals-derby-county",
-"q": "Derby County's top Premier League scorers",
-"d": 3,
-"asof": "Nov 2026",
-"src": "premierleague.com match data",
-"e": [
-[
-1,
-"dean-sturridge",
-"Dean Sturridge",
-"32 goals"
-],
-[
-2,
-"paulo-wanchope",
-"Paulo Wanchope",
-"23 goals"
-],
-[
-3,
-"deon-burton",
-"Deon Burton",
-"22 goals"
-],
-[
-3,
-"malcolm-christie",
-"Malcolm Christie",
-"22 goals"
-],
-[
-5,
-"francesco-baiano",
-"Francesco Baiano",
-"16 goals"
-],
-[
-6,
-"branko-strupar",
-"Branko Strupar",
-"15 goals"
-],
-[
-7,
-"rory-delap",
-"Rory Delap",
-"11 goals"
-],
-[
-8,
-"fabrizio-ravanelli",
-"Fabrizio Ravanelli",
-"9 goals"
-],
-[
-9,
-"ashley-ward",
-"Ashley Ward",
-"8 goals"
-],
-[
-9,
-"horacio-carbonari",
-"Horacio Carbonari",
-"8 goals"
-]
-],
-"f": "club-scorers"
-},
-{
-"id": "pl-club-apps-derby-county",
-"q": "Most Premier League appearances for Derby County",
-"d": 3,
-"asof": "Nov 2026",
-"src": "premierleague.com match data",
-"e": [
-[
-1,
-"darryl-powell",
-"Darryl Powell",
-"170 apps"
-],
-[
-2,
-"jacob-laursen",
-"Jacob Laursen",
-"137 apps"
-],
-[
-3,
-"mart-poom",
-"Mart Poom",
-"133 apps"
-],
-[
-4,
-"dean-sturridge",
-"Dean Sturridge",
-"128 apps"
-],
-[
-5,
-"deon-burton",
-"Deon Burton",
-"118 apps"
-],
-[
-6,
-"rory-delap",
-"Rory Delap",
-"103 apps"
-],
-[
-7,
-"stefano-eranio",
-"Stefano Eranio",
-"95 apps"
-],
-[
-8,
-"malcolm-christie",
-"Malcolm Christie",
-"92 apps"
-],
-[
-9,
-"horacio-carbonari",
-"Horacio Carbonari",
-"88 apps"
-],
-[
-10,
-"lee-carsley",
-"Lee Carsley",
-"80 apps"
-]
-],
-"f": "club-apps"
+"f": "club-apps",
+"c": "club"
 },
 {
 "id": "pl-club-goals-birmingham-city",
@@ -13253,7 +12230,8 @@
 "9 goals"
 ]
 ],
-"f": "club-scorers"
+"f": "club-scorers",
+"c": "club"
 },
 {
 "id": "pl-club-apps-birmingham-city",
@@ -13329,7 +12307,8 @@
 ]
 ]
 ],
-"f": "club-apps"
+"f": "club-apps",
+"c": "club"
 },
 {
 "id": "pl-club-goals-swansea-city",
@@ -13399,7 +12378,8 @@
 "12 goals"
 ]
 ],
-"f": "club-scorers"
+"f": "club-scorers",
+"c": "club"
 },
 {
 "id": "pl-club-apps-swansea-city",
@@ -13469,249 +12449,8 @@
 "117 apps"
 ]
 ],
-"f": "club-apps"
-},
-{
-"id": "pl-club-goals-ipswich-town",
-"q": "Ipswich Town's top Premier League scorers",
-"d": 3,
-"asof": "Nov 2026",
-"src": "premierleague.com match data",
-"e": [
-[
-1,
-"marcus-stewart",
-"Marcus Stewart",
-"25 goals"
-],
-[
-2,
-"chris-kiwomya",
-"Chris Kiwomya",
-"18 goals"
-],
-[
-3,
-"john-wark",
-"John Wark",
-"13 goals"
-],
-[
-3,
-"ian-marshall",
-"Ian Marshall",
-"13 goals"
-],
-[
-5,
-"liam-delap",
-"Liam Delap",
-"12 goals"
-],
-[
-6,
-"alun-armstrong",
-"Alun Armstrong",
-"11 goals"
-],
-[
-7,
-"marcus-bent",
-"Marcus Bent",
-"9 goals"
-],
-[
-8,
-"jason-dozzell",
-"Jason Dozzell",
-"7 goals"
-],
-[
-8,
-"martijn-reuser",
-"Martijn Reuser",
-"7 goals"
-],
-[
-10,
-"gavin-johnson",
-"Gavin Johnson",
-"6 goals",
-[
-[
-"boncho-genchev",
-"Boncho Genchev"
-],
-[
-"paul-mason",
-"Paul Mason"
-],
-[
-"matt-holland",
-"Matt Holland"
-],
-[
-"finidi-george",
-"Finidi George"
-]
-]
-]
-],
-"f": "club-scorers"
-},
-{
-"id": "pl-club-goals-queens-park-rangers",
-"q": "QPR's top Premier League scorers",
-"d": 3,
-"asof": "Nov 2026",
-"src": "premierleague.com match data",
-"e": [
-[
-1,
-"les-ferdinand",
-"Les Ferdinand",
-"60 goals"
-],
-[
-2,
-"bradley-allen",
-"Bradley Allen",
-"20 goals"
-],
-[
-3,
-"kevin-gallen",
-"Kevin Gallen",
-"18 goals"
-],
-[
-3,
-"charlie-austin",
-"Charlie Austin",
-"18 goals"
-],
-[
-5,
-"gary-penrice",
-"Gary Penrice",
-"17 goals"
-],
-[
-6,
-"simon-barker",
-"Simon Barker",
-"15 goals"
-],
-[
-7,
-"danny-dichio",
-"Danny Dichio",
-"13 goals"
-],
-[
-8,
-"andy-impey",
-"Andy Impey",
-"11 goals"
-],
-[
-9,
-"trevor-sinclair",
-"Trevor Sinclair",
-"10 goals"
-],
-[
-10,
-"devon-white",
-"Devon White",
-"9 goals",
-[
-[
-"jamie-mackie",
-"Jamie Mackie"
-],
-[
-"djibril-cisse",
-"Djibril Cissé"
-],
-[
-"bobby-zamora",
-"Bobby Zamora"
-]
-]
-]
-],
-"f": "club-scorers"
-},
-{
-"id": "pl-club-apps-queens-park-rangers",
-"q": "Most Premier League appearances for QPR",
-"d": 3,
-"asof": "Nov 2026",
-"src": "premierleague.com match data",
-"e": [
-[
-1,
-"andy-impey",
-"Andy Impey",
-"142 apps"
-],
-[
-2,
-"simon-barker",
-"Simon Barker",
-"132 apps"
-],
-[
-3,
-"david-bardsley",
-"David Bardsley",
-"131 apps"
-],
-[
-4,
-"clive-wilson",
-"Clive Wilson",
-"119 apps"
-],
-[
-5,
-"alan-mcdonald",
-"Alan McDonald",
-"116 apps"
-],
-[
-6,
-"les-ferdinand",
-"Les Ferdinand",
-"110 apps"
-],
-[
-7,
-"ian-holloway",
-"Ian Holloway",
-"107 apps"
-],
-[
-8,
-"trevor-sinclair",
-"Trevor Sinclair",
-"102 apps"
-],
-[
-9,
-"ray-wilkins",
-"Ray Wilkins",
-"83 apps"
-],
-[
-10,
-"steve-yates",
-"Steve Yates",
-"82 apps"
-]
-],
-"f": "club-apps"
+"f": "club-apps",
+"c": "club"
 },
 {
 "id": "pl-club-goals-hull-city",
@@ -13781,7 +12520,8 @@
 "5 goals"
 ]
 ],
-"f": "club-scorers"
+"f": "club-scorers",
+"c": "club"
 },
 {
 "id": "pl-club-apps-hull-city",
@@ -13857,7 +12597,8 @@
 ]
 ]
 ],
-"f": "club-apps"
+"f": "club-apps",
+"c": "club"
 },
 {
 "id": "pl-club-goals-reading",
@@ -13927,82 +12668,13 @@
 "5 goals"
 ]
 ],
-"f": "club-scorers"
-},
-{
-"id": "pl-club-apps-reading",
-"q": "Most Premier League appearances for Reading",
-"d": 3,
-"asof": "Nov 2026",
-"src": "premierleague.com match data",
-"e": [
-[
-1,
-"nicky-shorey",
-"Nicky Shorey",
-"90 apps"
-],
-[
-2,
-"james-harper",
-"James Harper",
-"76 apps"
-],
-[
-2,
-"marcus-hahnemann",
-"Marcus Hahnemann",
-"76 apps"
-],
-[
-4,
-"ivar-ingimarsson",
-"Ívar Ingimarsson",
-"73 apps"
-],
-[
-5,
-"stephen-hunt",
-"Stephen Hunt",
-"72 apps"
-],
-[
-6,
-"kevin-doyle",
-"Kevin Doyle",
-"68 apps"
-],
-[
-7,
-"graeme-murty",
-"Graeme Murty",
-"51 apps"
-],
-[
-8,
-"shane-long",
-"Shane Long",
-"50 apps"
-],
-[
-9,
-"dave-kitson",
-"Dave Kitson",
-"47 apps"
-],
-[
-9,
-"leroy-lita",
-"Leroy Lita",
-"47 apps"
-]
-],
-"f": "club-apps"
+"f": "club-scorers",
+"c": "club"
 },
 {
 "id": "pl-vs-arsenal",
 "q": "Most Premier League goals against Arsenal",
-"d": 2,
+"d": 1,
 "asof": "Nov 2026",
 "src": "premierleague.com match data",
 "e": [
@@ -14085,7 +12757,8 @@
 ]
 ]
 ],
-"f": "goals-against-club"
+"f": "goals-against-club",
+"c": "club"
 },
 {
 "id": "pl-vs-chelsea",
@@ -14165,7 +12838,8 @@
 ]
 ]
 ],
-"f": "goals-against-club"
+"f": "goals-against-club",
+"c": "club"
 },
 {
 "id": "pl-vs-liverpool",
@@ -14249,7 +12923,8 @@
 ]
 ]
 ],
-"f": "goals-against-club"
+"f": "goals-against-club",
+"c": "club"
 },
 {
 "id": "pl-vs-manchester-city",
@@ -14333,7 +13008,8 @@
 ]
 ]
 ],
-"f": "goals-against-club"
+"f": "goals-against-club",
+"c": "club"
 },
 {
 "id": "pl-vs-manchester-united",
@@ -14409,7 +13085,8 @@
 ]
 ]
 ],
-"f": "goals-against-club"
+"f": "goals-against-club",
+"c": "club"
 },
 {
 "id": "pl-vs-tottenham-hotspur",
@@ -14489,7 +13166,8 @@
 ]
 ]
 ],
-"f": "goals-against-club"
+"f": "goals-against-club",
+"c": "club"
 },
 {
 "id": "pl-vs-everton",
@@ -14577,12 +13255,13 @@
 ]
 ]
 ],
-"f": "goals-against-club"
+"f": "goals-against-club",
+"c": "club"
 },
 {
 "id": "pl-vs-newcastle-united",
 "q": "Most Premier League goals against Newcastle",
-"d": 2,
+"d": 1,
 "asof": "Nov 2026",
 "src": "premierleague.com match data",
 "e": [
@@ -14653,12 +13332,13 @@
 ]
 ]
 ],
-"f": "goals-against-club"
+"f": "goals-against-club",
+"c": "club"
 },
 {
 "id": "pl-vs-aston-villa",
 "q": "Most Premier League goals against Aston Villa",
-"d": 2,
+"d": 1,
 "asof": "Nov 2026",
 "src": "premierleague.com match data",
 "e": [
@@ -14729,12 +13409,13 @@
 ]
 ]
 ],
-"f": "goals-against-club"
+"f": "goals-against-club",
+"c": "club"
 },
 {
 "id": "pl-vs-west-ham-united",
 "q": "Most Premier League goals against West Ham",
-"d": 2,
+"d": 1,
 "asof": "Nov 2026",
 "src": "premierleague.com match data",
 "e": [
@@ -14799,12 +13480,13 @@
 "9 goals"
 ]
 ],
-"f": "goals-against-club"
+"f": "goals-against-club",
+"c": "club"
 },
 {
 "id": "pl-season-goals",
 "q": "Most Premier League goals in a season (best season each)",
-"d": 2,
+"d": 1,
 "src": "season articles",
 "e": [
 [
@@ -14867,12 +13549,13 @@
 "Harry Kane",
 "30 (2017–18)"
 ]
-]
+],
+"c": "classic"
 },
 {
 "id": "ucl-season-goals",
 "q": "Most Champions League goals in a season (best season each)",
-"d": 2,
+"d": 1,
 "src": "season articles",
 "e": [
 [
@@ -14941,7 +13624,8 @@
 ]
 ]
 ]
-]
+],
+"c": "classic"
 },
 {
 "id": "pl-goals",
@@ -15010,7 +13694,8 @@
 "Jermain Defoe",
 "162 goals"
 ]
-]
+],
+"c": "classic"
 },
 {
 "id": "pl-apps",
@@ -15079,12 +13764,13 @@
 "Phil Neville",
 "505 apps"
 ]
-]
+],
+"c": "classic"
 },
 {
 "id": "pl-assists",
 "q": "Most Premier League assists",
-"d": 2,
+"d": 1,
 "asof": "Nov 2026",
 "src": "Premier League records and statistics",
 "e": [
@@ -15148,7 +13834,8 @@
 "James Milner",
 "90 assists"
 ]
-]
+],
+"c": "classic"
 },
 {
 "id": "pl-clean-sheets",
@@ -15217,12 +13904,13 @@
 "Brad Friedel",
 "132 clean sheets"
 ]
-]
+],
+"c": "classic"
 },
 {
 "id": "pl-penalties",
 "q": "Most Premier League penalties scored",
-"d": 3,
+"d": 2,
 "asof": "Nov 2026",
 "src": "Premier League records and statistics",
 "e": [
@@ -15286,7 +13974,8 @@
 "Bruno Fernandes",
 "25 pens"
 ]
-]
+],
+"c": "quirky"
 },
 {
 "id": "ucl-goals",
@@ -15355,7 +14044,8 @@
 "Ruud van Nistelrooy",
 "56 goals"
 ]
-]
+],
+"c": "classic"
 },
 {
 "id": "eng-caps",
@@ -15425,12 +14115,13 @@
 "105 caps"
 ]
 ],
-"f": "home-nations"
+"f": "home-nations",
+"c": "classic"
 },
 {
 "id": "eng-goals",
 "q": "England's all-time top scorers",
-"d": 1,
+"d": 2,
 "asof": "Nov 2026",
 "src": "England national football team records and statistics",
 "e": [
@@ -15501,12 +14192,13 @@
 ]
 ]
 ],
-"f": "home-nations"
+"f": "home-nations",
+"c": "classic"
 },
 {
 "id": "eng-clean-sheets",
 "q": "Most England clean sheets",
-"d": 3,
+"d": 2,
 "asof": "Nov 2026",
 "src": "England national football team records and statistics",
 "e": [
@@ -15570,12 +14262,13 @@
 "Nigel Martyn",
 "13 clean sheets"
 ]
-]
+],
+"c": "nations"
 },
 {
 "id": "intl-caps",
 "q": "Most international caps (men)",
-"d": 3,
+"d": 2,
 "asof": "Nov 2026",
 "src": "List of men's footballers with 100 or more international caps",
 "e": [
@@ -15639,7 +14332,8 @@
 "Sergio Ramos",
 "180 caps"
 ]
-]
+],
+"c": "classic"
 },
 {
 "id": "mufc-apps",
@@ -15698,7 +14392,8 @@
 "denis-irwin",
 "Denis Irwin"
 ]
-]
+],
+"c": "club"
 },
 {
 "id": "mufc-goals",
@@ -15757,12 +14452,13 @@
 "paul-scholes",
 "Paul Scholes"
 ]
-]
+],
+"c": "club"
 },
 {
 "id": "mufc-assists",
 "q": "Most assists for Manchester United",
-"d": 3,
+"d": 1,
 "asof": "Nov 2026",
 "src": "Manchester United F.C. records and statistics",
 "e": [
@@ -15816,12 +14512,13 @@
 "eric-cantona",
 "Eric Cantona"
 ]
-]
+],
+"c": "club"
 },
 {
 "id": "cfc-apps",
 "q": "Most appearances for Chelsea",
-"d": 2,
+"d": 3,
 "asof": "Nov 2026",
 "src": "List of Chelsea F.C. records and statistics",
 "e": [
@@ -15875,12 +14572,13 @@
 "kerry-dixon",
 "Kerry Dixon"
 ]
-]
+],
+"c": "club"
 },
 {
 "id": "cfc-signings",
 "q": "Chelsea's most expensive signings",
-"d": 3,
+"d": 2,
 "asof": "Nov 2026",
 "src": "List of Chelsea F.C. records and statistics",
 "e": [
@@ -15934,7 +14632,8 @@
 "christian-pulisic",
 "Christian Pulisic"
 ]
-]
+],
+"c": "club"
 },
 {
 "id": "thfc-sales",
@@ -15993,12 +14692,13 @@
 "djed-spence",
 "Djed Spence"
 ]
-]
+],
+"c": "club"
 },
 {
 "id": "mcfc-assists",
 "q": "Most assists for Manchester City",
-"d": 2,
+"d": 1,
 "asof": "Nov 2026",
 "src": "List of Manchester City F.C. records and statistics",
 "e": [
@@ -16068,12 +14768,13 @@
 ]
 ]
 ]
-]
+],
+"c": "club"
 },
 {
 "id": "mcfc-signings",
 "q": "Manchester City's most expensive signings",
-"d": 3,
+"d": 2,
 "asof": "Nov 2026",
 "src": "List of Manchester City F.C. records and statistics",
 "e": [
@@ -16127,7 +14828,8 @@
 "riyad-mahrez",
 "Riyad Mahrez"
 ]
-]
+],
+"c": "club"
 },
 {
 "id": "efc-sales",
@@ -16186,12 +14888,13 @@
 "moise-kean",
 "Moise Kean"
 ]
-]
+],
+"c": "club"
 },
 {
 "id": "nufc-sales",
 "q": "Newcastle's biggest sales",
-"d": 3,
+"d": 2,
 "asof": "Nov 2026",
 "src": "List of Newcastle United F.C. records and statistics",
 "e": [
@@ -16245,7 +14948,8 @@
 "aleksandar-mitrovic",
 "Aleksandar Mitrović"
 ]
-]
+],
+"c": "club"
 },
 {
 "id": "celtic-sales",
@@ -16304,12 +15008,13 @@
 "victor-wanyama",
 "Victor Wanyama"
 ]
-]
+],
+"c": "club"
 },
 {
 "id": "rmcf-apps",
 "q": "Most appearances for Real Madrid",
-"d": 3,
+"d": 2,
 "asof": "Nov 2026",
 "src": "List of Real Madrid CF records and statistics",
 "e": [
@@ -16363,12 +15068,13 @@
 "jose-antonio-camacho",
 "José Antonio Camacho"
 ]
-]
+],
+"c": "club"
 },
 {
 "id": "rmcf-goals",
 "q": "Real Madrid's all-time top scorers",
-"d": 3,
+"d": 2,
 "asof": "Nov 2026",
 "src": "List of Real Madrid CF records and statistics",
 "e": [
@@ -16422,12 +15128,13 @@
 "emilio-butragueno",
 "Emilio Butragueño"
 ]
-]
+],
+"c": "club"
 },
 {
 "id": "rmcf-assists",
 "q": "Most assists for Real Madrid",
-"d": 3,
+"d": 2,
 "asof": "Nov 2026",
 "src": "List of Real Madrid CF records and statistics",
 "e": [
@@ -16491,12 +15198,13 @@
 "Emilio Butragueño",
 "109 assists"
 ]
-]
+],
+"c": "club"
 },
 {
 "id": "fcb-goals",
 "q": "Barcelona's all-time top scorers",
-"d": 3,
+"d": 2,
 "asof": "Nov 2026",
 "src": "List of FC Barcelona records and statistics",
 "e": [
@@ -16550,12 +15258,13 @@
 "mariano-martin",
 "Mariano Martín"
 ]
-]
+],
+"c": "club"
 },
 {
 "id": "juve-apps",
 "q": "Most appearances for Juventus",
-"d": 3,
+"d": 2,
 "asof": "Nov 2026",
 "src": "List of Juventus FC records and statistics",
 "e": [
@@ -16619,12 +15328,13 @@
 "Sandro Salvadore",
 "450 apps"
 ]
-]
+],
+"c": "club"
 },
 {
 "id": "juve-goals",
 "q": "Juventus's all-time top scorers",
-"d": 3,
+"d": 2,
 "asof": "Nov 2026",
 "src": "List of Juventus FC records and statistics",
 "e": [
@@ -16678,12 +15388,13 @@
 "paulo-dybala",
 "Paulo Dybala"
 ]
-]
+],
+"c": "club"
 },
 {
 "id": "fcbayern-apps",
 "q": "Most appearances for Bayern Munich",
-"d": 3,
+"d": 1,
 "asof": "Nov 2026",
 "src": "List of FC Bayern Munich records and statistics",
 "e": [
@@ -16737,7 +15448,8 @@
 "joshua-kimmich",
 "Joshua Kimmich"
 ]
-]
+],
+"c": "club"
 },
 {
 "id": "laliga-goals",
@@ -16806,7 +15518,8 @@
 "Pahiño",
 "212 goals"
 ]
-]
+],
+"c": "classic"
 },
 {
 "id": "bundesliga-goals",
@@ -16875,12 +15588,13 @@
 "Klaus Allofs",
 "177 goals"
 ]
-]
+],
+"c": "classic"
 },
 {
 "id": "pl-hat-tricks",
 "q": "Most Premier League hat-tricks",
-"d": 2,
+"d": 1,
 "asof": "Nov 2026",
 "src": "List of Premier League hat-tricks",
 "e": [
@@ -16966,12 +15680,13 @@
 ]
 ]
 ]
-]
+],
+"c": "classic"
 },
 {
 "id": "pl-free-kicks",
 "q": "Most Premier League free-kick goals",
-"d": 2,
+"d": 3,
 "asof": "Nov 2026",
 "src": "Premier League records and statistics",
 "e": [
@@ -17049,12 +15764,13 @@
 ]
 ]
 ]
-]
+],
+"c": "quirky"
 },
 {
 "id": "wc-goals",
 "q": "World Cup all-time top scorers",
-"d": 2,
+"d": 1,
 "asof": "Nov 2026",
 "src": "List of FIFA World Cup top goalscorers",
 "e": [
@@ -17124,7 +15840,8 @@
 ]
 ]
 ]
-]
+],
+"c": "classic"
 },
 {
 "id": "eng-captains",
@@ -17199,12 +15916,13 @@
 ]
 ]
 ]
-]
+],
+"c": "nations"
 },
 {
 "id": "ucl-assists",
 "q": "Most Champions League assists",
-"d": 2,
+"d": 1,
 "asof": "Nov 2026",
 "src": "UEFA Champions League records and statistics",
 "e": [
@@ -17274,12 +15992,13 @@
 ]
 ]
 ]
-]
+],
+"c": "classic"
 },
 {
 "id": "ucl-managers",
 "q": "Most Champions League games as a manager",
-"d": 3,
+"d": 2,
 "asof": "Nov 2026",
 "src": "UEFA Champions League records and statistics",
 "e": [
@@ -17333,12 +16052,13 @@
 "ottmar-hitzfeld",
 "Ottmar Hitzfeld"
 ]
-]
+],
+"c": "classic"
 },
 {
 "id": "pl-managers",
 "q": "Most Premier League games as a manager",
-"d": 2,
+"d": 3,
 "asof": "Nov 2026",
 "src": "List of Premier League managers",
 "e": [
@@ -17402,7 +16122,8 @@
 "Eddie Howe",
 "369 games"
 ]
-]
+],
+"c": "classic"
 },
 {
 "id": "pl-titles",
@@ -17497,12 +16218,13 @@
 ]
 ]
 ]
-]
+],
+"c": "classic"
 },
 {
 "id": "pl-potm",
 "q": "Most Premier League Player of the Month awards",
-"d": 2,
+"d": 1,
 "asof": "Nov 2026",
 "src": "Premier League Player of the Month",
 "e": [
@@ -17596,12 +16318,13 @@
 ]
 ]
 ]
-]
+],
+"c": "classic"
 },
 {
 "id": "sco-caps",
 "q": "Most Scotland caps",
-"d": 2,
+"d": 3,
 "asof": "Nov 2026",
 "src": "Scotland national football team records and statistics",
 "e": [
@@ -17666,12 +16389,13 @@
 "73 caps"
 ]
 ],
-"f": "home-nations"
+"f": "home-nations",
+"c": "nations"
 },
 {
 "id": "sco-goals",
 "q": "Scotland's all-time top scorers",
-"d": 2,
+"d": 3,
 "asof": "Nov 2026",
 "src": "Scotland national football team records and statistics",
 "e": [
@@ -17736,7 +16460,8 @@
 "15 goals"
 ]
 ],
-"f": "home-nations"
+"f": "home-nations",
+"c": "nations"
 },
 {
 "id": "wal-caps",
@@ -17812,12 +16537,13 @@
 ]
 ]
 ],
-"f": "home-nations"
+"f": "home-nations",
+"c": "nations"
 },
 {
 "id": "wal-goals",
 "q": "Wales's all-time top scorers",
-"d": 2,
+"d": 3,
 "asof": "Nov 2026",
 "src": "Wales national football team records and statistics",
 "e": [
@@ -17888,7 +16614,8 @@
 ]
 ]
 ],
-"f": "home-nations"
+"f": "home-nations",
+"c": "nations"
 },
 {
 "id": "nir-caps",
@@ -17958,72 +16685,13 @@
 "88 caps"
 ]
 ],
-"f": "home-nations"
-},
-{
-"id": "nir-goals",
-"q": "Northern Ireland's all-time top scorers",
-"d": 3,
-"asof": "Nov 2026",
-"src": "Northern Ireland national football team records and statistics",
-"e": [
-[
-1,
-"david-healy",
-"David Healy"
-],
-[
-2,
-"kyle-lafferty",
-"Kyle Lafferty"
-],
-[
-3,
-"billy-gillespie",
-"Billy Gillespie"
-],
-[
-3,
-"colin-clarke",
-"Colin Clarke"
-],
-[
-3,
-"steven-davis",
-"Steven Davis"
-],
-[
-6,
-"joe-bambrick",
-"Joe Bambrick"
-],
-[
-6,
-"gerry-armstrong",
-"Gerry Armstrong"
-],
-[
-6,
-"jimmy-quinn",
-"Jimmy Quinn"
-],
-[
-6,
-"iain-dowie",
-"Iain Dowie"
-],
-[
-6,
-"josh-magennis",
-"Josh Magennis"
-]
-],
-"f": "home-nations"
+"f": "home-nations",
+"c": "nations"
 },
 {
 "id": "man-derby-goals",
 "q": "Most goals in the Manchester derby",
-"d": 3,
+"d": 2,
 "asof": "Nov 2026",
 "src": "Manchester derby",
 "e": [
@@ -18077,12 +16745,13 @@
 "joe-spence",
 "Joe Spence"
 ]
-]
+],
+"c": "club"
 },
 {
 "id": "nld-goals",
 "q": "Most goals in the North London derby (Premier League era)",
-"d": 2,
+"d": 1,
 "asof": "Nov 2026",
 "src": "North London derby",
 "e": [
@@ -18165,7 +16834,8 @@
 ]
 ]
 ],
-"f": "derby"
+"f": "derby",
+"c": "club"
 },
 {
 "id": "mersey-goals",
@@ -18224,12 +16894,13 @@
 "graeme-sharp",
 "Graeme Sharp"
 ]
-]
+],
+"c": "club"
 },
 {
 "id": "clasico-goals",
 "q": "Most goals in El Clásico",
-"d": 2,
+"d": 1,
 "asof": "Nov 2026",
 "src": "El Clásico",
 "e": [
@@ -18294,12 +16965,13 @@
 "11 goals"
 ]
 ],
-"f": "derby"
+"f": "derby",
+"c": "club"
 },
 {
 "id": "milan-derby-goals",
 "q": "Most goals in the Milan derby",
-"d": 3,
+"d": 2,
 "asof": "Nov 2026",
 "src": "Derby della Madonnina",
 "e": [
@@ -18373,12 +17045,13 @@
 ]
 ]
 ]
-]
+],
+"c": "club"
 },
 {
 "id": "world-transfers",
 "q": "The 10 most expensive transfers ever (a player's biggest)",
-"d": 1,
+"d": 2,
 "asof": "Nov 2026",
 "src": "List of most expensive association football transfers",
 "e": [
@@ -18442,12 +17115,13 @@
 "Antoine Griezmann",
 "€120m"
 ]
-]
+],
+"c": "classic"
 },
 {
 "id": "ballon-dor-1990",
 "q": "1990 Ballon d'Or: the top 10",
-"d": 3,
+"d": 2,
 "src": "1990 Ballon d'Or",
 "e": [
 [
@@ -18501,7 +17175,8 @@
 "Guido Buchwald"
 ]
 ],
-"f": "ballon-dor"
+"f": "ballon-dor",
+"c": "era"
 },
 {
 "id": "ballon-dor-1991",
@@ -18560,12 +17235,13 @@
 "Chris Waddle"
 ]
 ],
-"f": "ballon-dor"
+"f": "ballon-dor",
+"c": "era"
 },
 {
 "id": "ballon-dor-1992",
 "q": "1992 Ballon d'Or: the top 10",
-"d": 3,
+"d": 2,
 "src": "1992 Ballon d'Or",
 "e": [
 [
@@ -18626,12 +17302,13 @@
 ]
 ]
 ],
-"f": "ballon-dor"
+"f": "ballon-dor",
+"c": "era"
 },
 {
 "id": "ballon-dor-1993",
 "q": "1993 Ballon d'Or: the top 10",
-"d": 3,
+"d": 2,
 "src": "1993 Ballon d'Or",
 "e": [
 [
@@ -18685,12 +17362,13 @@
 "Ryan Giggs"
 ]
 ],
-"f": "ballon-dor"
+"f": "ballon-dor",
+"c": "era"
 },
 {
 "id": "ballon-dor-1994",
 "q": "1994 Ballon d'Or: the top 10",
-"d": 3,
+"d": 2,
 "src": "1994 Ballon d'Or",
 "e": [
 [
@@ -18744,12 +17422,13 @@
 "Dejan Savićević"
 ]
 ],
-"f": "ballon-dor"
+"f": "ballon-dor",
+"c": "era"
 },
 {
 "id": "ballon-dor-1995",
 "q": "1995 Ballon d'Or: the top 10",
-"d": 3,
+"d": 2,
 "src": "1995 Ballon d'Or",
 "e": [
 [
@@ -18803,12 +17482,13 @@
 "Michael Laudrup"
 ]
 ],
-"f": "ballon-dor"
+"f": "ballon-dor",
+"c": "era"
 },
 {
 "id": "ballon-dor-1996",
 "q": "1996 Ballon d'Or: the top 10",
-"d": 3,
+"d": 2,
 "src": "1996 Ballon d'Or",
 "e": [
 [
@@ -18862,12 +17542,13 @@
 "Karel Poborský"
 ]
 ],
-"f": "ballon-dor"
+"f": "ballon-dor",
+"c": "era"
 },
 {
 "id": "ballon-dor-1997",
 "q": "1997 Ballon d'Or: the top 10",
-"d": 3,
+"d": 2,
 "src": "1997 Ballon d'Or",
 "e": [
 [
@@ -18928,12 +17609,13 @@
 ]
 ]
 ],
-"f": "ballon-dor"
+"f": "ballon-dor",
+"c": "era"
 },
 {
 "id": "ballon-dor-1998",
 "q": "1998 Ballon d'Or: the top 10",
-"d": 3,
+"d": 2,
 "src": "1998 Ballon d'Or",
 "e": [
 [
@@ -18987,12 +17669,13 @@
 "Marcel Desailly"
 ]
 ],
-"f": "ballon-dor"
+"f": "ballon-dor",
+"c": "era"
 },
 {
 "id": "ballon-dor-1999",
 "q": "1999 Ballon d'Or: the top 10",
-"d": 3,
+"d": 2,
 "src": "1999 Ballon d'Or",
 "e": [
 [
@@ -19046,7 +17729,8 @@
 "Lothar Matthäus"
 ]
 ],
-"f": "ballon-dor"
+"f": "ballon-dor",
+"c": "era"
 },
 {
 "id": "ballon-dor-2000",
@@ -19112,12 +17796,13 @@
 ]
 ]
 ],
-"f": "ballon-dor"
+"f": "ballon-dor",
+"c": "era"
 },
 {
 "id": "ballon-dor-2001",
 "q": "2001 Ballon d'Or: the top 10",
-"d": 2,
+"d": 1,
 "src": "2001 Ballon d'Or",
 "e": [
 [
@@ -19171,7 +17856,8 @@
 "Zinedine Zidane"
 ]
 ],
-"f": "ballon-dor"
+"f": "ballon-dor",
+"c": "era"
 },
 {
 "id": "ballon-dor-2002",
@@ -19230,12 +17916,13 @@
 "Alessandro Del Piero"
 ]
 ],
-"f": "ballon-dor"
+"f": "ballon-dor",
+"c": "era"
 },
 {
 "id": "ballon-dor-2003",
 "q": "2003 Ballon d'Or: the top 10",
-"d": 2,
+"d": 1,
 "src": "2003 Ballon d'Or",
 "e": [
 [
@@ -19289,7 +17976,8 @@
 "David Beckham"
 ]
 ],
-"f": "ballon-dor"
+"f": "ballon-dor",
+"c": "era"
 },
 {
 "id": "ballon-dor-2004",
@@ -19348,12 +18036,13 @@
 "Ruud van Nistelrooy"
 ]
 ],
-"f": "ballon-dor"
+"f": "ballon-dor",
+"c": "era"
 },
 {
 "id": "ballon-dor-2005",
 "q": "2005 Ballon d'Or: the top 10",
-"d": 2,
+"d": 1,
 "src": "2005 Ballon d'Or",
 "e": [
 [
@@ -19414,12 +18103,13 @@
 ]
 ]
 ],
-"f": "ballon-dor"
+"f": "ballon-dor",
+"c": "era"
 },
 {
 "id": "ballon-dor-2006",
 "q": "2006 Ballon d'Or: the top 10",
-"d": 2,
+"d": 1,
 "src": "2006 Ballon d'Or",
 "e": [
 [
@@ -19473,12 +18163,13 @@
 "Jens Lehmann"
 ]
 ],
-"f": "ballon-dor"
+"f": "ballon-dor",
+"c": "era"
 },
 {
 "id": "ballon-dor-2007",
 "q": "2007 Ballon d'Or: the top 10",
-"d": 2,
+"d": 1,
 "src": "2007 Ballon d'Or",
 "e": [
 [
@@ -19532,12 +18223,13 @@
 "Francesco Totti"
 ]
 ],
-"f": "ballon-dor"
+"f": "ballon-dor",
+"c": "era"
 },
 {
 "id": "ballon-dor-2008",
 "q": "2008 Ballon d'Or: the top 10",
-"d": 2,
+"d": 1,
 "src": "2008 Ballon d'Or",
 "e": [
 [
@@ -19591,12 +18283,13 @@
 "Steven Gerrard"
 ]
 ],
-"f": "ballon-dor"
+"f": "ballon-dor",
+"c": "era"
 },
 {
 "id": "ballon-dor-2009",
 "q": "2009 Ballon d'Or: the top 10",
-"d": 2,
+"d": 1,
 "src": "2009 Ballon d'Or",
 "e": [
 [
@@ -19650,7 +18343,8 @@
 "Steven Gerrard"
 ]
 ],
-"f": "ballon-dor"
+"f": "ballon-dor",
+"c": "era"
 },
 {
 "id": "ballon-dor-2016",
@@ -19709,7 +18403,8 @@
 "Pepe"
 ]
 ],
-"f": "ballon-dor"
+"f": "ballon-dor",
+"c": "era"
 },
 {
 "id": "ballon-dor-2017",
@@ -19768,7 +18463,8 @@
 "Harry Kane"
 ]
 ],
-"f": "ballon-dor"
+"f": "ballon-dor",
+"c": "era"
 },
 {
 "id": "ballon-dor-2018",
@@ -19827,7 +18523,8 @@
 "Harry Kane"
 ]
 ],
-"f": "ballon-dor"
+"f": "ballon-dor",
+"c": "era"
 },
 {
 "id": "ballon-dor-2019",
@@ -19886,7 +18583,8 @@
 "Riyad Mahrez"
 ]
 ],
-"f": "ballon-dor"
+"f": "ballon-dor",
+"c": "era"
 },
 {
 "id": "ballon-dor-2021",
@@ -19945,7 +18643,8 @@
 "Gianluigi Donnarumma"
 ]
 ],
-"f": "ballon-dor"
+"f": "ballon-dor",
+"c": "era"
 },
 {
 "id": "ballon-dor-2022",
@@ -20004,7 +18703,8 @@
 "Erling Haaland"
 ]
 ],
-"f": "ballon-dor"
+"f": "ballon-dor",
+"c": "era"
 },
 {
 "id": "ballon-dor-2023",
@@ -20063,7 +18763,8 @@
 "Luka Modrić"
 ]
 ],
-"f": "ballon-dor"
+"f": "ballon-dor",
+"c": "era"
 },
 {
 "id": "ballon-dor-2024",
@@ -20122,12 +18823,13 @@
 "Harry Kane"
 ]
 ],
-"f": "ballon-dor"
+"f": "ballon-dor",
+"c": "era"
 },
 {
 "id": "ballon-dor-2025",
 "q": "2025 Ballon d'Or: the top 10",
-"d": 1,
+"d": 2,
 "src": "2025 Ballon d'Or",
 "e": [
 [
@@ -20181,7 +18883,8 @@
 "Nuno Mendes"
 ]
 ],
-"f": "ballon-dor"
+"f": "ballon-dor",
+"c": "era"
 },
 {
 "id": "pl-1992",
@@ -20260,7 +18963,8 @@
 ]
 ]
 ],
-"f": "pl-season-scorers"
+"f": "pl-season-scorers",
+"c": "era"
 },
 {
 "id": "pl-1993",
@@ -20329,7 +19033,8 @@
 "17 goals"
 ]
 ],
-"f": "pl-season-scorers"
+"f": "pl-season-scorers",
+"c": "era"
 },
 {
 "id": "pl-1994",
@@ -20388,7 +19093,8 @@
 "Uwe Rösler"
 ]
 ],
-"f": "pl-season-scorers"
+"f": "pl-season-scorers",
+"c": "era"
 },
 {
 "id": "pl-1995",
@@ -20463,7 +19169,8 @@
 ]
 ]
 ],
-"f": "pl-season-scorers"
+"f": "pl-season-scorers",
+"c": "era"
 },
 {
 "id": "pl-1996",
@@ -20546,7 +19253,8 @@
 ]
 ]
 ],
-"f": "pl-season-scorers"
+"f": "pl-season-scorers",
+"c": "era"
 },
 {
 "id": "pl-1997",
@@ -20615,7 +19323,8 @@
 "13 goals"
 ]
 ],
-"f": "pl-season-scorers"
+"f": "pl-season-scorers",
+"c": "era"
 },
 {
 "id": "pl-1998",
@@ -20684,7 +19393,8 @@
 "14 goals"
 ]
 ],
-"f": "pl-season-scorers"
+"f": "pl-season-scorers",
+"c": "era"
 },
 {
 "id": "pl-1999",
@@ -20753,7 +19463,8 @@
 "14 goals"
 ]
 ],
-"f": "pl-season-scorers"
+"f": "pl-season-scorers",
+"c": "era"
 },
 {
 "id": "pl-2000",
@@ -20822,12 +19533,13 @@
 "11 goals"
 ]
 ],
-"f": "pl-season-scorers"
+"f": "pl-season-scorers",
+"c": "era"
 },
 {
 "id": "pl-2001",
 "q": "Top scorers in the 2001–02 Premier League",
-"d": 3,
+"d": 2,
 "src": "2001–02 FA Premier League",
 "e": [
 [
@@ -20891,12 +19603,13 @@
 "13 goals"
 ]
 ],
-"f": "pl-season-scorers"
+"f": "pl-season-scorers",
+"c": "era"
 },
 {
 "id": "pl-2002",
 "q": "Top scorers in the 2002–03 Premier League",
-"d": 3,
+"d": 2,
 "src": "2002–03 FA Premier League",
 "e": [
 [
@@ -20966,7 +19679,8 @@
 ]
 ]
 ],
-"f": "pl-season-scorers"
+"f": "pl-season-scorers",
+"c": "era"
 },
 {
 "id": "pl-2003",
@@ -21045,7 +19759,8 @@
 ]
 ]
 ],
-"f": "pl-season-scorers"
+"f": "pl-season-scorers",
+"c": "era"
 },
 {
 "id": "pl-2004",
@@ -21114,7 +19829,8 @@
 "12 goals"
 ]
 ],
-"f": "pl-season-scorers"
+"f": "pl-season-scorers",
+"c": "era"
 },
 {
 "id": "pl-2005",
@@ -21189,7 +19905,8 @@
 ]
 ]
 ],
-"f": "pl-season-scorers"
+"f": "pl-season-scorers",
+"c": "era"
 },
 {
 "id": "pl-2006",
@@ -21258,7 +19975,8 @@
 "12 goals"
 ]
 ],
-"f": "pl-season-scorers"
+"f": "pl-season-scorers",
+"c": "era"
 },
 {
 "id": "pl-2007",
@@ -21327,7 +20045,8 @@
 "13 goals"
 ]
 ],
-"f": "pl-season-scorers"
+"f": "pl-season-scorers",
+"c": "era"
 },
 {
 "id": "pl-2008",
@@ -21402,7 +20121,8 @@
 ]
 ]
 ],
-"f": "pl-season-scorers"
+"f": "pl-season-scorers",
+"c": "era"
 },
 {
 "id": "pl-2009",
@@ -21477,12 +20197,13 @@
 ]
 ]
 ],
-"f": "pl-season-scorers"
+"f": "pl-season-scorers",
+"c": "era"
 },
 {
 "id": "pl-2010",
 "q": "Top scorers in the 2010–11 Premier League",
-"d": 2,
+"d": 3,
 "src": "2010–11 Premier League",
 "e": [
 [
@@ -21552,7 +20273,8 @@
 ]
 ]
 ],
-"f": "pl-season-scorers"
+"f": "pl-season-scorers",
+"c": "era"
 },
 {
 "id": "pl-2011",
@@ -21627,7 +20349,8 @@
 ]
 ]
 ],
-"f": "pl-season-scorers"
+"f": "pl-season-scorers",
+"c": "era"
 },
 {
 "id": "pl-2012",
@@ -21696,7 +20419,8 @@
 "15 goals"
 ]
 ],
-"f": "pl-season-scorers"
+"f": "pl-season-scorers",
+"c": "era"
 },
 {
 "id": "pl-2013",
@@ -21765,7 +20489,8 @@
 "15 goals"
 ]
 ],
-"f": "pl-season-scorers"
+"f": "pl-season-scorers",
+"c": "era"
 },
 {
 "id": "pl-2014",
@@ -21844,7 +20569,8 @@
 ]
 ]
 ],
-"f": "pl-season-scorers"
+"f": "pl-season-scorers",
+"c": "era"
 },
 {
 "id": "pl-2015",
@@ -21913,7 +20639,8 @@
 "13 goals"
 ]
 ],
-"f": "pl-season-scorers"
+"f": "pl-season-scorers",
+"c": "era"
 },
 {
 "id": "pl-2016",
@@ -21992,7 +20719,8 @@
 ]
 ]
 ],
-"f": "pl-season-scorers"
+"f": "pl-season-scorers",
+"c": "era"
 },
 {
 "id": "pl-2017",
@@ -22075,7 +20803,8 @@
 ]
 ]
 ],
-"f": "pl-season-scorers"
+"f": "pl-season-scorers",
+"c": "era"
 },
 {
 "id": "pl-2018",
@@ -22166,7 +20895,8 @@
 ]
 ]
 ],
-"f": "pl-season-scorers"
+"f": "pl-season-scorers",
+"c": "era"
 },
 {
 "id": "pl-2019",
@@ -22235,7 +20965,8 @@
 "17 goals"
 ]
 ],
-"f": "pl-season-scorers"
+"f": "pl-season-scorers",
+"c": "era"
 },
 {
 "id": "pl-2020",
@@ -22304,7 +21035,8 @@
 "13 goals"
 ]
 ],
-"f": "pl-season-scorers"
+"f": "pl-season-scorers",
+"c": "era"
 },
 {
 "id": "pl-2021",
@@ -22373,7 +21105,8 @@
 "13 goals"
 ]
 ],
-"f": "pl-season-scorers"
+"f": "pl-season-scorers",
+"c": "era"
 },
 {
 "id": "pl-2022",
@@ -22448,7 +21181,8 @@
 ]
 ]
 ],
-"f": "pl-season-scorers"
+"f": "pl-season-scorers",
+"c": "era"
 },
 {
 "id": "pl-2023",
@@ -22523,12 +21257,13 @@
 ]
 ]
 ],
-"f": "pl-season-scorers"
+"f": "pl-season-scorers",
+"c": "era"
 },
 {
 "id": "pl-2024",
 "q": "Top scorers in the 2024–25 Premier League",
-"d": 2,
+"d": 3,
 "src": "2024–25 Premier League",
 "e": [
 [
@@ -22598,12 +21333,13 @@
 ]
 ]
 ],
-"f": "pl-season-scorers"
+"f": "pl-season-scorers",
+"c": "era"
 },
 {
 "id": "pl-2025",
 "q": "Top scorers in the 2025–26 Premier League",
-"d": 2,
+"d": 3,
 "src": "2025–26 Premier League",
 "e": [
 [
@@ -22667,7 +21403,8 @@
 "13 goals"
 ]
 ],
-"f": "pl-season-scorers"
+"f": "pl-season-scorers",
+"c": "era"
 },
 {
 "id": "ucl-1992",
@@ -22736,7 +21473,8 @@
 "4 goals"
 ]
 ],
-"f": "ucl-season-scorers"
+"f": "ucl-season-scorers",
+"c": "era"
 },
 {
 "id": "ucl-1993",
@@ -22823,7 +21561,8 @@
 ]
 ]
 ],
-"f": "ucl-season-scorers"
+"f": "ucl-season-scorers",
+"c": "era"
 },
 {
 "id": "ucl-1994",
@@ -22898,7 +21637,8 @@
 ]
 ]
 ],
-"f": "ucl-season-scorers"
+"f": "ucl-season-scorers",
+"c": "era"
 },
 {
 "id": "ucl-1995",
@@ -22967,7 +21707,8 @@
 "4 goals"
 ]
 ],
-"f": "ucl-season-scorers"
+"f": "ucl-season-scorers",
+"c": "era"
 },
 {
 "id": "ucl-1996",
@@ -23042,7 +21783,8 @@
 ]
 ]
 ],
-"f": "ucl-season-scorers"
+"f": "ucl-season-scorers",
+"c": "era"
 },
 {
 "id": "ucl-1997",
@@ -23145,7 +21887,8 @@
 ]
 ]
 ],
-"f": "ucl-season-scorers"
+"f": "ucl-season-scorers",
+"c": "era"
 },
 {
 "id": "ucl-1998",
@@ -23236,7 +21979,8 @@
 ]
 ]
 ],
-"f": "ucl-season-scorers"
+"f": "ucl-season-scorers",
+"c": "era"
 },
 {
 "id": "ucl-1999",
@@ -23315,7 +22059,8 @@
 ]
 ]
 ],
-"f": "ucl-season-scorers"
+"f": "ucl-season-scorers",
+"c": "era"
 },
 {
 "id": "ucl-2000",
@@ -23430,7 +22175,8 @@
 ]
 ]
 ],
-"f": "ucl-season-scorers"
+"f": "ucl-season-scorers",
+"c": "era"
 },
 {
 "id": "ucl-2001",
@@ -23499,12 +22245,13 @@
 "6 goals"
 ]
 ],
-"f": "ucl-season-scorers"
+"f": "ucl-season-scorers",
+"c": "era"
 },
 {
 "id": "ucl-2002",
 "q": "Top scorers in the 2002–03 Champions League",
-"d": 3,
+"d": 2,
 "src": "2002–03 UEFA Champions League",
 "e": [
 [
@@ -23568,7 +22315,8 @@
 "6 goals"
 ]
 ],
-"f": "ucl-season-scorers"
+"f": "ucl-season-scorers",
+"c": "era"
 },
 {
 "id": "ucl-2003",
@@ -23675,12 +22423,13 @@
 ]
 ]
 ],
-"f": "ucl-season-scorers"
+"f": "ucl-season-scorers",
+"c": "era"
 },
 {
 "id": "ucl-2004",
 "q": "Top scorers in the 2004–05 Champions League",
-"d": 3,
+"d": 2,
 "src": "2004–05 UEFA Champions League",
 "e": [
 [
@@ -23758,12 +22507,13 @@
 ]
 ]
 ],
-"f": "ucl-season-scorers"
+"f": "ucl-season-scorers",
+"c": "era"
 },
 {
 "id": "ucl-2005",
 "q": "Top scorers in the 2005–06 Champions League",
-"d": 3,
+"d": 2,
 "src": "2005–06 UEFA Champions League",
 "e": [
 [
@@ -23845,12 +22595,13 @@
 ]
 ]
 ],
-"f": "ucl-season-scorers"
+"f": "ucl-season-scorers",
+"c": "era"
 },
 {
 "id": "ucl-2006",
 "q": "Top scorers in the 2006–07 Champions League",
-"d": 3,
+"d": 2,
 "src": "2006–07 UEFA Champions League",
 "e": [
 [
@@ -23928,12 +22679,13 @@
 ]
 ]
 ],
-"f": "ucl-season-scorers"
+"f": "ucl-season-scorers",
+"c": "era"
 },
 {
 "id": "ucl-2007",
 "q": "Top scorers in the 2007–08 Champions League",
-"d": 3,
+"d": 2,
 "src": "2007–08 UEFA Champions League",
 "e": [
 [
@@ -24003,12 +22755,13 @@
 ]
 ]
 ],
-"f": "ucl-season-scorers"
+"f": "ucl-season-scorers",
+"c": "era"
 },
 {
 "id": "ucl-2008",
 "q": "Top scorers in the 2008–09 Champions League",
-"d": 3,
+"d": 1,
 "src": "2008–09 UEFA Champions League",
 "e": [
 [
@@ -24072,12 +22825,13 @@
 "5 goals"
 ]
 ],
-"f": "ucl-season-scorers"
+"f": "ucl-season-scorers",
+"c": "era"
 },
 {
 "id": "ucl-2009",
 "q": "Top scorers in the 2009–10 Champions League",
-"d": 3,
+"d": 2,
 "src": "2009–10 UEFA Champions League",
 "e": [
 [
@@ -24171,12 +22925,13 @@
 ]
 ]
 ],
-"f": "ucl-season-scorers"
+"f": "ucl-season-scorers",
+"c": "era"
 },
 {
 "id": "ucl-2010",
 "q": "Top scorers in the 2010–11 Champions League",
-"d": 3,
+"d": 2,
 "src": "2010–11 UEFA Champions League",
 "e": [
 [
@@ -24278,12 +23033,13 @@
 ]
 ]
 ],
-"f": "ucl-season-scorers"
+"f": "ucl-season-scorers",
+"c": "era"
 },
 {
 "id": "ucl-2011",
 "q": "Top scorers in the 2011–12 Champions League",
-"d": 3,
+"d": 2,
 "src": "2011–12 UEFA Champions League",
 "e": [
 [
@@ -24361,12 +23117,13 @@
 ]
 ]
 ],
-"f": "ucl-season-scorers"
+"f": "ucl-season-scorers",
+"c": "era"
 },
 {
 "id": "ucl-2012",
 "q": "Top scorers in the 2012–13 Champions League",
-"d": 3,
+"d": 2,
 "src": "2012–13 UEFA Champions League",
 "e": [
 [
@@ -24430,12 +23187,13 @@
 "5 goals"
 ]
 ],
-"f": "ucl-season-scorers"
+"f": "ucl-season-scorers",
+"c": "era"
 },
 {
 "id": "ucl-2013",
 "q": "Top scorers in the 2013–14 Champions League",
-"d": 3,
+"d": 1,
 "src": "2013–14 UEFA Champions League",
 "e": [
 [
@@ -24509,12 +23267,13 @@
 ]
 ]
 ],
-"f": "ucl-season-scorers"
+"f": "ucl-season-scorers",
+"c": "era"
 },
 {
 "id": "ucl-2014",
 "q": "Top scorers in the 2014–15 Champions League",
-"d": 3,
+"d": 1,
 "src": "2014–15 UEFA Champions League",
 "e": [
 [
@@ -24588,12 +23347,13 @@
 ]
 ]
 ],
-"f": "ucl-season-scorers"
+"f": "ucl-season-scorers",
+"c": "era"
 },
 {
 "id": "ucl-2015",
 "q": "Top scorers in the 2015–16 Champions League",
-"d": 3,
+"d": 1,
 "src": "2015–16 UEFA Champions League",
 "e": [
 [
@@ -24663,12 +23423,13 @@
 ]
 ]
 ],
-"f": "ucl-season-scorers"
+"f": "ucl-season-scorers",
+"c": "era"
 },
 {
 "id": "ucl-2016",
 "q": "Top scorers in the 2016–17 Champions League",
-"d": 3,
+"d": 1,
 "src": "2016–17 UEFA Champions League",
 "e": [
 [
@@ -24742,12 +23503,13 @@
 ]
 ]
 ],
-"f": "ucl-season-scorers"
+"f": "ucl-season-scorers",
+"c": "era"
 },
 {
 "id": "ucl-2017",
 "q": "Top scorers in the 2017–18 Champions League",
-"d": 3,
+"d": 1,
 "src": "2017–18 UEFA Champions League",
 "e": [
 [
@@ -24811,12 +23573,13 @@
 "6 goals"
 ]
 ],
-"f": "ucl-season-scorers"
+"f": "ucl-season-scorers",
+"c": "era"
 },
 {
 "id": "ucl-2018",
 "q": "Top scorers in the 2018–19 Champions League",
-"d": 3,
+"d": 2,
 "src": "2018–19 UEFA Champions League",
 "e": [
 [
@@ -24898,12 +23661,13 @@
 ]
 ]
 ],
-"f": "ucl-season-scorers"
+"f": "ucl-season-scorers",
+"c": "era"
 },
 {
 "id": "ucl-2019",
 "q": "Top scorers in the 2019–20 Champions League",
-"d": 3,
+"d": 2,
 "src": "2019–20 UEFA Champions League",
 "e": [
 [
@@ -24989,12 +23753,13 @@
 ]
 ]
 ],
-"f": "ucl-season-scorers"
+"f": "ucl-season-scorers",
+"c": "era"
 },
 {
 "id": "ucl-2020",
 "q": "Top scorers in the 2020–21 Champions League",
-"d": 3,
+"d": 1,
 "src": "2020–21 UEFA Champions League",
 "e": [
 [
@@ -25076,12 +23841,13 @@
 ]
 ]
 ],
-"f": "ucl-season-scorers"
+"f": "ucl-season-scorers",
+"c": "era"
 },
 {
 "id": "ucl-2021",
 "q": "Top scorers in the 2021–22 Champions League",
-"d": 3,
+"d": 2,
 "src": "2021–22 UEFA Champions League",
 "e": [
 [
@@ -25151,12 +23917,13 @@
 ]
 ]
 ],
-"f": "ucl-season-scorers"
+"f": "ucl-season-scorers",
+"c": "era"
 },
 {
 "id": "ucl-2022",
 "q": "Top scorers in the 2022–23 Champions League",
-"d": 3,
+"d": 2,
 "src": "2022–23 UEFA Champions League",
 "e": [
 [
@@ -25226,12 +23993,13 @@
 ]
 ]
 ],
-"f": "ucl-season-scorers"
+"f": "ucl-season-scorers",
+"c": "era"
 },
 {
 "id": "ucl-2023",
 "q": "Top scorers in the 2023–24 Champions League",
-"d": 3,
+"d": 2,
 "src": "2023–24 UEFA Champions League",
 "e": [
 [
@@ -25305,12 +24073,13 @@
 ]
 ]
 ],
-"f": "ucl-season-scorers"
+"f": "ucl-season-scorers",
+"c": "era"
 },
 {
 "id": "ucl-2024",
 "q": "Top scorers in the 2024–25 Champions League",
-"d": 3,
+"d": 2,
 "src": "2024–25 UEFA Champions League",
 "e": [
 [
@@ -25384,7 +24153,8 @@
 ]
 ]
 ],
-"f": "ucl-season-scorers"
+"f": "ucl-season-scorers",
+"c": "era"
 }
 ]
 }

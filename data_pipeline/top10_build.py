@@ -435,6 +435,9 @@ def match_lists(by_qid, winners: set[str] = frozenset()):
     first_goal, last_goal = {}, {}
     reds = set()
     winners_goals = C()
+    debut_goals, first10 = C(), C()
+    app_count = C()
+    streak, best_streak = C(), C()
     season_assists = collections.defaultdict(C)
     teams_before: dict = collections.defaultdict(set)  # player -> clubs played for in earlier matches
     rel_goals, promoted_apps = C(), C()
@@ -547,9 +550,18 @@ def match_lists(by_qid, winners: set[str] = frozenset()):
                 byear = dt.datetime.fromtimestamp(birth / 1000, dt.timezone.utc).year
                 if byear // 10 * 10 in born:
                     born[byear // 10 * 10][pid] += 1
+        scored_here = C(e[2] for e in m["events"] if e[0] in ("G", "P"))
         for pid in set(started) | came_on:
             if (tid := team_of.get(pid)) is not None:
                 teams_before[pid].add(name.get(tid))
+                app_count[pid] += 1
+                if app_count[pid] == 1:
+                    debut_goals[pid] = scored_here[pid]
+                if app_count[pid] <= 10:
+                    first10[pid] += scored_here[pid]
+                # Scoring run: goals in consecutive appearances.
+                streak[pid] = streak[pid] + 1 if scored_here[pid] else 0
+                best_streak[pid] = max(best_streak[pid], streak[pid])
     relegated = {(t, y) for y in teams_in if y + 1 in teams_in and y <= last_done for t in teams_in[y] - teams_in[y + 1]}
     relegations = C()
     for key in relegated:
@@ -598,6 +610,9 @@ def match_lists(by_qid, winners: set[str] = frozenset()):
         days = int(gap[k] / 86400000)
         return f"{days // 365} yrs {days % 365} days"
     specs += [
+        ("pl-debut-goals", "Most goals on Premier League debut", 3, +debut_goals, n(debut_goals, "goals"), False),
+        ("pl-first-10-goals", "Most Premier League goals in a player's first 10 games", 2, +first10, n(first10, "goals"), False),
+        ("pl-scoring-run", "Most consecutive Premier League appearances scoring", 2, +best_streak, n(best_streak, "games in a row"), False),
         ("pl-winning-goals", "Most Premier League winning goals", 2, winners_goals, n(winners_goals, "winners"), False),
         ("pl-goals-over-30", "Most Premier League goals after turning 30", 2, over30, n(over30, "goals"), False),
         ("pl-debut-season-goals", "Most Premier League goals in a player's first Premier League season", 2, debut_season,
@@ -672,6 +687,39 @@ FAMILIES = [
 ]
 
 
+# What kind of question it is; the app balances these (lib/data/top10.dart).
+#   classic  the famous all-time records (top scorers, caps, Ballon d'Or winners)
+#   club     one club's records, its derbies, goals against it
+#   era      a season, a decade, a manager's era, a Ballon d'Or year
+#   quirky   the odd ones (own goals, offsides, oldest scorers, scoring runs)
+#   nations  internationals and players from one country
+CATEGORIES = [
+    (r"^(pl-\d{4}|ucl-\d{4}|pl-assists-\d{4}|ballon-dor-\d{4}|pl-(goals|assist|appearances)-\d{4}s|pl-goals-born-|"
+     r"pl-(fergie|wenger)-goals)", "era"),
+    (r"^(pl-club-|pl-vs-(?!former)|pl-(merseyside|manchester|northwest|tynewear|london-derby)-goals|nld-goals|clasico-goals|"
+     r"man-derby|mersey-goals|milan-derby|(mufc|cfc|thfc|mcfc|efc|nufc|celtic|rmcf|fcb|juve|fcbayern|lfc|afc)-)", "club"),
+    (r"^(eng-clean|eng-captains|sco-|wal-|nir-|pl-goals-([a-z]{2}|gb-[a-z]{3}|africa|outside-europe|scandi)$|"
+     r"pl-apps-(non-english|africa|irish))", "nations"),
+    (r"^pl-(own-goals|red-cards|yellow-cards|headers|long-range|pen-saves|woodwork|offsides|big-chances-missed|errors|"
+     r"youngest|oldest|sub-|late-|teen-|veteran-|defender-|no-goals|clubs-|relegations|promoted-|rel-goals|goals-no-|"
+     r"apps-no-|goal-gap|vs-former|scoring-run|first-10|debut|winning-goals|goals-over-30|london-clubs|free-kicks|penalties|big6-goals)",
+     "quirky"),
+]
+MIN_FAME = 1.7  # answers this obscure (Coventry's appearance makers) are a quiz for one fan
+
+
+def category(lid: str) -> str:
+    return next((c for pat, c in CATEGORIES if re.match(pat, lid)), "classic")
+
+
+def list_level(mean_fame: float, cat: str) -> int:
+    """1 easy - 3 hard, from how well known the ten answers are, harder for
+    an odd stat or a single season (recalling *which* famous players is the
+    hard part)."""
+    score = mean_fame - {"quirky": 0.5, "era": 0.5}.get(cat, 0)
+    return 1 if score >= 4.0 else 2 if score >= 3.0 else 3
+
+
 def family(lid: str) -> str | None:
     return next((f for pat, f in FAMILIES if re.match(pat, lid)), None)
 
@@ -718,9 +766,19 @@ def main() -> int:
         live = not lid.split("-")[-1].isdigit()  # a finished season doesn't change
         out.append({"id": lid, "q": question, "d": level, **({"asof": dt.date.today().strftime("%b %Y")} if live else {}),
                     "src": article, "e": entries})
+    fame = {p["id"]: p["fame"] for p in by_qid.values()}
+    kept = []
     for l in out:
         if (fam := family(l["id"])):
             l["f"] = fam
+        l["c"] = category(l["id"])
+        mean = sum(fame.get(e[1], 1) for e in l["e"]) / len(l["e"])
+        if mean < MIN_FAME:
+            dropped.append(f"{l['id']}: too obscure (answers' average fame {mean:.1f})")
+            continue
+        l["d"] = list_level(mean, l["c"])
+        kept.append(l)
+    out = kept
     note = f"Top 10 lists from Wikipedia record tables: {len(out)} lists, {len(dropped)} dropped. Built {dt.date.today()}."
     OUT.write_text(json.dumps({"_note": note, "dropped": dropped, "lists": out}, ensure_ascii=False, indent=0) + "\n", encoding="utf-8")
     print(note)

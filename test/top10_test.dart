@@ -69,6 +69,30 @@ void main() {
     expect(oneOff, greaterThan(140)); // about half, not 1 in 41
   });
 
+    test('the mix: odd records lead on Hard, and the same kind rarely comes twice running', () {
+    final bank = Top10Bank([
+      for (var i = 0; i < 30; i++) Top10List(id: 'c$i', prompt: 'C', level: 3, entries: const [], category: 'classic'),
+      for (var i = 0; i < 30; i++) Top10List(id: 'q$i', prompt: 'Q', level: 3, entries: const [], category: 'quirky'),
+    ]);
+    var quirky = 0;
+    for (var i = 0; i < 400; i++) {
+      if (bank.pick(difficulty: Difficulty.hard, history: QuestionHistory(), random: Random(i))!.category == 'quirky') {
+        quirky++;
+      }
+    }
+    expect(quirky, inInclusiveRange(240, 320)); // 35 : 15
+
+    final h = QuestionHistory();
+    var repeats = 0;
+    String? last;
+    for (var i = 0; i < 40; i++) {
+      final c = bank.pick(difficulty: Difficulty.hard, history: h, random: Random(i))!.category;
+      if (c == last) repeats++;
+      last = c;
+    }
+    expect(repeats, lessThan(20));
+  });
+
     test('a shared 10th place takes any of its players, once', () {
     final list = Top10List(id: 'y', prompt: 'T', level: 1, entries: [
       for (var i = 0; i < 9; i++) Top10Entry(rank: i + 1, playerId: 'p$i', name: 'P$i'),
