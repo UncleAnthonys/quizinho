@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../core/app_services.dart';
+import '../../core/app_settings.dart';
 import '../../core/sound_service.dart';
 import '../../core/theme.dart';
 import '../../data/models.dart';
@@ -82,6 +83,27 @@ class _SoloScreenState extends State<SoloScreen> {
   late final Set<Era> _eras = {...AppScope.read(context).settings.lastConfig().eras};
   FootballGender _gender = FootballGender.men;
 
+  // The run's results screen saves new bests after this screen's own
+  // await has long returned (each game replaces the route before it), so
+  // the tiles follow the settings instead.
+  late final AppSettings _settings = AppScope.read(context).settings;
+
+  void _refresh() {
+    if (mounted) setState(() {});
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _settings.addListener(_refresh);
+  }
+
+  @override
+  void dispose() {
+    _settings.removeListener(_refresh);
+    super.dispose();
+  }
+
   /// Starting XI and Top 10 are men's football only for now.
   List<GameModeId> get _games =>
       [for (final g in soloGames) if (g.hasWomensGame || _gender == FootballGender.men) g];
@@ -103,7 +125,6 @@ class _SoloScreenState extends State<SoloScreen> {
       rounds: games.length,
     );
     await SoloRun(config: config, games: games, cup: cup).start(context);
-    if (mounted) setState(() {}); // fresh bests
   }
 
   @override
