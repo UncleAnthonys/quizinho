@@ -808,7 +808,8 @@
 "Juninho Paulista",
 "29 goals"
 ]
-]
+],
+"f": "goals-by-nation"
 },
 {
 "id": "pl-goals-fr",
@@ -877,7 +878,8 @@
 "Steed Malbranque",
 "39 goals"
 ]
-]
+],
+"f": "goals-by-nation"
 },
 {
 "id": "pl-goals-es",
@@ -946,7 +948,8 @@
 "Marcos Alonso",
 "26 goals"
 ]
-]
+],
+"f": "goals-by-nation"
 },
 {
 "id": "pl-goals-nl",
@@ -1021,7 +1024,8 @@
 ]
 ]
 ]
-]
+],
+"f": "goals-by-nation"
 },
 {
 "id": "pl-goals-ar",
@@ -1096,7 +1100,8 @@
 ]
 ]
 ]
-]
+],
+"f": "goals-by-nation"
 },
 {
 "id": "pl-goals-pt",
@@ -1165,7 +1170,8 @@
 "João Palhinha",
 "12 goals"
 ]
-]
+],
+"f": "goals-by-nation"
 },
 {
 "id": "pl-goals-de",
@@ -1234,7 +1240,8 @@
 "Lukas Podolski",
 "19 goals"
 ]
-]
+],
+"f": "goals-by-nation"
 },
 {
 "id": "pl-goals-be",
@@ -1303,7 +1310,8 @@
 "Nacer Chadli",
 "21 goals"
 ]
-]
+],
+"f": "goals-by-nation"
 },
 {
 "id": "pl-goals-no",
@@ -1372,7 +1380,8 @@
 "Egil Østenstad",
 "29 goals"
 ]
-]
+],
+"f": "goals-by-nation"
 },
 {
 "id": "pl-goals-gb-sct",
@@ -1441,7 +1450,8 @@
 "Robert Snodgrass",
 "26 goals"
 ]
-]
+],
+"f": "goals-by-nation"
 },
 {
 "id": "pl-goals-gb-wls",
@@ -1510,7 +1520,8 @@
 "Harry Wilson",
 "29 goals"
 ]
-]
+],
+"f": "goals-by-nation"
 },
 {
 "id": "pl-goals-ie",
@@ -1579,7 +1590,8 @@
 "Séamus Coleman",
 "22 goals"
 ]
-]
+],
+"f": "goals-by-nation"
 },
 {
 "id": "pl-goals-gb-nir",
@@ -1654,7 +1666,8 @@
 ]
 ]
 ]
-]
+],
+"f": "goals-by-nation"
 },
 {
 "id": "pl-goals-ci",
@@ -1723,7 +1736,8 @@
 "Sébastien Haller",
 "10 goals"
 ]
-]
+],
+"f": "goals-by-nation"
 },
 {
 "id": "pl-goals-africa",
@@ -1792,7 +1806,8 @@
 "Bryan Mbeumo",
 "57 goals"
 ]
-]
+],
+"f": "goals-by-nation"
 },
 {
 "id": "pl-goals-1990s",
@@ -1861,7 +1876,8 @@
 "Chris Sutton",
 "81 goals"
 ]
-]
+],
+"f": "decade"
 },
 {
 "id": "pl-assist-1990s",
@@ -1940,7 +1956,8 @@
 ]
 ]
 ]
-]
+],
+"f": "decade"
 },
 {
 "id": "pl-appearances-1990s",
@@ -2009,7 +2026,8 @@
 "Tim Flowers",
 "260 apps"
 ]
-]
+],
+"f": "decade"
 },
 {
 "id": "pl-goals-2000s",
@@ -2078,7 +2096,8 @@
 "Mark Viduka",
 "92 goals"
 ]
-]
+],
+"f": "decade"
 },
 {
 "id": "pl-assist-2000s",
@@ -2147,7 +2166,8 @@
 "Danny Murphy",
 "43 assists"
 ]
-]
+],
+"f": "decade"
 },
 {
 "id": "pl-appearances-2000s",
@@ -2216,7 +2236,8 @@
 "Steven Gerrard",
 "325 apps"
 ]
-]
+],
+"f": "decade"
 },
 {
 "id": "pl-goals-2010s",
@@ -2285,7 +2306,8 @@
 "Sadio Mané",
 "84 goals"
 ]
-]
+],
+"f": "decade"
 },
 {
 "id": "pl-assist-2010s",
@@ -2354,7 +2376,8 @@
 "Chris Brunt",
 "47 assists"
 ]
-]
+],
+"f": "decade"
 },
 {
 "id": "pl-appearances-2010s",
@@ -2433,7 +2456,8 @@
 ]
 ]
 ]
-]
+],
+"f": "decade"
 },
 {
 "id": "pl-goals-2020s",
@@ -2508,7 +2532,8 @@
 ]
 ]
 ]
-]
+],
+"f": "decade"
 },
 {
 "id": "pl-assist-2020s",
@@ -2577,7 +2602,8 @@
 "Martin Ødegaard",
 "37 assists"
 ]
-]
+],
+"f": "decade"
 },
 {
 "id": "pl-appearances-2020s",
@@ -2646,7 +2672,8 @@
 "Mohamed Salah",
 "207 apps"
 ]
-]
+],
+"f": "decade"
 },
 {
 "id": "pl-youngest-scorers",
@@ -3619,7 +3646,8 @@
 ]
 ]
 ]
-]
+],
+"f": "derby"
 },
 {
 "id": "pl-manchester-goals",
@@ -3702,7 +3730,8 @@
 ]
 ]
 ]
-]
+],
+"f": "derby"
 },
 {
 "id": "pl-tynewear-goals",
@@ -3781,7 +3810,8 @@
 ]
 ]
 ]
-]
+],
+"f": "derby"
 },
 {
 "id": "pl-london-derby-goals",
@@ -3850,7 +3880,8 @@
 "Jimmy Floyd Hasselbaink",
 "22 goals"
 ]
-]
+],
+"f": "derby"
 },
 {
 "id": "pl-winning-goals",
@@ -5081,7 +5112,8 @@
 ]
 ]
 ]
-]
+],
+"f": "pl-season-assists"
 },
 {
 "id": "pl-assists-1993",
@@ -5159,7 +5191,8 @@
 ]
 ]
 ]
-]
+],
+"f": "pl-season-assists"
 },
 {
 "id": "pl-assists-1994",
@@ -5227,7 +5260,8 @@
 "Jürgen Klinsmann",
 "10 assists"
 ]
-]
+],
+"f": "pl-season-assists"
 },
 {
 "id": "pl-assists-1995",
@@ -5295,7 +5329,8 @@
 "Mike Newell",
 "9 assists"
 ]
-]
+],
+"f": "pl-season-assists"
 },
 {
 "id": "pl-assists-1996",
@@ -5381,7 +5416,8 @@
 ]
 ]
 ]
-]
+],
+"f": "pl-season-assists"
 },
 {
 "id": "pl-assists-1997",
@@ -5455,7 +5491,8 @@
 ]
 ]
 ]
-]
+],
+"f": "pl-season-assists"
 },
 {
 "id": "pl-assists-1998",
@@ -5541,7 +5578,8 @@
 ]
 ]
 ]
-]
+],
+"f": "pl-season-assists"
 },
 {
 "id": "pl-assists-1999",
@@ -5623,7 +5661,8 @@
 ]
 ]
 ]
-]
+],
+"f": "pl-season-assists"
 },
 {
 "id": "pl-assists-2000",
@@ -5705,7 +5744,8 @@
 ]
 ]
 ]
-]
+],
+"f": "pl-season-assists"
 },
 {
 "id": "pl-assists-2001",
@@ -5783,7 +5823,8 @@
 ]
 ]
 ]
-]
+],
+"f": "pl-season-assists"
 },
 {
 "id": "pl-assists-2002",
@@ -5869,7 +5910,8 @@
 ]
 ]
 ]
-]
+],
+"f": "pl-season-assists"
 },
 {
 "id": "pl-assists-2003",
@@ -5951,7 +5993,8 @@
 ]
 ]
 ]
-]
+],
+"f": "pl-season-assists"
 },
 {
 "id": "pl-assists-2004",
@@ -6019,7 +6062,8 @@
 "Arjen Robben",
 "9 assists"
 ]
-]
+],
+"f": "pl-season-assists"
 },
 {
 "id": "pl-assists-2005",
@@ -6087,7 +6131,8 @@
 "Thierry Henry",
 "8 assists"
 ]
-]
+],
+"f": "pl-season-assists"
 },
 {
 "id": "pl-assists-2006",
@@ -6155,7 +6200,8 @@
 "Aaron Lennon",
 "7 assists"
 ]
-]
+],
+"f": "pl-season-assists"
 },
 {
 "id": "pl-assists-2007",
@@ -6241,7 +6287,8 @@
 ]
 ]
 ]
-]
+],
+"f": "pl-season-assists"
 },
 {
 "id": "pl-assists-2008",
@@ -6339,7 +6386,8 @@
 ]
 ]
 ]
-]
+],
+"f": "pl-season-assists"
 },
 {
 "id": "pl-assists-2009",
@@ -6407,7 +6455,8 @@
 "Matthew Etherington",
 "8 assists"
 ]
-]
+],
+"f": "pl-season-assists"
 },
 {
 "id": "pl-assists-2010",
@@ -6485,7 +6534,8 @@
 ]
 ]
 ]
-]
+],
+"f": "pl-season-assists"
 },
 {
 "id": "pl-assists-2011",
@@ -6553,7 +6603,8 @@
 "Stéphane Sessègnon",
 "9 assists"
 ]
-]
+],
+"f": "pl-season-assists"
 },
 {
 "id": "pl-assists-2012",
@@ -6627,7 +6678,8 @@
 ]
 ]
 ]
-]
+],
+"f": "pl-season-assists"
 },
 {
 "id": "pl-assists-2013",
@@ -6705,7 +6757,8 @@
 ]
 ]
 ]
-]
+],
+"f": "pl-season-assists"
 },
 {
 "id": "pl-assists-2014",
@@ -6795,7 +6848,8 @@
 ]
 ]
 ]
-]
+],
+"f": "pl-season-assists"
 },
 {
 "id": "pl-assists-2015",
@@ -6863,7 +6917,8 @@
 "Dele Alli",
 "9 assists"
 ]
-]
+],
+"f": "pl-season-assists"
 },
 {
 "id": "pl-assists-2016",
@@ -6937,7 +6992,8 @@
 ]
 ]
 ]
-]
+],
+"f": "pl-season-assists"
 },
 {
 "id": "pl-assists-2017",
@@ -7005,7 +7061,8 @@
 "Henrikh Mkhitaryan",
 "9 assists"
 ]
-]
+],
+"f": "pl-season-assists"
 },
 {
 "id": "pl-assists-2018",
@@ -7095,7 +7152,8 @@
 ]
 ]
 ]
-]
+],
+"f": "pl-season-assists"
 },
 {
 "id": "pl-assists-2019",
@@ -7163,7 +7221,8 @@
 "Harvey Barnes",
 "8 assists"
 ]
-]
+],
+"f": "pl-season-assists"
 },
 {
 "id": "pl-assists-2020",
@@ -7241,7 +7300,8 @@
 ]
 ]
 ]
-]
+],
+"f": "pl-season-assists"
 },
 {
 "id": "pl-assists-2021",
@@ -7327,7 +7387,8 @@
 ]
 ]
 ]
-]
+],
+"f": "pl-season-assists"
 },
 {
 "id": "pl-assists-2022",
@@ -7421,7 +7482,8 @@
 ]
 ]
 ]
-]
+],
+"f": "pl-season-assists"
 },
 {
 "id": "pl-assists-2023",
@@ -7495,7 +7557,8 @@
 ]
 ]
 ]
-]
+],
+"f": "pl-season-assists"
 },
 {
 "id": "pl-assists-2024",
@@ -7589,7 +7652,8 @@
 ]
 ]
 ]
-]
+],
+"f": "pl-season-assists"
 },
 {
 "id": "pl-assists-2025",
@@ -7683,7 +7747,8 @@
 ]
 ]
 ]
-]
+],
+"f": "pl-season-assists"
 },
 {
 "id": "pl-apps-no-title",
@@ -7821,7 +7886,8 @@
 "Emile Heskey",
 "110 goals"
 ]
-]
+],
+"f": "born-decade"
 },
 {
 "id": "pl-goals-born-1980s",
@@ -7890,7 +7956,8 @@
 "Cristiano Ronaldo",
 "103 goals"
 ]
-]
+],
+"f": "born-decade"
 },
 {
 "id": "pl-goals-born-1990s",
@@ -7959,7 +8026,8 @@
 "Danny Welbeck",
 "90 goals"
 ]
-]
+],
+"f": "born-decade"
 },
 {
 "id": "pl-goals-born-2000s",
@@ -8028,7 +8096,8 @@
 "Nicolas Jackson",
 "30 goals"
 ]
-]
+],
+"f": "born-decade"
 },
 {
 "id": "pl-club-goals-arsenal",
@@ -8097,7 +8166,8 @@
 "Alexis Sánchez",
 "60 goals"
 ]
-]
+],
+"f": "club-scorers"
 },
 {
 "id": "pl-club-apps-arsenal",
@@ -8166,7 +8236,8 @@
 "Thierry Henry",
 "258 apps"
 ]
-]
+],
+"f": "club-apps"
 },
 {
 "id": "pl-club-goals-aston-villa",
@@ -8235,7 +8306,8 @@
 "John Carew",
 "37 goals"
 ]
-]
+],
+"f": "club-scorers"
 },
 {
 "id": "pl-club-apps-aston-villa",
@@ -8304,7 +8376,8 @@
 "Ugo Ehiogu",
 "229 apps"
 ]
-]
+],
+"f": "club-apps"
 },
 {
 "id": "pl-club-goals-blackburn-rovers",
@@ -8373,7 +8446,8 @@
 "Jason Roberts",
 "24 goals"
 ]
-]
+],
+"f": "club-scorers"
 },
 {
 "id": "pl-club-apps-blackburn-rovers",
@@ -8442,7 +8516,8 @@
 "Lucas Neill",
 "188 apps"
 ]
-]
+],
+"f": "club-apps"
 },
 {
 "id": "pl-club-goals-bolton-wanderers",
@@ -8517,7 +8592,8 @@
 ]
 ]
 ]
-]
+],
+"f": "club-scorers"
 },
 {
 "id": "pl-club-apps-bolton-wanderers",
@@ -8596,7 +8672,8 @@
 ]
 ]
 ]
-]
+],
+"f": "club-apps"
 },
 {
 "id": "pl-club-goals-chelsea",
@@ -8665,7 +8742,8 @@
 "Nicolas Anelka",
 "38 goals"
 ]
-]
+],
+"f": "club-scorers"
 },
 {
 "id": "pl-club-apps-chelsea",
@@ -8734,7 +8812,8 @@
 "Willian",
 "234 apps"
 ]
-]
+],
+"f": "club-apps"
 },
 {
 "id": "pl-club-goals-crystal-palace",
@@ -8803,7 +8882,8 @@
 "Odsonne Édouard",
 "18 goals"
 ]
-]
+],
+"f": "club-scorers"
 },
 {
 "id": "pl-club-apps-crystal-palace",
@@ -8872,7 +8952,8 @@
 "Scott Dann",
 "164 apps"
 ]
-]
+],
+"f": "club-apps"
 },
 {
 "id": "pl-club-goals-everton",
@@ -8947,7 +9028,8 @@
 ]
 ]
 ]
-]
+],
+"f": "club-scorers"
 },
 {
 "id": "pl-club-apps-everton",
@@ -9022,7 +9104,8 @@
 ]
 ]
 ]
-]
+],
+"f": "club-apps"
 },
 {
 "id": "pl-club-goals-fulham",
@@ -9091,7 +9174,8 @@
 "Bobby Zamora",
 "20 goals"
 ]
-]
+],
+"f": "club-scorers"
 },
 {
 "id": "pl-club-apps-fulham",
@@ -9160,7 +9244,8 @@
 "Bernd Leno",
 "160 apps"
 ]
-]
+],
+"f": "club-apps"
 },
 {
 "id": "pl-club-goals-leeds-united",
@@ -9235,7 +9320,8 @@
 ]
 ]
 ]
-]
+],
+"f": "club-scorers"
 },
 {
 "id": "pl-club-apps-leeds-united",
@@ -9304,7 +9390,8 @@
 "Gary McAllister",
 "151 apps"
 ]
-]
+],
+"f": "club-apps"
 },
 {
 "id": "pl-club-goals-leicester-city",
@@ -9373,7 +9460,8 @@
 "Youri Tielemans",
 "21 goals"
 ]
-]
+],
+"f": "club-scorers"
 },
 {
 "id": "pl-club-apps-leicester-city",
@@ -9442,7 +9530,8 @@
 "Steve Guppy",
 "161 apps"
 ]
-]
+],
+"f": "club-apps"
 },
 {
 "id": "pl-club-goals-liverpool",
@@ -9511,7 +9600,8 @@
 "Daniel Sturridge",
 "50 goals"
 ]
-]
+],
+"f": "club-scorers"
 },
 {
 "id": "pl-club-apps-liverpool",
@@ -9580,7 +9670,8 @@
 "Alisson Becker",
 "265 apps"
 ]
-]
+],
+"f": "club-apps"
 },
 {
 "id": "pl-club-goals-manchester-city",
@@ -9649,7 +9740,8 @@
 "Edin Džeko",
 "50 goals"
 ]
-]
+],
+"f": "club-scorers"
 },
 {
 "id": "pl-club-apps-manchester-city",
@@ -9718,7 +9810,8 @@
 "Phil Foden",
 "233 apps"
 ]
-]
+],
+"f": "club-apps"
 },
 {
 "id": "pl-club-goals-manchester-united",
@@ -9787,7 +9880,8 @@
 "Eric Cantona",
 "64 goals"
 ]
-]
+],
+"f": "club-scorers"
 },
 {
 "id": "pl-club-apps-manchester-united",
@@ -9856,7 +9950,8 @@
 "Marcus Rashford",
 "293 apps"
 ]
-]
+],
+"f": "club-apps"
 },
 {
 "id": "pl-club-goals-middlesbrough",
@@ -9925,7 +10020,8 @@
 "Stewart Downing",
 "18 goals"
 ]
-]
+],
+"f": "club-scorers"
 },
 {
 "id": "pl-club-apps-middlesbrough",
@@ -9994,7 +10090,8 @@
 "Ugo Ehiogu",
 "126 apps"
 ]
-]
+],
+"f": "club-apps"
 },
 {
 "id": "pl-club-goals-newcastle-united",
@@ -10063,7 +10160,8 @@
 "Rob Lee",
 "34 goals"
 ]
-]
+],
+"f": "club-scorers"
 },
 {
 "id": "pl-club-apps-newcastle-united",
@@ -10132,7 +10230,8 @@
 "Fabricio Coloccini",
 "211 apps"
 ]
-]
+],
+"f": "club-apps"
 },
 {
 "id": "pl-club-goals-portsmouth",
@@ -10201,7 +10300,8 @@
 "Niko Kranjčar",
 "9 goals"
 ]
-]
+],
+"f": "club-scorers"
 },
 {
 "id": "pl-club-apps-portsmouth",
@@ -10270,7 +10370,8 @@
 "Lomana LuaLua",
 "87 apps"
 ]
-]
+],
+"f": "club-apps"
 },
 {
 "id": "pl-club-goals-southampton",
@@ -10339,7 +10440,8 @@
 "Ché Adams",
 "25 goals"
 ]
-]
+],
+"f": "club-scorers"
 },
 {
 "id": "pl-club-apps-southampton",
@@ -10414,7 +10516,8 @@
 ]
 ]
 ]
-]
+],
+"f": "club-apps"
 },
 {
 "id": "pl-club-goals-sunderland",
@@ -10483,7 +10586,8 @@
 "Fabio Borini",
 "14 goals"
 ]
-]
+],
+"f": "club-scorers"
 },
 {
 "id": "pl-club-apps-sunderland",
@@ -10552,7 +10656,8 @@
 "Adam Johnson",
 "122 apps"
 ]
-]
+],
+"f": "club-apps"
 },
 {
 "id": "pl-club-goals-tottenham-hotspur",
@@ -10621,7 +10726,8 @@
 "Steffen Iversen",
 "36 goals"
 ]
-]
+],
+"f": "club-scorers"
 },
 {
 "id": "pl-club-apps-tottenham-hotspur",
@@ -10690,7 +10796,8 @@
 "Ben Davies",
 "247 apps"
 ]
-]
+],
+"f": "club-apps"
 },
 {
 "id": "pl-club-goals-west-ham-united",
@@ -10759,7 +10866,8 @@
 "Manuel Lanzini",
 "27 goals"
 ]
-]
+],
+"f": "club-scorers"
 },
 {
 "id": "pl-club-apps-west-ham-united",
@@ -10828,7 +10936,8 @@
 "Łukasz Fabiański",
 "195 apps"
 ]
-]
+],
+"f": "club-apps"
 },
 {
 "id": "pl-club-goals-wolverhampton-wanderers",
@@ -10897,7 +11006,8 @@
 "Daniel Podence",
 "12 goals"
 ]
-]
+],
+"f": "club-scorers"
 },
 {
 "id": "pl-club-apps-wolverhampton-wanderers",
@@ -10966,7 +11076,8 @@
 "Hwang Hee-chan",
 "133 apps"
 ]
-]
+],
+"f": "club-apps"
 },
 {
 "id": "pl-club-goals-stoke-city",
@@ -11045,7 +11156,8 @@
 ]
 ]
 ]
-]
+],
+"f": "club-scorers"
 },
 {
 "id": "pl-club-apps-stoke-city",
@@ -11114,7 +11226,8 @@
 "Marc Wilson",
 "146 apps"
 ]
-]
+],
+"f": "club-apps"
 },
 {
 "id": "pl-club-goals-wigan-athletic",
@@ -11189,7 +11302,8 @@
 ]
 ]
 ]
-]
+],
+"f": "club-scorers"
 },
 {
 "id": "pl-club-apps-wigan-athletic",
@@ -11268,7 +11382,8 @@
 ]
 ]
 ]
-]
+],
+"f": "club-apps"
 },
 {
 "id": "pl-club-apps-coventry-city",
@@ -11337,7 +11452,8 @@
 "Gary Breen",
 "116 apps"
 ]
-]
+],
+"f": "club-apps"
 },
 {
 "id": "pl-club-goals-brighton-hove-albion",
@@ -11406,7 +11522,8 @@
 "Jack Hinshelwood",
 "15 goals"
 ]
-]
+],
+"f": "club-scorers"
 },
 {
 "id": "pl-club-apps-brighton-hove-albion",
@@ -11475,7 +11592,8 @@
 "Yves Bissouma",
 "112 apps"
 ]
-]
+],
+"f": "club-apps"
 },
 {
 "id": "pl-club-goals-burnley",
@@ -11550,7 +11668,8 @@
 ]
 ]
 ]
-]
+],
+"f": "club-scorers"
 },
 {
 "id": "pl-club-apps-burnley",
@@ -11619,7 +11738,8 @@
 "Nick Pope",
 "141 apps"
 ]
-]
+],
+"f": "club-apps"
 },
 {
 "id": "pl-club-goals-watford",
@@ -11694,7 +11814,8 @@
 ]
 ]
 ]
-]
+],
+"f": "club-scorers"
 },
 {
 "id": "pl-club-apps-watford",
@@ -11769,7 +11890,8 @@
 ]
 ]
 ]
-]
+],
+"f": "club-apps"
 },
 {
 "id": "pl-club-goals-norwich-city",
@@ -11838,7 +11960,8 @@
 "Steve Morison",
 "10 goals"
 ]
-]
+],
+"f": "club-scorers"
 },
 {
 "id": "pl-club-apps-norwich-city",
@@ -11907,7 +12030,8 @@
 "John Polston",
 "96 apps"
 ]
-]
+],
+"f": "club-apps"
 },
 {
 "id": "pl-club-goals-nottingham-forest",
@@ -11976,7 +12100,8 @@
 "Jason Lee",
 "12 goals"
 ]
-]
+],
+"f": "club-scorers"
 },
 {
 "id": "pl-club-apps-nottingham-forest",
@@ -12045,7 +12170,8 @@
 "Des Lyttle",
 "113 apps"
 ]
-]
+],
+"f": "club-apps"
 },
 {
 "id": "pl-club-goals-sheffield-wednesday",
@@ -12114,7 +12240,8 @@
 "Graham Hyde",
 "11 goals"
 ]
-]
+],
+"f": "club-scorers"
 },
 {
 "id": "pl-club-apps-sheffield-wednesday",
@@ -12183,7 +12310,8 @@
 "Chris Waddle",
 "108 apps"
 ]
-]
+],
+"f": "club-apps"
 },
 {
 "id": "pl-club-goals-charlton-athletic",
@@ -12262,7 +12390,8 @@
 ]
 ]
 ]
-]
+],
+"f": "club-scorers"
 },
 {
 "id": "pl-club-apps-charlton-athletic",
@@ -12337,7 +12466,8 @@
 ]
 ]
 ]
-]
+],
+"f": "club-apps"
 },
 {
 "id": "pl-club-goals-bournemouth",
@@ -12406,7 +12536,8 @@
 "Eli Junior Kroupi",
 "13 goals"
 ]
-]
+],
+"f": "club-scorers"
 },
 {
 "id": "pl-club-apps-bournemouth",
@@ -12475,7 +12606,8 @@
 "Marcus Tavernier",
 "126 apps"
 ]
-]
+],
+"f": "club-apps"
 },
 {
 "id": "pl-club-goals-brentford",
@@ -12550,7 +12682,8 @@
 ]
 ]
 ]
-]
+],
+"f": "club-scorers"
 },
 {
 "id": "pl-club-apps-brentford",
@@ -12619,7 +12752,8 @@
 "Kevin Schade",
 "112 apps"
 ]
-]
+],
+"f": "club-apps"
 },
 {
 "id": "pl-club-goals-west-bromwich-albion",
@@ -12698,7 +12832,8 @@
 ]
 ]
 ]
-]
+],
+"f": "club-scorers"
 },
 {
 "id": "pl-club-apps-west-bromwich-albion",
@@ -12767,7 +12902,8 @@
 "Salomón Rondón",
 "108 apps"
 ]
-]
+],
+"f": "club-apps"
 },
 {
 "id": "pl-club-goals-wimbledon",
@@ -12836,7 +12972,8 @@
 "Vinnie Jones",
 "12 goals"
 ]
-]
+],
+"f": "club-scorers"
 },
 {
 "id": "pl-club-apps-wimbledon",
@@ -12905,7 +13042,8 @@
 "Dean Blackwell",
 "157 apps"
 ]
-]
+],
+"f": "club-apps"
 },
 {
 "id": "pl-club-goals-derby-county",
@@ -12974,7 +13112,8 @@
 "Horacio Carbonari",
 "8 goals"
 ]
-]
+],
+"f": "club-scorers"
 },
 {
 "id": "pl-club-apps-derby-county",
@@ -13043,7 +13182,8 @@
 "Lee Carsley",
 "80 apps"
 ]
-]
+],
+"f": "club-apps"
 },
 {
 "id": "pl-club-goals-birmingham-city",
@@ -13112,7 +13252,8 @@
 "Craig Gardner",
 "9 goals"
 ]
-]
+],
+"f": "club-scorers"
 },
 {
 "id": "pl-club-apps-birmingham-city",
@@ -13187,7 +13328,8 @@
 ]
 ]
 ]
-]
+],
+"f": "club-apps"
 },
 {
 "id": "pl-club-goals-swansea-city",
@@ -13256,7 +13398,8 @@
 "André Ayew",
 "12 goals"
 ]
-]
+],
+"f": "club-scorers"
 },
 {
 "id": "pl-club-apps-swansea-city",
@@ -13325,7 +13468,8 @@
 "Federico Fernández",
 "117 apps"
 ]
-]
+],
+"f": "club-apps"
 },
 {
 "id": "pl-club-goals-ipswich-town",
@@ -13412,7 +13556,8 @@
 ]
 ]
 ]
-]
+],
+"f": "club-scorers"
 },
 {
 "id": "pl-club-goals-queens-park-rangers",
@@ -13495,7 +13640,8 @@
 ]
 ]
 ]
-]
+],
+"f": "club-scorers"
 },
 {
 "id": "pl-club-apps-queens-park-rangers",
@@ -13564,7 +13710,8 @@
 "Steve Yates",
 "82 apps"
 ]
-]
+],
+"f": "club-apps"
 },
 {
 "id": "pl-club-goals-hull-city",
@@ -13633,7 +13780,8 @@
 "Dame N'Doye",
 "5 goals"
 ]
-]
+],
+"f": "club-scorers"
 },
 {
 "id": "pl-club-apps-hull-city",
@@ -13708,7 +13856,8 @@
 ]
 ]
 ]
-]
+],
+"f": "club-apps"
 },
 {
 "id": "pl-club-goals-reading",
@@ -13777,7 +13926,8 @@
 "Jimmy Kébé",
 "5 goals"
 ]
-]
+],
+"f": "club-scorers"
 },
 {
 "id": "pl-club-apps-reading",
@@ -13846,7 +13996,8 @@
 "Leroy Lita",
 "47 apps"
 ]
-]
+],
+"f": "club-apps"
 },
 {
 "id": "pl-vs-arsenal",
@@ -13933,7 +14084,8 @@
 ]
 ]
 ]
-]
+],
+"f": "goals-against-club"
 },
 {
 "id": "pl-vs-chelsea",
@@ -14012,7 +14164,8 @@
 ]
 ]
 ]
-]
+],
+"f": "goals-against-club"
 },
 {
 "id": "pl-vs-liverpool",
@@ -14095,7 +14248,8 @@
 ]
 ]
 ]
-]
+],
+"f": "goals-against-club"
 },
 {
 "id": "pl-vs-manchester-city",
@@ -14178,7 +14332,8 @@
 ]
 ]
 ]
-]
+],
+"f": "goals-against-club"
 },
 {
 "id": "pl-vs-manchester-united",
@@ -14253,7 +14408,8 @@
 ]
 ]
 ]
-]
+],
+"f": "goals-against-club"
 },
 {
 "id": "pl-vs-tottenham-hotspur",
@@ -14332,7 +14488,8 @@
 ]
 ]
 ]
-]
+],
+"f": "goals-against-club"
 },
 {
 "id": "pl-vs-everton",
@@ -14419,7 +14576,8 @@
 ]
 ]
 ]
-]
+],
+"f": "goals-against-club"
 },
 {
 "id": "pl-vs-newcastle-united",
@@ -14494,7 +14652,8 @@
 ]
 ]
 ]
-]
+],
+"f": "goals-against-club"
 },
 {
 "id": "pl-vs-aston-villa",
@@ -14569,7 +14728,8 @@
 ]
 ]
 ]
-]
+],
+"f": "goals-against-club"
 },
 {
 "id": "pl-vs-west-ham-united",
@@ -14638,7 +14798,8 @@
 "Romelu Lukaku",
 "9 goals"
 ]
-]
+],
+"f": "goals-against-club"
 },
 {
 "id": "pl-season-goals",
@@ -15263,7 +15424,8 @@
 "Billy Wright",
 "105 caps"
 ]
-]
+],
+"f": "home-nations"
 },
 {
 "id": "eng-goals",
@@ -15338,7 +15500,8 @@
 ]
 ]
 ]
-]
+],
+"f": "home-nations"
 },
 {
 "id": "eng-clean-sheets",
@@ -17502,7 +17665,8 @@
 "Scott McTominay",
 "73 caps"
 ]
-]
+],
+"f": "home-nations"
 },
 {
 "id": "sco-goals",
@@ -17571,7 +17735,8 @@
 "Scott McTominay",
 "15 goals"
 ]
-]
+],
+"f": "home-nations"
 },
 {
 "id": "wal-caps",
@@ -17646,7 +17811,8 @@
 ]
 ]
 ]
-]
+],
+"f": "home-nations"
 },
 {
 "id": "wal-goals",
@@ -17721,7 +17887,8 @@
 ]
 ]
 ]
-]
+],
+"f": "home-nations"
 },
 {
 "id": "nir-caps",
@@ -17790,7 +17957,8 @@
 "Maik Taylor",
 "88 caps"
 ]
-]
+],
+"f": "home-nations"
 },
 {
 "id": "nir-goals",
@@ -17849,7 +18017,8 @@
 "josh-magennis",
 "Josh Magennis"
 ]
-]
+],
+"f": "home-nations"
 },
 {
 "id": "man-derby-goals",
@@ -17995,7 +18164,8 @@
 ]
 ]
 ]
-]
+],
+"f": "derby"
 },
 {
 "id": "mersey-goals",
@@ -18123,7 +18293,8 @@
 "Luis Suárez",
 "11 goals"
 ]
-]
+],
+"f": "derby"
 },
 {
 "id": "milan-derby-goals",
@@ -18329,7 +18500,8 @@
 "guido-buchwald",
 "Guido Buchwald"
 ]
-]
+],
+"f": "ballon-dor"
 },
 {
 "id": "ballon-dor-1991",
@@ -18387,7 +18559,8 @@
 "chris-waddle",
 "Chris Waddle"
 ]
-]
+],
+"f": "ballon-dor"
 },
 {
 "id": "ballon-dor-1992",
@@ -18452,7 +18625,8 @@
 ]
 ]
 ]
-]
+],
+"f": "ballon-dor"
 },
 {
 "id": "ballon-dor-1993",
@@ -18510,7 +18684,8 @@
 "ryan-giggs",
 "Ryan Giggs"
 ]
-]
+],
+"f": "ballon-dor"
 },
 {
 "id": "ballon-dor-1994",
@@ -18568,7 +18743,8 @@
 "dejan-savicevic",
 "Dejan Savićević"
 ]
-]
+],
+"f": "ballon-dor"
 },
 {
 "id": "ballon-dor-1995",
@@ -18626,7 +18802,8 @@
 "michael-laudrup",
 "Michael Laudrup"
 ]
-]
+],
+"f": "ballon-dor"
 },
 {
 "id": "ballon-dor-1996",
@@ -18684,7 +18861,8 @@
 "karel-poborsky",
 "Karel Poborský"
 ]
-]
+],
+"f": "ballon-dor"
 },
 {
 "id": "ballon-dor-1997",
@@ -18749,7 +18927,8 @@
 ]
 ]
 ]
-]
+],
+"f": "ballon-dor"
 },
 {
 "id": "ballon-dor-1998",
@@ -18807,7 +18986,8 @@
 "marcel-desailly",
 "Marcel Desailly"
 ]
-]
+],
+"f": "ballon-dor"
 },
 {
 "id": "ballon-dor-1999",
@@ -18865,7 +19045,8 @@
 "lothar-matthaus",
 "Lothar Matthäus"
 ]
-]
+],
+"f": "ballon-dor"
 },
 {
 "id": "ballon-dor-2000",
@@ -18930,7 +19111,8 @@
 ]
 ]
 ]
-]
+],
+"f": "ballon-dor"
 },
 {
 "id": "ballon-dor-2001",
@@ -18988,7 +19170,8 @@
 "zinedine-zidane",
 "Zinedine Zidane"
 ]
-]
+],
+"f": "ballon-dor"
 },
 {
 "id": "ballon-dor-2002",
@@ -19046,7 +19229,8 @@
 "alessandro-del-piero",
 "Alessandro Del Piero"
 ]
-]
+],
+"f": "ballon-dor"
 },
 {
 "id": "ballon-dor-2003",
@@ -19104,7 +19288,8 @@
 "david-beckham",
 "David Beckham"
 ]
-]
+],
+"f": "ballon-dor"
 },
 {
 "id": "ballon-dor-2004",
@@ -19162,7 +19347,8 @@
 "ruud-van-nistelrooy",
 "Ruud van Nistelrooy"
 ]
-]
+],
+"f": "ballon-dor"
 },
 {
 "id": "ballon-dor-2005",
@@ -19227,7 +19413,8 @@
 ]
 ]
 ]
-]
+],
+"f": "ballon-dor"
 },
 {
 "id": "ballon-dor-2006",
@@ -19285,7 +19472,8 @@
 "jens-lehmann",
 "Jens Lehmann"
 ]
-]
+],
+"f": "ballon-dor"
 },
 {
 "id": "ballon-dor-2007",
@@ -19343,7 +19531,8 @@
 "francesco-totti",
 "Francesco Totti"
 ]
-]
+],
+"f": "ballon-dor"
 },
 {
 "id": "ballon-dor-2008",
@@ -19401,7 +19590,8 @@
 "steven-gerrard",
 "Steven Gerrard"
 ]
-]
+],
+"f": "ballon-dor"
 },
 {
 "id": "ballon-dor-2009",
@@ -19459,7 +19649,8 @@
 "steven-gerrard",
 "Steven Gerrard"
 ]
-]
+],
+"f": "ballon-dor"
 },
 {
 "id": "ballon-dor-2016",
@@ -19517,7 +19708,8 @@
 "pepe",
 "Pepe"
 ]
-]
+],
+"f": "ballon-dor"
 },
 {
 "id": "ballon-dor-2017",
@@ -19575,7 +19767,8 @@
 "harry-kane",
 "Harry Kane"
 ]
-]
+],
+"f": "ballon-dor"
 },
 {
 "id": "ballon-dor-2018",
@@ -19633,7 +19826,8 @@
 "harry-kane",
 "Harry Kane"
 ]
-]
+],
+"f": "ballon-dor"
 },
 {
 "id": "ballon-dor-2019",
@@ -19691,7 +19885,8 @@
 "riyad-mahrez",
 "Riyad Mahrez"
 ]
-]
+],
+"f": "ballon-dor"
 },
 {
 "id": "ballon-dor-2021",
@@ -19749,7 +19944,8 @@
 "gianluigi-donnarumma",
 "Gianluigi Donnarumma"
 ]
-]
+],
+"f": "ballon-dor"
 },
 {
 "id": "ballon-dor-2022",
@@ -19807,7 +20003,8 @@
 "erling-haaland",
 "Erling Haaland"
 ]
-]
+],
+"f": "ballon-dor"
 },
 {
 "id": "ballon-dor-2023",
@@ -19865,7 +20062,8 @@
 "luka-modric",
 "Luka Modrić"
 ]
-]
+],
+"f": "ballon-dor"
 },
 {
 "id": "ballon-dor-2024",
@@ -19923,7 +20121,8 @@
 "harry-kane",
 "Harry Kane"
 ]
-]
+],
+"f": "ballon-dor"
 },
 {
 "id": "ballon-dor-2025",
@@ -19981,7 +20180,8 @@
 "nuno-mendes",
 "Nuno Mendes"
 ]
-]
+],
+"f": "ballon-dor"
 },
 {
 "id": "pl-1992",
@@ -20059,7 +20259,8 @@
 ]
 ]
 ]
-]
+],
+"f": "pl-season-scorers"
 },
 {
 "id": "pl-1993",
@@ -20127,7 +20328,8 @@
 "Rod Wallace",
 "17 goals"
 ]
-]
+],
+"f": "pl-season-scorers"
 },
 {
 "id": "pl-1994",
@@ -20185,7 +20387,8 @@
 "uwe-rosler",
 "Uwe Rösler"
 ]
-]
+],
+"f": "pl-season-scorers"
 },
 {
 "id": "pl-1995",
@@ -20259,7 +20462,8 @@
 ]
 ]
 ]
-]
+],
+"f": "pl-season-scorers"
 },
 {
 "id": "pl-1996",
@@ -20341,7 +20545,8 @@
 ]
 ]
 ]
-]
+],
+"f": "pl-season-scorers"
 },
 {
 "id": "pl-1997",
@@ -20409,7 +20614,8 @@
 "Paulo Wanchope",
 "13 goals"
 ]
-]
+],
+"f": "pl-season-scorers"
 },
 {
 "id": "pl-1998",
@@ -20477,7 +20683,8 @@
 "Alan Shearer",
 "14 goals"
 ]
-]
+],
+"f": "pl-season-scorers"
 },
 {
 "id": "pl-1999",
@@ -20545,7 +20752,8 @@
 "Niall Quinn",
 "14 goals"
 ]
-]
+],
+"f": "pl-season-scorers"
 },
 {
 "id": "pl-2000",
@@ -20613,7 +20821,8 @@
 "Jonatan Johansson",
 "11 goals"
 ]
-]
+],
+"f": "pl-season-scorers"
 },
 {
 "id": "pl-2001",
@@ -20681,7 +20890,8 @@
 "Andy Cole",
 "13 goals"
 ]
-]
+],
+"f": "pl-season-scorers"
 },
 {
 "id": "pl-2002",
@@ -20755,7 +20965,8 @@
 ]
 ]
 ]
-]
+],
+"f": "pl-season-scorers"
 },
 {
 "id": "pl-2003",
@@ -20833,7 +21044,8 @@
 ]
 ]
 ]
-]
+],
+"f": "pl-season-scorers"
 },
 {
 "id": "pl-2004",
@@ -20901,7 +21113,8 @@
 "Eiður Guðjohnsen",
 "12 goals"
 ]
-]
+],
+"f": "pl-season-scorers"
 },
 {
 "id": "pl-2005",
@@ -20975,7 +21188,8 @@
 ]
 ]
 ]
-]
+],
+"f": "pl-season-scorers"
 },
 {
 "id": "pl-2006",
@@ -21043,7 +21257,8 @@
 "Yakubu",
 "12 goals"
 ]
-]
+],
+"f": "pl-season-scorers"
 },
 {
 "id": "pl-2007",
@@ -21111,7 +21326,8 @@
 "John Carew",
 "13 goals"
 ]
-]
+],
+"f": "pl-season-scorers"
 },
 {
 "id": "pl-2008",
@@ -21185,7 +21401,8 @@
 ]
 ]
 ]
-]
+],
+"f": "pl-season-scorers"
 },
 {
 "id": "pl-2009",
@@ -21259,7 +21476,8 @@
 ]
 ]
 ]
-]
+],
+"f": "pl-season-scorers"
 },
 {
 "id": "pl-2010",
@@ -21333,7 +21551,8 @@
 ]
 ]
 ]
-]
+],
+"f": "pl-season-scorers"
 },
 {
 "id": "pl-2011",
@@ -21407,7 +21626,8 @@
 ]
 ]
 ]
-]
+],
+"f": "pl-season-scorers"
 },
 {
 "id": "pl-2012",
@@ -21475,7 +21695,8 @@
 "Frank Lampard",
 "15 goals"
 ]
-]
+],
+"f": "pl-season-scorers"
 },
 {
 "id": "pl-2013",
@@ -21543,7 +21764,8 @@
 "Jay Rodriguez",
 "15 goals"
 ]
-]
+],
+"f": "pl-season-scorers"
 },
 {
 "id": "pl-2014",
@@ -21621,7 +21843,8 @@
 ]
 ]
 ]
-]
+],
+"f": "pl-season-scorers"
 },
 {
 "id": "pl-2015",
@@ -21689,7 +21912,8 @@
 "Alexis Sánchez",
 "13 goals"
 ]
-]
+],
+"f": "pl-season-scorers"
 },
 {
 "id": "pl-2016",
@@ -21767,7 +21991,8 @@
 ]
 ]
 ]
-]
+],
+"f": "pl-season-scorers"
 },
 {
 "id": "pl-2017",
@@ -21849,7 +22074,8 @@
 ]
 ]
 ]
-]
+],
+"f": "pl-season-scorers"
 },
 {
 "id": "pl-2018",
@@ -21939,7 +22165,8 @@
 ]
 ]
 ]
-]
+],
+"f": "pl-season-scorers"
 },
 {
 "id": "pl-2019",
@@ -22007,7 +22234,8 @@
 "Marcus Rashford",
 "17 goals"
 ]
-]
+],
+"f": "pl-season-scorers"
 },
 {
 "id": "pl-2020",
@@ -22075,7 +22303,8 @@
 "Alexandre Lacazette",
 "13 goals"
 ]
-]
+],
+"f": "pl-season-scorers"
 },
 {
 "id": "pl-2021",
@@ -22143,7 +22372,8 @@
 "Raheem Sterling",
 "13 goals"
 ]
-]
+],
+"f": "pl-season-scorers"
 },
 {
 "id": "pl-2022",
@@ -22217,7 +22447,8 @@
 ]
 ]
 ]
-]
+],
+"f": "pl-season-scorers"
 },
 {
 "id": "pl-2023",
@@ -22291,7 +22522,8 @@
 ]
 ]
 ]
-]
+],
+"f": "pl-season-scorers"
 },
 {
 "id": "pl-2024",
@@ -22365,7 +22597,8 @@
 ]
 ]
 ]
-]
+],
+"f": "pl-season-scorers"
 },
 {
 "id": "pl-2025",
@@ -22433,7 +22666,8 @@
 "Danny Welbeck",
 "13 goals"
 ]
-]
+],
+"f": "pl-season-scorers"
 },
 {
 "id": "ucl-1992",
@@ -22501,7 +22735,8 @@
 "Túlio Maravilha",
 "4 goals"
 ]
-]
+],
+"f": "ucl-season-scorers"
 },
 {
 "id": "ucl-1993",
@@ -22587,7 +22822,8 @@
 ]
 ]
 ]
-]
+],
+"f": "ucl-season-scorers"
 },
 {
 "id": "ucl-1994",
@@ -22661,7 +22897,8 @@
 ]
 ]
 ]
-]
+],
+"f": "ucl-season-scorers"
 },
 {
 "id": "ucl-1995",
@@ -22729,7 +22966,8 @@
 "Iván Zamorano",
 "4 goals"
 ]
-]
+],
+"f": "ucl-season-scorers"
 },
 {
 "id": "ucl-1996",
@@ -22803,7 +23041,8 @@
 ]
 ]
 ]
-]
+],
+"f": "ucl-season-scorers"
 },
 {
 "id": "ucl-1997",
@@ -22905,7 +23144,8 @@
 ]
 ]
 ]
-]
+],
+"f": "ucl-season-scorers"
 },
 {
 "id": "ucl-1998",
@@ -22995,7 +23235,8 @@
 ]
 ]
 ]
-]
+],
+"f": "ucl-season-scorers"
 },
 {
 "id": "ucl-1999",
@@ -23073,7 +23314,8 @@
 ]
 ]
 ]
-]
+],
+"f": "ucl-season-scorers"
 },
 {
 "id": "ucl-2000",
@@ -23187,7 +23429,8 @@
 ]
 ]
 ]
-]
+],
+"f": "ucl-season-scorers"
 },
 {
 "id": "ucl-2001",
@@ -23255,7 +23498,8 @@
 "Michael Ballack",
 "6 goals"
 ]
-]
+],
+"f": "ucl-season-scorers"
 },
 {
 "id": "ucl-2002",
@@ -23323,7 +23567,8 @@
 "Alan Shearer",
 "6 goals"
 ]
-]
+],
+"f": "ucl-season-scorers"
 },
 {
 "id": "ucl-2003",
@@ -23429,7 +23674,8 @@
 ]
 ]
 ]
-]
+],
+"f": "ucl-season-scorers"
 },
 {
 "id": "ucl-2004",
@@ -23511,7 +23757,8 @@
 ]
 ]
 ]
-]
+],
+"f": "ucl-season-scorers"
 },
 {
 "id": "ucl-2005",
@@ -23597,7 +23844,8 @@
 ]
 ]
 ]
-]
+],
+"f": "ucl-season-scorers"
 },
 {
 "id": "ucl-2006",
@@ -23679,7 +23927,8 @@
 ]
 ]
 ]
-]
+],
+"f": "ucl-season-scorers"
 },
 {
 "id": "ucl-2007",
@@ -23753,7 +24002,8 @@
 ]
 ]
 ]
-]
+],
+"f": "ucl-season-scorers"
 },
 {
 "id": "ucl-2008",
@@ -23821,7 +24071,8 @@
 "Karim Benzema",
 "5 goals"
 ]
-]
+],
+"f": "ucl-season-scorers"
 },
 {
 "id": "ucl-2009",
@@ -23919,7 +24170,8 @@
 ]
 ]
 ]
-]
+],
+"f": "ucl-season-scorers"
 },
 {
 "id": "ucl-2010",
@@ -24025,7 +24277,8 @@
 ]
 ]
 ]
-]
+],
+"f": "ucl-season-scorers"
 },
 {
 "id": "ucl-2011",
@@ -24107,7 +24360,8 @@
 ]
 ]
 ]
-]
+],
+"f": "ucl-season-scorers"
 },
 {
 "id": "ucl-2012",
@@ -24175,7 +24429,8 @@
 "Ezequiel Lavezzi",
 "5 goals"
 ]
-]
+],
+"f": "ucl-season-scorers"
 },
 {
 "id": "ucl-2013",
@@ -24253,7 +24508,8 @@
 ]
 ]
 ]
-]
+],
+"f": "ucl-season-scorers"
 },
 {
 "id": "ucl-2014",
@@ -24331,7 +24587,8 @@
 ]
 ]
 ]
-]
+],
+"f": "ucl-season-scorers"
 },
 {
 "id": "ucl-2015",
@@ -24405,7 +24662,8 @@
 ]
 ]
 ]
-]
+],
+"f": "ucl-season-scorers"
 },
 {
 "id": "ucl-2016",
@@ -24483,7 +24741,8 @@
 ]
 ]
 ]
-]
+],
+"f": "ucl-season-scorers"
 },
 {
 "id": "ucl-2017",
@@ -24551,7 +24810,8 @@
 "Lionel Messi",
 "6 goals"
 ]
-]
+],
+"f": "ucl-season-scorers"
 },
 {
 "id": "ucl-2018",
@@ -24637,7 +24897,8 @@
 ]
 ]
 ]
-]
+],
+"f": "ucl-season-scorers"
 },
 {
 "id": "ucl-2019",
@@ -24727,7 +24988,8 @@
 ]
 ]
 ]
-]
+],
+"f": "ucl-season-scorers"
 },
 {
 "id": "ucl-2020",
@@ -24813,7 +25075,8 @@
 ]
 ]
 ]
-]
+],
+"f": "ucl-season-scorers"
 },
 {
 "id": "ucl-2021",
@@ -24887,7 +25150,8 @@
 ]
 ]
 ]
-]
+],
+"f": "ucl-season-scorers"
 },
 {
 "id": "ucl-2022",
@@ -24961,7 +25225,8 @@
 ]
 ]
 ]
-]
+],
+"f": "ucl-season-scorers"
 },
 {
 "id": "ucl-2023",
@@ -25039,7 +25304,8 @@
 ]
 ]
 ]
-]
+],
+"f": "ucl-season-scorers"
 },
 {
 "id": "ucl-2024",
@@ -25117,7 +25383,8 @@
 ]
 ]
 ]
-]
+],
+"f": "ucl-season-scorers"
 }
 ]
 }

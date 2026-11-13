@@ -27,13 +27,16 @@ class Top10Entry {
 /// built by data_pipeline/top10_build.py), e.g. "Premier League all-time top
 /// scorers".
 class Top10List {
-  const Top10List({required this.id, required this.prompt, required this.level, required this.entries, this.asOf = ''});
+  const Top10List(
+      {required this.id, required this.prompt, required this.level, required this.entries, this.asOf = '', String? family})
+      : family = family ?? id;
 
   factory Top10List.fromJson(Map<String, Object?> m) => Top10List(
         id: '${m['id']}',
         prompt: '${m['q']}',
         level: (m['d'] as num?)?.toInt() ?? 2,
         asOf: '${m['asof'] ?? ''}',
+        family: m['f'] as String?,
         entries: [
           for (final e in m['e'] as List? ?? const [])
             Top10Entry(
@@ -50,6 +53,10 @@ class Top10List {
 
   final String id;
   final String prompt;
+
+  /// Lists that are one idea many times over (each season's top scorers,
+  /// each club's) share a family; a one-off list is its own.
+  final String family;
 
   /// 1–3, as challenges ([Difficulty.allowedLevels]).
   final int level;
@@ -92,7 +99,15 @@ class Top10Bank {
     final fresh = [for (final l in pool) if (!order.contains(l.id)) l];
     final Top10List choice;
     if (fresh.isNotEmpty) {
-      choice = fresh[rnd.nextInt(fresh.length)];
+      // A family first, then one of its lists: 41 club lists count as one
+      // idea, so the one-off records come up as often as "a club's scorers".
+      final families = <String, List<Top10List>>{};
+      for (final l in fresh) {
+        families.putIfAbsent(l.family, () => []).add(l);
+      }
+      final keys = families.keys.toList();
+      final pickFrom = families[keys[rnd.nextInt(keys.length)]]!;
+      choice = pickFrom[rnd.nextInt(pickFrom.length)];
     } else {
       final rank = {for (final (i, id) in order.indexed) id: i};
       choice = ([...pool]..sort((a, b) => (rank[a.id] ?? 0).compareTo(rank[b.id] ?? 0))).first;

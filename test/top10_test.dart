@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:math';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:quizinho/data/models.dart';
@@ -54,7 +55,21 @@ void main() {
     expect(seen.length, greaterThan(5));
   });
 
-  test('a shared 10th place takes any of its players, once', () {
+  test('a family of lists (every club\'s scorers) counts as one idea when picking', () {
+    final bank = Top10Bank([
+      for (var i = 0; i < 40; i++) Top10List(id: 'club-$i', prompt: 'C', level: 1, entries: const [], family: 'clubs'),
+      const Top10List(id: 'own-goals', prompt: 'O', level: 1, entries: []),
+    ]);
+    var oneOff = 0;
+    for (var i = 0; i < 400; i++) {
+      if (bank.pick(difficulty: Difficulty.expert, history: QuestionHistory(), random: Random(i))!.id == 'own-goals') {
+        oneOff++;
+      }
+    }
+    expect(oneOff, greaterThan(140)); // about half, not 1 in 41
+  });
+
+    test('a shared 10th place takes any of its players, once', () {
     final list = Top10List(id: 'y', prompt: 'T', level: 1, entries: [
       for (var i = 0; i < 9; i++) Top10Entry(rank: i + 1, playerId: 'p$i', name: 'P$i'),
       const Top10Entry(rank: 10, playerId: 'beattie', name: 'James Beattie', alternates: [('keane', 'Robbie Keane')]),

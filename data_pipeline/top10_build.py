@@ -659,6 +659,23 @@ def slug_id(name: str) -> str:
     return re.sub(r"[^a-z]+", "-", _fold(name)).strip("-")
 
 
+# Lists that are one idea many times over (a season, a club, a nation): the
+# app picks a family first, so 40 club lists don't crowd out the one-offs.
+FAMILIES = [
+    (r"^pl-\d{4}$", "pl-season-scorers"), (r"^ucl-\d{4}$", "ucl-season-scorers"),
+    (r"^pl-assists-\d{4}$", "pl-season-assists"), (r"^ballon-dor-\d{4}$", "ballon-dor"),
+    (r"^pl-club-goals-", "club-scorers"), (r"^pl-club-apps-", "club-apps"), (r"^pl-vs-(?!former)", "goals-against-club"),
+    (r"^pl-goals-([a-z]{2}|gb-[a-z]{3}|africa)$", "goals-by-nation"), (r"^pl-(goals|assist|appearances)-\d{4}s$", "decade"),
+    (r"^pl-goals-born-", "born-decade"),
+    (r"^(pl-(merseyside|manchester|northwest|tynewear|london-derby)-goals|nld-goals|clasico-goals)$", "derby"),
+    (r"^(sco|wal|nir|eng)-(caps|goals)$", "home-nations"),
+]
+
+
+def family(lid: str) -> str | None:
+    return next((f for pat, f in FAMILIES if re.match(pat, lid)), None)
+
+
 def main() -> int:
     pages, qids, by_qid = load()
     qids.update(TITLE_QID)
@@ -701,6 +718,9 @@ def main() -> int:
         live = not lid.split("-")[-1].isdigit()  # a finished season doesn't change
         out.append({"id": lid, "q": question, "d": level, **({"asof": dt.date.today().strftime("%b %Y")} if live else {}),
                     "src": article, "e": entries})
+    for l in out:
+        if (fam := family(l["id"])):
+            l["f"] = fam
     note = f"Top 10 lists from Wikipedia record tables: {len(out)} lists, {len(dropped)} dropped. Built {dt.date.today()}."
     OUT.write_text(json.dumps({"_note": note, "dropped": dropped, "lists": out}, ensure_ascii=False, indent=0) + "\n", encoding="utf-8")
     print(note)
