@@ -65,13 +65,13 @@ enum GameModeId {
     whoPlays: 'Bid out loud as a team. When challenged, the whole team can shout answers.',
   ),
   pointless(
-    title: 'Pointless',
-    tagline: 'Think of the answers nobody else would',
+    title: 'Under the Radar',
+    tagline: 'Rarest answer wins',
     playable: true,
     rules: [
       'A category appears. Teams take turns - confer, then give ONE answer.',
-      'A right answer scores how many of 100 people would have said it. The more obscure, the lower.',
-      'A wrong answer or running out of time scores 100. Two answers each - lowest total wins +3, and every POINTLESS answer is +1.',
+      'A right answer scores how many of 100 people would have said it. The rarer the answer, the lower the score.',
+      'Wrong or out of time scores 100. Two answers each - lowest total wins +3, and a 0 (nobody would have said it) is +1.',
     ],
     whoPlays: 'Each team confers, then one person types or says the answer.',
   ),

@@ -70,7 +70,7 @@ class _PointlessScreenState extends State<PointlessScreen>
     final p = _phones;
     if (p == null) return;
     if (c.phase != PtPhase.answering) {
-      p.idle('Pointless', game: 'pt', board: _view(c));
+      p.idle('Under the Radar', game: 'pt', board: _view(c));
       return;
     }
     final clubs = c.category.answersAreClubs;
@@ -78,7 +78,7 @@ class _PointlessScreenState extends State<PointlessScreen>
       key: '${_t.rounds.length}-pt-${c.turn}-$_pickerKey',
       team: c.currentTeam,
       stage: TurnStage.answer,
-      title: 'POINTLESS · ANSWER ${c.goNumber} OF ${c.answersPerTeam}',
+      title: 'UNDER THE RADAR · ANSWER ${c.goNumber} OF ${c.answersPerTeam}',
       headline: c.category.prompt,
       sub: 'Confer - the most obscure right answer wins',
       game: 'pt',
@@ -290,7 +290,7 @@ class PtLayout extends StatelessWidget {
       Padding(
         padding: const EdgeInsets.fromLTRB(16, 6, 16, 0),
         child: Row(children: [
-          Text('POINTLESS', style: AppText.label(16, color: _studio)),
+          Text('UNDER THE RADAR', style: AppText.label(16, color: _studio)),
           const Spacer(),
           if (multiplier > 1) Text('x$multiplier POINTS', style: AppText.label(15, color: Palette.gold)),
         ]),
@@ -494,7 +494,7 @@ class _ColumnState extends State<_Column> with SingleTickerProviderStateMixin {
     return LayoutBuilder(builder: (context, box) {
       final h = max(60.0, box.maxHeight - 70);
       return Column(children: [
-        Text(pointless ? 'POINTLESS!' : '${v.round()}', style: AppText.headline(pointless ? 54 : 64, color: colour)),
+        Text(pointless ? 'NOBODY!' : '${v.round()}', style: AppText.headline(pointless ? 54 : 64, color: colour)),
         const SizedBox(height: 4),
         Container(
           width: 110,

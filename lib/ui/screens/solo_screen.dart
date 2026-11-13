@@ -28,7 +28,7 @@ const soloGames = [
 String soloScoring(GameModeId m) => switch (m) {
       GameModeId.clubConnections => '5 pairs. Right answers score, more for speed and rare picks.',
       GameModeId.careerPath => '5 careers. The fewer clubs you need, the more you score.',
-      GameModeId.pointless => '3 categories, one answer each. The more obscure, the more you score.',
+      GameModeId.pointless => '3 categories, one answer each. The rarer your answer, the more you score.',
       GameModeId.checkout501 => 'Check out from 501 in as few darts as you can.',
       GameModeId.startingXi => 'Name as much of the XI as you can. 3 lives.',
       GameModeId.ticTacToe => 'Fill all nine squares yourself. 3 lives. A full grid is 100.',
@@ -48,7 +48,7 @@ List<String> soloRules(GameModeId m) => switch (m) {
         ],
       GameModeId.pointless => [
           'A category appears. Give one answer.',
-          '3 categories. The more obscure your answer, the more you score.',
+          '3 categories. The rarer your answer, the more you score.',
         ],
       GameModeId.checkout501 => [
           'Start on 501. Name a player: their league apps + goals for that club come off.',

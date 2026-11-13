@@ -244,7 +244,7 @@ extension GameModeStyle on GameModeId {
         GameModeId.wildcard => 'WILDCARD',
         GameModeId.ticTacToe => 'NOUGHTS & CROSSES',
         GameModeId.biddingWar => 'BIDDING WAR',
-        GameModeId.pointless => 'POINTLESS',
+        GameModeId.pointless => 'UNDER THE RADAR',
         GameModeId.checkout501 => '501',
         GameModeId.headsUp => 'ON YOUR HEAD',
         GameModeId.top10 => 'TOP 10',
