@@ -18,8 +18,10 @@ workflows:
     integrations:
       app_store_connect: Quizinho ASC key
     environment:
-      groups:
-        - clips
+      # Pundit clips are parked: to bundle them in test builds again, add an
+      # environment group "clips" holding CLIPS_KEY and list it here:
+      #   groups:
+      #     - clips
       ios_signing:
         distribution_type: app_store
         bundle_identifier: com.littlefortstudios.quizinho
