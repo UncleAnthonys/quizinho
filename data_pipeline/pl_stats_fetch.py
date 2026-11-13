@@ -26,7 +26,10 @@ HEADERS = {"Origin": "https://www.premierleague.com", "Referer": "https://www.pr
 # stat -> how deep to go (deep ones feed nationality / position lists).
 STATS = {"goals": 1500, "goal_assist": 800, "appearances": 800, "own_goals": 100, "red_card": 100,
          "yellow_card": 100, "att_hd_goal": 300, "att_freekick_goal": 100, "att_obox_goal": 300,
-         "att_pen_goal": 100, "clean_sheet": 600}
+         "att_pen_goal": 100, "clean_sheet": 600,
+         # Since 2006-07; an unknown name just comes back empty.
+         "att_pen_miss": 60, "penalty_save": 60, "hit_woodwork": 60, "big_chance_missed": 60,
+         "total_offside": 60, "error_lead_to_goal": 60, "own_goal_accrued": 60}
 DECADE_STATS = ["goals", "goal_assist", "appearances"]
 
 
