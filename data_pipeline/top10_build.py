@@ -281,6 +281,36 @@ def feed_list(rows, match, unit: str, keep=lambda o: True, max_alts: int = 8):
     return entries, None
 
 
+def pl_winners(pages, qids, by_qid) -> set[str]:
+    """Our ids of everyone in Wikipedia's list of Premier League winners."""
+    winners = set()
+    page = pages.get("List of Premier League winning players")
+    if page:
+        for _, _, _, rows in tables(page):
+            for cells in rows:
+                for l in LINK.findall(" ".join(strip_attr(c) for c in cells)):
+                    if (q := qids.get(l.strip())) in by_qid:
+                        winners.add(by_qid[q]["id"])
+    return winners
+
+
+EUROPE = set("AL AD AM AT AZ BY BE BA BG HR CY CZ DK EE FI FR GE DE GR HU IS IE IT KZ XK LV LI LT LU MT MD MC ME NL MK "
+             "NO PL PT RO RU SM RS SK SI ES SE CH TR UA FO GI".split()) | {"GB-ENG", "GB-SCT", "GB-WLS", "GB-NIR"}
+SCANDI = {"NO", "SE", "DK", "IS", "FI", "FO"}
+# Clubs with a Top 10 of their own (Premier League goals and appearances).
+CLUB_LISTS = ["Arsenal", "Aston Villa", "Blackburn Rovers", "Bolton Wanderers", "Chelsea", "Crystal Palace", "Everton",
+              "Fulham", "Leeds United", "Leicester City", "Liverpool", "Manchester City", "Manchester United",
+              "Middlesbrough", "Newcastle United", "Portsmouth", "Southampton", "Sunderland", "Tottenham Hotspur",
+              "West Ham United", "Wolverhampton Wanderers", "Stoke City", "Wigan Athletic", "Coventry City",
+              "Brighton & Hove Albion", "Burnley", "Watford", "Norwich City", "Nottingham Forest", "Sheffield Wednesday",
+              "Charlton Athletic", "Bournemouth", "Brentford", "West Bromwich Albion", "Wimbledon", "Derby County",
+              "Birmingham City", "Swansea City", "Ipswich Town", "Queens Park Rangers", "Hull City", "Reading"]
+SHORT = {"Manchester United": "Man United", "Manchester City": "Man City", "Tottenham Hotspur": "Tottenham",
+         "Newcastle United": "Newcastle", "West Ham United": "West Ham", "Wolverhampton Wanderers": "Wolves",
+         "Brighton & Hove Albion": "Brighton", "West Bromwich Albion": "West Brom", "Queens Park Rangers": "QPR",
+         "Blackburn Rovers": "Blackburn", "Bolton Wanderers": "Bolton", "Sheffield Wednesday": "Sheffield Wednesday"}
+
+
 def feed_lists(pages, qids, by_qid):
     """Top 10s from the Premier League stats feed (raw/pl_stats.json.gz)."""
     path = HERE / "raw" / "pl_stats.json.gz"
@@ -292,21 +322,19 @@ def feed_lists(pages, qids, by_qid):
     nat = lambda *codes: (lambda o: (o.get("nationalTeam") or {}).get("isoCode") in codes)
     # No "by a defender" lists: the feed has one position per player, their
     # last (Ashley Young, a winger for most of his goals, is a defender).
-    # Title winners: everyone in Wikipedia's list of Premier League winners.
-    winners = set()
-    page = pages.get("List of Premier League winning players")
-    if page:
-        for _, _, _, rows in tables(page):
-            for cells in rows:
-                for l in LINK.findall(" ".join(strip_attr(c) for c in cells)):
-                    if (q := qids.get(l.strip())) in by_qid:
-                        winners.add(by_qid[q]["id"])
+    winners = pl_winners(pages, qids, by_qid)
     specs = [
         ("pl-own-goals", "Most Premier League own goals", 2, al["own_goals"], "own goals", None),
         ("pl-red-cards", "Most Premier League red cards", 2, al["red_card"], "reds", None),
         ("pl-yellow-cards", "Most Premier League yellow cards", 3, al["yellow_card"], "yellows", None),
         ("pl-headers", "Most Premier League headed goals" + SINCE_2006, 2, al["att_hd_goal"], "headers", None),
         ("pl-long-range", "Most Premier League goals from outside the box" + SINCE_2006, 2, al["att_obox_goal"], "goals", None),
+        ("pl-pen-saves", "Most Premier League penalty saves" + SINCE_2006, 3, al.get("penalty_save", []), "saves", None),
+        ("pl-woodwork", "Most times hitting the woodwork in the Premier League" + SINCE_2006, 2, al.get("hit_woodwork", []), "times", None),
+        ("pl-offsides", "Most times caught offside in the Premier League" + SINCE_2006, 2, al.get("total_offside", []), "offsides", None),
+        ("pl-big-chances-missed", "Most big chances missed in the Premier League (since Opta began counting them)", 2,
+         al.get("big_chance_missed", []), "missed", None),
+        ("pl-errors", "Most Premier League errors leading to a goal" + SINCE_2006, 3, al.get("error_lead_to_goal", []), "errors", None),
         ("pl-goals-no-title", "Most Premier League goals without winning the title", 2, al["goals"], "goals",
          lambda o: (p := match(o)) is not None and p["id"] not in winners),
     ]
@@ -370,7 +398,7 @@ def ranked(scores: dict, who, fmt, low_first: bool = False, max_alts: int = 8):
     return entries, None
 
 
-def match_lists(by_qid):
+def match_lists(by_qid, winners: set[str] = frozenset()):
     """Top 10s worked out from every Premier League match (raw/pl_matches)."""
     path = HERE / "raw" / "pl_matches.json.gz"
     if not path.exists():
@@ -398,8 +426,24 @@ def match_lists(by_qid):
     derby = {k: C() for k in ("merseyside", "manchester", "northwest", "tynewear", "london")}
     clubs_played, clubs_scored = collections.defaultdict(set), collections.defaultdict(set)
     youngest, oldest = {}, {}
+    over30, debut_season, vs_former, never_red, gk_apps = C(), C(), C(), C(), C()
+    born = {dec: C() for dec in (1970, 1980, 1990, 2000)}
+    club_goals = {t: C() for t in CLUB_LISTS}
+    club_apps = {t: C() for t in CLUB_LISTS}
+    fergie, wenger = C(), C()
+    first_season: dict = {}
+    first_goal, last_goal = {}, {}
+    reds = set()
+    winners_goals = C()
+    season_assists = collections.defaultdict(C)
+    teams_before: dict = collections.defaultdict(set)  # player -> clubs played for in earlier matches
+    rel_goals, promoted_apps = C(), C()
+    big6_player = set()
+    london_clubs = collections.defaultdict(set)
     played_for = collections.defaultdict(set)  # (team, season) -> players
     promoted_goals = C()  # (player, team, season) -> goals for a newly promoted side
+    d["matches"].sort(key=lambda m: m.get("ko") or 0)
+    relegated_early = {(t, y) for y in teams_in if y + 1 in teams_in and y <= last_done for t in teams_in[y] - teams_in[y + 1]}
     for m in d["matches"]:
         y = season_of(m)
         name = {str(t[0]): t[1] for t in m["teams"]}
@@ -413,18 +457,62 @@ def match_lists(by_qid):
             if tid is None:
                 continue
             apps[pid] += 1
-            clubs_played[pid].add(name.get(tid))
+            team = name.get(tid)
+            clubs_played[pid].add(team)
+            first_season.setdefault(pid, y)
+            if team in club_apps:
+                club_apps[team][pid] += 1
+            if team in BIG_SIX:
+                big6_player.add(pid)
+            if team in LONDON:
+                london_clubs[pid].add(team)
+            if y - 1 in teams_in and team not in teams_in[y - 1]:
+                promoted_apps[pid] += 1
+            if pos_of.get(pid) == "G":
+                gk_apps[pid] += 1
             played_for[(name.get(tid), y)].add(pid)
             if pid not in started:
                 sub_apps[pid] += 1
+        # The winning goal: the one that took the winners one past the
+        # losers' final score (an own goal's counts for nobody).
+        final = {str(t[0]): t[2] for t in m["teams"]}
+        if len(set(final.values())) == 2:
+            win, lose = sorted(final, key=lambda k: -final[k])
+            tally = 0
+            for e in m["events"]:
+                if e[0] in ("G", "P", "O") and str(e[3]) == win:
+                    tally += 1
+                    if tally == final[lose] + 1:
+                        if e[0] != "O":
+                            winners_goals[e[2]] += 1
+                        break
         for e in m["events"]:
-            if e[0] != "G":
+            if e[0] == "B" and e[1] in ("R", "YR"):
+                reds.add(e[2])
+            if e[0] not in ("G", "P"):  # goal, penalty goal (O: own goal)
                 continue
             pid, tid, secs = e[2], str(e[3]), e[4]
+            if len(e) > 5 and e[5] is not None:
+                season_assists[y][e[5]] += 1
             mine = name.get(tid)
             opp = next((t for t in both if t != mine), None)
             goals[pid] += 1
             clubs_scored[pid].add(mine)
+            if mine in club_goals:
+                club_goals[mine][pid] += 1
+            if opp in teams_before[pid]:
+                vs_former[pid] += 1
+            if first_season.get(pid) == y:
+                debut_season[pid] += 1
+            if (mine, y) in relegated_early:
+                rel_goals[pid] += 1
+            ko = m.get("ko") or 0
+            if mine == "Manchester United" and ko < 1369008000000:  # Ferguson's last game, 19 May 2013
+                fergie[pid] += 1
+            if mine == "Arsenal" and 845251200000 <= ko < 1526774400000:  # Wenger: Oct 1996 to May 2018
+                wenger[pid] += 1
+            first_goal.setdefault(pid, ko)
+            last_goal[pid] = ko
             if pid not in started:
                 sub_goals[pid] += 1
             if secs is not None and secs >= 5400:
@@ -454,6 +542,14 @@ def match_lists(by_qid):
                     teen[pid] += 1
                 if yrs >= 35:
                     veteran[pid] += 1
+                if yrs >= 30:
+                    over30[pid] += 1
+                byear = dt.datetime.fromtimestamp(birth / 1000, dt.timezone.utc).year
+                if byear // 10 * 10 in born:
+                    born[byear // 10 * 10][pid] += 1
+        for pid in set(started) | came_on:
+            if (tid := team_of.get(pid)) is not None:
+                teams_before[pid].add(name.get(tid))
     relegated = {(t, y) for y in teams_in if y + 1 in teams_in and y <= last_done for t in teams_in[y] - teams_in[y + 1]}
     relegations = C()
     for key in relegated:
@@ -494,9 +590,57 @@ def match_lists(by_qid):
         ("pl-tynewear-goals", "Most Premier League goals in the Tyne\u2013Wear derby", 3, derby["tynewear"], n(derby["tynewear"], "goals"), False),
         ("pl-london-derby-goals", "Most Premier League goals in London derbies", 2, derby["london"], n(derby["london"], "goals"), False),
     ]
+    nat = lambda pid: people[str(pid)][2]
+    pick = lambda c, keep: {k: v for k, v in c.items() if keep(k)}
+    gap = {k: last_goal[k] - first_goal[k] for k in first_goal}
+
+    def gap_text(k):
+        days = int(gap[k] / 86400000)
+        return f"{days // 365} yrs {days % 365} days"
+    specs += [
+        ("pl-winning-goals", "Most Premier League winning goals", 2, winners_goals, n(winners_goals, "winners"), False),
+        ("pl-goals-over-30", "Most Premier League goals after turning 30", 2, over30, n(over30, "goals"), False),
+        ("pl-debut-season-goals", "Most Premier League goals in a player's first Premier League season", 2, debut_season,
+         lambda k: f"{debut_season[k]} ({_season(first_season[k])})", False),
+        ("pl-vs-former-club", "Most Premier League goals against a former club", 3, vs_former, n(vs_former, "goals"), False),
+        ("pl-fergie-goals", "Most Premier League goals for Man United under Sir Alex Ferguson", 2, fergie, n(fergie, "goals"), False),
+        ("pl-wenger-goals", "Most Premier League goals for Arsenal under Ars\u00e8ne Wenger", 2, wenger, n(wenger, "goals"), False),
+        ("pl-goal-gap", "Longest gap between a player's first and last Premier League goals", 3, gap, gap_text, False),
+        ("pl-rel-goals", "Most Premier League goals for sides relegated that season", 3, rel_goals, n(rel_goals, "goals"), False),
+        ("pl-promoted-apps", "Most Premier League appearances for newly promoted sides", 3, promoted_apps, n(promoted_apps, "apps"), False),
+        ("pl-goals-no-big6", "Most Premier League goals by a player who never played for a Big Six club", 2,
+         pick(goals, lambda k: k not in big6_player), n(goals, "goals"), False),
+        ("pl-apps-no-red", "Most Premier League appearances without a red card", 2, pick(apps, lambda k: k not in reds), n(apps, "apps"), False),
+        ("pl-london-clubs", "Most London clubs played for in the Premier League", 3, {k: len(v) for k, v in london_clubs.items()},
+         lambda k: f"{len(london_clubs[k])} clubs", False),
+        ("pl-apps-non-english", "Most Premier League appearances by a non-English player", 2,
+         pick(apps, lambda k: nat(k) not in (None, "GB-ENG")), n(apps, "apps"), False),
+        ("pl-goals-outside-europe", "Most Premier League goals by a player from outside Europe", 2,
+         pick(goals, lambda k: nat(k) is not None and nat(k) not in EUROPE), n(goals, "goals"), False),
+        ("pl-apps-africa", "Most Premier League appearances by an African player", 2,
+         pick(apps, lambda k: nat(k) in AFRICA), n(apps, "apps"), False),
+        ("pl-goals-scandi", "Most Premier League goals by a Scandinavian player", 3,
+         pick(goals, lambda k: nat(k) in SCANDI), n(goals, "goals"), False),
+        ("pl-apps-irish", "Most Premier League appearances by an Irish player", 3,
+         pick(apps, lambda k: nat(k) == "IE"), n(apps, "apps"), False),
+    ]
+    for y, c in sorted(season_assists.items()):
+        if y <= last_done:
+            specs.append((f"pl-assists-{y}", f"Most assists in the {_season(y)} Premier League", 3, c, n(c, "assists"), False))
+    if winners:
+        specs.append(("pl-apps-no-title", "Most Premier League appearances without winning the title", 2,
+                      pick(apps, lambda k: (p := who_c(k)) is not None and p["id"] not in winners), n(apps, "apps"), False))
+    for dec, c in born.items():
+        specs.append((f"pl-goals-born-{dec}s", f"Most Premier League goals by a player born in the {dec}s", 2, c, n(c, "goals"), False))
+    for team in CLUB_LISTS:
+        short = SHORT.get(team, team)
+        sid = slug_id(team)
+        specs.append((f"pl-club-goals-{sid}", f"{short}'s top Premier League scorers", 2 if team in BIG_SIX else 3,
+                      club_goals[team], n(club_goals[team], "goals"), False))
+        specs.append((f"pl-club-apps-{sid}", f"Most Premier League appearances for {short}", 3,
+                      club_apps[team], n(club_apps[team], "apps"), False))
     for team, c in vs.items():
-        short = {"Manchester United": "Man United", "Manchester City": "Man City", "Tottenham Hotspur": "Tottenham",
-                 "Newcastle United": "Newcastle", "West Ham United": "West Ham"}.get(team, team)
+        short = SHORT.get(team, team)
         specs.append((f"pl-vs-{slug_id(team)}", f"Most Premier League goals against {short}", 2, c, n(c, "goals"), False))
     out, dropped = [], []
     for lid, q, lvl, scores, fmt, low in specs:
@@ -505,7 +649,8 @@ def match_lists(by_qid):
             names = re.sub(r"\d+", lambda mm: people.get(mm.group(0), [mm.group(0)])[0], problem) if "know" in problem else problem
             dropped.append(f"{lid}: {names}")
         else:
-            out.append({"id": lid, "q": q, "d": lvl, "asof": dt.date.today().strftime("%b %Y"),
+            done = lid.split("-")[-1].isdigit()  # a finished season doesn't change
+            out.append({"id": lid, "q": q, "d": lvl, **({} if done else {"asof": dt.date.today().strftime("%b %Y")}),
                         "src": "premierleague.com match data", "e": entries})
     return out, dropped
 
@@ -518,7 +663,7 @@ def main() -> int:
     pages, qids, by_qid = load()
     qids.update(TITLE_QID)
     out, dropped = [], []
-    for fn in (feed_lists, lambda *a: match_lists(by_qid)):
+    for fn in (feed_lists, lambda *a: match_lists(by_qid, pl_winners(*a))):
         got, lost = fn(pages, qids, by_qid)
         out += got
         dropped += lost
