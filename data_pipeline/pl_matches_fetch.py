@@ -63,10 +63,13 @@ def match(fid: int, people: dict) -> dict:
         lineups[int(tl["teamId"])] = rows
     events = []
     for e in d.get("events") or []:
-        if e.get("type") in ("G", "S", "B") and e.get("personId") is not None:
-            # G goal (description: G, P pen, O own goal); S substitution; B booking (Y/R)
+        if e.get("personId") is not None and e.get("type") not in ("PS", "PE"):
+            # G goal, P penalty goal, O own goal (teamId: the side it counted
+            # for), S substitution (ON/OFF), B booking (Y, R, YR); anything
+            # else is kept as it comes. Last field: the assist, if any.
             events.append([e["type"], e.get("description") or "", int(e["personId"]), int(e.get("teamId") or 0),
-                           int(e["clock"]["secs"]) if e.get("clock") else None])
+                           int(e["clock"]["secs"]) if e.get("clock") else None,
+                           int(e["assistId"]) if e.get("assistId") is not None else None])
     return {"id": fid, "season": d["gameweek"]["compSeason"]["label"], "ko": d["kickoff"].get("millis"),
             "teams": teams, "lineups": lineups, "events": events}
 
