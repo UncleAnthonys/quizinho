@@ -10,6 +10,7 @@ otherwise the list shows ranks alone.
 """
 from __future__ import annotations
 
+import collections
 import datetime as dt
 import gzip
 import json
@@ -223,14 +224,17 @@ def feed_matcher(by_qid):
     """Feed owner -> our player: same birth date and a shared name."""
     raw = json.load(gzip.open(HERE / "raw" / "players.json.gz", "rt", encoding="utf-8"))
     by_dob: dict[str, list[dict]] = {}
+    by_name: dict[str, list[dict]] = {}
     for r in raw:
         if r["id"] in by_qid and r.get("dob"):
             by_dob.setdefault(r["dob"], []).append(r)
+            for n in {r.get("name") or "", by_qid[r["id"]]["name"], *r.get("aliases", [])}:
+                by_name.setdefault(_fold(n), []).append(r)
 
     def words(r):
         p = by_qid[r["id"]]
         names = [p["name"], r.get("name") or "", *p.get("aliases", []), *r.get("aliases", []), *r.get("family_names", [])]
-        return {w for n in names for w in re.findall(r"[a-z]+", _fold(n)) if len(w) > 2}
+        return {w for n in names for w in re.findall(r"[a-z]+", _fold(n)) if len(w) > 1}
 
     def match(owner):
         ms = (owner.get("birth") or {}).get("date", {}).get("millis")
@@ -238,14 +242,17 @@ def feed_matcher(by_qid):
             return None
         dob = dt.datetime.fromtimestamp(ms / 1000, dt.timezone.utc).date().isoformat()
         name = owner["name"]
-        want = {w for w in re.findall(r"[a-z]+", _fold(f"{name.get('first', '')} {name.get('last', '')} {name['display']}")) if len(w) > 2}
-        last = {w for w in re.findall(r"[a-z]+", _fold(name.get("last", ""))) if len(w) > 2}
+        want = {w for w in re.findall(r"[a-z]+", _fold(f"{name.get('first', '')} {name.get('last', '')} {name['display']}")) if len(w) > 1}
+        last = {w for w in re.findall(r"[a-z]+", _fold(name.get("last", ""))) if len(w) > 1}
         same_day = by_dob.get(dob, [])
         # Surname first (Damien Duff, not Damien Gregorini born the same day),
         # then the most name words in common (twins: Michael, not Will Keane).
         hits = [r for r in same_day if last & words(r)] or [r for r in same_day if want & words(r)]
         if not hits:
-            return None
+            # Sources disagree on the date (day and month swapped, a day out):
+            # the same full name born within a year.
+            near = {r["id"]: r for r in by_name.get(_fold(name["display"]), []) if abs(int(r["dob"][:4]) - int(dob[:4])) <= 1}
+            return by_qid[next(iter(near))] if len(near) == 1 else None
         score = [len(want & words(r)) for r in hits]
         best = [r for r, n in zip(hits, score) if n == max(score)]
         return by_qid[best[0]["id"]] if len(best) == 1 else None
@@ -325,13 +332,196 @@ def feed_lists(pages, qids, by_qid):
     return out, dropped
 
 
+BIG_SIX = ["Arsenal", "Chelsea", "Liverpool", "Manchester City", "Manchester United", "Tottenham Hotspur"]
+LONDON = {"Arsenal", "Chelsea", "Tottenham Hotspur", "West Ham United", "Crystal Palace", "Fulham", "Brentford",
+          "Queens Park Rangers", "Charlton Athletic", "Wimbledon"}
+
+
+def _age(birth_ms: float, at_ms: float) -> tuple[int, int]:
+    """(years, days) old on the day."""
+    b = dt.datetime.fromtimestamp(birth_ms / 1000, dt.timezone.utc).date()
+    d = dt.datetime.fromtimestamp(at_ms / 1000, dt.timezone.utc).date()
+    years = d.year - b.year - ((d.month, d.day) < (b.month, b.day))
+    try:
+        last = b.replace(year=b.year + years)
+    except ValueError:  # 29 February
+        last = b.replace(year=b.year + years, day=28)
+    return years, (d - last).days
+
+
+def ranked(scores: dict, who, fmt, low_first: bool = False, max_alts: int = 8):
+    """(entries, problem): top ten of {feed id: value}, ties at 10th sharing
+    the slot. who(id) -> our player or None."""
+    order = sorted(scores, key=lambda k: scores[k] if low_first else -scores[k])
+    if len(order) < 11:
+        return None, f"only {len(order)}"
+    cut = scores[order[9]]
+    top, tied = order[:10], [k for k in order[10:] if scores[k] == cut]
+    if len(tied) > max_alts:
+        return None, f"{len(tied) + 1} level on 10th"
+    ps = [who(k) for k in top + tied]
+    if None in ps:
+        return None, "a player we don't know: " + ", ".join(str(k) for k, p in zip(top + tied, ps) if p is None)
+    entries, rank = [], 0
+    for i, (k, p) in enumerate(zip(top, ps)):
+        rank = rank if i and scores[k] == scores[top[i - 1]] else i + 1
+        alts = [[w["id"], w["name"]] for w in ps[10:]] if i == 9 else []
+        entries.append([rank, p["id"], p["name"], fmt(k)] + ([alts] if alts else []))
+    return entries, None
+
+
+def match_lists(by_qid):
+    """Top 10s worked out from every Premier League match (raw/pl_matches)."""
+    path = HERE / "raw" / "pl_matches.json.gz"
+    if not path.exists():
+        return [], ["pl matches: no data"]
+    d = json.load(gzip.open(path, "rt", encoding="utf-8"))
+    people, match = d["people"], feed_matcher(by_qid)
+
+    def who(pid):
+        name, birth, _ = people[str(pid)]
+        parts = name.split()
+        return match({"name": {"display": name, "first": parts[0], "last": " ".join(parts[1:]) or name},
+                      "birth": {"date": {"millis": birth}}})
+    cache: dict = {}
+    who_c = lambda pid: cache[pid] if pid in cache else cache.setdefault(pid, who(pid))
+    season_of = lambda m: int(re.search(r"(\d{4})/", m["season"]).group(1))
+    teams_in: dict[int, set] = {}
+    for m in d["matches"]:
+        teams_in.setdefault(season_of(m), set()).update(t[1] for t in m["teams"])
+    last_done = max(teams_in) - 1  # the latest season is still being played
+    C = collections.Counter
+    goals, sub_goals, late, teen, veteran, def_goals = C(), C(), C(), C(), C(), C()
+    apps, sub_apps = C(), C()
+    vs = {t: C() for t in BIG_SIX + ["Everton", "Newcastle United", "Aston Villa", "West Ham United"]}
+    big6 = C()
+    derby = {k: C() for k in ("merseyside", "manchester", "northwest", "tynewear", "london")}
+    clubs_played, clubs_scored = collections.defaultdict(set), collections.defaultdict(set)
+    youngest, oldest = {}, {}
+    played_for = collections.defaultdict(set)  # (team, season) -> players
+    promoted_goals = C()  # (player, team, season) -> goals for a newly promoted side
+    for m in d["matches"]:
+        y = season_of(m)
+        name = {str(t[0]): t[1] for t in m["teams"]}
+        both = {t[1] for t in m["teams"]}
+        started = {pid: (tid, pos) for tid, rows in m["lineups"].items() for pid, pos, st in rows if st}
+        pos_of = {pid: pos for rows in m["lineups"].values() for pid, pos, _ in rows}
+        team_of = {pid: tid for tid, rows in m["lineups"].items() for pid, _, _ in rows}
+        came_on = {e[2] for e in m["events"] if e[0] == "S" and e[1] == "ON"}
+        for pid in set(started) | came_on:
+            tid = team_of.get(pid)
+            if tid is None:
+                continue
+            apps[pid] += 1
+            clubs_played[pid].add(name.get(tid))
+            played_for[(name.get(tid), y)].add(pid)
+            if pid not in started:
+                sub_apps[pid] += 1
+        for e in m["events"]:
+            if e[0] != "G":
+                continue
+            pid, tid, secs = e[2], str(e[3]), e[4]
+            mine = name.get(tid)
+            opp = next((t for t in both if t != mine), None)
+            goals[pid] += 1
+            clubs_scored[pid].add(mine)
+            if pid not in started:
+                sub_goals[pid] += 1
+            if secs is not None and secs >= 5400:
+                late[pid] += 1
+            if pos_of.get(pid) == "D":
+                def_goals[pid] += 1
+            if opp in vs:
+                vs[opp][pid] += 1
+            if opp in BIG_SIX:
+                big6[pid] += 1
+            pair = {mine, opp}
+            for k, clubs in (("merseyside", {"Liverpool", "Everton"}), ("manchester", {"Manchester United", "Manchester City"}),
+                             ("northwest", {"Liverpool", "Manchester United"}), ("tynewear", {"Newcastle United", "Sunderland"})):
+                if pair == clubs:
+                    derby[k][pid] += 1
+            if pair <= LONDON:
+                derby["london"][pid] += 1
+            if y - 1 in teams_in and mine not in teams_in[y - 1]:
+                promoted_goals[(pid, mine, y)] += 1
+            birth = people[str(pid)][1]
+            if birth is not None and m.get("ko"):
+                age = (m["ko"] - birth) / 86400000
+                youngest[pid] = min(youngest.get(pid, 1e9), age)
+                oldest[pid] = max(oldest.get(pid, 0), age)
+                yrs = _age(birth, m["ko"])[0]
+                if yrs < 20:
+                    teen[pid] += 1
+                if yrs >= 35:
+                    veteran[pid] += 1
+    relegated = {(t, y) for y in teams_in if y + 1 in teams_in and y <= last_done for t in teams_in[y] - teams_in[y + 1]}
+    relegations = C()
+    for key in relegated:
+        for pid in played_for.get(key, ()):
+            relegations[pid] += 1
+    best_promoted: dict = {}
+    for (pid, team, y), g in promoted_goals.items():
+        if g > best_promoted.get(pid, (0,))[0]:
+            best_promoted[pid] = (g, team, y)
+    def age_text(pid, days):
+        birth = people[str(pid)][1]
+        y, dd = _age(birth, birth + days * 86400000)
+        return f"{y} yrs {dd} days"
+    zero = {pid: a for pid, a in apps.items() if goals[pid] == 0}
+    n = lambda c, unit: (lambda k: f"{c[k]:,} {unit}")
+    specs = [
+        ("pl-youngest-scorers", "Youngest Premier League goalscorers", 3, youngest, lambda k: age_text(k, youngest[k]), True),
+        ("pl-oldest-scorers", "Oldest Premier League goalscorers", 3, oldest, lambda k: age_text(k, oldest[k]), False),
+        ("pl-sub-goals", "Most Premier League goals off the bench", 2, sub_goals, n(sub_goals, "goals"), False),
+        ("pl-sub-apps", "Most Premier League appearances off the bench", 3, sub_apps, n(sub_apps, "apps"), False),
+        ("pl-late-goals", "Most Premier League goals in the 90th minute or later", 3, late, n(late, "goals"), False),
+        ("pl-teen-goals", "Most Premier League goals as a teenager", 2, teen, n(teen, "goals"), False),
+        ("pl-veteran-goals", "Most Premier League goals aged 35 or over", 3, veteran, n(veteran, "goals"), False),
+        ("pl-defender-goals", "Most Premier League goals by a defender (playing in defence)", 3, def_goals, n(def_goals, "goals"), False),
+        ("pl-no-goals", "Most Premier League appearances without scoring", 3, zero, n(zero, "apps"), False),
+        ("pl-clubs-played", "Most Premier League clubs played for", 3, {k: len(v) for k, v in clubs_played.items()},
+         lambda k: f"{len(clubs_played[k])} clubs", False),
+        ("pl-clubs-scored", "Most Premier League clubs scored for", 3, {k: len(v) for k, v in clubs_scored.items()},
+         lambda k: f"{len(clubs_scored[k])} clubs", False),
+        ("pl-relegations", "Most Premier League relegations as a player", 3, relegations, n(relegations, "relegations"), False),
+        ("pl-promoted-goals", "Most Premier League goals in a season for a newly promoted side (best season each)", 3,
+         {k: v[0] for k, v in best_promoted.items()},
+         lambda k: f"{best_promoted[k][0]} ({best_promoted[k][1]}, {_season(best_promoted[k][2])})", False),
+        ("pl-big6-goals", "Most Premier League goals against the Big Six", 2, big6, n(big6, "goals"), False),
+        ("pl-merseyside-goals", "Most Premier League goals in the Merseyside derby", 2, derby["merseyside"], n(derby["merseyside"], "goals"), False),
+        ("pl-manchester-goals", "Most Premier League goals in the Manchester derby", 2, derby["manchester"], n(derby["manchester"], "goals"), False),
+        ("pl-northwest-goals", "Most Premier League goals in Liverpool v Manchester United", 2, derby["northwest"], n(derby["northwest"], "goals"), False),
+        ("pl-tynewear-goals", "Most Premier League goals in the Tyne\u2013Wear derby", 3, derby["tynewear"], n(derby["tynewear"], "goals"), False),
+        ("pl-london-derby-goals", "Most Premier League goals in London derbies", 2, derby["london"], n(derby["london"], "goals"), False),
+    ]
+    for team, c in vs.items():
+        short = {"Manchester United": "Man United", "Manchester City": "Man City", "Tottenham Hotspur": "Tottenham",
+                 "Newcastle United": "Newcastle", "West Ham United": "West Ham"}.get(team, team)
+        specs.append((f"pl-vs-{slug_id(team)}", f"Most Premier League goals against {short}", 2, c, n(c, "goals"), False))
+    out, dropped = [], []
+    for lid, q, lvl, scores, fmt, low in specs:
+        entries, problem = ranked(scores, who_c, fmt, low)
+        if problem:
+            names = re.sub(r"\d+", lambda mm: people.get(mm.group(0), [mm.group(0)])[0], problem) if "know" in problem else problem
+            dropped.append(f"{lid}: {names}")
+        else:
+            out.append({"id": lid, "q": q, "d": lvl, "asof": dt.date.today().strftime("%b %Y"),
+                        "src": "premierleague.com match data", "e": entries})
+    return out, dropped
+
+
+def slug_id(name: str) -> str:
+    return re.sub(r"[^a-z]+", "-", _fold(name)).strip("-")
+
+
 def main() -> int:
     pages, qids, by_qid = load()
     qids.update(TITLE_QID)
     out, dropped = [], []
-    got, lost = feed_lists(pages, qids, by_qid)
-    out += got
-    dropped += lost
+    for fn in (feed_lists, lambda *a: match_lists(by_qid)):
+        got, lost = fn(pages, qids, by_qid)
+        out += got
+        dropped += lost
     for lid, q, d, title in [
         ("pl-season-goals", "Most Premier League goals in a season (best season each)", 2,
          lambda y: f"{_season(y)} {'FA ' if y < 2007 else ''}Premier League"),

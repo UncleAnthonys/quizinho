@@ -18,7 +18,9 @@ HEADING = re.compile(r"^(=+)\s*(.*?)\s*\1\s*$", re.M)
 def load():
     doc = json.load(gzip.open(HERE / "raw" / "lists_wikitext.json.gz", "rt", encoding="utf-8"))
     players = json.loads((HERE / "seed" / "players.json").read_text(encoding="utf-8"))["players"]
-    by_qid = {p["wikidata"]: p for p in players}
+    # The name people know them by (build_db.py does the same): Juan Mata, not "Juan Mata Pata".
+    known = json.loads((HERE / "seed" / "wiki_names.json").read_text(encoding="utf-8")).get("players", {})
+    by_qid = {p["wikidata"]: {**p, "name": known.get(p["id"], p["name"])} for p in players}
     return doc["pages"], doc["qids"], by_qid
 
 
