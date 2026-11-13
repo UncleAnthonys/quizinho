@@ -133,6 +133,8 @@ NAME_FIXES = {
     "Q27990922": "Ayumu Seko",       # stray digits
     "Q4105046": "Akanni-Sunday Wasiu",
     "Q2183285": "Mich D'Avray",
+    "Q1138205": "Paweł Abbott",       # missing space
+    "Q55973303": "Kennedy Egbus Mikuni",
     "Q222151": "João Moutinho",      # zero for o
     "Q19116103": "André Onana",
     "Q22082660": "Robert Arboleda",  # zero for o

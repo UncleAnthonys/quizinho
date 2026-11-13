@@ -241,12 +241,14 @@ def feed_matcher(by_qid):
         want = {w for w in re.findall(r"[a-z]+", _fold(f"{name.get('first', '')} {name.get('last', '')} {name['display']}")) if len(w) > 2}
         last = {w for w in re.findall(r"[a-z]+", _fold(name.get("last", ""))) if len(w) > 2}
         same_day = by_dob.get(dob, [])
-        # Surname first (Damien Duff, not Damien Gregorini born the same day).
-        for need in (last, want):
-            hits = [r for r in same_day if need & words(r)]
-            if len(hits) == 1:
-                return by_qid[hits[0]["id"]]
-        return None
+        # Surname first (Damien Duff, not Damien Gregorini born the same day),
+        # then the most name words in common (twins: Michael, not Will Keane).
+        hits = [r for r in same_day if last & words(r)] or [r for r in same_day if want & words(r)]
+        if not hits:
+            return None
+        score = [len(want & words(r)) for r in hits]
+        best = [r for r, n in zip(hits, score) if n == max(score)]
+        return by_qid[best[0]["id"]] if len(best) == 1 else None
     return match
 
 
