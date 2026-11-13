@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../core/theme.dart';
 import '../../domain/tournament.dart';
+import '../match_flow.dart' show GameModeStyle;
 import 'common.dart';
 
 /// The table after a round, and at full time, drawn from a snapshot so the

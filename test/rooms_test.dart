@@ -146,9 +146,11 @@ void main() {
       // Al's own turn, but Al hasn't joined: played on the host.
       expect(showTurn(0, name: 'Al'), isNull);
 
-      // Taken back by the host: Ann's phone no longer counts.
-      showTurn(0);
-      turns.playHere();
+      // Ann's phone stops checking in (locked, closed): her team's next
+      // turn is played on the host, and her phone no longer counts.
+      HostRoom.clock = () => DateTime.now().add(HostRoom.offlineAfter * 2);
+      addTearDown(() => HostRoom.clock = DateTime.now);
+      expect(showTurn(0), isNull);
       await ann.pass('k-0-null');
       await settle();
       expect(passed, 0);

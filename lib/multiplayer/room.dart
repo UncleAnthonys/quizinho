@@ -77,9 +77,13 @@ class HostRoom extends ChangeNotifier {
   /// lost signal): its turns are played on the host instead.
   static const offlineAfter = Duration(seconds: 40);
 
+  /// The clock phones are judged by (tests move it on).
+  @visibleForTesting
+  static DateTime Function() clock = DateTime.now;
+
   bool online(String device) {
     final heard = _heard[device];
-    return heard != null && DateTime.now().difference(heard) < offlineAfter;
+    return heard != null && clock().difference(heard) < offlineAfter;
   }
 
   final _buzzes = StreamController<RemoteBuzz>.broadcast();
@@ -117,7 +121,7 @@ class HostRoom extends ChangeNotifier {
       members = _members(v);
       for (final e in asMap(v).entries) {
         final at = asMap(e.value)['at'];
-        if (!_heard.containsKey(e.key) || _lastAt[e.key] != at) _heard[e.key] = DateTime.now();
+        if (!_heard.containsKey(e.key) || _lastAt[e.key] != at) _heard[e.key] = clock();
         _lastAt[e.key] = at;
       }
       notifyListeners();
