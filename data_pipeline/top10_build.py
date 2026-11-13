@@ -239,8 +239,14 @@ def feed_matcher(by_qid):
         dob = dt.datetime.fromtimestamp(ms / 1000, dt.timezone.utc).date().isoformat()
         name = owner["name"]
         want = {w for w in re.findall(r"[a-z]+", _fold(f"{name.get('first', '')} {name.get('last', '')} {name['display']}")) if len(w) > 2}
-        hits = [r for r in by_dob.get(dob, []) if want & words(r)]
-        return by_qid[hits[0]["id"]] if len(hits) == 1 else None
+        last = {w for w in re.findall(r"[a-z]+", _fold(name.get("last", ""))) if len(w) > 2}
+        same_day = by_dob.get(dob, [])
+        # Surname first (Damien Duff, not Damien Gregorini born the same day).
+        for need in (last, want):
+            hits = [r for r in same_day if need & words(r)]
+            if len(hits) == 1:
+                return by_qid[hits[0]["id"]]
+        return None
     return match
 
 
@@ -275,7 +281,8 @@ def feed_lists(pages, qids, by_qid):
     al, dec = feed["all"], feed["decades"]
     match = feed_matcher(by_qid)
     nat = lambda *codes: (lambda o: (o.get("nationalTeam") or {}).get("isoCode") in codes)
-    pos = lambda code: (lambda o: (o.get("info") or {}).get("position") == code)
+    # No "by a defender" lists: the feed has one position per player, their
+    # last (Ashley Young, a winger for most of his goals, is a defender).
     # Title winners: everyone in Wikipedia's list of Premier League winners.
     winners = set()
     page = pages.get("List of Premier League winning players")
@@ -291,8 +298,6 @@ def feed_lists(pages, qids, by_qid):
         ("pl-yellow-cards", "Most Premier League yellow cards", 3, al["yellow_card"], "yellows", None),
         ("pl-headers", "Most Premier League headed goals" + SINCE_2006, 2, al["att_hd_goal"], "headers", None),
         ("pl-long-range", "Most Premier League goals from outside the box" + SINCE_2006, 2, al["att_obox_goal"], "goals", None),
-        ("pl-defender-goals", "Most Premier League goals by a defender", 3, al["goals"], "goals", pos("D")),
-        ("pl-defender-assists", "Most Premier League assists by a defender", 3, al["goal_assist"], "assists", pos("D")),
         ("pl-goals-no-title", "Most Premier League goals without winning the title", 2, al["goals"], "goals",
          lambda o: (p := match(o)) is not None and p["id"] not in winners),
     ]

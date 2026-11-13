@@ -1,52 +1,17 @@
 {
-"_note": "Top 10 lists from Wikipedia record tables: 146 lists, 47 dropped. Built 2026-11-12.",
+"_note": "Top 10 lists from Wikipedia record tables: 179 lists, 12 dropped. Built 2026-11-13.",
 "dropped": [
 "pl-red-cards: 11 level on 10th",
-"pl-defender-goals: a player we don't know: Ian Marshall, Steve Watson",
-"pl-defender-assists: a player we don't know: Andy Hinchcliffe",
 "pl-goals-pt: a player we don't know: Daniel Podence",
-"pl-goals-de: a player we don't know: Kevin Schade",
-"pl-goals-gb-sct: a player we don't know: Don Hutchison, John Spencer",
-"pl-goals-ie: a player we don't know: Damien Duff",
-"pl-goals-gb-nir: a player we don't know: Iain Dowie, Michael Hughes, Jim Magilton, Steve Lomas, Gerry Taggart",
 "pl-goals-us: only 8 rows",
-"pl-assist-1990s: a player we don't know: Ruel Fox, Stuart Ripley",
-"pl-appearances-1990s: a player we don't know: Peter Atherton",
 "mufc-clean-sheets: row 6 names nobody we know: Alf Steward",
-"celtic-sales: row 3 names nobody we know: Jota (footballer, born March 1999)",
-"ucl-managers: row 4 names nobody we know: Arsène Wenger",
-"pl-managers: row 1 names nobody we know: Arsène Wenger",
-"sco-goals: row 8 names nobody we know: Robert Hamilton (Scottish footballer)",
-"nir-goals: row 3 names nobody we know: Billy Gillespie",
-"man-derby-goals: row 2 names nobody we know: Joe Hayes (footballer)",
-"mersey-goals: row 3 names nobody we know: Alex Young (footballer, born 1880)",
-"milan-derby-goals: row 6 names nobody we know: Enrico Candiani",
-"ballon-dor-1990: row 1 names nobody we know: Lothar Matthäus",
-"ballon-dor-1991: row 4 names nobody we know: Lothar Matthäus",
-"ballon-dor-1999: row 10 names nobody we know: Lothar Matthäus",
+"celtic-sales: row 7 names nobody we know: Odsonne Édouard",
 "ballon-dor-2010: only 3 rows",
 "ballon-dor-2011: only 3 rows",
 "ballon-dor-2012: only 3 rows",
 "ballon-dor-2013: only 3 rows",
 "ballon-dor-2014: only 3 rows",
 "ballon-dor-2015: only 3 rows",
-"pl-1992: row 3 names nobody we know: Dean Holdsworth",
-"pl-1993: row 7 names nobody we know: Mark Bright",
-"pl-1995: row 6 names nobody we know: Chris Armstrong (footballer, born 1971)",
-"pl-1996: someone level at 10th we don't know",
-"pl-1997: row 9 names nobody we know: Darren Huckerby",
-"pl-1998: row 9 names nobody we know: Julian Joachim",
-"pl-1999: row 4 names nobody we know: Michael Bridges",
-"pl-2000: row 2 names nobody we know: Marcus Stewart",
-"pl-2025: row 9 names nobody we know: Eli Junior Kroupi",
-"ucl-1992: row 8 names nobody we know: Zé Carlos (footballer, born 1965)",
-"ucl-1993: row 5 names nobody we know: Bernd Hobsch",
-"ucl-1994: someone level at 10th we don't know",
-"ucl-1995: row 9 names nobody we know: Mike Newell (footballer)",
-"ucl-1996: row 3 names nobody we know: Artur Duarte de Oliveira",
-"ucl-1997: row 8 names nobody we know: Oktay Derelioğlu",
-"ucl-1998: someone level at 10th we don't know",
-"ucl-2006: row 7 names nobody we know: Nicolae Dică",
 "ucl-2025: only 9 rows"
 ],
 "lists": [
@@ -779,6 +744,75 @@
 ]
 },
 {
+"id": "pl-goals-de",
+"q": "Most Premier League goals by a German player",
+"d": 3,
+"asof": "Nov 2026",
+"src": "premierleague.com stats",
+"e": [
+[
+1,
+"kai-havertz",
+"Kai Havertz",
+"46 goals"
+],
+[
+2,
+"ilkay-gundogan",
+"İlkay Gündoğan",
+"45 goals"
+],
+[
+3,
+"pascal-gross",
+"Pascal Groß",
+"35 goals"
+],
+[
+4,
+"mesut-ozil",
+"Mesut Özil",
+"33 goals"
+],
+[
+5,
+"jurgen-klinsmann",
+"Jürgen Klinsmann",
+"29 goals"
+],
+[
+5,
+"uwe-rosler",
+"Uwe Rösler",
+"29 goals"
+],
+[
+7,
+"leroy-sane",
+"Leroy Sané",
+"25 goals"
+],
+[
+8,
+"kevin-schade",
+"Kevin Schade",
+"24 goals"
+],
+[
+9,
+"robert-huth",
+"Robert Huth",
+"21 goals"
+],
+[
+10,
+"lukas-podolski",
+"Lukas Podolski",
+"19 goals"
+]
+]
+},
+{
 "id": "pl-goals-be",
 "q": "Most Premier League goals by a Belgian player",
 "d": 3,
@@ -917,6 +951,75 @@
 ]
 },
 {
+"id": "pl-goals-gb-sct",
+"q": "Most Premier League goals by a Scottish player",
+"d": 3,
+"asof": "Nov 2026",
+"src": "premierleague.com stats",
+"e": [
+[
+1,
+"duncan-ferguson",
+"Duncan Ferguson",
+"68 goals"
+],
+[
+2,
+"kevin-gallacher",
+"Kevin Gallacher",
+"56 goals"
+],
+[
+3,
+"steven-fletcher",
+"Steven Fletcher",
+"53 goals"
+],
+[
+4,
+"gary-mcallister",
+"Gary McAllister",
+"49 goals"
+],
+[
+5,
+"don-hutchison",
+"Don Hutchison",
+"37 goals"
+],
+[
+6,
+"paul-dickov",
+"Paul Dickov",
+"36 goals"
+],
+[
+6,
+"john-spencer",
+"John Spencer",
+"36 goals"
+],
+[
+8,
+"charlie-adam",
+"Charlie Adam",
+"33 goals"
+],
+[
+9,
+"james-morrison",
+"James Morrison",
+"32 goals"
+],
+[
+10,
+"robert-snodgrass",
+"Robert Snodgrass",
+"26 goals"
+]
+]
+},
+{
 "id": "pl-goals-gb-wls",
 "q": "Most Premier League goals by a Welsh player",
 "d": 3,
@@ -982,6 +1085,150 @@
 "harry-wilson",
 "Harry Wilson",
 "29 goals"
+]
+]
+},
+{
+"id": "pl-goals-ie",
+"q": "Most Premier League goals by an Irish player",
+"d": 3,
+"asof": "Nov 2026",
+"src": "premierleague.com stats",
+"e": [
+[
+1,
+"robbie-keane",
+"Robbie Keane",
+"126 goals"
+],
+[
+2,
+"niall-quinn",
+"Niall Quinn",
+"59 goals"
+],
+[
+3,
+"shane-long",
+"Shane Long",
+"56 goals"
+],
+[
+4,
+"damien-duff",
+"Damien Duff",
+"54 goals"
+],
+[
+5,
+"jonathan-walters",
+"Jonathan Walters",
+"43 goals"
+],
+[
+6,
+"roy-keane",
+"Roy Keane",
+"39 goals"
+],
+[
+7,
+"kevin-doyle",
+"Kevin Doyle",
+"37 goals"
+],
+[
+8,
+"ian-harte",
+"Ian Harte",
+"28 goals"
+],
+[
+9,
+"rory-delap",
+"Rory Delap",
+"23 goals"
+],
+[
+10,
+"seamus-coleman",
+"Séamus Coleman",
+"22 goals"
+]
+]
+},
+{
+"id": "pl-goals-gb-nir",
+"q": "Most Premier League goals by a Northern Irish player",
+"d": 3,
+"asof": "Nov 2026",
+"src": "premierleague.com stats",
+"e": [
+[
+1,
+"iain-dowie",
+"Iain Dowie",
+"33 goals"
+],
+[
+2,
+"chris-brunt",
+"Chris Brunt",
+"24 goals"
+],
+[
+3,
+"steven-davis",
+"Steven Davis",
+"17 goals"
+],
+[
+3,
+"keith-gillespie",
+"Keith Gillespie",
+"17 goals"
+],
+[
+5,
+"michael-hughes",
+"Michael Hughes",
+"15 goals"
+],
+[
+5,
+"jim-magilton",
+"Jim Magilton",
+"15 goals"
+],
+[
+5,
+"gareth-mcauley",
+"Gareth McAuley",
+"15 goals"
+],
+[
+8,
+"jonny-evans",
+"Jonny Evans",
+"14 goals"
+],
+[
+8,
+"steve-lomas",
+"Steve Lomas",
+"14 goals"
+],
+[
+10,
+"stuart-dallas",
+"Stuart Dallas",
+"9 goals",
+[
+[
+"gerry-taggart",
+"Gerry Taggart"
+]
+]
 ]
 ]
 },
@@ -1189,6 +1436,154 @@
 "chris-sutton",
 "Chris Sutton",
 "81 goals"
+]
+]
+},
+{
+"id": "pl-assist-1990s",
+"q": "Most Premier League assists in the 1990s (1992–2000)",
+"d": 3,
+"asof": "Nov 2026",
+"src": "premierleague.com stats",
+"e": [
+[
+1,
+"matt-le-tissier",
+"Matt Le Tissier",
+"63 assists"
+],
+[
+2,
+"ryan-giggs",
+"Ryan Giggs",
+"61 assists"
+],
+[
+3,
+"steve-mcmanaman",
+"Steve McManaman",
+"58 assists"
+],
+[
+4,
+"eric-cantona",
+"Eric Cantona",
+"56 assists"
+],
+[
+4,
+"teddy-sheringham",
+"Teddy Sheringham",
+"56 assists"
+],
+[
+6,
+"david-beckham",
+"David Beckham",
+"52 assists"
+],
+[
+7,
+"dennis-bergkamp",
+"Dennis Bergkamp",
+"50 assists"
+],
+[
+8,
+"darren-anderton",
+"Darren Anderton",
+"49 assists"
+],
+[
+9,
+"alan-shearer",
+"Alan Shearer",
+"46 assists"
+],
+[
+10,
+"nick-barmby",
+"Nick Barmby",
+"44 assists",
+[
+[
+"ruel-fox",
+"Ruel Fox"
+],
+[
+"stuart-ripley",
+"Stuart Ripley"
+]
+]
+]
+]
+},
+{
+"id": "pl-appearances-1990s",
+"q": "Most Premier League appearances in the 1990s (1992–2000)",
+"d": 3,
+"asof": "Nov 2026",
+"src": "premierleague.com stats",
+"e": [
+[
+1,
+"peter-atherton",
+"Peter Atherton",
+"293 apps"
+],
+[
+2,
+"gary-speed",
+"Gary Speed",
+"288 apps"
+],
+[
+3,
+"tim-sherwood",
+"Tim Sherwood",
+"276 apps"
+],
+[
+4,
+"gary-mcallister",
+"Gary McAllister",
+"270 apps"
+],
+[
+4,
+"nigel-winterburn",
+"Nigel Winterburn",
+"270 apps"
+],
+[
+6,
+"mark-hughes",
+"Mark Hughes",
+"267 apps"
+],
+[
+7,
+"des-walker",
+"Des Walker",
+"264 apps"
+],
+[
+8,
+"lee-dixon",
+"Lee Dixon",
+"263 apps"
+],
+[
+8,
+"denis-irwin",
+"Denis Irwin",
+"263 apps"
+],
+[
+10,
+"tim-flowers",
+"Tim Flowers",
+"260 apps"
 ]
 ]
 },
@@ -4244,6 +4639,134 @@
 ]
 },
 {
+"id": "ucl-managers",
+"q": "Most Champions League games as a manager",
+"d": 3,
+"asof": "Nov 2026",
+"src": "UEFA Champions League records and statistics",
+"e": [
+[
+1,
+"carlo-ancelotti",
+"Carlo Ancelotti"
+],
+[
+2,
+"alex-ferguson",
+"Alex Ferguson"
+],
+[
+3,
+"pep-guardiola",
+"Pep Guardiola"
+],
+[
+4,
+"arsene-wenger",
+"Arsène Wenger"
+],
+[
+5,
+"jose-mourinho",
+"José Mourinho"
+],
+[
+6,
+"diego-simeone",
+"Diego Simeone"
+],
+[
+7,
+"mircea-lucescu",
+"Mircea Lucescu"
+],
+[
+8,
+"massimiliano-allegri",
+"Massimiliano Allegri"
+],
+[
+9,
+"jurgen-klopp",
+"Jürgen Klopp"
+],
+[
+10,
+"ottmar-hitzfeld",
+"Ottmar Hitzfeld"
+]
+]
+},
+{
+"id": "pl-managers",
+"q": "Most Premier League games as a manager",
+"d": 2,
+"asof": "Nov 2026",
+"src": "List of Premier League managers",
+"e": [
+[
+1,
+"arsene-wenger",
+"Arsène Wenger",
+"828 games"
+],
+[
+2,
+"alex-ferguson",
+"Alex Ferguson",
+"810 games"
+],
+[
+3,
+"david-moyes",
+"David Moyes",
+"759 games"
+],
+[
+4,
+"harry-redknapp",
+"Harry Redknapp",
+"641 games"
+],
+[
+5,
+"sam-allardyce",
+"Sam Allardyce",
+"541 games"
+],
+[
+6,
+"steve-bruce",
+"Steve Bruce",
+"476 games"
+],
+[
+7,
+"mark-hughes",
+"Mark Hughes",
+"466 games"
+],
+[
+8,
+"roy-hodgson",
+"Roy Hodgson",
+"416 games"
+],
+[
+9,
+"pep-guardiola",
+"Pep Guardiola",
+"380 games"
+],
+[
+10,
+"eddie-howe",
+"Eddie Howe",
+"369 games"
+]
+]
+},
+{
 "id": "pl-titles",
 "q": "Most Premier League titles as a player",
 "d": 2,
@@ -4507,6 +5030,75 @@
 ]
 },
 {
+"id": "sco-goals",
+"q": "Scotland's all-time top scorers",
+"d": 2,
+"asof": "Nov 2026",
+"src": "Scotland national football team records and statistics",
+"e": [
+[
+1,
+"denis-law",
+"Denis Law",
+"30 goals"
+],
+[
+1,
+"kenny-dalglish",
+"Kenny Dalglish",
+"30 goals"
+],
+[
+3,
+"hughie-gallacher",
+"Hughie Gallacher",
+"24 goals"
+],
+[
+4,
+"lawrie-reilly",
+"Lawrie Reilly",
+"22 goals"
+],
+[
+4,
+"john-mcginn",
+"John McGinn",
+"22 goals"
+],
+[
+6,
+"ally-mccoist",
+"Ally McCoist",
+"19 goals"
+],
+[
+7,
+"kenny-miller",
+"Kenny Miller",
+"18 goals"
+],
+[
+8,
+"robert-hamilton",
+"Robert Hamilton",
+"15 goals"
+],
+[
+8,
+"james-mcfadden",
+"James McFadden",
+"15 goals"
+],
+[
+8,
+"scott-mctominay",
+"Scott McTominay",
+"15 goals"
+]
+]
+},
+{
 "id": "wal-caps",
 "q": "Most Wales caps",
 "d": 2,
@@ -4726,6 +5318,124 @@
 ]
 },
 {
+"id": "nir-goals",
+"q": "Northern Ireland's all-time top scorers",
+"d": 3,
+"asof": "Nov 2026",
+"src": "Northern Ireland national football team records and statistics",
+"e": [
+[
+1,
+"david-healy",
+"David Healy"
+],
+[
+2,
+"kyle-lafferty",
+"Kyle Lafferty"
+],
+[
+3,
+"billy-gillespie",
+"Billy Gillespie"
+],
+[
+3,
+"colin-clarke",
+"Colin Clarke"
+],
+[
+3,
+"steven-davis",
+"Steven Davis"
+],
+[
+6,
+"joe-bambrick",
+"Joe Bambrick"
+],
+[
+6,
+"gerry-armstrong",
+"Gerry Armstrong"
+],
+[
+6,
+"jimmy-quinn",
+"Jimmy Quinn"
+],
+[
+6,
+"iain-dowie",
+"Iain Dowie"
+],
+[
+6,
+"josh-magennis",
+"Josh Magennis"
+]
+]
+},
+{
+"id": "man-derby-goals",
+"q": "Most goals in the Manchester derby",
+"d": 3,
+"asof": "Nov 2026",
+"src": "Manchester derby",
+"e": [
+[
+1,
+"wayne-rooney",
+"Wayne Rooney"
+],
+[
+2,
+"joe-hayes",
+"Joe Hayes"
+],
+[
+3,
+"francis-lee",
+"Francis Lee"
+],
+[
+4,
+"sergio-aguero",
+"Sergio Agüero"
+],
+[
+5,
+"bobby-charlton",
+"Bobby Charlton"
+],
+[
+6,
+"erling-haaland",
+"Erling Haaland"
+],
+[
+7,
+"colin-bell",
+"Colin Bell"
+],
+[
+8,
+"eric-cantona",
+"Eric Cantona"
+],
+[
+9,
+"brian-kidd",
+"Brian Kidd"
+],
+[
+10,
+"joe-spence",
+"Joe Spence"
+]
+]
+},
+{
 "id": "nld-goals",
 "q": "Most goals in the North London derby (Premier League era)",
 "d": 2,
@@ -4813,6 +5523,65 @@
 ]
 },
 {
+"id": "mersey-goals",
+"q": "Most goals in the Merseyside derby",
+"d": 3,
+"asof": "Nov 2026",
+"src": "Merseyside derby",
+"e": [
+[
+1,
+"ian-rush",
+"Ian Rush"
+],
+[
+2,
+"dixie-dean",
+"Dixie Dean"
+],
+[
+3,
+"alex-young-1880",
+"Alex Young"
+],
+[
+4,
+"steven-gerrard",
+"Steven Gerrard"
+],
+[
+5,
+"mohamed-salah",
+"Mohamed Salah"
+],
+[
+6,
+"harry-chambers",
+"Harry Chambers"
+],
+[
+7,
+"jimmy-settle",
+"Jimmy Settle"
+],
+[
+8,
+"jack-parkinson",
+"Jack Parkinson"
+],
+[
+9,
+"peter-beardsley",
+"Peter Beardsley"
+],
+[
+10,
+"graeme-sharp",
+"Graeme Sharp"
+]
+]
+},
+{
 "id": "clasico-goals",
 "q": "Most goals in El Clásico",
 "d": 2,
@@ -4882,6 +5651,85 @@
 ]
 },
 {
+"id": "milan-derby-goals",
+"q": "Most goals in the Milan derby",
+"d": 3,
+"asof": "Nov 2026",
+"src": "Derby della Madonnina",
+"e": [
+[
+1,
+"andriy-shevchenko",
+"Andriy Shevchenko",
+"14 goals"
+],
+[
+2,
+"giuseppe-meazza",
+"Giuseppe Meazza",
+"13 goals"
+],
+[
+3,
+"gunnar-nordahl",
+"Gunnar Nordahl",
+"11 goals"
+],
+[
+3,
+"istvan-nyers",
+"István Nyers",
+"11 goals"
+],
+[
+5,
+"zlatan-ibrahimovic",
+"Zlatan Ibrahimović",
+"10 goals"
+],
+[
+5,
+"enrico-candiani",
+"Enrico Candiani",
+"10 goals"
+],
+[
+7,
+"lautaro-martinez",
+"Lautaro Martínez",
+"9 goals"
+],
+[
+8,
+"benito-lorenzi",
+"Benito Lorenzi",
+"8 goals"
+],
+[
+9,
+"jose-altafini",
+"José Altafini",
+"7 goals"
+],
+[
+9,
+"alessandro-altobelli",
+"Alessandro Altobelli",
+"7 goals",
+[
+[
+"roberto-boninsegna",
+"Roberto Boninsegna"
+],
+[
+"louis-van-hege",
+"Louis Van Hege"
+]
+]
+]
+]
+},
+{
 "id": "world-transfers",
 "q": "The 10 most expensive transfers ever (a player's biggest)",
 "d": 1,
@@ -4947,6 +5795,122 @@
 "antoine-griezmann",
 "Antoine Griezmann",
 "€120m"
+]
+]
+},
+{
+"id": "ballon-dor-1990",
+"q": "1990 Ballon d'Or: the top 10",
+"d": 3,
+"src": "1990 Ballon d'Or",
+"e": [
+[
+1,
+"lothar-matthaus",
+"Lothar Matthäus"
+],
+[
+2,
+"salvatore-schillaci",
+"Salvatore Schillaci"
+],
+[
+3,
+"andreas-brehme",
+"Andreas Brehme"
+],
+[
+4,
+"paul-gascoigne",
+"Paul Gascoigne"
+],
+[
+5,
+"franco-baresi",
+"Franco Baresi"
+],
+[
+6,
+"enzo-scifo",
+"Enzo Scifo"
+],
+[
+6,
+"jurgen-klinsmann",
+"Jürgen Klinsmann"
+],
+[
+8,
+"roberto-baggio",
+"Roberto Baggio"
+],
+[
+9,
+"frank-rijkaard",
+"Frank Rijkaard"
+],
+[
+10,
+"guido-buchwald",
+"Guido Buchwald"
+]
+]
+},
+{
+"id": "ballon-dor-1991",
+"q": "1991 Ballon d'Or: the top 10",
+"d": 3,
+"src": "1991 Ballon d'Or",
+"e": [
+[
+1,
+"jean-pierre-papin",
+"Jean-Pierre Papin"
+],
+[
+2,
+"dejan-savicevic",
+"Dejan Savićević"
+],
+[
+2,
+"darko-pancev",
+"Darko Pančev"
+],
+[
+2,
+"lothar-matthaus",
+"Lothar Matthäus"
+],
+[
+5,
+"robert-prosinecki",
+"Robert Prosinečki"
+],
+[
+6,
+"gary-lineker",
+"Gary Lineker"
+],
+[
+7,
+"gianluca-vialli",
+"Gianluca Vialli"
+],
+[
+8,
+"miodrag-belodedici",
+"Miodrag Belodedici"
+],
+[
+9,
+"mark-hughes",
+"Mark Hughes"
+],
+[
+10,
+"chris-waddle",
+"Chris Waddle"
 ]
 ]
 },
@@ -5367,6 +6331,64 @@
 10,
 "marcel-desailly",
 "Marcel Desailly"
+]
+]
+},
+{
+"id": "ballon-dor-1999",
+"q": "1999 Ballon d'Or: the top 10",
+"d": 3,
+"src": "1999 Ballon d'Or",
+"e": [
+[
+1,
+"rivaldo",
+"Rivaldo"
+],
+[
+2,
+"david-beckham",
+"David Beckham"
+],
+[
+3,
+"andriy-shevchenko",
+"Andriy Shevchenko"
+],
+[
+4,
+"gabriel-batistuta",
+"Gabriel Batistuta"
+],
+[
+5,
+"luis-figo",
+"Luís Figo"
+],
+[
+6,
+"roy-keane",
+"Roy Keane"
+],
+[
+7,
+"christian-vieri",
+"Christian Vieri"
+],
+[
+8,
+"juan-sebastian-veron",
+"Juan Sebastián Verón"
+],
+[
+9,
+"raul",
+"Raúl"
+],
+[
+10,
+"lothar-matthaus",
+"Lothar Matthäus"
 ]
 ]
 },
@@ -6487,6 +7509,152 @@
 ]
 },
 {
+"id": "pl-1992",
+"q": "Top scorers in the 1992–93 Premier League",
+"d": 3,
+"src": "1992–93 FA Premier League",
+"e": [
+[
+1,
+"teddy-sheringham",
+"Teddy Sheringham",
+"22 goals"
+],
+[
+2,
+"les-ferdinand",
+"Les Ferdinand",
+"20 goals"
+],
+[
+3,
+"dean-holdsworth",
+"Dean Holdsworth",
+"19 goals"
+],
+[
+4,
+"micky-quinn",
+"Micky Quinn",
+"17 goals"
+],
+[
+5,
+"alan-shearer",
+"Alan Shearer",
+"16 goals"
+],
+[
+5,
+"david-white",
+"David White",
+"16 goals"
+],
+[
+7,
+"chris-armstrong",
+"Chris Armstrong",
+"15 goals"
+],
+[
+7,
+"eric-cantona",
+"Eric Cantona",
+"15 goals"
+],
+[
+7,
+"brian-deane",
+"Brian Deane",
+"15 goals"
+],
+[
+7,
+"mark-hughes",
+"Mark Hughes",
+"15 goals",
+[
+[
+"matt-le-tissier",
+"Matt Le Tissier"
+],
+[
+"ian-wright",
+"Ian Wright"
+]
+]
+]
+]
+},
+{
+"id": "pl-1993",
+"q": "Top scorers in the 1993–94 Premier League",
+"d": 3,
+"src": "1993–94 FA Premier League",
+"e": [
+[
+1,
+"andy-cole",
+"Andy Cole",
+"34 goals"
+],
+[
+2,
+"alan-shearer",
+"Alan Shearer",
+"31 goals"
+],
+[
+3,
+"matt-le-tissier",
+"Matt Le Tissier",
+"25 goals"
+],
+[
+3,
+"chris-sutton",
+"Chris Sutton",
+"25 goals"
+],
+[
+5,
+"ian-wright",
+"Ian Wright",
+"23 goals"
+],
+[
+6,
+"peter-beardsley",
+"Peter Beardsley",
+"21 goals"
+],
+[
+7,
+"mark-bright",
+"Mark Bright",
+"19 goals"
+],
+[
+8,
+"eric-cantona",
+"Eric Cantona",
+"18 goals"
+],
+[
+9,
+"dean-holdsworth",
+"Dean Holdsworth",
+"17 goals"
+],
+[
+9,
+"rod-wallace",
+"Rod Wallace",
+"17 goals"
+]
+]
+},
+{
 "id": "pl-1994",
 "q": "Top scorers in the 1994–95 Premier League",
 "d": 3,
@@ -6541,6 +7709,434 @@
 10,
 "uwe-rosler",
 "Uwe Rösler"
+]
+]
+},
+{
+"id": "pl-1995",
+"q": "Top scorers in the 1995–96 Premier League",
+"d": 3,
+"src": "1995–96 FA Premier League",
+"e": [
+[
+1,
+"alan-shearer",
+"Alan Shearer",
+"31 goals"
+],
+[
+2,
+"robbie-fowler",
+"Robbie Fowler",
+"28 goals"
+],
+[
+3,
+"les-ferdinand",
+"Les Ferdinand",
+"25 goals"
+],
+[
+4,
+"dwight-yorke",
+"Dwight Yorke",
+"17 goals"
+],
+[
+5,
+"teddy-sheringham",
+"Teddy Sheringham",
+"16 goals"
+],
+[
+6,
+"chris-armstrong",
+"Chris Armstrong",
+"15 goals"
+],
+[
+6,
+"andrei-kanchelskis",
+"Andrei Kanchelskis",
+"15 goals"
+],
+[
+6,
+"ian-wright",
+"Ian Wright",
+"15 goals"
+],
+[
+9,
+"eric-cantona",
+"Eric Cantona",
+"14 goals"
+],
+[
+9,
+"stan-collymore",
+"Stan Collymore",
+"14 goals",
+[
+[
+"dion-dublin",
+"Dion Dublin"
+]
+]
+]
+]
+},
+{
+"id": "pl-1996",
+"q": "Top scorers in the 1996–97 Premier League",
+"d": 3,
+"src": "1996–97 FA Premier League",
+"e": [
+[
+1,
+"alan-shearer",
+"Alan Shearer",
+"25 goals"
+],
+[
+2,
+"ian-wright",
+"Ian Wright",
+"23 goals"
+],
+[
+3,
+"robbie-fowler",
+"Robbie Fowler",
+"18 goals"
+],
+[
+3,
+"ole-gunnar-solskjaer",
+"Ole Gunnar Solskjær",
+"18 goals"
+],
+[
+5,
+"dwight-yorke",
+"Dwight Yorke",
+"17 goals"
+],
+[
+6,
+"les-ferdinand",
+"Les Ferdinand",
+"16 goals"
+],
+[
+6,
+"fabrizio-ravanelli",
+"Fabrizio Ravanelli",
+"16 goals"
+],
+[
+8,
+"dion-dublin",
+"Dion Dublin",
+"13 goals"
+],
+[
+8,
+"matt-le-tissier",
+"Matt Le Tissier",
+"13 goals"
+],
+[
+10,
+"dennis-bergkamp",
+"Dennis Bergkamp",
+"12 goals",
+[
+[
+"steve-claridge",
+"Steve Claridge"
+],
+[
+"stan-collymore",
+"Stan Collymore"
+],
+[
+"juninho-paulista",
+"Juninho Paulista"
+]
+]
+]
+]
+},
+{
+"id": "pl-1997",
+"q": "Top scorers in the 1997–98 Premier League",
+"d": 3,
+"src": "1997–98 FA Premier League",
+"e": [
+[
+1,
+"dion-dublin",
+"Dion Dublin",
+"18 goals"
+],
+[
+1,
+"michael-owen",
+"Michael Owen",
+"18 goals"
+],
+[
+1,
+"chris-sutton",
+"Chris Sutton",
+"18 goals"
+],
+[
+4,
+"dennis-bergkamp",
+"Dennis Bergkamp",
+"16 goals"
+],
+[
+4,
+"kevin-gallacher",
+"Kevin Gallacher",
+"16 goals"
+],
+[
+4,
+"jimmy-floyd-hasselbaink",
+"Jimmy Floyd Hasselbaink",
+"16 goals"
+],
+[
+7,
+"andy-cole",
+"Andy Cole",
+"15 goals"
+],
+[
+7,
+"john-hartson",
+"John Hartson",
+"15 goals"
+],
+[
+9,
+"darren-huckerby",
+"Darren Huckerby",
+"14 goals"
+],
+[
+10,
+"paulo-wanchope",
+"Paulo Wanchope",
+"13 goals"
+]
+]
+},
+{
+"id": "pl-1998",
+"q": "Top scorers in the 1998–99 Premier League",
+"d": 3,
+"src": "1998–99 FA Premier League",
+"e": [
+[
+1,
+"jimmy-floyd-hasselbaink",
+"Jimmy Floyd Hasselbaink",
+"18 goals"
+],
+[
+1,
+"michael-owen",
+"Michael Owen",
+"18 goals"
+],
+[
+1,
+"dwight-yorke",
+"Dwight Yorke",
+"18 goals"
+],
+[
+4,
+"nicolas-anelka",
+"Nicolas Anelka",
+"17 goals"
+],
+[
+4,
+"andy-cole",
+"Andy Cole",
+"17 goals"
+],
+[
+6,
+"hamilton-ricard",
+"Hámilton Ricard",
+"15 goals"
+],
+[
+7,
+"dion-dublin",
+"Dion Dublin",
+"14 goals"
+],
+[
+7,
+"robbie-fowler",
+"Robbie Fowler",
+"14 goals"
+],
+[
+7,
+"julian-joachim",
+"Julian Joachim",
+"14 goals"
+],
+[
+7,
+"alan-shearer",
+"Alan Shearer",
+"14 goals"
+]
+]
+},
+{
+"id": "pl-1999",
+"q": "Top scorers in the 1999–00 Premier League",
+"d": 3,
+"src": "1999–00 FA Premier League",
+"e": [
+[
+1,
+"kevin-phillips",
+"Kevin Phillips",
+"30 goals"
+],
+[
+2,
+"alan-shearer",
+"Alan Shearer",
+"23 goals"
+],
+[
+3,
+"dwight-yorke",
+"Dwight Yorke",
+"20 goals"
+],
+[
+4,
+"michael-bridges",
+"Michael Bridges",
+"19 goals"
+],
+[
+4,
+"andy-cole",
+"Andy Cole",
+"19 goals"
+],
+[
+6,
+"thierry-henry",
+"Thierry Henry",
+"17 goals"
+],
+[
+7,
+"paolo-di-canio",
+"Paolo Di Canio",
+"16 goals"
+],
+[
+8,
+"chris-armstrong",
+"Chris Armstrong",
+"14 goals"
+],
+[
+8,
+"steffen-iversen",
+"Steffen Iversen",
+"14 goals"
+],
+[
+8,
+"niall-quinn",
+"Niall Quinn",
+"14 goals"
+]
+]
+},
+{
+"id": "pl-2000",
+"q": "Top scorers in the 2000–01 Premier League",
+"d": 3,
+"src": "2000–01 FA Premier League",
+"e": [
+[
+1,
+"jimmy-floyd-hasselbaink",
+"Jimmy Floyd Hasselbaink",
+"23 goals"
+],
+[
+2,
+"marcus-stewart",
+"Marcus Stewart",
+"19 goals"
+],
+[
+3,
+"thierry-henry",
+"Thierry Henry",
+"17 goals"
+],
+[
+3,
+"mark-viduka",
+"Mark Viduka",
+"17 goals"
+],
+[
+5,
+"michael-owen",
+"Michael Owen",
+"16 goals"
+],
+[
+6,
+"teddy-sheringham",
+"Teddy Sheringham",
+"15 goals"
+],
+[
+7,
+"emile-heskey",
+"Emile Heskey",
+"14 goals"
+],
+[
+7,
+"kevin-phillips",
+"Kevin Phillips",
+"14 goals"
+],
+[
+9,
+"alen-boksic",
+"Alen Bokšić",
+"12 goals"
+],
+[
+10,
+"jonatan-johansson",
+"Jonatan Johansson",
+"11 goals"
 ]
 ]
 },
@@ -8297,6 +9893,636 @@
 ]
 },
 {
+"id": "pl-2025",
+"q": "Top scorers in the 2025–26 Premier League",
+"d": 2,
+"src": "2025–26 Premier League",
+"e": [
+[
+1,
+"erling-haaland",
+"Erling Haaland",
+"27 goals"
+],
+[
+2,
+"igor-thiago",
+"Igor Thiago",
+"22 goals"
+],
+[
+3,
+"antoine-semenyo",
+"Antoine Semenyo",
+"17 goals"
+],
+[
+4,
+"ollie-watkins",
+"Ollie Watkins",
+"16 goals"
+],
+[
+5,
+"morgan-gibbs-white",
+"Morgan Gibbs-White",
+"15 goals"
+],
+[
+5,
+"joao-pedro",
+"João Pedro",
+"15 goals"
+],
+[
+7,
+"dominic-calvert-lewin",
+"Dominic Calvert-Lewin",
+"14 goals"
+],
+[
+7,
+"viktor-gyokeres",
+"Viktor Gyökeres",
+"14 goals"
+],
+[
+9,
+"eli-junior-kroupi",
+"Eli Junior Kroupi",
+"13 goals"
+],
+[
+9,
+"danny-welbeck",
+"Danny Welbeck",
+"13 goals"
+]
+]
+},
+{
+"id": "ucl-1992",
+"q": "Top scorers in the 1992–93 Champions League",
+"d": 3,
+"src": "1992–93 UEFA Champions League",
+"e": [
+[
+1,
+"romario",
+"Romário",
+"7 goals"
+],
+[
+2,
+"marco-van-basten",
+"Marco van Basten",
+"6 goals"
+],
+[
+2,
+"franck-sauzee",
+"Franck Sauzée",
+"6 goals"
+],
+[
+2,
+"alen-boksic",
+"Alen Bokšić",
+"6 goals"
+],
+[
+5,
+"johnny-ekstrom",
+"Johnny Ekström",
+"5 goals"
+],
+[
+6,
+"marco-simone",
+"Marco Simone",
+"4 goals"
+],
+[
+6,
+"gert-verheyen",
+"Gert Verheyen",
+"4 goals"
+],
+[
+6,
+"ze-carlos-1965",
+"Zé Carlos",
+"4 goals"
+],
+[
+6,
+"emil-kostadinov",
+"Emil Kostadinov",
+"4 goals"
+],
+[
+6,
+"tulio-maravilha",
+"Túlio Maravilha",
+"4 goals"
+]
+]
+},
+{
+"id": "ucl-1993",
+"q": "Top scorers in the 1993–94 Champions League",
+"d": 3,
+"src": "1993–94 UEFA Champions League",
+"e": [
+[
+1,
+"ronald-koeman",
+"Ronald Koeman",
+"8 goals"
+],
+[
+1,
+"wynton-rufer",
+"Wynton Rufer",
+"8 goals"
+],
+[
+3,
+"luc-nilis",
+"Luc Nilis",
+"7 goals"
+],
+[
+3,
+"hristo-stoichkov",
+"Hristo Stoichkov",
+"7 goals"
+],
+[
+5,
+"bernd-hobsch",
+"Bernd Hobsch",
+"5 goals"
+],
+[
+5,
+"valeri-karpin",
+"Valeri Karpin",
+"5 goals"
+],
+[
+7,
+"marco-bode",
+"Marco Bode",
+"4 goals"
+],
+[
+7,
+"jurgen-klinsmann",
+"Jürgen Klinsmann",
+"4 goals"
+],
+[
+7,
+"daniele-massaro",
+"Daniele Massaro",
+"4 goals"
+],
+[
+7,
+"viktor-onopko",
+"Viktor Onopko",
+"4 goals",
+[
+[
+"jean-pierre-papin",
+"Jean-Pierre Papin"
+],
+[
+"nikolai-pisarev",
+"Nikolai Pisarev"
+],
+[
+"sergey-rodionov",
+"Sergey Rodionov"
+],
+[
+"kubilay-turkyilmaz",
+"Kubilay Türkyılmaz"
+]
+]
+]
+]
+},
+{
+"id": "ucl-1994",
+"q": "Top scorers in the 1994–95 Champions League",
+"d": 3,
+"src": "1994–95 UEFA Champions League",
+"e": [
+[
+1,
+"george-weah",
+"George Weah",
+"7 goals"
+],
+[
+2,
+"jari-litmanen",
+"Jari Litmanen",
+"6 goals"
+],
+[
+3,
+"magnus-erlingmark",
+"Magnus Erlingmark",
+"4 goals"
+],
+[
+3,
+"marco-simone",
+"Marco Simone",
+"4 goals"
+],
+[
+5,
+"jose-mari-bakero",
+"José Mari Bakero",
+"3 goals"
+],
+[
+5,
+"romario",
+"Romário",
+"3 goals"
+],
+[
+5,
+"hristo-stoichkov",
+"Hristo Stoichkov",
+"3 goals"
+],
+[
+5,
+"claudio-caniggia",
+"Claudio Caniggia",
+"3 goals"
+],
+[
+5,
+"christian-nerlinger",
+"Christian Nerlinger",
+"3 goals"
+],
+[
+5,
+"mehmet-scholl",
+"Mehmet Scholl",
+"3 goals",
+[
+[
+"viktor-leonenko",
+"Viktor Leonenko"
+]
+]
+]
+]
+},
+{
+"id": "ucl-1995",
+"q": "Top scorers in the 1995–96 Champions League",
+"d": 3,
+"src": "1995–96 UEFA Champions League",
+"e": [
+[
+1,
+"jari-litmanen",
+"Jari Litmanen",
+"9 goals"
+],
+[
+2,
+"alessandro-del-piero",
+"Alessandro Del Piero",
+"6 goals"
+],
+[
+2,
+"raul",
+"Raúl",
+"6 goals"
+],
+[
+2,
+"krzysztof-warzycha",
+"Krzysztof Warzycha",
+"6 goals"
+],
+[
+5,
+"patrick-kluivert",
+"Patrick Kluivert",
+"5 goals"
+],
+[
+5,
+"yuriy-nikiforov",
+"Yuriy Nikiforov",
+"5 goals"
+],
+[
+5,
+"nicolas-ouedec",
+"Nicolas Ouédec",
+"5 goals"
+],
+[
+5,
+"fabrizio-ravanelli",
+"Fabrizio Ravanelli",
+"5 goals"
+],
+[
+9,
+"mike-newell",
+"Mike Newell",
+"4 goals"
+],
+[
+9,
+"ivan-zamorano",
+"Iván Zamorano",
+"4 goals"
+]
+]
+},
+{
+"id": "ucl-1996",
+"q": "Top scorers in the 1996–97 Champions League",
+"d": 3,
+"src": "1996–97 UEFA Champions League",
+"e": [
+[
+1,
+"milinko-pantic",
+"Milinko Pantić",
+"5 goals"
+],
+[
+2,
+"nicola-amoruso",
+"Nicola Amoruso",
+"4 goals"
+],
+[
+2,
+"artur-duarte-de-oliveira",
+"Artur Duarte de Oliveira",
+"4 goals"
+],
+[
+2,
+"alen-boksic",
+"Alen Bokšić",
+"4 goals"
+],
+[
+2,
+"alessandro-del-piero",
+"Alessandro Del Piero",
+"4 goals"
+],
+[
+2,
+"mario-jardel",
+"Mário Jardel",
+"4 goals"
+],
+[
+2,
+"lars-ricken",
+"Lars Ricken",
+"4 goals"
+],
+[
+2,
+"karl-heinz-riedle",
+"Karl-Heinz Riedle",
+"4 goals"
+],
+[
+2,
+"marco-simone",
+"Marco Simone",
+"4 goals"
+],
+[
+2,
+"christian-vieri",
+"Christian Vieri",
+"4 goals",
+[
+[
+"diego-simeone",
+"Diego Simeone"
+]
+]
+]
+]
+},
+{
+"id": "ucl-1997",
+"q": "Top scorers in the 1997–98 Champions League",
+"d": 3,
+"src": "1997–98 UEFA Champions League",
+"e": [
+[
+1,
+"alessandro-del-piero",
+"Alessandro Del Piero",
+"10 goals"
+],
+[
+2,
+"thierry-henry",
+"Thierry Henry",
+"7 goals"
+],
+[
+3,
+"filippo-inzaghi",
+"Filippo Inzaghi",
+"6 goals"
+],
+[
+3,
+"serhii-rebrov",
+"Serhii Rebrov",
+"6 goals"
+],
+[
+5,
+"andy-cole",
+"Andy Cole",
+"5 goals"
+],
+[
+5,
+"andriy-shevchenko",
+"Andriy Shevchenko",
+"5 goals"
+],
+[
+7,
+"stefan-beinlich",
+"Stefan Beinlich",
+"4 goals"
+],
+[
+7,
+"oktay-derelioglu",
+"Oktay Derelioğlu",
+"4 goals"
+],
+[
+7,
+"emerson",
+"Emerson",
+"4 goals"
+],
+[
+7,
+"victor-ikpeba",
+"Victor Ikpeba",
+"4 goals",
+[
+[
+"carsten-jancker",
+"Carsten Jancker"
+],
+[
+"fernando-morientes",
+"Fernando Morientes"
+],
+[
+"sigurd-rushfeldt",
+"Sigurd Rushfeldt"
+],
+[
+"davor-suker",
+"Davor Šuker"
+],
+[
+"david-trezeguet",
+"David Trezeguet"
+],
+[
+"stephane-chapuisat",
+"Stéphane Chapuisat"
+],
+[
+"harald-brattbakk",
+"Harald Brattbakk"
+],
+[
+"roar-strand",
+"Roar Strand"
+]
+]
+]
+]
+},
+{
+"id": "ucl-1998",
+"q": "Top scorers in the 1998–99 Champions League",
+"d": 3,
+"src": "1998–99 UEFA Champions League",
+"e": [
+[
+1,
+"andriy-shevchenko",
+"Andriy Shevchenko",
+"8 goals"
+],
+[
+1,
+"dwight-yorke",
+"Dwight Yorke",
+"8 goals"
+],
+[
+3,
+"zlatko-zahovic",
+"Zlatko Zahović",
+"7 goals"
+],
+[
+4,
+"filippo-inzaghi",
+"Filippo Inzaghi",
+"6 goals"
+],
+[
+5,
+"ruud-van-nistelrooy",
+"Ruud van Nistelrooy",
+"5 goals"
+],
+[
+5,
+"nuno-gomes",
+"Nuno Gomes",
+"5 goals"
+],
+[
+7,
+"sonny-anderson",
+"Sonny Anderson",
+"4 goals"
+],
+[
+7,
+"mario-basler",
+"Mario Basler",
+"4 goals"
+],
+[
+7,
+"andy-cole",
+"Andy Cole",
+"4 goals"
+],
+[
+7,
+"stefan-effenberg",
+"Stefan Effenberg",
+"4 goals",
+[
+[
+"ryan-giggs",
+"Ryan Giggs"
+],
+[
+"sinisa-gogic",
+"Siniša Gogić"
+],
+[
+"serhii-rebrov",
+"Serhii Rebrov"
+],
+[
+"jurgen-rische",
+"Jürgen Rische"
+],
+[
+"paul-scholes",
+"Paul Scholes"
+]
+]
+]
+]
+},
+{
 "id": "ucl-1999",
 "q": "Top scorers in the 1999–00 Champions League",
 "d": 3,
@@ -8893,6 +11119,88 @@
 [
 "juninho-pernambucano",
 "Juninho Pernambucano"
+]
+]
+]
+]
+},
+{
+"id": "ucl-2006",
+"q": "Top scorers in the 2006–07 Champions League",
+"d": 3,
+"src": "2006–07 UEFA Champions League",
+"e": [
+[
+1,
+"kaka",
+"Kaká",
+"10 goals"
+],
+[
+2,
+"peter-crouch",
+"Peter Crouch",
+"6 goals"
+],
+[
+2,
+"ruud-van-nistelrooy",
+"Ruud van Nistelrooy",
+"6 goals"
+],
+[
+2,
+"fernando-morientes",
+"Fernando Morientes",
+"6 goals"
+],
+[
+2,
+"didier-drogba",
+"Didier Drogba",
+"6 goals"
+],
+[
+6,
+"raul",
+"Raúl",
+"5 goals"
+],
+[
+7,
+"nicolae-dica",
+"Nicolae Dică",
+"4 goals"
+],
+[
+7,
+"louis-saha",
+"Louis Saha",
+"4 goals"
+],
+[
+7,
+"claudio-pizarro",
+"Claudio Pizarro",
+"4 goals"
+],
+[
+7,
+"filippo-inzaghi",
+"Filippo Inzaghi",
+"4 goals",
+[
+[
+"david-villa",
+"David Villa"
+],
+[
+"francesco-totti",
+"Francesco Totti"
+],
+[
+"wayne-rooney",
+"Wayne Rooney"
 ]
 ]
 ]

@@ -129,6 +129,10 @@ def position_code(labels: list[str]) -> str | None:
 # Typos and vandalism in Wikidata labels, by Wikidata id.
 NAME_FIXES = {
     "Q108159340": "Arda Güler",      # Greek capital alpha
+    "Q20645743": "Álvaro Montero",   # vandalised label
+    "Q27990922": "Ayumu Seko",       # stray digits
+    "Q4105046": "Akanni-Sunday Wasiu",
+    "Q2183285": "Mich D'Avray",
     "Q222151": "João Moutinho",      # zero for o
     "Q19116103": "André Onana",
     "Q22082660": "Robert Arboleda",  # zero for o
@@ -333,6 +337,8 @@ def main() -> int:
             stats["spell_new_move_kept"] += 1
 
     # ---- players ----------------------------------------------------------
+    managers = {m["name"].removeprefix("Sir ") for m in
+                json.loads((SEED / "grid_managers.json").read_text(encoding="utf-8"))["managers"]}
     out_players = []
     used_slugs: dict[str, str] = {}
     used_clubs: set[str] = set()
@@ -370,6 +376,12 @@ def main() -> int:
             if pid in used_slugs:
                 pid = f"{slug(name)}-{p['id'].lower()}"
         used_slugs[pid] = p["id"]
+        # Famous as managers, not players (Wenger at Strasbourg, Mourinho at
+        # Rio Ave): their Wikipedia pages say nothing about their playing
+        # days, so an uncapped one counts as little known.
+        fame = player_fame(p.get("sitelinks", 0), women)
+        if name in managers and p["id"] not in capped:
+            fame = min(fame, 2)
         stored = next((code for n in p.get("nationalities", []) if (code := country_code(n, countries))), None)
         nat = capped.get(p["id"]) or stored
         stats["nat_from_caps" if p["id"] in capped else "nat_stored" if stored else "nat_none"] += 1
@@ -387,7 +399,7 @@ def main() -> int:
                 club_stats[cid] = [sum(s["apps"] for s in at), sum(s["goals"] for s in at)]
         out_players.append({
             "id": pid, "wikidata": p["id"], "name": name, "nat": nat,
-            "pos": position_code(p.get("positions", [])), "fame": player_fame(p.get("sitelinks", 0), women),
+            "pos": position_code(p.get("positions", [])), "fame": fame,
             "reach": p.get("sitelinks", 0), **({"g": "w"} if women else {}),
             "aliases": aliases,
             "career": [[s["club"], s["start"], s["end"]] + (["loan"] if s["loan"] else []) for s in career],
