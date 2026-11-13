@@ -1,7 +1,7 @@
 # Keeps the game's data current: re-reads the Premier League feed (rankings
 # and every match), the Wikipedia record pages, finds any new players (every
 # Premier League appearance, new signings with a Wikipedia career), then
-# rebuilds the database, the voice vocabulary and Top 10, and commits them
+# rebuilds the database, the voice vocabulary, Top 10 and the teasers, and commits them
 # (which redeploys the browser game). Weekly, and twice a week in the
 # transfer windows (January, June to early September). Or run it by hand.
 #
@@ -50,6 +50,9 @@ jobs:
           bash scripts/ci_run.sh "Database" python3 data_pipeline/build_db.py
           bash scripts/ci_run.sh "Voice vocabulary" python3 data_pipeline/voice_vocab.py
           bash scripts/ci_run.sh "Top 10" python3 data_pipeline/top10_build.py
+      - name: Half-Time Teasers
+        working-directory: data_pipeline
+        run: bash ../scripts/ci_run.sh "Teasers" python3 teasers_build.py
       - name: Commit
         run: |
           git config user.name "quizinho-data-bot"

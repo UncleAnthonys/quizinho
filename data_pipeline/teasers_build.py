@@ -286,6 +286,113 @@ def derby_teasers(players: list[dict], curated: list[dict], shown) -> list[dict]
     return out
 
 
+# Premier League derbies the match data covers in full (every line-up since 1992).
+PL_DERBIES = {
+    "mersey": ("the Merseyside derby", {"Liverpool", "Everton"}),
+    "manc": ("the Manchester derby", {"Manchester United", "Manchester City"}),
+    "nld": ("the North London derby", {"Arsenal", "Tottenham Hotspur"}),
+    "northwest": ("Liverpool v Man United", {"Liverpool", "Manchester United"}),
+    "tynewear": ("the Tyne-Wear derby", {"Newcastle United", "Sunderland"}),
+}
+PL_DERBY_CLUBS = {"Q1130849", "Q5794", "Q18656", "Q50602", "Q9617", "Q18741", "Q18716", "Q18739"}
+
+
+def pl_derby_teasers(players: list[dict], shown, taken: set[frozenset]) -> list[dict]:
+    """Derby combos from every Premier League line-up (raw/pl_matches.json.gz):
+    "Played in the Merseyside derby AND the Manchester derby in the Premier
+    League, AND for Fulham". Starting or coming on counts. Exact by
+    construction: the whole answer set is read off the line-ups, so there's
+    no shortlist to check by hand. Premier League only (said in the question):
+    cup derbies and pre-1992 ones aren't in the data."""
+    import gzip
+    from top10_build import feed_matcher
+    from top10_tables import load
+    path = ROOT / "raw" / "pl_matches.json.gz"
+    if not path.exists():
+        return []
+    _, _, by_qid = load()
+    match = feed_matcher(by_qid)
+    d = json.load(gzip.open(path, "rt", encoding="utf-8"))
+    people = d["people"]
+    ours: dict[str, str | None] = {}
+
+    def who(pid) -> str | None:
+        if pid not in ours:
+            name, birth, _ = people[str(pid)]
+            parts = name.split()
+            p = match({"name": {"display": name, "first": parts[0], "last": " ".join(parts[1:]) or name},
+                       "birth": {"date": {"millis": birth}}})
+            ours[pid] = p["id"] if p else None
+        return ours[pid]
+    # derby -> our player -> [(date, "Everton 1-0 Liverpool")]
+    played: dict[str, dict[str, list[tuple[str, str]]]] = {k: {} for k in PL_DERBIES}
+    unknown: dict[str, set] = {k: set() for k in PL_DERBIES}
+    for m in d["matches"]:
+        names = {t[1] for t in m["teams"]}
+        key = next((k for k, (_, clubs) in PL_DERBIES.items() if names == clubs), None)
+        if key is None:
+            continue
+        on = {e[2] for e in m["events"] if e[0] == "S" and e[1] == "ON"}
+        day = time.strftime("%Y-%m-%d", time.gmtime((m.get("ko") or 0) / 1000))
+        score = f"{m['teams'][0][1]} {m['teams'][0][2]}-{m['teams'][1][2]} {m['teams'][1][1]}"
+        for rows in m["lineups"].values():
+            for pid, _, start in rows:
+                if not (start or pid in on):
+                    continue
+                ours_id = who(pid)
+                if ours_id is None:
+                    unknown[key].add(people[str(pid)][0])
+                    continue
+                played[key].setdefault(ours_id, []).append((day, score))
+    by_id = {p["id"]: p for p in players}
+    clubs_of = {p["id"]: {e[0] for e in p.get("career", [])} for p in players}
+    out, used = [], {}
+
+    def add(q: str, ids: set[str], keys: tuple[str, ...], club: str | None) -> None:
+        if not 1 <= len(ids) <= 6 or frozenset(ids) in taken or any(used.get(i, 0) >= DERBY_CAP for i in ids):
+            return
+        if max(by_id[i]["fame"] for i in ids) < MIN_FAME:
+            return
+        if set.intersection(*(unknown[k] for k in keys)):
+            return  # someone we can't name played in every one of them: maybe an answer
+        taken.add(frozenset(ids))
+        for i in ids:
+            used[i] = used.get(i, 0) + 1
+        years = [int(day[:4]) for k in keys for i in ids for day, _ in played[k][i]]
+        out.append({"kind": "plderby", "q": q, "eras": era_mask(min(years), max(years)), "difficulty": 2,
+                    "answers": sorted(ids, key=lambda i: -by_id[i]["fame"]),
+                    "names": [shown(i) for i in sorted(ids, key=lambda i: -by_id[i]["fame"])],
+                    "proof": {i: [f"{PL_DERBIES[k][0]}: {played[k][i][0][0]} {played[k][i][0][1]}" for k in keys]
+                              for i in ids}})
+    keys = list(PL_DERBIES)
+    # Three derbies, no club shared.
+    for ks in itertools.combinations(keys, 3):
+        if len(set().union(*(PL_DERBIES[k][1] for k in ks))) != 6:
+            continue
+        ids = set.intersection(*(set(played[k]) for k in ks))
+        n = [PL_DERBIES[k][0] for k in ks]
+        add(f"Played in {n[0]}, {n[1]} AND {n[2]} in the Premier League", ids, ks, None)
+    # Two derbies and a club outside them: only clubs everyone knows.
+    band = {c[0]: c[3] for c in json.loads((SEED / "clubs.json").read_text())["clubs"]}
+    big = {qid: club for qid, club in POOL.items() if band.get(qid, 0) >= 4}
+    for ks in itertools.combinations(keys, 2):
+        if len(PL_DERBIES[ks[0]][1] | PL_DERBIES[ks[1]][1]) != 4:
+            continue
+        both = set.intersection(*(set(played[k]) for k in ks))
+        n = [PL_DERBIES[k][0] for k in ks]
+        for qid, club in big.items():
+            if qid in PL_DERBY_CLUBS:
+                continue
+            ids = {i for i in both if qid in clubs_of.get(i, set())}
+            add(f"Played in {n[0]} AND {n[1]} in the Premier League, AND for {club}", ids, ks, qid)
+    # The best of them: well-known answers first, so they don't swamp the bank.
+    out.sort(key=lambda t: -sum(by_id[i]["fame"] for i in t["answers"]) / len(t["answers"]))
+    return out[:PL_DERBY_MAX]
+
+
+PL_DERBY_MAX = 45
+
+
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--offline", action="store_true", help="only the curated teasers (no Wikipedia)")
@@ -312,6 +419,9 @@ def main() -> None:
     derbies = derby_teasers(players, curated, shown)
     out += derbies
     print(f"{len(derbies)} derby teasers from derby_facts.json")
+    pl = pl_derby_teasers(players, shown, {frozenset(t["answers"]) for t in out if t.get("answers")})
+    out += pl
+    print(f"{len(pl)} derby combos from every Premier League line-up")
 
     if not args.offline:
         # "Scored in a Champions League / World Cup final AND played for X".
@@ -468,6 +578,7 @@ def main() -> None:
     random.Random(7).shuffle(out)
     note = (f"Half-Time Teasers: {sum(t['kind'] == 'curated' for t in out)} hand-checked, "
             f"{sum(t['kind'] == 'derby' for t in out)} from checked derby line-ups, "
+            f"{sum(t['kind'] == 'plderby' for t in out)} from every Premier League line-up, "
             f"{sum(t['kind'] == 'final' for t in out)} final-scorer teasers checked against Wikipedia. "
             f"Built {time.strftime('%Y-%m-%d %H:%M UTC', time.gmtime())}.")
     print(note)
@@ -485,7 +596,7 @@ def family(t: dict) -> str:
     q = t["q"]
     if t["kind"] == "final":
         return "final"
-    if t["kind"] == "derby" or q.startswith("Played in"):
+    if t["kind"] in ("derby", "plderby") or q.startswith("Played in"):
         return "derby"
     if q.startswith("Played under") and (" played in " in q):
         return "mixed"
