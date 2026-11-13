@@ -651,14 +651,16 @@ def match_lists(by_qid, winners: set[str] = frozenset()):
     # Coventry's or Charlton's appearance makers, no.
     pl_seasons = collections.Counter(t for y, ts in teams_in.items() for t in ts)
     for team in CLUB_LISTS:
-        if pl_seasons[team] < MIN_CLUB_SEASONS:
+        sid = slug_id(team)
+        picked = {f"pl-club-goals-{sid}", f"pl-club-apps-{sid}"} & set(CLUB_PICKS)
+        if pl_seasons[team] < MIN_CLUB_SEASONS and not picked:
             continue
         short = SHORT.get(team, team)
-        sid = slug_id(team)
-        specs.append((f"pl-club-goals-{sid}", f"{short}'s top Premier League scorers", 2 if team in BIG_SIX else 3,
-                      club_goals[team], n(club_goals[team], "goals"), False))
-        specs.append((f"pl-club-apps-{sid}", f"Most Premier League appearances for {short}", 3,
-                      club_apps[team], n(club_apps[team], "apps"), False))
+        whose = f"{short}'" if short.endswith("s") else f"{short}'s"
+        for lid, q, c, unit in ((f"pl-club-goals-{sid}", f"{whose} top Premier League scorers", club_goals[team], "goals"),
+                                (f"pl-club-apps-{sid}", f"Most Premier League appearances for {short}", club_apps[team], "apps")):
+            if pl_seasons[team] >= MIN_CLUB_SEASONS or lid in CLUB_PICKS:
+                specs.append((lid, q, 3, c, n(c, unit), False))
     for team, c in vs.items():
         short = SHORT.get(team, team)
         specs.append((f"pl-vs-{slug_id(team)}", f"Most Premier League goals against {short}", 2, c, n(c, "goals"), False))
@@ -711,6 +713,15 @@ CATEGORIES = [
      "quirky"),
 ]
 MIN_CLUB_SEASONS = 15  # Premier League seasons a club needs for its own Top 10s
+# Smaller clubs' lists picked by hand, with their level (1 easy - 3 hard).
+CLUB_PICKS = {
+    "pl-club-goals-wolverhampton-wanderers": 2, "pl-club-apps-wolverhampton-wanderers": 2,
+    "pl-club-goals-stoke-city": 2, "pl-club-apps-stoke-city": 3,
+    "pl-club-goals-brighton-hove-albion": 2, "pl-club-apps-brighton-hove-albion": 2,
+    "pl-club-goals-burnley": 3, "pl-club-apps-burnley": 3,
+    "pl-club-goals-nottingham-forest": 3,
+    "pl-club-goals-bournemouth": 2, "pl-club-apps-bournemouth": 3,
+}
 MIN_FAME = 1.7  # answers this obscure (Coventry's appearance makers) are a quiz for one fan
 
 
@@ -779,6 +790,10 @@ def main() -> int:
             l["f"] = fam
         l["c"] = category(l["id"])
         mean = sum(fame.get(e[1], 1) for e in l["e"]) / len(l["e"])
+        if l["id"] in CLUB_PICKS:
+            l["d"] = CLUB_PICKS[l["id"]]
+            kept.append(l)
+            continue
         if mean < MIN_FAME:
             dropped.append(f"{l['id']}: too obscure (answers' average fame {mean:.1f})")
             continue

@@ -1,5 +1,5 @@
 {
-"_note": "Top 10 lists from Wikipedia record tables: 300 lists, 20 dropped. Built 2026-11-13.",
+"_note": "Top 10 lists from Wikipedia record tables: 311 lists, 20 dropped. Built 2026-11-13.",
 "dropped": [
 "pl-red-cards: 11 level on 10th",
 "pl-goals-us: only 8 rows",
@@ -10656,6 +10656,803 @@
 "lukasz-fabianski",
 "Łukasz Fabiański",
 "195 apps"
+]
+],
+"f": "club-apps",
+"c": "club"
+},
+{
+"id": "pl-club-goals-wolverhampton-wanderers",
+"q": "Wolves' top Premier League scorers",
+"d": 2,
+"asof": "Nov 2026",
+"src": "premierleague.com match data",
+"e": [
+[
+1,
+"raul-jimenez",
+"Raúl Jiménez",
+"40 goals"
+],
+[
+2,
+"matheus-cunha",
+"Matheus Cunha",
+"29 goals"
+],
+[
+3,
+"hwang-hee-chan",
+"Hwang Hee-chan",
+"24 goals"
+],
+[
+4,
+"steven-fletcher",
+"Steven Fletcher",
+"22 goals"
+],
+[
+5,
+"ruben-neves",
+"Rúben Neves",
+"21 goals"
+],
+[
+6,
+"kevin-doyle",
+"Kevin Doyle",
+"18 goals"
+],
+[
+7,
+"diogo-jota",
+"Diogo Jota",
+"16 goals"
+],
+[
+8,
+"matt-jarvis",
+"Matt Jarvis",
+"15 goals"
+],
+[
+8,
+"jorgen-strand-larsen",
+"Jørgen Strand Larsen",
+"15 goals"
+],
+[
+10,
+"daniel-podence",
+"Daniel Podence",
+"12 goals"
+]
+],
+"f": "club-scorers",
+"c": "club"
+},
+{
+"id": "pl-club-apps-wolverhampton-wanderers",
+"q": "Most Premier League appearances for Wolves",
+"d": 2,
+"asof": "Nov 2026",
+"src": "premierleague.com match data",
+"e": [
+[
+1,
+"ruben-neves",
+"Rúben Neves",
+"177 apps"
+],
+[
+2,
+"joao-moutinho",
+"João Moutinho",
+"175 apps"
+],
+[
+3,
+"nelson-semedo",
+"Nélson Semedo",
+"165 apps"
+],
+[
+4,
+"jose-sa",
+"José Sá",
+"160 apps"
+],
+[
+5,
+"adama-traore",
+"Adama Traoré",
+"157 apps"
+],
+[
+6,
+"conor-coady",
+"Conor Coady",
+"151 apps"
+],
+[
+7,
+"matt-doherty",
+"Matt Doherty",
+"146 apps"
+],
+[
+8,
+"raul-jimenez",
+"Raúl Jiménez",
+"135 apps"
+],
+[
+8,
+"rayan-ait-nouri",
+"Rayan Aït-Nouri",
+"135 apps"
+],
+[
+10,
+"hwang-hee-chan",
+"Hwang Hee-chan",
+"133 apps"
+]
+],
+"f": "club-apps",
+"c": "club"
+},
+{
+"id": "pl-club-goals-stoke-city",
+"q": "Stoke City's top Premier League scorers",
+"d": 2,
+"asof": "Nov 2026",
+"src": "premierleague.com match data",
+"e": [
+[
+1,
+"peter-crouch",
+"Peter Crouch",
+"45 goals"
+],
+[
+2,
+"jonathan-walters",
+"Jonathan Walters",
+"43 goals"
+],
+[
+3,
+"mame-biram-diouf",
+"Mame Biram Diouf",
+"23 goals"
+],
+[
+4,
+"marko-arnautovic",
+"Marko Arnautović",
+"22 goals"
+],
+[
+5,
+"charlie-adam",
+"Charlie Adam",
+"19 goals"
+],
+[
+6,
+"ricardo-fuller",
+"Ricardo Fuller",
+"18 goals"
+],
+[
+7,
+"xherdan-shaqiri",
+"Xherdan Shaqiri",
+"15 goals"
+],
+[
+8,
+"ryan-shawcross",
+"Ryan Shawcross",
+"14 goals"
+],
+[
+8,
+"bojan-krkic",
+"Bojan Krkić",
+"14 goals"
+],
+[
+10,
+"robert-huth",
+"Robert Huth",
+"13 goals",
+[
+[
+"matthew-etherington",
+"Matthew Etherington"
+],
+[
+"kenwyne-jones",
+"Kenwyne Jones"
+]
+]
+]
+],
+"f": "club-scorers",
+"c": "club"
+},
+{
+"id": "pl-club-apps-stoke-city",
+"q": "Most Premier League appearances for Stoke City",
+"d": 3,
+"asof": "Nov 2026",
+"src": "premierleague.com match data",
+"e": [
+[
+1,
+"ryan-shawcross",
+"Ryan Shawcross",
+"317 apps"
+],
+[
+2,
+"glenn-whelan",
+"Glenn Whelan",
+"277 apps"
+],
+[
+3,
+"jonathan-walters",
+"Jonathan Walters",
+"226 apps"
+],
+[
+4,
+"peter-crouch",
+"Peter Crouch",
+"202 apps"
+],
+[
+5,
+"erik-pieters",
+"Erik Pieters",
+"169 apps"
+],
+[
+6,
+"geoff-cameron",
+"Geoff Cameron",
+"168 apps"
+],
+[
+7,
+"asmir-begovic",
+"Asmir Begović",
+"160 apps"
+],
+[
+8,
+"matthew-etherington",
+"Matthew Etherington",
+"152 apps"
+],
+[
+9,
+"robert-huth",
+"Robert Huth",
+"149 apps"
+],
+[
+10,
+"marc-wilson",
+"Marc Wilson",
+"146 apps"
+]
+],
+"f": "club-apps",
+"c": "club"
+},
+{
+"id": "pl-club-goals-brighton-hove-albion",
+"q": "Brighton's top Premier League scorers",
+"d": 2,
+"asof": "Nov 2026",
+"src": "premierleague.com match data",
+"e": [
+[
+1,
+"danny-welbeck",
+"Danny Welbeck",
+"46 goals"
+],
+[
+2,
+"pascal-gross",
+"Pascal Groß",
+"35 goals"
+],
+[
+3,
+"glenn-murray",
+"Glenn Murray",
+"26 goals"
+],
+[
+3,
+"neal-maupay",
+"Neal Maupay",
+"26 goals"
+],
+[
+5,
+"leandro-trossard",
+"Leandro Trossard",
+"25 goals"
+],
+[
+6,
+"kaoru-mitoma",
+"Kaoru Mitoma",
+"23 goals"
+],
+[
+7,
+"joao-pedro",
+"João Pedro",
+"19 goals"
+],
+[
+8,
+"lewis-dunk",
+"Lewis Dunk",
+"18 goals"
+],
+[
+9,
+"alexis-mac-allister",
+"Alexis Mac Allister",
+"16 goals"
+],
+[
+10,
+"jack-hinshelwood",
+"Jack Hinshelwood",
+"15 goals"
+]
+],
+"f": "club-scorers",
+"c": "club"
+},
+{
+"id": "pl-club-apps-brighton-hove-albion",
+"q": "Most Premier League appearances for Brighton",
+"d": 2,
+"asof": "Nov 2026",
+"src": "premierleague.com match data",
+"e": [
+[
+1,
+"lewis-dunk",
+"Lewis Dunk",
+"308 apps"
+],
+[
+2,
+"pascal-gross",
+"Pascal Groß",
+"257 apps"
+],
+[
+3,
+"solly-march",
+"Solly March",
+"194 apps"
+],
+[
+4,
+"danny-welbeck",
+"Danny Welbeck",
+"176 apps"
+],
+[
+5,
+"joel-veltman",
+"Joël Veltman",
+"165 apps"
+],
+[
+6,
+"adam-webster",
+"Adam Webster",
+"138 apps"
+],
+[
+7,
+"mathew-ryan",
+"Mathew Ryan",
+"121 apps"
+],
+[
+8,
+"leandro-trossard",
+"Leandro Trossard",
+"116 apps"
+],
+[
+9,
+"kaoru-mitoma",
+"Kaoru Mitoma",
+"113 apps"
+],
+[
+10,
+"yves-bissouma",
+"Yves Bissouma",
+"112 apps"
+]
+],
+"f": "club-apps",
+"c": "club"
+},
+{
+"id": "pl-club-goals-burnley",
+"q": "Burnley's top Premier League scorers",
+"d": 3,
+"asof": "Nov 2026",
+"src": "premierleague.com match data",
+"e": [
+[
+1,
+"chris-wood",
+"Chris Wood",
+"49 goals"
+],
+[
+2,
+"ashley-barnes",
+"Ashley Barnes",
+"42 goals"
+],
+[
+3,
+"sam-vokes",
+"Sam Vokes",
+"17 goals"
+],
+[
+4,
+"jay-rodriguez",
+"Jay Rodriguez",
+"13 goals"
+],
+[
+5,
+"danny-ings",
+"Danny Ings",
+"11 goals"
+],
+[
+5,
+"zian-flemming",
+"Zian Flemming",
+"11 goals"
+],
+[
+7,
+"johann-berg-gu-mundsson",
+"Jóhann Berg Guðmundsson",
+"10 goals"
+],
+[
+8,
+"ben-mee",
+"Ben Mee",
+"9 goals"
+],
+[
+8,
+"andre-gray",
+"Andre Gray",
+"9 goals"
+],
+[
+8,
+"jeff-hendrick",
+"Jeff Hendrick",
+"9 goals",
+[
+[
+"maxwel-cornet",
+"Maxwel Cornet"
+]
+]
+]
+],
+"f": "club-scorers",
+"c": "club"
+},
+{
+"id": "pl-club-apps-burnley",
+"q": "Most Premier League appearances for Burnley",
+"d": 3,
+"asof": "Nov 2026",
+"src": "premierleague.com match data",
+"e": [
+[
+1,
+"ben-mee",
+"Ben Mee",
+"217 apps"
+],
+[
+2,
+"ashley-barnes",
+"Ashley Barnes",
+"207 apps"
+],
+[
+3,
+"james-tarkowski",
+"James Tarkowski",
+"194 apps"
+],
+[
+4,
+"johann-berg-gu-mundsson",
+"Jóhann Berg Guðmundsson",
+"162 apps"
+],
+[
+4,
+"ashley-westwood",
+"Ashley Westwood",
+"162 apps"
+],
+[
+6,
+"charlie-taylor",
+"Charlie Taylor",
+"161 apps"
+],
+[
+7,
+"matthew-lowton",
+"Matt Lowton",
+"159 apps"
+],
+[
+8,
+"jack-cork",
+"Jack Cork",
+"156 apps"
+],
+[
+9,
+"chris-wood",
+"Chris Wood",
+"144 apps"
+],
+[
+10,
+"nick-pope",
+"Nick Pope",
+"141 apps"
+]
+],
+"f": "club-apps",
+"c": "club"
+},
+{
+"id": "pl-club-goals-nottingham-forest",
+"q": "Nottingham Forest's top Premier League scorers",
+"d": 3,
+"asof": "Nov 2026",
+"src": "premierleague.com match data",
+"e": [
+[
+1,
+"chris-wood",
+"Chris Wood",
+"38 goals"
+],
+[
+2,
+"morgan-gibbs-white",
+"Morgan Gibbs-White",
+"33 goals"
+],
+[
+3,
+"bryan-roy",
+"Bryan Roy",
+"24 goals"
+],
+[
+4,
+"stan-collymore",
+"Stan Collymore",
+"22 goals"
+],
+[
+5,
+"taiwo-awoniyi",
+"Taiwo Awoniyi",
+"21 goals"
+],
+[
+6,
+"stuart-pearce",
+"Stuart Pearce",
+"18 goals"
+],
+[
+7,
+"ian-woan",
+"Ian Woan",
+"17 goals"
+],
+[
+8,
+"steve-stone",
+"Steve Stone",
+"16 goals"
+],
+[
+8,
+"callum-hudson-odoi",
+"Callum Hudson-Odoi",
+"16 goals"
+],
+[
+10,
+"jason-lee",
+"Jason Lee",
+"12 goals"
+]
+],
+"f": "club-scorers",
+"c": "club"
+},
+{
+"id": "pl-club-goals-bournemouth",
+"q": "Bournemouth's top Premier League scorers",
+"d": 2,
+"asof": "Nov 2026",
+"src": "premierleague.com match data",
+"e": [
+[
+1,
+"joshua-king",
+"Joshua King",
+"48 goals"
+],
+[
+2,
+"callum-wilson",
+"Callum Wilson",
+"41 goals"
+],
+[
+3,
+"antoine-semenyo",
+"Antoine Semenyo",
+"30 goals"
+],
+[
+4,
+"dominic-solanke",
+"Dominic Solanke",
+"28 goals"
+],
+[
+5,
+"marcus-tavernier",
+"Marcus Tavernier",
+"23 goals"
+],
+[
+6,
+"justin-kluivert",
+"Justin Kluivert",
+"22 goals"
+],
+[
+7,
+"evanilson",
+"Evanilson",
+"21 goals"
+],
+[
+8,
+"junior-stanislas",
+"Junior Stanislas",
+"20 goals"
+],
+[
+9,
+"ryan-fraser",
+"Ryan Fraser",
+"16 goals"
+],
+[
+10,
+"eli-junior-kroupi",
+"Eli Junior Kroupi",
+"13 goals"
+]
+],
+"f": "club-scorers",
+"c": "club"
+},
+{
+"id": "pl-club-apps-bournemouth",
+"q": "Most Premier League appearances for Bournemouth",
+"d": 3,
+"asof": "Nov 2026",
+"src": "premierleague.com match data",
+"e": [
+[
+1,
+"adam-smith",
+"Adam Smith",
+"265 apps"
+],
+[
+2,
+"lewis-cook",
+"Lewis Cook",
+"200 apps"
+],
+[
+3,
+"steve-cook",
+"Steve Cook",
+"168 apps"
+],
+[
+4,
+"joshua-king",
+"Joshua King",
+"161 apps"
+],
+[
+5,
+"dan-gosling",
+"Dan Gosling",
+"138 apps"
+],
+[
+6,
+"simon-francis",
+"Simon Francis",
+"136 apps"
+],
+[
+7,
+"ryan-christie",
+"Ryan Christie",
+"133 apps"
+],
+[
+8,
+"charlie-daniels",
+"Charlie Daniels",
+"129 apps"
+],
+[
+9,
+"callum-wilson",
+"Callum Wilson",
+"126 apps"
+],
+[
+9,
+"marcus-tavernier",
+"Marcus Tavernier",
+"126 apps"
 ]
 ],
 "f": "club-apps",
