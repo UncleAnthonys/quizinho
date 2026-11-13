@@ -228,6 +228,32 @@ def main() -> int:
             new[hit["id"]] = {"id": hit["id"], "name": hit["name"], "sitelinks": hit["sitelinks"]}
             forced.add(hit["id"])
     print(f"  found on Wikidata by birth date: {sum(1 for q in forced if q in new)}", flush=True)
+    # The feed's birth date can be wrong (Mick Quinn): search the name, and
+    # take the one footballer it finds who played for a Premier League club.
+    still = [(name, dob) for name, dob in lost
+             if not any(same_person(name, dob, [c["name"] or "", *c["aliases"]], dob) for c in found.get(dob, []))]
+    by_name_found = 0
+    pl_ids = list(json.loads((SEED / "pl_clubs.json").read_text(encoding="utf-8"))["clubs"])
+    for name, dob in still:
+        d = wp.get(wp.WIKIDATA, {"action": "wbsearchentities", "search": name, "language": "en", "type": "item", "limit": 7})
+        cands = [c["id"] for c in d.get("search", [])]
+        if not cands:
+            continue
+        rows = wd.sparql(f"""
+SELECT DISTINCT ?p ?pLabel ?sl WHERE {{
+  VALUES ?p {{ {wd.values(cands)} }}
+  VALUES ?club {{ {wd.values(pl_ids)} }}
+  ?p wdt:P106 wd:{FOOTBALLER} ; wdt:P54 ?club ; wikibase:sitelinks ?sl .
+  SERVICE wikibase:label {{ bd:serviceParam wikibase:language "en,mul". }}
+}}""")
+        if len(rows) == 1:
+            q = wd.qid(rows[0]["p"]["value"])
+            if q not in players and q not in new:
+                new[q] = {"id": q, "name": wd.val(rows[0], "pLabel"), "sitelinks": wd.num(wd.val(rows[0], "sl")) or 0}
+                by_name_found += 1
+            forced.add(q)
+        time.sleep(0.3)
+    print(f"  found on Wikidata by name: {by_name_found} of {len(still)}", flush=True)
 
     wd.player_details(new)
     new_spells = wd.player_spells(sorted(new))
