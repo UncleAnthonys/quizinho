@@ -199,23 +199,12 @@ class _Top10ScreenState extends State<Top10Screen> with TickerProviderStateMixin
           BigButton(label: 'Finish', icon: Icons.flag, onPressed: () => widget.round.onComplete(c.result())),
         ]);
       }
-      final standings = List.generate(_t.teamCount, (i) => i)..sort((a, b) => c.foundByTeam(b).compareTo(c.foundByTeam(a)));
-      return Column(mainAxisSize: MainAxisSize.min, children: [
-        for (final t in standings)
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 3),
-            child: Row(children: [
-              TeamChip(name: _t.teamName(t), colorIndex: _t.config.teams[t].colorIndex, size: 16),
-              const Spacer(),
-              Text('${c.foundByTeam(t)} found', style: AppText.headline(20)),
-            ]),
-          ),
-        const SizedBox(height: 10),
-        BigButton(label: 'Finish round', icon: Icons.flag, onPressed: () => widget.round.onComplete(c.result())),
-      ]);
+      // The standings are part of the layout (joined phones show them too).
+      return BigButton(label: 'Finish round', icon: Icons.flag, onPressed: () => widget.round.onComplete(c.result()));
     }
     if (_phones?.remote case final m?) {
-      return OnTheirPhone(name: m.name, onSkip: () => setState(() => _phones!.playHere()));
+      // One line, so the whole list stays in view.
+      return OnTheirPhone(name: m.name, compact: true, onSkip: () => setState(() => _phones!.playHere()));
     }
     final colour = _solo ? null : _t.config.teams[c.currentTeam].colorIndex;
     final lastLife = !_solo && c.livesLeft[c.currentTeam] == 1;
@@ -267,6 +256,8 @@ class Top10Layout extends StatelessWidget {
         'asof': c.list.asOf,
         'finished': c.finished,
         if (t.teamCount == 1) 'solo': true,
+        'teams': [for (var i = 0; i < t.teamCount; i++) t.teamName(i)],
+        'found': [for (var i = 0; i < t.teamCount; i++) c.foundByTeam(i)],
         'fresh': c.lastFound ?? -1,
         'colours': [for (final team in t.config.teams) team.colorIndex],
         'rows': [
@@ -297,9 +288,18 @@ class Top10Layout extends StatelessWidget {
       if (asOf.isNotEmpty && !typing) Text('As of $asOf', style: AppText.label(12)),
       const SizedBox(height: 8),
       Expanded(
-        child: ListView.separated(
+        // All ten in view: rows shrink to fit the space (down to a floor,
+        // then it scrolls).
+        child: LayoutBuilder(builder: (context, box) {
+          const gap = 4.0;
+          final n = rows.isEmpty ? 1 : rows.length;
+          final fit = (box.maxHeight - gap * (n - 1)) / n;
+          final rowH = fit.clamp(_minRow, _maxRow).toDouble();
+          final font = (rowH * 0.5).clamp(14.0, 20.0).toDouble();
+          return ListView.separated(
+          physics: fit >= _minRow ? const NeverScrollableScrollPhysics() : null,
           itemCount: rows.length,
-          separatorBuilder: (_, __) => const SizedBox(height: 5),
+          separatorBuilder: (_, __) => const SizedBox(height: gap),
           itemBuilder: (context, i) {
             final r = rows[i];
             final team = (r['team'] as num?)?.toInt() ?? -1;
@@ -309,26 +309,61 @@ class Top10Layout extends StatelessWidget {
             final figure = '${r['figure'] ?? ''}';
             return AnimatedContainer(
               duration: const Duration(milliseconds: 250),
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
+              height: rowH,
+              padding: const EdgeInsets.symmetric(horizontal: 12),
               decoration: BoxDecoration(
                 color: colour?.withValues(alpha: 0.22) ?? Colors.black.withValues(alpha: 0.3),
                 borderRadius: BorderRadius.circular(10),
                 border: Border.all(color: i == fresh ? (colour ?? _accent) : Palette.line, width: i == fresh ? 2 : 1),
               ),
               child: Row(children: [
-                SizedBox(width: 30, child: Text('${r['rank']}', style: AppText.headline(20, color: colour ?? Palette.muted))),
+                SizedBox(width: 30, child: Text('${r['rank']}', style: AppText.headline(font, color: colour ?? Palette.muted))),
                 Expanded(
                   child: Text(name.toUpperCase(),
-                      overflow: TextOverflow.ellipsis, style: AppText.headline(20, color: got ? Palette.text : Palette.muted)),
+                      overflow: TextOverflow.ellipsis, style: AppText.headline(font, color: got ? Palette.text : Palette.muted)),
                 ),
-                if (figure.isNotEmpty) Text(figure, style: AppText.label(13, color: got ? Palette.text : Palette.muted)),
+                if (figure.isNotEmpty) Text(figure, style: AppText.label(font < 18 ? 12 : 13, color: got ? Palette.text : Palette.muted)),
               ]),
             );
           },
-        ),
+        );
+        }),
       ),
       const SizedBox(height: 8),
+      if (data['finished'] == true && !solo) ...[
+        _Standings(data: data, colours: colours),
+        const SizedBox(height: 8),
+      ],
       bottom,
+    ]);
+  }
+
+  static const _minRow = 30.0;
+  static const _maxRow = 44.0;
+}
+
+/// Who found how many, most first (main phone and joined phones alike).
+class _Standings extends StatelessWidget {
+  const _Standings({required this.data, required this.colours});
+  final Map<String, Object?> data;
+  final List<int> colours;
+
+  @override
+  Widget build(BuildContext context) {
+    final names = [for (final n in (data['teams'] as List?) ?? const []) '$n'];
+    final found = [for (final f in (data['found'] as List?) ?? const []) (f as num).toInt()];
+    if (names.length != found.length || names.isEmpty) return const SizedBox.shrink();
+    final order = List.generate(names.length, (i) => i)..sort((a, b) => found[b].compareTo(found[a]));
+    return Column(mainAxisSize: MainAxisSize.min, children: [
+      for (final t in order)
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 2),
+          child: Row(children: [
+            TeamChip(name: names[t], colorIndex: t < colours.length ? colours[t] : 0, size: 16),
+            const Spacer(),
+            Text('${found[t]} found', style: AppText.headline(20)),
+          ]),
+        ),
     ]);
   }
 }

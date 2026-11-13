@@ -630,7 +630,12 @@ class _GuestGameState extends State<_GuestGame> with SingleTickerProviderStateMi
               child: Top10Layout(
                 data: board,
                 typing: answerTyping.value && stage == 'answer',
-                bottom: stage == 'wait' ? _status('${v['headline'] ?? ''}'.toUpperCase()) : clockAndBox(),
+                // Round over: the list shows who found how many instead.
+                bottom: stage != 'wait'
+                    ? clockAndBox()
+                    : board['finished'] == true
+                        ? const SizedBox.shrink()
+                        : _status('${v['headline'] ?? ''}'.toUpperCase()),
               ),
             ),
           ),

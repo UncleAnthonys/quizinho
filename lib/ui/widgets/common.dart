@@ -293,15 +293,32 @@ class TeamChip extends StatelessWidget {
 
 /// On the host while someone plays their turn on their own phone.
 class OnTheirPhone extends StatelessWidget {
-  const OnTheirPhone({super.key, required this.name, this.what = 'is answering', this.onSkip});
+  const OnTheirPhone({super.key, required this.name, this.what = 'is answering', this.onSkip, this.compact = false});
   final String name;
   final String what;
+
+  /// One line, for screens that need the room (Top 10's list).
+  final bool compact;
 
   /// Lets the host move things on if that phone has gone quiet.
   final VoidCallback? onSkip;
 
   @override
-  Widget build(BuildContext context) => Padding(
+  Widget build(BuildContext context) => compact
+      ? Padding(
+          padding: const EdgeInsets.symmetric(vertical: 4),
+          child: Row(children: [
+            const Icon(Icons.phone_iphone_rounded, color: Palette.yellow, size: 22),
+            const SizedBox(width: 8),
+            Expanded(
+              child: Text('${name.toUpperCase()} $what'.toUpperCase(),
+                  overflow: TextOverflow.ellipsis, style: AppText.headline(18)),
+            ),
+            if (onSkip != null)
+              TextButton(onPressed: onSkip, child: Text('PLAY HERE', style: AppText.label(12))),
+          ]),
+        )
+      : Padding(
         padding: const EdgeInsets.symmetric(vertical: 12),
         child: Column(mainAxisSize: MainAxisSize.min, children: [
           const Icon(Icons.phone_iphone_rounded, color: Palette.yellow, size: 40),
