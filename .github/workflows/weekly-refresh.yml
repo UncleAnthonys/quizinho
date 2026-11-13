@@ -1,0 +1,64 @@
+# Keeps the game's data current: re-reads the Premier League feed (rankings
+# and every match), the Wikipedia record pages, finds any new players (every
+# Premier League appearance, new signings with a Wikipedia career), then
+# rebuilds the database, the voice vocabulary and Top 10, and commits them
+# (which redeploys the browser game). Weekly, and twice a week in the
+# transfer windows (January, June to early September). Or run it by hand.
+#
+# The monthly Wikidata dump (fetch-data.yml) replaces the raw player files;
+# the next run of this puts the extra players back before rebuilding.
+name: Weekly data refresh
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "17 4 * * 1" # Mondays 04:17 UTC
+    - cron: "17 4 * 1,6,7,8,9 4" # and Thursdays in transfer-window months
+
+permissions:
+  contents: write
+
+concurrency:
+  group: fetch-data
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 240
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Premier League rankings
+        working-directory: data_pipeline
+        run: bash ../scripts/ci_run.sh "PL stats" python3 pl_stats_fetch.py
+      - name: Every Premier League match
+        working-directory: data_pipeline
+        run: bash ../scripts/ci_run.sh "PL matches" python3 pl_matches_fetch.py
+      - name: Wikipedia record pages
+        working-directory: data_pipeline
+        run: bash ../scripts/ci_run.sh "Lists" python3 lists_fetch.py
+      - name: Extra and new players
+        working-directory: data_pipeline
+        run: bash ../scripts/ci_run.sh "Extra players" python3 players_extra_fetch.py
+      - name: Rebuild
+        run: |
+          pip install --quiet espeakng-loader phonemizer
+          bash scripts/ci_run.sh "Normalise" python3 data_pipeline/normalise.py
+          bash scripts/ci_run.sh "Database" python3 data_pipeline/build_db.py
+          bash scripts/ci_run.sh "Voice vocabulary" python3 data_pipeline/voice_vocab.py
+          bash scripts/ci_run.sh "Top 10" python3 data_pipeline/top10_build.py
+      - name: Commit
+        run: |
+          git config user.name "quizinho-data-bot"
+          git config user.email "quizinho-data-bot@users.noreply.github.com"
+          git add data_pipeline/raw data_pipeline/seed assets/db assets/voice
+          if git diff --cached --quiet; then
+            echo "No changes."
+          else
+            git commit -m "Data: weekly refresh (PL feed, record pages, new players, rebuild)"
+            git pull --rebase origin main
+            git push
+          fi
