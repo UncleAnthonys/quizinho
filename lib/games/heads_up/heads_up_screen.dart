@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:math';
 
-import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 
@@ -35,7 +34,8 @@ class _HeadsUpScreenState extends State<HeadsUpScreen>
   String? _holder;
   HeadsUpPhase? _lastPhase;
   int _lastSecond = -1;
-  int _quarterTurns = kIsWeb ? 0 : 1;
+  /// Which way the card turns when the screen is upright (1 or 3, from the tilt).
+  int _quarterTurns = 1;
   Color? _flash;
   Timer? _flashTimer;
   late final TiltDetector _tilt = TiltDetector(
@@ -224,8 +224,12 @@ class _HeadsUpScreenState extends State<HeadsUpScreen>
   /// Countdown and cards, rotated to read sideways on a forehead.
   Widget _fullScreen(HeadsUpController c) {
     final counting = c.phase == HeadsUpPhase.countdown;
-    return RotatedBox(
-      quarterTurns: _quarterTurns,
+    // Sideways on the forehead: turn the card only when the screen itself is
+    // still upright (rotation lock on, or an app locked to portrait). A screen
+    // that has turned itself (iPad, a browser) is already the right way round.
+    return LayoutBuilder(
+      builder: (context, box) => RotatedBox(
+      quarterTurns: box.maxHeight > box.maxWidth ? _quarterTurns : 0,
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 150),
         color: _flash ?? Colors.transparent,
@@ -279,6 +283,7 @@ class _HeadsUpScreenState extends State<HeadsUpScreen>
                 ]),
               ]),
       ),
+    ),
     );
   }
 

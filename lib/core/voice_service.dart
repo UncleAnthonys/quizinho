@@ -100,6 +100,8 @@ class VoiceService {
     if (_available != null) return _available!;
     if (_native case final n?) {
       try {
+        // Android: speech_to_text asks for the microphone; ours then listens.
+        if (defaultTargetPlatform == TargetPlatform.android) await _stt.initialize();
         _available = await n.authorize();
       } catch (e) {
         debugPrint('Speech unavailable: $e');
@@ -169,7 +171,9 @@ class VoiceService {
         }
       });
       try {
-        return await n.listen();
+        // The answers' names: Android leans towards them (iOS already has
+        // every player's name in its model; this helps it too).
+        return await n.listen(contextual: hints.take(100).toList());
       } catch (e) {
         debugPrint('Speech listen failed: $e');
         await _nativeSub?.cancel();

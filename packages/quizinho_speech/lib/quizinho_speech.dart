@@ -17,14 +17,16 @@ class SpeechFinal extends SpeechEvent {
   final List<String> alternatives;
 }
 
-/// Quizinho's own iOS recogniser: Apple on-device speech with a custom
-/// language model of every player's name (iOS 17+). Other platforms use the
-/// generic recogniser instead — check [supported].
+/// Quizinho's own recogniser. iOS: Apple on-device speech with a custom
+/// language model of every player's name (iOS 17+). Android: Google's
+/// recogniser, biased to the question's answers ([listen]'s contextual) on
+/// Android 13+. Browsers use the generic recogniser — check [supported].
 class QuizinhoSpeech {
   static const _methods = MethodChannel('quizinho/speech');
   static const _eventChannel = EventChannel('quizinho/speech/events');
 
-  static bool get supported => !kIsWeb && defaultTargetPlatform == TargetPlatform.iOS;
+  static bool get supported =>
+      !kIsWeb && (defaultTargetPlatform == TargetPlatform.iOS || defaultTargetPlatform == TargetPlatform.android);
 
   late final Stream<SpeechEvent> events = _eventChannel.receiveBroadcastStream().map((e) {
     final m = Map<String, dynamic>.from(e as Map);
