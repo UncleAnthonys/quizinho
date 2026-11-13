@@ -205,10 +205,7 @@ class _StartingXiScreenState extends State<StartingXiScreen>
       onStart: c.startTurn,
       onContinue: c.continueAfterExplosion,
       answerBox: _phones?.remote != null
-          ? OnTheirPhone(
-              name: _turnPlayer ?? t.teamName(c.currentTeam),
-              onSkip: () => setState(() => _phones!.playHere()),
-            )
+          ? OnTheirPhone(name: _turnPlayer ?? t.teamName(c.currentTeam))
           : PlayerPicker(
               key: ValueKey('xi-$_turn'),
               index: services.repo.players,

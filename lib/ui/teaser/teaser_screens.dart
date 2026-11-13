@@ -133,7 +133,6 @@ class _TeaserHalfTimeScreenState extends State<TeaserHalfTimeScreen>
                   child: TeaserPlay(
                     controller: c,
                     remoteAnswerer: teaserBridge?.remote?.name,
-                    onPlayHere: teaserBridge?.localBuzz,
                     showQuestion: false,
                   ),
                 ),
@@ -254,7 +253,7 @@ class _TeaserBetweenGamesState extends State<TeaserBetweenGames>
           TeaserPrompt(question: c.teaser.question, prefix: c.teaser.prefix, compact: true),
           const SizedBox(height: 12),
         ],
-        TeaserPlay(controller: c, remoteAnswerer: teaserBridge?.remote?.name, onPlayHere: teaserBridge?.localBuzz),
+        TeaserPlay(controller: c, remoteAnswerer: teaserBridge?.remote?.name),
         if (c.phase == BuzzPhase.open)
           TextButton(
             onPressed: () => _setOpen(false),

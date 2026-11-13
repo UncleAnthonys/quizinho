@@ -22,6 +22,7 @@ import '../games/club_connections/club_connections_screen.dart' show ClubsCard;
 import '../ui/teaser/teaser_widgets.dart' show TeaserPrompt;
 import '../ui/widgets/buzzer_pad.dart' show TeamBuzzer;
 import '../ui/widgets/common.dart';
+import '../ui/widgets/match_table.dart';
 import '../ui/widgets/player_picker.dart';
 import 'room.dart';
 import 'room_link.dart';
@@ -247,6 +248,7 @@ class _GuestGameState extends State<_GuestGame> with SingleTickerProviderStateMi
       'turn' => _turn(v, colour),
       'main' => _center('EYES ON THE MAIN SCREEN', '${v['what'] ?? ''}', scores: v['teams']),
       'rules' => _rules(v),
+      'table' => _table(v),
       'closed' => _center('FULL TIME', 'Thanks for playing!'),
       _ => _center('YOU’RE IN', 'Waiting for kick-off on the main phone…'),
     };
@@ -315,6 +317,19 @@ class _GuestGameState extends State<_GuestGame> with SingleTickerProviderStateMi
         maxHeight: compact ? 190 : 250,
       ),
     ]);
+  }
+
+  /// The table after a round, or full time: the main phone's own screen.
+  Widget _table(Map<String, Object?> v) {
+    final full = v['full'] == true;
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(20, 8, 20, 16),
+      child: Column(children: [
+        if (full) FullTimeHeader(data: v) else RoundTableHeader(data: v),
+        Expanded(child: ListView(children: matchTableRows(v))),
+        Text(full ? 'Thanks for playing!' : 'Next game on the main phone', style: AppText.label(14)),
+      ]),
+    );
   }
 
   Widget _center(String title, String body, {Object? scores}) => Padding(
@@ -541,7 +556,7 @@ class _GuestGameState extends State<_GuestGame> with SingleTickerProviderStateMi
     // The answer box when it's this phone's turn; who's playing otherwise.
     Widget answerBox() {
       if (!mine || stage != 'answer') {
-        return _status(whoName.isEmpty ? '' : '${whoName.toUpperCase()} IS ANSWERING');
+        return whoName.isEmpty ? const SizedBox.shrink() : OnTheirPhone(name: whoName);
       }
       final ids = {for (final a in asList(v['answers'])) '$a'};
       return PlayerPicker(
@@ -584,9 +599,10 @@ class _GuestGameState extends State<_GuestGame> with SingleTickerProviderStateMi
         final choosing = stage == 'choose';
         Widget bottom;
         if (stage == 'wait') {
-          bottom = _status('${v['headline'] ?? ''}'.toUpperCase());
+          // Round over: the banner and standings say it all.
+          bottom = board['phase'] == 'finished' ? const SizedBox.shrink() : _status('${v['headline'] ?? ''}'.toUpperCase());
         } else if (choosing && !mine) {
-          bottom = _status('${whoName.toUpperCase()} IS PICKING A SQUARE');
+          bottom = OnTheirPhone(name: whoName, what: 'is picking a square');
         } else if (choosing) {
           bottom = Column(children: [
             Text('YOUR GO - TAP A SQUARE', textAlign: TextAlign.center, style: AppText.headline(24, color: Palette.yellow)),
@@ -664,7 +680,9 @@ class _GuestGameState extends State<_GuestGame> with SingleTickerProviderStateMi
                       onChallenge: () => widget.room.answer(q, 'act:challenge'),
                       onPass: () => widget.room.answer(q, 'act:pass'),
                     )
-                  : _status(whoName.isEmpty ? '' : '${whoName.toUpperCase()} IS DECIDING'),
+                  : whoName.isEmpty
+                      ? const SizedBox.shrink()
+                      : OnTheirPhone(name: whoName, what: 'is deciding'),
               answerBox: clockAndBox(),
             ),
           ),
@@ -674,8 +692,8 @@ class _GuestGameState extends State<_GuestGame> with SingleTickerProviderStateMi
   }
 
   Widget _status(String text) => Padding(
-        padding: const EdgeInsets.all(24),
-        child: Text(text, textAlign: TextAlign.center, style: AppText.headline(26, color: Palette.muted)),
+        padding: const EdgeInsets.all(12),
+        child: Text(text, textAlign: TextAlign.center, style: AppText.headline(20, color: Palette.muted)),
       );
 }
 

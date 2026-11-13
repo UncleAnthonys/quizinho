@@ -9,6 +9,7 @@ import '../../core/theme.dart';
 import '../../domain/tournament.dart';
 import '../match_access.dart';
 import '../widgets/common.dart';
+import '../widgets/match_table.dart';
 
 class WinnerScreen extends StatefulWidget {
   const WinnerScreen({super.key, required this.tournament});
@@ -59,9 +60,8 @@ class _WinnerScreenState extends State<WinnerScreen> with SingleTickerProviderSt
 
   @override
   Widget build(BuildContext context) {
-    final t = widget.tournament;
-    final leaders = t.leaders;
-    final draw = leaders.length > 1;
+    // The same snapshot the joined phones draw (MatchFlow sends it).
+    final table = MatchTable.fullTime(widget.tournament);
     return Scaffold(
       body: PitchBackground(
         child: Stack(children: [
@@ -75,35 +75,8 @@ class _WinnerScreenState extends State<WinnerScreen> with SingleTickerProviderSt
             child: Padding(
               padding: const EdgeInsets.all(20),
               child: Column(children: [
-                const SizedBox(height: 20),
-                Text('FULL TIME', style: AppText.label(18)),
-                const Icon(Icons.emoji_events_rounded, color: Palette.gold, size: 110),
-                Text(draw ? 'IT’S A DRAW' : 'CHAMPIONS', style: AppText.headline(30, color: Palette.gold)),
-                const SizedBox(height: 6),
-                Wrap(alignment: WrapAlignment.center, spacing: 8, runSpacing: 8, children: [
-                  for (final l in leaders) TeamChip(name: t.teamName(l), colorIndex: t.config.teams[l].colorIndex, size: 34),
-                ]),
-                const SizedBox(height: 10),
-                if (_line.isNotEmpty)
-                  Text(_line, textAlign: TextAlign.center, style: AppText.headline(22, color: Palette.text, weight: FontWeight.w700)),
-                const SizedBox(height: 12),
-                if (t.playerTable.isNotEmpty && !t.everyTeamSolo) _PlayerOfTheMatch(tournament: t),
-                const SizedBox(height: 8),
-                Expanded(
-                  child: ListView(children: [
-                    for (final (pos, team) in t.standings.indexed)
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 4),
-                        child: Row(children: [
-                          SizedBox(width: 30, child: Text('${pos + 1}', style: AppText.headline(24, color: Palette.muted))),
-                          Container(width: 10, height: 28, color: Palette.team(t.config.teams[team].colorIndex)),
-                          const SizedBox(width: 10),
-                          Expanded(child: Text(t.teamName(team).toUpperCase(), style: AppText.headline(26))),
-                          Text('${t.scores[team]}', style: AppText.headline(30)),
-                        ]),
-                      ),
-                  ]),
-                ),
+                FullTimeHeader(data: table, line: _line),
+                Expanded(child: ListView(children: matchTableRows(table))),
                 BigButton(label: 'Rematch', icon: Icons.replay, onPressed: _rematch),
                 const SizedBox(height: 8),
                 GhostButton(
@@ -156,46 +129,4 @@ class _ConfettiPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(covariant _ConfettiPainter old) => old.t != t;
-}
-
-/// Top individual scorer from face-offs and bomb turns.
-class _PlayerOfTheMatch extends StatelessWidget {
-  const _PlayerOfTheMatch({required this.tournament});
-  final Tournament tournament;
-
-  @override
-  Widget build(BuildContext context) {
-    final table = tournament.playerTable;
-    final best = table.first;
-    final colour = tournament.config.teams[best.team].colorIndex;
-    final others = table.skip(1).take(3).toList();
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-      decoration: BoxDecoration(
-        color: Colors.black.withValues(alpha: 0.35),
-        borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: Palette.gold),
-      ),
-      child: Column(children: [
-        Text('PLAYER OF THE MATCH', style: AppText.label(13, color: Palette.gold)),
-        const SizedBox(height: 4),
-        Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-          const Icon(Icons.star_rounded, color: Palette.gold),
-          const SizedBox(width: 6),
-          Flexible(child: TeamChip(name: best.name, colorIndex: colour, size: 24)),
-          const SizedBox(width: 8),
-          Text('${best.points} PTS', style: AppText.headline(24, color: Palette.gold)),
-        ]),
-        if (others.isNotEmpty) ...[
-          const SizedBox(height: 6),
-          Text(
-            others.map((p) => '${p.name} ${p.points}').join('  ·  '),
-            textAlign: TextAlign.center,
-            style: AppText.label(13),
-          ),
-        ],
-      ]),
-    );
-  }
 }

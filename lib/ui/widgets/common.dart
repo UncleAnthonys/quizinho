@@ -291,42 +291,25 @@ class TeamChip extends StatelessWidget {
       );
 }
 
-/// On the host while someone plays their turn on their own phone.
+/// Whose turn it is when they're playing it on their own phone: one line,
+/// so the game keeps the room (Top 10's list, the grid). A phone that drops
+/// out stops checking in and its turns come back to this one by themselves.
 class OnTheirPhone extends StatelessWidget {
-  const OnTheirPhone({super.key, required this.name, this.what = 'is answering', this.onSkip, this.compact = false});
+  const OnTheirPhone({super.key, required this.name, this.what = 'is answering'});
   final String name;
   final String what;
 
-  /// One line, for screens that need the room (Top 10's list).
-  final bool compact;
-
-  /// Lets the host move things on if that phone has gone quiet.
-  final VoidCallback? onSkip;
-
   @override
-  Widget build(BuildContext context) => compact
-      ? Padding(
-          padding: const EdgeInsets.symmetric(vertical: 4),
-          child: Row(children: [
-            const Icon(Icons.phone_iphone_rounded, color: Palette.yellow, size: 22),
-            const SizedBox(width: 8),
-            Expanded(
-              child: Text('${name.toUpperCase()} $what'.toUpperCase(),
-                  overflow: TextOverflow.ellipsis, style: AppText.headline(18)),
-            ),
-            if (onSkip != null)
-              TextButton(onPressed: onSkip, child: Text('PLAY HERE', style: AppText.label(12))),
-          ]),
-        )
-      : Padding(
-        padding: const EdgeInsets.symmetric(vertical: 12),
-        child: Column(mainAxisSize: MainAxisSize.min, children: [
-          const Icon(Icons.phone_iphone_rounded, color: Palette.yellow, size: 40),
-          const SizedBox(height: 6),
-          Text('${name.toUpperCase()} $what'.toUpperCase(), textAlign: TextAlign.center, style: AppText.headline(28)),
-          Text('on their phone', style: AppText.label(15)),
-          if (onSkip != null)
-            TextButton(onPressed: onSkip, child: Text('PLAY IT ON THIS PHONE INSTEAD', style: AppText.label(13))),
+  Widget build(BuildContext context) => Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8),
+        child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+          const Icon(Icons.phone_iphone_rounded, color: Palette.yellow, size: 22),
+          const SizedBox(width: 8),
+          Flexible(
+            child: Text('${name.toUpperCase()} $what'.toUpperCase(),
+                overflow: TextOverflow.ellipsis, style: AppText.headline(18)),
+          ),
+          Text('  on their phone', style: AppText.label(12)),
         ]),
       );
 }

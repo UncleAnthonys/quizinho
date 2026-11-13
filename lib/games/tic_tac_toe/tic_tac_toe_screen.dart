@@ -251,7 +251,6 @@ class _TicTacToeScreenState extends State<TicTacToeScreen>
       return OnTheirPhone(
         name: m.name,
         what: c.phase == TttPhase.choosing ? 'is picking a square' : 'is answering',
-        onSkip: () => setState(() => _phones!.playHere()),
       );
     }
     if (c.phase == TttPhase.choosing) {
@@ -326,7 +325,6 @@ class _TicTacToeScreenState extends State<TicTacToeScreen>
               ),
             ),
           );
-    final standings = List.generate(_t.teamCount, (i) => i)..sort((a, b) => c.squaresOf(b).compareTo(c.squaresOf(a)));
     if (_t.teamCount == 1) {
       return Column(children: [
         SoloScore(score: c.result().solo ?? 0),
@@ -335,20 +333,8 @@ class _TicTacToeScreenState extends State<TicTacToeScreen>
         BigButton(label: 'Finish round', icon: Icons.flag, onPressed: () => widget.round.onComplete(c.result())),
       ]);
     }
+    // The standings are part of the layout (joined phones show them too).
     return Column(children: [
-      for (final t in standings)
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 3),
-          child: Row(children: [
-            TeamChip(name: _t.teamName(t), colorIndex: _t.config.teams[t].colorIndex, size: 16),
-            const Spacer(),
-            Text(
-              '${c.squaresOf(t)} squares${c.winner == t ? ' + ${TicTacToeController.lineBonus} line bonus' : ''}',
-              style: AppText.headline(20),
-            ),
-          ]),
-        ),
-      const SizedBox(height: 6),
       missed,
       const SizedBox(height: 8),
       BigButton(label: 'Finish round', icon: Icons.flag, onPressed: () => widget.round.onComplete(c.result())),
@@ -446,9 +432,31 @@ class TttLayout extends StatelessWidget {
           typing ? const SizedBox.shrink() : const SizedBox(height: 8),
           typing ? const SizedBox.shrink() : TttBoard(data: data, onTap: onTap, onReveal: onReveal),
           typing ? const SizedBox.shrink() : const SizedBox(height: 12),
+          if (phase == 'finished' && data['solo'] != true) ...[_standings(colours), const SizedBox(height: 6)],
           bottom,
         ]),
       ),
+    ]);
+  }
+
+  /// Who got how many squares, most first (main phone and joined phones alike).
+  Widget _standings(List<int> colours) {
+    final names = [for (final n in (data['teams'] as List?) ?? const []) '$n'];
+    final squares = [for (final n in (data['squares'] as List?) ?? const []) (n as num).toInt()];
+    if (names.isEmpty || names.length != squares.length) return const SizedBox.shrink();
+    final winner = (data['winnerTeam'] as num?)?.toInt();
+    final order = List.generate(names.length, (i) => i)..sort((a, b) => squares[b].compareTo(squares[a]));
+    return Column(children: [
+      for (final t in order)
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 3),
+          child: Row(children: [
+            TeamChip(name: names[t], colorIndex: t < colours.length ? colours[t] : 0, size: 16),
+            const Spacer(),
+            Text('${squares[t]} squares${winner == t ? ' + ${TicTacToeController.lineBonus} line bonus' : ''}',
+                style: AppText.headline(20)),
+          ]),
+        ),
     ]);
   }
 }
@@ -485,6 +493,9 @@ class TttBoard extends StatelessWidget {
         'team': c.currentTeam,
         if (t.teamCount == 1) 'solo': true,
         if (c.winner != null) 'winner': t.teamName(c.winner!),
+        if (c.winner != null) 'winnerTeam': c.winner,
+        'teams': [for (var i = 0; i < t.teamCount; i++) t.teamName(i)],
+        'squares': [for (var i = 0; i < t.teamCount; i++) c.squaresOf(i)],
       };
 
   static List<T?> _list<T>(Object? v) => v is List ? [for (final x in v) x is T ? x : null] : const [];

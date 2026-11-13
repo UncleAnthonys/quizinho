@@ -203,8 +203,7 @@ class _Top10ScreenState extends State<Top10Screen> with TickerProviderStateMixin
       return BigButton(label: 'Finish round', icon: Icons.flag, onPressed: () => widget.round.onComplete(c.result()));
     }
     if (_phones?.remote case final m?) {
-      // One line, so the whole list stays in view.
-      return OnTheirPhone(name: m.name, compact: true, onSkip: () => setState(() => _phones!.playHere()));
+      return OnTheirPhone(name: m.name);
     }
     final colour = _solo ? null : _t.config.teams[c.currentTeam].colorIndex;
     final lastLife = !_solo && c.livesLeft[c.currentTeam] == 1;

@@ -22,6 +22,7 @@ import 'screens/round_intro_screen.dart';
 import 'screens/round_summary_screen.dart';
 import 'screens/winner_screen.dart';
 import 'teaser/teaser_screens.dart';
+import 'widgets/match_table.dart';
 
 /// Moves a match through: wheel → intro → game → summary → … → winner.
 /// Each step replaces the previous route so "back" never lands mid-game.
@@ -135,7 +136,7 @@ abstract final class MatchFlow {
       onComplete: (result) {
         t.recordRound(result, multiplier: multiplier);
         _save(services, t);
-        room?.showMainScreen(t, 'Round ${t.rounds.length} of ${t.totalRounds} done');
+        room?.showTable(MatchTable.round(t));
         nav.pushReplacement(_route(_Guard(child: RoundSummaryScreen(tournament: t))));
       },
     );
@@ -153,7 +154,7 @@ abstract final class MatchFlow {
 
   static void toWinner(BuildContext context, Tournament t) {
     AppScope.read(context).settings.clearMatch();
-    _phones(context, t, 'Full time!');
+    AppScope.read(context).room?.showTable(MatchTable.fullTime(t));
     Navigator.of(context).pushReplacement(_route(WinnerScreen(tournament: t)));
   }
 

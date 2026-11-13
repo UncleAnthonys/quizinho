@@ -44,8 +44,6 @@ class TurnBridge {
   StreamSubscription<RemoteAnswer>? _sub;
   String _key = '';
 
-  /// A turn the host took back ("play it on this phone instead").
-  String? _hereKey;
   PlayerIndex? _index;
   void Function(Player)? _onPick;
   void Function()? _onPass;
@@ -68,7 +66,9 @@ class TurnBridge {
   RoomMember? phoneFor(int team, {String? name}) {
     final players = tournament.config.teams[team].players;
     final who = name ?? (players.isEmpty ? null : players.first);
-    return who == null ? null : room.memberFor(team, who);
+    final m = who == null ? null : room.memberFor(team, who);
+    // A phone that's stopped checking in: the host plays it.
+    return m != null && room.online(m.device) ? m : null;
   }
 
   /// Puts [team]'s turn on the phones. Returns the phone playing it, or null
@@ -102,7 +102,7 @@ class TurnBridge {
     /// Anything else the phone sends ("raise:5", "challenge", "pass").
     void Function(String action)? onAction,
   }) {
-    final m = key == _hereKey ? null : phoneFor(team, name: name);
+    final m = phoneFor(team, name: name);
     remote = m;
     _key = key;
     _index = index;
@@ -137,12 +137,6 @@ class TurnBridge {
     };
     _publish(view, left: left, total: total);
     return m;
-  }
-
-  /// The host takes this turn back (that phone's gone quiet).
-  void playHere() {
-    _hereKey = _key;
-    remote = null;
   }
 
   /// Between turns: "eyes on the main screen" — or, with [board], the

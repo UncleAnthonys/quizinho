@@ -68,6 +68,20 @@ class HostRoom extends ChangeNotifier {
   /// Phones that have picked a name, by device.
   Map<String, RoomMember> members = const {};
 
+  /// When each phone last checked in (its member entry's "at" changing:
+  /// joined phones re-save it every [GuestRoom.heartbeat]).
+  final Map<String, Object?> _lastAt = {};
+  final Map<String, DateTime> _heard = {};
+
+  /// A phone that hasn't checked in for this long has gone (locked, closed,
+  /// lost signal): its turns are played on the host instead.
+  static const offlineAfter = Duration(seconds: 40);
+
+  bool online(String device) {
+    final heard = _heard[device];
+    return heard != null && DateTime.now().difference(heard) < offlineAfter;
+  }
+
   final _buzzes = StreamController<RemoteBuzz>.broadcast();
   final _answers = StreamController<RemoteAnswer>.broadcast();
   final Set<String> _seenBuzzes = {};
@@ -101,6 +115,11 @@ class HostRoom extends ChangeNotifier {
   void _listen() {
     _subs.add(link.watch('$_root/members').listen((v) {
       members = _members(v);
+      for (final e in asMap(v).entries) {
+        final at = asMap(e.value)['at'];
+        if (!_heard.containsKey(e.key) || _lastAt[e.key] != at) _heard[e.key] = DateTime.now();
+        _lastAt[e.key] = at;
+      }
       notifyListeners();
     }));
     _subs.add(link.watch('$_root/buzzes').listen((v) {
@@ -150,6 +169,10 @@ class HostRoom extends ChangeNotifier {
         'what': what,
         'teams': teamsView(t),
       });
+
+  /// The table after a round or at full time ([MatchTable] snapshot), as the
+  /// main phone shows it.
+  Future<void> showTable(Map<String, Object?> table) => show({'kind': 'table', ...table});
 
   /// The rules card for the game about to start, so joined phones can read
   /// along with the main phone.
@@ -231,7 +254,15 @@ class GuestRoom extends ChangeNotifier {
 
   RoomMember? get me => members[device];
 
+  /// How often this phone tells the host it's still here (re-saving its
+  /// name), so a phone that's gone doesn't get handed the next turn.
+  static const heartbeat = Duration(seconds: 12);
+  Timer? _beat;
+
   void start() {
+    _beat ??= Timer.periodic(heartbeat, (_) {
+      if (me case final m?) claim(m.team, m.name);
+    });
     _subs.add(link.watch('$_root/host').listen((v) {
       final m = asMap(v);
       if (m.isEmpty) {
@@ -278,6 +309,7 @@ class GuestRoom extends ChangeNotifier {
 
   @override
   void dispose() {
+    _beat?.cancel();
     for (final s in _subs) {
       s.cancel();
     }

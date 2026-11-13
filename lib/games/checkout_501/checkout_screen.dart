@@ -257,7 +257,7 @@ class _CheckoutScreenState extends State<CheckoutScreen>
       TimerBar(fraction: c.fractionLeft, seconds: c.secondsLeft),
       const SizedBox(height: 8),
       if (_phones?.remote case final m?)
-        OnTheirPhone(name: '${m.name} (${_t.teamName(team)})', onSkip: () => setState(() => _phones!.playHere()))
+        OnTheirPhone(name: '${m.name} (${_t.teamName(team)})')
       else
         PlayerPicker(
           key: ValueKey('co-${c.turn}-$_pickerKey'),

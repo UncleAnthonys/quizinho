@@ -255,8 +255,7 @@ class _BiddingWarScreenState extends State<BiddingWarScreen>
   Widget _controls(BiddingWarController c) {
     if (c.phase == BidPhase.bidding) {
       if (_phones?.remote case final m?) {
-        return OnTheirPhone(name: '${m.name} (${_t.teamName(c.currentTeam)})', what: 'is deciding',
-            onSkip: () => setState(() => _phones!.playHere()));
+        return OnTheirPhone(name: '${m.name} (${_t.teamName(c.currentTeam)})', what: 'is deciding');
       }
     }
     return BidControls(data: _view(c), onRaise: c.raise, onChallenge: c.challenge, onPass: c.pass);
@@ -270,8 +269,7 @@ class _BiddingWarScreenState extends State<BiddingWarScreen>
       TimerBar(fraction: c.fractionLeft, seconds: c.secondsLeft),
       const SizedBox(height: 10),
       if (_phones?.remote case final m?)
-        OnTheirPhone(name: '${m.name} (${_t.teamName(c.holder!)})', what: 'is naming them',
-            onSkip: () => setState(() => _phones!.playHere()))
+        OnTheirPhone(name: '${m.name} (${_t.teamName(c.holder!)})', what: 'is naming them')
       else
         _picker(c, colour),
     ]);

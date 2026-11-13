@@ -13,7 +13,7 @@ import 'teaser_widgets.dart';
 /// The working part of the teaser, used at half-time and between games:
 /// team buzzers, the answer box, the host's calls, and the result.
 class TeaserPlay extends StatelessWidget {
-  const TeaserPlay({super.key, required this.controller, this.remoteAnswerer, this.onPlayHere, this.showQuestion = true});
+  const TeaserPlay({super.key, required this.controller, this.remoteAnswerer, this.showQuestion = true});
   final TeaserController controller;
 
   /// False where the question is already on screen above (half-time).
@@ -21,9 +21,6 @@ class TeaserPlay extends StatelessWidget {
 
   /// Answering on their own phone (null = on this one).
   final String? remoteAnswerer;
-
-  /// That phone's gone quiet: answer here instead.
-  final VoidCallback? onPlayHere;
 
   Tournament get t => controller.tournament;
 
@@ -37,7 +34,7 @@ class TeaserPlay extends StatelessWidget {
     if (c.phase == BuzzPhase.answering) {
       final team = c.answeringTeam!;
       final colour = t.config.teams[team].colorIndex;
-      if (remoteAnswerer != null) return OnTheirPhone(name: remoteAnswerer!, onSkip: onPlayHere);
+      if (remoteAnswerer != null) return OnTheirPhone(name: remoteAnswerer!);
       final call = c.hostCall;
       if (call != null) {
         return Column(mainAxisSize: MainAxisSize.min, children: [

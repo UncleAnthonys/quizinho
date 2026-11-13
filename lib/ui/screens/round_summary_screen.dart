@@ -7,6 +7,7 @@ import '../../domain/tournament.dart';
 import '../match_flow.dart';
 import '../teaser/teaser_screens.dart';
 import '../widgets/common.dart';
+import '../widgets/match_table.dart';
 
 /// After each round: who scored what, and the table. Then half-time (the
 /// teaser), or the next game — with the teaser there to be had in between.
@@ -94,30 +95,9 @@ class _RoundSummaryScreenState extends State<RoundSummaryScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final last = t.rounds.last;
-    final standings = t.standings;
-    final rows = [
-      for (final (pos, team) in standings.indexed)
-        Container(
-          margin: const EdgeInsets.only(bottom: 8),
-          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-          decoration: BoxDecoration(
-            color: Colors.black.withValues(alpha: 0.3),
-            borderRadius: BorderRadius.circular(14),
-            border: Border(left: BorderSide(color: Palette.team(t.config.teams[team].colorIndex), width: 6)),
-          ),
-          child: Row(children: [
-            SizedBox(width: 28, child: Text('${pos + 1}', style: AppText.headline(26, color: Palette.muted))),
-            Expanded(child: Text(t.teamName(team).toUpperCase(), style: AppText.headline(28))),
-            if ((last.points[team] ?? 0) > 0)
-              Padding(
-                padding: const EdgeInsets.only(right: 12),
-                child: Text('+${last.points[team]}', style: AppText.headline(24, color: Palette.yellow)),
-              ),
-            Text('${t.scores[team]}', style: AppText.headline(36)),
-          ]),
-        ),
-    ];
+    // The same snapshot the joined phones draw (MatchFlow sends it).
+    final table = MatchTable.round(t);
+    final rows = matchTableRows(table);
     // Between games (not at half-time, which has its own screen).
     final showTeaser = t.teaser != null && t.teaser!.halfTimeDone && !t.teaserDue;
     final teaser = showTeaser
@@ -143,12 +123,7 @@ class _RoundSummaryScreenState extends State<RoundSummaryScreen> {
               if (_teaserOpen && !_teaserResult)
                 Expanded(child: SingleChildScrollView(child: teaser))
               else ...[
-                Text('ROUND ${t.rounds.length} OF ${t.totalRounds}', style: AppText.label(16)),
-                Text(last.mode.title.toUpperCase(), style: AppText.headline(40, color: last.mode.color)),
-                if (last.multiplier > 1) Text('DOUBLE POINTS', style: AppText.label(15, color: Palette.gold)),
-                const SizedBox(height: 24),
-                Text('THE TABLE', style: AppText.label(14)),
-                const SizedBox(height: 8),
+                RoundTableHeader(data: table),
                 if (_teaserResult)
                   Expanded(child: ListView(children: [...rows, if (teaser != null) teaser]))
                 else ...[
