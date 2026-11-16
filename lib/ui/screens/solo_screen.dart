@@ -31,7 +31,7 @@ String soloScoring(GameModeId m) => switch (m) {
       GameModeId.pointless => '3 categories, one answer each. The rarer your answer, the more you score.',
       GameModeId.checkout501 => 'Check out from 501 in as few darts as you can.',
       GameModeId.startingXi => 'Name as much of the XI as you can. 3 lives.',
-      GameModeId.ticTacToe => 'Fill all nine squares yourself. 3 lives. A full grid is 100.',
+      GameModeId.ticTacToe => 'Fill all nine squares in 3 minutes. Faster, with lives to spare, scores more.',
       GameModeId.top10 => 'Name as many of the ten as you can. 3 lives; 10 for each one.',
       _ => '',
     };
@@ -60,7 +60,8 @@ List<String> soloRules(GameModeId m) => switch (m) {
         ],
       GameModeId.ticTacToe => [
           'Pick a square, then name a player who fits both its headers.',
-          'Fill all nine. 3 lives. A full grid is 100. Each player only once.',
+          'One 3-minute clock for the whole grid, and 3 lives. Each player only once.',
+          'Every square scores; finishing fast and keeping lives scores more. A perfect grid is 100.',
         ],
       GameModeId.top10 => [
           'Name as many of the ten as you can. Each one is worth 10.',

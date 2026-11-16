@@ -105,6 +105,21 @@ void main() {
     expect(c.score, 10);
   });
 
+  test('players level on the last rank fill any of its places (Salah, then Kane)', () {
+    final list = Top10List(id: 'z', prompt: 'T', level: 1, entries: [
+      for (var i = 0; i < 6; i++) Top10Entry(rank: i + 1, playerId: 'p$i', name: 'P$i'),
+      for (var i = 6; i < 9; i++) Top10Entry(rank: 7, playerId: 'p$i', name: 'P$i'),
+      const Top10Entry(rank: 7, playerId: 'salah', name: 'Salah', alternates: [('kane', 'Kane')]),
+    ]);
+    final c = Top10Controller(list: list);
+    expect(c.submit(p('salah')), Top10Answer.found);
+    expect(c.found[6], 'salah', reason: 'first empty place among the level ones');
+    expect(c.submit(p('kane')), Top10Answer.found);
+    expect(c.found[7], 'kane');
+    expect(c.submit(p('kane')), Top10Answer.alreadyFound);
+    expect(c.submit(p('p0')), Top10Answer.found);
+  });
+
   test('teams take turns: a point each, lives, ends when all are out', () {
     final c = Top10Controller(list: _list, teamCount: 2, answerSeconds: 10);
     expect(c.submit(p('p0')), Top10Answer.found);

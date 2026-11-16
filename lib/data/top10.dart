@@ -75,11 +75,21 @@ class Top10List {
   final String asOf;
   final List<Top10Entry> entries;
 
-  int? indexOf(String playerId) {
+  int? indexOf(String playerId) => slotsFor(playerId).firstOrNull;
+
+  /// The places [playerId] can fill. Usually one; but players level on the
+  /// last rank (five on 6 goals for places 7-10, plus those level beyond the
+  /// ten) share all of those places: any of them can go in any empty one.
+  List<int> slotsFor(String playerId) {
+    if (entries.isEmpty) return const [];
+    final lastRank = entries.last.rank;
+    final tied = [for (final (i, e) in entries.indexed) if (e.rank == lastRank) i];
     for (final (i, e) in entries.indexed) {
-      if (e.all.any((a) => a.$1 == playerId)) return i;
+      if (e.all.any((a) => a.$1 == playerId)) {
+        return e.rank == lastRank ? tied : [i];
+      }
     }
-    return null;
+    return const [];
   }
 }
 

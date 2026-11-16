@@ -191,11 +191,21 @@ void main() {
       expect(c.result().solo, 100);
     });
 
-    test('solo has no clock for picking', () {
-      final c = TicTacToeController(grid: grid(), teamCount: 1, chooseSeconds: 5);
+    test('Pack the Box: one clock for the whole grid; time left and lives add to the score', () {
+      final c = TicTacToeController(grid: grid(), teamCount: 1, chooseSeconds: 5, soloSeconds: 180);
       c.advance(secs(60));
-      expect(c.phase, TttPhase.choosing);
-      expect(c.clockRunning, isFalse);
+      expect(c.phase, TttPhase.choosing, reason: 'no clock just for picking');
+      expect(c.clockRunning, isTrue);
+      expect(c.secondsLeft, 120);
+      for (var i = 0; i < 9; i++) {
+        c.choose(i);
+        c.submit(player('p$i'));
+      }
+      // 63 for the grid, 12 for three lives, 25 x 2/3 for the time left.
+      expect(c.result().solo, 92);
+      final slow = TicTacToeController(grid: grid(), teamCount: 1, soloSeconds: 180);
+      slow.advance(secs(181));
+      expect(slow.phase, TttPhase.finished, reason: 'time up ends the grid');
     });
 
     test('a player can only be used once per grid', () {

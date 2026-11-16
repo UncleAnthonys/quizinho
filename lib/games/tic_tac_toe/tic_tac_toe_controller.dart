@@ -164,9 +164,15 @@ class TicTacToeController extends ChangeNotifier {
     this.chooseSeconds = 20,
     this.steals = 1,
     this.lives = 3,
+    this.soloSeconds = 180,
   }) : currentTeam = startTeam % teamCount {
+    if (_solo) secondsLeft = soloSeconds.toDouble();
     _startChoosing();
   }
+
+  /// Solo (Pack the Box): one clock for the whole grid, Sporcle-style,
+  /// instead of a clock per answer. Time left adds to the score.
+  final int soloSeconds;
 
   final TicTacToeGrid grid;
   final int teamCount;
@@ -225,8 +231,10 @@ class TicTacToeController extends ChangeNotifier {
 
   bool canChoose(int square) => phase == TttPhase.choosing && (owner[square] == null || canSteal(square));
   /// The clock running now: picking a square, or naming a player.
-  int get phaseSeconds => phase == TttPhase.answering ? answerSeconds : (_chooseClock ? chooseSeconds : 0);
-  bool get clockRunning => phase == TttPhase.answering || (phase == TttPhase.choosing && _chooseClock);
+  int get phaseSeconds =>
+      _solo ? soloSeconds : (phase == TttPhase.answering ? answerSeconds : (_chooseClock ? chooseSeconds : 0));
+  bool get clockRunning =>
+      _solo ? phase != TttPhase.finished : (phase == TttPhase.answering || (phase == TttPhase.choosing && _chooseClock));
   double get fractionLeft => phaseSeconds == 0 ? 0 : (secondsLeft / phaseSeconds).clamp(0.0, 1.0);
   int squaresOf(int team) => owner.where((o) => o == team).length;
 
@@ -235,7 +243,7 @@ class TicTacToeController extends ChangeNotifier {
     stealing = owner[square] != null;
     selected = square;
     phase = TttPhase.answering;
-    secondsLeft = answerSeconds.toDouble();
+    if (!_solo) secondsLeft = answerSeconds.toDouble();
     notifyListeners();
   }
 
@@ -244,6 +252,12 @@ class TicTacToeController extends ChangeNotifier {
     secondsLeft -= elapsed.inMicroseconds / 1e6;
     if (secondsLeft <= 0) {
       secondsLeft = 0;
+      if (_solo) {
+        // The grid's clock is up.
+        _emit(GameEvent.timeUp);
+        _finish();
+        return;
+      }
       if (phase == TttPhase.answering) {
         _miss(timeout: true);
       } else {
@@ -294,9 +308,19 @@ class TicTacToeController extends ChangeNotifier {
         points: {
           for (var t = 0; t < teamCount; t++) t: squaresOf(t) + (winner == t ? lineBonus : 0),
         },
-        // Solo (Pack the Box): the share of the nine you filled; all nine is 100.
-        solo: teamCount == 1 ? (squaresOf(0) * 100 / 9).round() : null,
+        solo: teamCount == 1 ? soloScore : null,
       );
+
+  /// Pack the Box, out of 100: 7 a square (63), then for lives kept (up to
+  /// 12) and time left (up to 25), both scaled by how much of the grid you
+  /// filled. A full grid with no lives lost and no time used is 100; a full
+  /// grid in a minute with a life lost is 63 + 8 + 17 = 88.
+  int get soloScore {
+    final filled = squaresOf(0) / 9;
+    final lifeBonus = 4 * livesLeft[0].clamp(0, lives) * filled;
+    final timeBonus = soloSeconds == 0 ? 0 : 25 * (secondsLeft / soloSeconds).clamp(0.0, 1.0) * filled;
+    return (7 * squaresOf(0) + lifeBonus + timeBonus).round().clamp(0, 100);
+  }
 
   bool get _solo => teamCount == 1;
 
@@ -350,7 +374,10 @@ class TicTacToeController extends ChangeNotifier {
     notifyListeners();
   }
 
-  void _startChoosing() => secondsLeft = _chooseClock ? chooseSeconds.toDouble() : 0;
+  void _startChoosing() {
+    if (_solo) return; // one clock for the whole grid
+    secondsLeft = _chooseClock ? chooseSeconds.toDouble() : 0;
+  }
 
   void _finish() {
     phase = TttPhase.finished;

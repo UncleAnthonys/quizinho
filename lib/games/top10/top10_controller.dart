@@ -54,6 +54,9 @@ class Top10Controller extends ChangeNotifier {
   final Map<int, String> found = {};
   final Map<int, int> foundBy = {};
 
+  /// Who's been named, so one of several level players can't be named twice.
+  final Set<String> foundIds = {};
+
   /// Wrong names, newest last ("✗ Gary Cahill").
   final List<String> misses = [];
 
@@ -89,9 +92,14 @@ class Top10Controller extends ChangeNotifier {
 
   Top10Answer submit(Player p) {
     if (finished) return Top10Answer.ignored;
-    final i = list.indexOf(p.id);
-    if (i != null && found.containsKey(i)) return Top10Answer.alreadyFound;
+    // Players level on the last rank share those places: take the first empty one.
+    final slots = list.slotsFor(p.id);
+    if (slots.isNotEmpty && (foundIds.contains(p.id) || slots.every(found.containsKey))) {
+      return Top10Answer.alreadyFound;
+    }
+    final i = slots.isEmpty ? null : slots.firstWhere((s) => !found.containsKey(s));
     if (i != null) {
+      foundIds.add(p.id);
       found[i] = p.name;
       foundBy[i] = currentTeam;
       lastFound = i;
