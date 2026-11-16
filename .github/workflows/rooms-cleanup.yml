@@ -39,4 +39,13 @@ jobs:
               urllib.request.urlopen(urllib.request.Request(url(f"rooms/{code}"), method="DELETE"))
               deleted += 1
           print(f"::notice title=Rooms clean-up::deleted {deleted}, kept {kept}")
+          # Voice misses (heard words only, for improving recognition) are kept
+          # at most 12 months, as the privacy policy says.
+          misses = get("voicemisses") or {}
+          old = [k for k, v in misses.items()
+                 if not isinstance(v, dict) or not isinstance(v.get("at"), (int, float))
+                 or now - v["at"] > 365 * 24 * 3600 * 1000]
+          for k in old:
+              urllib.request.urlopen(urllib.request.Request(url(f"voicemisses/{k}"), method="DELETE"))
+          print(f"::notice title=Voice misses::deleted {len(old)} older than 12 months, kept {len(misses) - len(old)}")
           PY
