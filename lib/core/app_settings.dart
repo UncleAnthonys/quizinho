@@ -152,7 +152,9 @@ class AppSettings extends ChangeNotifier {
       difficulty: Difficulty.fromName(_prefs.getString('difficulty')),
       modes: (modes == null || modes.isEmpty) ? null : modes,
       // After buzzing you should know it: 5/8/12s (older saves of 10/15/20 move to 8).
-      answerSeconds: const {5, 8, 12}.contains(_prefs.getInt('answerSeconds')) ? _prefs.getInt('answerSeconds')! : 8,
+      // 12s default (8 was too tight for Club Connections and Career Path);
+      // a new key, so phones that saved the old 8 start on 12 too.
+      answerSeconds: const {8, 12, 15}.contains(_prefs.getInt('answerSecs')) ? _prefs.getInt('answerSecs')! : 12,
       bombSeconds: _prefs.getInt('bombSeconds') ?? 20,
       bombLives: _prefs.getInt('bombLives') ?? 3,
       headsUpSeconds: _prefs.getInt('headsUpSeconds') ?? 60,
@@ -168,7 +170,7 @@ class AppSettings extends ChangeNotifier {
     await _prefs.setStringList('modes', [for (final m in c.modes) m.name]);
     await _prefs.setString('length', c.length.name);
     await _prefs.setString('difficulty', c.difficulty.name);
-    await _prefs.setInt('answerSeconds', c.answerSeconds);
+    await _prefs.setInt('answerSecs', c.answerSeconds);
     await _prefs.setInt('bombSeconds', c.bombSeconds);
     await _prefs.setInt('bombLives', c.bombLives);
     await _prefs.setInt('headsUpSeconds', c.headsUpSeconds);

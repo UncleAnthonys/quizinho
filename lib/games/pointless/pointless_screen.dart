@@ -80,7 +80,7 @@ class _PointlessScreenState extends State<PointlessScreen>
       stage: TurnStage.answer,
       title: 'UNDER THE RADAR · ANSWER ${c.goNumber} OF ${c.answersPerTeam}',
       headline: c.category.prompt,
-      sub: 'Confer - the most obscure right answer wins',
+      sub: 'Confer - the rarest right answer wins',
       game: 'pt',
       board: _view(c),
       left: c.secondsLeft,
@@ -197,6 +197,7 @@ class _PointlessScreenState extends State<PointlessScreen>
       'answers': [for (final a in c.answers) answer(a)],
       'go': c.goNumber,
       'per': c.answersPerTeam,
+      if (_t.teamCount == 1) 'alone': true,
       if (finished && _t.teamCount == 1) 'solo': c.result().solo ?? 0,
       if (finished) ...{
         'tie': c.winners.length > 1,
@@ -355,7 +356,8 @@ class PtLayout extends StatelessWidget {
         ]),
         typing
             ? const SizedBox.shrink()
-            : Text('Confer - the most obscure right answer wins.', textAlign: TextAlign.center, style: AppText.label(13)),
+            : Text(data['alone'] == true ? 'The rarest right answer scores most.' : 'Confer - the rarest right answer wins.',
+                textAlign: TextAlign.center, style: AppText.label(13)),
         const SizedBox(height: 8),
         answerBox,
       ]);

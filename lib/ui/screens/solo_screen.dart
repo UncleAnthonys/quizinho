@@ -206,7 +206,7 @@ class _SoloScreenState extends State<SoloScreen> {
             ),
             const Padding(
               padding: EdgeInsets.only(top: 6, left: 4),
-              child: Text('Bests are kept for each difficulty.', style: TextStyle(color: Palette.muted, fontSize: 13)),
+              child: Text('Best scores are kept for each difficulty.', style: TextStyle(color: Palette.muted, fontSize: 13)),
             ),
             const SizedBox(height: 16),
             Text('FOOTBALL', style: AppText.label(14, color: Palette.yellow)),
