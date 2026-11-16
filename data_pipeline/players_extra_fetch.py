@@ -171,7 +171,7 @@ def infobox_spells(text: str) -> list[dict]:
             if not link or not span:
                 continue
             title = link.group(1).strip().replace("_", " ")
-            out.append({"title": title[:1].upper() + title[1:], "start": span[0], "end": span[1],
+            out.append({"title": title[:1].upper() + title[1:], "start": span[0], "end": span[1], "national": bool(prefix),
                         "loan": "→" in v or "loan" in v.lower(),
                         "apps": wp.number(params.get((f"{prefix}caps", n), "")),
                         "goals": wp.number(params.get((f"{prefix}goals", n), ""))})
@@ -260,20 +260,29 @@ SELECT DISTINCT ?p ?pLabel ?sl WHERE {{
     players.update(new)
     spells += new_spells
 
-    # 4. Infobox careers: players with no dated club in Wikidata, and the
-    # Premier League players above.
-    dated = {s["player"] for s in spells if s.get("start")}
-    bare = sorted({q for q in players if q not in dated} | forced)
-    print(f"players with no dated spell: {len(bare)}", flush=True)
-    titles = wp.enwiki_titles(bare)
+    # 4. Infobox careers for everyone with an English Wikipedia article.
+    # Wikidata's clubs go stale (Andersen and Sarr with no Crystal Palace,
+    # Will Hughes stuck at Derby, Arthur's Liverpool loan missing); the
+    # infobox is what editors keep up to date, so where it lists a senior
+    # career it replaces Wikidata's clubs (and its national teams, if listed).
+    everyone = sorted(players)
+    print(f"players to read infoboxes for: {len(everyone)}", flush=True)
+    titles = wp.enwiki_titles(everyone)
     texts = wp.wikitext(sorted(set(titles.values())))
     by_player = {q: infobox_spells(texts.get(t, "")) for q, t in titles.items()}
     team_titles = sorted({s["title"] for ss in by_player.values() for s in ss})
     team_qid = wp.club_qids(team_titles)
     added = 0
-    # An infobox career replaces a forced player's thin Wikidata one.
-    replaced = {q for q, ss in by_player.items() if ss and q in forced}
-    spells = [s for s in spells if s["player"] not in replaced]
+    def national(team: str) -> bool:
+        return "national" in (clubs.get(team, {}).get("name") or "").lower()
+    club_rows = {q for q, ss in by_player.items() if any(not s["national"] for s in ss)}
+    nat_rows = {q for q, ss in by_player.items() if any(s["national"] for s in ss)}
+    before_n = len(spells)
+    spells = [s for s in spells
+              if not ((s["player"] in club_rows and not national(s["team"]))
+                      or (s["player"] in nat_rows and national(s["team"])))]
+    print(f"Wikidata spells replaced by infobox careers: {before_n - len(spells)} "
+          f"({len(club_rows)} players' clubs, {len(nat_rows)} national teams)", flush=True)
     for q, ss in by_player.items():
         for s in ss:
             team = team_qid.get(s["title"])
