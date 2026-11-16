@@ -10,12 +10,11 @@ clubs and countries (.json.gz) so normalise.py treats them like the rest.
    League club (seed/pl_clubs.json): the 90s squad players.
 3. Everyone who has played a Premier League match (raw/pl_matches.json.gz)
    but isn't in seed/players.json: found on Wikidata by birth date and name,
-   and given their Wikipedia career (below) even if Wikidata has one, since
-   Wikidata's was too thin to keep them (Kluivert, Podence).
-4. Senior careers (and national teams) from the English Wikipedia infobox for
-   players Wikidata has no dated clubs for (Kroupi), and for those in 3.
-   Saved as spells with "src": "enwiki", replacing that player's Wikidata
-   spells; a re-run replaces them.
+   and given their Wikipedia career too (below).
+4. Every player's senior career (and national teams) from their English
+   Wikipedia infobox, saved to raw/infobox.json.gz next to Wikidata's
+   spells. normalise.py cross-checks the two (and the Premier League
+   line-ups) and reports where they disagree.
 
 Runs in GitHub Actions (.github/workflows/players-extra.yml): the dev
 workspace can't reach Wikidata or Wikipedia. Standard library only.
@@ -260,11 +259,11 @@ SELECT DISTINCT ?p ?pLabel ?sl WHERE {{
     players.update(new)
     spells += new_spells
 
-    # 4. Infobox careers for everyone with an English Wikipedia article.
-    # Wikidata's clubs go stale (Andersen and Sarr with no Crystal Palace,
-    # Will Hughes stuck at Derby, Arthur's Liverpool loan missing); the
-    # infobox is what editors keep up to date, so where it lists a senior
-    # career it replaces Wikidata's clubs (and its national teams, if listed).
+    # 4. Every player's career as their English Wikipedia infobox lists it,
+    # saved alongside Wikidata's (raw/infobox.json.gz). normalise.py checks
+    # one against the other (and against every Premier League line-up),
+    # keeps what they agree on, settles the rest by rule and lists every
+    # disagreement in seed/career_anomalies.json.
     everyone = sorted(players)
     print(f"players to read infoboxes for: {len(everyone)}", flush=True)
     titles = wp.enwiki_titles(everyone)
@@ -272,31 +271,24 @@ SELECT DISTINCT ?p ?pLabel ?sl WHERE {{
     by_player = {q: infobox_spells(texts.get(t, "")) for q, t in titles.items()}
     team_titles = sorted({s["title"] for ss in by_player.values() for s in ss})
     team_qid = wp.club_qids(team_titles)
+    infobox: dict[str, list] = {}
     added = 0
-    def national(team: str) -> bool:
-        return "national" in (clubs.get(team, {}).get("name") or "").lower()
-    club_rows = {q for q, ss in by_player.items() if any(not s["national"] for s in ss)}
-    nat_rows = {q for q, ss in by_player.items() if any(s["national"] for s in ss)}
-    before_n = len(spells)
-    spells = [s for s in spells
-              if not ((s["player"] in club_rows and not national(s["team"]))
-                      or (s["player"] in nat_rows and national(s["team"])))]
-    print(f"Wikidata spells replaced by infobox careers: {before_n - len(spells)} "
-          f"({len(club_rows)} players' clubs, {len(nat_rows)} national teams)", flush=True)
     for q, ss in by_player.items():
+        rows = []
         for s in ss:
             team = team_qid.get(s["title"])
-            if not team:
-                continue
-            spells.append({"player": q, "team": team, "start": f"{s['start']}-07-01",
-                           "end": f"{s['end']}-06-30" if s["end"] else None,
-                           "apps": s["apps"], "goals": s["goals"], "acq": [LOAN] if s["loan"] else [],
-                           "src": "enwiki"})
-            added += 1
-    print(f"infobox spells: {added} for {sum(1 for ss in by_player.values() if ss)} players", flush=True)
+            if team:
+                rows.append({"team": team, "start": s["start"], "end": s["end"], "loan": s["loan"],
+                             "apps": s["apps"], "goals": s["goals"], "national": s["national"]})
+        if rows:
+            infobox[q] = rows
+            added += len(rows)
+    print(f"infobox careers: {added} spells for {len(infobox)} players", flush=True)
+    wd.save("infobox", infobox)
 
     # Teams and countries the new spells and players bring in.
-    missing_teams = sorted({s["team"] for s in spells} - set(clubs))
+    missing_teams = sorted(({s["team"] for s in spells}
+                            | {r["team"] for rows in infobox.values() for r in rows}) - set(clubs))
     clubs.update(wd.club_info(missing_teams))
     country_ids = {n for p in players.values() for n in p.get("nationalities", [])} | {
         c["country"] for c in clubs.values() if c.get("country")}

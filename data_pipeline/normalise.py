@@ -246,6 +246,134 @@ def senior_nations(spells_raw: list[dict], clubs_raw: dict, countries: dict) -> 
     return {pid: code for pid, (_, code) in best.items()}
 
 
+def _fold(t: str | None) -> str:
+    return unicodedata.normalize("NFKD", t or "").encode("ascii", "ignore").decode().lower()
+
+
+def pl_appearances(players_raw: list[dict]) -> dict[str, dict[str, tuple[int, int]]]:
+    """Every Premier League appearance (raw/pl_matches.json.gz), as our
+    Wikidata id -> PL club id -> (first season, last season). A feed player
+    is ours when the birth date matches and a name word is shared."""
+    path = RAW / "pl_matches.json.gz"
+    pl_path = SEED / "pl_clubs.json"
+    if not path.exists() or not pl_path.exists():
+        return {}
+    d = json.load(gzip.open(path, "rt", encoding="utf-8"))
+    pl_clubs = json.loads(pl_path.read_text(encoding="utf-8"))["clubs"]  # qid -> "Arsenal F.C."
+
+    def club_qid(feed_name: str) -> str | None:
+        f = _fold(feed_name)
+        hits = [q for q, n in pl_clubs.items() if _fold(n).startswith(f) or f in _fold(n)]
+        return hits[0] if len(hits) == 1 else None
+    team_q = {t[1]: club_qid(t[1]) for m in d["matches"] for t in m["teams"]}
+    by_dob: dict[str, list[dict]] = defaultdict(list)
+    for p in players_raw:
+        if p.get("dob"):
+            by_dob[p["dob"]].append(p)
+
+    def words(*names: str) -> set[str]:
+        return {w for n in names for w in re.findall(r"[a-z]+", _fold(n)) if len(w) > 2}
+    ours: dict[str, str | None] = {}
+    for pid, (name, millis, _) in d["people"].items():
+        if millis is None:
+            continue
+        import datetime as _dt
+        dob = _dt.datetime.fromtimestamp(millis / 1000, _dt.timezone.utc).date().isoformat()
+        want = words(name)
+        last = words(name.split()[-1]) if name.split() else set()
+        cands = [p for p in by_dob.get(dob, []) if want & words(p.get("name") or "", *p.get("aliases", []))]
+        best = [p for p in cands if last & words(p.get("name") or "", *p.get("aliases", []))] or cands
+        ours[pid] = best[0]["id"] if len(best) == 1 else None
+    out: dict[str, dict[str, tuple[int, int]]] = defaultdict(dict)
+    for m in d["matches"]:
+        season = int(re.search(r"(\d{4})/", m["season"]).group(1))
+        names = {str(t[0]): t[1] for t in m["teams"]}
+        on = {e[2] for e in m["events"] if e[0] == "S" and e[1] == "ON"}
+        for tid, rows in m["lineups"].items():
+            club = team_q.get(names.get(tid, ""))
+            if not club:
+                continue
+            for pid, _, start in rows:
+                if not (start or pid in on):
+                    continue
+                q = ours.get(str(pid))
+                if not q:
+                    continue
+                a, b = out[q].get(club, (season, season))
+                out[q][club] = (min(a, season), max(b, season))
+    return out
+
+
+def cross_check(by_player: dict, players_raw: list[dict], keep_clubs: dict, stats: Counter) -> None:
+    """Belt and braces for careers: Wikidata's clubs, the English Wikipedia
+    infobox's (raw/infobox.json.gz) and every Premier League line-up.
+
+    Where they agree, nothing changes. Where they don't:
+      infobox only     the club is added (Wikidata goes stale on recent moves:
+                       Andersen and Sarr at Palace, Arthur's Liverpool loan)
+      Wikidata only    kept if a Premier League line-up confirms it, else
+                       dropped (the infobox is the one editors maintain)
+      years differ     the infobox's years are used
+      line-ups only    a Premier League club neither source has is added
+    Every disagreement goes in seed/career_anomalies.json, best-known players
+    first, to check by hand."""
+    path = RAW / "infobox.json.gz"
+    infobox = json.load(gzip.open(path, "rt", encoding="utf-8")) if path.exists() else {}
+    pl = pl_appearances(players_raw)
+    current = max((b for clubs in pl.values() for _, b in clubs.values()), default=0)  # season under way
+    names = {p["id"]: (p.get("name") or p["id"], p.get("sitelinks", 0)) for p in players_raw}
+    anomalies: list[dict] = []
+
+    def note(q: str, kind: str, club: str, detail: str = "") -> None:
+        stats[f"career_{kind}"] += 1
+        n, sl = names.get(q, (q, 0))
+        anomalies.append({"player": n, "wikidata": q, "sitelinks": sl, "kind": kind,
+                          "club": keep_clubs.get(club, {}).get("name", club), "detail": detail})
+
+    for q in set(by_player) | set(infobox) | set(pl):
+        wd = by_player.get(q, [])
+        rows = [r for r in infobox.get(q, []) if not r.get("national") and r["team"] in keep_clubs
+                and r.get("apps") != 0 and r.get("start")]
+        if rows:
+            ib = [{"club": r["team"], "start": r["start"], "end": r["end"], "loan": bool(r.get("loan")),
+                   "raw_start": f"{r['start']}-07-01", "apps": r.get("apps"), "goals": r.get("goals")} for r in rows]
+            ib_clubs = {s["club"] for s in ib}
+            wd_clubs = {s["club"] for s in wd}
+            merged = list(ib)
+            for s in wd:
+                if s["club"] in ib_clubs:
+                    starts = [i["start"] for i in ib if i["club"] == s["club"]]
+                    if min(abs(s["start"] - x) for x in starts) > 1:
+                        note(q, "years_differ", s["club"], f"Wikidata {s['start']}, infobox {sorted(starts)}")
+                elif s["club"] in pl.get(q, {}):
+                    merged.append(s)
+                    note(q, "wikidata_only_kept", s["club"], "confirmed by Premier League line-ups")
+                else:
+                    note(q, "wikidata_only_dropped", s["club"], f"{s['start']}-{s['end'] or ''}")
+            for c in ib_clubs - wd_clubs:
+                if wd:
+                    note(q, "infobox_only_added", c)
+        else:
+            merged = list(wd)
+        have = {s["club"] for s in merged}
+        for c, (a, b) in pl.get(q, {}).items():
+            if c not in have and c in keep_clubs:
+                end = None if b >= current else b + 1  # still there this season
+                merged.append({"club": c, "start": a, "end": end, "loan": False, "raw_start": f"{a}-08-01",
+                               "apps": None, "goals": None})
+                note(q, "premier_league_only_added", c, f"{a}-{end or ''}")
+        if merged:
+            by_player[q] = merged
+    anomalies.sort(key=lambda a: -a["sitelinks"])
+    kinds = Counter(a["kind"] for a in anomalies)
+    (SEED / "career_anomalies.json").write_text(json.dumps(
+        {"_note": "Where Wikidata, the Wikipedia infobox and the Premier League line-ups disagree on a career, "
+                  "and what normalise.py did about it (see cross_check). Best-known players first. "
+                  f"Counts: {dict(kinds)}",
+         "anomalies": anomalies[:3000]}, ensure_ascii=False, indent=0), encoding="utf-8")
+    print(f"careers cross-checked: {dict(kinds)}")
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--report", action="store_true")
@@ -337,6 +465,9 @@ def main() -> int:
             })
             stats["spell_zero_apps"] -= 1
             stats["spell_new_move_kept"] += 1
+
+    # ---- cross-check: Wikidata v Wikipedia infobox v Premier League -------
+    cross_check(by_player, players_raw, keep_clubs, stats)
 
     # ---- players ----------------------------------------------------------
     managers = {m["name"].removeprefix("Sir ") for m in
