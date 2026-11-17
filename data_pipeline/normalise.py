@@ -39,6 +39,11 @@ EXCLUDE_TYPES = {
     "Q18558301", "Q2367225",  # university / college teams
     "Q13393265", "Q4498974", "Q17156793", "Q17376093",  # basketball, ice hockey, NFL, cricket
 }
+# Reserve sides whose Wikidata label doesn't say so (or has been vandalised).
+RESERVE_CLUBS = {
+    "Q950835",  # Sevilla Atlético, labelled "FC barcelona" (gave Sergio Ramos a Barcelona spell)
+}
+
 NON_SENIOR_LABEL = re.compile(
     r"(\bU-?\d{2}\b|\bunder[- ]?\d{2}\b|\byouth\b|\bacademy\b|\breserves?\b|\bjuvenil\b|\bprimavera\b"
     r"|\bjong\b|\bcastilla\b|\batl[eè]tic\b"
@@ -311,8 +316,9 @@ def cross_check(by_player: dict, players_raw: list[dict], keep_clubs: dict, stat
     Where they agree, nothing changes. Where they don't:
       infobox only     the club is added (Wikidata goes stale on recent moves:
                        Andersen and Sarr at Palace, Arthur's Liverpool loan)
-      Wikidata only    kept if a Premier League line-up confirms it, else
-                       dropped (the infobox is the one editors maintain)
+      Wikidata only    kept if a Premier League line-up confirms it or
+                       Wikidata records games there, else dropped (youth
+                       sides, coaching jobs: Busquets at Lleida)
       years differ     the infobox's years are used
       line-ups only    a Premier League club neither source has is added
     A club counts if he played a game there in any competition: no league
@@ -331,6 +337,11 @@ def cross_check(by_player: dict, players_raw: list[dict], keep_clubs: dict, stat
         n, sl = names.get(q, (q, 0))
         anomalies.append({"player": n, "wikidata": q, "sitelinks": sl, "kind": kind,
                           "club": keep_clubs.get(club, {}).get("name", club), "detail": detail})
+
+    def clashes(s: dict, ib: list[dict]) -> bool:
+        """Overlaps a non-loan infobox spell by more than a season."""
+        a0, a1 = s["start"], s["end"] or current
+        return any(min(a1, i["end"] or current) - max(a0, i["start"]) >= 1 for i in ib if not i["loan"])
 
     for q in set(by_player) | set(infobox) | set(pl):
         wd = by_player.get(q, [])
@@ -352,6 +363,14 @@ def cross_check(by_player: dict, players_raw: list[dict], keep_clubs: dict, stat
                 elif s["club"] in pl.get(q, {}):
                     merged.append(s)
                     note(q, "wikidata_only_kept", s["club"], "confirmed by Premier League line-ups")
+                elif (s.get("apps") or 0) > 0 and not clashes(s, ib):
+                    # Wikidata records games there, in a gap in the infobox's
+                    # career: a real spell the infobox didn't link up (Keegan,
+                    # Scunthorpe, 124 games). One that overlaps the infobox's
+                    # clubs is a duplicate entry or a mistake (Passarella's
+                    # second River Plate; Vidal at Universidad de Chile).
+                    merged.append(s)
+                    note(q, "wikidata_only_kept", s["club"], f"{s['apps']} games on Wikidata")
                 else:
                     note(q, "wikidata_only_dropped", s["club"], f"{s['start']}-{s['end'] or ''}")
             for c in ib_clubs - wd_clubs:
@@ -406,6 +425,9 @@ def main() -> int:
     # ---- clubs ------------------------------------------------------------
     keep_clubs: dict[str, dict] = {}
     for cid, c in clubs_raw.items():
+        if cid in RESERVE_CLUBS:
+            stats["club_not_senior"] += 1
+            continue
         name = clean_name(c.get("name"))
         if not name:
             stats["club_no_name"] += 1

@@ -250,7 +250,7 @@
 "Q1023201",
 "C.D. Marathón",
 "HON",
-2,
+1,
 [
 "C.D. Marathon",
 "Club Deportivo Marathon",
@@ -272,7 +272,7 @@
 "Q1023205",
 "Motagua",
 "HON",
-2,
+1,
 [
 "F.C. Motagua",
 "Club Deportivo Motagua",
@@ -514,7 +514,7 @@
 "Q1024474",
 "Miramar Misiones",
 "URU",
-2,
+1,
 [],
 19,
 "m"
@@ -1084,6 +1084,17 @@
 "m"
 ],
 [
+"Q1047912",
+"Sápmi football team",
+"NOR",
+1,
+[
+"Sapmi football team"
+],
+27,
+"m"
+],
+[
 "Q1048007",
 "Køge Boldklub",
 "DEN",
@@ -1334,7 +1345,7 @@
 "Q1052781",
 "Club Celaya",
 "MEX",
-1,
+2,
 [],
 15,
 "m"
@@ -2841,7 +2852,7 @@
 "Q1136016",
 "Cosenza Calcio",
 "ITA",
-1,
+2,
 [
 "Cosenza Calcio Srl"
 ],
@@ -3034,6 +3045,15 @@
 "Police SA"
 ],
 25,
+"m"
+],
+[
+"Q1140624",
+"Crișana Oradea",
+"ROU",
+1,
+[],
+10,
 "m"
 ],
 [
@@ -4340,6 +4360,19 @@
 "m"
 ],
 [
+"Q12396315",
+"Olympiacos SFP",
+"GRE",
+1,
+[
+"Olympiacos C.F.P.",
+"Olympiacos CFP",
+"Olympiacos S.F.P."
+],
+20,
+"m"
+],
+[
 "Q124007617",
 "SK Sturm Graz",
 "AUT",
@@ -5269,7 +5302,7 @@
 "Q130521",
 "Guangzhou",
 "CHN",
-2,
+3,
 [
 "Guangzhou F.C.",
 "Guangzhou Evergrande",
@@ -5589,7 +5622,7 @@
 "Q133520",
 "Grêmio Barueri Futebol",
 "BRA",
-2,
+1,
 [
 "Gremio Barueri Futebol"
 ],
@@ -6549,7 +6582,7 @@
 "Q1387110",
 "Felgueiras",
 "POR",
-2,
+1,
 [
 "F.C. Felgueiras",
 "FC Felgueiras"
@@ -7093,6 +7126,15 @@
 "m"
 ],
 [
+"Q1388848",
+"FK Dainava Alytus",
+"LTU",
+1,
+[],
+14,
+"m"
+],
+[
 "Q1388862",
 "FK Donji Srem",
 "SRB",
@@ -7491,6 +7533,17 @@
 "Lobi Stars F.C."
 ],
 15,
+"m"
+],
+[
+"Q1415807",
+"Mjøndalen IF Fotball",
+"NOR",
+1,
+[
+"Mjøndalen Idrettsforening"
+],
+27,
 "m"
 ],
 [
@@ -10602,7 +10655,7 @@ null,
 "Q1638649",
 "Melbourne Knights",
 "AUS",
-1,
+2,
 [],
 14,
 "m"
@@ -11927,6 +11980,15 @@ null,
 "S.C. Salgueiros"
 ],
 18,
+"m"
+],
+[
+"Q1755918",
+"Società Ginnastica Comunale Sampierdarenese",
+"ITA",
+1,
+[],
+12,
 "m"
 ],
 [
@@ -13566,7 +13628,7 @@ null,
 "Q18524",
 "Nuneaton Town",
 "GBR",
-1,
+2,
 [
 "Nuneaton Town F.C.",
 "Nuneaton",
@@ -15500,7 +15562,7 @@ null,
 "Q19573",
 "Bury",
 "GBR",
-3,
+2,
 [
 "Bury F.C.",
 "BFC",
@@ -15665,7 +15727,7 @@ null,
 "Q19589",
 "Doncaster Rovers",
 "GBR",
-2,
+3,
 [
 "Doncaster Rovers F.C.",
 "Doncaster",
@@ -16220,6 +16282,17 @@ null,
 1,
 [
 "FC Chelyabinsk"
+],
+11,
+"m"
+],
+[
+"Q1974544",
+"Dynamo Kirov",
+"RUS",
+1,
+[
+"FC Dynamo Kirov"
 ],
 11,
 "m"
@@ -21007,7 +21080,7 @@ null,
 "Q2387559",
 "Tirol Innsbruck",
 "AUT",
-2,
+1,
 [
 "FC Tirol Innsbruck"
 ],
@@ -21116,7 +21189,7 @@ null,
 "Q240438",
 "Alania Vladikavkaz",
 "RUS",
-1,
+2,
 [
 "FC Alania Vladikavkaz"
 ],
@@ -22485,7 +22558,7 @@ null,
 "Q2525070",
 "Odesa",
 "UKR",
-2,
+1,
 [
 "SC Odesa"
 ],
@@ -22734,6 +22807,15 @@ null,
 "FC Epitsentr Dunaivtsi"
 ],
 11,
+"m"
+],
+[
+"Q254658",
+"Oulun Palloseura",
+"FIN",
+1,
+[],
+16,
 "m"
 ],
 [
@@ -25377,6 +25459,17 @@ null,
 "m"
 ],
 [
+"Q2819143",
+"A.E.K.",
+"GRE",
+1,
+[
+"AEK"
+],
+12,
+"m"
+],
+[
 "Q2819319",
 "Proodeftiki Neolaia",
 "GRE",
@@ -26344,7 +26437,7 @@ null,
 "Q289029",
 "Ancona",
 "ITA",
-1,
+2,
 [
 "SSC Ancona",
 "Anconitana",
@@ -26399,6 +26492,20 @@ null,
 "Legnano Football"
 ],
 22,
+"m"
+],
+[
+"Q289339",
+"A.C. Lumezzane",
+"ITA",
+2,
+[
+"A C Lumezzane",
+"A. C. Lumezzane",
+"AC Lumezzane",
+"Lumezzane Calcio"
+],
+16,
 "m"
 ],
 [
@@ -29615,7 +29722,7 @@ null,
 "Q326156",
 "Tavriya Simferopol",
 "SUN",
-1,
+2,
 [
 "SC Tavriya Simferopol",
 "SC Tavria Simferopol"
@@ -29658,6 +29765,15 @@ null,
 "Vidi"
 ],
 47,
+"m"
+],
+[
+"Q3268410",
+"Palloseura Kemi Kings",
+"FIN",
+1,
+[],
+18,
 "m"
 ],
 [
@@ -30194,7 +30310,7 @@ null,
 "Q332833",
 "Gold Eagles",
 "COL",
-1,
+2,
 [
 "Rionegro",
 "Aguilas Doradas",
@@ -33411,7 +33527,7 @@ null,
 "Q433529",
 "Atletico Roma",
 "ITA",
-1,
+2,
 [
 "Atletico Roma F.C.",
 "Cisco Calcio Roma",
@@ -33836,7 +33952,7 @@ null,
 "Q451635",
 "AmaZulu",
 "RSA",
-2,
+1,
 [
 "AmaZulu F.C.",
 "Amazulu"
@@ -34683,7 +34799,7 @@ null,
 "Q484569",
 "Gangwon",
 "KOR",
-2,
+1,
 [
 "Gangwon FC",
 "Gangwon Football Club"
@@ -36247,7 +36363,7 @@ null,
 "Q5214935",
 "Halifax Town",
 "GBR",
-1,
+2,
 [
 "FC Halifax Town",
 "Halifax",
@@ -36819,7 +36935,7 @@ null,
 "Q541744",
 "Red Bull Bragantino",
 "BRA",
-1,
+2,
 [
 "Bragantino",
 "Clube Atletico Bragantino",
@@ -37292,7 +37408,7 @@ null,
 "Q54834034",
 "Sochi",
 "RUS",
-2,
+1,
 [
 "PFC Sochi",
 "FC Sochi"
@@ -38310,6 +38426,15 @@ null,
 "m"
 ],
 [
+"Q582663",
+"Obolón Kiev",
+"UKR",
+1,
+[],
+11,
+"m"
+],
+[
 "Q582900",
 "Velbazhd Kyustendil",
 "BUL",
@@ -38692,6 +38817,15 @@ null,
 "FK Minsk"
 ],
 35,
+"m"
+],
+[
+"Q595205",
+"Europe XI",
+null,
+1,
+[],
+10,
 "m"
 ],
 [
@@ -39289,7 +39423,7 @@ null,
 "Q603633",
 "Liberty Professionals",
 "GHA",
-1,
+2,
 [
 "Liberty Professionals F.C.",
 "Liberty Professionals FC"
@@ -43585,6 +43719,18 @@ null,
 "m"
 ],
 [
+"Q701290",
+"SSV Ulm 1846",
+"GER",
+1,
+[
+"Ulm",
+"SSV Ulm"
+],
+14,
+"m"
+],
+[
 "Q701576",
 "TV Grosswallstadt",
 "GER",
@@ -43686,6 +43832,17 @@ null,
 "m"
 ],
 [
+"Q7071377",
+"Náutico Futebol Clube",
+"BRA",
+1,
+[
+"Nautico Futebol Clube"
+],
+10,
+"m"
+],
+[
 "Q707826",
 "Rhein-Neckar Löwen",
 "GER",
@@ -43758,6 +43915,15 @@ null,
 "Taichung Futuro F.C."
 ],
 12,
+"m"
+],
+[
+"Q712836",
+"INF Clairefontaine",
+"FRA",
+1,
+[],
+18,
 "m"
 ],
 [
@@ -47695,7 +47861,7 @@ null,
 "Q838534",
 "Paraná Clube",
 "BRA",
-2,
+3,
 [
 "EC Pinheiros",
 "Colorado EC",
@@ -47785,7 +47951,7 @@ null,
 "Q8408",
 "Modena",
 "ITA",
-3,
+2,
 [
 "Modena F.C.",
 "Modena Calcio",
@@ -48844,7 +49010,7 @@ null,
 "Q862851",
 "Foolad",
 "IRN",
-1,
+2,
 [
 "Foolad F.C.",
 "Men of Steel",
@@ -50345,7 +50511,7 @@ null,
 "Q932284",
 "Cork City",
 "IRL",
-2,
+1,
 [
 "Cork City F.C."
 ],
@@ -50783,18 +50949,6 @@ null,
 "m"
 ],
 [
-"Q950835",
-"barcelona",
-"ESP",
-3,
-[
-"FC barcelona",
-"Betis"
-],
-28,
-"m"
-],
-[
 "Q951345",
 "KKPK Medyk Konin Women",
 "POL",
@@ -50884,7 +51038,7 @@ null,
 "Q958577",
 "Puntarenas",
 "CRC",
-2,
+1,
 [
 "Puntarenas F.C."
 ],
@@ -51374,7 +51528,7 @@ null,
 "Q98921",
 "Ipatinga Futebol Clube",
 "BRA",
-2,
+1,
 [
 "Betim Esporte Clube",
 "Ipatinga Esporte Clube"
@@ -51398,6 +51552,17 @@ null,
 1,
 [],
 28,
+"m"
+],
+[
+"Q994685",
+"Baia Mare",
+"ROU",
+1,
+[
+"FC Baia Mare"
+],
+10,
 "m"
 ],
 [
