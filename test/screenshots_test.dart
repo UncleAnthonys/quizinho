@@ -325,7 +325,11 @@ void main() {
           ),
         ),
       ]),
-      then: () async => miss.value = 1,
+      then: () async {
+        miss.value = 1;
+        await tester.pump(); // starts the animation
+        await tester.pump(const Duration(milliseconds: 150));
+      },
     );
   }, skip: !_shots);
 
