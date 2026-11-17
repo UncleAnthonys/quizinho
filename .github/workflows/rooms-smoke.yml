@@ -18,6 +18,10 @@ jobs:
           code=ZZZZ
           put=$(curl -s -o /dev/null -w "%{http_code}" -X PUT -d '{"at":{".sv":"timestamp"}}' "$U/rooms/$code/host.json")
           got=$(curl -s "$U/rooms/$code/host.json")
+          # Does a save hand back the database's own time? (Phones use it to
+          # line their clocks up, so buzzes are timed fairly.)
+          echoed=$(curl -s -X PUT -d '{"at":{".sv":"timestamp"},"n":"x"}' "$U/rooms/$code/members/smoke.json")
+          echo "::notice title=Clock::PUT reply=$echoed local=$(date +%s%3N)"
           stream=$(timeout 4 curl -s -N -H "Accept: text/event-stream" "$U/rooms/$code.json" | head -c 300 || true)
           other=$(curl -s -o /dev/null -w "%{http_code}" -X PUT -d '1' "$U/elsewhere.json")
           badcode=$(curl -s -o /dev/null -w "%{http_code}" -X PUT -d '1' "$U/rooms/TOOLONG/x.json")
