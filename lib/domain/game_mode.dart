@@ -47,7 +47,7 @@ enum GameModeId {
     playable: true,
     rules: [
       'Pick a square, then name a player who fits both its headers. A player can only be named once.',
-      'Correct: the square is yours, +1. Wrong, too slow or a pass costs a life (3 lives each). One steal each.',
+      'Correct: the square is yours, +1. Wrong, too slow or a pass costs a life (3 lives each). One steal per team.',
       'Three in a row wins the game, +3. Otherwise, it ends when every team is out of lives.',
     ],
     whoPlays: 'Teams take turns.',
