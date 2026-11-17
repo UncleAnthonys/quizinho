@@ -45,21 +45,46 @@ Timer? _release;
 /// buzz lost), the keyboard closes again.
 void primeKeyboard() {
   try {
-    final input = _primer ??= (web.document.createElement('input') as web.HTMLInputElement)
-      ..type = 'text'
-      ..setAttribute('aria-hidden', 'true')
-      ..style.cssText = 'position:fixed;top:0;left:0;width:1px;height:1px;opacity:0;'
-          'font-size:16px;border:0;padding:0;pointer-events:none;';
-    if (input.parentNode == null) web.document.body?.append(input);
-    input.focus();
-    _primedAt = DateTime.now();
-    _release?.cancel();
-    _release = Timer(const Duration(seconds: 4), () {
-      if (web.document.activeElement == input) input.blur();
-    });
+    // Android: focusing now opens the keyboard. iPhone: only when the finger
+    // lifts (touchend) - the buzzer fires on touch-down - so it's also done
+    // then, by the listener below.
+    _focusPrimer();
+    _armedUntil = DateTime.now().add(const Duration(milliseconds: 1500));
+    if (!_listening) {
+      _listening = true;
+      web.window.addEventListener(
+        'touchend',
+        ((web.Event _) {
+          final until = _armedUntil;
+          if (until == null || DateTime.now().isAfter(until)) return;
+          _armedUntil = null;
+          _focusPrimer();
+        }).toJS,
+        // Capture: runs inside the touchend itself, before anything else.
+        web.AddEventListenerOptions(capture: true, passive: true),
+      );
+    }
   } catch (e) {
     debugPrint('Keyboard not primed: $e');
   }
+}
+
+DateTime? _armedUntil;
+bool _listening = false;
+
+void _focusPrimer() {
+  final input = _primer ??= (web.document.createElement('input') as web.HTMLInputElement)
+    ..type = 'text'
+    ..setAttribute('aria-hidden', 'true')
+    ..style.cssText = 'position:fixed;top:0;left:0;width:1px;height:1px;opacity:0;'
+        'font-size:16px;border:0;padding:0;pointer-events:none;';
+  if (input.parentNode == null) web.document.body?.append(input);
+  input.focus();
+  _primedAt = DateTime.now();
+  _release?.cancel();
+  _release = Timer(const Duration(seconds: 4), () {
+    if (web.document.activeElement == input) input.blur();
+  });
 }
 
 /// The keyboard was opened by a tap in the last few seconds: an answer box
