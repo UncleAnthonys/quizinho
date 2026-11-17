@@ -422,6 +422,12 @@ class _TttLayoutState extends State<TttLayout> {
   // keyboard closed again - nobody could type.
   final _scroll = ScrollController();
 
+  // The board's size with no keyboard up. While the keyboard comes and goes
+  // (and for a moment after - Safari closes it slowly) the screen looks short,
+  // so the board keeps this size rather than shrinking and growing back.
+  double? _boardWidth;
+  DateTime _keyboardAt = DateTime(0);
+
   Map<String, Object?> get data => widget.data;
   bool get typing => widget.typing;
 
@@ -431,6 +437,7 @@ class _TttLayoutState extends State<TttLayout> {
     // The keyboard opening or closing starts the page at the top, so the
     // heading never sits half under the title.
     if (old.typing != widget.typing) {
+      _keyboardAt = DateTime.now();
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (mounted && _scroll.hasClients) _scroll.jumpTo(0);
       });
@@ -487,7 +494,7 @@ class _TttLayoutState extends State<TttLayout> {
               const SizedBox(height: 8),
               Center(
                 child: SizedBox(
-                  width: min(box.maxWidth - 24, max(240.0, box.maxHeight - 260)),
+                  width: _sizeBoard(box),
                   child: TttBoard(data: data, onTap: onTap, onReveal: onReveal),
                 ),
               ),
@@ -500,6 +507,16 @@ class _TttLayoutState extends State<TttLayout> {
         ),
       ),
     ]);
+  }
+
+  double _sizeBoard(BoxConstraints box) {
+    final fits = min(box.maxWidth - 24, max(240.0, box.maxHeight - 260));
+    final settling = typing ||
+        MediaQuery.viewInsetsOf(context).bottom > 0 ||
+        DateTime.now().difference(_keyboardAt) < const Duration(milliseconds: 1500);
+    final kept = _boardWidth;
+    if (settling && kept != null) return min(box.maxWidth - 24, max(fits, kept));
+    return _boardWidth = fits;
   }
 
   /// Who got how many squares, most first (main phone and joined phones alike).
