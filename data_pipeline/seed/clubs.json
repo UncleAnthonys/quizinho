@@ -58,7 +58,7 @@
 "Q1022910",
 "Boston River",
 "URU",
-1,
+2,
 [],
 18,
 "m"
@@ -67,7 +67,7 @@
 "Q1022923",
 "Gimnasia y Esgrima de Jujuy",
 "ARG",
-2,
+1,
 [
 "Gimnasia de Jujuy",
 "GyE Jujuy"
@@ -250,7 +250,7 @@
 "Q1023201",
 "C.D. Marathón",
 "HON",
-1,
+2,
 [
 "C.D. Marathon",
 "Club Deportivo Marathon",
@@ -483,7 +483,7 @@
 "Q1024460",
 "C.S. Cartaginés",
 "CRC",
-1,
+2,
 [
 "Cartago",
 "Brumosos",
@@ -496,7 +496,7 @@
 "Q1024463",
 "CS Concordia Chiajna",
 "ROU",
-2,
+1,
 [],
 22,
 "m"
@@ -543,7 +543,7 @@
 "Q1024482",
 "CS Sfaxien",
 "TUN",
-2,
+1,
 [],
 28,
 "m"
@@ -572,7 +572,7 @@
 "Q1026324",
 "S.S. Chieti Calcio",
 "ITA",
-2,
+1,
 [],
 13,
 "m"
@@ -652,7 +652,7 @@
 "Q10292312",
 "Grêmio Novorizontino",
 "BRA",
-1,
+2,
 [],
 16,
 "m"
@@ -875,7 +875,7 @@
 "Q104099625",
 "Gimcheon Sangmu",
 "KOR",
-1,
+2,
 [
 "Gimcheon Sangmu FC"
 ],
@@ -937,9 +937,18 @@
 "Q1044651",
 "Vegalta Sendai",
 "JPN",
-3,
+4,
 [],
 36,
+"m"
+],
+[
+"Q1045202",
+"Western Mass Pioneers",
+"USA",
+1,
+[],
+10,
 "m"
 ],
 [
@@ -1075,17 +1084,6 @@
 "m"
 ],
 [
-"Q1047912",
-"Sápmi football team",
-"NOR",
-1,
-[
-"Sapmi football team"
-],
-27,
-"m"
-],
-[
 "Q1048007",
 "Køge Boldklub",
 "DEN",
@@ -1102,6 +1100,18 @@
 [],
 16,
 "w"
+],
+[
+"Q104845452",
+"Turon",
+"UZB",
+1,
+[
+"FC Turon",
+"Turon Yaypan"
+],
+11,
+"m"
 ],
 [
 "Q10489087",
@@ -1137,7 +1147,7 @@
 "Q1050331",
 "Football Club Molenbeek Brussels",
 "BEL",
-2,
+1,
 [
 "FC Brussels",
 "Football Club Strombeek",
@@ -1174,7 +1184,7 @@
 "Q1051147",
 "Enyimba International",
 "NGA",
-2,
+1,
 [
 "Enyimba International F.C."
 ],
@@ -1185,7 +1195,7 @@
 "Q1051164",
 "Coton Sport FC de Garoua",
 "CMR",
-2,
+1,
 [
 "Cotonsport F.C. Garoua",
 "Cotonsport Garoua"
@@ -1240,10 +1250,22 @@
 "m"
 ],
 [
+"Q105144613",
+"Deportes Limache",
+"CHI",
+1,
+[
+"D. Limache",
+"Limache"
+],
+10,
+"m"
+],
+[
 "Q1051514",
 "Raja Club Athletic",
 "MAR",
-2,
+1,
 [
 "RCA"
 ],
@@ -1312,7 +1334,7 @@
 "Q1052781",
 "Club Celaya",
 "MEX",
-2,
+1,
 [],
 15,
 "m"
@@ -1339,7 +1361,7 @@
 "Q1053917",
 "K.S.V. Roeselare",
 "BEL",
-2,
+1,
 [
 "KSV Roeselare"
 ],
@@ -1996,10 +2018,19 @@
 "m"
 ],
 [
+"Q108457563",
+"Clube de Futebol Estrela da Amadora",
+"POR",
+1,
+[],
+14,
+"m"
+],
+[
 "Q108708",
 "Fuenlabrada",
 "ESP",
-1,
+2,
 [
 "CF Fuenlabrada"
 ],
@@ -2021,7 +2052,7 @@
 "Q1089889",
 "Churchill Brothers",
 "IND",
-2,
+1,
 [
 "Churchill Brothers S.C.",
 "Churchill Brothers SC"
@@ -2305,10 +2336,21 @@
 "m"
 ],
 [
+"Q11040351",
+"Araz PFK",
+"AZE",
+1,
+[
+"Araz-Naxçıvan PFK"
+],
+19,
+"m"
+],
+[
 "Q1104682",
 "Cobh Ramblers",
 "IRL",
-2,
+1,
 [
 "Cobh Ramblers F.C."
 ],
@@ -2462,10 +2504,12 @@
 ],
 [
 "Q1124841",
-"PFC Lokomotiv Plovdiv",
+"Lokomotiv Plovdiv",
 "BUL",
 1,
-[],
+[
+"PFC Lokomotiv Plovdiv"
+],
 32,
 "m"
 ],
@@ -2496,7 +2540,7 @@
 "Q11283587",
 "Azul Claro Numazu",
 "JPN",
-1,
+2,
 [],
 21,
 "m"
@@ -2797,7 +2841,7 @@
 "Q1136016",
 "Cosenza Calcio",
 "ITA",
-2,
+1,
 [
 "Cosenza Calcio Srl"
 ],
@@ -2993,15 +3037,6 @@
 "m"
 ],
 [
-"Q1140624",
-"Crișana Oradea",
-"ROU",
-1,
-[],
-10,
-"m"
-],
-[
 "Q1140695",
 "Annecy",
 "FRA",
@@ -3158,6 +3193,17 @@
 "Nasaf Qarshi FK"
 ],
 28,
+"m"
+],
+[
+"Q115104762",
+"Vancouver FC",
+"CAN",
+1,
+[
+"Vancouver Football Club"
+],
+13,
 "m"
 ],
 [
@@ -3363,6 +3409,29 @@
 "m"
 ],
 [
+"Q117206645",
+"FK Transinvest",
+"LTU",
+1,
+[],
+55,
+"m"
+],
+[
+"Q117317506",
+"Muras United",
+"KGZ",
+1,
+[
+"Muras United FC",
+"Мурас Юнайтед Джалал-Абад",
+"ФК Мурас Юнайтед",
+"футбол Клубурас Юнайтед"
+],
+13,
+"m"
+],
+[
 "Q1176524",
 "Mezőkövesd-Zsóry SE",
 "HUN",
@@ -3380,6 +3449,26 @@
 "Al-Shorta Sports Club"
 ],
 28,
+"m"
+],
+[
+"Q118435445",
+"FK Arkadag",
+"TKM",
+1,
+[],
+24,
+"m"
+],
+[
+"Q1186020",
+"BBCU",
+"THA",
+1,
+[
+"BBCU F.C."
+],
+10,
 "m"
 ],
 [
@@ -3462,7 +3551,7 @@
 "Q118945347",
 "San Diego FC",
 "USA",
-1,
+2,
 [
 "San Diego F.C.",
 "SDFC"
@@ -3525,7 +3614,7 @@
 "Q1191661",
 "Deportivo Español",
 "ARG",
-2,
+1,
 [],
 16,
 "m"
@@ -3690,7 +3779,7 @@
 "Q11963",
 "Hércules",
 "ESP",
-3,
+2,
 [
 "Hércules CF",
 "Hercules CF"
@@ -3851,6 +3940,17 @@
 "Manila Digger F.C."
 ],
 14,
+"m"
+],
+[
+"Q12050697",
+"SK Artis Brno",
+"CZE",
+1,
+[
+"SK Líšeň"
+],
+10,
 "m"
 ],
 [
@@ -4036,7 +4136,7 @@
 "Q12247491",
 "Neom",
 "KSA",
-1,
+2,
 [
 "Neom SC",
 "Al-Suqoor Club",
@@ -4135,7 +4235,7 @@
 "Q12297",
 "Villarreal",
 "ESP",
-4,
+5,
 [
 "Villarreal CF",
 "Villarreal Club Football",
@@ -4149,7 +4249,7 @@
 "Q122981749",
 "East Bengal",
 "IND",
-1,
+2,
 [
 "East Bengal FC",
 "East Bengal F.C."
@@ -4240,19 +4340,6 @@
 "m"
 ],
 [
-"Q12396315",
-"Olympiacos SFP",
-"GRE",
-1,
-[
-"Olympiacos C.F.P.",
-"Olympiacos CFP",
-"Olympiacos S.F.P."
-],
-20,
-"m"
-],
-[
 "Q124007617",
 "SK Sturm Graz",
 "AUT",
@@ -4312,15 +4399,6 @@
 1,
 [],
 14,
-"m"
-],
-[
-"Q1248262",
-"Red Bull Ghana",
-"GHA",
-1,
-[],
-13,
 "m"
 ],
 [
@@ -4402,15 +4480,6 @@
 1,
 [],
 20,
-"m"
-],
-[
-"Q1256467",
-"FK Drita",
-"MKD",
-1,
-[],
-12,
 "m"
 ],
 [
@@ -4584,6 +4653,15 @@
 "FC Hegelmann"
 ],
 74,
+"m"
+],
+[
+"Q12654292",
+"FK Babrungas",
+"LTU",
+1,
+[],
+26,
 "m"
 ],
 [
@@ -4766,6 +4844,15 @@
 "m"
 ],
 [
+"Q12760468",
+"FK Zvijezda 09",
+"BIH",
+1,
+[],
+16,
+"m"
+],
+[
 "Q1276685",
 "OL Lyonnes Women",
 "FRA",
@@ -4789,6 +4876,29 @@
 [],
 11,
 "w"
+],
+[
+"Q1277198",
+"Kaya",
+"PHI",
+1,
+[
+"Kaya F.C."
+],
+20,
+"m"
+],
+[
+"Q1277386",
+"KS Lushnja",
+"ALB",
+1,
+[
+"Klubi Futbollit Lushnja",
+"Klubi Sportiv Lushnja"
+],
+23,
+"m"
 ],
 [
 "Q1277456",
@@ -5058,6 +5168,15 @@
 "m"
 ],
 [
+"Q1292264",
+"FK BSK Banja Luka",
+"BIH",
+1,
+[],
+13,
+"m"
+],
+[
 "Q1293144",
 "Eendracht Aalst",
 "BEL",
@@ -5129,6 +5248,15 @@
 "m"
 ],
 [
+"Q1302027",
+"KF Egnatia",
+"ALB",
+1,
+[],
+32,
+"m"
+],
+[
 "Q1302085",
 "Köpetdag Aşgabat",
 "TKM",
@@ -5141,7 +5269,7 @@
 "Q130521",
 "Guangzhou",
 "CHN",
-3,
+2,
 [
 "Guangzhou F.C.",
 "Guangzhou Evergrande",
@@ -5183,7 +5311,7 @@
 "Q1309485",
 "Eintracht Frankfurt Women",
 "GER",
-3,
+5,
 [],
 24,
 "w"
@@ -5245,18 +5373,6 @@
 3,
 [],
 58,
-"m"
-],
-[
-"Q1316700",
-"CSA Steaua București",
-"ROU",
-1,
-[
-"Steaua",
-"Steaua București"
-],
-14,
 "m"
 ],
 [
@@ -5526,6 +5642,15 @@
 "m"
 ],
 [
+"Q13384986",
+"FK Vora",
+"ALB",
+1,
+[],
+13,
+"m"
+],
+[
 "Q13385",
 "Ars et Labor Ferrara Calcio",
 "ITA",
@@ -5545,7 +5670,7 @@
 ],
 [
 "Q1339086",
-"PFC Ludogorets 1945",
+"Ludogorets 1945",
 "BUL",
 2,
 [
@@ -5630,7 +5755,7 @@
 "Q13405481",
 "New York Cosmos",
 "USA",
-1,
+2,
 [],
 16,
 "m"
@@ -5913,6 +6038,17 @@
 "m"
 ],
 [
+"Q1353661",
+"IFK Malmö",
+"SWE",
+1,
+[
+"I.F.K. Malmö"
+],
+16,
+"m"
+],
+[
 "Q1353948",
 "NK Zvijezda Gradačac",
 "BIH",
@@ -5930,6 +6066,15 @@
 "Sun Hei SC"
 ],
 14,
+"m"
+],
+[
+"Q135415841",
+"Union Brescia",
+"ITA",
+1,
+[],
+10,
 "m"
 ],
 [
@@ -6016,11 +6161,11 @@
 ],
 [
 "Q136433",
-"PFC CSKA Sofia",
+"CSKA Sofia",
 "BUL",
 3,
 [
-"CSKA Sofia"
+"PFC CSKA Sofia"
 ],
 50,
 "m"
@@ -6043,17 +6188,6 @@
 "FC Machida Zelvia"
 ],
 30,
-"m"
-],
-[
-"Q1367507",
-"Schaan",
-"LIE",
-1,
-[
-"FC Schaan"
-],
-18,
 "m"
 ],
 [
@@ -6190,7 +6324,7 @@
 "Q138230",
 "Kasımpaşa S.K.",
 "TUR",
-2,
+3,
 [
 "Kasımpaşa SK",
 "Kasımpaşa Spor Kulübü"
@@ -6716,6 +6850,15 @@
 "m"
 ],
 [
+"Q1387607",
+"Saint Eloi Lupopo",
+"COD",
+1,
+[],
+16,
+"m"
+],
+[
 "Q1387648",
 "Sisaket",
 "THA",
@@ -6823,6 +6966,17 @@
 "w"
 ],
 [
+"Q1387792",
+"UNA Strassen",
+"LUX",
+1,
+[
+"FC UNA Strassen"
+],
+20,
+"m"
+],
+[
 "Q1387817",
 "Vale of Leven",
 "GBR",
@@ -6871,15 +7025,6 @@
 1,
 [],
 19,
-"m"
-],
-[
-"Q1387898",
-"TDCS Dong Thap",
-"VNM",
-1,
-[],
-11,
 "m"
 ],
 [
@@ -6948,15 +7093,6 @@
 "m"
 ],
 [
-"Q1388848",
-"FK Dainava Alytus",
-"LTU",
-1,
-[],
-14,
-"m"
-],
-[
 "Q1388862",
 "FK Donji Srem",
 "SRB",
@@ -6969,7 +7105,7 @@
 "Q1388889",
 "Fakel Voronezh",
 "RUS",
-1,
+2,
 [
 "FC Fakel Voronezh",
 "Fakel Voronezh Logo"
@@ -7008,7 +7144,7 @@
 "Q1388917",
 "FK Jedinstvo Ub",
 "SRB",
-2,
+1,
 [],
 13,
 "m"
@@ -7203,17 +7339,6 @@
 "m"
 ],
 [
-"Q1389899",
-"Maccabi Tel Aviv",
-"ISR",
-1,
-[
-"Maccabi Tel-Aviv Association"
-],
-18,
-"m"
-],
-[
 "Q1391701",
 "Spartak Myjava",
 "SVK",
@@ -7274,7 +7399,7 @@
 "Q1398111",
 "Fatih Karagümrük S.K.",
 "TUR",
-2,
+3,
 [
 "Centone Karagümrük",
 "Fatih Karagümrük SK"
@@ -7369,17 +7494,6 @@
 "m"
 ],
 [
-"Q1415807",
-"Mjøndalen IF Fotball",
-"NOR",
-1,
-[
-"Mjøndalen Idrettsforening"
-],
-27,
-"m"
-],
-[
 "Q14161251",
 "Tambov",
 "RUS",
@@ -7456,10 +7570,12 @@
 ],
 [
 "Q1417698",
-"PFC Minyor Pernik",
+"Minyor Pernik",
 "BUL",
 1,
-[],
+[
+"PFC Minyor Pernik"
+],
 16,
 "m"
 ],
@@ -7566,6 +7682,17 @@
 "Goztepe Izmir"
 ],
 38,
+"m"
+],
+[
+"Q1423655",
+"the White",
+"LBY",
+1,
+[
+"the White S.C."
+],
+12,
 "m"
 ],
 [
@@ -7703,10 +7830,24 @@
 "Q1431996",
 "Quimper Kerfeunteun",
 "FRA",
-2,
+1,
 [
 "Quimper Kerfeunteun F.C.",
 "Quimper KFC"
+],
+12,
+"m"
+],
+[
+"Q1432459",
+"Marist",
+"SLB",
+1,
+[
+"Marist F.C.",
+"Marist FC",
+"Marist Fire F.C.",
+"Marist Fire FC"
 ],
 12,
 "m"
@@ -7804,10 +7945,11 @@
 ],
 [
 "Q144190",
-"PFC Levski Sofia",
+"Levski Sofia",
 "BUL",
 2,
 [
+"PFC Levski Sofia",
 "Levski",
 "PFC Levski"
 ],
@@ -7870,7 +8012,7 @@
 "Q1447181",
 "Gotham FC Women",
 "USA",
-4,
+5,
 [],
 24,
 "w"
@@ -8041,10 +8183,12 @@
 ],
 [
 "Q1462564",
-"PFC Montana",
+"Montana",
 "BUL",
 1,
-[],
+[
+"PFC Montana"
+],
 21,
 "m"
 ],
@@ -8064,7 +8208,7 @@
 "Q14641974",
 "Tottenham Hotspur Women",
 "GBR",
-3,
+4,
 [],
 22,
 "w"
@@ -8188,6 +8332,17 @@
 "m"
 ],
 [
+"Q1474411",
+"Klepp IL",
+"NOR",
+1,
+[
+"Klepp Idrettslag"
+],
+11,
+"m"
+],
+[
 "Q1474910",
 "HNK Orašje",
 "BIH",
@@ -8266,15 +8421,6 @@
 "Club Deportivo Morelia"
 ],
 28,
-"m"
-],
-[
-"Q1481495",
-"JSD Partizan",
-"SRB",
-1,
-[],
-18,
 "m"
 ],
 [
@@ -8400,6 +8546,17 @@
 "m"
 ],
 [
+"Q15060070",
+"Beykoz Anadoluspor",
+"TUR",
+1,
+[
+"Tuzlaspor"
+],
+10,
+"m"
+],
+[
 "Q1508285",
 "Paysandu Sport Club",
 "BRA",
@@ -8432,7 +8589,7 @@
 "Q1510813",
 "South Melbourne",
 "AUS",
-1,
+2,
 [
 "South Melbourne FC"
 ],
@@ -8443,7 +8600,7 @@
 "Q1512790",
 "US Fiorenzuola 1922",
 "ITA",
-2,
+1,
 [],
 13,
 "m"
@@ -8551,10 +8708,12 @@
 ],
 [
 "Q1517008",
-"PFC Vidima-Rakovski Sevlievo",
+"Vidima-Rakovski Sevlievo",
 "BUL",
 1,
-[],
+[
+"PFC Vidima-Rakovski Sevlievo"
+],
 14,
 "m"
 ],
@@ -8620,10 +8779,12 @@
 ],
 [
 "Q1520817",
-"PFC Marek Dupnitsa",
+"Marek Dupnitsa",
 "BUL",
 1,
-[],
+[
+"PFC Marek Dupnitsa"
+],
 16,
 "m"
 ],
@@ -8646,6 +8807,17 @@
 1,
 [],
 13,
+"m"
+],
+[
+"Q15223662",
+"Hapoel Afula",
+"ISR",
+1,
+[
+"Hapoel Afula F.C."
+],
+10,
 "m"
 ],
 [
@@ -9071,6 +9243,15 @@
 "m"
 ],
 [
+"Q1552445",
+"NK Vitez",
+"BIH",
+1,
+[],
+17,
+"m"
+],
+[
 "Q1552687",
 "Guam Shipyard",
 "USA",
@@ -9238,6 +9419,18 @@
 "m"
 ],
 [
+"Q15732501",
+"Europa",
+"GBR",
+1,
+[
+"Europa FC",
+"College Europa F.C."
+],
+32,
+"m"
+],
+[
 "Q157352",
 "FSV Frankfurt",
 "GER",
@@ -9313,6 +9506,28 @@
 "m"
 ],
 [
+"Q1576467",
+"FK Metta",
+"LVA",
+1,
+[
+"FS Metta"
+],
+25,
+"m"
+],
+[
+"Q1578104",
+"Rocha",
+"URU",
+1,
+[
+"Rocha F.C."
+],
+16,
+"m"
+],
+[
 "Q157828",
 "Holstein Kiel",
 "GER",
@@ -9328,7 +9543,7 @@
 "Q15786",
 "1. FC Nürnberg",
 "GER",
-4,
+3,
 [],
 65,
 "m"
@@ -9540,6 +9755,15 @@
 "m"
 ],
 [
+"Q15914914",
+"FK Pobeda Junior",
+"MKD",
+1,
+[],
+13,
+"m"
+],
+[
 "Q1591915",
 "Hayes & Yeading United",
 "GBR",
@@ -9559,6 +9783,18 @@
 "GHA",
 1,
 [],
+12,
+"m"
+],
+[
+"Q15926370",
+"Gibraltar Phoenix",
+"GBR",
+1,
+[
+"Gibraltar Phoenix F.C.",
+"Gibraltar Phoenix FC"
+],
 12,
 "m"
 ],
@@ -9589,6 +9825,17 @@
 1,
 [],
 14,
+"m"
+],
+[
+"Q15989127",
+"Kheybar Khorramabad",
+"IRN",
+1,
+[
+"Kheybar Khorramabad F.C."
+],
+11,
 "m"
 ],
 [
@@ -9632,6 +9879,17 @@
 "m"
 ],
 [
+"Q160302",
+"University of Edinburgh",
+"GBR",
+1,
+[
+"Edinburgh University"
+],
+90,
+"m"
+],
+[
 "Q1603994",
 "Volga Tver",
 "RUS",
@@ -9666,7 +9924,7 @@
 "Q1608208",
 "Albirex Niigata",
 "SGP",
-1,
+2,
 [
 "Albirex Niigata FC"
 ],
@@ -9696,6 +9954,33 @@
 "m"
 ],
 [
+"Q16110505",
+"NK Kustošija Zagreb",
+"CRO",
+1,
+[],
+12,
+"m"
+],
+[
+"Q16121558",
+"Nahdat Zemamra",
+"MAR",
+1,
+[],
+14,
+"m"
+],
+[
+"Q161217",
+"07 Vestur",
+"FRO",
+1,
+[],
+27,
+"m"
+],
+[
 "Q161554",
 "Chemnitzer",
 "GER",
@@ -9704,6 +9989,17 @@
 "Chemnitzer FC"
 ],
 34,
+"m"
+],
+[
+"Q1617811",
+"Wexford Youths",
+"IRL",
+1,
+[
+"Wexford Youths F.C."
+],
+18,
 "m"
 ],
 [
@@ -9774,7 +10070,7 @@
 "Q162289",
 "1. FC Köln Women",
 "GER",
-2,
+3,
 [
 "FC Koln Women",
 "FC Köln Women",
@@ -9858,7 +10154,7 @@ null,
 "Q162449",
 "1. FFC Frankfurt Women",
 "GER",
-5,
+2,
 [],
 12,
 "w"
@@ -9896,7 +10192,7 @@ null,
 "Q162472",
 "FK Příbram",
 "CZE",
-2,
+1,
 [],
 27,
 "m"
@@ -9920,10 +10216,19 @@ null,
 "m"
 ],
 [
+"Q16259792",
+"Sanna Khanh Hoa",
+"VNM",
+1,
+[],
+10,
+"m"
+],
+[
 "Q16261725",
 "Seoul E-Land",
 "KOR",
-1,
+2,
 [
 "Seoul E-Land FC"
 ],
@@ -10203,12 +10508,12 @@ null,
 ],
 [
 "Q1635778",
-"PFC Spartak Varna",
+"Spartak Varna",
 "BUL",
 1,
 [
-"FC Spartak Varna",
-"Spartak Varna"
+"PFC Spartak Varna",
+"FC Spartak Varna"
 ],
 21,
 "m"
@@ -10285,10 +10590,19 @@ null,
 "m"
 ],
 [
+"Q1638392",
+"KF Trepça",
+"XKS",
+1,
+[],
+19,
+"m"
+],
+[
 "Q1638649",
 "Melbourne Knights",
 "AUS",
-2,
+1,
 [],
 14,
 "m"
@@ -10305,12 +10619,32 @@ null,
 "m"
 ],
 [
+"Q16412614",
+"Maardu Linnameeskond",
+"EST",
+1,
+[
+"Maardu FC Starbunker"
+],
+20,
+"m"
+],
+[
 "Q1642914",
 "FK Belasica",
 "MKD",
 1,
 [],
 18,
+"m"
+],
+[
+"Q16478096",
+"FA Šiauliai",
+"LTU",
+1,
+[],
+73,
 "m"
 ],
 [
@@ -10337,7 +10671,7 @@ null,
 "Q16539606",
 "Arta/Solar7",
 "DJI",
-1,
+2,
 [
 "Association Sportive d'Arta"
 ],
@@ -10586,6 +10920,19 @@ null,
 "m"
 ],
 [
+"Q16826343",
+"Hang Yuen",
+"TWN",
+1,
+[
+"Hang Yuen F.C.",
+"Hang Yuan",
+"Hang Yuan FC"
+],
+10,
+"m"
+],
+[
 "Q16836317",
 "Atlanta United FC",
 "USA",
@@ -10700,6 +11047,15 @@ null,
 "m"
 ],
 [
+"Q16839936",
+"GD HCB Songo",
+"MOZ",
+1,
+[],
+12,
+"m"
+],
+[
 "Q16840146",
 "Granada Women",
 "ESP",
@@ -10717,15 +11073,6 @@ null,
 "NorthEast United FC"
 ],
 23,
-"m"
-],
-[
-"Q16840542",
-"HBS Craeyenhout",
-"NED",
-1,
-[],
-11,
 "m"
 ],
 [
@@ -10751,6 +11098,15 @@ null,
 "Lao Toyota FC"
 ],
 16,
+"m"
+],
+[
+"Q16843233",
+"ND Lendava 1903",
+"SVN",
+1,
+[],
+10,
 "m"
 ],
 [
@@ -10789,6 +11145,15 @@ null,
 "Naft Al-Wasat SC"
 ],
 13,
+"m"
+],
+[
+"Q16845471",
+"Naft Maysan",
+"IRQ",
+1,
+[],
+10,
 "m"
 ],
 [
@@ -11030,7 +11395,7 @@ null,
 "Q170107",
 "Rot-Weiß Erfurt",
 "GER",
-2,
+1,
 [
 "FC Rot-Weiß Erfurt",
 "FC Rot-Weiss Erfurt"
@@ -11133,6 +11498,15 @@ null,
 "m"
 ],
 [
+"Q17071104",
+"UMS de Loum",
+"CMR",
+1,
+[],
+10,
+"m"
+],
+[
 "Q17182219",
 "Louisville City FC",
 "USA",
@@ -11143,6 +11517,15 @@ null,
 "Louisville City"
 ],
 14,
+"m"
+],
+[
+"Q1718602",
+"KF 2 Korriku",
+"XKS",
+1,
+[],
+13,
 "m"
 ],
 [
@@ -11176,6 +11559,15 @@ null,
 "FC Ferizaj"
 ],
 19,
+"m"
+],
+[
+"Q1718612",
+"KF Istogu",
+"XKS",
+1,
+[],
+14,
 "m"
 ],
 [
@@ -11233,6 +11625,26 @@ null,
 1,
 [],
 13,
+"m"
+],
+[
+"Q1719039",
+"KS Kamza",
+"ALB",
+1,
+[
+"FC Kamza"
+],
+19,
+"m"
+],
+[
+"Q1719050",
+"KS Polkowice",
+"POL",
+1,
+[],
+10,
 "m"
 ],
 [
@@ -11518,12 +11930,14 @@ null,
 "m"
 ],
 [
-"Q1755918",
-"Società Ginnastica Comunale Sampierdarenese",
-"ITA",
+"Q1756279",
+"Victoria Rosport",
+"LUX",
 1,
-[],
-12,
+[
+"FC Victoria Rosport"
+],
+18,
 "m"
 ],
 [
@@ -11567,17 +11981,6 @@ null,
 "Olympique Ales"
 ],
 20,
-"m"
-],
-[
-"Q17577095",
-"SKChF Sevastopol",
-"RUS",
-1,
-[
-"FC SKChF Sevastopol"
-],
-10,
 "m"
 ],
 [
@@ -11658,10 +12061,12 @@ null,
 ],
 [
 "Q176371",
-"PFC CSKA Moscow",
+"CSKA Moscow",
 "RUS",
 3,
-[],
+[
+"PFC CSKA Moscow"
+],
 76,
 "m"
 ],
@@ -11669,7 +12074,7 @@ null,
 "Q1764590",
 "Maidstone United",
 "GBR",
-2,
+1,
 [
 "Maidstone United F.C.",
 "Maidstone",
@@ -11679,15 +12084,6 @@ null,
 "The Stones"
 ],
 22,
-"m"
-],
-[
-"Q1765897",
-"A.V.V. De Volewijckers",
-"NED",
-1,
-[],
-10,
 "m"
 ],
 [
@@ -11766,15 +12162,6 @@ null,
 "m"
 ],
 [
-"Q1779098",
-"Kolbotn IL",
-"NOR",
-1,
-[],
-11,
-"m"
-],
-[
 "Q1779108",
 "Kolding IF",
 "DEN",
@@ -11813,15 +12200,6 @@ null,
 "São Carlos F.C."
 ],
 10,
-"m"
-],
-[
-"Q1781210",
-"London XI",
-"GBR",
-1,
-[],
-13,
 "m"
 ],
 [
@@ -11978,6 +12356,15 @@ null,
 "m"
 ],
 [
+"Q18001655",
+"Francs Borains",
+"BEL",
+1,
+[],
+10,
+"m"
+],
+[
 "Q1801856",
 "Redbergslids IK",
 "SWE",
@@ -12031,6 +12418,15 @@ null,
 1,
 [],
 12,
+"m"
+],
+[
+"Q1806407",
+"Larvik Turn & IF",
+"NOR",
+1,
+[],
+17,
 "m"
 ],
 [
@@ -12151,7 +12547,7 @@ null,
 "Q181216",
 "HNK Hajduk Split",
 "CRO",
-4,
+3,
 [
 "Hajduk",
 "Hajduk Split",
@@ -12224,10 +12620,21 @@ null,
 "m"
 ],
 [
+"Q1814928",
+"Çetinkaya Türk S.K.",
+null,
+1,
+[
+"Cetinkaya"
+],
+18,
+"m"
+],
+[
 "Q1815297",
 "USL Dunkerque",
 "FRA",
-2,
+1,
 [],
 22,
 "m"
@@ -12275,6 +12682,15 @@ null,
 "FC Torpedo-Kadino Mogilev"
 ],
 12,
+"m"
+],
+[
+"Q1818085",
+"NK Jedinstvo Bihać",
+"BIH",
+1,
+[],
+16,
 "m"
 ],
 [
@@ -12688,7 +13104,7 @@ null,
 "Q1835695",
 "Selangor",
 "MAS",
-1,
+2,
 [
 "Selangor F.C.",
 "Red Giants",
@@ -12729,10 +13145,21 @@ null,
 "m"
 ],
 [
+"Q18411591",
+"Europa Point",
+"GBR",
+1,
+[
+"Europa Point F.C."
+],
+12,
+"m"
+],
+[
 "Q18460",
 "Salford City",
 "GBR",
-1,
+2,
 [
 "Salford City F.C.",
 "City",
@@ -13075,7 +13502,7 @@ null,
 "Q18520",
 "Luton Town",
 "GBR",
-2,
+3,
 [
 "Luton Town F.C.",
 "Town",
@@ -13139,7 +13566,7 @@ null,
 "Q18524",
 "Nuneaton Town",
 "GBR",
-2,
+1,
 [
 "Nuneaton Town F.C.",
 "Nuneaton",
@@ -13170,7 +13597,7 @@ null,
 "Q18526",
 "Stockport County",
 "GBR",
-2,
+3,
 [
 "Stockport County F.C.",
 "Stockport",
@@ -13303,6 +13730,17 @@ null,
 "Energetik FC"
 ],
 13,
+"m"
+],
+[
+"Q1858435",
+"Red Arrows",
+"ZAM",
+1,
+[
+"Red Arrows F.C."
+],
+12,
 "m"
 ],
 [
@@ -13457,10 +13895,12 @@ null,
 ],
 [
 "Q1868622",
-"PFC Lokomotiv Mezdra",
+"Lokomotiv Mezdra",
 "BUL",
 1,
-[],
+[
+"PFC Lokomotiv Mezdra"
+],
 12,
 "m"
 ],
@@ -13589,7 +14029,7 @@ null,
 "Q18729",
 "Reading",
 "GBR",
-3,
+4,
 [
 "Reading F.C.",
 "RFC",
@@ -14417,15 +14857,6 @@ null,
 "m"
 ],
 [
-"Q1933939",
-"SD Crvena Zvezda",
-"SRB",
-1,
-[],
-23,
-"m"
-],
-[
 "Q193481",
 "AC Sparta Prague",
 "CZE",
@@ -14673,6 +15104,17 @@ null,
 "m"
 ],
 [
+"Q19463632",
+"Energetik Türkmebaşy",
+"TKM",
+1,
+[
+"FC Energetik Türkmebaşy"
+],
+12,
+"m"
+],
+[
 "Q19467",
 "Crystal Palace",
 "GBR",
@@ -14692,7 +15134,7 @@ null,
 "Q19470",
 "Derby County",
 "GBR",
-3,
+4,
 [
 "Derby County F.C.",
 "Derby",
@@ -15058,7 +15500,7 @@ null,
 "Q19573",
 "Bury",
 "GBR",
-2,
+3,
 [
 "Bury F.C.",
 "BFC",
@@ -15107,6 +15549,28 @@ null,
 "Dreams Football Club"
 ],
 10,
+"m"
+],
+[
+"Q19577058",
+"Magpies",
+"GBR",
+1,
+[
+"F.C. Magpies"
+],
+15,
+"m"
+],
+[
+"Q19577311",
+"Mons Calpe",
+"GBR",
+1,
+[
+"Mons Calpe S.C."
+],
+17,
 "m"
 ],
 [
@@ -15172,7 +15636,7 @@ null,
 "Q19585",
 "Royal Charleroi",
 "BEL",
-3,
+2,
 [
 "Royal Charleroi S.C.",
 "R. Charleroi S.C.",
@@ -15201,7 +15665,7 @@ null,
 "Q19589",
 "Doncaster Rovers",
 "GBR",
-3,
+2,
 [
 "Doncaster Rovers F.C.",
 "Doncaster",
@@ -15320,7 +15784,7 @@ null,
 "Q19603",
 "Twente",
 "NED",
-3,
+4,
 [
 "FC Twente",
 "Football Club Twente",
@@ -15333,7 +15797,7 @@ null,
 "Q19604",
 "Portsmouth",
 "GBR",
-4,
+3,
 [
 "Portsmouth F.C.",
 "PFC",
@@ -15348,7 +15812,7 @@ null,
 "Q19607",
 "Sheffield United",
 "GBR",
-3,
+4,
 [
 "Sheffield United F.C.",
 "United",
@@ -15374,6 +15838,15 @@ null,
 "Whitecaps FC"
 ],
 43,
+"m"
+],
+[
+"Q1961080",
+"OFK Gradina",
+"BIH",
+1,
+[],
+13,
 "m"
 ],
 [
@@ -15711,10 +16184,12 @@ null,
 ],
 [
 "Q1973205",
-"PFC Rodopa Smolyan",
+"Rodopa Smolyan",
 "BUL",
 1,
-[],
+[
+"PFC Rodopa Smolyan"
+],
 10,
 "m"
 ],
@@ -15745,17 +16220,6 @@ null,
 1,
 [
 "FC Chelyabinsk"
-],
-11,
-"m"
-],
-[
-"Q1974544",
-"Dynamo Kirov",
-"RUS",
-1,
-[
-"FC Dynamo Kirov"
 ],
 11,
 "m"
@@ -16088,7 +16552,7 @@ null,
 "Q20051399",
 "Juárez",
 "MEX",
-1,
+2,
 [
 "FC Juárez",
 "Bravos de Juárez",
@@ -16509,7 +16973,7 @@ null,
 "Q2031920",
 "Unión Magdalena",
 "COL",
-1,
+2,
 [
 "Banana Cyclone",
 "The Samarios",
@@ -16564,7 +17028,7 @@ null,
 ],
 [
 "Q2034147",
-"PFC Rilski Sportist Samokov",
+"Rilski Sportist Samokov",
 "BUL",
 1,
 [],
@@ -16668,6 +17132,15 @@ null,
 "ChievoVerona"
 ],
 57,
+"m"
+],
+[
+"Q2038410",
+"US Biskra",
+"ALG",
+1,
+[],
+10,
 "m"
 ],
 [
@@ -16780,7 +17253,7 @@ null,
 "Q204357",
 "LA Galaxy",
 "USA",
-4,
+3,
 [
 "Galaxy",
 "L.A. Galaxy",
@@ -16835,7 +17308,7 @@ null,
 "Q20472948",
 "Bodrum FK",
 "TUR",
-1,
+2,
 [
 "Bodrumspor"
 ],
@@ -16952,7 +17425,7 @@ null,
 "Q205732",
 "Debreceni VSC",
 "HUN",
-1,
+2,
 [
 "DVSC"
 ],
@@ -17006,11 +17479,22 @@ null,
 "Q2061414",
 "U.D. Oliveirense",
 "POR",
-2,
+1,
 [
 "UD Oliveirense"
 ],
 20,
+"m"
+],
+[
+"Q2061934",
+"Shengavit",
+"ARM",
+1,
+[
+"Shengavit F.C."
+],
+10,
 "m"
 ],
 [
@@ -17172,7 +17656,7 @@ null,
 "Q207501",
 "FK Vojvodina",
 "SRB",
-3,
+2,
 [
 "Fudbalski klub Vojvodina"
 ],
@@ -17183,7 +17667,7 @@ null,
 "Q207503",
 "Helsingborgs IF",
 "SWE",
-3,
+2,
 [
 "HIF"
 ],
@@ -17213,6 +17697,17 @@ null,
 "m"
 ],
 [
+"Q2077647",
+"Atlético Clube Coríntians",
+"BRA",
+1,
+[
+"Atletico Clube Corintians"
+],
+10,
+"m"
+],
+[
 "Q2078847",
 "Avanhard Kramatorsk",
 "UKR",
@@ -17227,10 +17722,21 @@ null,
 "Q20792292",
 "Umeå IK Women",
 "SWE",
-4,
+3,
 [],
 28,
 "w"
+],
+[
+"Q2081317",
+"Al-Shabab",
+"KWT",
+1,
+[
+"Al-Shabab SC"
+],
+12,
+"m"
 ],
 [
 "Q208228",
@@ -17461,6 +17967,15 @@ null,
 "m"
 ],
 [
+"Q20949669",
+"FK Podgorica",
+"MNE",
+1,
+[],
+16,
+"m"
+],
+[
 "Q209509",
 "Grenoble Foot 38",
 "FRA",
@@ -17525,7 +18040,7 @@ null,
 "Q209619",
 "OFK Beograd",
 "SRB",
-3,
+2,
 [
 "OFK Belgrade"
 ],
@@ -17603,7 +18118,7 @@ null,
 "Q210025",
 "Nordsjælland",
 "DEN",
-2,
+3,
 [
 "FC Nordsjælland"
 ],
@@ -17614,7 +18129,7 @@ null,
 "Q210170",
 "K.F. Tirana",
 "ALB",
-2,
+1,
 [
 "KF Tirana",
 "Tirana F.C.",
@@ -17727,6 +18242,18 @@ null,
 "m"
 ],
 [
+"Q2111218",
+"Adama City",
+"ETH",
+1,
+[
+"Adama City F.C.",
+"Adama City FC"
+],
+15,
+"m"
+],
+[
 "Q211177",
 "Viking FK",
 "NOR",
@@ -17805,7 +18332,7 @@ null,
 "Q2117747",
 "Western New York Flash Women",
 "USA",
-5,
+4,
 [],
 15,
 "w"
@@ -17863,6 +18390,17 @@ null,
 "m"
 ],
 [
+"Q211961",
+"Tighina",
+"MDA",
+1,
+[
+"FC Tighina"
+],
+15,
+"m"
+],
+[
 "Q21200167",
 "A.O. Kerkyra",
 "GRE",
@@ -17892,6 +18430,15 @@ null,
 ],
 15,
 "w"
+],
+[
+"Q212119",
+"NK GOŠK Gabela",
+"BIH",
+1,
+[],
+20,
+"m"
 ],
 [
 "Q212269",
@@ -18020,6 +18567,17 @@ null,
 "m"
 ],
 [
+"Q2134369",
+"Lida",
+"BLR",
+1,
+[
+"FC Lida"
+],
+15,
+"m"
+],
+[
 "Q2134745",
 "Real Tamale United",
 "GHA",
@@ -18043,7 +18601,7 @@ null,
 "Q2137561",
 "Ufa",
 "RUS",
-1,
+2,
 [
 "FC Ufa"
 ],
@@ -18131,7 +18689,7 @@ null,
 "Q2151803",
 "Washington Freedom Women",
 "USA",
-4,
+3,
 [],
 10,
 "w"
@@ -18172,15 +18730,6 @@ null,
 1,
 [],
 12,
-"m"
-],
-[
-"Q2158074",
-"CS Dinamo București",
-"ROU",
-1,
-[],
-11,
 "m"
 ],
 [
@@ -18341,17 +18890,6 @@ null,
 "m"
 ],
 [
-"Q2171108",
-"Racing Club de Bruxelles",
-"BEL",
-1,
-[
-"Racing Foot-Ball Club"
-],
-12,
-"m"
-],
-[
 "Q217233",
 "Stabæk Fotball",
 "NOR",
@@ -18491,6 +19029,17 @@ null,
 3,
 [],
 55,
+"m"
+],
+[
+"Q2184580",
+"AS Capoise",
+"HAI",
+1,
+[
+"Association Sportive Capoise"
+],
+11,
 "m"
 ],
 [
@@ -18734,12 +19283,32 @@ null,
 "m"
 ],
 [
+"Q22047699",
+"Tsarsko Selo",
+"BUL",
+1,
+[
+"FC Tsarsko Selo"
+],
+15,
+"m"
+],
+[
 "Q220621",
 "Argentinos Juniors",
 "ARG",
 3,
 [],
 47,
+"m"
+],
+[
+"Q2206406",
+"SKU Amstetten",
+"AUT",
+1,
+[],
+11,
 "m"
 ],
 [
@@ -18756,10 +19325,12 @@ null,
 ],
 [
 "Q22080021",
-"PFC Neftochimic Burgas",
+"Neftochimic Burgas",
 "BUL",
 1,
-[],
+[
+"PFC Neftochimic Burgas"
+],
 15,
 "m"
 ],
@@ -19025,6 +19596,19 @@ null,
 "m"
 ],
 [
+"Q222131",
+"United States Soccer Federation",
+"USA",
+1,
+[
+"U.S. Soccer",
+"US Soccer",
+"USSF"
+],
+37,
+"m"
+],
+[
 "Q222157",
 "Shuvalan FK",
 "AZE",
@@ -19057,7 +19641,7 @@ null,
 "Q222861",
 "Flora Tallinn",
 "EST",
-2,
+1,
 [
 "FC Flora Tallinn",
 "FC Flora"
@@ -19246,7 +19830,7 @@ null,
 "Q223823",
 "Skonto",
 "LVA",
-2,
+1,
 [
 "Skonto FC",
 "FK Skonto",
@@ -19322,6 +19906,17 @@ null,
 "m"
 ],
 [
+"Q2252351",
+"Warrenpoint Town",
+"GBR",
+1,
+[
+"Warrenpoint Town F.C."
+],
+14,
+"m"
+],
+[
 "Q2253360",
 "Andorra",
 "ESP",
@@ -19354,10 +19949,12 @@ null,
 ],
 [
 "Q2258322",
-"PFC Spartak Pleven",
+"Spartak Pleven",
 "BUL",
 1,
-[],
+[
+"PFC Spartak Pleven"
+],
 17,
 "m"
 ],
@@ -19386,10 +19983,21 @@ null,
 "m"
 ],
 [
+"Q22677517",
+"NEROCA",
+"IND",
+1,
+[
+"NEROCA FC"
+],
+10,
+"m"
+],
+[
 "Q2268833",
 "K Beerschot VA",
 "BEL",
-1,
+2,
 [
 "Beerschot",
 "Beerschot VA",
@@ -19450,10 +20058,12 @@ null,
 ],
 [
 "Q2275503",
-"PFC Nyva Vinnytsia",
+"Nyva Vinnytsia",
 "UKR",
 1,
-[],
+[
+"PFC Nyva Vinnytsia"
+],
 13,
 "m"
 ],
@@ -19476,6 +20086,17 @@ null,
 "VirtusEntella"
 ],
 29,
+"m"
+],
+[
+"Q2277220",
+"Pezoporikos Larnaca",
+"CYP",
+1,
+[
+"Pezoporikos Larnaca FC"
+],
+16,
 "m"
 ],
 [
@@ -19567,7 +20188,7 @@ null,
 "Q2291116",
 "Wacker Innsbruck",
 "AUT",
-2,
+1,
 [
 "FC Wacker Innsbruck"
 ],
@@ -19620,9 +20241,21 @@ null,
 "Q2298585",
 "UD Marbella",
 "ESP",
-1,
+2,
 [],
 19,
+"m"
+],
+[
+"Q2299270",
+"Solomon Warriors",
+"SLB",
+1,
+[
+"Solomon Warriors F.C.",
+"Solomon Warriors FC"
+],
+14,
 "m"
 ],
 [
@@ -20044,6 +20677,17 @@ null,
 "m"
 ],
 [
+"Q2330244",
+"KS Pogradeci",
+"ALB",
+1,
+[
+"Klubi Sportiv Pogradeci"
+],
+17,
+"m"
+],
+[
 "Q2332097",
 "Sporting Mahonés",
 "ESP",
@@ -20123,7 +20767,7 @@ null,
 "Q2341011",
 "Associação Atlética Portuguesa",
 "BRA",
-2,
+1,
 [
 "Portuguesa Carioca"
 ],
@@ -20162,6 +20806,15 @@ null,
 "The Seagulls"
 ],
 12,
+"m"
+],
+[
+"Q2346863",
+"Steve Biko",
+"GAM",
+1,
+[],
+11,
 "m"
 ],
 [
@@ -20307,6 +20960,17 @@ null,
 "m"
 ],
 [
+"Q2384676",
+"Académica do Mindelo",
+"CPV",
+1,
+[
+"Academica do Mindelo"
+],
+10,
+"m"
+],
+[
 "Q238504",
 "FK Renova",
 "MKD",
@@ -20398,6 +21062,15 @@ null,
 "m"
 ],
 [
+"Q23924",
+"Khangarid",
+"MNG",
+1,
+[],
+13,
+"m"
+],
+[
 "Q239241",
 "Port Talbot Town",
 "GBR",
@@ -20443,7 +21116,7 @@ null,
 "Q240438",
 "Alania Vladikavkaz",
 "RUS",
-2,
+1,
 [
 "FC Alania Vladikavkaz"
 ],
@@ -20495,7 +21168,7 @@ null,
 "Q2407595",
 "Coquimbo Unido",
 "CHI",
-1,
+2,
 [],
 19,
 "m"
@@ -20504,11 +21177,20 @@ null,
 "Q240783",
 "AC Omonia",
 "CYP",
-2,
+3,
 [
 "AC Omonia Nicosia"
 ],
 50,
+"m"
+],
+[
+"Q2408120",
+"SK Gjøvik-Lyn",
+"NOR",
+1,
+[],
+14,
 "m"
 ],
 [
@@ -20558,6 +21240,19 @@ null,
 1,
 [],
 12,
+"m"
+],
+[
+"Q24185095",
+"Punjab",
+"IND",
+1,
+[
+"Punjab FC",
+"RoundGlass Punjab FC",
+"Punjab Football Club"
+],
+18,
 "m"
 ],
 [
@@ -20645,6 +21340,15 @@ null,
 "m"
 ],
 [
+"Q2422585",
+"FK 11 Oktomvri",
+"MKD",
+1,
+[],
+14,
+"m"
+],
+[
 "Q242260",
 "Persepolis",
 "IRN",
@@ -20723,6 +21427,22 @@ null,
 "m"
 ],
 [
+"Q24317",
+"Rakvere JK Tarvas",
+"EST",
+1,
+[
+"FC Flora Rakvere",
+"Flora Rakvere",
+"JK Rakvere Virumaa",
+"JK Virumaa Rakvere",
+"Rakvere Virumaa",
+"Virumaa JK Rakvere"
+],
+13,
+"m"
+],
+[
 "Q243235",
 "Académica de Coimbra",
 "POR",
@@ -20775,7 +21495,7 @@ null,
 "Q244317",
 "Pyunik",
 "ARM",
-2,
+1,
 [
 "FC Pyunik",
 "Football Club Pyunik"
@@ -21008,6 +21728,17 @@ null,
 "m"
 ],
 [
+"Q246580",
+"Amicale",
+"VUT",
+1,
+[
+"Amicale F.C."
+],
+15,
+"m"
+],
+[
 "Q2466360",
 "Maritsa Plovdiv",
 "BUL",
@@ -21135,6 +21866,17 @@ null,
 1,
 [],
 10,
+"m"
+],
+[
+"Q2475308",
+"Deportes Valdivia",
+"CHI",
+1,
+[
+"Valdivia"
+],
+11,
 "m"
 ],
 [
@@ -21351,6 +22093,15 @@ null,
 "m"
 ],
 [
+"Q24914473",
+"Akademija Pandev",
+"MKD",
+1,
+[],
+24,
+"m"
+],
+[
 "Q2493830",
 "Águia de Marabá Futebol Clube",
 "BRA",
@@ -21379,6 +22130,17 @@ null,
 "FC Podillya Khmelnytskyi"
 ],
 10,
+"m"
+],
+[
+"Q2494372",
+"Crystal Palace",
+"GBR",
+1,
+[
+"Crystal Palace F.C."
+],
+11,
 "m"
 ],
 [
@@ -21507,6 +22269,15 @@ null,
 "m"
 ],
 [
+"Q2505717",
+"FK Dinamo Vranje",
+"SRB",
+1,
+[],
+19,
+"m"
+],
+[
 "Q2505780",
 "FK Proleter Novi Sad",
 "SRB",
@@ -21561,7 +22332,7 @@ null,
 "Q2508289",
 "Rio Branco Atlético Clube",
 "BRA",
-1,
+2,
 [],
 14,
 "m"
@@ -21604,7 +22375,7 @@ null,
 "Q2511257",
 "Rayo Majadahonda",
 "ESP",
-2,
+1,
 [
 "CF Rayo Majadahonda"
 ],
@@ -21926,6 +22697,26 @@ null,
 "m"
 ],
 [
+"Q25424586",
+"Aluminium Arak",
+"IRN",
+1,
+[
+"Aluminium Arak F.C."
+],
+14,
+"m"
+],
+[
+"Q25427474",
+"Kuala Lumpur City",
+"MAS",
+1,
+[],
+16,
+"m"
+],
+[
 "Q25429081",
 "Karketu Dili",
 "TLS",
@@ -21946,12 +22737,12 @@ null,
 "m"
 ],
 [
-"Q254658",
-"Oulun Palloseura",
-"FIN",
+"Q25497952",
+"DFK Dainava",
+"LTU",
 1,
 [],
-16,
+73,
 "m"
 ],
 [
@@ -22052,7 +22843,7 @@ null,
 "Q2553450",
 "Volta Redonda Futebol Clube",
 "BRA",
-2,
+1,
 [],
 18,
 "m"
@@ -22220,6 +23011,17 @@ null,
 "m"
 ],
 [
+"Q2579592",
+"Neftchi Kochkor-Ata",
+"KGZ",
+1,
+[
+"FC Neftchi Kochkor-Ata"
+],
+16,
+"m"
+],
+[
 "Q257984",
 "Gimnàstic de Tarragona",
 "ESP",
@@ -22250,7 +23052,7 @@ null,
 "Q2584065",
 "Associação Atlética Portuguesa",
 "BRA",
-2,
+1,
 [
 "Portuguesa Santista"
 ],
@@ -22405,15 +23207,6 @@ null,
 1,
 [],
 12,
-"m"
-],
-[
-"Q2598805",
-"Centro Educativo Recreativo Associação Atlética São Mateus",
-"BRA",
-1,
-[],
-11,
 "m"
 ],
 [
@@ -22577,6 +23370,17 @@ null,
 "m"
 ],
 [
+"Q2612802",
+"Mosul",
+"IRQ",
+1,
+[
+"Mosul FC"
+],
+10,
+"m"
+],
+[
 "Q2613806",
 "Sudbury",
 "GBR",
@@ -22591,7 +23395,7 @@ null,
 "Q2613971",
 "Al-Taawon",
 "KSA",
-1,
+2,
 [
 "Al-Taawon FC",
 "Al-Taawoun FC"
@@ -22733,6 +23537,15 @@ null,
 1,
 [],
 10,
+"m"
+],
+[
+"Q26223027",
+"CSKA 1948 Sofia",
+"BUL",
+1,
+[],
+21,
 "m"
 ],
 [
@@ -23148,6 +23961,15 @@ null,
 "w"
 ],
 [
+"Q264506",
+"Khartoum NC",
+"SDN",
+1,
+[],
+10,
+"m"
+],
+[
 "Q2647768",
 "Leiknir Reykjavík",
 "ISL",
@@ -23195,7 +24017,7 @@ null,
 "Q2655899",
 "Al-Riyadh",
 "KSA",
-1,
+2,
 [
 "Al-Riyadh SC"
 ],
@@ -23255,7 +24077,7 @@ null,
 "Q2658769",
 "Lokomotiv-Kazanka",
 "RUS",
-2,
+1,
 [
 "FC Lokomotiv-Kazanka",
 "Kazanka"
@@ -23314,7 +24136,7 @@ null,
 "Q2662732",
 "FK Kolubara",
 "SRB",
-2,
+1,
 [
 "Fudbalski klub Kolubara"
 ],
@@ -23427,6 +24249,15 @@ null,
 "m"
 ],
 [
+"Q2668486",
+"Esporte Clube Flamengo",
+"BRA",
+1,
+[],
+13,
+"m"
+],
+[
 "Q266890",
 "FK Sevojno",
 "SRB",
@@ -23490,7 +24321,7 @@ null,
 "Q267574",
 "Aalborg Boldspilklub",
 "DEN",
-2,
+1,
 [],
 14,
 "m"
@@ -23512,7 +24343,7 @@ null,
 ],
 [
 "Q2684577",
-"PFC Shumen 2010",
+"Shumen 2010",
 "BUL",
 1,
 [],
@@ -23616,6 +24447,17 @@ null,
 "m"
 ],
 [
+"Q2700856",
+"Al-Hilal",
+"LBY",
+1,
+[
+"Al-Hilal SC"
+],
+12,
+"m"
+],
+[
 "Q2701581",
 "Ciego de Ávila",
 "CUB",
@@ -23701,17 +24543,6 @@ null,
 1,
 [],
 11,
-"m"
-],
-[
-"Q2706716",
-"Juventud Antoniana",
-"ARG",
-1,
-[
-"Centro Juventud Antoniana"
-],
-10,
 "m"
 ],
 [
@@ -23882,7 +24713,7 @@ null,
 "Q272712",
 "Çaykur Rizespor",
 "TUR",
-2,
+3,
 [
 "Caykur Rizespor",
 "Rizespor"
@@ -23985,6 +24816,15 @@ null,
 "m"
 ],
 [
+"Q2743725",
+"Futbol Club Penya d'Andorra",
+"AND",
+1,
+[],
+16,
+"m"
+],
+[
 "Q2744247",
 "Kalamata",
 "GRE",
@@ -24055,7 +24895,7 @@ null,
 "Q2748082",
 "Brøndby IF Women",
 "DEN",
-3,
+2,
 [],
 13,
 "w"
@@ -24142,6 +24982,15 @@ null,
 "FK Dukla Praha"
 ],
 33,
+"m"
+],
+[
+"Q2759870",
+"Gimnasia y Tiro",
+"ARG",
+1,
+[],
+10,
 "m"
 ],
 [
@@ -24375,6 +25224,18 @@ null,
 "m"
 ],
 [
+"Q28065290",
+"Coimbatore",
+"IND",
+1,
+[
+"FC Coimbatore",
+"CCFC"
+],
+12,
+"m"
+],
+[
 "Q280679",
 "PAS Giannina",
 "GRE",
@@ -24433,7 +25294,7 @@ null,
 "Q28169542",
 "North Carolina Courage Women",
 "USA",
-3,
+4,
 [],
 17,
 "w"
@@ -24456,6 +25317,17 @@ null,
 "FC Arsenal Tula"
 ],
 39,
+"m"
+],
+[
+"Q28173992",
+"Real Kashmir",
+"IND",
+1,
+[
+"Real Kashmir F.C."
+],
+10,
 "m"
 ],
 [
@@ -24502,17 +25374,6 @@ null,
 "Semassi F.C."
 ],
 10,
-"m"
-],
-[
-"Q2819143",
-"A.E.K.",
-"GRE",
-2,
-[
-"AEK"
-],
-12,
 "m"
 ],
 [
@@ -24584,6 +25445,15 @@ null,
 "Fasil Kenema S.C."
 ],
 12,
+"m"
+],
+[
+"Q28225258",
+"Saif Sporting Club",
+"BGD",
+1,
+[],
+11,
 "m"
 ],
 [
@@ -24725,6 +25595,26 @@ null,
 "Al-Ramtha SC"
 ],
 16,
+"m"
+],
+[
+"Q2829424",
+"Al-Wathba",
+"SYR",
+1,
+[
+"Al-Wathba SC"
+],
+12,
+"m"
+],
+[
+"Q28340330",
+"Pärnu JK Vaprus",
+"EST",
+1,
+[],
+22,
 "m"
 ],
 [
@@ -24946,7 +25836,7 @@ null,
 "Q285131",
 "VfL Wolfsburg Women",
 "GER",
-5,
+4,
 [],
 32,
 "w"
@@ -24959,6 +25849,15 @@ null,
 [
 "Antequera CF"
 ],
+12,
+"m"
+],
+[
+"Q2853237",
+"Antigua GFC",
+"GUA",
+1,
+[],
 12,
 "m"
 ],
@@ -25172,6 +26071,26 @@ null,
 "m"
 ],
 [
+"Q2868052",
+"Association Sportive Central Sport",
+"FRA",
+1,
+[
+"AS Central Sport"
+],
+12,
+"m"
+],
+[
+"Q2868087",
+"AS Kigali",
+"RWA",
+1,
+[],
+10,
+"m"
+],
+[
 "Q2868167",
 "ASM Oran",
 "ALG",
@@ -25237,12 +26156,14 @@ null,
 "m"
 ],
 [
-"Q2869514",
-"Atlético Petróleos do Namibe",
-"ANG",
+"Q2869503",
+"Atlético Acreano",
+"BRA",
 1,
-[],
-11,
+[
+"Atletico Acreano"
+],
+13,
 "m"
 ],
 [
@@ -25391,7 +26312,7 @@ null,
 "Q288419",
 "Foot club de Pau",
 "FRA",
-1,
+2,
 [],
 32,
 "m"
@@ -25423,7 +26344,7 @@ null,
 "Q289029",
 "Ancona",
 "ITA",
-2,
+1,
 [
 "SSC Ancona",
 "Anconitana",
@@ -25478,20 +26399,6 @@ null,
 "Legnano Football"
 ],
 22,
-"m"
-],
-[
-"Q289339",
-"A.C. Lumezzane",
-"ITA",
-2,
-[
-"A C Lumezzane",
-"A. C. Lumezzane",
-"AC Lumezzane",
-"Lumezzane Calcio"
-],
-16,
 "m"
 ],
 [
@@ -25761,11 +26668,23 @@ null,
 ],
 [
 "Q290629",
-"PFC Cherno More Varna",
+"Cherno More Varna",
 "BUL",
 1,
 [],
 33,
+"m"
+],
+[
+"Q290781",
+"AD Almería",
+"ESP",
+1,
+[
+"AD Almeria",
+"Agrupación Deportiva Almería"
+],
+17,
 "m"
 ],
 [
@@ -25950,6 +26869,18 @@ null,
 "Botafogo-PB"
 ],
 23,
+"m"
+],
+[
+"Q2912223",
+"Ironi Tiberias",
+"ISR",
+1,
+[
+"Ironi Tiberias F.C.",
+"Hapoel Tiberias F.C."
+],
+10,
 "m"
 ],
 [
@@ -26275,6 +27206,17 @@ null,
 "Cuiaba Esporte Clube"
 ],
 28,
+"m"
+],
+[
+"Q2947239",
+"Chabab Atlas Khénifra",
+"MAR",
+1,
+[
+"Chabab Atlas Khenifra"
+],
+11,
 "m"
 ],
 [
@@ -27076,6 +28018,17 @@ null,
 "m"
 ],
 [
+"Q30115933",
+"Struga",
+"MKD",
+1,
+[
+"FC Struga"
+],
+28,
+"m"
+],
+[
 "Q30115963",
 "Bashundhara Kings",
 "BGD",
@@ -27111,6 +28064,15 @@ null,
 "m"
 ],
 [
+"Q30128799",
+"FK Tuzla City",
+"BIH",
+1,
+[],
+23,
+"m"
+],
+[
 "Q301332",
 "Kardemir Karabükspor",
 "TUR",
@@ -27123,7 +28085,7 @@ null,
 "Q301431",
 "Aarhus Gymnastikforening",
 "DEN",
-3,
+2,
 [
 "Aarhus GF",
 "Aarhus Gymnastik Forening",
@@ -27170,7 +28132,7 @@ null,
 "Q3022181",
 "Democrata Futebol Clube",
 "BRA",
-2,
+1,
 [
 "Democrata FC"
 ],
@@ -27210,6 +28172,18 @@ null,
 2,
 [],
 29,
+"m"
+],
+[
+"Q3030826",
+"Police",
+"TRI",
+1,
+[
+"Police F.C.",
+"Police FC"
+],
+11,
 "m"
 ],
 [
@@ -27427,7 +28401,7 @@ null,
 "Q30587901",
 "UD Ibiza",
 "ESP",
-1,
+2,
 [],
 27,
 "m"
@@ -27443,6 +28417,17 @@ null,
 ],
 22,
 "w"
+],
+[
+"Q3063068",
+"Atert Bissen",
+"LUX",
+1,
+[
+"FC Atert Bissen"
+],
+16,
+"m"
 ],
 [
 "Q3063074",
@@ -27464,6 +28449,18 @@ null,
 [],
 10,
 "w"
+],
+[
+"Q3063100",
+"Petrocub Hîncești",
+"MDA",
+1,
+[
+"FC Petrocub Hîncești",
+"FC Petrocub"
+],
+33,
+"m"
 ],
 [
 "Q3063135",
@@ -27543,7 +28540,7 @@ null,
 "Q306787",
 "Östers IF",
 "SWE",
-2,
+1,
 [
 "Öster",
 "ÖIF",
@@ -27953,6 +28950,17 @@ null,
 "m"
 ],
 [
+"Q3108385",
+"Glacis United",
+"GBR",
+1,
+[
+"Glacis United F.C."
+],
+18,
+"m"
+],
+[
 "Q311268",
 "Al-Rayyan",
 "QAT",
@@ -28017,6 +29025,15 @@ null,
 "m"
 ],
 [
+"Q31193518",
+"Hillerød Fodbold",
+"DEN",
+1,
+[],
+12,
+"m"
+],
+[
 "Q31199353",
 "MFA Žalgiris Women",
 "LTU",
@@ -28038,7 +29055,7 @@ null,
 "Q312181",
 "magicJack Women",
 "USA",
-4,
+3,
 [],
 10,
 "w"
@@ -28095,6 +29112,15 @@ null,
 [
 "Verdes FC"
 ],
+10,
+"m"
+],
+[
+"Q3136204",
+"Liberia Ship Corporate Registry",
+"LBR",
+1,
+[],
 10,
 "m"
 ],
@@ -28318,6 +29344,17 @@ null,
 "m"
 ],
 [
+"Q3174756",
+"Kiyovu Sports",
+"RWA",
+1,
+[
+"S.C. Kiyovu Sports"
+],
+13,
+"m"
+],
+[
 "Q3175004",
 "Sporting Clube da Praia",
 "CPV",
@@ -28451,15 +29488,6 @@ null,
 "m"
 ],
 [
-"Q3201027",
-"P.A.O.K.",
-"GRE",
-1,
-[],
-10,
-"m"
-],
-[
 "Q321061",
 "Sion",
 "SUI",
@@ -28471,15 +29499,6 @@ null,
 "Football Club Sion"
 ],
 49,
-"m"
-],
-[
-"Q32140",
-"CSKA Moscow",
-"RUS",
-1,
-[],
-28,
 "m"
 ],
 [
@@ -28576,7 +29595,7 @@ null,
 "Q32494",
 "Schalke 04",
 "GER",
-4,
+5,
 [],
 88,
 "m"
@@ -28596,7 +29615,7 @@ null,
 "Q326156",
 "Tavriya Simferopol",
 "SUN",
-2,
+1,
 [
 "SC Tavriya Simferopol",
 "SC Tavria Simferopol"
@@ -28639,15 +29658,6 @@ null,
 "Vidi"
 ],
 47,
-"m"
-],
-[
-"Q3268410",
-"Palloseura Kemi Kings",
-"FIN",
-1,
-[],
-18,
 "m"
 ],
 [
@@ -28893,11 +29903,22 @@ null,
 "Q329607",
 "IFK Norrköping",
 "SWE",
-1,
+2,
 [
 "Snoka"
 ],
 44,
+"m"
+],
+[
+"Q3296385",
+"Santa Claus",
+"FIN",
+1,
+[
+"FC Santa Claus"
+],
+11,
 "m"
 ],
 [
@@ -29034,7 +30055,7 @@ null,
 "Q332527",
 "Deportivo Independiente Medellín",
 "COL",
-3,
+2,
 [
 "DIM",
 "Independiente Medellin"
@@ -29173,7 +30194,7 @@ null,
 "Q332833",
 "Gold Eagles",
 "COL",
-2,
+1,
 [
 "Rionegro",
 "Aguilas Doradas",
@@ -29285,7 +30306,7 @@ null,
 "Q335190",
 "FK Vardar",
 "MKD",
-1,
+2,
 [],
 47,
 "m"
@@ -29473,12 +30494,30 @@ null,
 "m"
 ],
 [
+"Q3400314",
+"FK Borec",
+"MKD",
+1,
+[],
+14,
+"m"
+],
+[
 "Q340133",
 "Hacettepe S.K.",
 "TUR",
 1,
 [],
 16,
+"m"
+],
+[
+"Q3403436",
+"Princesa do Solimões Esporte Clube",
+"BRA",
+1,
+[],
+11,
 "m"
 ],
 [
@@ -29502,6 +30541,15 @@ null,
 "m"
 ],
 [
+"Q3417949",
+"Raja Beni Mellal",
+"MAR",
+1,
+[],
+14,
+"m"
+],
+[
 "Q341892",
 "Nam Dinh",
 "VNM",
@@ -29510,6 +30558,15 @@ null,
 "Nam Dinh F.C."
 ],
 17,
+"m"
+],
+[
+"Q3419593",
+"Rapide Oued Zem",
+"MAR",
+1,
+[],
+11,
 "m"
 ],
 [
@@ -29637,6 +30694,19 @@ null,
 "w"
 ],
 [
+"Q3463910",
+"St Joseph's",
+"GBR",
+1,
+[
+"St Joseph's F.C.",
+"St. Joseph F.C.",
+"St Joseph's FRAC"
+],
+24,
+"m"
+],
+[
 "Q3468767",
 "A.C. Gozzano",
 "ITA",
@@ -29646,6 +30716,28 @@ null,
 "Associazione Calcio Gozzano"
 ],
 10,
+"m"
+],
+[
+"Q3472988",
+"Santos Futebol Clube Amapá",
+"BRA",
+1,
+[
+"Santos of Amapá"
+],
+13,
+"m"
+],
+[
+"Q3484007",
+"Silver Strikers",
+"MWI",
+1,
+[
+"Silver Strikers F.C."
+],
+11,
 "m"
 ],
 [
@@ -29707,6 +30799,15 @@ null,
 "Tatran Liptovsky Mikulas"
 ],
 13,
+"m"
+],
+[
+"Q3493033",
+"Speranța Nisporeni",
+"MDA",
+1,
+[],
+21,
 "m"
 ],
 [
@@ -29814,6 +30915,15 @@ null,
 "m"
 ],
 [
+"Q3542721",
+"A.C. Barnechea City",
+"CHI",
+1,
+[],
+12,
+"m"
+],
+[
 "Q3543925",
 "Víkingur Gøta",
 "FRO",
@@ -29829,6 +30939,15 @@ null,
 1,
 [],
 11,
+"m"
+],
+[
+"Q3547648",
+"Ubiratan Esporte Clube",
+"BRA",
+1,
+[],
+10,
 "m"
 ],
 [
@@ -29941,6 +31060,15 @@ null,
 "m"
 ],
 [
+"Q3573032",
+"CD Ebro",
+"ESP",
+1,
+[],
+15,
+"m"
+],
+[
 "Q3573106",
 "Yuen Long",
 "CHN",
@@ -30027,6 +31155,17 @@ null,
 "FC Avezzano"
 ],
 14,
+"m"
+],
+[
+"Q36404703",
+"Fresno FC",
+"USA",
+1,
+[
+"Fresno Football Club"
+],
+10,
 "m"
 ],
 [
@@ -30263,7 +31402,7 @@ null,
 ],
 [
 "Q374254",
-"PFC Beroe Stara Zagora",
+"Beroe Stara Zagora",
 "BUL",
 1,
 [
@@ -30513,6 +31652,15 @@ null,
 "m"
 ],
 [
+"Q3796435",
+"ND Ilirija Ljubljana",
+"SVN",
+1,
+[],
+12,
+"m"
+],
+[
 "Q3804552",
 "Kalba",
 "UAE",
@@ -30678,7 +31826,7 @@ null,
 "Q3844288",
 "Manchester City Women",
 "GBR",
-4,
+5,
 [
 "Manchester City W.F.C."
 ],
@@ -30862,7 +32010,7 @@ null,
 "Q38781",
 "Torpedo Kutaisi",
 "GEO",
-1,
+2,
 [
 "FC Torpedo Kutaisi"
 ],
@@ -31002,6 +32150,17 @@ null,
 "m"
 ],
 [
+"Q39059875",
+"Mekelle 70 Enderta",
+"ETH",
+1,
+[
+"Mekelle City FC"
+],
+10,
+"m"
+],
+[
 "Q391014",
 "River Plate",
 "URU",
@@ -31041,6 +32200,15 @@ null,
 "FC Zvezda Irkutsk"
 ],
 12,
+"m"
+],
+[
+"Q391197",
+"Ungmennafélagið Víkingur",
+"ISL",
+1,
+[],
+14,
 "m"
 ],
 [
@@ -31237,17 +32405,6 @@ null,
 "m"
 ],
 [
-"Q393286",
-"Gudja United",
-"MLT",
-1,
-[
-"Gudja United F.C."
-],
-13,
-"m"
-],
-[
 "Q393302",
 "Gżira United",
 "MLT",
@@ -31374,6 +32531,17 @@ null,
 "Hebei Football Club"
 ],
 29,
+"m"
+],
+[
+"Q402806",
+"Dingli Swallows",
+"MLT",
+1,
+[
+"Dingli Swallows F.C."
+],
+10,
 "m"
 ],
 [
@@ -31664,6 +32832,17 @@ null,
 "m"
 ],
 [
+"Q4165220",
+"Al-Fahaheel",
+"KWT",
+1,
+[
+"Al-Fahaheel FC"
+],
+15,
+"m"
+],
+[
 "Q4165738",
 "Khaitan Sporting Club",
 "KWT",
@@ -31771,7 +32950,7 @@ null,
 "Q421009",
 "Tampa Bay Mutiny",
 "USA",
-2,
+1,
 [],
 26,
 "m"
@@ -31916,6 +33095,15 @@ null,
 "Maccabi Netanya F.C."
 ],
 33,
+"m"
+],
+[
+"Q426695",
+"New York Shipbuilding Corporation",
+"USA",
+1,
+[],
+13,
 "m"
 ],
 [
@@ -32223,7 +33411,7 @@ null,
 "Q433529",
 "Atletico Roma",
 "ITA",
-2,
+1,
 [
 "Atletico Roma F.C.",
 "Cisco Calcio Roma",
@@ -32246,7 +33434,7 @@ null,
 "Q43375974",
 "Volos N.F.C.",
 "GRE",
-1,
+2,
 [
 "Volos F.C."
 ],
@@ -32367,7 +33555,7 @@ null,
 "Q4400851",
 "Napoli Women",
 "ITA",
-3,
+2,
 [],
 15,
 "w"
@@ -32414,7 +33602,7 @@ null,
 "Q44300",
 "NK Rudar Velenje",
 "SVN",
-2,
+1,
 [],
 31,
 "m"
@@ -32464,7 +33652,7 @@ null,
 "Q44307",
 "ND Mura 05",
 "SVN",
-2,
+1,
 [],
 17,
 "m"
@@ -32550,6 +33738,15 @@ null,
 "m"
 ],
 [
+"Q44879",
+"Selenge Press",
+"MNG",
+1,
+[],
+16,
+"m"
+],
+[
 "Q44897",
 "Espérance Sportive de Tunis",
 "TUN",
@@ -32590,6 +33787,15 @@ null,
 "m"
 ],
 [
+"Q4498918",
+"Chojniczanka Chojnice",
+"POL",
+1,
+[],
+11,
+"m"
+],
+[
 "Q4500008",
 "Hornchurch",
 "GBR",
@@ -32606,10 +33812,19 @@ null,
 "m"
 ],
 [
+"Q4502088",
+"FK Khujand",
+"TJK",
+1,
+[],
+20,
+"m"
+],
+[
 "Q4512",
 "VfB Stuttgart",
 "GER",
-5,
+4,
 [
 "Die Schwaben",
 "The Swabians"
@@ -32621,7 +33836,7 @@ null,
 "Q451635",
 "AmaZulu",
 "RSA",
-1,
+2,
 [
 "AmaZulu F.C.",
 "Amazulu"
@@ -32800,7 +34015,7 @@ null,
 "Q462411",
 "N.K. Zagreb",
 "CRO",
-3,
+2,
 [
 "NK Zagreb"
 ],
@@ -32852,15 +34067,6 @@ null,
 "m"
 ],
 [
-"Q4654035",
-"ASAC Concorde",
-"MRT",
-1,
-[],
-13,
-"m"
-],
-[
 "Q4654428",
 "SKN St. Pölten Women",
 "AUT",
@@ -32900,6 +34106,29 @@ null,
 [],
 12,
 "w"
+],
+[
+"Q4702305",
+"Bourj",
+"LBN",
+1,
+[
+"Bourj FC",
+"Al-Bourj FC"
+],
+11,
+"m"
+],
+[
+"Q4702349",
+"Al-Diwaniya",
+"IRQ",
+1,
+[
+"Al-Diwaniya FC"
+],
+10,
+"m"
 ],
 [
 "Q4702627",
@@ -33011,6 +34240,15 @@ null,
 "Changchun Yatai F.C."
 ],
 28,
+"m"
+],
+[
+"Q472805",
+"TSV Hannover-Burgdorf",
+"GER",
+1,
+[],
+18,
 "m"
 ],
 [
@@ -33166,7 +34404,7 @@ null,
 "Q478766",
 "DWS",
 "NED",
-2,
+1,
 [
 "AFC DWS",
 "Door Wilskracht Sterk",
@@ -33285,7 +34523,7 @@ null,
 "Q482262",
 "América Futebol Clube",
 "BRA",
-2,
+1,
 [
 "America",
 "América",
@@ -33377,6 +34615,17 @@ null,
 "m"
 ],
 [
+"Q4827520",
+"Avaldsnes IL",
+"NOR",
+1,
+[
+"Avaldsnes Idrettslag"
+],
+14,
+"m"
+],
+[
 "Q482764",
 "Al-Nassr",
 "KSA",
@@ -33434,7 +34683,7 @@ null,
 "Q484569",
 "Gangwon",
 "KOR",
-1,
+2,
 [
 "Gangwon FC",
 "Gangwon Football Club"
@@ -33543,7 +34792,7 @@ null,
 "Q48843",
 "Accrington Stanley",
 "GBR",
-1,
+2,
 [
 "Accrington Stanley F.C.",
 "Stanley",
@@ -33945,7 +35194,7 @@ null,
 "Q492419",
 "FCR 2001 Duisburg Women",
 "GER",
-4,
+3,
 [],
 21,
 "w"
@@ -34007,15 +35256,6 @@ null,
 "m"
 ],
 [
-"Q493464",
-"Bergisch Gladbach 09",
-"GER",
-1,
-[],
-10,
-"m"
-],
-[
 "Q4937261",
 "Boeung Ket",
 "KHM",
@@ -34052,7 +35292,7 @@ null,
 "Q495027",
 "Busan IPark",
 "KOR",
-1,
+2,
 [
 "Busan IPark FC",
 "Busan I'Cons FC",
@@ -34075,6 +35315,17 @@ null,
 "GS"
 ],
 92,
+"m"
+],
+[
+"Q495903",
+"Cheonan City",
+"KOR",
+1,
+[
+"Cheonan City FC"
+],
+10,
 "m"
 ],
 [
@@ -34105,6 +35356,15 @@ null,
 2,
 [],
 31,
+"m"
+],
+[
+"Q4971508",
+"Briton Ferry Llansawel",
+"GBR",
+1,
+[],
+10,
 "m"
 ],
 [
@@ -34261,6 +35521,18 @@ null,
 "m"
 ],
 [
+"Q5015596",
+"Cabinteely",
+"IRL",
+1,
+[
+"Cabinteely F.C.",
+"Cabinteely Football Club"
+],
+10,
+"m"
+],
+[
 "Q501693",
 "ES Troyes AC",
 "FRA",
@@ -34285,10 +35557,21 @@ null,
 "m"
 ],
 [
+"Q502381",
+"Persis Solo",
+"IDN",
+1,
+[
+"Sambernyawa"
+],
+11,
+"m"
+],
+[
 "Q503317",
 "Dijon FCO",
 "FRA",
-2,
+3,
 [
 "Dijon"
 ],
@@ -34394,7 +35677,7 @@ null,
 "Q507444",
 "Henan",
 "CHN",
-1,
+2,
 [
 "Henan F.C.",
 "Henan Jianye",
@@ -34409,7 +35692,7 @@ null,
 "Q508322",
 "Gueugnon",
 "FRA",
-2,
+1,
 [
 "FC Gueugnon"
 ],
@@ -34583,7 +35866,7 @@ null,
 "Q513237",
 "Kocaelispor",
 "TUR",
-1,
+2,
 [],
 30,
 "m"
@@ -34856,7 +36139,7 @@ null,
 "Q519966",
 "Club Atlético Sarmiento",
 "ARG",
-1,
+2,
 [
 "Sarmiento de Junín"
 ],
@@ -34892,6 +36175,15 @@ null,
 "Diyarbakırspor Kulübü"
 ],
 22,
+"m"
+],
+[
+"Q5205823",
+"DNŠ Primorje",
+"SVN",
+1,
+[],
+14,
 "m"
 ],
 [
@@ -34955,7 +36247,7 @@ null,
 "Q5214935",
 "Halifax Town",
 "GBR",
-2,
+1,
 [
 "FC Halifax Town",
 "Halifax",
@@ -35085,6 +36377,17 @@ null,
 "m"
 ],
 [
+"Q526794",
+"Sportist Svoge",
+"BUL",
+1,
+[
+"FC Sportist Svoge"
+],
+11,
+"m"
+],
+[
 "Q526949",
 "SpVgg Bayreuth",
 "GER",
@@ -35113,6 +36416,15 @@ null,
 "Canon Yaounde"
 ],
 28,
+"m"
+],
+[
+"Q528226",
+"UJA Maccabi Paris Métropole",
+"FRA",
+1,
+[],
+12,
 "m"
 ],
 [
@@ -35280,7 +36592,7 @@ null,
 "Q53410120",
 "Türkgücü-Ataspor München",
 "GER",
-1,
+2,
 [
 "SV Türkgücü-Ataspor München"
 ],
@@ -35342,6 +36654,17 @@ null,
 "Racing Charleroi"
 ],
 16,
+"m"
+],
+[
+"Q53675330",
+"Kupiškis",
+"LTU",
+1,
+[
+"FC Kupiškis"
+],
+18,
 "m"
 ],
 [
@@ -35496,7 +36819,7 @@ null,
 "Q541744",
 "Red Bull Bragantino",
 "BRA",
-2,
+1,
 [
 "Bragantino",
 "Clube Atletico Bragantino",
@@ -35535,15 +36858,6 @@ null,
 "Ezra F.C."
 ],
 12,
-"m"
-],
-[
-"Q5423700",
-"United Koreans in Japan",
-"JPN",
-1,
-[],
-11,
 "m"
 ],
 [
@@ -35587,6 +36901,19 @@ null,
 1,
 [],
 28,
+"m"
+],
+[
+"Q5424818",
+"Arda",
+"BUL",
+1,
+[
+"FC Arda",
+"Arda Kardzhali",
+"FC Arda Kardzhali"
+],
+21,
 "m"
 ],
 [
@@ -35679,6 +37006,17 @@ null,
 "m"
 ],
 [
+"Q5425216",
+"Unirea Slobozia",
+"ROU",
+1,
+[
+"FC Unirea Slobozia"
+],
+14,
+"m"
+],
+[
 "Q5425354",
 "FELDA United",
 "MAS",
@@ -35720,6 +37058,17 @@ null,
 "m"
 ],
 [
+"Q5426249",
+"FK Mladost Novi Sad",
+"SRB",
+1,
+[
+"FK Mladost GAT"
+],
+10,
+"m"
+],
+[
 "Q5426288",
 "FK Otrant",
 "MNE",
@@ -35744,6 +37093,17 @@ null,
 1,
 [],
 23,
+"m"
+],
+[
+"Q5426448",
+"Košice",
+"SVK",
+1,
+[
+"FC Košice"
+],
+25,
 "m"
 ],
 [
@@ -35788,7 +37148,7 @@ null,
 "Q543467",
 "G.D. Chaves",
 "POR",
-1,
+2,
 [
 "Chaves",
 "GD Chaves"
@@ -35930,10 +37290,11 @@ null,
 ],
 [
 "Q54834034",
-"PFC Sochi",
+"Sochi",
 "RUS",
-1,
+2,
 [
+"PFC Sochi",
 "FC Sochi"
 ],
 35,
@@ -35964,6 +37325,18 @@ null,
 "FC Mynai"
 ],
 21,
+"m"
+],
+[
+"Q54944515",
+"HFX Wanderers FC",
+"CAN",
+1,
+[
+"Halifax Wanderers",
+"HFX Wanderers"
+],
+13,
 "m"
 ],
 [
@@ -35998,6 +37371,17 @@ null,
 "Djoliba Athletic Club"
 ],
 18,
+"m"
+],
+[
+"Q55072718",
+"Kuban Krasnodar",
+"RUS",
+1,
+[
+"PFC Kuban Krasnodar"
+],
+15,
 "m"
 ],
 [
@@ -36080,7 +37464,7 @@ null,
 "Q5549552",
 "Real Sociedad Women",
 "ESP",
-3,
+2,
 [],
 21,
 "w"
@@ -36118,6 +37502,15 @@ null,
 [],
 21,
 "w"
+],
+[
+"Q55632160",
+"Ryomyong Sports Club",
+"PRK",
+1,
+[],
+10,
+"m"
 ],
 [
 "Q55639736",
@@ -36273,6 +37666,17 @@ null,
 "m"
 ],
 [
+"Q561410",
+"AKS Chorzów",
+"POL",
+1,
+[
+"AKS Chorzow"
+],
+11,
+"m"
+],
+[
 "Q56173579",
 "Havadar",
 "IRN",
@@ -36300,7 +37704,7 @@ null,
 "Q564192",
 "Wuhan Yangtze River",
 "CHN",
-1,
+2,
 [
 "Wuhan F.C."
 ],
@@ -36369,7 +37773,7 @@ null,
 "Q56542463",
 "LR Vicenza",
 "ITA",
-2,
+3,
 [
 "Vicenza",
 "Lanerossi Vicenza",
@@ -36378,6 +37782,17 @@ null,
 "LR Vicenza Virtus"
 ],
 45,
+"m"
+],
+[
+"Q566136",
+"Memmingen",
+"GER",
+1,
+[
+"FC Memmingen"
+],
+11,
 "m"
 ],
 [
@@ -36525,7 +37940,7 @@ null,
 "Q572526",
 "FK Dukla Banská Bystrica",
 "SVK",
-2,
+1,
 [],
 30,
 "m"
@@ -36895,20 +38310,13 @@ null,
 "m"
 ],
 [
-"Q582663",
-"Obolón Kiev",
-"UKR",
-1,
-[],
-11,
-"m"
-],
-[
 "Q582900",
-"PFC Velbazhd Kyustendil",
+"Velbazhd Kyustendil",
 "BUL",
 1,
-[],
+[
+"PFC Velbazhd Kyustendil"
+],
 13,
 "m"
 ],
@@ -36945,6 +38353,15 @@ null,
 "m"
 ],
 [
+"Q58436702",
+"Stjarnan",
+"ISL",
+1,
+[],
+10,
+"m"
+],
+[
 "Q584440",
 "Mika",
 "ARM",
@@ -36954,6 +38371,17 @@ null,
 "Football Club Mika"
 ],
 36,
+"m"
+],
+[
+"Q58446904",
+"Ungmennafélagið Afturelding",
+"ISL",
+1,
+[
+"UMF Afturelding"
+],
+12,
 "m"
 ],
 [
@@ -37267,15 +38695,6 @@ null,
 "m"
 ],
 [
-"Q595205",
-"Europe XI",
-null,
-1,
-[],
-10,
-"m"
-],
-[
 "Q595489",
 "Fagiano Okayama",
 "JPN",
@@ -37438,7 +38857,7 @@ null,
 "Q59773336",
 "Western United",
 "AUS",
-1,
+2,
 [
 "Western United FC",
 "Western Melbourne FC"
@@ -37572,7 +38991,7 @@ null,
 "Q60011070",
 "Benfica Women",
 "POR",
-3,
+2,
 [],
 16,
 "w"
@@ -37656,7 +39075,7 @@ null,
 "Q602542",
 "FBC Melgar",
 "PER",
-2,
+1,
 [
 "F.B.C. Melgar"
 ],
@@ -37870,7 +39289,7 @@ null,
 "Q603633",
 "Liberty Professionals",
 "GHA",
-2,
+1,
 [
 "Liberty Professionals F.C.",
 "Liberty Professionals FC"
@@ -37882,7 +39301,7 @@ null,
 "Q604581",
 "Club Sporting Cristal",
 "PER",
-3,
+2,
 [
 "Sporting Cristal"
 ],
@@ -38114,7 +39533,7 @@ null,
 "Q60762002",
 "Mohun Bagan Super Giant",
 "IND",
-1,
+2,
 [
 "Mohun Bagan FC",
 "Mohun Bagan SG"
@@ -38391,6 +39810,17 @@ null,
 "m"
 ],
 [
+"Q61379638",
+"FK Vilnius",
+"LTU",
+1,
+[
+"FKV"
+],
+12,
+"m"
+],
+[
 "Q61382287",
 "FK Atmosfera",
 "LTU",
@@ -38400,10 +39830,21 @@ null,
 "m"
 ],
 [
+"Q61386319",
+"Baltijos Futbolo Akademija",
+"LTU",
+1,
+[
+"Baltic Football Academy"
+],
+17,
+"m"
+],
+[
 "Q613931",
 "Saba Qom",
 "IRN",
-1,
+2,
 [
 "Saba Qom F.C.",
 "Sabaye Qom"
@@ -39164,6 +40605,17 @@ null,
 "m"
 ],
 [
+"Q636797",
+"Ba",
+"FJI",
+1,
+[
+"Ba F.C."
+],
+18,
+"m"
+],
+[
 "Q637427",
 "Orihuela",
 "ESP",
@@ -39279,7 +40731,7 @@ null,
 "Q639525",
 "Sandhausen",
 "GER",
-1,
+2,
 [
 "SV Sandhausen"
 ],
@@ -39309,6 +40761,19 @@ null,
 "Bollklubben Häcken"
 ],
 44,
+"m"
+],
+[
+"Q63994855",
+"Football Club Lumezzane",
+"ITA",
+2,
+[
+"A.S.D. Valgobbiazanano",
+"FC Lumezzane S.S.D.",
+"ValgobbiaZanano"
+],
+12,
 "m"
 ],
 [
@@ -39353,6 +40818,18 @@ null,
 "Gençlerbirliği Spor Kulübü"
 ],
 42,
+"m"
+],
+[
+"Q6416397",
+"Sepidrood Rasht",
+"IRN",
+1,
+[
+"Sepidrood Rasht F.C.",
+"Sepidrood Rasht FC"
+],
+11,
 "m"
 ],
 [
@@ -39420,20 +40897,6 @@ null,
 "Poole Town FC"
 ],
 11,
-"m"
-],
-[
-"Q6418817",
-"Djurgårdens IF",
-"SWE",
-1,
-[
-"DIF",
-"Djurgår'n",
-"Djurgårdens Idrottsförening",
-"Stockholms stolthet"
-],
-15,
 "m"
 ],
 [
@@ -39573,10 +41036,12 @@ null,
 ],
 [
 "Q643434",
-"PFC Slavia Sofia",
+"Slavia Sofia",
 "BUL",
-2,
-[],
+1,
+[
+"PFC Slavia Sofia"
+],
 37,
 "m"
 ],
@@ -39743,7 +41208,7 @@ null,
 "Q646596",
 "Puebla",
 "MEX",
-2,
+3,
 [
 "Puebla F.C.",
 "Club Puebla",
@@ -40315,15 +41780,6 @@ null,
 "m"
 ],
 [
-"Q662388",
-"Diables Noirs",
-"COG",
-1,
-[],
-15,
-"m"
-],
-[
 "Q662990",
 "Vasa IFK",
 "FIN",
@@ -40343,6 +41799,15 @@ null,
 "Ascoli Picchio"
 ],
 46,
+"m"
+],
+[
+"Q663263",
+"Sinop Futebol Clube",
+"BRA",
+1,
+[],
+11,
 "m"
 ],
 [
@@ -40441,7 +41906,7 @@ null,
 "Q6651",
 "Brescia Calcio",
 "ITA",
-4,
+3,
 [
 "BSFC",
 "B.S.F.C.",
@@ -40821,7 +42286,7 @@ null,
 "Q670438",
 "Rheindorf Altach",
 "AUT",
-1,
+2,
 [
 "SC Rheindorf Altach"
 ],
@@ -40839,10 +42304,12 @@ null,
 ],
 [
 "Q6707867",
-"PFC Belasitsa Petrich",
+"Belasitsa Petrich",
 "BUL",
 1,
-[],
+[
+"PFC Belasitsa Petrich"
+],
 13,
 "m"
 ],
@@ -40993,17 +42460,6 @@ null,
 "m"
 ],
 [
-"Q673238",
-"Kharkiv",
-"UKR",
-1,
-[
-"FC Kharkiv"
-],
-15,
-"m"
-],
-[
 "Q6732568",
 "Magway",
 "MMR",
@@ -41032,6 +42488,18 @@ null,
 1,
 [],
 10,
+"m"
+],
+[
+"Q674263",
+"Canet Roussillon",
+"FRA",
+1,
+[
+"Canet Roussillon FC",
+"Perpignan Canet FC"
+],
+12,
 "m"
 ],
 [
@@ -41089,6 +42557,17 @@ null,
 "m"
 ],
 [
+"Q674867",
+"Moyola Park",
+"GBR",
+1,
+[
+"Moyola Park F.C."
+],
+10,
+"m"
+],
+[
 "Q674903",
 "Bermuda Hogges",
 "USA",
@@ -41118,6 +42597,17 @@ null,
 "US Livorno"
 ],
 52,
+"m"
+],
+[
+"Q676897",
+"Nacional Potosí",
+"BOL",
+1,
+[
+"Nacional Potosi"
+],
+19,
 "m"
 ],
 [
@@ -41220,6 +42710,17 @@ null,
 "TSV Grün-Weiß Dankersen"
 ],
 13,
+"m"
+],
+[
+"Q681483",
+"Rapperswil-Jona",
+"SUI",
+1,
+[
+"FC Rapperswil-Jona"
+],
+12,
 "m"
 ],
 [
@@ -41681,10 +43182,12 @@ null,
 ],
 [
 "Q693951",
-"PFC Spartak Nalchik",
+"Spartak Nalchik",
 "RUS",
 1,
-[],
+[
+"PFC Spartak Nalchik"
+],
 31,
 "m"
 ],
@@ -41766,6 +43269,15 @@ null,
 1,
 [],
 21,
+"m"
+],
+[
+"Q6954582",
+"NK Rogaška",
+"SVN",
+1,
+[],
+13,
 "m"
 ],
 [
@@ -41942,7 +43454,7 @@ null,
 "Q697473",
 "Swarovski Tirol",
 "AUT",
-2,
+1,
 [
 "FC Swarovski Tirol"
 ],
@@ -42037,6 +43549,15 @@ null,
 "m"
 ],
 [
+"Q700047",
+"TSV Schwieberdingen",
+"GER",
+1,
+[],
+10,
+"m"
+],
+[
 "Q700053",
 "FK Pirmasens",
 "GER",
@@ -42061,18 +43582,6 @@ null,
 1,
 [],
 10,
-"m"
-],
-[
-"Q701290",
-"SSV Ulm 1846",
-"GER",
-1,
-[
-"Ulm",
-"SSV Ulm"
-],
-14,
 "m"
 ],
 [
@@ -42116,7 +43625,7 @@ null,
 "Q704",
 "Olympique Lyonnais",
 "FRA",
-5,
+4,
 [
 "Lyon",
 "OL",
@@ -42171,20 +43680,9 @@ null,
 "Q7069287",
 "Al-Diriyah Club",
 "KSA",
-1,
+2,
 [],
 17,
-"m"
-],
-[
-"Q7071377",
-"Náutico Futebol Clube",
-"BRA",
-1,
-[
-"Nautico Futebol Clube"
-],
-10,
 "m"
 ],
 [
@@ -42221,6 +43719,17 @@ null,
 "m"
 ],
 [
+"Q709805",
+"Kigwancha Sports Club",
+"PRK",
+1,
+[
+"Sinŭiju Locomotive"
+],
+22,
+"m"
+],
+[
 "Q7124770",
 "Indian Arrows",
 "IND",
@@ -42249,15 +43758,6 @@ null,
 "Taichung Futuro F.C."
 ],
 12,
-"m"
-],
-[
-"Q712836",
-"INF Clairefontaine",
-"FRA",
-1,
-[],
-18,
 "m"
 ],
 [
@@ -42303,7 +43803,7 @@ null,
 "Q719338",
 "Santiago Wanderers",
 "CHI",
-2,
+1,
 [],
 25,
 "m"
@@ -42312,7 +43812,7 @@ null,
 "Q719344",
 "C.A. Cerro",
 "URU",
-2,
+1,
 [
 "Cerro"
 ],
@@ -42431,7 +43931,7 @@ null,
 "Q722534",
 "Al-Orobah",
 "KSA",
-1,
+2,
 [
 "Al-Orobah F.C."
 ],
@@ -42639,7 +44139,7 @@ null,
 "Q725916",
 "NK Istra 1961",
 "CRO",
-1,
+2,
 [
 "NK Istra Pula"
 ],
@@ -42703,6 +44203,15 @@ null,
 "m"
 ],
 [
+"Q7268855",
+"Quang Ninh Charcoal",
+"VNM",
+1,
+[],
+14,
+"m"
+],
+[
 "Q727093",
 "CD Baskonia",
 "ESP",
@@ -42760,7 +44269,7 @@ null,
 "Q72844",
 "Al-Ettifaq",
 "KSA",
-2,
+3,
 [
 "Al-Ettifaq FC",
 "Ettifaq Dammam",
@@ -42829,7 +44338,7 @@ null,
 "Q7300505",
 "Reading Women",
 "GBR",
-2,
+3,
 [
 "Reading F.C. Women"
 ],
@@ -42851,7 +44360,7 @@ null,
 "Q730219",
 "Korona Kielce",
 "POL",
-1,
+2,
 [],
 36,
 "m"
@@ -43143,7 +44652,7 @@ null,
 "Q737727",
 "Nitra",
 "SVK",
-1,
+2,
 [
 "FC Nitra"
 ],
@@ -43407,6 +44916,28 @@ null,
 "m"
 ],
 [
+"Q74111273",
+"West Armenia",
+"ARM",
+1,
+[
+"FC West Armenia"
+],
+13,
+"m"
+],
+[
+"Q74112200",
+"Van",
+"ARM",
+1,
+[
+"FC Van"
+],
+23,
+"m"
+],
+[
 "Q741382",
 "Kapfenberger SV",
 "AUT",
@@ -43563,6 +45094,17 @@ null,
 "m"
 ],
 [
+"Q7467957",
+"Panathinaikos A.O.",
+"GRE",
+1,
+[
+"Panathinaikos A.C."
+],
+23,
+"m"
+],
+[
 "Q746853",
 "FF Jaro",
 "FIN",
@@ -43602,7 +45144,7 @@ null,
 "Q7482049",
 "Strømsgodset TF",
 "NOR",
-1,
+2,
 [
 "Strømsgodset Toppfotball"
 ],
@@ -43678,7 +45220,7 @@ null,
 "Q749603",
 "São José Esporte Clube",
 "BRA",
-2,
+1,
 [],
 15,
 "m"
@@ -43840,6 +45382,17 @@ null,
 "m"
 ],
 [
+"Q7530160",
+"Sirens",
+"MLT",
+1,
+[
+"Sirens F.C."
+],
+14,
+"m"
+],
+[
 "Q753462",
 "Universitatea Cluj",
 "ROU",
@@ -43885,7 +45438,7 @@ null,
 "Q754310",
 "FK Borac Čačak",
 "SRB",
-2,
+1,
 [],
 27,
 "m"
@@ -43926,7 +45479,7 @@ null,
 "Q7561031",
 "Cangzhou Mighty Lions",
 "CHN",
-1,
+2,
 [],
 17,
 "m"
@@ -44134,7 +45687,7 @@ null,
 "Q7579603",
 "Sporting de Huelva Women",
 "ESP",
-2,
+3,
 [],
 14,
 "w"
@@ -44239,10 +45792,12 @@ null,
 ],
 [
 "Q762017",
-"PFC Dobrudzha Dobrich",
+"Dobrudzha Dobrich",
 "BUL",
 1,
-[],
+[
+"PFC Dobrudzha Dobrich"
+],
 14,
 "m"
 ],
@@ -44262,7 +45817,7 @@ null,
 "Q762353",
 "Esporte Clube Novo Hamburgo",
 "BRA",
-1,
+2,
 [],
 15,
 "m"
@@ -44284,7 +45839,7 @@ null,
 "Q765016",
 "UE Cornellá",
 "ESP",
-1,
+2,
 [
 "UE Cornella"
 ],
@@ -44300,6 +45855,24 @@ null,
 "Young Elephants FC"
 ],
 13,
+"m"
+],
+[
+"Q766469",
+"Regar-TadAZ Tursunzoda",
+"SUN",
+1,
+[],
+27,
+"m"
+],
+[
+"Q766742",
+"Ravshan Kulob",
+"TJK",
+1,
+[],
+22,
 "m"
 ],
 [
@@ -44339,6 +45912,15 @@ null,
 [
 "Q768225",
 "Clube Atlético do Porto",
+"BRA",
+1,
+[],
+10,
+"m"
+],
+[
+"Q768249",
+"Clube Desportivo Sete de Setembro",
 "BRA",
 1,
 [],
@@ -44446,6 +46028,15 @@ null,
 "m"
 ],
 [
+"Q770936",
+"U.N. Käerjeng '97",
+"LUX",
+1,
+[],
+21,
+"m"
+],
+[
 "Q7711263",
 "That Ras Club",
 "JOR",
@@ -44541,6 +46132,15 @@ null,
 "m"
 ],
 [
+"Q773360",
+"US Hostert",
+"LUX",
+1,
+[],
+14,
+"m"
+],
+[
 "Q775469",
 "Tiraspol",
 "MDA",
@@ -44601,7 +46201,7 @@ null,
 "Q777337",
 "Aurora Pro Patria 1919",
 "ITA",
-2,
+1,
 [],
 30,
 "m"
@@ -44922,7 +46522,7 @@ null,
 "Q791128",
 "Aviron Bayonnais",
 "FRA",
-2,
+1,
 [
 "Aviron Bayonnais FC",
 "Bayonne",
@@ -44938,6 +46538,18 @@ null,
 3,
 [],
 38,
+"m"
+],
+[
+"Q7911914",
+"Valledupar",
+"COL",
+1,
+[
+"Valledupar F.C.",
+"VFC"
+],
+10,
 "m"
 ],
 [
@@ -44977,7 +46589,7 @@ null,
 "Q793241",
 "Ayr United",
 "GBR",
-2,
+1,
 [
 "Ayr United F.C.",
 "Ayr",
@@ -45015,7 +46627,7 @@ null,
 "Q7944477",
 "Vålerenga Fotball Damer Women",
 "NOR",
-2,
+3,
 [],
 16,
 "w"
@@ -45033,7 +46645,7 @@ null,
 "Q795978",
 "Baltika Kaliningrad",
 "RUS",
-1,
+2,
 [
 "FC Baltika Kaliningrad"
 ],
@@ -45085,7 +46697,7 @@ null,
 "Q7985296",
 "West Ham United Women",
 "GBR",
-3,
+4,
 [],
 20,
 "w"
@@ -45206,7 +46818,7 @@ null,
 "Q806495",
 "Bangkok United",
 "THA",
-1,
+2,
 [
 "Bangkok United F.C.",
 "Bangkok United FC"
@@ -45224,6 +46836,27 @@ null,
 "Bangor Football Club"
 ],
 17,
+"m"
+],
+[
+"Q8072111",
+"Thimphu City",
+"BTN",
+1,
+[
+"Thimphu City FC",
+"Zimdra FC"
+],
+12,
+"m"
+],
+[
+"Q80722063",
+"Club Atlético Palmaflor",
+"BOL",
+1,
+[],
+10,
 "m"
 ],
 [
@@ -45453,7 +47086,7 @@ null,
 "Q812723",
 "Alshariqa",
 "UAE",
-2,
+3,
 [
 "Al-Nasr Dubai",
 "Al-Nasr S.C."
@@ -46062,7 +47695,7 @@ null,
 "Q838534",
 "Paraná Clube",
 "BRA",
-3,
+2,
 [
 "EC Pinheiros",
 "Colorado EC",
@@ -46244,7 +47877,7 @@ null,
 "Q843097",
 "Hvidovre IF",
 "DEN",
-2,
+1,
 [
 "Hvidovre Idrætsforening"
 ],
@@ -46304,6 +47937,15 @@ null,
 "m"
 ],
 [
+"Q844498",
+"Schifflange 95",
+"LUX",
+1,
+[],
+11,
+"m"
+],
+[
 "Q844931",
 "Kashiwa Reysol",
 "JPN",
@@ -46343,7 +47985,7 @@ null,
 "Q845137",
 "Angers SCO",
 "FRA",
-2,
+3,
 [
 "Angers",
 "SCO",
@@ -46356,7 +47998,7 @@ null,
 "Q845146",
 "NK Interblock",
 "SVN",
-2,
+1,
 [],
 24,
 "m"
@@ -46571,6 +48213,15 @@ null,
 "m"
 ],
 [
+"Q848977",
+"Harland and Wolff",
+"GBR",
+1,
+[],
+34,
+"m"
+],
+[
 "Q849139",
 "K.S.K. Beveren",
 "BEL",
@@ -46718,7 +48369,7 @@ null,
 "Q852266",
 "ASEC Mimosas",
 "CIV",
-3,
+2,
 [],
 30,
 "m"
@@ -46979,7 +48630,7 @@ null,
 "Q856416",
 "CP Mérida",
 "ESP",
-1,
+2,
 [
 "CP Merida"
 ],
@@ -47061,6 +48712,15 @@ null,
 "Wits University FC"
 ],
 16,
+"m"
+],
+[
+"Q85772919",
+"KF Malisheva",
+"XKS",
+1,
+[],
+19,
 "m"
 ],
 [
@@ -47209,7 +48869,7 @@ null,
 "Q8633",
 "Varese Calcio",
 "ITA",
-3,
+2,
 [
 "Varese Calcio S.S.D.",
 "Città di Varese"
@@ -47329,7 +48989,7 @@ null,
 "Q867320",
 "Rouen",
 "FRA",
-1,
+2,
 [
 "FC Rouen"
 ],
@@ -47349,10 +49009,21 @@ null,
 "m"
 ],
 [
+"Q867882",
+"Thisted",
+"DEN",
+1,
+[
+"Thisted FC"
+],
+10,
+"m"
+],
+[
 "Q867921",
 "Livingston",
 "GBR",
-1,
+2,
 [
 "Livingston F.C.",
 "LFC",
@@ -47850,6 +49521,17 @@ null,
 "m"
 ],
 [
+"Q9008987",
+"Internacional de Madrid",
+"ESP",
+1,
+[
+"Inter de Madrid"
+],
+12,
+"m"
+],
+[
 "Q902962",
 "Bray Wanderers",
 "IRL",
@@ -47983,18 +49665,6 @@ null,
 "m"
 ],
 [
-"Q911524",
-"Dunaújváros",
-"HUN",
-1,
-[
-"Dunaújváros FC",
-"Dunaujvaros FC"
-],
-17,
-"m"
-],
-[
 "Q912225",
 "USM Alger",
 "ALG",
@@ -48111,6 +49781,15 @@ null,
 "m"
 ],
 [
+"Q917613",
+"UE Engordany",
+"AND",
+1,
+[],
+25,
+"m"
+],
+[
 "Q918044",
 "Valencia CF Mestalla",
 "ESP",
@@ -48146,6 +49825,17 @@ null,
 1,
 [],
 35,
+"m"
+],
+[
+"Q9182810",
+"Bytovia Bytów",
+"POL",
+1,
+[
+"Bytovia Bytow"
+],
+11,
 "m"
 ],
 [
@@ -48194,7 +49884,7 @@ null,
 "Q919762",
 "Sporting Club Lyon",
 "FRA",
-2,
+1,
 [
 "AS Lyon-Duchère",
 "AS Lyon Duchere",
@@ -48354,6 +50044,18 @@ null,
 "m"
 ],
 [
+"Q9257386",
+"FK Tekstilac Odžaci",
+"SRB",
+1,
+[
+"FK Tekstilac Ites",
+"Odžački sportski klub"
+],
+11,
+"m"
+],
+[
 "Q925935",
 "GKS Katowice",
 "POL",
@@ -48427,7 +50129,7 @@ null,
 "Q927084",
 "SKA-Energiya Khabarovsk",
 "RUS",
-1,
+2,
 [
 "FC SKA-Energiya Khabarovsk"
 ],
@@ -48720,7 +50422,7 @@ null,
 "Q935022",
 "Mohun Bagan AC",
 "IND",
-2,
+1,
 [
 "Mohun Bagan",
 "Mohun Bagan SC"
@@ -48985,7 +50687,7 @@ null,
 "Q944876",
 "Calcio Lecco 1912",
 "ITA",
-1,
+2,
 [
 "Lecco Calcio"
 ],
@@ -49153,7 +50855,7 @@ null,
 "Q956200",
 "Seattle Sounders",
 "USA",
-2,
+1,
 [],
 13,
 "m"
@@ -49249,7 +50951,7 @@ null,
 "Q96045907",
 "Mazatlán Fútbol Club",
 "MEX",
-1,
+2,
 [
 "Mazatlán Futbol Club"
 ],
@@ -49417,7 +51119,7 @@ null,
 "Q96791589",
 "Real Madrid Women",
 "ESP",
-3,
+4,
 [
 "Real Madrid Femenino",
 "RM Women",
@@ -49456,10 +51158,21 @@ null,
 "m"
 ],
 [
+"Q970677",
+"Chikhura Sachkhere",
+"GEO",
+1,
+[
+"FC Chikhura Sachkhere"
+],
+28,
+"m"
+],
+[
 "Q97079547",
 "Racing Louisville FC Women",
 "USA",
-2,
+3,
 [],
 11,
 "w"
@@ -49477,7 +51190,7 @@ null,
 "Q971490",
 "Club Atlético Aldosivi",
 "ARG",
-1,
+2,
 [
 "Aldosivi"
 ],
@@ -49519,6 +51232,17 @@ null,
 "Miami FC Blues"
 ],
 14,
+"m"
+],
+[
+"Q97276157",
+"Qingdao Qingchundao",
+"CHN",
+1,
+[
+"Qingdao Qingchundao F.C."
+],
+12,
 "m"
 ],
 [
@@ -49659,23 +51383,21 @@ null,
 "m"
 ],
 [
+"Q990835",
+"Brothers Union",
+"BGD",
+1,
+[],
+13,
+"m"
+],
+[
 "Q994224",
 "Extremadura UD",
 "ESP",
 1,
 [],
 28,
-"m"
-],
-[
-"Q994685",
-"Baia Mare",
-"ROU",
-1,
-[
-"FC Baia Mare"
-],
-10,
 "m"
 ],
 [
