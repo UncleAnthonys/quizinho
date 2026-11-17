@@ -17,6 +17,7 @@ on:
 
 permissions:
   contents: write
+  issues: write # the note when well-known players' past clubs change
 
 concurrency:
   group: fetch-data
@@ -59,6 +60,9 @@ jobs:
           fi
       - name: Rebuild
         run: |
+          # Last week's careers, to compare with after the rebuild.
+          cp data_pipeline/seed/players.json "$RUNNER_TEMP/old_players.json"
+          cp data_pipeline/seed/clubs.json "$RUNNER_TEMP/old_clubs.json"
           pip install --quiet espeakng-loader phonemizer
           bash scripts/ci_run.sh "Normalise" python3 data_pipeline/normalise.py
           bash scripts/ci_run.sh "Database" python3 data_pipeline/build_db.py
@@ -82,4 +86,21 @@ jobs:
               sleep $((i * 10))
             done
             exit 1
+          fi
+      # Well-known players whose past clubs changed: usually a source fixing
+      # itself, sometimes a new error. Opens an issue (GitHub emails it) only
+      # then; new transfers alone don't.
+      - name: Career changes
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set +e
+          python3 data_pipeline/career_changes.py "$RUNNER_TEMP/old_players.json" "$RUNNER_TEMP/old_clubs.json" > "$RUNNER_TEMP/changes.md"
+          flagged=$?
+          set -e
+          cat "$RUNNER_TEMP/changes.md" >> "$GITHUB_STEP_SUMMARY"
+          if [ "$flagged" = 1 ]; then
+            gh issue create --repo "$GITHUB_REPOSITORY" \
+              --title "Weekly refresh: careers changed for well-known players ($(date -u +%d\ %b))" \
+              --body-file "$RUNNER_TEMP/changes.md"
           fi
