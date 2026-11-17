@@ -648,8 +648,15 @@ class TttBoard extends StatelessWidget {
                     Positioned(
                       top: 0,
                       right: 0,
-                      child: Icon(locked.contains(i) ? Icons.lock_rounded : Icons.swap_vert_rounded,
-                          size: 18, color: Palette.onTeam(colour)),
+                      // "STEAL" in words (arrows read as a transfer); a lock once stolen.
+                      child: locked.contains(i)
+                          ? Icon(Icons.lock_rounded, size: 18, color: Palette.onTeam(colour))
+                          : Container(
+                              margin: const EdgeInsets.all(3),
+                              padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 1),
+                              decoration: BoxDecoration(color: Palette.yellow, borderRadius: BorderRadius.circular(5)),
+                              child: Text('STEAL', style: AppText.label(10, color: Palette.pitchDeep)),
+                            ),
                     ),
                 ]),
         ),
