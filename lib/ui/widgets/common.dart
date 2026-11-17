@@ -277,7 +277,11 @@ class _CommentaryBannerState extends State<CommentaryBanner> {
             showWhenUnlinked: false,
             targetAnchor: Alignment.topCenter,
             followerAnchor: Alignment.topCenter,
-            child: IgnorePointer(child: Center(child: _banner(widget.text))),
+            // Material: text in its own floating layer needs the app's text
+            // styling, or Flutter draws a yellow double underline under it.
+            child: IgnorePointer(
+              child: Material(type: MaterialType.transparency, child: Center(child: _banner(widget.text))),
+            ),
           ),
         ),
       );
