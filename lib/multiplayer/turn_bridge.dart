@@ -4,6 +4,7 @@ import 'dart:convert';
 import '../data/models.dart';
 import '../domain/player_index.dart';
 import '../domain/tournament.dart';
+import '../ui/widgets/player_picker.dart' show answerNudge;
 import 'room.dart';
 
 /// What a phone does on someone's turn.
@@ -55,11 +56,30 @@ class TurnBridge {
   double? _sentLeft;
   final Stopwatch _sinceSent = Stopwatch();
 
-  void start() => _sub ??= room.answers.listen(_onAnswer);
+  void start() {
+    _sub ??= room.answers.listen(_onAnswer);
+    answerNudge.addListener(_sendNudge);
+  }
 
   void dispose() {
     _sub?.cancel();
     _sub = null;
+    answerNudge.removeListener(_sendNudge);
+  }
+
+  /// What the phones were last shown, and a count of nudges sent.
+  Map<String, Object?>? _lastSent;
+  int _nudges = 0;
+
+  /// "Already used - try another": shown where the answer's being given, so
+  /// when that's a joined phone, it goes to the phone (its answer box
+  /// wiggles and shows it). The main phone isn't answering, so it's not
+  /// shown there.
+  void _sendNudge() {
+    final n = answerNudge.value;
+    final last = _lastSent;
+    if (n == null || remote == null || last == null) return;
+    room.show({...last, 'nudge': {'n': ++_nudges, 't': n.$1}});
   }
 
   /// The phone for [team]'s turn: [name]'s if given, else the captain's.
@@ -188,6 +208,7 @@ class TurnBridge {
     } else {
       _sentLeft = null;
     }
+    _lastSent = v;
     room.show(v);
   }
 

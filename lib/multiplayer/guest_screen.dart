@@ -557,8 +557,19 @@ class _GuestGameState extends State<_GuestGame> with SingleTickerProviderStateMi
   /// Someone's turn in XI Bomb, Tic-Tac-Toe, Pointless, 501 or Bidding War,
   /// drawn with the host's own layout for that game: theirs to play on this
   /// phone, or theirs to watch.
+  /// The last "try another" nudge shown from the main phone.
+  Object? _nudgeSeen;
+
   Widget _turn(Map<String, Object?> v, int colour) {
     _syncClock(v);
+    // "Already used - try another" for this phone's answer: the answer box
+    // wiggles and shows it (PlayerPicker), once per nudge.
+    final nudge = asMap(v['nudge']);
+    if (nudge['n'] != null && nudge['n'] != _nudgeSeen) {
+      _nudgeSeen = nudge['n'];
+      final text = '${nudge['t'] ?? ''}';
+      WidgetsBinding.instance.addPostFrameCallback((_) => nudgeAnswer(text));
+    }
     final s = AppScope.of(context);
     final q = '${v['q']}';
     final stage = '${v['stage']}';
