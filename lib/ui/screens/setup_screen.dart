@@ -29,6 +29,12 @@ class _SetupScreenState extends State<SetupScreen> {
 
   /// Optional player names per team (parallel to [_names]).
   final List<List<String>> _players = [];
+
+  /// On Your Head needs a guesser and someone to describe on every team: off
+  /// when a team has only one named player. (A team with no names entered
+  /// could be any size, so it's left to them - the note says what it needs.)
+  bool get _headsUpPossible => !_players.any((p) => p.length == 1);
+  bool _canPick(GameModeId m) => m.playable && (m != GameModeId.headsUp || _headsUpPossible);
   MatchLength _length = MatchLength.medium;
   Difficulty _difficulty = Difficulty.medium;
   final Set<GameModeId> _modes = {};
@@ -88,7 +94,7 @@ class _SetupScreenState extends State<SetupScreen> {
 
   bool get _valid =>
       _names.every((n) => n.text.trim().isNotEmpty) &&
-      _modes.any((m) => m != GameModeId.wildcard);
+      _modes.where(_canPick).any((m) => m != GameModeId.wildcard);
 
   List<TeamSetup> _teamsNow() => [
         for (var i = 0; i < _names.length; i++)
@@ -161,7 +167,7 @@ class _SetupScreenState extends State<SetupScreen> {
       ],
       length: _length,
       difficulty: _difficulty,
-      modes: Set.of(_modes),
+      modes: {..._modes.where(_canPick)},
       answerSeconds: _answerSeconds,
       bombSeconds: _bombSeconds,
       bombLives: _lives,
@@ -279,21 +285,21 @@ class _SetupScreenState extends State<SetupScreen> {
                 Wrap(spacing: 8, runSpacing: 8, children: [
                   for (final m in GameModeId.values)
                     FilterChip(
-                      avatar: Icon(m.icon, size: 18, color: m.playable ? m.color : Palette.muted),
+                      avatar: Icon(m.icon, size: 18, color: _canPick(m) ? m.color : Palette.muted),
                       label: Text(m.playable ? m.title : '${m.title} · soon'),
-                      selected: _modes.contains(m),
-                      onSelected: m.playable
+                      selected: _modes.contains(m) && _canPick(m),
+                      onSelected: _canPick(m)
                           ? (on) => setState(() => on ? _modes.add(m) : _modes.remove(m))
                           : null,
                     ),
                 ]),
-                if (_modes.contains(GameModeId.headsUp))
+                if (_modes.contains(GameModeId.headsUp) || !_headsUpPossible)
                   Padding(
                     padding: const EdgeInsets.only(top: 8),
                     child: Text('On Your Head needs at least 2 players on every team.',
                         style: AppText.label(13, color: Palette.gold)),
                   ),
-                if (!_modes.any((m) => m != GameModeId.wildcard))
+                if (!_modes.where(_canPick).any((m) => m != GameModeId.wildcard))
                   const Padding(
                     padding: EdgeInsets.only(top: 8),
                     child: Text('Pick at least one game.', style: TextStyle(color: Palette.danger)),
