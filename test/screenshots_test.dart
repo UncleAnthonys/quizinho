@@ -298,21 +298,34 @@ void main() {
     );
   }, skip: !_shots);
 
-  // A wrong answer, stamped over the game (replaces the old snackbar).
-  testWidgets('Wrong answer stamp', (tester) async {
+  // A wrong answer: the question card shakes red with the name crossed out.
+  testWidgets('Wrong answer shake', (tester) async {
+    final miss = ValueNotifier<int?>(null);
     await shot(
       tester,
-      'miss_stamp',
-      Stack(children: [
-        Column(children: [
-          _scores(),
-          const SizedBox(height: 40),
-          Text('MANCHESTER CITY', textAlign: TextAlign.center, style: AppText.headline(44)),
-          const Icon(Icons.swap_vert_rounded, color: Palette.yellow, size: 36),
-          Text('BARCELONA', textAlign: TextAlign.center, style: AppText.headline(44)),
-        ]),
-        const Align(alignment: Alignment(0, 0.15), child: MissStamp(name: 'Pedri')),
+      'miss_shake',
+      Column(children: [
+        _scores(),
+        const SizedBox(height: 40),
+        ValueListenableBuilder<int?>(
+          valueListenable: miss,
+          builder: (context, n, _) => MissShake(
+            trigger: n,
+            name: 'Pedri',
+            child: Container(
+              margin: const EdgeInsets.symmetric(horizontal: 16),
+              padding: const EdgeInsets.all(20),
+              decoration: BoxDecoration(color: Palette.pitchDeep, borderRadius: BorderRadius.circular(18)),
+              child: Column(children: [
+                Text('MANCHESTER CITY', textAlign: TextAlign.center, style: AppText.headline(44)),
+                const Icon(Icons.swap_vert_rounded, color: Palette.yellow, size: 36),
+                Text('BARCELONA', textAlign: TextAlign.center, style: AppText.headline(44)),
+              ]),
+            ),
+          ),
+        ),
       ]),
+      then: () async => miss.value = 1,
     );
   }, skip: !_shots);
 
