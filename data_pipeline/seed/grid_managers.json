@@ -1,9 +1,10 @@
 {
- "_note": "Club managers for grid categories ('Managed by Ferguson'): club QID, start and end (YYYY-MM) of each job, from Wikidata, checked during the teaser work. Used by build_db.py.",
+ "_note": "Club managers for grid categories ('Managed by Ferguson'): club QID, start and end (YYYY-MM) of each job, from Wikidata, checked during the teaser work. Used by build_db.py. 'national': true = also managed a national team, so the grid label adds '(club)' (checked Nov 2026: Klopp Germany and Zidane France from July 2026).",
  "managers": [
   {
    "name": "Sir Alex Ferguson",
    "short": "Ferguson",
+   "national": true,
    "spells": [
     [
      "Q187326",
@@ -113,6 +114,7 @@
   {
    "name": "Jürgen Klopp",
    "short": "Klopp",
+   "national": true,
    "spells": [
     [
      "Q105254",
@@ -134,6 +136,7 @@
   {
    "name": "Carlo Ancelotti",
    "short": "Ancelotti",
+   "national": true,
    "spells": [
     [
      "Q1422",
@@ -185,6 +188,7 @@
   {
    "name": "Antonio Conte",
    "short": "Conte",
+   "national": true,
    "spells": [
     [
      "Q1422",
@@ -227,6 +231,7 @@
   {
    "name": "Mauricio Pochettino",
    "short": "Pochettino",
+   "national": true,
    "spells": [
     [
      "Q8780",
@@ -258,6 +263,7 @@
   {
    "name": "Thomas Tuchel",
    "short": "Tuchel",
+   "national": true,
    "spells": [
     [
      "Q105254",
@@ -289,6 +295,7 @@
   {
    "name": "Louis van Gaal",
    "short": "Van Gaal",
+   "national": true,
    "spells": [
     [
      "Q81888",
@@ -320,6 +327,7 @@
   {
    "name": "Roberto Mancini",
    "short": "Mancini",
+   "national": true,
    "spells": [
     [
      "Q2052",
@@ -412,6 +420,7 @@
   {
    "name": "Zinedine Zidane",
    "short": "Zidane",
+   "national": true,
    "spells": [
     [
      "Q8682",
@@ -455,6 +464,7 @@
   {
    "name": "Luis Enrique",
    "short": "Luis Enrique",
+   "national": true,
    "spells": [
     [
      "Q2739",
@@ -568,6 +578,7 @@
   {
    "name": "Hansi Flick",
    "short": "Flick",
+   "national": true,
    "spells": [
     [
      "Q15789",
