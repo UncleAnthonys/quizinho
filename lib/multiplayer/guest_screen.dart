@@ -1,9 +1,10 @@
 import 'dart:async';
 
-import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:flutter/foundation.dart' show defaultTargetPlatform, kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart' show Ticker;
 
+import '../core/app_links.dart';
 import '../core/app_services.dart';
 import '../core/hinted_speech.dart';
 import '../core/web_keyboard.dart';
@@ -271,7 +272,7 @@ class _GuestGameState extends State<_GuestGame> with SingleTickerProviderStateMi
         child: Column(children: [
           Collapse(
             hidden: keyboardInset.value > 0 || answerTyping.value,
-            child: Column(children: [header, if (kIsWeb) const _VoiceBoost()]),
+            child: Column(children: [header, if (_AppNudge.shows) const _AppNudge()]),
           ),
           Expanded(child: body()),
         ]),
@@ -709,29 +710,28 @@ class _GuestGameState extends State<_GuestGame> with SingleTickerProviderStateMi
       );
 }
 
-/// Whether this browser's mic is getting the answer-name boost (Chrome's
-/// on-device speech with hints), so it's obvious which phones have it.
-class _VoiceBoost extends StatelessWidget {
-  const _VoiceBoost();
+/// iPhone and iPad browsers only: their speech recognition struggles with
+/// unusual names, and the app knows every player's name. Shows once the
+/// App Store listing is live ([appStoreUrl]). Android browsers are about as
+/// good as the app, so they see nothing.
+class _AppNudge extends StatelessWidget {
+  const _AppNudge();
+
+  static bool get shows => kIsWeb && defaultTargetPlatform == TargetPlatform.iOS && appStoreUrl != null;
 
   @override
-  Widget build(BuildContext context) => ValueListenableBuilder<String>(
-        valueListenable: HintedSpeech.status,
-        builder: (context, s, _) {
-          final (text, colour) = switch (s) {
-            'ready' => ('Full voice - unusual names should work too', Palette.green),
-            'downloading' => ('Tuning voice to footballer names… type unusual names for now', Palette.gold),
-            'checking' => ('Checking voice…', Palette.muted),
-            _ => ('Basic voice - may mishear unusual names, so type those', Palette.muted),
-          };
-          return Padding(
-            padding: const EdgeInsets.fromLTRB(16, 0, 16, 2),
-            child: Row(children: [
-              Icon(s == 'ready' ? Icons.mic_rounded : Icons.mic_none_rounded, size: 15, color: colour),
-              const SizedBox(width: 4),
-              Text(text, style: AppText.label(12, color: colour)),
-            ]),
-          );
-        },
+  Widget build(BuildContext context) => InkWell(
+        onTap: () => openLink(appStoreUrl!),
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(16, 0, 16, 4),
+          child: Row(children: [
+            const Icon(Icons.download_rounded, size: 15, color: Palette.gold),
+            const SizedBox(width: 4),
+            Expanded(
+              child: Text('Download the app for better voice recognition on unusual names',
+                  style: AppText.label(12, color: Palette.gold)),
+            ),
+          ]),
+        ),
       );
 }

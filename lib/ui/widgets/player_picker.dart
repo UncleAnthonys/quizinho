@@ -335,6 +335,15 @@ class _PlayerPickerState extends State<PlayerPicker> {
 
   String? _typedNote;
 
+  /// The box's hint follows how they're answering: "Say or type a name…"
+  /// while the mic is on, "Type a name…" once typing (or with voice off).
+  String _hintNow() {
+    final h = widget.hint;
+    final typeOnly = h.startsWith('Say or type ') ? 'Type ${h.substring(12)}' : h;
+    if (!_voiceOn || _typing) return typeOnly;
+    return typeOnly.startsWith('Type ') ? 'Say or type ${typeOnly.substring(5)}' : typeOnly;
+  }
+
   /// Back to the mic, for this answer and the next ones.
   void _backToMic() {
     widget.voice?.preferTyping = false;
@@ -365,7 +374,7 @@ class _PlayerPickerState extends State<PlayerPicker> {
         textCapitalization: TextCapitalization.words,
         style: AppText.headline(26, weight: FontWeight.w800),
         decoration: InputDecoration(
-          hintText: widget.hint,
+          hintText: _hintNow(),
           // The mic sits in the box only while it's the way of answering;
           // once the player types, the box is just for typing and the mic is
           // offered underneath instead ("Speak the answer").
