@@ -405,7 +405,7 @@ class PtLayout extends StatelessWidget {
               const SizedBox(width: 10),
               Text('+${points[t]}', style: AppText.headline(30, color: Palette.yellow)),
               if (answers.any((a) => a.team == t && a.pointless))
-                Text('  incl. POINTLESS bonus', style: AppText.label(12, color: Palette.gold)),
+                Text('  including +1 for a 0', style: AppText.label(12, color: Palette.gold)),
             ]),
           ),
       ],
