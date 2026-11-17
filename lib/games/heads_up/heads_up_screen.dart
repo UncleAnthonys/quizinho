@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:math';
 
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 
@@ -260,7 +261,9 @@ class _HeadsUpScreenState extends State<HeadsUpScreen>
                     ),
                   ),
                 ),
-                Row(children: [
+                // The app tilts (down = correct, up = pass); buttons only in a
+                // browser, where the phone may not let the page read the tilt.
+                if (kIsWeb) Row(children: [
                   Expanded(
                     child: BigButton(
                       label: 'Pass',
