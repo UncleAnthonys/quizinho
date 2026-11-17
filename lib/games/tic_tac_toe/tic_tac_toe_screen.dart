@@ -167,12 +167,7 @@ class _TicTacToeScreenState extends State<TicTacToeScreen>
     final who = _turnPlayer;
     final r = c.submit(p);
     if (r == TttSubmit.alreadyUsed) {
-      ScaffoldMessenger.of(context)
-        ..hideCurrentSnackBar()
-        ..showSnackBar(SnackBar(
-          content: Text('${p.name} has already been used on this grid - someone else!'),
-          duration: const Duration(milliseconds: 1600),
-        ));
+      nudgeAnswer('${p.name} has already been used on this grid - someone else!');
     } else if (r == TttSubmit.claimed && who != null) {
       _t.creditPlayer(team, who, widget.round.multiplier);
     }
@@ -554,6 +549,8 @@ class TttBoard extends StatelessWidget {
         if (c.winner != null) 'winnerTeam': c.winner,
         'teams': [for (var i = 0; i < t.teamCount; i++) t.teamName(i)],
         'squares': [for (var i = 0; i < t.teamCount; i++) c.squaresOf(i)],
+        if (c.missName != null && c.missSquare != null)
+          'miss': {'n': c.missSerial, 'name': c.missName, 'sq': c.missSquare},
       };
 
   static List<T?> _list<T>(Object? v) => v is List ? [for (final x in v) x is T ? x : null] : const [];
@@ -593,7 +590,10 @@ class TttBoard extends StatelessWidget {
           ),
         );
 
-    Widget square(int i) {
+    final miss = data['miss'] is Map ? Map<String, Object?>.from(data['miss']! as Map) : const <String, Object?>{};
+    final missSq = (miss['sq'] as num?)?.toInt();
+
+    Widget squareBody(int i) {
       final ownerTeam = i < owner.length ? owner[i] : null;
       final selected = selectedSq == i;
       final winning = line.contains(i);
@@ -662,6 +662,12 @@ class TttBoard extends StatelessWidget {
         ),
       );
     }
+
+    Widget square(int i) => MissShake(
+          trigger: missSq == i ? (miss['n'] as num?)?.toInt() : null,
+          name: miss['name'] as String?,
+          child: squareBody(i),
+        );
 
     Widget cell(Widget child) => Expanded(child: AspectRatio(aspectRatio: 1, child: Padding(padding: const EdgeInsets.all(3), child: child)));
 

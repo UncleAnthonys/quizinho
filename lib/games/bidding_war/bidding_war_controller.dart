@@ -126,6 +126,9 @@ class BiddingWarController extends ChangeNotifier {
     }
   }
 
+  /// The last name that wasn't on the list (the category card shakes with it).
+  String? lastWrong;
+
   BidSubmit submit(Player p) {
     if (phase != BidPhase.answering) return BidSubmit.ignored;
     if (_namedIds.contains(p.id)) {
@@ -134,6 +137,7 @@ class BiddingWarController extends ChangeNotifier {
       return BidSubmit.duplicate;
     }
     if (!category.answerIds.contains(p.id)) {
+      lastWrong = p.name;
       _emit(BidEvent.wrong); // no penalty — the clock is the pressure
       notifyListeners();
       return BidSubmit.wrong;

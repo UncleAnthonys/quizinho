@@ -135,10 +135,10 @@ class _BiddingWarScreenState extends State<BiddingWarScreen>
           s.haptic(HapticStrength.light);
         case BidEvent.duplicate:
           s.sound.play(Sfx.wrong, volume: 0.5);
-          _toast('Already got that one!');
+          nudgeAnswer('Already got that one!');
         case BidEvent.wrong:
+          // The category card shakes red with the name (BidLayout).
           s.sound.play(Sfx.wrong, volume: 0.5);
-          _toast('Not on the list - keep going!');
         case BidEvent.completed:
           s.sound.play(Sfx.fanfare);
           s.sound.play(Sfx.cheer);
@@ -172,9 +172,6 @@ class _BiddingWarScreenState extends State<BiddingWarScreen>
 
   String _pick(List<String> lines) => lines[Random().nextInt(lines.length)];
 
-  void _toast(String text) => ScaffoldMessenger.of(context)
-    ..hideCurrentSnackBar()
-    ..showSnackBar(SnackBar(content: Text(text), duration: const Duration(milliseconds: 1100)));
 
   @override
   void dispose() {
@@ -223,6 +220,7 @@ class _BiddingWarScreenState extends State<BiddingWarScreen>
     return {
       'phase': c.phase.name,
       'prompt': c.category.prompt,
+      if (c.lastEvent == BidEvent.wrong && c.lastWrong != null) 'miss': {'n': c.eventSerial, 'name': c.lastWrong},
       'teams': [for (var i = 0; i < _t.teamCount; i++) {'name': _t.teamName(i), 'color': _t.config.teams[i].colorIndex}],
       'team': c.currentTeam,
       if (c.holder != null) 'holder': c.holder,
@@ -338,7 +336,11 @@ class BidLayout extends StatelessWidget {
           if (multiplier > 1) Text('x$multiplier POINTS', style: AppText.label(15, color: Palette.gold)),
         ]),
       ),
-      _CategoryCard(prompt: '${data['prompt'] ?? ''}', compact: phase == 'answering'),
+      MissShake(
+        trigger: data['miss'] is Map ? ((data['miss']! as Map)['n'] as num?)?.toInt() : null,
+        name: data['miss'] is Map ? (data['miss']! as Map)['name'] as String? : null,
+        child: _CategoryCard(prompt: '${data['prompt'] ?? ''}', compact: phase == 'answering'),
+      ),
       if (commentary != null) commentary!,
       Expanded(
         child: switch (phase) {

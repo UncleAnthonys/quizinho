@@ -127,11 +127,7 @@ class _Top10ScreenState extends State<Top10Screen> with TickerProviderStateMixin
 
   void _submit(Top10Controller c, Player player) {
     final r = c.submit(player);
-    if (r == Top10Answer.alreadyFound) {
-      ScaffoldMessenger.of(context)
-        ..hideCurrentSnackBar()
-        ..showSnackBar(SnackBar(content: Text('${player.name} is already up there'), duration: const Duration(milliseconds: 1400)));
-    }
+    if (r == Top10Answer.alreadyFound) nudgeAnswer('${player.name} is already up there');
     setState(() => _pickerKey++);
   }
 

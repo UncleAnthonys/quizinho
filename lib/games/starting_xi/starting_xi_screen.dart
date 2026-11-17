@@ -161,14 +161,7 @@ class _StartingXiScreenState extends State<StartingXiScreen>
     if (r == SubmitResult.correct && who != null) {
       widget.round.tournament.creditPlayer(team, who, widget.round.multiplier);
     }
-    if (r == SubmitResult.alreadyNamed) {
-      ScaffoldMessenger.of(context)
-        ..hideCurrentSnackBar()
-        ..showSnackBar(SnackBar(
-          content: Text('${p.name} is already on the board - someone else!'),
-          duration: const Duration(milliseconds: 1400),
-        ));
-    }
+    if (r == SubmitResult.alreadyNamed) nudgeAnswer('${p.name} is already on the board - someone else!');
     _turn++; // fresh answer box (and mic) every time
     _syncPhones(c);
   }

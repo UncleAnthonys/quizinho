@@ -310,9 +310,18 @@ class TicTacToeController extends ChangeNotifier {
       _claim(sq, p.name);
       return TttSubmit.claimed;
     }
+    missName = p.name;
+    missSquare = sq;
+    missSerial++;
     _miss();
     return TttSubmit.missed;
   }
+
+  /// The last wrong name and its square: that square shakes red with the
+  /// name crossed out, on every phone ([missSerial] changes each time).
+  String? missName;
+  int? missSquare;
+  int missSerial = 0;
 
   /// Answer not in our database; the room voted.
   void submitDisputed({required bool allowed}) {

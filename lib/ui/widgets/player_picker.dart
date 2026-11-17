@@ -1,3 +1,6 @@
+import 'dart:async';
+import 'dart:math';
+
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 
@@ -21,6 +24,17 @@ import '../../domain/player_index.dart';
 /// collapse to a compact layout so the question stays visible above the
 /// keyboard (the answer box sits near the top, not behind the keyboard).
 final ValueNotifier<bool> answerTyping = ValueNotifier(false);
+
+/// "Try another" - a name that's already been used (or can't count here).
+/// Not a wrong answer, so no red: the answer box gives a small wiggle and the
+/// message shows under it in yellow for a moment. Games call [nudgeAnswer];
+/// the answer box on screen shows it (even one built just after).
+final ValueNotifier<(String, DateTime)?> answerNudge = ValueNotifier(null);
+
+void nudgeAnswer(String message) => answerNudge.value = (message, DateTime.now());
+
+/// How long a nudge shows.
+const Duration _nudgeFor = Duration(milliseconds: 2000);
 
 class PlayerPicker extends StatefulWidget {
   const PlayerPicker({
@@ -67,7 +81,24 @@ class PlayerPicker extends StatefulWidget {
   State<PlayerPicker> createState() => _PlayerPickerState();
 }
 
-class _PlayerPickerState extends State<PlayerPicker> {
+class _PlayerPickerState extends State<PlayerPicker> with SingleTickerProviderStateMixin {
+  late final AnimationController _wiggle = AnimationController(vsync: this, duration: const Duration(milliseconds: 380));
+  String? _nudge;
+  Timer? _nudgeTimer;
+
+  void _onNudge() {
+    final n = answerNudge.value;
+    if (n == null || !mounted) return;
+    final age = DateTime.now().difference(n.$2);
+    if (age >= _nudgeFor) return;
+    _nudgeTimer?.cancel();
+    setState(() => _nudge = n.$1);
+    _wiggle.forward(from: 0);
+    _nudgeTimer = Timer(_nudgeFor - age, () {
+      if (mounted) setState(() => _nudge = null);
+    });
+  }
+
   final _controller = TextEditingController();
   final _focus = FocusNode();
   List<PlayerMatch> _results = const [];
@@ -97,6 +128,8 @@ class _PlayerPickerState extends State<PlayerPicker> {
   @override
   void initState() {
     super.initState();
+    answerNudge.addListener(_onNudge);
+    _onNudge(); // one sent just before this box was built
     _focus.addListener(_onFocus);
     if (_autoListen) {
       WidgetsBinding.instance.addPostFrameCallback((_) => _listen());
@@ -122,6 +155,9 @@ class _PlayerPickerState extends State<PlayerPicker> {
 
   @override
   void dispose() {
+    answerNudge.removeListener(_onNudge);
+    _nudgeTimer?.cancel();
+    _wiggle.dispose();
     // The box closed (time up, pass, or a wrong pick) after speech that
     // matched nobody: save it with the right answers — usually there's no
     // time left to type the name, so this is where most misses are caught.
@@ -363,7 +399,13 @@ class _PlayerPickerState extends State<PlayerPicker> {
     final typed = _controller.text.trim();
     if (_voting) return _vote(typed);
     return Column(mainAxisSize: MainAxisSize.min, children: [
-      TextField(
+      AnimatedBuilder(
+        animation: _wiggle,
+        builder: (context, box) => Transform.translate(
+          offset: Offset(_wiggle.isAnimating ? sin(_wiggle.value * pi * 4) * 7 * (1 - _wiggle.value) : 0, 0),
+          child: box,
+        ),
+        child: TextField(
         controller: _controller,
         focusNode: _focus,
         // Keyboard straight up when there's no mic, or the player types (in
@@ -394,6 +436,12 @@ class _PlayerPickerState extends State<PlayerPicker> {
         onChanged: _onTyped,
         onSubmitted: (_) => _submitTyped(),
       ),
+      ),
+      if (_nudge case final n?)
+        Padding(
+          padding: const EdgeInsets.only(top: 8),
+          child: Text(n.toUpperCase(), textAlign: TextAlign.center, style: AppText.label(13, color: Palette.yellow)),
+        ),
       // A real button (not a hint), so it doesn't read as "speak now".
       if (_voiceOn && _typing && _results.isEmpty)
         Padding(

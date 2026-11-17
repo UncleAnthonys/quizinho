@@ -97,10 +97,10 @@ class _CheckoutScreenState extends State<CheckoutScreen>
       final s = services;
       switch (c.lastEvent) {
         case CoEvent.duplicate:
-          _toast('Already used - that player’s gone! Pick another.');
+          nudgeAnswer('Already used - that player’s gone! Pick another.');
           _pickerKey++;
         case CoEvent.noStats:
-          _toast('No league numbers on record for them at this club yet - pick another.');
+          nudgeAnswer('No league numbers on record for them at this club yet - pick another.');
           _pickerKey++;
         case CoEvent.thrown:
           final t = c.lastThrow!;
@@ -140,9 +140,6 @@ class _CheckoutScreenState extends State<CheckoutScreen>
 
   String _pick(List<String> lines) => lines[Random().nextInt(lines.length)];
 
-  void _toast(String text) => ScaffoldMessenger.of(context)
-    ..hideCurrentSnackBar()
-    ..showSnackBar(SnackBar(content: Text(text), duration: const Duration(milliseconds: 1400)));
 
   @override
   void dispose() {

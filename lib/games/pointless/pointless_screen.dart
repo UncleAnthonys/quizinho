@@ -106,7 +106,7 @@ class _PointlessScreenState extends State<PointlessScreen>
           s.haptic(HapticStrength.heavy);
           say(_pick(const ['Not on the list - that’s the full 100.', 'Ouch. 100 points.', 'Wrong! Maximum score.']));
         case PtEvent.duplicate:
-          _toast('Already said - pick another!');
+          nudgeAnswer('Already said - pick another!');
           _pickerKey++;
         case PtEvent.scored || PtEvent.pointless:
           s.haptic(HapticStrength.light); // the column does the rest
@@ -129,9 +129,6 @@ class _PointlessScreenState extends State<PointlessScreen>
 
   String _pick(List<String> lines) => lines[Random().nextInt(lines.length)];
 
-  void _toast(String text) => ScaffoldMessenger.of(context)
-    ..hideCurrentSnackBar()
-    ..showSnackBar(SnackBar(content: Text(text), duration: const Duration(milliseconds: 1100)));
 
   @override
   void dispose() {
