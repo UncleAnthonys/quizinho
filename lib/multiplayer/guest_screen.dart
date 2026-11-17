@@ -237,14 +237,6 @@ class _GuestGameState extends State<_GuestGame> with SingleTickerProviderStateMi
     final me = widget.me;
     final teams = widget.room.teams ?? const [];
     final colour = me.team < teams.length ? teams[me.team].colorIndex : 0;
-    final header = Padding(
-      padding: const EdgeInsets.fromLTRB(16, 8, 16, 4),
-      child: Row(children: [
-        TeamChip(name: me.name, colorIndex: colour, size: 18),
-        const Spacer(),
-        Text('GAME ${widget.room.code}', style: AppText.label(13)),
-      ]),
-    );
     Widget body() => switch (v['kind']) {
       'buzz' => _buzz(v, colour),
       'turn' => _turn(v, colour),
@@ -272,7 +264,8 @@ class _GuestGameState extends State<_GuestGame> with SingleTickerProviderStateMi
         child: Column(children: [
           Collapse(
             hidden: keyboardInset.value > 0 || answerTyping.value,
-            child: Column(children: [header, if (_AppNudge.shows) const _AppNudge()]),
+            // (No name/game-code strip: the screen's for the game.)
+            child: Column(children: [if (_AppNudge.shows) const _AppNudge()]),
           ),
           Expanded(child: body()),
         ]),
@@ -340,7 +333,7 @@ class _GuestGameState extends State<_GuestGame> with SingleTickerProviderStateMi
       child: Column(children: [
         if (full) FullTimeHeader(data: v) else RoundTableHeader(data: v),
         Expanded(child: ListView(children: matchTableRows(v))),
-        Text(full ? 'Thanks for playing!' : 'Next game on the main phone', style: AppText.label(14)),
+        if (full) Text('Thanks for playing!', style: AppText.label(14)),
       ]),
     );
   }
