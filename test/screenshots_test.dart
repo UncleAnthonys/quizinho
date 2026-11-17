@@ -315,7 +315,7 @@ void main() {
     services.settings.typeAnswers = true;
     await shot(tester, 'answer_keyboard_chosen', answering(voice: _ShotVoice(services.settings)));
     await shot(tester, 'answer_keyboard_typing', answering(voice: _ShotVoice(services.settings), typing: true),
-        then: () => tester.enterText(find.byType(TextField), 'Fabreg'));
+        then: () => tester.enterText(find.byType(TextField), 'Fabregas'));
     services.settings.typeAnswers = false;
   }, skip: !_shots);
 

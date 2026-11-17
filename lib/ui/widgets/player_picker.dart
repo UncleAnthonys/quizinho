@@ -335,6 +335,19 @@ class _PlayerPickerState extends State<PlayerPicker> {
 
   String? _typedNote;
 
+  /// Back to the mic, for this answer and the next ones.
+  void _backToMic() {
+    widget.voice?.preferTyping = false;
+    _focus.unfocus();
+    _controller.clear();
+    _typing = false;
+    _silentRestarts = 0;
+    _voiceNote = null;
+    _results = const [];
+    _typedNote = null;
+    _listen();
+  }
+
   @override
   Widget build(BuildContext context) {
     final typed = _controller.text.trim();
@@ -353,36 +366,32 @@ class _PlayerPickerState extends State<PlayerPicker> {
         style: AppText.headline(26, weight: FontWeight.w800),
         decoration: InputDecoration(
           hintText: widget.hint,
-          prefixIcon: _voiceOn
+          // The mic sits in the box only while it's the way of answering;
+          // once the player types, the box is just for typing and the mic is
+          // offered underneath instead ("Speak the answer").
+          prefixIcon: _voiceOn && !_typing
               ? IconButton(
                   icon: Icon(_listening ? Icons.graphic_eq_rounded : Icons.mic_rounded, color: widget.accent),
-                  onPressed: _listening
-                      ? null
-                      : () {
-                          // Back to the mic, for this answer and the next ones.
-                          widget.voice?.preferTyping = false;
-                          _focus.unfocus();
-                          _typing = false;
-                          _silentRestarts = 0;
-                          _voiceNote = null;
-                          _listen();
-                        },
+                  onPressed: _listening ? null : _backToMic,
                 )
-              : Icon(Icons.search, color: widget.accent),
-          suffixIcon: typed.isEmpty
-              ? null
-              : Padding(
-                  padding: const EdgeInsets.all(6),
-                  child: FilledButton(
-                    style: FilledButton.styleFrom(backgroundColor: widget.accent, minimumSize: const Size(56, 40)),
-                    onPressed: _submitTyped,
-                    child: Text('GO', style: AppText.headline(18, color: Palette.pitchDeep)),
-                  ),
-                ),
+              : Icon(Icons.keyboard_rounded, color: widget.accent),
         ),
+        // The keyboard's own key judges a full answer typed with no list
+        // showing ("Not recognised - check the spelling"); otherwise you
+        // tap the player in the list.
+        textInputAction: TextInputAction.go,
         onChanged: _onTyped,
         onSubmitted: (_) => _submitTyped(),
       ),
+      if (_voiceOn && _typing && _results.isEmpty)
+        Align(
+          alignment: Alignment.centerLeft,
+          child: TextButton.icon(
+            onPressed: _backToMic,
+            icon: Icon(Icons.mic_rounded, color: widget.accent),
+            label: Text('SPEAK THE ANSWER', style: AppText.label(14, color: Palette.text)),
+          ),
+        ),
       if (_typedNote != null)
         Padding(
           padding: const EdgeInsets.only(top: 6),

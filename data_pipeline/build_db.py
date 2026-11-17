@@ -307,9 +307,13 @@ def validate_and_collect(problems: Problems):
         # ...or a capital stuck on the end of a word ("RodríguezF")
         if re.search(r"\d|[a-zà-ÿ][A-Z](?:\s|$)", p["name"]) or (re.search(r"[A-Za-z]", p["name"]) and re.search(r"[Ͱ-ӿ]", p["name"])):
             problems.error(f"{pid}: suspicious name {p['name']!r} — fix in normalise.py NAME_FIXES")
-        # ...or a lower-case word that isn't a name particle ("gabriel putita del leon")
+        # ...or a lower-case word that isn't a name particle ("Walter Ivan alexis
+        # Montoya"): capitalised here rather than stopping the whole rebuild.
         if any(w[0].islower() and w not in NAME_PARTICLES for w in p["name"].split()):
-            problems.error(f"{pid}: suspicious name {p['name']!r} — fix in normalise.py NAME_FIXES")
+            fixed = " ".join(w[0].upper() + w[1:] if w[0].islower() and w not in NAME_PARTICLES else w
+                             for w in p["name"].split())
+            problems.warn(f"{pid}: lower-case word in {p['name']!r}, shown as {fixed!r}")
+            p = {**p, "name": fixed}
         spells = []
         for i, entry in enumerate(p.get("career", [])):
             club_id, start, end = entry[0], entry[1], entry[2]
@@ -677,6 +681,9 @@ def generate_bidding(clubs, players, connections, countries):
     return out
 
 
+# Club-type words a name can be written with or without ("PFC CSKA Moscow").
+CLUB_WORDS = {"fc", "pfc", "afc", "cf", "sc", "fk", "sk", "ac", "as", "ss", "ssc", "cd", "ud", "sv", "rc", "rcd"}
+
 # Hand-made lists stay short enough to get through in a minute.
 CURATED_MAX_ANSWERS = 20
 
@@ -708,10 +715,18 @@ def load_curated_bidding(players, clubs, problems: Problems) -> list[dict]:
 
     player_names, club_names = index(mens(players)), index(mens(clubs))
 
+    # Club names also match without FC/PFC/AFC etc. ("CSKA Moscow" finds
+    # "PFC CSKA Moscow" when a source starts using the full name).
+    def core(n: str) -> str:
+        return " ".join(w for w in norm(n).split() if w not in CLUB_WORDS)
+
     def resolve_club(raw: str) -> str | None:
         name, _, pin = raw.partition("|")
-        return (pin if pin in clubs else None) if pin else club_names.get(norm(name))
+        if pin:
+            return pin if pin in clubs else None
+        return club_names.get(norm(name)) or club_cores.get(core(name))
 
+    club_cores = {core(n): k for n, k in club_names.items()}
     for name, aliases in doc.get("club_aliases", {}).items():
         cid = resolve_club(name)
         if cid is None:
@@ -719,6 +734,7 @@ def load_curated_bidding(players, clubs, problems: Problems) -> list[dict]:
             continue
         clubs[cid]["aliases"] = list(dict.fromkeys(clubs[cid]["aliases"] + aliases))
     club_names = index(mens(clubs))
+    club_cores = {core(n): k for n, k in club_names.items()}
 
     out = []
     for c in doc["categories"]:
