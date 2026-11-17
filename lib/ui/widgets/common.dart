@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 
 import '../../core/theme.dart';
@@ -351,4 +352,33 @@ class RuleText extends StatelessWidget {
     if (at < text.length) spans.add(TextSpan(text: text.substring(at)));
     return Text.rich(TextSpan(style: style, children: spans));
   }
+}
+
+/// Part of a game screen that makes way for the keyboard. In a browser it
+/// slides shut (and back) in step with the keyboard instead of vanishing in
+/// one frame, which looked jerky on joined phones; in the app it's instant,
+/// as the app's keyboard handling already looks smooth. Stays built while
+/// hidden, so nothing resets.
+class Collapse extends StatelessWidget {
+  const Collapse({super.key, required this.hidden, required this.child});
+  final bool hidden;
+  final Widget child;
+
+  static const duration = Duration(milliseconds: 220);
+
+  @override
+  Widget build(BuildContext context) => TweenAnimationBuilder<double>(
+        tween: Tween(end: hidden ? 0 : 1),
+        duration: kIsWeb ? duration : Duration.zero,
+        curve: Curves.easeOutCubic,
+        child: child,
+        // Always the same shape, so what's inside keeps its state.
+        builder: (context, v, child) => ClipRect(
+          child: Align(
+            alignment: Alignment.topCenter,
+            heightFactor: v,
+            child: Opacity(opacity: v, child: IgnorePointer(ignoring: v < 1, child: child)),
+          ),
+        ),
+      );
 }

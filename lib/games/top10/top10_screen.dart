@@ -171,11 +171,14 @@ class _Top10ScreenState extends State<Top10Screen> with TickerProviderStateMixin
                       ),
                   ]),
                 )
-              else if (!typing)
-                Scoreboard(
-                  tournament: _t,
-                  highlightTeam: c.finished ? null : c.currentTeam,
-                  extra: (i) => _scoreLine(c, i),
+              else
+                Collapse(
+                  hidden: typing,
+                  child: Scoreboard(
+                    tournament: _t,
+                    highlightTeam: c.finished ? null : c.currentTeam,
+                    extra: (i) => _scoreLine(c, i),
+                  ),
                 ),
               Expanded(
                 child: Padding(

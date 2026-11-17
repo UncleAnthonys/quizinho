@@ -328,7 +328,7 @@ class XiLayout extends StatelessWidget {
         child: PitchBackground(
           child: SafeArea(
             child: Column(children: [
-              typing ? const SizedBox.shrink() : scores,
+              Collapse(hidden: typing, child: scores),
               Padding(
                 padding: const EdgeInsets.fromLTRB(16, 4, 16, 0),
                 child: Column(children: [

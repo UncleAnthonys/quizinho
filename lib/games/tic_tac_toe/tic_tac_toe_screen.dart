@@ -210,14 +210,15 @@ class _TicTacToeScreenState extends State<TicTacToeScreen>
       body: PitchBackground(
         child: SafeArea(
           child: Column(children: [
-            typing
-                ? const SizedBox.shrink()
-                : Scoreboard(
-                    tournament: _t,
-                    highlightTeam: c.phase == TttPhase.finished ? null : c.currentTeam,
-                    extra: (i) => _scoreLine(c, i),
-                  ),
-            typing ? const SizedBox.shrink() : CommentaryBanner(text: commentaryText),
+            Collapse(
+              hidden: typing,
+              child: Scoreboard(
+                tournament: _t,
+                highlightTeam: c.phase == TttPhase.finished ? null : c.currentTeam,
+                extra: (i) => _scoreLine(c, i),
+              ),
+            ),
+            Collapse(hidden: typing, child: CommentaryBanner(text: commentaryText)),
             Expanded(
               child: TttLayout(
                 data: _view(c),
@@ -461,10 +462,15 @@ class _TttLayoutState extends State<TttLayout> {
       ),
       Expanded(
         child: ListView(controller: _scroll, padding: const EdgeInsets.fromLTRB(12, 4, 12, 16), children: [
-          typing ? const SizedBox.shrink() : banner,
-          typing ? const SizedBox.shrink() : const SizedBox(height: 8),
-          typing ? const SizedBox.shrink() : TttBoard(data: data, onTap: onTap, onReveal: onReveal),
-          typing ? const SizedBox.shrink() : const SizedBox(height: 12),
+          Collapse(
+            hidden: typing,
+            child: Column(children: [
+              banner,
+              const SizedBox(height: 8),
+              TttBoard(data: data, onTap: onTap, onReveal: onReveal),
+              const SizedBox(height: 12),
+            ]),
+          ),
           if (phase == 'finished' && data['solo'] != true) ...[_standings(colours), const SizedBox(height: 6)],
           bottom,
         ]),

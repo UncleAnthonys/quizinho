@@ -23,6 +23,7 @@ import 'package:quizinho/games/tic_tac_toe/tic_tac_toe_screen.dart';
 import 'package:quizinho/domain/tournament.dart';
 import 'package:quizinho/ui/screens/round_intro_screen.dart';
 import 'package:quizinho/domain/game_mode.dart';
+import 'package:quizinho/ui/screens/free_kick_screen.dart';
 import 'package:quizinho/ui/screens/home_screen.dart';
 import 'package:quizinho/ui/screens/setup_screen.dart';
 import 'package:quizinho/ui/screens/solo_screen.dart';
@@ -319,6 +320,34 @@ void main() {
     await shot(tester, 'answer_keyboard_typing', answering(voice: _ShotVoice(services.settings), typing: true),
         then: () => tester.enterText(find.byType(TextField), 'Fabregas'));
     services.settings.typeAnswers = false;
+  }, skip: !_shots);
+
+  // The free kick on a joined phone: waiting for the kick, then the result.
+  testWidgets('Free kick (joined phone)', (tester) async {
+    Map<String, Object?> fk(String phase) => {
+          'kind': 'freekick',
+          'n': 2,
+          'wall': [
+            for (final m in GameModeId.values)
+              if (m.playable && m != GameModeId.wildcard) m.name,
+          ],
+          'phase': phase,
+          if (phase != 'ready') 'target': 3,
+          'curl': 1,
+          if (phase == 'landed') 'landed': GameModeId.values.where((m) => m.playable && m != GameModeId.wildcard).elementAt(3).name,
+          'round': '3/6',
+          'teams': _teams,
+        };
+    for (final phase in ['ready', 'landed']) {
+      await shot(
+          tester,
+          'freekick_joined_$phase',
+          FreeKickMirror(key: UniqueKey(), data: fk(phase), scores: _scores()),
+          then: () async {
+            await tester.pump(const Duration(seconds: 1));
+            await tester.pump(const Duration(seconds: 1));
+          });
+    }
   }, skip: !_shots);
 
   // The rules before a game, as the main phone shows them (points in yellow).

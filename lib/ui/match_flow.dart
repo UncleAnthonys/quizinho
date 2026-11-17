@@ -77,7 +77,7 @@ abstract final class MatchFlow {
     } else if (t.isFinished) {
       nav.push(_route(WinnerScreen(tournament: t)));
     } else {
-      _phones(context, t, 'Picking the next game');
+      // (The free kick shows itself on joined phones.)
       nav.push(_route(_Guard(child: FreeKickScreen(tournament: t))));
     }
   }
@@ -115,7 +115,7 @@ abstract final class MatchFlow {
     final services = AppScope.read(context);
     if (t.rounds.isEmpty) _pickTeaser(services, t);
     _save(services, t);
-    _phones(context, t, t.rounds.isEmpty ? 'Kick-off - picking the first game' : 'Picking the next game');
+    // (The free kick shows itself on joined phones.)
     Navigator.of(context).pushReplacement(_route(_Guard(child: FreeKickScreen(tournament: t))));
   }
 

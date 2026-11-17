@@ -7,6 +7,7 @@ import '../../core/sound_service.dart';
 import '../../core/theme.dart';
 import '../../domain/game_mode.dart';
 import '../../domain/tournament.dart';
+import '../../multiplayer/room.dart' show teamsView;
 import '../match_flow.dart';
 import '../widgets/common.dart';
 
@@ -54,9 +55,31 @@ class _FreeKickScreenState extends State<FreeKickScreen> with TickerProviderStat
 
   AppServices get _s => AppScope.read(context);
 
+  /// Joined phones play the same kick from this ([FreeKickMirror]): the
+  /// wall, then which shirt the ball hits and how it curls, then the game.
+  void _publish() {
+    final t = widget.tournament;
+    _s.room?.show({
+      'kind': 'freekick',
+      'n': t.rounds.length,
+      'wall': [for (final m in _wall) m.name],
+      'phase': _landed != null ? 'landed' : (_running ? 'kick' : 'ready'),
+      if (_target != null) 'target': _target,
+      'under': _under,
+      'curl': _curl,
+      if (_landed != null) 'landed': _landed!.name,
+      if (_wildcardGame != null) 'wild': _wildcardGame!.name,
+      'round': '${(t.roundNumber).clamp(1, t.totalRounds)}/${t.totalRounds}',
+      'teams': teamsView(t),
+    });
+  }
+
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) _publish();
+    });
     _kick.addListener(_onTick);
     // Teams picked, match on: Keegan sets the tone before the first kick.
     if (widget.tournament.rounds.isEmpty) {
@@ -98,6 +121,7 @@ class _FreeKickScreenState extends State<FreeKickScreen> with TickerProviderStat
       _target = _under ? null : _wall.indexOf(target);
       _curl = _rnd.nextBool() ? 1 : -1;
     });
+    _publish();
     _s.sound.play(Sfx.whistle, volume: 0.6);
     await _kick.forward(from: 0);
     if (!mounted) return;
@@ -110,6 +134,7 @@ class _FreeKickScreenState extends State<FreeKickScreen> with TickerProviderStat
       _landed = target;
       _wildcardGame = real;
     });
+    _publish();
     _reveal.forward(from: 0);
   }
 
@@ -180,6 +205,149 @@ class _FreeKickScreenState extends State<FreeKickScreen> with TickerProviderStat
         ),
       ),
     );
+  }
+}
+
+/// The free kick on a joined phone: the main phone's kick, played here from
+/// what it sends ([_FreeKickScreenState._publish]) - the same wall, the same
+/// shirt hit, the same game revealed. No buttons: the main phone kicks and
+/// moves on.
+class FreeKickMirror extends StatefulWidget {
+  const FreeKickMirror({super.key, required this.data, required this.scores});
+  final Map<String, Object?> data;
+  final Widget scores;
+
+  @override
+  State<FreeKickMirror> createState() => _FreeKickMirrorState();
+}
+
+class _FreeKickMirrorState extends State<FreeKickMirror> with TickerProviderStateMixin {
+  late final AnimationController _kick =
+      AnimationController(vsync: this, duration: const Duration(milliseconds: 3000));
+  late final AnimationController _idle =
+      AnimationController(vsync: this, duration: const Duration(milliseconds: 1800))..repeat();
+  late final AnimationController _reveal =
+      AnimationController(vsync: this, duration: const Duration(milliseconds: 600));
+  late List<GameModeId> _wall;
+  late _ShirtLabels _labels;
+  int? _target;
+  bool _under = false;
+  double _curl = 1;
+  bool _kicking = false;
+  GameModeId? _landed;
+  GameModeId? _wild;
+
+  @override
+  void initState() {
+    super.initState();
+    _setWall();
+    _apply();
+  }
+
+  @override
+  void didUpdateWidget(FreeKickMirror old) {
+    super.didUpdateWidget(old);
+    _apply();
+  }
+
+  @override
+  void dispose() {
+    _kick.dispose();
+    _idle.dispose();
+    _reveal.dispose();
+    super.dispose();
+  }
+
+  void _setWall() {
+    _wall = [
+      for (final n in (widget.data['wall'] as List?) ?? const [])
+        if (GameModeId.fromName('$n') case final m?) m,
+    ];
+    _labels = _ShirtLabels([..._wall, GameModeId.wildcard]);
+  }
+
+  void _apply() {
+    final d = widget.data;
+    final phase = '${d['phase']}';
+    if (phase == 'ready' || _landed != null || _landing) return;
+    _target = (d['target'] as num?)?.toInt();
+    _under = d['under'] == true;
+    _curl = (d['curl'] as num?)?.toDouble() ?? 1;
+    if (phase == 'kick' && !_kicking) {
+      _kicking = true;
+      _kick.forward(from: 0);
+      _refresh();
+    } else if (phase == 'landed') {
+      _land();
+    }
+  }
+
+  void _refresh() => WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) setState(() {});
+      });
+
+  bool _landing = false;
+
+  /// The game: once the kick has played out here (or straight away, for a
+  /// phone that joined after the kick).
+  Future<void> _land() async {
+    _landing = true;
+    await Future<void>.delayed(Duration.zero); // never mid-build
+    if (_kick.isAnimating) await _kick.forward();
+    if (!mounted) return;
+    if (_kick.value < 1) _kick.value = 1;
+    final d = widget.data;
+    _idle.stop();
+    setState(() {
+      _kicking = true;
+      _landed = GameModeId.fromName('${d['landed']}');
+      _wild = d['wild'] == null ? null : GameModeId.fromName('${d['wild']}');
+    });
+    _reveal.forward(from: 0);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final landed = _landed;
+    return Column(children: [
+      widget.scores,
+      const SizedBox(height: 12),
+      Expanded(
+        child: CustomPaint(
+          size: Size.infinite,
+          painter: _FreeKickPainter(
+            segments: _wall,
+            labels: _labels,
+            kick: _kick,
+            idle: _idle,
+            going: _kicking || landed != null || '${widget.data['phase']}' != 'ready',
+            target: _target,
+            under: _under,
+            curl: _curl,
+          ),
+        ),
+      ),
+      SizedBox(
+        height: 150,
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
+          child: landed == null
+              ? const SizedBox.shrink()
+              : ScaleTransition(
+                  scale: CurvedAnimation(parent: _reveal, curve: Curves.elasticOut),
+                  child: Column(mainAxisAlignment: MainAxisAlignment.end, children: [
+                    Icon(landed.icon, color: landed.color, size: 38),
+                    FittedBox(
+                      fit: BoxFit.scaleDown,
+                      child: Text(landed.title.toUpperCase(), style: AppText.headline(48, color: landed.color)),
+                    ),
+                    if (_wild != null)
+                      Text('${_wild!.title.toUpperCase()} · DOUBLE POINTS', style: AppText.headline(22, color: Palette.text)),
+                  ]),
+                ),
+        ),
+      ),
+    ]);
   }
 }
 
