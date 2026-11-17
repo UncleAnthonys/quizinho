@@ -60,7 +60,7 @@ List<String> soloRules(GameModeId m) => switch (m) {
         ],
       GameModeId.ticTacToe => [
           'Pick a square, then name a player who fits both its headers.',
-          'One 3-minute clock for the whole grid, and 3 lives. Each player only once.',
+          'One 3-minute clock for the whole grid, and 3 lives. A player can only be named once.',
           'Every square scores; finishing fast and keeping lives scores more. A perfect grid is 100.',
         ],
       GameModeId.top10 => [
