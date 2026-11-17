@@ -79,8 +79,13 @@ Widget _scores({List<String> extra = const []}) => ScoreStrip(
 
 Widget _timer() => const TimerBar(fraction: 0.6, seconds: 12);
 
-Widget _picker({VoiceService? voice}) =>
-    PlayerPicker(index: PlayerIndex(allPlayers), voice: voice, onPick: (_) {}, onPass: () {});
+Widget _picker({VoiceService? voice}) => PlayerPicker(
+    // A fresh box each shot (otherwise it keeps the last shot's state).
+    key: UniqueKey(),
+    index: PlayerIndex(allPlayers),
+    voice: voice,
+    onPick: (_) {},
+    onPass: () {});
 
 /// A mic for the shots: on, and (with [heard]) hearing those words at once.
 class _ShotVoice extends VoiceService {
