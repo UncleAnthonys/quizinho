@@ -55,6 +55,34 @@ const int _maxCategories = 2;
 /// English clubs on one side of the grid, at most (so 4 of the 6).
 const int _maxEnglishASide = 2;
 
+/// A grid that doesn't keep giving the same names. Two rules:
+/// - a player can fit three or more squares only where each of those squares
+///   has plenty of other answers ([variedMinAnswers]): Giuseppe Rossi was one
+///   of five answers in all three Villarreal squares;
+/// - no two squares share more than half the smaller one's answers
+///   ("Manchester United" beside "Club teammate of Giggs").
+bool gridIsVaried(TicTacToeGrid g) {
+  final where = <String, List<int>>{};
+  for (var i = 0; i < 9; i++) {
+    for (final p in g.answers[i]) {
+      where.putIfAbsent(p, () => []).add(i);
+    }
+  }
+  for (final squares in where.values) {
+    if (squares.length >= 3 && squares.any((i) => g.answers[i].length < variedMinAnswers)) return false;
+  }
+  for (var i = 0; i < 9; i++) {
+    for (var j = i + 1; j < 9; j++) {
+      final a = g.answers[i], b = g.answers[j];
+      if (a.intersection(b).length * 2 > min(a.length, b.length)) return false;
+    }
+  }
+  return true;
+}
+
+/// See [gridIsVaried].
+const int variedMinAnswers = 10;
+
 /// Builds a grid where every square has at least one valid answer.
 /// [minFame] keeps clubs recognisable (5 = only giants); English clubs get one
 /// step more (Charlton, Ipswich). Lowers itself if nothing fits. Returns null
@@ -74,6 +102,7 @@ TicTacToeGrid? generateTicTacToeGrid(
   int Function(String playerId)? answerFame,
   Set<String> avoid = const {},
   int attempts = 300,
+  bool distinct = true,
 }) {
   final clubs = <String, Club>{};
   final links = <String, Map<String, ClubConnection>>{};
@@ -143,6 +172,7 @@ TicTacToeGrid? generateTicTacToeGrid(
             for (final c in cols) links[r]![c]!.answerIds,
         ],
       );
+      if (distinct && !gridIsVaried(grid)) continue;
       if (!avoid.contains(grid.id)) return grid;
     }
   }

@@ -24,6 +24,29 @@ void main() {
   group('grid generation', () {
     final repo = parseFootballJson(File('assets/db/football.json').readAsStringSync());
 
+    test('grids are varied: no name fits three thin squares, no two squares near-duplicates', () async {
+      final conns = [...await repo.allClubConnections(), ...await repo.categoryClubPairs()];
+      var made = 0;
+      for (var seed = 0; seed < 40; seed++) {
+        final g = generateTicTacToeGrid(conns, random: Random(seed), minFame: 4);
+        if (g == null) continue;
+        made++;
+        expect(gridIsVaried(g), isTrue, reason: g.id);
+      }
+      expect(made, greaterThan(30));
+    });
+
+    test('a grid where one player fits three thin squares is rejected', () {
+      final thin = TicTacToeGrid(
+        rows: [club('r0'), club('r1'), club('r2')],
+        cols: [club('c0'), club('c1'), club('c2')],
+        answers: [
+          for (var i = 0; i < 9; i++) i < 3 ? {'rossi', 'a$i', 'b$i', 'c$i', 'd$i'} : {'x$i'},
+        ],
+      );
+      expect(gridIsVaried(thin), isFalse);
+    });
+
     test('every square has a valid answer, all six clubs distinct', () async {
       final conns = await repo.allClubConnections();
       for (var seed = 0; seed < 20; seed++) {

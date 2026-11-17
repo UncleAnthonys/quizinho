@@ -72,7 +72,8 @@ class _TicTacToeScreenState extends State<TicTacToeScreen>
             maxLevel: maxLevel, // never harder pairs than the chosen difficulty
             minKnownAnswers: strict ? known : 0,
             answerFame: fame,
-            avoid: fresh ? unseen : used);
+            avoid: fresh ? unseen : used,
+            distinct: strict); // varied squares, unless nothing else fits
     // Not enough in the chosen eras at this difficulty — widen rather than stall.
     var grid = make(inEras);
     if (grid == null) {
@@ -245,7 +246,20 @@ class _TicTacToeScreenState extends State<TicTacToeScreen>
         ...TttBoard.snapshot(c, _t),
         'who': _turnPlayer ?? _t.teamName(c.currentTeam),
         if (_showMissed && c.phase == TttPhase.finished) 'counts': [for (final a in c.grid.answers) a.length],
+        // Joined phones can open any square's answers themselves at the end.
+        if (c.phase == TttPhase.finished) ...{
+          'missed': [for (var i = 0; i < 9; i++) _names(c, i)],
+          'totals': [for (final a in c.grid.answers) a.length],
+        },
       };
+
+  /// A square's answers, best-known first (at most 60, for the phones).
+  List<String> _names(TicTacToeController c, int i) {
+    final players = services.repo.players;
+    final ps = [for (final id in c.grid.answers[i]) if (players.byId(id) case final p?) p]
+      ..sort((a, b) => b.fame != a.fame ? b.fame.compareTo(a.fame) : a.name.compareTo(b.name));
+    return [for (final p in ps.take(60)) p.name];
+  }
 
   Widget _bottom(TicTacToeController c) {
     if (_phones?.remote case final m?) {
@@ -343,11 +357,18 @@ class _TicTacToeScreenState extends State<TicTacToeScreen>
   }
 
   /// Every answer for square [i], best-known first; the one named is marked.
-  void _answers(TicTacToeController c, int i) {
-    final players = services.repo.players;
-    final named = c.claimedWith[i];
-    final names = [for (final id in c.grid.answers[i]) if (players.byId(id) case final p?) p]
-      ..sort((a, b) => b.fame != a.fame ? b.fame.compareTo(a.fame) : a.name.compareTo(b.name));
+  void _answers(TicTacToeController c, int i) => showSquareAnswers(
+        context,
+        title: '${c.grid.rows[i ~/ 3].name}  +  ${c.grid.cols[i % 3].name}',
+        names: _names(c, i),
+        total: c.grid.answers[i].length,
+        named: c.claimedWith[i],
+      );
+}
+
+/// One square's answers after the game (main phone and joined phones).
+void showSquareAnswers(BuildContext context,
+    {required String title, required List<String> names, required int total, String? named}) {
     showModalBottomSheet<void>(
       context: context,
       backgroundColor: Palette.pitchDeep,
@@ -356,25 +377,23 @@ class _TicTacToeScreenState extends State<TicTacToeScreen>
         child: ConstrainedBox(
           constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.7),
           child: ListView(padding: const EdgeInsets.fromLTRB(20, 18, 20, 20), shrinkWrap: true, children: [
-            Text('${c.grid.rows[i ~/ 3].name.toUpperCase()}  +  ${c.grid.cols[i % 3].name.toUpperCase()}',
-                textAlign: TextAlign.center, style: AppText.headline(22, color: Palette.yellow)),
+            Text(title.toUpperCase(), textAlign: TextAlign.center, style: AppText.headline(22, color: Palette.yellow)),
             const SizedBox(height: 4),
-            Text(names.length == 1 ? 'THE ONLY ANSWER IN OUR DATABASE' : '${names.length} ANSWERS IN OUR DATABASE',
+            Text(total == 1 ? 'THE ONLY ANSWER IN OUR DATABASE' : '$total ANSWERS IN OUR DATABASE',
                 textAlign: TextAlign.center, style: AppText.label(13)),
             const SizedBox(height: 12),
             Wrap(alignment: WrapAlignment.center, spacing: 6, runSpacing: 6, children: [
-              for (final p in names)
+              for (final n in names)
                 Chip(
-                  label: Text(p.name),
-                  backgroundColor: p.name == named ? Palette.yellow : Palette.card,
-                  labelStyle: TextStyle(color: p.name == named ? Palette.pitchDeep : Palette.text),
+                  label: Text(n),
+                  backgroundColor: n == named ? Palette.yellow : Palette.card,
+                  labelStyle: TextStyle(color: n == named ? Palette.pitchDeep : Palette.text),
                 ),
             ]),
           ]),
         ),
       ),
     );
-  }
 }
 
 /// The whole Tic-Tac-Toe screen under the scores — title, whose turn, the

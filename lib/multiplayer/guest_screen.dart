@@ -16,7 +16,7 @@ import '../games/buzz_game_view.dart' show FaceOffIntro;
 import '../games/checkout_501/checkout_screen.dart' show CoLayout;
 import '../games/pointless/pointless_screen.dart' show PtLayout;
 import '../games/starting_xi/starting_xi_screen.dart' show XiLayout;
-import '../games/tic_tac_toe/tic_tac_toe_screen.dart' show TttLayout;
+import '../games/tic_tac_toe/tic_tac_toe_screen.dart' show TttLayout, showSquareAnswers;
 import '../games/top10/top10_screen.dart' show Top10Layout;
 import '../games/career_path/career_path_screen.dart' show CareerTrail;
 import '../games/club_connections/club_connections_screen.dart' show ClubsCard;
@@ -609,8 +609,13 @@ class _GuestGameState extends State<_GuestGame> with SingleTickerProviderStateMi
         final choosing = stage == 'choose';
         Widget bottom;
         if (stage == 'wait') {
-          // Round over: the banner and standings say it all.
-          bottom = board['phase'] == 'finished' ? const SizedBox.shrink() : _status('${v['headline'] ?? ''}'.toUpperCase());
+          // Round over: tap any square to see its answers (sent by the main phone).
+          bottom = board['phase'] == 'finished'
+              ? (board['missed'] == null
+                  ? const SizedBox.shrink()
+                  : Text('TAP A SQUARE TO SEE ITS ANSWERS',
+                      textAlign: TextAlign.center, style: AppText.label(13, color: Palette.yellow)))
+              : _status('${v['headline'] ?? ''}'.toUpperCase());
         } else if (choosing && !mine) {
           bottom = OnTheirPhone(name: whoName, what: 'is picking a square');
         } else if (choosing) {
@@ -640,10 +645,12 @@ class _GuestGameState extends State<_GuestGame> with SingleTickerProviderStateMi
           scores,
           Expanded(
             child: TttLayout(
-              data: board,
+              // At the end, each square shows how many answers it had.
+              data: board['missed'] != null ? {...board, 'counts': board['totals']} : board,
               typing: answerTyping.value && stage == 'answer',
               bottom: bottom,
               onTap: mine && choosing ? (i) => widget.room.answer(q, 'choice:$i') : null,
+              onReveal: board['missed'] == null ? null : (i) => _squareAnswers(board, i),
             ),
           ),
         ]);
@@ -699,6 +706,21 @@ class _GuestGameState extends State<_GuestGame> with SingleTickerProviderStateMi
         ]);
     }
     return _center('EYES ON THE MAIN SCREEN', '${v['headline'] ?? ''}', scores: v['teams']);
+  }
+
+  /// One square's answers at the end of Noughts & Crosses.
+  void _squareAnswers(Map<String, Object?> board, int i) {
+    final rows = asList(board['rows']), cols = asList(board['cols']);
+    final missed = asList(board['missed']);
+    final totals = asList(board['totals']);
+    final claimed = asList(board['claimed']);
+    showSquareAnswers(
+      context,
+      title: '${i ~/ 3 < rows.length ? rows[i ~/ 3] : ''}  +  ${i % 3 < cols.length ? cols[i % 3] : ''}',
+      names: [for (final n in i < missed.length ? asList(missed[i]) : const []) '$n'],
+      total: i < totals.length ? (totals[i] as num?)?.toInt() ?? 0 : 0,
+      named: i < claimed.length && '${claimed[i]}'.isNotEmpty ? '${claimed[i]}' : null,
+    );
   }
 
   Widget _status(String text) => Padding(
