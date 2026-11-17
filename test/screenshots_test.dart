@@ -12,6 +12,7 @@ import 'package:quizinho/core/app_services.dart';
 import 'package:quizinho/core/app_settings.dart';
 import 'package:quizinho/core/sound_service.dart';
 import 'package:quizinho/core/theme.dart';
+import 'package:quizinho/core/voice_service.dart';
 import 'package:quizinho/data/in_memory_football_repository.dart';
 import 'package:quizinho/domain/player_index.dart';
 import 'package:quizinho/games/bidding_war/bidding_war_screen.dart';
@@ -78,7 +79,33 @@ Widget _scores({List<String> extra = const []}) => ScoreStrip(
 
 Widget _timer() => const TimerBar(fraction: 0.6, seconds: 12);
 
-Widget _picker() => PlayerPicker(index: PlayerIndex(allPlayers), onPick: (_) {}, onPass: () {});
+Widget _picker({VoiceService? voice}) =>
+    PlayerPicker(index: PlayerIndex(allPlayers), voice: voice, onPick: (_) {}, onPass: () {});
+
+/// A mic for the shots: on, and (with [heard]) hearing those words at once.
+class _ShotVoice extends VoiceService {
+  _ShotVoice(super.settings, {this.heard});
+  final String? heard;
+
+  @override
+  bool get enabled => true;
+
+  @override
+  Future<bool> listen({
+    required void Function(String words) onWords,
+    required void Function(List<String> alternatives) onDone,
+    List<String> hints = const [],
+  }) async {
+    if (heard case final h?) onWords(h);
+    return true;
+  }
+
+  @override
+  void stop() {}
+
+  @override
+  void reportMiss(List<String> heard, {String? playerId, List<String> answers = const []}) {}
+}
 
 void main() {
   late AppServices services;
@@ -95,7 +122,7 @@ void main() {
     );
   });
 
-  Future<void> shot(WidgetTester tester, String name, Widget body) async {
+  Future<void> shot(WidgetTester tester, String name, Widget body, {Future<void> Function()? then}) async {
     tester.view.physicalSize = const Size(390, 844);
     tester.view.devicePixelRatio = 1;
     addTearDown(tester.view.reset);
@@ -108,6 +135,10 @@ void main() {
       ),
     ));
     await tester.pump(const Duration(seconds: 2));
+    if (then != null) {
+      await then();
+      await tester.pump(const Duration(milliseconds: 300));
+    }
     await expectLater(find.byType(MaterialApp), matchesGoldenFile('../docs/shots/$name.png'));
   }
 
@@ -257,6 +288,30 @@ void main() {
             ]),
           )),
     );
+  }, skip: !_shots);
+
+  // The answer box with the mic on: listening, hearing words, and the
+  // player who's chosen the keyboard (box ready to type, mic waits for a tap).
+  testWidgets('Answer box', (tester) async {
+    Widget answering({VoiceService? voice, bool typing = false}) => column(
+        _scores(extra: const ['1 ▢', '1 ▢']),
+        TttLayout(
+          data: ttt('answering'),
+          typing: typing,
+          bottom: Column(children: [
+            Text('ARSENAL  +  JUVENTUS', textAlign: TextAlign.center, style: AppText.headline(20, color: Palette.yellow)),
+            _timer(),
+            _picker(voice: voice),
+          ]),
+        ));
+    services.settings.typeAnswers = false;
+    await shot(tester, 'answer_mic_listening', answering(voice: _ShotVoice(services.settings)));
+    await shot(tester, 'answer_mic_hearing', answering(voice: _ShotVoice(services.settings, heard: 'says a fab')));
+    services.settings.typeAnswers = true;
+    await shot(tester, 'answer_keyboard_chosen', answering(voice: _ShotVoice(services.settings)));
+    await shot(tester, 'answer_keyboard_typing', answering(voice: _ShotVoice(services.settings), typing: true),
+        then: () => tester.enterText(find.byType(TextField), 'Fabreg'));
+    services.settings.typeAnswers = false;
   }, skip: !_shots);
 
   final answers = [

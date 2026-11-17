@@ -124,6 +124,14 @@ class AppSettings extends ChangeNotifier {
     write: _prefs.setStringList,
   );
 
+  /// The player last chose the keyboard over the mic: answer boxes open
+  /// ready to type, and the mic waits to be tapped. Tapping it switches back.
+  /// Saved quietly (no rebuild mid-answer).
+  bool get typeAnswers => _prefs.getBool('typeAnswers') ?? false;
+  set typeAnswers(bool v) {
+    if (v != typeAnswers) _prefs.setBool('typeAnswers', v);
+  }
+
   void _setBool(String key, bool v) {
     _prefs.setBool(key, v);
     notifyListeners();

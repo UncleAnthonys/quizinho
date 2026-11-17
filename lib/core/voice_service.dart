@@ -68,6 +68,10 @@ class VoiceService {
   /// Voice is on in settings and the device hasn't said no.
   bool get enabled => _settings.voiceOn && _available != false;
 
+  /// This player types: answer boxes don't start the mic until it's tapped.
+  bool get preferTyping => _settings.typeAnswers;
+  set preferTyping(bool v) => _settings.typeAnswers = v;
+
   /// Builds the player-name model in the background (iPhone only). Called at
   /// launch; safe to call repeatedly. Built once per install or data update,
   /// then kept on the phone. Until it's ready, voice still works, just

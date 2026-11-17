@@ -88,18 +88,27 @@ class _PlayerPickerState extends State<PlayerPicker> {
   int _silentRestarts = 0;
 
   bool get _voiceOn => widget.voice?.enabled ?? false;
+
+  /// The mic starts by itself unless this player last chose the keyboard.
+  bool get _autoListen => _voiceOn && !(widget.voice?.preferTyping ?? false);
   bool get _keepListening => mounted && _voiceOn && !_picked && !_typing && !_voting;
 
   @override
   void initState() {
     super.initState();
     _focus.addListener(_onFocus);
-    if (_voiceOn) WidgetsBinding.instance.addPostFrameCallback((_) => _listen());
+    if (_autoListen) {
+      WidgetsBinding.instance.addPostFrameCallback((_) => _listen());
+    } else if (_voiceOn) {
+      _typing = true; // chose the keyboard last time: the mic waits for a tap
+    }
   }
 
   /// Tapping the box = typing: the mic stops at once so it can't fight the keyboard.
   void _onFocus() {
     answerTyping.value = _focus.hasFocus;
+    // Tapping the box picks the keyboard, for this answer and the next ones.
+    if (_focus.hasFocus && _voiceOn) widget.voice?.preferTyping = true;
     if (_focus.hasFocus && !_typing) {
       _typing = true;
       widget.voice?.stop();
@@ -291,6 +300,7 @@ class _PlayerPickerState extends State<PlayerPicker> {
   void _onTyped(String q) {
     if (!_typing && _voiceOn) {
       _typing = true;
+      widget.voice?.preferTyping = true;
       widget.voice?.stop();
       _listening = false;
       _voiceNote = null;
@@ -333,7 +343,9 @@ class _PlayerPickerState extends State<PlayerPicker> {
       TextField(
         controller: _controller,
         focusNode: _focus,
-        autofocus: !_voiceOn, // keyboard would cover the screen while speaking
+        // Keyboard straight up when there's no mic, or the player types (in
+        // the app: a browser only shows the keyboard after a tap on the box).
+        autofocus: !_voiceOn || (!kIsWeb && !_autoListen),
         autocorrect: false,
         enableSuggestions: false,
         autofillHints: const <String>[], // stops Safari offering contacts
@@ -347,6 +359,8 @@ class _PlayerPickerState extends State<PlayerPicker> {
                   onPressed: _listening
                       ? null
                       : () {
+                          // Back to the mic, for this answer and the next ones.
+                          widget.voice?.preferTyping = false;
                           _focus.unfocus();
                           _typing = false;
                           _silentRestarts = 0;
