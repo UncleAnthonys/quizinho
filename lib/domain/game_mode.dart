@@ -7,8 +7,8 @@ enum GameModeId {
     playable: true,
     rules: [
       'Two clubs appear. Hit your buzzer as soon as you know a player who played for both.',
-      'Get it right: 2 points. Get it wrong: you’re locked out and the others can steal.',
-      'Name a rare pick - a player most people wouldn’t think of - for a bonus point.',
+      'Get it right: +2. Get it wrong: you’re locked out and the others can steal.',
+      'Name a rare pick - a player most people wouldn’t think of - for a bonus +1.',
     ],
     whoPlays: 'Anyone can buzz - unless it says FACE-OFF, then only the two named players.',
   ),
@@ -18,7 +18,7 @@ enum GameModeId {
     playable: true,
     rules: [
       'Clubs appear one at a time, in career order.',
-      'Buzz as early as you dare: 5 points on the first clue, dropping each reveal.',
+      'Buzz as early as you dare: +5 on the first clue, dropping each reveal.',
       'Wrong answers lock your team out of that player.',
     ],
     whoPlays: 'Teams can confer - except on FACE-OFF questions, where it’s just the named players.',
@@ -94,7 +94,7 @@ enum GameModeId {
     rules: [
       'One player holds the phone to their forehead. Their team describes the name on screen.',
       'Tilt DOWN when you get it, UP to pass. Or use the buttons.',
-      'Every team gets one go. Most correct cards wins 3 points.',
+      'Every team gets one go. Most correct cards wins +3.',
     ],
     whoPlays: 'The named player guesses; their teammates describe. Other teams keep quiet!',
   ),
@@ -104,7 +104,7 @@ enum GameModeId {
     playable: true,
     rules: [
       'A Top 10 from the record books. Take turns to name one of the ten.',
-      'Correct: 1 point. Wrong, too slow or a pass costs a life (3 each).',
+      'Correct: +1. Wrong, too slow or a pass costs a life (3 lives each).',
       'It ends when all ten are found or every team is out of lives.',
     ],
     whoPlays: 'Teams take turns.',
