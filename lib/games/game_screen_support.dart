@@ -63,16 +63,16 @@ mixin GameScreenSupport<W extends StatefulWidget> on State<W>, TickerProviderSta
   }
 
   /// Call from the controller listener; reacts once per new event.
-  /// [miss]: shown on a wrong answer or time-out ("✗ Gary Cahill").
+  /// [miss]: stamped on a wrong answer ("Gary Cahill").
   /// [clip]: a pundit line for the moment, after the sound effect.
   void handleEvent(int serial, GameEvent? event, {String? miss, Clip? clip}) {
     if (event == null || serial == _seenSerial) return;
     _seenSerial = serial;
     final s = services;
     if (clip != null) s.sound.playClip(clip, delay: const Duration(milliseconds: 700));
-    if ((event == GameEvent.wrong || event == GameEvent.timeUp) && miss != null && mounted) {
-      _stamp(miss, timeUp: event == GameEvent.timeUp);
-    }
+    // Wrong answers only: a time-out is plain from the clock, and a message
+    // would just sit over the buttons.
+    if (event == GameEvent.wrong && miss != null && mounted) _stamp(miss);
     switch (event) {
       case GameEvent.buzz:
         s.sound.play(Sfx.buzzIn);
@@ -135,8 +135,8 @@ mixin GameScreenSupport<W extends StatefulWidget> on State<W>, TickerProviderSta
   OverlayEntry? _missEntry;
   AnimationController? _missAnim;
 
-  /// The wrong answer, stamped over the game ([MissStamp]).
-  void _stamp(String name, {bool timeUp = false}) {
+  /// The wrong answer, stamped over the game ([MissStamp]). Taps go through it.
+  void _stamp(String name) {
     _clearStamp();
     final anim = AnimationController(vsync: this, duration: MissStamp.duration);
     final entry = OverlayEntry(
@@ -145,7 +145,7 @@ mixin GameScreenSupport<W extends StatefulWidget> on State<W>, TickerProviderSta
           alignment: const Alignment(0, 0.15),
           child: AnimatedBuilder(
             animation: anim,
-            builder: (_, __) => MissStamp(name: name, timeUp: timeUp, progress: anim.value),
+            builder: (_, __) => MissStamp(name: name, progress: anim.value),
           ),
         ),
       ),

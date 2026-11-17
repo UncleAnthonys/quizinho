@@ -384,13 +384,12 @@ class Collapse extends StatelessWidget {
 }
 
 /// A wrong answer, stamped on the pitch: red card, cross, the name struck
-/// through ("WRONG" / "TIME UP" above). Pops in, holds, fades - in place of
+/// through ("WRONG" above). Pops in, holds, fades - in place of
 /// a plain snackbar. Shown by GameScreenSupport; [progress] drives it (0..1
 /// over [MissStamp.duration]), or null for a still (screenshots).
 class MissStamp extends StatelessWidget {
-  const MissStamp({super.key, required this.name, this.timeUp = false, this.progress});
+  const MissStamp({super.key, required this.name, this.progress});
   final String name;
-  final bool timeUp;
   final double? progress;
 
   static const duration = Duration(milliseconds: 1900);
@@ -421,7 +420,7 @@ class MissStamp extends StatelessWidget {
               const SizedBox(width: 10),
               Flexible(
                 child: Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start, children: [
-                  Text(timeUp ? 'TIME UP' : 'WRONG', style: AppText.label(13, color: Colors.white)),
+                  Text('WRONG', style: AppText.label(13, color: Colors.white)),
                   FittedBox(
                     fit: BoxFit.scaleDown,
                     alignment: Alignment.centerLeft,
