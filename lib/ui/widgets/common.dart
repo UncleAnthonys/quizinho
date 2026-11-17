@@ -401,13 +401,31 @@ class _MissShakeState extends State<MissShake> with SingleTickerProviderStateMix
   late final AnimationController _a = AnimationController(vsync: this, duration: const Duration(milliseconds: 1500));
   String? _name;
 
+  /// The last wrong answer shaken, app-wide: a wrong answer often swaps the
+  /// screen's layout (answering -> steal), so the card showing it is a new
+  /// one - it must still play, but only once.
+  static String? _played;
+
+  @override
+  void initState() {
+    super.initState();
+    _maybePlay();
+  }
+
   @override
   void didUpdateWidget(MissShake old) {
     super.didUpdateWidget(old);
-    if (widget.trigger != null && widget.trigger != old.trigger) {
-      _name = widget.name;
-      _a.forward(from: 0);
-    }
+    _maybePlay();
+  }
+
+  void _maybePlay() {
+    final t = widget.trigger;
+    if (t == null) return;
+    final key = '$t|${widget.name}';
+    if (key == _played) return;
+    _played = key;
+    _name = widget.name;
+    _a.forward(from: 0);
   }
 
   @override
