@@ -5,8 +5,8 @@ import 'dart:js_interop_unsafe';
 /// there's nothing to ask, and this does nothing.
 void requestMotionPermission() {
   try {
-    final dme = globalContext['DeviceMotionEvent'];
-    if (dme is JSObject && dme.has('requestPermission')) {
+    final dme = globalContext.getProperty<JSObject?>('DeviceMotionEvent'.toJS);
+    if (dme != null && dme.has('requestPermission')) {
       dme.callMethod<JSAny?>('requestPermission'.toJS);
     }
   } catch (_) {}

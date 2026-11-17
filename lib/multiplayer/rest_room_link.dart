@@ -93,6 +93,16 @@ class RestRoomLink extends RoomLink {
   Future<void> put(String path, Object? value) => _send('PUT', path, value);
 
   @override
+  Future<Object?> putRead(String path, Object? value) async {
+    final res = await _send('PUT', path, value);
+    try {
+      return jsonDecode(res.body);
+    } catch (_) {
+      return null;
+    }
+  }
+
+  @override
   Future<void> patch(String path, Map<String, Object?> values) => _send('PATCH', path, values);
 
   @override

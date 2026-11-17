@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:flutter/foundation.dart';
 
@@ -66,6 +67,7 @@ class BuzzBridge extends ChangeNotifier {
   String get questionKey => '${tournament.rounds.length}-${controller.tag}';
 
   void start() {
+    _lastPhase = controller.phase;
     _subs.add(room.buzzes.listen(_onBuzz));
     _subs.add(room.answers.listen(_onAnswer));
     controller.addListener(_onChange);
@@ -73,14 +75,87 @@ class BuzzBridge extends ChangeNotifier {
   }
 
   void _onBuzz(RemoteBuzz b) {
-    if (b.question != questionKey || controller.phase != BuzzPhase.open || paused()) return;
+    if (b.tap != null) _noteDelay(b.device, b.received - b.tap!);
+    if (b.question != questionKey || paused()) return;
+    // The main phone's own buzz counted at once; this one was tapped first.
+    if (_hostTap != null && b.tappedAt < _hostTap! && _takeOver(b)) return;
+    if (controller.phase != BuzzPhase.open) return;
     _pending.add(b);
     _window ??= Timer(_fairnessWindow, _decide);
   }
 
+  // ---- fair against the main phone's own buzzers -------------------------
+  // A buzz on the main phone counts the moment it's pressed; one from a
+  // joined phone takes ~0.2-0.6 s to arrive. Every buzz carries when it was
+  // tapped on the shared clock (ServerClock), so for a short while after the
+  // main phone's buzz, a phone buzz that was really tapped earlier takes
+  // the answer over. How long: the slowest joined phone's recent delay.
+
+  /// When the main phone's buzz was pressed (shared clock), while a phone's
+  /// earlier tap could still turn up; null otherwise.
+  int? _hostTap;
+  Timer? _hostWindow;
+
+  /// Recent delays (tap to the main phone hearing it), per phone.
+  final Map<String, List<int>> _delays = {};
+
+  void _noteDelay(String device, int ms) {
+    if (ms < 0 || ms > 5000) return;
+    final d = _delays.putIfAbsent(device, () => []);
+    d.add(ms);
+    if (d.length > 5) d.removeAt(0);
+  }
+
+  /// How long to wait for an earlier phone tap: the slowest phone that
+  /// could buzz, plus a margin. Before any are measured, half a second.
+  Duration _waitForPhones() {
+    final ds = [
+      for (final m in room.members.values)
+        if (room.online(m.device) && controller.couldBuzz(m.team)) ...?_delays[m.device],
+    ];
+    final ms = ds.isEmpty ? 500 : ds.reduce(max) + 120;
+    return Duration(milliseconds: ms.clamp(150, 800));
+  }
+
+  /// Joined phones that could still buzz this question.
+  bool _phonesInPlay() =>
+      room.serverClock.synced &&
+      room.members.values.any((m) => room.online(m.device) && controller.couldBuzz(m.team));
+
+  /// The main phone buzzed (a team answering there, no phone answering).
+  void _hostBuzzed() {
+    if (!_phonesInPlay()) return;
+    _hostTap = room.serverClock.now;
+    _hostWindow?.cancel();
+    _hostWindow = Timer(_waitForPhones(), () => _hostTap = null);
+    // Phone buzzes already in hand but not yet judged (the 0.2 s window).
+    final waiting = [..._pending]..sort((a, b) => a.tappedAt.compareTo(b.tappedAt));
+    _pending.clear();
+    _window?.cancel();
+    _window = null;
+    for (final b in waiting) {
+      if (b.tappedAt < _hostTap! && _takeOver(b)) return;
+    }
+  }
+
+  /// [b]'s phone answers instead of the main phone, if it may.
+  bool _takeOver(RemoteBuzz b) {
+    final m = room.members[b.device];
+    if (m == null || controller.phase != BuzzPhase.answering || remote != null) return false;
+    final f = faceOff();
+    if (f != null && f.nameFor(m.team) != m.name) return false;
+    if (!controller.overturn(m.team)) return false;
+    _hostTap = null;
+    _hostWindow?.cancel();
+    remote = m;
+    notifyListeners();
+    _publish(); // the phones: it's their turn now
+    return true;
+  }
+
   void _decide() {
     _window = null;
-    final buzzes = [..._pending]..sort((a, b) => a.at.compareTo(b.at));
+    final buzzes = [..._pending]..sort((a, b) => a.tappedAt.compareTo(b.tappedAt));
     _pending.clear();
     if (controller.phase != BuzzPhase.open) return;
     final f = faceOff();
@@ -128,8 +203,14 @@ class BuzzBridge extends ChangeNotifier {
     notifyListeners();
   }
 
+  BuzzPhase? _lastPhase;
+
   void _onChange() {
-    if (controller.phase != BuzzPhase.answering && remote != null) {
+    final phase = controller.phase;
+    if (phase == BuzzPhase.answering && _lastPhase == BuzzPhase.open && remote == null) _hostBuzzed();
+    if (phase != BuzzPhase.answering) _hostTap = null;
+    _lastPhase = phase;
+    if (phase != BuzzPhase.answering && remote != null) {
       remote = null;
       notifyListeners();
     }
@@ -163,6 +244,8 @@ class BuzzBridge extends ChangeNotifier {
           if (remote != null) 'device': remote!.device,
         },
       if (c.phase == BuzzPhase.answering && remote != null) 'answers': answerIds().toList(),
+      // A wrong answer just now: every phone shakes its question card.
+      if (c.lastEvent == GameEvent.wrong && c.lastMiss != null) 'miss': {'n': c.eventSerial, 'name': c.lastMiss},
       if (resolved)
         'result': {
           'scored': o?.scored ?? false,
@@ -212,6 +295,7 @@ class BuzzBridge extends ChangeNotifier {
   @override
   void dispose() {
     _window?.cancel();
+    _hostWindow?.cancel();
     controller.removeListener(_onChange);
     for (final s in _subs) {
       s.cancel();

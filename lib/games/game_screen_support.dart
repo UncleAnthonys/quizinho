@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
-import 'package:flutter/material.dart' show ScaffoldMessenger, SnackBar;
 import 'package:flutter/services.dart' show DeviceOrientation, SystemChrome;
 import 'package:flutter/widgets.dart';
 
@@ -62,18 +61,14 @@ mixin GameScreenSupport<W extends StatefulWidget> on State<W>, TickerProviderSta
   }
 
   /// Call from the controller listener; reacts once per new event.
-  /// [miss]: shown on a wrong answer or time-out ("✗ Gary Cahill").
   /// [clip]: a pundit line for the moment, after the sound effect.
   void handleEvent(int serial, GameEvent? event, {String? miss, Clip? clip}) {
     if (event == null || serial == _seenSerial) return;
     _seenSerial = serial;
     final s = services;
     if (clip != null) s.sound.playClip(clip, delay: const Duration(milliseconds: 700));
-    if ((event == GameEvent.wrong || event == GameEvent.timeUp) && miss != null && mounted) {
-      ScaffoldMessenger.of(context)
-        ..hideCurrentSnackBar()
-        ..showSnackBar(SnackBar(content: Text('✗ $miss'), duration: const Duration(milliseconds: 1800)));
-    }
+    // (A wrong answer shakes the question card - MissShake, in each game's
+    // view - and a time-out is plain from the clock: no message.)
     switch (event) {
       case GameEvent.buzz:
         s.sound.play(Sfx.buzzIn);

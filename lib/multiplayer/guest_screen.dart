@@ -397,11 +397,19 @@ class _GuestGameState extends State<_GuestGame> with SingleTickerProviderStateMi
     // from a phone that hasn't got the turn).
     final voice = s.voice;
     final types = kIsWeb && (voice == null || !voice.enabled || voice.preferTyping);
-    final early = types && _buzzedOn == q && phase == 'open';
+    // Only while this buzz is still waiting for the main phone: once it's
+    // answered (wrong, and the steal is on), this team can't buzz again and
+    // the box goes, so the phone shows the game again.
+    final early = types && _buzzedOn == q && myBuzzer;
     final iAnswer = early || phase == 'answering' && answering['device'] == widget.room.device;
     final result = asMap(v['result']);
 
-    final question = _question(v, compact: iAnswer);
+    final miss = asMap(v['miss']);
+    final question = MissShake(
+      trigger: (miss['n'] as num?)?.toInt(),
+      name: miss['name'] as String?,
+      child: _question(v, compact: iAnswer),
+    );
 
     Widget action;
     if (iAnswer) {

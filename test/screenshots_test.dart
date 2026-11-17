@@ -298,6 +298,41 @@ void main() {
     );
   }, skip: !_shots);
 
+  // A wrong answer: the question card shakes red with the name crossed out.
+  testWidgets('Wrong answer shake', (tester) async {
+    final miss = ValueNotifier<int?>(null);
+    await shot(
+      tester,
+      'miss_shake',
+      Column(children: [
+        _scores(),
+        const SizedBox(height: 40),
+        ValueListenableBuilder<int?>(
+          valueListenable: miss,
+          builder: (context, n, _) => MissShake(
+            trigger: n,
+            name: 'Pedri',
+            child: Container(
+              margin: const EdgeInsets.symmetric(horizontal: 16),
+              padding: const EdgeInsets.all(20),
+              decoration: BoxDecoration(color: Palette.pitchDeep, borderRadius: BorderRadius.circular(18)),
+              child: Column(children: [
+                Text('MANCHESTER CITY', textAlign: TextAlign.center, style: AppText.headline(44)),
+                const Icon(Icons.swap_vert_rounded, color: Palette.yellow, size: 36),
+                Text('BARCELONA', textAlign: TextAlign.center, style: AppText.headline(44)),
+              ]),
+            ),
+          ),
+        ),
+      ]),
+      then: () async {
+        miss.value = 1;
+        await tester.pump(); // starts the animation
+        await tester.pump(const Duration(milliseconds: 150));
+      },
+    );
+  }, skip: !_shots);
+
   // The longest headers a grid can have, to check they fit their squares.
   testWidgets('Tic-Tac-Toe long headers', (tester) async {
     await shot(
