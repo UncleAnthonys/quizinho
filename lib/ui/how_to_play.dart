@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../core/theme.dart';
 import '../domain/game_mode.dart';
 import 'match_flow.dart' show GameModeStyle;
+import 'widgets/common.dart';
 
 /// The rules for the whole game and every round — from Settings.
 void showHowToPlay(BuildContext context) => showModalBottomSheet<void>(
@@ -32,7 +33,7 @@ void showHowToPlay(BuildContext context) => showModalBottomSheet<void>(
               Text(m.title.toUpperCase(), style: AppText.headline(24, color: m.color)),
             ]),
             const SizedBox(height: 4),
-            for (final r in m.rules) Text('• $r', style: const TextStyle(fontSize: 15, height: 1.45)),
+            for (final r in m.rules) RuleText('• $r', style: const TextStyle(fontSize: 15, height: 1.45)),
             const SizedBox(height: 14),
           ],
         ]),

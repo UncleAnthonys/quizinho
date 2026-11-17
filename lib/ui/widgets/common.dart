@@ -329,3 +329,26 @@ class SoloScore extends StatelessWidget {
         ]),
       ]);
 }
+
+/// A line of rules with the points ("+3", "+1") in yellow, as on the score
+/// screens, so it's clear they're points.
+class RuleText extends StatelessWidget {
+  const RuleText(this.text, {super.key, this.style = const TextStyle(fontSize: 18, height: 1.35)});
+  final String text;
+  final TextStyle style;
+
+  static final _points = RegExp(r'\+\d+');
+
+  @override
+  Widget build(BuildContext context) {
+    final spans = <TextSpan>[];
+    var at = 0;
+    for (final m in _points.allMatches(text)) {
+      if (m.start > at) spans.add(TextSpan(text: text.substring(at, m.start)));
+      spans.add(TextSpan(text: m[0], style: const TextStyle(color: Palette.yellow, fontWeight: FontWeight.w800)));
+      at = m.end;
+    }
+    if (at < text.length) spans.add(TextSpan(text: text.substring(at)));
+    return Text.rich(TextSpan(style: style, children: spans));
+  }
+}

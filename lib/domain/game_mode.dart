@@ -69,9 +69,9 @@ enum GameModeId {
     tagline: 'Rarest answer wins',
     playable: true,
     rules: [
-      'A category appears. Teams take turns - confer, then give ONE answer.',
-      'A right answer scores how many of 100 people would have said it. The rarer the answer, the lower the score.',
-      'Wrong or out of time scores 100. Two answers each - lowest total wins +3, and a 0 (nobody would have said it) is +1.',
+      'A category appears. Teams take turns - confer, then give one answer.',
+      'The rarer the answer, the lower the score.',
+      'Wrong or out of time scores 100. Two answers each - lowest total wins +3, and an answer that scores 0 gets +1.',
     ],
     whoPlays: 'Each team confers, then one person types or says the answer.',
   ),

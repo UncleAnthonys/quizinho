@@ -361,7 +361,7 @@ class _GuestGameState extends State<_GuestGame> with SingleTickerProviderStateMi
           child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
             CircleAvatar(radius: 13, backgroundColor: colour, child: Text('${i + 1}', style: AppText.headline(15, color: Palette.pitchDeep))),
             const SizedBox(width: 12),
-            Expanded(child: Text(r, style: const TextStyle(fontSize: 16, height: 1.4))),
+            Expanded(child: RuleText(r, style: const TextStyle(fontSize: 16, height: 1.4))),
           ]),
         ),
       if (v['who'] != null) ...[

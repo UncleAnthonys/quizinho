@@ -73,7 +73,7 @@ class _RoundIntroScreenState extends State<RoundIntroScreen> {
                         child: Text('${i + 1}', style: AppText.headline(18, color: Palette.pitchDeep)),
                       ),
                       const SizedBox(width: 12),
-                      Expanded(child: Text(rule, style: const TextStyle(fontSize: 18, height: 1.35))),
+                      Expanded(child: RuleText(rule)),
                     ]),
                   ),
                 const SizedBox(height: 6),

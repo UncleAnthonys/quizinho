@@ -21,6 +21,8 @@ import 'package:quizinho/games/pointless/pointless_screen.dart';
 import 'package:quizinho/games/starting_xi/starting_xi_screen.dart';
 import 'package:quizinho/games/tic_tac_toe/tic_tac_toe_screen.dart';
 import 'package:quizinho/domain/tournament.dart';
+import 'package:quizinho/ui/screens/round_intro_screen.dart';
+import 'package:quizinho/domain/game_mode.dart';
 import 'package:quizinho/ui/screens/home_screen.dart';
 import 'package:quizinho/ui/screens/setup_screen.dart';
 import 'package:quizinho/ui/screens/solo_screen.dart';
@@ -317,6 +319,17 @@ void main() {
     await shot(tester, 'answer_keyboard_typing', answering(voice: _ShotVoice(services.settings), typing: true),
         then: () => tester.enterText(find.byType(TextField), 'Fabregas'));
     services.settings.typeAnswers = false;
+  }, skip: !_shots);
+
+  // The rules before a game, as the main phone shows them (points in yellow).
+  testWidgets('Rules', (tester) async {
+    final t = Tournament(TournamentConfig(teams: [
+      TeamSetup(name: 'Home', colorIndex: 0),
+      TeamSetup(name: 'Away', colorIndex: 1),
+    ]));
+    for (final (name, mode) in [('rules_under_the_radar', GameModeId.pointless), ('rules_noughts_crosses', GameModeId.ticTacToe)]) {
+      await shot(tester, name, RoundIntroScreen(key: UniqueKey(), tournament: t, mode: mode, multiplier: 1));
+    }
   }, skip: !_shots);
 
   final answers = [

@@ -404,7 +404,7 @@ class _SoloIntroState extends State<_SoloIntro> {
                             backgroundColor: mode.color,
                             child: Text('${i + 1}', style: AppText.headline(15, color: Palette.pitchDeep))),
                         const SizedBox(width: 12),
-                        Expanded(child: Text(r, style: const TextStyle(fontSize: 17, height: 1.4))),
+                        Expanded(child: RuleText(r, style: const TextStyle(fontSize: 17, height: 1.4))),
                       ]),
                     )
                 else
