@@ -67,6 +67,13 @@ class BuzzGameView extends StatelessWidget {
         builder: (context, _) => _build(context),
       );
 
+  /// The question card shakes on a wrong answer ([MissShake]).
+  Widget _shaking(Widget q) => MissShake(
+        trigger: controller.lastEvent == GameEvent.wrong ? controller.eventSerial : null,
+        name: controller.lastMiss,
+        child: q,
+      );
+
   Widget _build(BuildContext context) {
     final c = controller;
     final t = round.tournament;
@@ -101,7 +108,7 @@ class BuzzGameView extends StatelessWidget {
                   Text('on their phone', style: AppText.label(15)),
                 ]),
               ),
-              Expanded(child: SingleChildScrollView(child: question(false))),
+              Expanded(child: SingleChildScrollView(child: _shaking(question(false)))),
             ]),
           ),
         ),
@@ -125,7 +132,7 @@ class BuzzGameView extends StatelessWidget {
               // so the keyboard stays up.
               answerTyping.value
                   ? const SizedBox.shrink()
-                  : Expanded(child: SingleChildScrollView(child: question(true))),
+                  : Expanded(child: SingleChildScrollView(child: _shaking(question(true)))),
             ]),
           ),
         ),
@@ -188,7 +195,7 @@ class BuzzGameView extends StatelessWidget {
             CommentaryBanner(text: commentary),
             if (faceOff != null && (c.phase == BuzzPhase.open || c.phase == BuzzPhase.answering))
               _FaceOffBanner(faceOff: faceOff!, tournament: t),
-            question(false),
+            _shaking(question(false)),
             if (c.phase == BuzzPhase.open || c.phase == BuzzPhase.answering)
               Padding(
                 padding: const EdgeInsets.fromLTRB(18, 4, 18, 4),
@@ -283,7 +290,7 @@ class BuzzGameView extends StatelessWidget {
           child: c.phase == BuzzPhase.open
               ? SingleChildScrollView(
                   child: Column(children: [
-                    question(true),
+                    _shaking(question(true)),
                     Padding(
                       padding: const EdgeInsets.fromLTRB(12, 2, 12, 0),
                       child: TimerBar(fraction: c.secondsLeft / c.phaseSeconds, seconds: c.secondsLeft, height: 10),

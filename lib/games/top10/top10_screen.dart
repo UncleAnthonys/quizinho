@@ -5,10 +5,12 @@ import '../../core/theme.dart';
 import '../../data/models.dart';
 import '../../domain/game_mode.dart';
 import '../../domain/tournament.dart';
+import '../../multiplayer/room_link.dart' show asMap;
 import '../../multiplayer/turn_bridge.dart';
 import '../../ui/widgets/common.dart';
 import '../../ui/widgets/player_picker.dart';
 import '../buzz_game_view.dart' show LoadingRound, OutOfChallenges;
+import '../buzz_race_controller.dart' show GameEvent;
 import '../game_screen_support.dart';
 import 'top10_controller.dart';
 
@@ -256,6 +258,8 @@ class Top10Layout extends StatelessWidget {
   static Map<String, Object?> snapshot(Top10Controller c, Tournament t) => {
         'prompt': c.list.prompt,
         'asof': c.list.asOf,
+        // A wrong name just now: the heading shakes on every phone.
+        if (c.lastEvent == GameEvent.wrong && c.misses.isNotEmpty) 'miss': {'n': c.eventSerial, 'name': c.misses.last},
         'finished': c.finished,
         if (t.teamCount == 1) 'solo': true,
         'teams': [for (var i = 0; i < t.teamCount; i++) t.teamName(i)],
@@ -285,8 +289,15 @@ class Top10Layout extends StatelessWidget {
     return Column(children: [
       Text('TOP 10', style: AppText.label(15, color: _accent)),
       const SizedBox(height: 2),
-      Text('${data['prompt'] ?? ''}'.toUpperCase(),
-          textAlign: TextAlign.center, style: AppText.headline(typing ? 20 : 26).copyWith(height: 1.05)),
+      MissShake(
+        trigger: (asMap(data['miss'])['n'] as num?)?.toInt(),
+        name: asMap(data['miss'])['name'] as String?,
+        child: SizedBox(
+          width: double.infinity,
+          child: Text('${data['prompt'] ?? ''}'.toUpperCase(),
+              textAlign: TextAlign.center, style: AppText.headline(typing ? 20 : 26).copyWith(height: 1.05)),
+        ),
+      ),
       if (asOf.isNotEmpty && !typing) Text('As of $asOf', style: AppText.label(12)),
       const SizedBox(height: 8),
       Expanded(

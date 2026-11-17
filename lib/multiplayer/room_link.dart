@@ -18,7 +18,49 @@ abstract class RoomLink {
 
   Future<void> remove(String path) => put(path, null);
 
+  /// Replaces the value at [path] and returns what was saved, with
+  /// [serverTime] filled in by the database (null if this link can't say).
+  Future<Object?> putRead(String path, Object? value) async {
+    await put(path, value);
+    return null;
+  }
+
   void close() {}
+}
+
+/// This phone's idea of the database's clock: its own clock plus an offset
+/// measured from saves that carry [serverTime] (the database hands back the
+/// time it stored; the save happened about halfway through the round trip).
+/// Every phone in a room shares that clock, so a buzz can carry the moment it
+/// was tapped and be judged fairly against the others, wherever they are.
+class ServerClock {
+  int? _offset;
+  int _bestTrip = 1 << 30;
+
+  bool get synced => _offset != null;
+
+  /// Now, on the database's clock (or this phone's, until [synced]).
+  int get now => DateTime.now().millisecondsSinceEpoch + (_offset ?? 0);
+
+  /// Times [save] (a putRead whose value has "at": serverTime, or is
+  /// serverTime itself). The quickest round trip gives the best estimate;
+  /// later ones refresh it if they're nearly as quick (clocks drift).
+  Future<void> stamp(Future<Object?> Function() save) async {
+    final t0 = DateTime.now().millisecondsSinceEpoch;
+    final Object? saved;
+    try {
+      saved = await save();
+    } catch (_) {
+      return;
+    }
+    final t1 = DateTime.now().millisecondsSinceEpoch;
+    final at = saved is num ? saved : asMap(saved)['at'];
+    if (at is! num) return;
+    final trip = t1 - t0;
+    if (_offset != null && trip > _bestTrip * 3 ~/ 2 + 20) return;
+    _offset = at.toInt() - (t0 + t1) ~/ 2;
+    if (trip < _bestTrip) _bestTrip = trip;
+  }
 }
 
 /// Placeholder the database replaces with its own clock (ms since epoch) —

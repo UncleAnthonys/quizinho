@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
-import 'package:flutter/material.dart' show Overlay, OverlayEntry;
 import 'package:flutter/services.dart' show DeviceOrientation, SystemChrome;
 import 'package:flutter/widgets.dart';
 
@@ -10,7 +9,6 @@ import '../core/app_services.dart';
 import '../core/sound_service.dart';
 import '../domain/tournament.dart';
 import '../multiplayer/room.dart' show HostRoom;
-import '../ui/widgets/common.dart' show MissStamp;
 import 'buzz_race_controller.dart' show GameEvent;
 
 /// What every game screen receives from the tournament flow.
@@ -63,16 +61,14 @@ mixin GameScreenSupport<W extends StatefulWidget> on State<W>, TickerProviderSta
   }
 
   /// Call from the controller listener; reacts once per new event.
-  /// [miss]: stamped on a wrong answer ("Gary Cahill").
   /// [clip]: a pundit line for the moment, after the sound effect.
   void handleEvent(int serial, GameEvent? event, {String? miss, Clip? clip}) {
     if (event == null || serial == _seenSerial) return;
     _seenSerial = serial;
     final s = services;
     if (clip != null) s.sound.playClip(clip, delay: const Duration(milliseconds: 700));
-    // Wrong answers only: a time-out is plain from the clock, and a message
-    // would just sit over the buttons.
-    if (event == GameEvent.wrong && miss != null && mounted) _stamp(miss);
+    // (A wrong answer shakes the question card - MissShake, in each game's
+    // view - and a time-out is plain from the clock: no message.)
     switch (event) {
       case GameEvent.buzz:
         s.sound.play(Sfx.buzzIn);
@@ -132,41 +128,7 @@ mixin GameScreenSupport<W extends StatefulWidget> on State<W>, TickerProviderSta
     }
   }
 
-  OverlayEntry? _missEntry;
-  AnimationController? _missAnim;
-
-  /// The wrong answer, stamped over the game ([MissStamp]). Taps go through it.
-  void _stamp(String name) {
-    _clearStamp();
-    final anim = AnimationController(vsync: this, duration: MissStamp.duration);
-    final entry = OverlayEntry(
-      builder: (_) => IgnorePointer(
-        child: Align(
-          alignment: const Alignment(0, 0.15),
-          child: AnimatedBuilder(
-            animation: anim,
-            builder: (_, __) => MissStamp(name: name, progress: anim.value),
-          ),
-        ),
-      ),
-    );
-    _missAnim = anim;
-    _missEntry = entry;
-    Overlay.of(context).insert(entry);
-    anim.forward().whenComplete(() {
-      if (_missEntry == entry) _clearStamp();
-    });
-  }
-
-  void _clearStamp() {
-    _missEntry?.remove();
-    _missEntry = null;
-    _missAnim?.dispose();
-    _missAnim = null;
-  }
-
   void disposeGameSupport() {
-    _clearStamp();
     if (_tableMode && !kIsWeb) SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
     _ticker?.dispose();
     _commentaryTimer?.cancel();

@@ -42,6 +42,19 @@ abstract interface class BuzzTarget implements Listenable {
   /// "2/3", shown as "Q 2/3" on the phones ('' = not shown).
   String get progress;
   String get modeName;
+
+  /// For the wrong-answer shake on the phones.
+  GameEvent? get lastEvent;
+  int get eventSerial;
+  String? get lastMiss;
+
+  /// A buzz on a joined phone that was tapped before the main phone's (which
+  /// counted at once): [team] answers instead. False if they can't.
+  bool overturn(int team);
+
+  /// Whether [team] may buzz this question at all (not locked out),
+  /// whatever's happening right now.
+  bool couldBuzz(int team);
 }
 
 /// Shared rules for buzzer games: first to buzz answers, a wrong answer locks
@@ -77,7 +90,9 @@ abstract class BuzzRaceController<Q> extends ChangeNotifier implements BuzzTarge
   (double, double) _pausedOpen = (0, 1);
   BuzzOutcome? outcome;
 
+  @override
   GameEvent? lastEvent;
+  @override
   int eventSerial = 0;
 
   Q get current => questions[questionIndex];
@@ -180,6 +195,25 @@ abstract class BuzzRaceController<Q> extends ChangeNotifier implements BuzzTarge
     notifyListeners();
   }
 
+  @override
+  bool couldBuzz(int team) {
+    final was = phase;
+    if (was != BuzzPhase.answering) return canBuzz(team);
+    phase = BuzzPhase.open;
+    final ok = canBuzz(team);
+    phase = was;
+    return ok;
+  }
+
+  @override
+  bool overturn(int team) {
+    if (phase != BuzzPhase.answering || answeringTeam == null || !couldBuzz(team)) return false;
+    answeringTeam = team;
+    setTimer(answerSeconds.toDouble()); // a full answer clock for them
+    notifyListeners();
+    return true;
+  }
+
   /// The answering team picked [player] from the list.
   void submit(Player player) {
     final team = answeringTeam;
@@ -199,6 +233,7 @@ abstract class BuzzRaceController<Q> extends ChangeNotifier implements BuzzTarge
 
   /// Shown after a wrong answer: who it counted as, or that time ran out —
   /// so a voice mix-up (Gary for Tim Cahill) is visible, not a mystery.
+  @override
   String? lastMiss;
 
   /// The team named someone the database doesn't know; the room voted.

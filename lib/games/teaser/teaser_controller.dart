@@ -58,12 +58,15 @@ class TeaserController extends ChangeNotifier implements BuzzTarget {
 
   /// The last wrong answer and who gave it — the host can overrule it.
   int? lastWrongTeam;
+  @override
   String? lastMiss;
 
   /// An answer that fits on paper but we couldn't confirm: the host's call.
   Player? hostCall;
 
+  @override
   GameEvent? lastEvent;
+  @override
   int eventSerial = 0;
 
   void _emit(GameEvent e) {
@@ -115,6 +118,25 @@ class TeaserController extends ChangeNotifier implements BuzzTarget {
         return;
     }
     notifyListeners();
+  }
+
+  @override
+  bool couldBuzz(int team) {
+    final was = phase;
+    if (was != BuzzPhase.answering) return canBuzz(team);
+    phase = BuzzPhase.open;
+    final ok = canBuzz(team);
+    phase = was;
+    return ok;
+  }
+
+  @override
+  bool overturn(int team) {
+    if (phase != BuzzPhase.answering || answeringTeam == null || !couldBuzz(team)) return false;
+    answeringTeam = team;
+    _setTimer(answerSeconds.toDouble());
+    notifyListeners();
+    return true;
   }
 
   @override

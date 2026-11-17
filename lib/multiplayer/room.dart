@@ -35,12 +35,22 @@ class RoomMember {
 }
 
 class RemoteBuzz {
-  const RemoteBuzz({required this.device, required this.question, required this.at});
+  const RemoteBuzz({required this.device, required this.question, required this.at, this.tap, this.received = 0});
   final String device;
   final String question;
 
-  /// The database's clock, so phones are timed fairly against each other.
+  /// When it reached the database (the database's clock).
   final int at;
+
+  /// When it was tapped, on the database's clock ([ServerClock]); null from a
+  /// phone that hasn't lined its clock up yet.
+  final int? tap;
+
+  /// When the host heard it, on the database's clock.
+  final int received;
+
+  /// Best guess at the tap: [tap], or [at] less a typical upload.
+  int get tappedAt => tap ?? at - 150;
 }
 
 class RemoteAnswer {
@@ -67,6 +77,10 @@ class HostRoom extends ChangeNotifier {
 
   /// Phones that have picked a name, by device.
   Map<String, RoomMember> members = const {};
+
+  /// The database's clock, as this phone reckons it (for fair buzzes).
+  final ServerClock serverClock = ServerClock();
+  Timer? _tick;
 
   /// When each phone last checked in (its member entry's "at" changing:
   /// joined phones re-save it every [GuestRoom.heartbeat]).
@@ -109,14 +123,20 @@ class HostRoom extends ChangeNotifier {
   static HostRoom reattach(RoomLink link, String code) => HostRoom._(link, code).._listen();
 
   /// Names to pick from on the phones (call again if the team sheet changes).
-  Future<void> setTeams(List<TeamSetup> teams) => link.put('$_root/host', {
+  Future<void> setTeams(List<TeamSetup> teams) => serverClock.stamp(() => link.putRead('$_root/host', {
         'teams': [
           for (final t in teams) {'name': t.name, 'color': t.colorIndex, 'players': t.players},
         ],
         'at': serverTime,
-      });
+      }));
 
   void _listen() {
+    // Keeps this phone's clock lined up with the database's (and phones see
+    // the room's still alive).
+    unawaited(serverClock.stamp(() => link.putRead('$_root/host/at', serverTime)));
+    _tick ??= Timer.periodic(const Duration(seconds: 30), (_) {
+      unawaited(serverClock.stamp(() => link.putRead('$_root/host/at', serverTime)));
+    });
     _subs.add(link.watch('$_root/members').listen((v) {
       members = _members(v);
       for (final e in asMap(v).entries) {
@@ -131,7 +151,13 @@ class HostRoom extends ChangeNotifier {
         if (!_seenBuzzes.add(e.key)) continue;
         final m = asMap(e.value);
         if (m['d'] is String && m['k'] is String) {
-          _buzzes.add(RemoteBuzz(device: m['d']! as String, question: m['k']! as String, at: (m['at'] as num?)?.toInt() ?? 0));
+          _buzzes.add(RemoteBuzz(
+            device: m['d']! as String,
+            question: m['k']! as String,
+            at: (m['at'] as num?)?.toInt() ?? 0,
+            tap: (m['tap'] as num?)?.toInt(),
+            received: serverClock.now,
+          ));
         }
       }
     }));
@@ -210,6 +236,8 @@ class HostRoom extends ChangeNotifier {
   }
 
   Future<void> close() async {
+    _tick?.cancel(); // no more saves once it's over (they'd bring the room back)
+    _tick = null;
     for (final s in _subs) {
       await s.cancel();
     }
@@ -221,6 +249,7 @@ class HostRoom extends ChangeNotifier {
 
   @override
   void dispose() {
+    _tick?.cancel();
     for (final s in _subs) {
       s.cancel();
     }
@@ -319,12 +348,24 @@ class GuestRoom extends ChangeNotifier {
   bool taken(int team, String name) =>
       members.values.any((m) => m.team == team && m.name == name && m.device != device);
 
-  Future<void> claim(int team, String name) =>
-      link.put('$_root/members/$device', {'name': name, 'team': team, 'at': serverTime});
+  /// Also lines this phone's clock up with the database's ([serverClock]):
+  /// every check-in is a timed save.
+  Future<void> claim(int team, String name) => serverClock.stamp(
+      () => link.putRead('$_root/members/$device', {'name': name, 'team': team, 'at': serverTime}));
+
+  /// The database's clock, as this phone reckons it.
+  final ServerClock serverClock = ServerClock();
 
   Future<void> leave() => link.remove('$_root/members/$device');
 
-  Future<void> buzz(String question) => link.push('$_root/buzzes', {'d': device, 'k': question, 'at': serverTime});
+  /// Carries the moment of the tap on the shared clock, so the main phone
+  /// can judge it fairly against its own buzzers.
+  Future<void> buzz(String question) => link.push('$_root/buzzes', {
+        'd': device,
+        'k': question,
+        'at': serverTime,
+        if (serverClock.synced) 'tap': serverClock.now,
+      });
 
   Future<void> answer(String question, String playerId) =>
       link.push('$_root/answers', {'d': device, 'k': question, 'p': playerId});

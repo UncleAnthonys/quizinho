@@ -404,7 +404,12 @@ class _GuestGameState extends State<_GuestGame> with SingleTickerProviderStateMi
     final iAnswer = early || phase == 'answering' && answering['device'] == widget.room.device;
     final result = asMap(v['result']);
 
-    final question = _question(v, compact: iAnswer);
+    final miss = asMap(v['miss']);
+    final question = MissShake(
+      trigger: (miss['n'] as num?)?.toInt(),
+      name: miss['name'] as String?,
+      child: _question(v, compact: iAnswer),
+    );
 
     Widget action;
     if (iAnswer) {

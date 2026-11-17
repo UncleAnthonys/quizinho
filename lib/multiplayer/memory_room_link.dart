@@ -33,6 +33,12 @@ class MemoryRoomLink extends RoomLink {
   }
 
   @override
+  Future<Object?> putRead(String path, Object? value) async {
+    await put(path, value);
+    return readAt(_tree, pathParts(path));
+  }
+
+  @override
   Future<void> patch(String path, Map<String, Object?> values) async {
     _tree = writeAt(_tree, pathParts(path), _stamp(values), merge: true);
     _changes.add(null);

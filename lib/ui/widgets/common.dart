@@ -383,62 +383,86 @@ class Collapse extends StatelessWidget {
       );
 }
 
-/// A wrong answer, stamped on the pitch: red card, cross, the name struck
-/// through ("WRONG" above). Pops in, holds, fades - in place of
-/// a plain snackbar. Shown by GameScreenSupport; [progress] drives it (0..1
-/// over [MissStamp.duration]), or null for a still (screenshots).
-class MissStamp extends StatelessWidget {
-  const MissStamp({super.key, required this.name, this.progress});
-  final String name;
-  final double? progress;
-
-  static const duration = Duration(milliseconds: 1900);
+/// A wrong answer: the question card shakes, flashes red, and the name
+/// that was wrong shows on it crossed out for a moment - on the main phone
+/// and every joined phone at once. [trigger] changes once per wrong answer
+/// (the game's event serial); null = nothing to show.
+class MissShake extends StatefulWidget {
+  const MissShake({super.key, required this.trigger, required this.name, required this.child});
+  final int? trigger;
+  final String? name;
+  final Widget child;
 
   @override
-  Widget build(BuildContext context) {
-    final t = progress ?? 0.5;
-    // Pop in over the first 12%, fade over the last 18%.
-    final pop = Curves.easeOutBack.transform((t / 0.12).clamp(0.0, 1.0));
-    final fade = t < 0.82 ? 1.0 : (1 - (t - 0.82) / 0.18).clamp(0.0, 1.0);
-    return Opacity(
-      opacity: fade * (t < 0.12 ? (t / 0.12).clamp(0.0, 1.0) : 1),
-      child: Transform.scale(
-        scale: 0.7 + 0.3 * pop,
-        child: Transform.rotate(
-          angle: -0.035,
-          child: Container(
-            margin: const EdgeInsets.symmetric(horizontal: 28),
-            padding: const EdgeInsets.fromLTRB(18, 12, 22, 14),
-            decoration: BoxDecoration(
-              color: Palette.danger,
-              borderRadius: BorderRadius.circular(18),
-              border: Border.all(color: Colors.white.withValues(alpha: 0.9), width: 3),
-              boxShadow: const [BoxShadow(color: Colors.black54, blurRadius: 24, offset: Offset(0, 8))],
-            ),
-            child: Row(mainAxisSize: MainAxisSize.min, children: [
-              const Icon(Icons.close_rounded, color: Colors.white, size: 46),
-              const SizedBox(width: 10),
-              Flexible(
-                child: Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start, children: [
-                  Text('WRONG', style: AppText.label(13, color: Colors.white)),
-                  FittedBox(
-                    fit: BoxFit.scaleDown,
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      name.toUpperCase(),
-                      style: AppText.headline(34, color: Colors.white).copyWith(
-                        decoration: TextDecoration.lineThrough,
-                        decorationColor: Colors.white,
-                        decorationThickness: 3,
+  State<MissShake> createState() => _MissShakeState();
+}
+
+class _MissShakeState extends State<MissShake> with SingleTickerProviderStateMixin {
+  late final AnimationController _a = AnimationController(vsync: this, duration: const Duration(milliseconds: 1500));
+  String? _name;
+
+  @override
+  void didUpdateWidget(MissShake old) {
+    super.didUpdateWidget(old);
+    if (widget.trigger != null && widget.trigger != old.trigger) {
+      _name = widget.name;
+      _a.forward(from: 0);
+    }
+  }
+
+  @override
+  void dispose() {
+    _a.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) => AnimatedBuilder(
+        animation: _a,
+        child: widget.child,
+        builder: (context, child) {
+          final t = _a.value;
+          final running = _a.isAnimating;
+          // A quick shake in the first third; the red and the name fade out.
+          final shake = t < 0.35 ? sin(t / 0.35 * pi * 6) * 12 * (1 - t / 0.35) : 0.0;
+          final red = !running ? 0.0 : (t < 0.15 ? t / 0.15 : (1 - (t - 0.15) / 0.85)).clamp(0.0, 1.0);
+          return Transform.translate(
+            offset: Offset(shake, 0),
+            child: Stack(children: [
+              child!,
+              if (red > 0)
+                Positioned.fill(
+                  child: IgnorePointer(
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Palette.danger.withValues(alpha: 0.82 * red),
+                        borderRadius: BorderRadius.circular(18),
+                      ),
+                      alignment: Alignment.center,
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: Opacity(
+                        opacity: red,
+                        child: FittedBox(
+                          fit: BoxFit.scaleDown,
+                          child: Row(mainAxisSize: MainAxisSize.min, children: [
+                            const Icon(Icons.close_rounded, color: Colors.white, size: 40),
+                            const SizedBox(width: 8),
+                            Text(
+                              (_name ?? '').toUpperCase(),
+                              style: AppText.headline(40, color: Colors.white).copyWith(
+                                decoration: TextDecoration.lineThrough,
+                                decorationColor: Colors.white,
+                                decorationThickness: 3,
+                              ),
+                            ),
+                          ]),
+                        ),
                       ),
                     ),
                   ),
-                ]),
-              ),
+                ),
             ]),
-          ),
-        ),
-      ),
-    );
-  }
+          );
+        },
+      );
 }
