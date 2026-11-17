@@ -382,3 +382,64 @@ class Collapse extends StatelessWidget {
         ),
       );
 }
+
+/// A wrong answer, stamped on the pitch: red card, cross, the name struck
+/// through ("WRONG" / "TIME UP" above). Pops in, holds, fades - in place of
+/// a plain snackbar. Shown by GameScreenSupport; [progress] drives it (0..1
+/// over [MissStamp.duration]), or null for a still (screenshots).
+class MissStamp extends StatelessWidget {
+  const MissStamp({super.key, required this.name, this.timeUp = false, this.progress});
+  final String name;
+  final bool timeUp;
+  final double? progress;
+
+  static const duration = Duration(milliseconds: 1900);
+
+  @override
+  Widget build(BuildContext context) {
+    final t = progress ?? 0.5;
+    // Pop in over the first 12%, fade over the last 18%.
+    final pop = Curves.easeOutBack.transform((t / 0.12).clamp(0.0, 1.0));
+    final fade = t < 0.82 ? 1.0 : (1 - (t - 0.82) / 0.18).clamp(0.0, 1.0);
+    return Opacity(
+      opacity: fade * (t < 0.12 ? (t / 0.12).clamp(0.0, 1.0) : 1),
+      child: Transform.scale(
+        scale: 0.7 + 0.3 * pop,
+        child: Transform.rotate(
+          angle: -0.035,
+          child: Container(
+            margin: const EdgeInsets.symmetric(horizontal: 28),
+            padding: const EdgeInsets.fromLTRB(18, 12, 22, 14),
+            decoration: BoxDecoration(
+              color: Palette.danger,
+              borderRadius: BorderRadius.circular(18),
+              border: Border.all(color: Colors.white.withValues(alpha: 0.9), width: 3),
+              boxShadow: const [BoxShadow(color: Colors.black54, blurRadius: 24, offset: Offset(0, 8))],
+            ),
+            child: Row(mainAxisSize: MainAxisSize.min, children: [
+              const Icon(Icons.close_rounded, color: Colors.white, size: 46),
+              const SizedBox(width: 10),
+              Flexible(
+                child: Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start, children: [
+                  Text(timeUp ? 'TIME UP' : 'WRONG', style: AppText.label(13, color: Colors.white)),
+                  FittedBox(
+                    fit: BoxFit.scaleDown,
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      name.toUpperCase(),
+                      style: AppText.headline(34, color: Colors.white).copyWith(
+                        decoration: TextDecoration.lineThrough,
+                        decorationColor: Colors.white,
+                        decorationThickness: 3,
+                      ),
+                    ),
+                  ),
+                ]),
+              ),
+            ]),
+          ),
+        ),
+      ),
+    );
+  }
+}

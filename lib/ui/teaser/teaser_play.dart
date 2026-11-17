@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import '../../core/app_services.dart';
 import '../../core/theme.dart';
-import '../../domain/player_index.dart';
 import '../../domain/tournament.dart';
 import '../../games/buzz_race_controller.dart';
 import '../../games/teaser/teaser_controller.dart';
@@ -149,28 +148,12 @@ class TeaserPlay extends StatelessWidget {
 
   Widget _revealed(BuildContext context) {
     final c = controller;
-    final herrings = _herrings(c, AppScope.read(context).repo.players);
     return Column(mainAxisSize: MainAxisSize.min, children: [
       TeaserReveal(question: c.teaser.question, answers: c.teaser.answerNames, showQuestion: showQuestion),
-      if (herrings.isNotEmpty) ...[
-        const SizedBox(height: 12),
-        Text('NOT THESE', style: AppText.label(13)),
-        const SizedBox(height: 4),
-        for (final (name, why) in herrings)
-          Padding(
-            padding: const EdgeInsets.only(bottom: 4),
-            child: Text('$name - $why', textAlign: TextAlign.center, style: AppText.label(13, color: Palette.text)),
-          ),
-      ],
       // The last wrong guess, in case our data missed it: small, under the answer.
       if (c.lastMiss != null && c.canOverrule) ...[const SizedBox(height: 12), _countIt()],
     ]);
   }
 
-  /// Red herrings worth showing: (name, why not), a few at most.
-  List<(String, String)> _herrings(TeaserController c, PlayerIndex players) => [
-        for (final e in c.teaser.herrings.entries.take(3))
-          if (players.byId(e.key) case final p?)
-            (p.name, e.value.length > 140 ? '${e.value.substring(0, 137)}…' : e.value),
-      ];
+
 }

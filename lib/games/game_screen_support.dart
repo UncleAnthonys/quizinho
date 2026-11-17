@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
-import 'package:flutter/material.dart' show ScaffoldMessenger, SnackBar;
+import 'package:flutter/material.dart' show Overlay, OverlayEntry;
 import 'package:flutter/services.dart' show DeviceOrientation, SystemChrome;
 import 'package:flutter/widgets.dart';
 
@@ -10,6 +10,7 @@ import '../core/app_services.dart';
 import '../core/sound_service.dart';
 import '../domain/tournament.dart';
 import '../multiplayer/room.dart' show HostRoom;
+import '../ui/widgets/common.dart' show MissStamp;
 import 'buzz_race_controller.dart' show GameEvent;
 
 /// What every game screen receives from the tournament flow.
@@ -70,9 +71,7 @@ mixin GameScreenSupport<W extends StatefulWidget> on State<W>, TickerProviderSta
     final s = services;
     if (clip != null) s.sound.playClip(clip, delay: const Duration(milliseconds: 700));
     if ((event == GameEvent.wrong || event == GameEvent.timeUp) && miss != null && mounted) {
-      ScaffoldMessenger.of(context)
-        ..hideCurrentSnackBar()
-        ..showSnackBar(SnackBar(content: Text('✗ $miss'), duration: const Duration(milliseconds: 1800)));
+      _stamp(miss, timeUp: event == GameEvent.timeUp);
     }
     switch (event) {
       case GameEvent.buzz:
@@ -133,7 +132,41 @@ mixin GameScreenSupport<W extends StatefulWidget> on State<W>, TickerProviderSta
     }
   }
 
+  OverlayEntry? _missEntry;
+  AnimationController? _missAnim;
+
+  /// The wrong answer, stamped over the game ([MissStamp]).
+  void _stamp(String name, {bool timeUp = false}) {
+    _clearStamp();
+    final anim = AnimationController(vsync: this, duration: MissStamp.duration);
+    final entry = OverlayEntry(
+      builder: (_) => IgnorePointer(
+        child: Align(
+          alignment: const Alignment(0, 0.15),
+          child: AnimatedBuilder(
+            animation: anim,
+            builder: (_, __) => MissStamp(name: name, timeUp: timeUp, progress: anim.value),
+          ),
+        ),
+      ),
+    );
+    _missAnim = anim;
+    _missEntry = entry;
+    Overlay.of(context).insert(entry);
+    anim.forward().whenComplete(() {
+      if (_missEntry == entry) _clearStamp();
+    });
+  }
+
+  void _clearStamp() {
+    _missEntry?.remove();
+    _missEntry = null;
+    _missAnim?.dispose();
+    _missAnim = null;
+  }
+
   void disposeGameSupport() {
+    _clearStamp();
     if (_tableMode && !kIsWeb) SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
     _ticker?.dispose();
     _commentaryTimer?.cancel();

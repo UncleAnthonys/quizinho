@@ -298,6 +298,24 @@ void main() {
     );
   }, skip: !_shots);
 
+  // A wrong answer, stamped over the game (replaces the old snackbar).
+  testWidgets('Wrong answer stamp', (tester) async {
+    await shot(
+      tester,
+      'miss_stamp',
+      Stack(children: [
+        Column(children: [
+          _scores(),
+          const SizedBox(height: 40),
+          Text('MANCHESTER CITY', textAlign: TextAlign.center, style: AppText.headline(44)),
+          const Icon(Icons.swap_vert_rounded, color: Palette.yellow, size: 36),
+          Text('BARCELONA', textAlign: TextAlign.center, style: AppText.headline(44)),
+        ]),
+        const Align(alignment: Alignment(0, 0.15), child: MissStamp(name: 'Pedri')),
+      ]),
+    );
+  }, skip: !_shots);
+
   // The longest headers a grid can have, to check they fit their squares.
   testWidgets('Tic-Tac-Toe long headers', (tester) async {
     await shot(
