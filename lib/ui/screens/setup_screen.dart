@@ -287,6 +287,12 @@ class _SetupScreenState extends State<SetupScreen> {
                           : null,
                     ),
                 ]),
+                if (_modes.contains(GameModeId.headsUp))
+                  Padding(
+                    padding: const EdgeInsets.only(top: 8),
+                    child: Text('On Your Head needs at least 2 players on every team.',
+                        style: AppText.label(13, color: Palette.gold)),
+                  ),
                 if (!_modes.any((m) => m != GameModeId.wildcard))
                   const Padding(
                     padding: EdgeInsets.only(top: 8),

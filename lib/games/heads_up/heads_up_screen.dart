@@ -1,11 +1,11 @@
 import 'dart:async';
 import 'dart:math';
 
-import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 
 import '../../core/app_services.dart';
+import '../../core/motion_permission.dart';
 import '../../core/sound_service.dart';
 import '../../core/theme.dart';
 import '../../domain/game_mode.dart';
@@ -128,6 +128,10 @@ class _HeadsUpScreenState extends State<HeadsUpScreen>
     });
   }
 
+  String get _packTitle => _packId == _mix
+      ? 'Mix it up'
+      : _packs.firstWhere((p) => p.id == _packId, orElse: () => _packs.first).title;
+
   List<String> _buildDeck() {
     final source = _packId == _mix
         ? [for (final p in _packs) ...p.cards]
@@ -198,27 +202,39 @@ class _HeadsUpScreenState extends State<HeadsUpScreen>
         ]),
       ),
       const SizedBox(height: 16),
-      Text('PICK A PACK', style: AppText.label(13)),
-      const SizedBox(height: 6),
-      Wrap(spacing: 8, runSpacing: 8, children: [
-        for (final (id, title) in [(_mix, 'Mix it up'), for (final p in _packs) (p.id, p.title)])
-          ChoiceChip(
-            label: Text(title),
-            selected: _packId == id,
-            onSelected: (_) => setState(() => _packId = id),
-          ),
-      ]),
+      // One pack for the whole round, picked before the first turn, so every
+      // team plays the same difficulty.
+      if (c.turnsTaken == 0) ...[
+        Text('PICK A PACK - EVERY TEAM PLAYS THE SAME ONE', style: AppText.label(13)),
+        const SizedBox(height: 6),
+        Wrap(spacing: 8, runSpacing: 8, children: [
+          for (final (id, title) in [(_mix, 'Mix it up'), for (final p in _packs) (p.id, p.title)])
+            ChoiceChip(
+              label: Text(title),
+              selected: _packId == id,
+              onSelected: (_) => setState(() => _packId = id),
+            ),
+        ]),
+      ] else
+        Text('PACK: ${_packTitle.toUpperCase()} - SAME AS THE FIRST TEAM', style: AppText.label(13)),
       const SizedBox(height: 16),
       Container(
         padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(color: Colors.black.withValues(alpha: 0.3), borderRadius: BorderRadius.circular(14)),
         child: Text(
-          '${c.turnSeconds} seconds. Tilt the phone DOWN for correct, UP to pass - or tap the buttons.',
+          '${c.turnSeconds} seconds. Got it? Tilt the phone DOWN. Don’t know? Tilt it UP to pass.',
           style: const TextStyle(fontSize: 15, height: 1.4),
         ),
       ),
       const SizedBox(height: 16),
-      BigButton(label: 'Start', icon: Icons.play_arrow_rounded, onPressed: () => c.startTurn(_buildDeck())),
+      BigButton(
+        label: 'Start',
+        icon: Icons.play_arrow_rounded,
+        onPressed: () {
+          requestMotionPermission(); // iPhone browsers: the tilt needs asking for, from a tap
+          c.startTurn(_buildDeck());
+        },
+      ),
     ]);
   }
 
@@ -228,8 +244,11 @@ class _HeadsUpScreenState extends State<HeadsUpScreen>
     // Sideways on the forehead: turn the card only when the screen itself is
     // still upright (rotation lock on, or an app locked to portrait). A screen
     // that has turned itself (iPad, a browser) is already the right way round.
+    // SizedBox.expand: the rotated card fills the screen (loose constraints
+    // left the countdown in a strip across the top of a portrait phone).
     return LayoutBuilder(
-      builder: (context, box) => RotatedBox(
+      builder: (context, box) => SizedBox.expand(
+        child: RotatedBox(
       quarterTurns: box.maxHeight > box.maxWidth ? _quarterTurns : 0,
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 150),
@@ -261,9 +280,13 @@ class _HeadsUpScreenState extends State<HeadsUpScreen>
                     ),
                   ),
                 ),
-                // The app tilts (down = correct, up = pass); buttons only in a
-                // browser, where the phone may not let the page read the tilt.
-                if (kIsWeb) Row(children: [
+                // Tilting does it (down = correct, up = pass). Buttons only where
+                // the phone can't report its tilt (a laptop, a browser that
+                // wasn't given permission).
+                ValueListenableBuilder<bool>(
+                  valueListenable: _tilt.sensing,
+                  builder: (context, sensing, buttons) => sensing ? const SizedBox.shrink() : buttons!,
+                  child: Row(children: [
                   Expanded(
                     child: BigButton(
                       label: 'Pass',
@@ -283,10 +306,12 @@ class _HeadsUpScreenState extends State<HeadsUpScreen>
                       onPressed: _correct,
                     ),
                   ),
-                ]),
+                  ]),
+                ),
               ]),
       ),
-    ),
+        ),
+      ),
     );
   }
 

@@ -93,7 +93,7 @@ enum GameModeId {
     playable: true,
     rules: [
       'One player holds the phone to their forehead. Their team describes the name on screen.',
-      'Tilt DOWN when you get it, UP to pass. Or use the buttons.',
+      'Got it? Tilt the phone DOWN. Don’t know? Tilt it UP to pass.',
       'Every team gets one go. Most correct cards wins +3.',
     ],
     whoPlays: 'The named player guesses; their teammates describe. Other teams keep quiet!',

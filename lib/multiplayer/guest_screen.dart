@@ -425,6 +425,10 @@ class _GuestGameState extends State<_GuestGame> with SingleTickerProviderStateMi
             locked: false,
             onBuzz: () {
               s.haptic(HapticStrength.heavy);
+              // A player who types: the keyboard comes up with the buzz, so
+              // it's already there when the answer box appears.
+              final voice = s.voice;
+              if (kIsWeb && (voice == null || !voice.enabled || voice.preferTyping)) primeKeyboard();
               setState(() => _buzzedOn = q);
               widget.room.buzz(q);
               // The main phone should take it within a second; if it

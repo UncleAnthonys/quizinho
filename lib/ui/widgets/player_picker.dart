@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import '../../core/flags.dart';
 import '../../core/theme.dart';
 import '../../core/voice_service.dart';
+import '../../core/web_keyboard.dart';
 import '../../data/models.dart';
 import '../../domain/player_index.dart';
 
@@ -366,8 +367,9 @@ class _PlayerPickerState extends State<PlayerPicker> {
         controller: _controller,
         focusNode: _focus,
         // Keyboard straight up when there's no mic, or the player types (in
-        // the app: a browser only shows the keyboard after a tap on the box).
-        autofocus: !_voiceOn || (!kIsWeb && !_autoListen),
+        // the app; in a browser only when the buzz tap already opened it -
+        // otherwise a browser only shows the keyboard after a tap on the box).
+        autofocus: !_voiceOn || (!_autoListen && (!kIsWeb || keyboardPrimed)),
         autocorrect: false,
         enableSuggestions: false,
         autofillHints: const <String>[], // stops Safari offering contacts

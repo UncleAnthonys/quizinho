@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
+
 import 'package:sensors_plus/sensors_plus.dart';
 
 /// Turns accelerometer readings into Heads Up gestures.
@@ -29,6 +31,11 @@ class TiltDetector {
   bool enabled = false;
   int _turns = 0;
 
+  /// True once the phone has reported its tilt at all (the app always does;
+  /// a laptop never does; an iPhone browser only after permission). Until
+  /// then the game shows Pass/Correct buttons instead.
+  final ValueNotifier<bool> sensing = ValueNotifier(false);
+
   void start() {
     if (_sub != null) return;
     try {
@@ -45,6 +52,7 @@ class TiltDetector {
   }
 
   void _onEvent(AccelerometerEvent e) {
+    if (!sensing.value) sensing.value = true;
     if (e.x.abs() > _trigger) {
       final turns = e.x > 0 ? 1 : 3;
       if (turns != _turns) {
