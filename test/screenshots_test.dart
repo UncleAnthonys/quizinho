@@ -298,6 +298,23 @@ void main() {
     );
   }, skip: !_shots);
 
+  // The longest headers a grid can have, to check they fit their squares.
+  testWidgets('Tic-Tac-Toe long headers', (tester) async {
+    await shot(
+      tester,
+      'ttt_long_headers',
+      TttLayout(
+        data: {
+          ...ttt('choosing'),
+          'rows': ['Managed by Pochettino (club)', 'Villarreal', 'Managed by Luis Enrique (club)'],
+          'cols': ['Club teammate of Owen', 'Manchester United', 'Managed by Guardiola (club)'],
+        },
+        onTap: (_) {},
+        bottom: const SizedBox.shrink(),
+      ),
+    );
+  }, skip: !_shots);
+
   // The answer box with the mic on: listening, hearing words, and the
   // player who's chosen the keyboard (box ready to type, mic waits for a tap).
   testWidgets('Answer box', (tester) async {

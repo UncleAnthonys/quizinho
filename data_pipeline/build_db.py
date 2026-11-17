@@ -539,7 +539,7 @@ def generate_grid_categories(clubs, players):
     managers = json.loads((SEED / "grid_managers.json").read_text(encoding="utf-8"))["managers"]
     for m in managers:
         cid = f"mgr:{slug_id(m['name'])}"
-        cats.append({"id": cid, "label": f"Managed by {m['short']}", "kind": "manager"})
+        cats.append({"id": cid, "label": f"Managed by {m['short']} (club)", "kind": "manager"})
         jobs = [(c, int(a[:4]), int(b[:4]) if b else dt.date.today().year) for c, a, b in m["spells"]]
         own[cid] = {c for c, _, _ in jobs}
         members[cid] = {

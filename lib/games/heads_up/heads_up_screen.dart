@@ -216,7 +216,7 @@ class _HeadsUpScreenState extends State<HeadsUpScreen>
             ),
         ]),
       ] else
-        Text('PACK: ${_packTitle.toUpperCase()} - SAME AS THE FIRST TEAM', style: AppText.label(13)),
+        Text('PACK: ${_packTitle.toUpperCase()}', style: AppText.label(13)),
       const SizedBox(height: 16),
       Container(
         padding: const EdgeInsets.all(12),
