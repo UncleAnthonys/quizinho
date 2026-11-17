@@ -374,7 +374,7 @@ class _PlayerPickerState extends State<PlayerPicker> {
                   icon: Icon(_listening ? Icons.graphic_eq_rounded : Icons.mic_rounded, color: widget.accent),
                   onPressed: _listening ? null : _backToMic,
                 )
-              : Icon(Icons.search, color: widget.accent),
+              : Icon(Icons.keyboard_rounded, color: widget.accent),
         ),
         // The keyboard's own key judges a full answer typed with no list
         // showing ("Not recognised - check the spelling"); otherwise you

@@ -77,7 +77,7 @@ FIFA = {
 }
 LOAN = {"Q2914547"}  # loan (19,700 uses in the dump; other acquisition codes are transfers)
 # Formal bits to strip from club names for display ("AFC Ajax" -> "Ajax").
-CLUB_PREFIX = re.compile(r"^(F\.?C\.?|A\.?F\.?C\.?|C\.?F\.?|S\.?L\.?|SV|S\.?S\.?C\.?|R\.?C\.?D\.?|K\.?R\.?C\.?|E\.?C\.?|S\.?C\.?) ")
+CLUB_PREFIX = re.compile(r"^(P\.?F\.?C\.?|F\.?C\.?|A\.?F\.?C\.?|C\.?F\.?|S\.?L\.?|SV|S\.?S\.?C\.?|R\.?C\.?D\.?|K\.?R\.?C\.?|E\.?C\.?|S\.?C\.?) ")
 CLUB_SUFFIX = re.compile(r" (F\.?C\.?|A\.?F\.?C\.?|C\.?F\.?|S\.?C\.?|E\.?C\.?|FBPA|Club de F[úu]tbol|Football Club|K\.?V\.?|S\.?A\.?D\.?)$")
 POSITION_CODES = [
     ("goalkeeper", "GK"), ("centre-back", "CB"), ("center back", "CB"), ("full-back", "FB"), ("fullback", "FB"),
