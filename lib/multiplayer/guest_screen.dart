@@ -390,7 +390,15 @@ class _GuestGameState extends State<_GuestGame> with SingleTickerProviderStateMi
     final canBuzz = [for (final t in asList(v['canBuzz'])) (t as num).toInt()];
     final inFaceOff = faceOff.isEmpty || faceOff['${me.team}'] == me.name;
     final myBuzzer = phase == 'open' && canBuzz.contains(me.team) && inFaceOff;
-    final iAnswer = phase == 'answering' && answering['device'] == widget.room.device;
+    // A player who types gets the answer box the moment they buzz, before
+    // the main phone confirms it: then it's already there when the finger
+    // lifts, the only moment an iPhone lets the keyboard open. If someone
+    // else was first, it goes again (and the main phone ignores an answer
+    // from a phone that hasn't got the turn).
+    final voice = s.voice;
+    final types = kIsWeb && (voice == null || !voice.enabled || voice.preferTyping);
+    final early = types && _buzzedOn == q && phase == 'open';
+    final iAnswer = early || phase == 'answering' && answering['device'] == widget.room.device;
     final result = asMap(v['result']);
 
     final question = _question(v, compact: iAnswer);
@@ -427,8 +435,7 @@ class _GuestGameState extends State<_GuestGame> with SingleTickerProviderStateMi
               s.haptic(HapticStrength.heavy);
               // A player who types: the keyboard comes up with the buzz, so
               // it's already there when the answer box appears.
-              final voice = s.voice;
-              if (kIsWeb && (voice == null || !voice.enabled || voice.preferTyping)) primeKeyboard();
+              if (types) primeKeyboard();
               setState(() => _buzzedOn = q);
               widget.room.buzz(q);
               // The main phone should take it within a second; if it
