@@ -11,6 +11,12 @@ name: Weekly data refresh
 
 on:
   workflow_dispatch:
+    inputs:
+      accept_all:
+        description: "Put every career change live now (only after changing the rules; normally a past-career change waits for a second refresh)"
+        default: "no"
+        type: choice
+        options: ["no", "yes"]
   schedule:
     - cron: "17 4 * * 1" # Mondays 04:17 UTC
     - cron: "17 4 * 1,6,7,8,9 4" # and Thursdays in transfer-window months
@@ -64,7 +70,7 @@ jobs:
           cp data_pipeline/seed/players.json "$RUNNER_TEMP/old_players.json"
           cp data_pipeline/seed/clubs.json "$RUNNER_TEMP/old_clubs.json"
           pip install --quiet espeakng-loader phonemizer
-          bash scripts/ci_run.sh "Normalise" python3 data_pipeline/normalise.py
+          bash scripts/ci_run.sh "Normalise" python3 data_pipeline/normalise.py ${{ inputs.accept_all == 'yes' && '--accept-all' || '' }}
           bash scripts/ci_run.sh "Database" python3 data_pipeline/build_db.py
           bash scripts/ci_run.sh "Voice vocabulary" python3 data_pipeline/voice_vocab.py
           bash scripts/ci_run.sh "Top 10" python3 data_pipeline/top10_build.py

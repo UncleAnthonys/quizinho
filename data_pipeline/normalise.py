@@ -17,6 +17,7 @@ Rules for "played for a club" (see README):
 from __future__ import annotations
 
 import argparse
+import datetime as dt
 import gzip
 import json
 import pathlib
@@ -343,7 +344,7 @@ def cross_check(by_player: dict, players_raw: list[dict], keep_clubs: dict, stat
         a0, a1 = s["start"], s["end"] or current
         return any(min(a1, i["end"] or current) - max(a0, i["start"]) >= 1 for i in ib if not i["loan"])
 
-    for q in set(by_player) | set(infobox) | set(pl):
+    for q in sorted(set(by_player) | set(infobox) | set(pl)):
         wd = by_player.get(q, [])
         # 0 league games still counts if the career-statistics table shows
         # cup or European games there ("total"): he played for them.
@@ -387,7 +388,7 @@ def cross_check(by_player: dict, players_raw: list[dict], keep_clubs: dict, stat
                 note(q, "premier_league_only_added", c, f"{a}-{end or ''}")
         if merged:
             by_player[q] = merged
-    anomalies.sort(key=lambda a: -a["sitelinks"])
+    anomalies.sort(key=lambda a: (-a["sitelinks"], a["wikidata"], a["kind"], a["club"]))
     kinds = Counter(a["kind"] for a in anomalies)
     (SEED / "career_anomalies.json").write_text(json.dumps(
         {"_note": "Where Wikidata, the Wikipedia infobox and the Premier League line-ups disagree on a career, "
@@ -397,10 +398,74 @@ def cross_check(by_player: dict, players_raw: list[dict], keep_clubs: dict, stat
     print(f"careers cross-checked: {dict(kinds)}")
 
 
+class CareerGuard:
+    """Vandalism guard. Wikipedia and Wikidata are open to anyone, and bad
+    edits are usually undone within hours, so a change to a player's PAST
+    career (a club gained or lost, against what's live now in
+    seed/players.json) only goes live once two refreshes in a row have seen
+    it. Until then the live version stays, and the change waits in
+    seed/career_pending.json; one that isn't seen again is forgotten.
+    New transfers (a club starting this season or last) and new players go
+    live straight away. accept_all puts everything live (after a rule fix).
+    Applied to each player's final career, exactly as it would ship."""
+
+    def __init__(self, keep_clubs: dict, stats: Counter, accept_all: bool = False) -> None:
+        self.keep_clubs, self.stats, self.accept_all = keep_clubs, stats, accept_all
+        live_path, self.pending_path = SEED / "players.json", SEED / "career_pending.json"
+        self.live = ({p["wikidata"]: p["career"] for p in json.loads(live_path.read_text(encoding="utf-8"))["players"]}
+                     if live_path.exists() else {})
+        self.pending = (json.loads(self.pending_path.read_text(encoding="utf-8")).get("pending", {})
+                        if self.pending_path.exists() and not accept_all else {})
+        self.recent = dt.date.today().year - 1
+        self.still: dict[str, dict[str, str]] = {}
+
+    def apply(self, q: str, career: list[dict]) -> list[dict]:
+        if q not in self.live:
+            return career  # a new player: nothing live to protect
+        was = {s[0]: s for s in self.live[q]}
+        now = {s["club"] for s in career}
+        waiting = self.pending.get(q, {})
+        put_back = False
+        for c in now - was.keys():
+            if min(s["start"] for s in career if s["club"] == c) >= self.recent:
+                continue  # a new move
+            if self.accept_all or waiting.get(c) == "add":
+                self.stats["career_change_live"] += 1
+                continue
+            career = [s for s in career if s["club"] != c]
+            self.still.setdefault(q, {})[c] = "add"
+            self.stats["career_change_held"] += 1
+        for c in was.keys() - now:
+            if c not in self.keep_clubs:
+                continue  # the club itself is gone (excluded by a rule)
+            if self.accept_all or waiting.get(c) == "remove":
+                self.stats["career_change_live"] += 1
+                continue
+            s = was[c]
+            career.append({"club": c, "start": s[1], "end": s[2], "loan": len(s) > 3,
+                           "raw_start": f"{s[1]}-07-01", "apps": None, "goals": None})
+            self.still.setdefault(q, {})[c] = "remove"
+            self.stats["career_change_held"] += 1
+            put_back = True
+        # Only re-sort when a held spell went back in (otherwise the order by
+        # exact date - a loan in February before a move in August - stands).
+        return sorted(career, key=lambda s: (s["start"], s["raw_start"])) if put_back else career
+
+    def save(self) -> None:
+        self.pending_path.write_text(json.dumps(
+            {"_note": "Past-career changes seen once, waiting for a second refresh before going live "
+                      "(normalise.py CareerGuard): player -> {club: add|remove}.",
+             "pending": self.still}, indent=0, sort_keys=True), encoding="utf-8")
+        print(f"career changes: {self.stats['career_change_live']} live, "
+              f"{self.stats['career_change_held']} held for a second look")
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--report", action="store_true")
     ap.add_argument("--min-club-sitelinks", type=int, default=10, help="drop very obscure clubs")
+    ap.add_argument("--accept-all", action="store_true",
+                    help="put every career change live now (after changing the rules, not for a normal refresh)")
     args = ap.parse_args()
 
     players_raw = load("players")
@@ -494,6 +559,7 @@ def main() -> int:
 
     # ---- cross-check: Wikidata v Wikipedia infobox v Premier League -------
     cross_check(by_player, players_raw, keep_clubs, stats)
+    guard = CareerGuard(keep_clubs, stats, accept_all=args.accept_all)
 
     # ---- players ----------------------------------------------------------
     managers = {m["name"].removeprefix("Sir ") for m in
@@ -529,6 +595,7 @@ def main() -> int:
                 prev["loan"] = prev["loan"] and s["loan"]
                 continue
             career.append(dict(s))
+        career = guard.apply(p["id"], career)
         pid = slug(name)
         if pid in used_slugs:
             pid = f"{pid}-{year(p.get('dob')) or p['id'].lower()}"
@@ -552,7 +619,7 @@ def main() -> int:
         # League apps + goals per club (Football 501), summed over every spell
         # there — only when every spell has numbers, so a total never undercounts.
         club_stats: dict[str, list[int]] = {}
-        for cid in {s["club"] for s in spells}:
+        for cid in sorted({s["club"] for s in spells}):  # sorted: same file every run
             at = [s for s in spells if s["club"] == cid]
             if all(s["apps"] is not None and s["goals"] is not None for s in at) and sum(s["apps"] for s in at) > 0:
                 club_stats[cid] = [sum(s["apps"] for s in at), sum(s["goals"] for s in at)]
@@ -564,6 +631,8 @@ def main() -> int:
             "career": [[s["club"], s["start"], s["end"]] + (["loan"] if s["loan"] else []) for s in career],
             **({"stats": club_stats} if club_stats else {}),
         })
+
+    guard.save()
 
     # Club fame = how many well-known players played there (Wikipedia coverage
     # alone ranks Kuban Krasnodar above Arsenal). Ranked into 5 bands.
