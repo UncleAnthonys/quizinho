@@ -392,13 +392,19 @@ class _PlayerPickerState extends State<PlayerPicker> {
         onChanged: _onTyped,
         onSubmitted: (_) => _submitTyped(),
       ),
+      // A real button (not a hint), so it doesn't read as "speak now".
       if (_voiceOn && _typing && _results.isEmpty)
-        Align(
-          alignment: Alignment.centerLeft,
-          child: TextButton.icon(
+        Padding(
+          padding: const EdgeInsets.only(top: 10),
+          child: OutlinedButton.icon(
             onPressed: _backToMic,
             icon: Icon(Icons.mic_rounded, color: widget.accent),
-            label: Text('SPEAK THE ANSWER', style: AppText.label(14, color: Palette.text)),
+            label: Text('SPEAK THE ANSWER', style: AppText.label(15, color: Palette.text)),
+            style: OutlinedButton.styleFrom(
+              foregroundColor: Palette.text,
+              side: BorderSide(color: widget.accent, width: 2),
+              padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
+            ),
           ),
         ),
       if (_typedNote != null)
