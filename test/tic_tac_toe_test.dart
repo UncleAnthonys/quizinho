@@ -90,7 +90,7 @@ void main() {
       expect(wales.answerIds.every((id) => nat(id) == 'WAL'), isTrue);
       expect(conns.any((c) => c.clubA.id == 'nat:ENG' && c.clubB.country == 'GBR'), isFalse);
       final fergie = conns.firstWhere((c) => c.clubA.id == 'mgr:sir-alex-ferguson' && c.clubB.name == 'Everton');
-      expect(fergie.clubA.name, 'Managed by Ferguson');
+      expect(fergie.clubA.name, 'Managed by Ferguson (club)');
       expect(fergie.answerIds, contains('wayne-rooney'));
       expect(conns.any((c) => c.clubA.id == 'with:lionel-messi' && c.clubB.name == 'Barcelona'), isFalse);
       var withNation = 0;
