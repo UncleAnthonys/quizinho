@@ -428,28 +428,27 @@ class _MissShakeState extends State<MissShake> with SingleTickerProviderStateMix
           final red = !running ? 0.0 : (t < 0.15 ? t / 0.15 : (1 - (t - 0.15) / 0.85)).clamp(0.0, 1.0);
           return Transform.translate(
             offset: Offset(shake, 0),
-            child: Stack(children: [
-              child!,
+            child: Stack(alignment: Alignment.center, children: [
+              // The card itself turns red (its own shape, nothing around it).
+              ColorFiltered(
+                colorFilter: ColorFilter.mode(Palette.danger.withValues(alpha: 0.96 * red), BlendMode.srcATop),
+                child: child,
+              ),
               if (red > 0)
                 Positioned.fill(
                   child: IgnorePointer(
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: Palette.danger.withValues(alpha: 0.82 * red),
-                        borderRadius: BorderRadius.circular(18),
-                      ),
-                      alignment: Alignment.center,
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 8),
                       child: Opacity(
                         opacity: red,
                         child: FittedBox(
                           fit: BoxFit.scaleDown,
                           child: Row(mainAxisSize: MainAxisSize.min, children: [
-                            const Icon(Icons.close_rounded, color: Colors.white, size: 40),
+                            const Icon(Icons.close_rounded, color: Colors.white, size: 54),
                             const SizedBox(width: 8),
                             Text(
                               (_name ?? '').toUpperCase(),
-                              style: AppText.headline(40, color: Colors.white).copyWith(
+                              style: AppText.headline(56, color: Colors.white).copyWith(
                                 decoration: TextDecoration.lineThrough,
                                 decorationColor: Colors.white,
                                 decorationThickness: 3,
