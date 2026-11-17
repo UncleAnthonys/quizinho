@@ -19,6 +19,7 @@ import '../games/tic_tac_toe/tic_tac_toe_screen.dart' show TttLayout;
 import '../games/top10/top10_screen.dart' show Top10Layout;
 import '../games/career_path/career_path_screen.dart' show CareerTrail;
 import '../games/club_connections/club_connections_screen.dart' show ClubsCard;
+import '../ui/screens/free_kick_screen.dart' show FreeKickMirror;
 import '../ui/teaser/teaser_widgets.dart' show TeaserPrompt;
 import '../ui/widgets/buzzer_pad.dart' show TeamBuzzer;
 import '../ui/widgets/common.dart';
@@ -247,6 +248,12 @@ class _GuestGameState extends State<_GuestGame> with SingleTickerProviderStateMi
       'buzz' => _buzz(v, colour),
       'turn' => _turn(v, colour),
       'main' => _center('EYES ON THE MAIN SCREEN', '${v['what'] ?? ''}', scores: v['teams']),
+      // The free kick picking the next game, played here too.
+      'freekick' => FreeKickMirror(
+          key: ValueKey('fk-${v['n']}'),
+          data: v,
+          scores: _scores(v['teams'], round: '${v['round'] ?? ''}'),
+        ),
       'rules' => _rules(v),
       'table' => _table(v),
       'closed' => _center('FULL TIME', 'Thanks for playing!'),
@@ -256,11 +263,16 @@ class _GuestGameState extends State<_GuestGame> with SingleTickerProviderStateMi
     // and let the game shrink to its compact "typing" layout, like the app.
     return ListenableBuilder(
       listenable: Listenable.merge([keyboardInset, answerTyping]),
-      builder: (context, _) => Padding(
+      // Slides with the keyboard rather than jumping (Collapse.duration).
+      builder: (context, _) => AnimatedPadding(
+        duration: Collapse.duration,
+        curve: Curves.easeOutCubic,
         padding: EdgeInsets.only(bottom: keyboardInset.value),
         child: Column(children: [
-          if (keyboardInset.value == 0) header,
-          if (kIsWeb && keyboardInset.value == 0) const _VoiceBoost(),
+          Collapse(
+            hidden: keyboardInset.value > 0 || answerTyping.value,
+            child: Column(children: [header, if (kIsWeb) const _VoiceBoost()]),
+          ),
           Expanded(child: body()),
         ]),
       ),

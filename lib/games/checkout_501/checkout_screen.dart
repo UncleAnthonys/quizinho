@@ -172,7 +172,7 @@ class _CheckoutScreenState extends State<CheckoutScreen>
         body: PitchBackground(
           child: SafeArea(
             child: Column(children: [
-              typing ? const SizedBox.shrink() : Scoreboard(tournament: _t, highlightTeam: c.phase == CoPhase.finished ? null : c.currentTeam),
+              Collapse(hidden: typing, child: Scoreboard(tournament: _t, highlightTeam: c.phase == CoPhase.finished ? null : c.currentTeam)),
               Expanded(
                 child: CoLayout(
                   data: _view(c),
@@ -318,7 +318,7 @@ class CoLayout extends StatelessWidget {
         ]),
       ),
       _CategoryCard(prompt: '${data['prompt'] ?? ''}', compact: typing),
-      typing ? const SizedBox.shrink() : _board(phase),
+      Collapse(hidden: typing, child: _board(phase)),
       if (!typing && commentary != null) commentary!,
       Expanded(
         child: switch (phase) {

@@ -162,9 +162,10 @@ class _PointlessScreenState extends State<PointlessScreen>
         body: PitchBackground(
           child: SafeArea(
             child: Column(children: [
-              typing
-                  ? const SizedBox.shrink()
-                  : Scoreboard(tournament: _t, highlightTeam: c.phase == PtPhase.finished ? null : c.currentTeam),
+              Collapse(
+                hidden: typing,
+                child: Scoreboard(tournament: _t, highlightTeam: c.phase == PtPhase.finished ? null : c.currentTeam),
+              ),
               Expanded(
                 child: PtLayout(
                   data: _view(c),
@@ -342,8 +343,7 @@ class PtLayout extends StatelessWidget {
   }
 
   Widget _answering() => ListView(padding: const EdgeInsets.fromLTRB(13, 4, 13, 16), children: [
-        typing ? const SizedBox.shrink() : _totals(),
-        typing ? const SizedBox.shrink() : const SizedBox(height: 10),
+        Collapse(hidden: typing, child: Column(children: [_totals(), const SizedBox(height: 10)])),
         Row(mainAxisAlignment: MainAxisAlignment.center, children: [
           _teamChip(_int(data['team']), size: 20),
           const SizedBox(width: 8),
@@ -354,10 +354,11 @@ class PtLayout extends StatelessWidget {
             ),
           ),
         ]),
-        typing
-            ? const SizedBox.shrink()
-            : Text(data['alone'] == true ? 'The rarest right answer scores most.' : 'Confer - the rarest right answer wins.',
-                textAlign: TextAlign.center, style: AppText.label(13)),
+        Collapse(
+          hidden: typing,
+          child: Text(data['alone'] == true ? 'The rarest right answer scores most.' : 'Confer - the rarest right answer wins.',
+              textAlign: TextAlign.center, style: AppText.label(13)),
+        ),
         const SizedBox(height: 8),
         answerBox,
       ]);
