@@ -244,12 +244,65 @@ class TimerBar extends StatelessWidget {
 }
 
 /// Floating one-liner from the "commentator".
-class CommentaryBanner extends StatelessWidget {
+/// The pundit's line. It floats over the top of the game (just under the
+/// scores, over the game's title) instead of taking room in the layout, so
+/// nothing below it jumps down and back up when it comes and goes. Where it
+/// sits in a screen's column marks the spot; it takes no height there.
+class CommentaryBanner extends StatefulWidget {
   const CommentaryBanner({super.key, required this.text});
   final String? text;
 
   @override
-  Widget build(BuildContext context) => AnimatedSwitcher(
+  State<CommentaryBanner> createState() => _CommentaryBannerState();
+}
+
+class _CommentaryBannerState extends State<CommentaryBanner> {
+  final _link = LayerLink();
+  OverlayEntry? _entry;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      final overlay = Overlay.maybeOf(context);
+      if (overlay == null) return;
+      _entry = OverlayEntry(
+        builder: (_) => Positioned(
+          left: 0,
+          right: 0,
+          top: 0,
+          child: CompositedTransformFollower(
+            link: _link,
+            showWhenUnlinked: false,
+            targetAnchor: Alignment.topCenter,
+            followerAnchor: Alignment.topCenter,
+            child: IgnorePointer(child: Center(child: _banner(widget.text))),
+          ),
+        ),
+      );
+      overlay.insert(_entry!);
+    });
+  }
+
+  @override
+  void didUpdateWidget(CommentaryBanner old) {
+    super.didUpdateWidget(old);
+    if (old.text != widget.text) _entry?.markNeedsBuild();
+  }
+
+  @override
+  void dispose() {
+    _entry?.remove();
+    _entry = null;
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) =>
+      CompositedTransformTarget(link: _link, child: const SizedBox(width: double.infinity, height: 0));
+
+  static Widget _banner(String? text) => AnimatedSwitcher(
         duration: const Duration(milliseconds: 280),
         transitionBuilder: (child, anim) => ScaleTransition(
           scale: Tween(begin: 0.85, end: 1.0).animate(CurvedAnimation(parent: anim, curve: Curves.easeOutBack)),
@@ -264,13 +317,14 @@ class CommentaryBanner extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: Palette.gold,
                   borderRadius: BorderRadius.circular(12),
+                  boxShadow: const [BoxShadow(color: Colors.black45, blurRadius: 14, offset: Offset(0, 4))],
                 ),
                 child: Row(mainAxisSize: MainAxisSize.min, children: [
                   const Icon(Icons.mic_external_on, color: Palette.pitchDeep, size: 20),
                   const SizedBox(width: 8),
                   Flexible(
                     child: Text(
-                      text!,
+                      text,
                       style: AppText.headline(20, color: Palette.pitchDeep, weight: FontWeight.w800),
                     ),
                   ),
