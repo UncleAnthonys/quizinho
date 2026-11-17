@@ -608,6 +608,21 @@ BID_COUNTRIES = {"GBR", "ENG", "SCO", "ESP", "ITA", "GER", "FRA", "NED", "POR", 
 BID_MIN_SOLID = 3
 
 
+def answers_mask(answers, players, club_ids) -> int:
+    """Eras a list of answers mostly belongs to: each era that at least half of
+    the recognisable answers (fame 2+, or all if none are) played in at these
+    clubs. One 2000s cameo no longer makes a list of 90s players count as
+    2000s, so ticking 2000s+ gets lists that are mostly 2000s+ players."""
+    pool = [pid for pid in answers if players[pid]["fame"] >= 2] or list(answers)
+    masks = [spells_mask([s for s in players[pid]["spells"] if s["club"] in club_ids]) for pid in pool]
+    masks = [m for m in masks if m]
+    if not masks:
+        return 0
+    per = {bit: sum(1 for m in masks if m & bit) for bit, _, _ in ERAS}
+    m = sum(bit for bit, n in per.items() if n * 2 >= len(masks))
+    return m or max(per, key=per.get)
+
+
 def bidding_difficulty(answers: list[str], players, club_ids=()) -> int | None:
     """Easy needs lots of recognisable answers; a category with 25 valid
     answers that nobody would know is rejected rather than called 'hard'.
@@ -635,9 +650,7 @@ def generate_bidding(clubs, players, connections, countries):
         if diff is None:
             return
         diff = max(diff, floor)
-        eras = 0
-        for pid in answers:
-            eras |= spells_mask([s for s in players[pid]["spells"] if s["club"] in club_ids])
+        eras = answers_mask(answers, players, club_ids)
         out.append({"id": cid, "prompt": prompt, "kind": kind, "answers": answers, "difficulty": diff, "eras": eras or 31})
 
     # 1. Played for both clubs

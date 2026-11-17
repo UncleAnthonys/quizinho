@@ -315,6 +315,8 @@ def cross_check(by_player: dict, players_raw: list[dict], keep_clubs: dict, stat
                        dropped (the infobox is the one editors maintain)
       years differ     the infobox's years are used
       line-ups only    a Premier League club neither source has is added
+    A club counts if he played a game there in any competition: no league
+    games but a cup or European one (career-statistics table) still counts.
     Every disagreement goes in seed/career_anomalies.json, best-known players
     first, to check by hand."""
     path = RAW / "infobox.json.gz"
@@ -332,8 +334,10 @@ def cross_check(by_player: dict, players_raw: list[dict], keep_clubs: dict, stat
 
     for q in set(by_player) | set(infobox) | set(pl):
         wd = by_player.get(q, [])
+        # 0 league games still counts if the career-statistics table shows
+        # cup or European games there ("total"): he played for them.
         rows = [r for r in infobox.get(q, []) if not r.get("national") and r["team"] in keep_clubs
-                and r.get("apps") != 0 and r.get("start")]
+                and (r.get("apps") != 0 or (r.get("total") or 0) > 0) and r.get("start")]
         if rows:
             ib = [{"club": r["team"], "start": r["start"], "end": r["end"], "loan": bool(r.get("loan")),
                    "raw_start": f"{r['start']}-07-01", "apps": r.get("apps"), "goals": r.get("goals")} for r in rows]

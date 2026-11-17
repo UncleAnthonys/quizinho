@@ -177,6 +177,54 @@ def infobox_spells(text: str) -> list[dict]:
     return out
 
 
+STATS_HEADING = re.compile(r"\n==\s*(?:Career statistics|Career stats|Statistics)\s*==[ \t]*\n", re.I)
+CELL_ATTR = re.compile(r"^([^\[\]{|]*=[^\[\]{|]*)\|(?!\|)(.*)$", re.S)
+CELL_JUNK = re.compile(r"<ref[^>]*/>|<ref.*?</ref>|\{\{.*?\}\}|'{2,3}|<[^>]+>", re.S)
+
+
+def career_totals(text: str) -> dict[str, int]:
+    """Club article title -> most appearances in any row of the article's club
+    career-statistics table, counting cups and Europe (the row's last two
+    numbers are total apps and goals). Arthur at Liverpool: 0 league games,
+    one in the Champions League, so 1. Clubs missing from the table, or
+    articles without one, aren't listed."""
+    m = STATS_HEADING.search(text)
+    if not m:
+        return {}
+    sec = text[m.end():]
+    nxt = re.search(r"\n==[^=]", sec)
+    sec = sec[:nxt.start()] if nxt else sec
+    start = sec.find("{|")  # the club table comes before the international one
+    if start < 0:
+        return {}
+    end = sec.find("\n|}", start)
+    table = sec[start:end if end > 0 else None]
+    out: dict[str, int] = {}
+    club = None
+    for row in re.split(r"\n\|-[^\n]*", table)[1:]:
+        cells = []
+        for line in row.split("\n"):
+            line = line.strip()
+            if not line or line[0] not in "|!" or line.startswith(("|+", "|}")):
+                continue
+            for c in re.split(r"\|\||!!", line[1:]):
+                am = CELL_ATTR.match(c.strip())
+                cells.append((am.group(2) if am else c).strip())
+        if not cells:
+            continue
+        if re.search(r"career total", cells[0], re.I):
+            club = None
+            continue
+        link = wp.LINK.search(cells[0])
+        if link and not re.search(r"\d{4}", link.group(1)):  # a club, not a season
+            title = link.group(1).strip().replace("_", " ")
+            club = title[:1].upper() + title[1:]
+        nums = [int(v) for v in (CELL_JUNK.sub("", c).strip() for c in cells) if re.fullmatch(r"\d+", v)]
+        if club and len(nums) >= 2:
+            out[club] = max(out.get(club, 0), nums[-2])
+    return out
+
+
 def main() -> int:
     t0 = time.time()
     players = {p["id"]: p for p in wd.load("players")}
@@ -269,17 +317,26 @@ SELECT DISTINCT ?p ?pLabel ?sl WHERE {{
     titles = wp.enwiki_titles(everyone)
     texts = wp.wikitext(sorted(set(titles.values())))
     by_player = {q: infobox_spells(texts.get(t, "")) for q, t in titles.items()}
-    team_titles = sorted({s["title"] for ss in by_player.values() for s in ss})
+    # Every club's total from the career-statistics table, cups and Europe
+    # included: a spell with no league games still counts if he played.
+    totals = {q: career_totals(texts.get(t, "")) for q, t in titles.items()}
+    team_titles = sorted({s["title"] for ss in by_player.values() for s in ss}
+                         | {c for tt in totals.values() for c in tt})
     team_qid = wp.club_qids(team_titles)
     infobox: dict[str, list] = {}
     added = 0
     for q, ss in by_player.items():
         rows = []
+        total_by_team: dict[str, int] = {}
+        for title, n in totals.get(q, {}).items():
+            if team_qid.get(title):
+                total_by_team[team_qid[title]] = max(n, total_by_team.get(team_qid[title], 0))
         for s in ss:
             team = team_qid.get(s["title"])
             if team:
                 rows.append({"team": team, "start": s["start"], "end": s["end"], "loan": s["loan"],
-                             "apps": s["apps"], "goals": s["goals"], "national": s["national"]})
+                             "apps": s["apps"], "goals": s["goals"], "national": s["national"],
+                             **({"total": total_by_team[team]} if team in total_by_team else {})})
         if rows:
             infobox[q] = rows
             added += len(rows)

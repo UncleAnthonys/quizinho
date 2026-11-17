@@ -378,7 +378,7 @@ class _TicTacToeScreenState extends State<TicTacToeScreen>
 
 /// The whole Tic-Tac-Toe screen under the scores — title, whose turn, the
 /// grid — with the host's or the phone's own [bottom] (answer box, buttons).
-class TttLayout extends StatelessWidget {
+class TttLayout extends StatefulWidget {
   const TttLayout({
     super.key,
     required this.data,
@@ -398,7 +398,42 @@ class TttLayout extends StatelessWidget {
   final void Function(int square)? onTap;
 
   @override
+  State<TttLayout> createState() => _TttLayoutState();
+}
+
+class _TttLayoutState extends State<TttLayout> {
+  // One scroll view for good: re-creating it (it used to be keyed on typing)
+  // rebuilt the answer box as the keyboard opened, so it lost focus and the
+  // keyboard closed again - nobody could type.
+  final _scroll = ScrollController();
+
+  Map<String, Object?> get data => widget.data;
+  bool get typing => widget.typing;
+
+  @override
+  void didUpdateWidget(TttLayout old) {
+    super.didUpdateWidget(old);
+    // The keyboard opening or closing starts the page at the top, so the
+    // heading never sits half under the title.
+    if (old.typing != widget.typing) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted && _scroll.hasClients) _scroll.jumpTo(0);
+      });
+    }
+  }
+
+  @override
+  void dispose() {
+    _scroll.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final onTap = widget.onTap;
+    final onReveal = widget.onReveal;
+    final multiplier = widget.multiplier;
+    final bottom = widget.bottom;
     final phase = '${data['phase']}';
     final colours = [for (final c in (data['colours'] as List?) ?? const []) (c as num).toInt()];
     final team = (data['team'] as num?)?.toInt() ?? 0;
@@ -425,9 +460,7 @@ class TttLayout extends StatelessWidget {
         ]),
       ),
       Expanded(
-        // Keyed on typing: the keyboard opening or closing starts the page at
-        // the top, so the heading never sits half under the title.
-        child: ListView(key: ValueKey(typing), padding: const EdgeInsets.fromLTRB(12, 4, 12, 16), children: [
+        child: ListView(controller: _scroll, padding: const EdgeInsets.fromLTRB(12, 4, 12, 16), children: [
           typing ? const SizedBox.shrink() : banner,
           typing ? const SizedBox.shrink() : const SizedBox(height: 8),
           typing ? const SizedBox.shrink() : TttBoard(data: data, onTap: onTap, onReveal: onReveal),
