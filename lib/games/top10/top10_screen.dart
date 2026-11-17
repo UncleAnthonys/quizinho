@@ -287,7 +287,6 @@ class Top10Layout extends StatelessWidget {
       const SizedBox(height: 2),
       MissShake(
         trigger: (asMap(data['miss'])['n'] as num?)?.toInt(),
-        name: asMap(data['miss'])['name'] as String?,
         child: SizedBox(
           width: double.infinity,
           child: Text('${data['prompt'] ?? ''}'.toUpperCase(),

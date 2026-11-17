@@ -338,7 +338,6 @@ class BidLayout extends StatelessWidget {
       ),
       MissShake(
         trigger: data['miss'] is Map ? ((data['miss']! as Map)['n'] as num?)?.toInt() : null,
-        name: data['miss'] is Map ? (data['miss']! as Map)['name'] as String? : null,
         child: _CategoryCard(prompt: '${data['prompt'] ?? ''}', compact: phase == 'answering'),
       ),
       if (commentary != null) commentary!,

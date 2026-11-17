@@ -70,7 +70,6 @@ class BuzzGameView extends StatelessWidget {
   /// The question card shakes on a wrong answer ([MissShake]).
   Widget _shaking(Widget q) => MissShake(
         trigger: controller.lastEvent == GameEvent.wrong ? controller.eventSerial : null,
-        name: controller.lastMiss,
         child: q,
       );
 

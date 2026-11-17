@@ -311,7 +311,6 @@ void main() {
           valueListenable: miss,
           builder: (context, n, _) => MissShake(
             trigger: n,
-            name: 'Pedri',
             child: Container(
               margin: const EdgeInsets.symmetric(horizontal: 16),
               padding: const EdgeInsets.all(20),

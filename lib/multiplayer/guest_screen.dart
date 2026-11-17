@@ -407,7 +407,6 @@ class _GuestGameState extends State<_GuestGame> with SingleTickerProviderStateMi
     final miss = asMap(v['miss']);
     final question = MissShake(
       trigger: (miss['n'] as num?)?.toInt(),
-      name: miss['name'] as String?,
       child: _question(v, compact: iAnswer),
     );
 

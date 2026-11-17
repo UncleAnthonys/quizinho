@@ -475,19 +475,29 @@ class _TttLayoutState extends State<TttLayout> {
         ]),
       ),
       Expanded(
-        child: ListView(controller: _scroll, padding: const EdgeInsets.fromLTRB(12, 4, 12, 16), children: [
+        // The board leaves room for the answer box under it: on a short
+        // screen (a phone browser, with its toolbars) it's drawn smaller
+        // rather than pushing the answer box off the bottom.
+        child: LayoutBuilder(
+          builder: (context, box) => ListView(controller: _scroll, padding: const EdgeInsets.fromLTRB(12, 4, 12, 16), children: [
           Collapse(
             hidden: typing,
             child: Column(children: [
               banner,
               const SizedBox(height: 8),
-              TttBoard(data: data, onTap: onTap, onReveal: onReveal),
+              Center(
+                child: SizedBox(
+                  width: min(box.maxWidth - 24, max(240.0, box.maxHeight - 260)),
+                  child: TttBoard(data: data, onTap: onTap, onReveal: onReveal),
+                ),
+              ),
               const SizedBox(height: 12),
             ]),
           ),
           if (phase == 'finished' && data['solo'] != true) ...[_standings(colours), const SizedBox(height: 6)],
           bottom,
         ]),
+        ),
       ),
     ]);
   }
@@ -665,7 +675,8 @@ class TttBoard extends StatelessWidget {
 
     Widget square(int i) => MissShake(
           trigger: missSq == i ? (miss['n'] as num?)?.toInt() : null,
-          name: miss['name'] as String?,
+          // After the keyboard's closed and the board's back in view.
+          delay: const Duration(milliseconds: 350),
           child: squareBody(i),
         );
 
