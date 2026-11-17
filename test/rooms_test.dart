@@ -103,11 +103,14 @@ void main() {
       expect(ann.taken(1, 'Bob'), isTrue);
     });
 
-    test('the earliest buzz by the database clock answers, on their phone', () async {
-      clock = 2000;
-      await bob.buzz(bridge.questionKey);
-      clock = 1500; // Ann buzzed first by the shared clock, even if it arrives second
-      await ann.buzz(bridge.questionKey);
+    /// A phone's buzz tapped at [tap] on the shared clock.
+    Future<void> buzzAt(String device, int tap) =>
+        link.push('rooms/${host.code}/buzzes', {'d': device, 'k': bridge.questionKey, 'at': tap + 100, 'tap': tap});
+
+    test('the earliest tap answers, on their phone (not the first to arrive)', () async {
+      final now = host.serverClock.now;
+      await buzzAt('phone-bob', now);
+      await buzzAt('phone-ann', now - 300); // Ann tapped first, even though hers arrives second
       await settle(300);
       expect(game.phase, BuzzPhase.answering);
       expect(game.answeringTeam, 0);
@@ -118,6 +121,39 @@ void main() {
       await settle();
       expect(game.outcome?.scored, isTrue);
       expect(game.outcome?.team, 0);
+    });
+
+    test('a phone tapped before the main phone\'s buzz takes the answer over', () async {
+      expect(host.serverClock.synced, isTrue);
+      game.buzz(0); // Home, on the main phone: counts at once
+      await settle();
+      expect(game.answeringTeam, 0);
+      expect(bridge.remote, isNull);
+      await buzzAt('phone-bob', host.serverClock.now - 200); // Bob tapped 0.2 s earlier
+      await settle();
+      expect(game.phase, BuzzPhase.answering);
+      expect(game.answeringTeam, 1);
+      expect(bridge.remote?.name, 'Bob');
+      expect(asMap(bob.view['answering'])['device'], 'phone-bob');
+    });
+
+    test('a phone tapped after the main phone\'s buzz doesn\'t', () async {
+      game.buzz(0);
+      await settle();
+      await buzzAt('phone-bob', host.serverClock.now + 50);
+      await settle();
+      expect(game.answeringTeam, 0);
+      expect(bridge.remote, isNull);
+    });
+
+    test('a wrong answer reaches the phones, so their question card shakes', () async {
+      await buzzAt('phone-ann', host.serverClock.now);
+      await settle(300);
+      await ann.answer(bridge.questionKey, 'william-gallas');
+      await settle();
+      final miss = asMap(bob.view['miss']);
+      expect(miss['name'], 'William Gallas');
+      expect(miss['n'], isA<num>());
     });
 
     test('phones get the clock again when it drifts, so it never sticks', () async {
