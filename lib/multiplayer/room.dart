@@ -271,6 +271,8 @@ class GuestRoom extends ChangeNotifier {
       final m = asMap(v);
       if (m.isEmpty) {
         missing = true;
+        // The room was there and now it's gone: the game is over.
+        if (teams != null) _stop();
       } else {
         missing = false;
         teams = [
@@ -292,7 +294,25 @@ class GuestRoom extends ChangeNotifier {
     _subs.add(link.watch('$_root/view').listen((v) {
       view = asMap(v);
       notifyListeners();
+      // Full time: the phone lets go of the room by itself (connections and
+      // the 12-second check-in), so nothing carries over into the next game
+      // - even if this tab is just left open.
+      if (view['kind'] == 'closed') _stop();
     }));
+  }
+
+  /// Stops listening and checking in. The last view stays on screen.
+  void _stop() {
+    _beat?.cancel();
+    _beat = null;
+    final subs = [..._subs];
+    _subs.clear();
+    // Not from inside a listener callback mid-delivery.
+    scheduleMicrotask(() {
+      for (final s in subs) {
+        s.cancel();
+      }
+    });
   }
 
   /// Taken by another phone.

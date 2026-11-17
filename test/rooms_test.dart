@@ -26,6 +26,28 @@ void main() {
     });
   });
 
+  test('a joined phone lets go of the room at full time', () async {
+    final link = MemoryRoomLink();
+    final teams = [TeamSetup(name: 'Home', colorIndex: 0, players: ['Ann'])];
+    final host = await HostRoom.open(link, teams);
+    final ann = GuestRoom(link, host.code, 'phone-ann')..start();
+    await settle();
+    await ann.claim(0, 'Ann');
+    await host.show({'kind': 'main', 'what': 'Round 1'});
+    await settle();
+    expect(ann.view['kind'], 'main');
+    await host.close();
+    await settle();
+    expect(ann.view['kind'], 'closed');
+    // Anything written to that room afterwards no longer reaches the phone:
+    // its connections are closed, so nothing builds up game after game.
+    await link.put('rooms/${host.code}/view', {'kind': 'main', 'what': 'stale'});
+    await settle();
+    expect(ann.view['kind'], 'closed');
+    ann.dispose();
+    host.dispose();
+  });
+
   group('a buzzer game across phones', () {
     late MemoryRoomLink link;
     late HostRoom host;
