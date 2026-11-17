@@ -81,9 +81,9 @@ enum GameModeId {
     playable: true,
     rules: [
       'Every team starts on 501. Take turns naming a player - their league apps + goals for the club come off your score.',
-      'Over 180 is a BUST: your score stays.',
-      'Finish anywhere from 0 to −10 to check out; further below is a bust. Everyone gets the same number of darts - if two teams check out on the same dart, closest to 0 wins +3.',
-      'Once a player is named they’re gone for everyone - steal the one they wanted!',
+      'Over 180 is BUST: your score stays.',
+      'Finish anywhere from 0 to −10 to check out; further below is bust. Everyone gets the same number of darts - if two teams check out on the same dart, closest to 0 wins +3.',
+      'Once a player is named they’re gone for everyone.',
     ],
     whoPlays: 'Each team confers, then names one player per turn.',
   ),

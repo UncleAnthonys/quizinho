@@ -52,7 +52,7 @@ List<String> soloRules(GameModeId m) => switch (m) {
         ],
       GameModeId.checkout501 => [
           'Start on 501. Name a player: their league apps + goals for that club come off.',
-          'Over 180 is a bust. Check out between 0 and −10 in as few darts as you can.',
+          'Over 180 is bust. Check out between 0 and −10 in as few darts as you can.',
         ],
       GameModeId.startingXi => [
           'A famous line-up with the names hidden. Name as many of the XI as you can.',
