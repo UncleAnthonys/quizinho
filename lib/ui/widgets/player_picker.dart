@@ -25,6 +25,10 @@ import '../../domain/player_index.dart';
 /// keyboard (the answer box sits near the top, not behind the keyboard).
 final ValueNotifier<bool> answerTyping = ValueNotifier(false);
 
+/// The answer box that's typing now (so a box closing doesn't switch off the
+/// next one's typing).
+Object? _typingBox;
+
 /// In a browser, a tap that opens the answer box (a buzzer, a square) also
 /// readies the keyboard for a player who types ([primeKeyboard]): Safari only
 /// opens it from a tap, and the box arrives just after.
@@ -147,7 +151,13 @@ class _PlayerPickerState extends State<PlayerPicker> with SingleTickerProviderSt
 
   /// Tapping the box = typing: the mic stops at once so it can't fight the keyboard.
   void _onFocus() {
-    answerTyping.value = _focus.hasFocus;
+    if (_focus.hasFocus) {
+      _typingBox = this;
+      answerTyping.value = true;
+    } else if (_typingBox == this) {
+      _typingBox = null;
+      answerTyping.value = false;
+    }
     // Tapping the box picks the keyboard, for this answer and the next ones.
     if (_focus.hasFocus && _voiceOn) widget.voice?.preferTyping = true;
     if (_focus.hasFocus && !_typing) {
@@ -175,7 +185,14 @@ class _PlayerPickerState extends State<PlayerPicker> with SingleTickerProviderSt
     widget.voice?.stop();
     _focus.removeListener(_onFocus);
     _focus.dispose();
-    answerTyping.value = false;
+    // Not now: the screen is being torn down, and the layouts listening would
+    // be rebuilt mid-teardown. Just after - unless another box is typing by then.
+    if (_typingBox == this) {
+      _typingBox = null;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (_typingBox == null) answerTyping.value = false;
+      });
+    }
     _controller.dispose();
     super.dispose();
   }
