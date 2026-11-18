@@ -8,6 +8,7 @@ Things to come back to before Quizinho goes live. Tick them off as they're done.
 - [ ] Privacy policy URL → https://quizinho.app/privacy/ in Play Console (App content → Privacy policy) and App Store Connect (App Privacy)
 - [ ] Support URL → https://quizinho.app/support/ in both stores
 - [ ] Play Data safety → Delete data URL → https://quizinho.app/privacy/#delete
+- [ ] Play Store settings → contact Website → https://quizinho.app/
 
 ## Google Play Console
 - [ ] Re-check every App content answer before submitting
