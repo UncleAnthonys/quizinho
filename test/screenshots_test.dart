@@ -433,6 +433,20 @@ void main() {
     services.settings.typeAnswers = false;
     await shot(
       tester,
+      'ttt_steal_tags',
+      column(
+          _scores(extra: const ['1 ▢', '1 ▢']),
+          TttLayout(
+              data: {
+                ...ttt('choosing'),
+                'claimed': ['Luka Modrić', null, null, null, 'Divock Origi', null, null, null, null],
+                'stealable': [0, 4],
+              },
+              onTap: (_) {},
+              bottom: const SizedBox.shrink())),
+    );
+    await shot(
+      tester,
       'ttt_commentary',
       column(
           _scores(extra: const ['1 ▢', '1 ▢']),

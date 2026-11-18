@@ -668,7 +668,11 @@ class TttBoard extends StatelessWidget {
               : Stack(children: [
                   Positioned.fill(
                     child: Padding(
-                      padding: const EdgeInsets.all(6),
+                      // Under the corner tag (STEAL, a lock, +2), never behind it:
+                      // the name shrinks to fit the space left.
+                      padding: (count != null && count > 1) || stealable.contains(i) || locked.contains(i)
+                          ? const EdgeInsets.fromLTRB(6, 22, 6, 6)
+                          : const EdgeInsets.all(6),
                       child: FittedBox(
                         fit: BoxFit.scaleDown,
                         child: _ClaimName(i < claimed.length ? claimed[i] ?? '' : '', color: Palette.onTeam(colour)),
