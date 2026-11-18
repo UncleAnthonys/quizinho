@@ -668,15 +668,16 @@ class TttBoard extends StatelessWidget {
               : Stack(children: [
                   Positioned.fill(
                     child: Padding(
-                      // Just clear of the STEAL tag or lock, never behind it (the
-                      // name shrinks a touch to fit). The "+2" count is small
-                      // enough to sit beside the name as it is.
-                      padding: stealable.contains(i) || locked.contains(i)
-                          ? const EdgeInsets.fromLTRB(6, 17, 6, 1)
-                          : const EdgeInsets.all(6),
-                      child: FittedBox(
-                        fit: BoxFit.scaleDown,
-                        child: _ClaimName(i < claimed.length ? claimed[i] ?? '' : '', color: Palette.onTeam(colour)),
+                      padding: const EdgeInsets.all(6),
+                      // Centred as ever; with a STEAL tag or lock in the corner it
+                      // moves down only as far as it takes to clear it. (The "+2"
+                      // count is small enough to sit beside the name as it is.)
+                      child: CustomSingleChildLayout(
+                        delegate: _BelowTag(stealable.contains(i) || locked.contains(i) ? 12 : 0),
+                        child: FittedBox(
+                          fit: BoxFit.scaleDown,
+                          child: _ClaimName(i < claimed.length ? claimed[i] ?? '' : '', color: Palette.onTeam(colour)),
+                        ),
                       ),
                     ),
                   ),
@@ -757,4 +758,22 @@ class _ClaimName extends StatelessWidget {
       Text(surname.toUpperCase(), style: AppText.headline(18, color: color)),
     ]);
   }
+}
+
+/// Centres a square's name, but never higher than [clear] from the top (under
+/// the corner tag): it moves down just enough, and shrinks only if it must.
+class _BelowTag extends SingleChildLayoutDelegate {
+  const _BelowTag(this.clear);
+  final double clear;
+
+  @override
+  BoxConstraints getConstraintsForChild(BoxConstraints constraints) =>
+      BoxConstraints.loose(Size(constraints.maxWidth, max(0, constraints.maxHeight - clear)));
+
+  @override
+  Offset getPositionForChild(Size size, Size child) =>
+      Offset((size.width - child.width) / 2, max(clear, (size.height - child.height) / 2));
+
+  @override
+  bool shouldRelayout(_BelowTag old) => old.clear != clear;
 }
