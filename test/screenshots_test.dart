@@ -778,7 +778,7 @@ void main() {
       BuzzGameView(
         round: RoundContext(tournament: t, multiplier: 1, onComplete: (_) {}),
         controller: ClubConnectionsController(teamCount: 2, questions: [arsenalBarca()]),
-        question: (compact) => ClubsCard(a: 'Arsenal', b: 'Barcelona', compact: compact),
+        question: (compact) => ClubsCard(a: 'Southampton', b: 'Bayern Munich', compact: compact),
         resolvedDetail: const SizedBox(),
         timerLabel: 'BUZZ IN',
         commentary: null,
