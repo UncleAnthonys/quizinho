@@ -214,12 +214,12 @@ class _TicTacToeScreenState extends State<TicTacToeScreen>
                 extra: (i) => _scoreLine(c, i),
               ),
             ),
-            Collapse(hidden: typing, child: CommentaryBanner(text: commentaryText)),
             Expanded(
               child: TttLayout(
                 data: _view(c),
                 multiplier: widget.round.multiplier,
                 typing: typing,
+                commentary: commentaryText,
                 // A joined phone has this turn: it picks the square, not the host.
                 onTap: _phones?.remote == null ? c.choose : null,
                 onReveal: (i) => _answers(c, i),
@@ -402,8 +402,12 @@ class TttLayout extends StatefulWidget {
     this.typing = false,
     this.onTap,
     this.onReveal,
+    this.commentary,
   });
   final Map<String, Object?> data;
+
+  /// The pundit's line, shown in place of the title ([CommentaryBanner]).
+  final String? commentary;
   final Widget bottom;
   final int multiplier;
   final void Function(int square)? onReveal;
@@ -473,13 +477,16 @@ class _TttLayoutState extends State<TttLayout> {
             Text(phase == 'choosing' ? 'PICK A SQUARE' : 'NAME A PLAYER', style: AppText.headline(22)),
           ]);
     return Column(children: [
-      Padding(
-        padding: const EdgeInsets.fromLTRB(16, 4, 16, 0),
-        child: Row(children: [
-          Text(data['solo'] == true ? 'PACK THE BOX' : 'NOUGHTS & CROSSES', style: AppText.label(15, color: Palette.yellow)),
-          const Spacer(),
-          if (multiplier > 1) Text('x$multiplier POINTS', style: AppText.label(15, color: Palette.gold)),
-        ]),
+      CommentaryBanner(
+        text: typing ? null : widget.commentary,
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(16, 4, 16, 0),
+          child: Row(children: [
+            Text(data['solo'] == true ? 'PACK THE BOX' : 'NOUGHTS & CROSSES', style: AppText.label(15, color: Palette.yellow)),
+            const Spacer(),
+            if (multiplier > 1) Text('x$multiplier POINTS', style: AppText.label(15, color: Palette.gold)),
+          ]),
+        ),
       ),
       Expanded(
         // The board leaves room for the answer box under it: on a short

@@ -201,7 +201,7 @@ class _BiddingWarScreenState extends State<BiddingWarScreen>
               child: BidLayout(
                 data: _view(c),
                 multiplier: widget.round.multiplier,
-                commentary: CommentaryBanner(text: commentaryText),
+                commentary: commentaryText,
                 controls: _controls(c),
                 answerBox: _answerBox(c),
                 finish: BigButton(label: 'Finish round', icon: Icons.flag, onPressed: () => widget.round.onComplete(c.result())),
@@ -312,7 +312,7 @@ class BidLayout extends StatelessWidget {
   final Widget controls;
   final Widget answerBox;
   final int multiplier;
-  final Widget? commentary;
+  final String? commentary;
   final Widget? finish;
 
   List<Object?> _list(String k) => (data[k] as List?) ?? const [];
@@ -328,19 +328,21 @@ class BidLayout extends StatelessWidget {
   Widget build(BuildContext context) {
     final phase = '${data['phase']}';
     return Column(children: [
-      Padding(
-        padding: const EdgeInsets.fromLTRB(16, 6, 16, 0),
-        child: Row(children: [
-          Text('BIDDING WAR', style: AppText.label(16, color: Palette.yellow)),
-          const Spacer(),
-          if (multiplier > 1) Text('x$multiplier POINTS', style: AppText.label(15, color: Palette.gold)),
-        ]),
+      CommentaryBanner(
+        text: commentary,
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(16, 6, 16, 0),
+          child: Row(children: [
+            Text('BIDDING WAR', style: AppText.label(16, color: Palette.yellow)),
+            const Spacer(),
+            if (multiplier > 1) Text('x$multiplier POINTS', style: AppText.label(15, color: Palette.gold)),
+          ]),
+        ),
       ),
       MissShake(
         trigger: data['miss'] is Map ? ((data['miss']! as Map)['n'] as num?)?.toInt() : null,
         child: _CategoryCard(prompt: '${data['prompt'] ?? ''}', compact: phase == 'answering'),
       ),
-      if (commentary != null) commentary!,
       Expanded(
         child: switch (phase) {
           'bidding' => _bidding(),

@@ -243,98 +243,51 @@ class TimerBar extends StatelessWidget {
   }
 }
 
-/// Floating one-liner from the "commentator".
-/// The pundit's line. It floats over the top of the game (just under the
-/// scores, over the game's title) instead of taking room in the layout, so
-/// nothing below it jumps down and back up when it comes and goes. Where it
-/// sits in a screen's column marks the spot; it takes no height there.
-class CommentaryBanner extends StatefulWidget {
-  const CommentaryBanner({super.key, required this.text});
+/// The pundit's line, in place of the game's title line ([child]) for as
+/// long as it shows: the title fades out, a slim gold strip fades in where it
+/// was, then the title comes back. Takes no room of its own, so nothing jumps,
+/// and covers nothing but the title.
+class CommentaryBanner extends StatelessWidget {
+  const CommentaryBanner({super.key, required this.text, required this.child});
   final String? text;
+  final Widget child;
+
+  static const _fade = Duration(milliseconds: 250);
 
   @override
-  State<CommentaryBanner> createState() => _CommentaryBannerState();
-}
-
-class _CommentaryBannerState extends State<CommentaryBanner> {
-  final _link = LayerLink();
-  OverlayEntry? _entry;
-
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (!mounted) return;
-      final overlay = Overlay.maybeOf(context);
-      if (overlay == null) return;
-      _entry = OverlayEntry(
-        builder: (_) => Positioned(
-          left: 0,
-          right: 0,
-          top: 0,
-          child: CompositedTransformFollower(
-            link: _link,
-            showWhenUnlinked: false,
-            targetAnchor: Alignment.topCenter,
-            followerAnchor: Alignment.topCenter,
-            // Material: text in its own floating layer needs the app's text
-            // styling, or Flutter draws a yellow double underline under it.
-            child: IgnorePointer(
-              child: Material(type: MaterialType.transparency, child: Center(child: _banner(widget.text))),
-            ),
-          ),
-        ),
-      );
-      overlay.insert(_entry!);
-    });
-  }
-
-  @override
-  void didUpdateWidget(CommentaryBanner old) {
-    super.didUpdateWidget(old);
-    if (old.text != widget.text) _entry?.markNeedsBuild();
-  }
-
-  @override
-  void dispose() {
-    _entry?.remove();
-    _entry = null;
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) =>
-      CompositedTransformTarget(link: _link, child: const SizedBox(width: double.infinity, height: 0));
-
-  static Widget _banner(String? text) => AnimatedSwitcher(
-        duration: const Duration(milliseconds: 280),
-        transitionBuilder: (child, anim) => ScaleTransition(
-          scale: Tween(begin: 0.85, end: 1.0).animate(CurvedAnimation(parent: anim, curve: Curves.easeOutBack)),
-          child: FadeTransition(opacity: anim, child: child),
-        ),
-        child: text == null
-            ? const SizedBox.shrink(key: ValueKey('none'))
-            : Container(
-                key: ValueKey(text),
-                margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-                decoration: BoxDecoration(
-                  color: Palette.gold,
-                  borderRadius: BorderRadius.circular(12),
-                  boxShadow: const [BoxShadow(color: Colors.black45, blurRadius: 14, offset: Offset(0, 4))],
-                ),
-                child: Row(mainAxisSize: MainAxisSize.min, children: [
-                  const Icon(Icons.mic_external_on, color: Palette.pitchDeep, size: 20),
-                  const SizedBox(width: 8),
-                  Flexible(
-                    child: Text(
-                      text,
-                      style: AppText.headline(20, color: Palette.pitchDeep, weight: FontWeight.w800),
+  Widget build(BuildContext context) {
+    final text = this.text;
+    return Stack(clipBehavior: Clip.none, alignment: Alignment.center, children: [
+      AnimatedOpacity(opacity: text == null ? 1 : 0, duration: _fade, child: IgnorePointer(ignoring: text != null, child: child)),
+      Positioned.fill(
+        child: IgnorePointer(
+          child: AnimatedSwitcher(
+            duration: _fade,
+            child: text == null
+                ? const SizedBox.shrink(key: ValueKey('none'))
+                : Padding(
+                    key: ValueKey(text),
+                    padding: const EdgeInsets.symmetric(horizontal: 12),
+                    child: Center(
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 3),
+                        decoration: BoxDecoration(color: Palette.gold, borderRadius: BorderRadius.circular(8)),
+                        child: FittedBox(
+                          fit: BoxFit.scaleDown,
+                          child: Row(mainAxisSize: MainAxisSize.min, children: [
+                            const Icon(Icons.mic_external_on, color: Palette.pitchDeep, size: 16),
+                            const SizedBox(width: 6),
+                            Text(text, maxLines: 1, style: AppText.headline(17, color: Palette.pitchDeep, weight: FontWeight.w800)),
+                          ]),
+                        ),
+                      ),
                     ),
                   ),
-                ]),
-              ),
-      );
+          ),
+        ),
+      ),
+    ]);
+  }
 }
 
 class TeamChip extends StatelessWidget {

@@ -118,20 +118,20 @@ class BuzzGameView extends StatelessWidget {
         resizeToAvoidBottomInset: true,
         body: PitchBackground(
           child: SafeArea(
-            // Answer box and its drop-down go first, right under the clock, so
-            // the keyboard can only ever cover the question, never what you type.
+            // The question (its one-line form) on top, then the clock and the
+            // answer box with its drop-down, all above where the keyboard comes
+            // up. The question stays put while typing (never swapped in and
+            // out), so the answer box is never rebuilt and the keyboard stays up.
             child: Column(children: [
+              ConstrainedBox(
+                constraints: BoxConstraints(maxHeight: MediaQuery.sizeOf(context).height * 0.3),
+                child: SingleChildScrollView(child: _shaking(question(true))),
+              ),
               Padding(
-                padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
+                padding: const EdgeInsets.fromLTRB(16, 4, 16, 0),
                 child: TimerBar(fraction: c.secondsLeft / c.phaseSeconds, seconds: c.secondsLeft, height: 10),
               ),
               Flexible(fit: FlexFit.loose, child: _bottom(context, services)),
-              // Typing: the question steps aside so the suggestions get the room.
-              // Only this sibling changes; the answer box above isn't rebuilt,
-              // so the keyboard stays up.
-              answerTyping.value
-                  ? const SizedBox.shrink()
-                  : Expanded(child: SingleChildScrollView(child: _shaking(question(true)))),
             ]),
           ),
         ),
@@ -158,7 +158,9 @@ class BuzzGameView extends StatelessWidget {
         child: SafeArea(
           child: Column(children: [
             Scoreboard(tournament: t, highlightTeam: c.answeringTeam),
-            Padding(
+            CommentaryBanner(
+              text: commentary,
+              child: Padding(
               padding: const EdgeInsets.fromLTRB(18, 6, 18, 0),
               child: Row(children: [
                 Text(c.mode.title.toUpperCase(), style: AppText.label(16, color: Palette.yellow)),
@@ -179,6 +181,7 @@ class BuzzGameView extends StatelessWidget {
                   ),
               ]),
             ),
+            ),
             if (awaitingFaceOff && faceOff != null)
               Expanded(
                 child: FaceOffIntro(
@@ -191,7 +194,6 @@ class BuzzGameView extends StatelessWidget {
                 ),
               )
             else ...[
-            CommentaryBanner(text: commentary),
             if (faceOff != null && (c.phase == BuzzPhase.open || c.phase == BuzzPhase.answering))
               _FaceOffBanner(faceOff: faceOff!, tournament: t),
             _shaking(question(false)),
@@ -257,7 +259,9 @@ class BuzzGameView extends StatelessWidget {
       }
       return Column(children: [
         // compact score line
-        Padding(
+        CommentaryBanner(
+          text: commentary,
+          child: Padding(
           padding: const EdgeInsets.fromLTRB(4, 4, 4, 2),
           child: Row(children: [
             Text(c.mode.title.toUpperCase(), style: AppText.label(13, color: Palette.yellow)),
@@ -282,7 +286,7 @@ class BuzzGameView extends StatelessWidget {
               ),
           ]),
         ),
-        CommentaryBanner(text: commentary),
+        ),
         if (faceOff != null && (c.phase == BuzzPhase.open || c.phase == BuzzPhase.answering))
           _FaceOffBanner(faceOff: faceOff!, tournament: t),
         Expanded(

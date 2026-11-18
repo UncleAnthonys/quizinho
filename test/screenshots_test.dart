@@ -17,6 +17,10 @@ import 'package:quizinho/data/in_memory_football_repository.dart';
 import 'package:quizinho/domain/player_index.dart';
 import 'package:quizinho/games/bidding_war/bidding_war_screen.dart';
 import 'package:quizinho/games/checkout_501/checkout_screen.dart';
+import 'package:quizinho/games/buzz_game_view.dart';
+import 'package:quizinho/games/club_connections/club_connections_controller.dart';
+import 'package:quizinho/games/club_connections/club_connections_screen.dart';
+import 'package:quizinho/games/game_screen_support.dart';
 import 'package:quizinho/games/pointless/pointless_screen.dart';
 import 'package:quizinho/games/starting_xi/starting_xi_screen.dart';
 import 'package:quizinho/games/tic_tac_toe/tic_tac_toe_screen.dart';
@@ -399,6 +403,45 @@ void main() {
             await tester.pump(const Duration(seconds: 1));
           });
     }
+  }, skip: !_shots);
+
+  // The pundit's line in place of the game's title, and the answering
+  // screen with the question on top.
+  testWidgets('Commentary and answering', (tester) async {
+    final t = Tournament(TournamentConfig(teams: [
+      TeamSetup(name: 'Home', colorIndex: 0),
+      TeamSetup(name: 'Away', colorIndex: 1),
+    ]));
+    final round = RoundContext(tournament: t, multiplier: 1, onComplete: (_) {});
+    Widget view(ClubConnectionsController c, String? commentary) => BuzzGameView(
+          round: round,
+          controller: c,
+          question: (compact) => ClubsCard(a: 'AC Milan', b: 'Chelsea', compact: compact),
+          resolvedDetail: const SizedBox(),
+          timerLabel: 'STEAL IT',
+          commentary: commentary,
+          onFinished: () {},
+        );
+    await shot(tester, 'cc_title', view(ClubConnectionsController(teamCount: 2, questions: [arsenalBarca()]), null));
+    await shot(tester, 'cc_commentary',
+        view(ClubConnectionsController(teamCount: 2, questions: [arsenalBarca()]), 'Not even in the same postcode.'));
+    services.settings.typeAnswers = true;
+    final answering = ClubConnectionsController(teamCount: 2, questions: [arsenalBarca()])..buzz(0);
+    await shot(tester, 'cc_answering', view(answering, null));
+    await shot(tester, 'cc_answering_typing', view(answering, null),
+        then: () => tester.enterText(find.byType(TextField), 'Desa'));
+    services.settings.typeAnswers = false;
+    await shot(
+      tester,
+      'ttt_commentary',
+      column(
+          _scores(extra: const ['1 ▢', '1 ▢']),
+          TttLayout(
+              data: ttt('choosing'),
+              commentary: 'Swing and a miss.',
+              onTap: (_) {},
+              bottom: const Text('Tap an empty square…', textAlign: TextAlign.center))),
+    );
   }, skip: !_shots);
 
   // The rules before a game, as the main phone shows them (points in yellow).

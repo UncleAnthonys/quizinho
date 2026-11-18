@@ -194,7 +194,7 @@ class _StartingXiScreenState extends State<StartingXiScreen>
         highlightTeam: c.phase == BombPhase.finished ? null : c.currentTeam,
         extra: (i) => _extra(c, i),
       ),
-      commentary: CommentaryBanner(text: commentaryText),
+      commentary: commentaryText,
       onStart: c.startTurn,
       onContinue: c.continueAfterExplosion,
       answerBox: _phones?.remote != null
@@ -291,7 +291,7 @@ class XiLayout extends StatelessWidget {
   final double left;
   final int multiplier;
   final bool typing;
-  final Widget? commentary;
+  final String? commentary;
   final VoidCallback? onStart;
   final VoidCallback? onContinue;
   final Widget? finish;
@@ -325,11 +325,14 @@ class XiLayout extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.fromLTRB(16, 4, 16, 0),
                 child: Column(children: [
-                  Row(children: [
-                    Text('STARTING XI BOMB', style: AppText.label(15, color: Palette.yellow)),
-                    const Spacer(),
-                    if (multiplier > 1) Text('x$multiplier POINTS', style: AppText.label(15, color: Palette.gold)),
-                  ]),
+                  CommentaryBanner(
+                    text: commentary,
+                    child: Row(children: [
+                      Text('STARTING XI BOMB', style: AppText.label(15, color: Palette.yellow)),
+                      const Spacer(),
+                      if (multiplier > 1) Text('x$multiplier POINTS', style: AppText.label(15, color: Palette.gold)),
+                    ]),
+                  ),
                   FittedBox(
                     fit: BoxFit.scaleDown,
                     child: Text('NAME ${'${data['target'] ?? ''}'.toUpperCase()}’S XI', style: AppText.headline(30)),
@@ -338,7 +341,6 @@ class XiLayout extends StatelessWidget {
                   Text('${data['title'] ?? ''}', style: AppText.label(13)),
                 ]),
               ),
-              if (commentary != null) commentary!,
               // Keyboard up: swap the pitch for a one-line list of who's been named.
               if (typing)
                 Padding(

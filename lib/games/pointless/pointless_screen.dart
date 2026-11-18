@@ -168,7 +168,7 @@ class _PointlessScreenState extends State<PointlessScreen>
                   data: _view(c),
                   multiplier: widget.round.multiplier,
                   typing: typing,
-                  commentary: CommentaryBanner(text: commentaryText),
+                  commentary: commentaryText,
                   answerBox: _answerBox(c),
                   onContinue: c.next,
                   finish: BigButton(label: 'Finish round', icon: Icons.flag, onPressed: () => widget.round.onComplete(c.result())),
@@ -263,7 +263,7 @@ class PtLayout extends StatelessWidget {
   final Widget answerBox;
   final int multiplier;
   final bool typing;
-  final Widget? commentary;
+  final String? commentary;
   final VoidCallback? onContinue;
   final Widget? finish;
 
@@ -286,16 +286,18 @@ class PtLayout extends StatelessWidget {
   Widget build(BuildContext context) {
     final phase = '${data['phase']}';
     return Column(children: [
-      Padding(
-        padding: const EdgeInsets.fromLTRB(16, 6, 16, 0),
-        child: Row(children: [
-          Text('UNDER THE RADAR', style: AppText.label(16, color: _studio)),
-          const Spacer(),
-          if (multiplier > 1) Text('x$multiplier POINTS', style: AppText.label(15, color: Palette.gold)),
-        ]),
+      CommentaryBanner(
+        text: typing ? null : commentary,
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(16, 6, 16, 0),
+          child: Row(children: [
+            Text('UNDER THE RADAR', style: AppText.label(16, color: _studio)),
+            const Spacer(),
+            if (multiplier > 1) Text('x$multiplier POINTS', style: AppText.label(15, color: Palette.gold)),
+          ]),
+        ),
       ),
       _CategoryCard(prompt: '${data['prompt'] ?? ''}', compact: phase != 'finished'),
-      if (!typing && commentary != null) commentary!,
       Expanded(
         child: switch (phase) {
           'answering' => _answering(),
