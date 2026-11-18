@@ -104,6 +104,16 @@ def patch_web() -> None:
             '  <script>if ("virtualKeyboard" in navigator) navigator.virtualKeyboard.overlaysContent = true;</script>\n</head>',
             1,
         )
+    # The page behind the game in the game's darkest green: while Safari's
+    # keyboard and toolbar slide away, the strip it hasn't handed back to the
+    # game yet shows this instead of a black/white flash.
+    if "quizinho-bg" not in s:
+        s = s.replace(
+            "</head>",
+            '  <meta name="theme-color" content="#051F15">\n'
+            '  <style id="quizinho-bg">html, body { background: #051F15; }</style>\n</head>',
+            1,
+        )
     index.write_text(s, encoding="utf-8")
     print("patched", index.relative_to(ROOT))
 
