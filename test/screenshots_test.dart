@@ -675,4 +675,198 @@ void main() {
     await shot(tester, 'teaser_between_games', summary(open: true));
     await shot(tester, 'teaser_tapped', summary(open: false));
   }, skip: !_shots);
+
+  // ---------------------------------------------------------------------------
+  // Store listing: phone screenshots (a caption over a real screen) and the
+  // Play feature graphic. Written to docs/store/.
+  Future<void> storeShot(WidgetTester tester, String name, String caption, Widget screen,
+      {bool wrap = true, Future<void> Function()? then}) async {
+    // 1080 x 1920 (9:16), drawn at 3x.
+    tester.view.physicalSize = const Size(1080, 1920);
+    tester.view.devicePixelRatio = 3;
+    addTearDown(tester.view.reset);
+    const phone = Size(390, 844);
+    await tester.pumpWidget(AppScope(
+      services: services,
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        theme: buildTheme(),
+        home: Builder(
+          builder: (context) => Container(
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [Color(0xFF17573A), Palette.pitchDeep],
+              ),
+            ),
+            child: Column(children: [
+              const SizedBox(height: 34),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 22),
+                child: SizedBox(
+                  height: 92,
+                  child: Center(
+                    child: Text(caption,
+                        textAlign: TextAlign.center,
+                        style: AppText.headline(31, color: Palette.yellow).copyWith(height: 1.02)),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 14),
+              Expanded(
+                child: Center(
+                  child: AspectRatio(
+                    aspectRatio: phone.width / phone.height,
+                    child: Container(
+                      margin: const EdgeInsets.only(bottom: 26),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(26),
+                        border: Border.all(color: Colors.white24, width: 1.5),
+                        boxShadow: const [BoxShadow(color: Colors.black54, blurRadius: 24, offset: Offset(0, 10))],
+                      ),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(25),
+                        child: FittedBox(
+                          child: SizedBox.fromSize(
+                            size: phone,
+                            child: MediaQuery(
+                              data: MediaQuery.of(context).copyWith(size: phone, padding: EdgeInsets.zero, viewPadding: EdgeInsets.zero),
+                              child: wrap ? Scaffold(body: PitchBackground(child: SafeArea(child: screen))) : screen,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ]),
+          ),
+        ),
+      ),
+    ));
+    await tester.pump(const Duration(seconds: 2));
+    if (then != null) {
+      await then();
+      await tester.pump(const Duration(milliseconds: 300));
+    }
+    await expectLater(find.byType(MaterialApp), matchesGoldenFile('../docs/store/$name.png'));
+  }
+
+  testWidgets('Store screenshots', (tester) async {
+    await services.settings.saveConfig(TournamentConfig(teams: [
+      TeamSetup(name: 'Home', colorIndex: 0, players: ['Alex', 'Sam']),
+      TeamSetup(name: 'Away', colorIndex: 1, players: ['Gav', 'Jo']),
+    ]));
+    await storeShot(tester, 'phone_1_home', 'THE FOOTBALL\nPARTY GAME', const HomeScreen(), wrap: false);
+
+    final t = Tournament(TournamentConfig(teams: [
+      TeamSetup(name: 'Home', colorIndex: 0),
+      TeamSetup(name: 'Away', colorIndex: 1),
+    ]));
+    await storeShot(
+      tester,
+      'phone_2_buzz',
+      'BUZZ IN FIRST.\nNAME THE PLAYER.',
+      BuzzGameView(
+        round: RoundContext(tournament: t, multiplier: 1, onComplete: (_) {}),
+        controller: ClubConnectionsController(teamCount: 2, questions: [arsenalBarca()]),
+        question: (compact) => ClubsCard(a: 'Arsenal', b: 'Barcelona', compact: compact),
+        resolvedDetail: const SizedBox(),
+        timerLabel: 'BUZZ IN',
+        commentary: null,
+        onFinished: () {},
+      ),
+      wrap: false,
+    );
+    await storeShot(
+      tester,
+      'phone_3_noughts',
+      'NOUGHTS & CROSSES,\nFOOTBALL STYLE',
+      column(_scores(extra: const ['1 ▢', '1 ▢']),
+          TttLayout(data: ttt('choosing'), onTap: (_) {}, bottom: const Text('Tap an empty square…', textAlign: TextAlign.center))),
+    );
+    await storeShot(
+      tester,
+      'phone_4_bidding',
+      'HOW MANY CAN\nYOU NAME? PROVE IT.',
+      column(
+          _scores(),
+          BidLayout(
+            data: bid('bidding'),
+            controls: BidControls(data: bid('bidding'), onRaise: (_) {}, onChallenge: () {}, onPass: () {}),
+            answerBox: const SizedBox(),
+          )),
+    );
+    await storeShot(
+      tester,
+      'phone_5_xi',
+      'NAME THE XI BEFORE\nTHE BOMB GOES OFF',
+      XiLayout(
+        data: xi('ticking'),
+        scores: _scores(extra: const ['♥♥♥  2 named', '♥♥  1 named']),
+        left: 12,
+        answerBox: _picker(),
+      ),
+    );
+    Map<String, Object?> fk() => {
+          'kind': 'freekick',
+          'n': 2,
+          'wall': [
+            for (final m in GameModeId.values)
+              if (m.playable && m != GameModeId.wildcard) m.name,
+          ],
+          'phase': 'landed',
+          'target': 3,
+          'curl': 1,
+          'landed': GameModeId.values.where((m) => m.playable && m != GameModeId.wildcard).elementAt(3).name,
+          'round': '3/6',
+          'teams': _teams,
+        };
+    await storeShot(
+      tester,
+      'phone_6_freekick',
+      'A FREE KICK PICKS\nEVERY GAME',
+      FreeKickMirror(key: UniqueKey(), data: fk(), scores: _scores()),
+      then: () async {
+        await tester.pump(const Duration(seconds: 1));
+        await tester.pump(const Duration(seconds: 1));
+      },
+    );
+    await storeShot(tester, 'phone_7_setup', 'TEAMS, FACE-OFFS AND\nEVERYONE\'S OWN PHONE', const SetupScreen(), wrap: false);
+    services.settings.recordSolo('cup', 'medium', 412);
+    await storeShot(tester, 'phone_8_solo', 'OR PLAY SOLO AND\nBEAT YOUR BEST', const SoloScreen(), wrap: false);
+  }, skip: !_shots);
+
+  testWidgets('Store feature graphic', (tester) async {
+    tester.view.physicalSize = const Size(1024, 500);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.reset);
+    await tester.pumpWidget(MaterialApp(
+      debugShowCheckedModeBanner: false,
+      theme: buildTheme(),
+      home: Container(
+        decoration: const BoxDecoration(
+          gradient: RadialGradient(center: Alignment(-0.45, 0), radius: 1.1, colors: [Color(0xFF17573A), Palette.pitchDeep]),
+        ),
+        padding: const EdgeInsets.symmetric(horizontal: 70),
+        child: Row(children: [
+          const QuizinhoBadge(size: 330),
+          const SizedBox(width: 50),
+          Expanded(
+            child: Column(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.start, children: [
+              const QuizinhoWordmark(size: 92),
+              const SizedBox(height: 26),
+              Text('THE FOOTBALL\nPARTY QUIZ', style: AppText.headline(50).copyWith(height: 1.0)),
+              const SizedBox(height: 16),
+              Text('Buzz in · Name the player · Lift the cup', style: AppText.label(22, color: Palette.yellow)),
+            ]),
+          ),
+        ]),
+      ),
+    ));
+    await tester.pump(const Duration(seconds: 1));
+    await expectLater(find.byType(MaterialApp), matchesGoldenFile('../docs/store/feature_graphic.png'));
+  }, skip: !_shots);
 }
