@@ -20,6 +20,8 @@ import 'package:quizinho/games/checkout_501/checkout_screen.dart';
 import 'package:quizinho/games/buzz_game_view.dart';
 import 'package:quizinho/games/club_connections/club_connections_controller.dart';
 import 'package:quizinho/games/club_connections/club_connections_screen.dart';
+import 'package:quizinho/games/career_path/career_path_controller.dart';
+import 'package:quizinho/games/career_path/career_path_screen.dart';
 import 'package:quizinho/games/game_screen_support.dart';
 import 'package:quizinho/games/pointless/pointless_screen.dart';
 import 'package:quizinho/games/starting_xi/starting_xi_screen.dart';
@@ -815,29 +817,25 @@ void main() {
         answerBox: _picker(),
       ),
     );
-    Map<String, Object?> fk() => {
-          'kind': 'freekick',
-          'n': 2,
-          'wall': [
-            for (final m in GameModeId.values)
-              if (m.playable && m != GameModeId.wildcard) m.name,
-          ],
-          'phase': 'landed',
-          'target': 3,
-          'curl': 1,
-          'landed': GameModeId.values.where((m) => m.playable && m != GameModeId.wildcard).elementAt(3).name,
-          'round': '3/6',
-          'teams': _teams,
-        };
+    // Not one of the free Warm-Up Cup's careers (Yaya Touré, Crouch, Keane).
+    final career = CareerPathController(teamCount: 2, questions: [zlatanPath()])..revealed = 3;
     await storeShot(
       tester,
-      'phone_6_freekick',
-      'A FREE KICK PICKS\nEVERY GAME',
-      FreeKickMirror(key: UniqueKey(), data: fk(), scores: _scores()),
-      then: () async {
-        await tester.pump(const Duration(seconds: 1));
-        await tester.pump(const Duration(seconds: 1));
-      },
+      'phone_6_career',
+      'GUESS THE PLAYER\nFROM THEIR CLUBS',
+      BuzzGameView(
+        round: RoundContext(tournament: t, multiplier: 1, onComplete: (_) {}),
+        controller: career,
+        question: (compact) => Column(children: [
+          Text('WORTH ${career.pointsAvailable} POINTS', style: AppText.headline(compact ? 18 : 24, color: Palette.gold)),
+          CareerTrail(spells: career.current.spells, shown: career.revealed, highlight: career.revealed - 1, maxHeight: compact ? 190 : 250),
+        ]),
+        resolvedDetail: const SizedBox(),
+        timerLabel: 'NEXT CLUB IN',
+        commentary: null,
+        onFinished: () {},
+      ),
+      wrap: false,
     );
     await storeShot(tester, 'phone_7_setup', 'TEAMS, FACE-OFFS AND\nEVERYONE\'S OWN PHONE', const SetupScreen(), wrap: false);
     services.settings.recordSolo('cup', 'medium', 412);
