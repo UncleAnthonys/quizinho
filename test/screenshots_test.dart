@@ -692,7 +692,10 @@ void main() {
         debugShowCheckedModeBanner: false,
         theme: buildTheme(),
         home: Builder(
-          builder: (context) => Container(
+          // Material: the app's text styling (no yellow underline on the caption).
+          builder: (context) => Material(
+            type: MaterialType.transparency,
+            child: Container(
             decoration: const BoxDecoration(
               gradient: LinearGradient(
                 begin: Alignment.topCenter,
@@ -742,6 +745,7 @@ void main() {
                 ),
               ),
             ]),
+          ),
           ),
         ),
       ),
@@ -794,7 +798,8 @@ void main() {
       column(
           _scores(),
           BidLayout(
-            data: bid('bidding'),
+            // Not the free Warm-Up Cup's question: a real category, its real count.
+            data: {...bid('bidding'), 'prompt': 'Brazilian players at Barcelona', 'max': 33},
             controls: BidControls(data: bid('bidding'), onRaise: (_) {}, onChallenge: () {}, onPass: () {}),
             answerBox: const SizedBox(),
           )),
@@ -846,7 +851,9 @@ void main() {
     await tester.pumpWidget(MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: buildTheme(),
-      home: Container(
+      home: Material(
+        type: MaterialType.transparency,
+        child: Container(
         decoration: const BoxDecoration(
           gradient: RadialGradient(center: Alignment(-0.45, 0), radius: 1.1, colors: [Color(0xFF17573A), Palette.pitchDeep]),
         ),
@@ -864,6 +871,7 @@ void main() {
             ]),
           ),
         ]),
+      ),
       ),
     ));
     await tester.pump(const Duration(seconds: 1));
