@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import '../domain/player_index.dart';
 import 'models.dart';
 import 'question_history.dart';
@@ -67,14 +69,21 @@ class ChallengeSource {
     String Function(T) idOf, {
     bool record = true,
   }) async {
-    final unseen = {...used, ...history.seen(kind)};
+    // Nobody in the room has had it; then had by just one phone, two... (the
+    // fewest first); then anything not already in this match.
+    final counts = history.seenCounts(kind);
+    final most = counts.values.fold(0, max);
+    final tiers = [
+      for (var k = 1; k <= most; k++) {...used, for (final e in counts.entries) if (e.value >= k) e.key},
+      used,
+    ];
     T? found;
+    levels:
     for (final levels in [d.allowedLevels, d.atMostLevels]) {
-      found = await pick(levels, eras, unseen) ??
-          await pick(levels, Era.allMask, unseen) ??
-          await pick(levels, eras, used) ??
-          await pick(levels, Era.allMask, used);
-      if (found != null) break;
+      for (final exclude in tiers) {
+        found = await pick(levels, eras, exclude) ?? await pick(levels, Era.allMask, exclude);
+        if (found != null) break levels;
+      }
     }
     if (found != null && record) history.add(kind, idOf(found));
     return found;
