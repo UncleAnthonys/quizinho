@@ -25,6 +25,13 @@ import '../../domain/player_index.dart';
 /// keyboard (the answer box sits near the top, not behind the keyboard).
 final ValueNotifier<bool> answerTyping = ValueNotifier(false);
 
+/// In a browser, a tap that opens the answer box (a buzzer, a square) also
+/// readies the keyboard for a player who types ([primeKeyboard]): Safari only
+/// opens it from a tap, and the box arrives just after.
+void primeKeyboardIfTyping(VoiceService? voice) {
+  if (kIsWeb && (voice == null || !voice.enabled || voice.preferTyping)) primeKeyboard();
+}
+
 /// "Try another" - a name that's already been used (or can't count here).
 /// Not a wrong answer, so no red: the answer box gives a small wiggle and the
 /// message shows under it in yellow for a moment. Games call [nudgeAnswer];

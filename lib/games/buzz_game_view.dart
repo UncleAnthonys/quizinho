@@ -238,7 +238,10 @@ class BuzzGameView extends StatelessWidget {
                     enabled: c.canBuzz(team) && !awaitingFaceOff && !phoneTeams.contains(team),
                     locked: c.lockedOut.contains(team),
                     onPhone: phoneTeams.contains(team),
-                    onBuzz: () => c.buzz(team),
+                    onBuzz: () {
+                      primeKeyboardIfTyping(services.voice);
+                      c.buzz(team);
+                    },
                     quarterTurns: quarterTurns,
                   ),
                 ),
@@ -367,7 +370,10 @@ class BuzzGameView extends StatelessWidget {
               child: BuzzerPad(
                 tournament: t,
                 canBuzz: c.canBuzz,
-                onBuzz: c.buzz,
+                onBuzz: (team) {
+                  primeKeyboardIfTyping(services.voice);
+                  c.buzz(team);
+                },
                 lockedOut: c.lockedOut,
                 faceOff: faceOff,
                 onPhone: phoneTeams,

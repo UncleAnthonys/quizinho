@@ -385,14 +385,14 @@ class Collapse extends StatelessWidget {
         curve: Curves.easeOutCubic,
         child: child,
         // Always the same shape, so what's inside keeps its state.
-        // Coming back (the keyboard closing) it takes its full height at once
-        // and only fades in: growing while the keyboard slides away showed a
-        // half-drawn board for a moment. Going, it folds away as before.
+        // Coming back (the keyboard closing) it's simply there, as in the app:
+        // growing while the keyboard slid away showed a half-drawn board.
+        // Going, it folds away.
         builder: (context, v, child) => ClipRect(
           child: Align(
             alignment: Alignment.topCenter,
             heightFactor: hidden ? v : 1,
-            child: Opacity(opacity: v, child: IgnorePointer(ignoring: v < 1, child: child)),
+            child: Opacity(opacity: hidden ? v : 1, child: IgnorePointer(ignoring: hidden, child: child)),
           ),
         ),
       );

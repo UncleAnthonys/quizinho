@@ -221,7 +221,12 @@ class _TicTacToeScreenState extends State<TicTacToeScreen>
                 typing: typing,
                 commentary: commentaryText,
                 // A joined phone has this turn: it picks the square, not the host.
-                onTap: _phones?.remote == null ? c.choose : null,
+                onTap: _phones?.remote == null
+                    ? (sq) {
+                        primeKeyboardIfTyping(services.voice);
+                        c.choose(sq);
+                      }
+                    : null,
                 onReveal: (i) => _answers(c, i),
                 bottom: _bottom(c),
               ),
