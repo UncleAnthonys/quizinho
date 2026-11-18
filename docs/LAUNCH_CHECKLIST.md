@@ -7,6 +7,7 @@ Things to come back to before Quizinho goes live. Tick them off as they're done.
 - [ ] Join link / QR code: `joinPageUrl` in `lib/multiplayer/rooms_config.dart`
 - [ ] Privacy policy URL → https://quizinho.app/privacy/ in Play Console (App content → Privacy policy) and App Store Connect (App Privacy)
 - [ ] Support URL → https://quizinho.app/support/ in both stores
+- [ ] Play Data safety → Delete data URL → https://quizinho.app/privacy/#delete
 
 ## Google Play Console
 - [ ] Re-check every App content answer before submitting
