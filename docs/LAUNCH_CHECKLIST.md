@@ -26,6 +26,9 @@ Things to come back to before Quizinho goes live. Tick them off as they're done.
 - [ ] App Privacy answers (from Claude)
 - [ ] Age rating, category (Games → Trivia)
 
+## After launch
+- [ ] Under-13s: the target audience is 13+ at launch. To aim at younger players, keep typed names and voice misses on the phone (or get consent), add a children's section to the privacy policy, then add the under-13 age groups in Play (Families policy)
+
 ## In the app
 - [ ] `appStoreUrl` in `lib/core/app_links.dart`, which shows the "Download the app" line on joined phones. Finalise its copy: "Download the app to never hear the same questions twice and better voice recognition"
 - [ ] Purchases switched on (`Purchases.enabled` in `lib/core/purchases.dart`)
