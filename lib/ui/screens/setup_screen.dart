@@ -112,7 +112,7 @@ class _SetupScreenState extends State<SetupScreen> {
     if (room == null) {
       setState(() => _openingRoom = true);
       try {
-        room = await HostRoom.open(link, _teamsNow());
+        room = await HostRoom.open(link, _teamsNow(), history: s.settings.history);
         s.room = room;
       } catch (e) {
         if (mounted) {

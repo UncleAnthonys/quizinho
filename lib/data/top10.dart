@@ -134,7 +134,8 @@ class Top10Bank {
     if (pool.isEmpty) pool = lists;
     if (pool.isEmpty) return null;
     final order = history.order(kind);
-    final fresh = [for (final l in pool) if (!order.contains(l.id)) l];
+    final seen = history.seen(kind); // anyone in the room's
+    final fresh = [for (final l in pool) if (!seen.contains(l.id)) l];
     final Top10List choice;
     if (fresh.isNotEmpty) {
       final byId = {for (final l in lists) l.id: l};
@@ -165,7 +166,8 @@ class Top10Bank {
       final pickFrom = families[keys[rnd.nextInt(keys.length)]]!;
       choice = pickFrom[rnd.nextInt(pickFrom.length)];
     } else {
-      final rank = {for (final (i, id) in order.indexed) id: i};
+      // The one the fewest phones in the room have had, longest ago.
+      final rank = {for (final (i, id) in history.repeatOrder(kind).indexed) id: i};
       choice = ([...pool]..sort((a, b) => (rank[a.id] ?? 0).compareTo(rank[b.id] ?? 0))).first;
     }
     history.add(kind, choice.id);

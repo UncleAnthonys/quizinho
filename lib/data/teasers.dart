@@ -105,8 +105,8 @@ class TeaserPicker {
     if (pool.isEmpty) pool = [for (final t in bank.teasers) if (_fits(t, difficulty)) t];
     if (pool.isEmpty) return null;
 
-    final order = history.order(kind);
-    final seen = order.toSet();
+    final order = history.order(kind); // this phone's, for spacing
+    final seen = history.seen(kind); // anyone in the room's
     final recent = [for (final id in order.reversed.take(5)) if (bank.byId(id) case final t?) t];
     final recentAnswers = {for (final t in recent) ...t.answerIds};
     final lastFamily = recent.isEmpty ? null : recent.first.family;
@@ -114,8 +114,9 @@ class TeaserPicker {
 
     var fresh = [for (final t in pool) if (!seen.contains(t.id)) t];
     if (fresh.isEmpty) {
-      // Everything at this level has been played: the longest-ago half again.
-      final rank = {for (final (i, id) in order.indexed) id: i};
+      // Everything at this level has been played: the half the fewest phones
+      // in the room have had (longest ago first) comes round again.
+      final rank = {for (final (i, id) in history.repeatOrder(kind).indexed) id: i};
       fresh = [...pool]..sort((a, b) => (rank[a.id] ?? 0).compareTo(rank[b.id] ?? 0));
       fresh = fresh.take(max(1, fresh.length ~/ 2)).toList();
     }

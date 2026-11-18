@@ -56,7 +56,7 @@ class _JoinScreenState extends State<JoinScreen> {
     final s = AppScope.read(context);
     final link = s.roomLink;
     if (link == null || normaliseRoomCode(code).length != 4) return;
-    final room = GuestRoom(link, code, s.settings.deviceId)..start();
+    final room = GuestRoom(link, code, s.settings.deviceId, history: s.settings.history)..start();
     setState(() => _room = room);
   }
 

@@ -4,6 +4,7 @@ import 'dart:math';
 
 import 'package:flutter/foundation.dart';
 
+import '../data/question_history.dart';
 import '../domain/tournament.dart';
 import 'room_link.dart';
 
@@ -69,7 +70,12 @@ Map<String, RoomMember> _members(Object? v) => {
 
 /// The host phone's side of a room.
 class HostRoom extends ChangeNotifier {
-  HostRoom._(this.link, this.code);
+  HostRoom._(this.link, this.code, this.history);
+
+  /// This phone's question history: while the room's open it also counts what
+  /// the joined phones have had (they hand it over as they join), and every
+  /// question picked here is passed on for them to remember too.
+  final QuestionHistory? history;
 
   final RoomLink link;
   final String code;
@@ -110,8 +116,8 @@ class HostRoom extends ChangeNotifier {
   Stream<RemoteBuzz> get buzzes => _buzzes.stream;
   Stream<RemoteAnswer> get answers => _answers.stream;
 
-  static Future<HostRoom> open(RoomLink link, List<TeamSetup> teams, {Random? random}) async {
-    final room = HostRoom._(link, newRoomCode(random));
+  static Future<HostRoom> open(RoomLink link, List<TeamSetup> teams, {Random? random, QuestionHistory? history}) async {
+    final room = HostRoom._(link, newRoomCode(random), history);
     await room.setTeams(teams);
     await link.put('${room._root}/view', {'kind': 'lobby'});
     room._listen();
@@ -120,7 +126,8 @@ class HostRoom extends ChangeNotifier {
 
   /// Picks a room back up after the app was closed: same code, so phones
   /// that joined carry on without scanning again.
-  static HostRoom reattach(RoomLink link, String code) => HostRoom._(link, code).._listen();
+  static HostRoom reattach(RoomLink link, String code, {QuestionHistory? history}) =>
+      HostRoom._(link, code, history).._listen();
 
   /// Names to pick from on the phones (call again if the team sheet changes).
   Future<void> setTeams(List<TeamSetup> teams) => serverClock.stamp(() => link.putRead('$_root/host', {
@@ -137,6 +144,12 @@ class HostRoom extends ChangeNotifier {
     _tick ??= Timer.periodic(const Duration(seconds: 30), (_) {
       unawaited(serverClock.stamp(() => link.putRead('$_root/host/at', serverTime)));
     });
+    if (history case final h?) {
+      h.onRecord = _record;
+      _subs.add(link.watch('$_root/seen').listen((v) {
+        if (h.onRecord == _record) h.setOthers(seenLists(v));
+      }));
+    }
     _subs.add(link.watch('$_root/members').listen((v) {
       members = _members(v);
       for (final e in asMap(v).entries) {
@@ -171,6 +184,25 @@ class HostRoom extends ChangeNotifier {
         }
       }
     }));
+  }
+
+  /// Tells the joined phones what was just asked, to remember it.
+  Future<void> _asked(String kind, List<String> ids) async {
+    try {
+      await link.push('$_root/asked', {'k': kind, 'i': ids});
+    } catch (e) {
+      debugPrint('Asked not sent: $e');
+    }
+  }
+
+  late final void Function(String, List<String>) _record = (kind, ids) => unawaited(_asked(kind, ids));
+
+  /// (Only if it's still this room's: a newer room may have taken over.)
+  void _letGoOfHistory() {
+    final h = history;
+    if (h == null || h.onRecord != _record) return;
+    h.onRecord = null;
+    h.setOthers(const {});
   }
 
   /// The phone [name] in [team] is using, if they've joined.
@@ -236,6 +268,7 @@ class HostRoom extends ChangeNotifier {
   }
 
   Future<void> close() async {
+    _letGoOfHistory();
     _tick?.cancel(); // no more saves once it's over (they'd bring the room back)
     _tick = null;
     for (final s in _subs) {
@@ -249,6 +282,7 @@ class HostRoom extends ChangeNotifier {
 
   @override
   void dispose() {
+    _letGoOfHistory();
     _tick?.cancel();
     for (final s in _subs) {
       s.cancel();
@@ -259,6 +293,15 @@ class HostRoom extends ChangeNotifier {
   }
 }
 
+/// The joined phones' question lists, as they're kept in a room (by phone,
+/// then kind).
+Map<String, Map<String, List<String>>> seenLists(Object? v) => {
+      for (final e in asMap(v).entries)
+        e.key: {
+          for (final k in asMap(e.value).entries) k.key: [for (final id in asList(k.value)) '$id'],
+        },
+    };
+
 /// Team names, colours and scores for a view.
 List<Map<String, Object?>> teamsView(Tournament t) => [
       for (var i = 0; i < t.teamCount; i++)
@@ -267,7 +310,12 @@ List<Map<String, Object?>> teamsView(Tournament t) => [
 
 /// A joining phone's side of a room.
 class GuestRoom extends ChangeNotifier {
-  GuestRoom(this.link, String code, this.device) : code = normaliseRoomCode(code);
+  GuestRoom(this.link, String code, this.device, {this.history}) : code = normaliseRoomCode(code);
+
+  /// This phone's question history: handed to the main phone on joining (so it
+  /// can avoid what this phone's had), and added to as the main phone asks.
+  final QuestionHistory? history;
+  final Set<String> _askedSeen = {};
 
   final RoomLink link;
   final String code;
@@ -296,6 +344,15 @@ class GuestRoom extends ChangeNotifier {
     _beat ??= Timer.periodic(heartbeat, (_) {
       if (me case final m?) claim(m.team, m.name);
     });
+    if (history case final h?) {
+      _subs.add(link.watch('$_root/asked').listen((v) {
+        for (final e in asMap(v).entries) {
+          if (!_askedSeen.add(e.key)) continue;
+          final m = asMap(e.value);
+          if (m['k'] is String) h.addFromRoom(m['k']! as String, [for (final id in asList(m['i'])) '$id']);
+        }
+      }));
+    }
     _subs.add(link.watch('$_root/host').listen((v) {
       final m = asMap(v);
       if (m.isEmpty) {
@@ -350,8 +407,28 @@ class GuestRoom extends ChangeNotifier {
 
   /// Also lines this phone's clock up with the database's ([serverClock]):
   /// every check-in is a timed save.
-  Future<void> claim(int team, String name) => serverClock.stamp(
-      () => link.putRead('$_root/members/$device', {'name': name, 'team': team, 'at': serverTime}));
+  ///
+  /// The first time, it also hands the main phone this phone's question list.
+  Future<void> claim(int team, String name) {
+    if (!_seenSent && history != null) {
+      _seenSent = true;
+      final mine = history!.export();
+      if (mine.isNotEmpty) unawaited(_sendSeen(mine));
+    }
+    return serverClock.stamp(
+        () => link.putRead('$_root/members/$device', {'name': name, 'team': team, 'at': serverTime}));
+  }
+
+  bool _seenSent = false;
+
+  Future<void> _sendSeen(Map<String, List<String>> mine) async {
+    try {
+      await link.put('$_root/seen/$device', mine);
+    } catch (e) {
+      _seenSent = false; // try again at the next check-in
+      debugPrint('Seen not sent: $e');
+    }
+  }
 
   /// The database's clock, as this phone reckons it.
   final ServerClock serverClock = ServerClock();

@@ -22,6 +22,10 @@ jobs:
           # line their clocks up, so buzzes are timed fairly.)
           echoed=$(curl -s -X PUT -d '{"at":{".sv":"timestamp"},"n":"x"}' "$U/rooms/$code/members/smoke.json")
           echo "::notice title=Clock::PUT reply=$echoed local=$(date +%s%3N)"
+          # Joined phones' question lists and the questions asked (shared history).
+          seenw=$(curl -s -o /dev/null -w "%{http_code}" -X PUT -d '{"teaser":["a","b"]}' "$U/rooms/$code/seen/smoke.json")
+          askedw=$(curl -s -o /dev/null -w "%{http_code}" -X POST -d '{"k":"teaser","i":["a"]}' "$U/rooms/$code/asked.json")
+          echo "::notice title=Shared history::seen=$seenw asked=$askedw (both should be 200)"
           stream=$(timeout 4 curl -s -N -H "Accept: text/event-stream" "$U/rooms/$code.json" | head -c 300 || true)
           other=$(curl -s -o /dev/null -w "%{http_code}" -X PUT -d '1' "$U/elsewhere.json")
           badcode=$(curl -s -o /dev/null -w "%{http_code}" -X PUT -d '1' "$U/rooms/TOOLONG/x.json")
@@ -31,4 +35,4 @@ jobs:
           overwrite=$(curl -s -o /dev/null -w "%{http_code}" -X PUT -d '{"h":["x"]}' "$U/voicemisses/$missid.json")
           echo "::notice title=Voice misses::saved=$miss overwrite=$overwrite (should be refused)"
           echo "::notice title=Rooms::put=$put read=$got other=$other badcode=$badcode stream=$(echo "$stream" | tr '\n' ' ' | cut -c1-200)"
-          [ "$put" = "200" ] && [ "$other" != "200" ] && [ "$badcode" != "200" ] && echo "$stream" | grep -q "event: put" && [ -n "$missid" ] && [ "$overwrite" != "200" ]
+          [ "$put" = "200" ] && [ "$seenw" = "200" ] && [ "$askedw" = "200" ] && [ "$other" != "200" ] && [ "$badcode" != "200" ] && echo "$stream" | grep -q "event: put" && [ -n "$missid" ] && [ "$overwrite" != "200" ]

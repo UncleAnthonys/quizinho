@@ -158,6 +158,24 @@ void main() {
       }
     });
 
+    test('avoids what anyone in the room has had, then repeats the fewest-seen', () {
+      final pool = [for (final t in bank.teasers) if (t.level <= 2) t.id];
+      final history = QuestionHistory();
+      final picker = TeaserPicker(bank: bank, history: history, players: players, random: Random(3));
+      // Ann's had all but one; that one comes up.
+      history.setOthers({'ann': {'teaser': pool.sublist(1)}});
+      expect(picker.pick(difficulty: Difficulty.medium)!.id, pool.first);
+      // Now every one's been had. Ann and Bob have both had the first half;
+      // only Ann the second: it comes from the second half.
+      final half = pool.length ~/ 2;
+      history.setOthers({
+        'ann': {'teaser': pool},
+        'bob': {'teaser': pool.sublist(0, half)},
+      });
+      final again = picker.pick(difficulty: Difficulty.medium)!.id;
+      expect(pool.sublist(half), contains(again));
+    });
+
     test('different phones pick differently', () {
       final a = TeaserPicker(bank: bank, history: QuestionHistory(), players: players, random: Random(1));
       final b = TeaserPicker(bank: bank, history: QuestionHistory(), players: players, random: Random(2));

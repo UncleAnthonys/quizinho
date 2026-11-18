@@ -1,4 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:quizinho/data/question_history.dart';
 import 'package:quizinho/domain/player_index.dart';
 import 'package:quizinho/domain/tournament.dart';
 import 'package:quizinho/games/buzz_race_controller.dart';
@@ -46,6 +47,30 @@ void main() {
     expect(ann.view['kind'], 'closed');
     ann.dispose();
     host.dispose();
+  });
+
+  test('joined phones hand over what they have had, and remember what the main phone asks', () async {
+    final link = MemoryRoomLink();
+    final hostHistory = QuestionHistory()..add('teaser', 'mine');
+    final annHistory = QuestionHistory()..addAll('teaser', ['t1', 't2']);
+    final host = await HostRoom.open(link, [TeamSetup(name: 'Home', colorIndex: 0, players: ['Ann'])], history: hostHistory);
+    final ann = GuestRoom(link, host.code, 'phone-ann', history: annHistory)..start();
+    await settle();
+    expect(hostHistory.seen('teaser'), {'mine'}, reason: 'nothing until a name is picked');
+    await ann.claim(0, 'Ann');
+    await settle();
+    expect(hostHistory.seen('teaser'), {'mine', 't1', 't2'});
+    hostHistory.add('top10', 'list-9');
+    await settle();
+    expect(annHistory.seen('top10'), {'list-9'});
+    // Room over: the main phone's back to its own.
+    await host.close();
+    expect(hostHistory.seen('teaser'), {'mine'});
+    hostHistory.add('top10', 'after');
+    await settle();
+    expect(annHistory.seen('top10'), {'list-9'});
+    host.dispose();
+    ann.dispose();
   });
 
   group('a buzzer game across phones', () {

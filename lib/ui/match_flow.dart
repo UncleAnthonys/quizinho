@@ -66,7 +66,7 @@ abstract final class MatchFlow {
     }
     final code = saved['room'] as String?;
     final link = s.roomLink;
-    if (code != null && link != null && s.room?.code != code) s.room = HostRoom.reattach(link, code);
+    if (code != null && link != null && s.room?.code != code) s.room = HostRoom.reattach(link, code, history: s.settings.history);
     final pending = saved['pending'] is Map ? saved['pending']! as Map : null;
     final mode = pending == null ? null : GameModeId.fromName('${pending['mode']}');
     final nav = Navigator.of(context);
