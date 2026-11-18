@@ -18,6 +18,7 @@ Things to come back to before Quizinho goes live. Tick them off as they're done.
 - [ ] In-app product `com.littlefortstudios.quizinho.fullgame`, £2.99 (needs a build uploaded first)
 - [ ] Store listing: "Quizinho: Football Party Quiz", text, icon, feature graphic, screenshots
 - [ ] Android build + signing in Codemagic (Claude)
+- [ ] Android manifest: strip the AD_ID permission (Play is told the app uses no advertising ID)
 
 ## App Store Connect
 - [ ] Paid Applications Agreement, bank and tax (W-8BEN-E)
