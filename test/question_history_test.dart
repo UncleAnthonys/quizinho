@@ -70,10 +70,12 @@ void main() {
     final history = QuestionHistory();
     final source = ChallengeSource(repo, history: history);
     // What a friend's phone has had: everything this phone would pick first.
-    final theirs = [for (var i = 0; i < 10; i++) (await ChallengeSource(repo).match(Difficulty.easy, {}))!.id];
-    history.setOthers({'friend': {'match': theirs}});
-    for (var i = 0; i < 5; i++) {
-      expect(theirs, isNot(contains((await source.match(Difficulty.easy, {}))!.id)));
+    // (Club Connections: thousands of pairs, so fresh ones never run out here.)
+    final friend = ChallengeSource(repo);
+    final theirs = [for (var i = 0; i < 20; i++) (await friend.clubConnection(Difficulty.medium, {}))!.id];
+    history.setOthers({'friend': {'conn': theirs}});
+    for (var i = 0; i < 10; i++) {
+      expect(theirs, isNot(contains((await source.clubConnection(Difficulty.medium, {}))!.id)));
     }
   });
 }
