@@ -135,6 +135,28 @@ void main() {
       }
     });
 
+    test('trophies come up about equally; never a nation beside the Euros or World Cup', () async {
+      final conns = [...await repo.allClubConnections(), ...await repo.categoryClubPairs()];
+      int fame(String id) => repo.players.byId(id)?.fame ?? 0;
+      final cups = <String, int>{};
+      for (var seed = 0; seed < 300; seed++) {
+        final g = generateTicTacToeGrid(conns,
+            random: Random(seed), minFame: 4, maxLevel: 2, minKnownAnswers: 2, answerFame: fame)!;
+        final ids = [for (final c in [...g.rows, ...g.cols]) if (isGridCategory(c)) c.id];
+        final nation = ids.any((id) => id.startsWith('nat:'));
+        final international = ids.any((id) => id.startsWith('cup:euro') || id.startsWith('cup:wc'));
+        expect(nation && international, isFalse, reason: '$ids');
+        for (final id in ids.where((id) => id.startsWith('cup:'))) {
+          cups.update(id.split(':')[1], (n) => n + 1, ifAbsent: () => 1);
+        }
+      }
+      // ignore: avoid_print
+      print('trophies over 300 Medium grids: $cups');
+      expect(cups.length, 5, reason: '$cups');
+      final counts = cups.values.toList()..sort();
+      expect(counts.first * 3, greaterThanOrEqualTo(counts.last), reason: '$cups');
+    });
+
     test('clubs only when there are no categories to use', () async {
       final g = generateTicTacToeGrid(await repo.allClubConnections(), random: Random(2), minFame: 4)!;
       expect([...g.rows, ...g.cols].where(isGridCategory), isEmpty);

@@ -62,6 +62,20 @@ const _categoryKinds = {'with': 0.35, 'nat': 0.25, 'mgr': 0.20, 'cup': 0.20};
 /// "with" (Club teammate of), "nat", "mgr" (Managed by) or "cup" (trophy).
 String _kindOf(String id) => id.split(':').first;
 
+/// Two categories that would mostly share their answers: a nation beside the
+/// Euros or World Cup (Spain and Euros winners: Silva, Fàbregas, Torres in
+/// both columns).
+bool _clash(String a, String b) {
+  bool international(String id) => _kindOf(id) == 'cup' && const {'euro', 'wc'}.contains(id.split(':')[1]);
+  return (_kindOf(a) == 'nat' && international(b)) || (_kindOf(b) == 'nat' && international(a));
+}
+
+/// How hard to try around the categories chosen before choosing again. Some
+/// fit fewer grids (the FA Cup pairs only with English clubs, and a grid has
+/// two a side at most): trying harder keeps each trophy, manager and nation as
+/// likely to appear as the shares say, not just as likely to be tried.
+const int _triesPerChoice = 15;
+
 /// English clubs on one side of the grid, at most (so 4 of the 6).
 const int _maxEnglishASide = 2;
 
@@ -214,24 +228,29 @@ TicTacToeGrid? generateTicTacToeGrid(
     final cats = [for (final id in pool) if (isGridCategory(clubs[id]!)) id];
     final teams = [for (final id in pool) if (!isGridCategory(clubs[id]!)) id];
     if (cats.isEmpty || teams.length < 4) continue;
-    for (var i = 0; i < attempts; i++) {
+    for (var i = 0; i < attempts ~/ 5; i++) {
       final k = random.nextDouble() < _twoCategories ? 2 : 1;
       final side = <String>[];
       for (var j = 0; j < k; j++) {
-        final c = category([for (final id in cats) if (!side.contains(id) && _kindOf(id) != (side.isEmpty ? '' : _kindOf(side.first))) id]);
+        final c = category([
+          for (final id in cats)
+            if (side.every((s) => s != id && _kindOf(s) != _kindOf(id) && !_clash(s, id))) id,
+        ]);
         if (c != null) side.add(c);
       }
       if (side.isEmpty) continue;
       // The rest of that side: clubs linked to the side's categories.
       final linked = teams.where((id) => side.every((c) => links[c]!.containsKey(id))).toList();
-      final more = pick(linked, 3 - side.length);
-      if (more == null) continue;
-      final rows = [...side, ...more]..shuffle(random);
-      final common = teams.where((id) => !rows.contains(id) && rows.every((r) => links[r]!.containsKey(id))).toList();
-      if (common.length < 3) continue;
-      final cols = pick(common, 3)!;
-      final grid = random.nextBool() ? check(rows, cols) : check(cols, rows);
-      if (grid != null) return grid;
+      for (var t = 0; t < _triesPerChoice; t++) {
+        final more = pick(linked, 3 - side.length);
+        if (more == null) break;
+        final rows = [...side, ...more]..shuffle(random);
+        final common = teams.where((id) => !rows.contains(id) && rows.every((r) => links[r]!.containsKey(id))).toList();
+        if (common.length < 3) continue;
+        final cols = pick(common, 3)!;
+        final grid = random.nextBool() ? check(rows, cols) : check(cols, rows);
+        if (grid != null) return grid;
+      }
     }
   }
 
