@@ -93,15 +93,29 @@ void main() {
       expect(fergie.clubA.name, 'Managed by Ferguson (club)');
       expect(fergie.answerIds, contains('wayne-rooney'));
       expect(conns.any((c) => c.clubA.id == 'with:lionel-messi' && c.clubB.name == 'Barcelona'), isFalse);
-      var withNation = 0;
-      for (var seed = 0; seed < 30; seed++) {
+      final kinds = <String, int>{};
+      var two = 0;
+      for (var seed = 0; seed < 80; seed++) {
         final g = generateTicTacToeGrid(conns, random: Random(seed), minFame: 4)!;
-        final n = [...g.rows, ...g.cols].where(isGridCategory).length;
-        expect(n, lessThanOrEqualTo(2));
-        if (n > 0) withNation++;
+        final cats = [...g.rows, ...g.cols].where(isGridCategory).toList();
+        // Every grid has one (teammate, nation, manager or trophy); two at most.
+        expect(cats.length, inInclusiveRange(1, 2), reason: 'seed $seed');
+        if (cats.length == 2) two++;
+        for (final c in cats) {
+          kinds.update(c.id.split(':').first, (n) => n + 1, ifAbsent: () => 1);
+        }
         expect(g.answers.every((a) => a.isNotEmpty), isTrue);
       }
-      expect(withNation, greaterThan(0));
+      // All four sorts come up, managers and trophies included.
+      expect(kinds.keys, containsAll(['with', 'nat', 'mgr', 'cup']), reason: '$kinds');
+      expect(kinds['cup']!, greaterThanOrEqualTo(8), reason: '$kinds');
+      expect(kinds['mgr']!, greaterThanOrEqualTo(8), reason: '$kinds');
+      expect(two, greaterThan(10));
+    });
+
+    test('clubs only when there are no categories to use', () async {
+      final g = generateTicTacToeGrid(await repo.allClubConnections(), random: Random(2), minFame: 4)!;
+      expect([...g.rows, ...g.cols].where(isGridCategory), isEmpty);
     });
 
     test('grids lean English, with one far-flung club at most', () async {

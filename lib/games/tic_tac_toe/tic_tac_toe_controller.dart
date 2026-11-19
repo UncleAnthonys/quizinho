@@ -47,10 +47,20 @@ double gridWeight(Club c) {
   return big ? 0.4 : 0.1;
 }
 
-/// Categories (nations, played with, managed by): about six grids in ten
-/// have one, never more than two.
+/// Categories (nations, played with, managed by, trophies): every grid has
+/// one, about half have two, never more ([_categoryKinds] decides which sort).
+/// [_categoryWeight] only matters for the clubs-only fallback.
 const double _categoryWeight = 0.12;
 const int _maxCategories = 2;
+const double _twoCategories = 0.5;
+
+/// Which sort of category, by share. The kind is picked first, then one of
+/// its categories: by count alone the 50 teammates would crowd out the 5
+/// trophies and 20 managers.
+const _categoryKinds = {'with': 0.35, 'nat': 0.25, 'mgr': 0.20, 'cup': 0.20};
+
+/// "with" (Club teammate of), "nat", "mgr" (Managed by) or "cup" (trophy).
+String _kindOf(String id) => id.split(':').first;
 
 /// English clubs on one side of the grid, at most (so 4 of the 6).
 const int _maxEnglishASide = 2;
@@ -147,33 +157,91 @@ TicTacToeGrid? generateTicTacToeGrid(
     return links[a]![b]!.answerIds.any((id) => answerFame(id) >= 4);
   }
 
+  /// One category: its kind first (by [_categoryKinds], among the kinds
+  /// [from] has), then one of that kind.
+  String? category(List<String> from) {
+    final byKind = <String, List<String>>{};
+    for (final id in from) {
+      byKind.putIfAbsent(_kindOf(id), () => []).add(id);
+    }
+    final kinds = [for (final k in _categoryKinds.keys) if (byKind.containsKey(k)) k];
+    if (kinds.isEmpty) return null;
+    var r = random.nextDouble() * kinds.fold<double>(0, (a, k) => a + _categoryKinds[k]!);
+    var kind = kinds.last;
+    for (final k in kinds) {
+      r -= _categoryKinds[k]!;
+      if (r <= 0) {
+        kind = k;
+        break;
+      }
+    }
+    final of = byKind[kind]!;
+    return of[random.nextInt(of.length)];
+  }
+
+  TicTacToeGrid? check(List<String> rows, List<String> cols) {
+    if ([...rows, ...cols].where((id) => _farAway(clubs[id]!)).length > 1) return null;
+    if ([...rows, ...cols].where((id) => isGridCategory(clubs[id]!)).length > _maxCategories) return null;
+    // Never an all-English grid: two English clubs a side at most.
+    int english(List<String> ids) => ids.where((id) => _home.contains(clubs[id]!.country)).length;
+    if (english(rows) > _maxEnglishASide || english(cols) > _maxEnglishASide) return null;
+    if (!rows.every((r) => cols.every((c) => fair(r, c)))) return null;
+    final grid = TicTacToeGrid(
+      rows: [for (final r in rows) clubs[r]!],
+      cols: [for (final c in cols) clubs[c]!],
+      answers: [
+        for (final r in rows)
+          for (final c in cols) links[r]![c]!.answerIds,
+      ],
+    );
+    if (distinct && !gridIsVaried(grid)) return null;
+    return avoid.contains(grid.id) ? null : grid;
+  }
+
+  List<String> poolAt(int fame) => [
+        for (final id in links.keys)
+          if (clubs[id]!.fame >= (_home.contains(clubs[id]!.country) ? fame - 1 : fame) && links[id]!.length >= 3) id,
+      ];
+
+  // First, with a category or two on one side (clubs on the other: categories
+  // only link to clubs), sometimes as the rows, sometimes the columns.
   for (var fame = minFame; fame >= 1; fame--) {
-    final pool = [
-      for (final id in links.keys)
-        if (clubs[id]!.fame >= (_home.contains(clubs[id]!.country) ? fame - 1 : fame) && links[id]!.length >= 3) id,
-    ];
+    final pool = poolAt(fame);
+    final cats = [for (final id in pool) if (isGridCategory(clubs[id]!)) id];
+    final teams = [for (final id in pool) if (!isGridCategory(clubs[id]!)) id];
+    if (cats.isEmpty || teams.length < 4) continue;
+    for (var i = 0; i < attempts; i++) {
+      final k = random.nextDouble() < _twoCategories ? 2 : 1;
+      final side = <String>[];
+      for (var j = 0; j < k; j++) {
+        final c = category([for (final id in cats) if (!side.contains(id) && _kindOf(id) != (side.isEmpty ? '' : _kindOf(side.first))) id]);
+        if (c != null) side.add(c);
+      }
+      if (side.isEmpty) continue;
+      // The rest of that side: clubs linked to the side's categories.
+      final linked = teams.where((id) => side.every((c) => links[c]!.containsKey(id))).toList();
+      final more = pick(linked, 3 - side.length);
+      if (more == null) continue;
+      final rows = [...side, ...more]..shuffle(random);
+      final common = teams.where((id) => !rows.contains(id) && rows.every((r) => links[r]!.containsKey(id))).toList();
+      if (common.length < 3) continue;
+      final cols = pick(common, 3)!;
+      final grid = random.nextBool() ? check(rows, cols) : check(cols, rows);
+      if (grid != null) return grid;
+    }
+  }
+
+  // Nothing fair with a category (a narrow era choice, or data without any):
+  // clubs only, as before.
+  for (var fame = minFame; fame >= 1; fame--) {
+    final pool = [for (final id in poolAt(fame)) if (!isGridCategory(clubs[id]!)) id];
     if (pool.length < 6) continue;
     for (var i = 0; i < attempts; i++) {
       final rows = pick(pool, 3)!;
       final common = pool.where((id) => !rows.contains(id) && rows.every((r) => links[r]!.containsKey(id))).toList();
       if (common.length < 3) continue;
-      final cols = pick(common, 3)!;
-      if ([...rows, ...cols].where((id) => _farAway(clubs[id]!)).length > 1) continue;
-      if ([...rows, ...cols].where((id) => isGridCategory(clubs[id]!)).length > _maxCategories) continue;
-      // Never an all-English grid: two English clubs a side at most.
-      int english(List<String> ids) => ids.where((id) => _home.contains(clubs[id]!.country)).length;
-      if (english(rows) > _maxEnglishASide || english(cols) > _maxEnglishASide) continue;
-      if (!rows.every((r) => cols.every((c) => fair(r, c)))) continue;
-      final grid = TicTacToeGrid(
-        rows: [for (final r in rows) clubs[r]!],
-        cols: [for (final c in cols) clubs[c]!],
-        answers: [
-          for (final r in rows)
-            for (final c in cols) links[r]![c]!.answerIds,
-        ],
-      );
-      if (distinct && !gridIsVaried(grid)) continue;
-      if (!avoid.contains(grid.id)) return grid;
+      final grid = check(rows, pick(common, 3)!);
+      if (grid != null) return grid;
     }
   }
   return null;
