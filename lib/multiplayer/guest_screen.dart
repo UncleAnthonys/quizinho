@@ -400,6 +400,10 @@ class _GuestGameState extends State<_GuestGame> with SingleTickerProviderStateMi
     // Only while this buzz is still waiting for the main phone: once it's
     // answered (wrong, and the steal is on), this team can't buzz again and
     // the box goes, so the phone shows the game again.
+    // A buzz belongs to one go at the question: once that's over (answered,
+    // or a new question), forget it. The teaser keeps its key between games,
+    // so a buzz at half-time used to open the box straight away next time.
+    if (phase != 'open') _buzzedOn = null;
     final early = types && _buzzedOn == q && myBuzzer;
     final iAnswer = early || phase == 'answering' && answering['device'] == widget.room.device;
     final result = asMap(v['result']);
@@ -667,7 +671,8 @@ class _GuestGameState extends State<_GuestGame> with SingleTickerProviderStateMi
           ]);
         }
         return Column(children: [
-          scores,
+          // Typing: the scores make way, so the suggestions show above the keyboard.
+          Collapse(hidden: answerTyping.value && stage == 'answer', child: scores),
           Expanded(
             child: TttLayout(
               // At the end, each square shows how many answers it had.
@@ -681,7 +686,8 @@ class _GuestGameState extends State<_GuestGame> with SingleTickerProviderStateMi
         ]);
       case 'top10':
         return Column(children: [
-          scores,
+          // Typing: the scores make way, so the suggestions show above the keyboard.
+          Collapse(hidden: answerTyping.value && stage == 'answer', child: scores),
           Expanded(
             child: Padding(
               padding: const EdgeInsets.fromLTRB(16, 6, 16, 12),
@@ -700,18 +706,20 @@ class _GuestGameState extends State<_GuestGame> with SingleTickerProviderStateMi
         ]);
       case 'pt':
         return Column(children: [
-          scores,
+          // Typing: the scores make way, so the suggestions show above the keyboard.
+          Collapse(hidden: answerTyping.value && stage == 'answer', child: scores),
           Expanded(child: PtLayout(data: board, typing: answerTyping.value, answerBox: clockAndBox())),
         ]);
       case 'co':
         return Column(children: [
-          scores,
+          // Typing: the scores make way, so the suggestions show above the keyboard.
+          Collapse(hidden: answerTyping.value && stage == 'answer', child: scores),
           Expanded(child: CoLayout(data: board, typing: answerTyping.value, answerBox: clockAndBox())),
         ]);
       case 'bid':
         final phase = '${board['phase']}';
         return Column(children: [
-          if (phase == 'bidding' || phase == 'finished') scores,
+          if (phase == 'bidding' || phase == 'finished') Collapse(hidden: answerTyping.value && stage == 'answer', child: scores),
           Expanded(
             child: BidLayout(
               data: board,

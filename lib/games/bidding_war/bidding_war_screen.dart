@@ -343,7 +343,10 @@ class BidLayout extends StatelessWidget {
       ),
       MissShake(
         trigger: data['miss'] is Map ? ((data['miss']! as Map)['n'] as num?)?.toInt() : null,
-        child: _CategoryCard(prompt: '${data['prompt'] ?? ''}', compact: phase == 'answering'),
+        // (Compact on a short screen too, so the bid buttons fit below.)
+        child: _CategoryCard(
+            prompt: '${data['prompt'] ?? ''}',
+            compact: phase == 'answering' || MediaQuery.sizeOf(context).height < _shortScreen),
       ),
       Expanded(
         child: switch (phase) {
@@ -356,13 +359,19 @@ class BidLayout extends StatelessWidget {
     ]);
   }
 
-  Widget _bidding() {
+  /// Below this height (a small iPhone in Safari) the bidding screen tightens
+  /// up so Raise and Challenge stay on screen without scrolling.
+  static const double _shortScreen = 740;
+
+  Widget _bidding() => LayoutBuilder(builder: (context, box) => _biddingIn(short: box.maxHeight < 470));
+
+  Widget _biddingIn({required bool short}) {
     final holder = (data['holder'] as num?)?.toInt();
     final out = _list('out');
-    return ListView(padding: const EdgeInsets.fromLTRB(16, 4, 16, 16), children: [
+    return ListView(padding: EdgeInsets.fromLTRB(16, short ? 0 : 4, 16, 16), children: [
       // Current bid
       Container(
-        padding: const EdgeInsets.symmetric(vertical: 12),
+        padding: EdgeInsets.symmetric(vertical: short ? 6 : 12),
         decoration: BoxDecoration(color: Colors.black.withValues(alpha: 0.3), borderRadius: BorderRadius.circular(16)),
         child: Column(children: [
           if (holder == null)
@@ -371,7 +380,7 @@ class BidLayout extends StatelessWidget {
             _teamChip(holder, size: 18),
             const SizedBox(height: 4),
             Text('CLAIM THEY CAN NAME', style: AppText.label(15)),
-            Text('${data['bid']}', style: AppText.headline(72, color: Palette.yellow)),
+            Text('${data['bid']}', style: AppText.headline(short ? 46 : 72, color: Palette.yellow)),
           ],
           Text('${data['max']} answers exist', style: AppText.label(13)),
           const SizedBox(height: 2),
@@ -379,18 +388,18 @@ class BidLayout extends StatelessWidget {
               style: AppText.label(13, color: Palette.yellow)),
         ]),
       ),
-      const SizedBox(height: 14),
+      SizedBox(height: short ? 6 : 14),
       Row(mainAxisAlignment: MainAxisAlignment.center, children: [
         _teamChip(_int(data['team']), size: 22),
         const SizedBox(width: 8),
         Flexible(
           child: FittedBox(
             fit: BoxFit.scaleDown,
-            child: Text(holder == null ? 'OPENING BID' : 'WHAT DO YOU DO?', style: AppText.headline(26)),
+            child: Text(holder == null ? 'OPENING BID' : 'WHAT DO YOU DO?', style: AppText.headline(short ? 22 : 26)),
           ),
         ),
       ]),
-      const SizedBox(height: 10),
+      SizedBox(height: short ? 4 : 10),
       controls,
       if (out.isNotEmpty)
         Padding(
@@ -490,19 +499,20 @@ class _BidControlsState extends State<BidControls> {
       _pending = d['holder'] == null ? min(3, maxBid) : min(minRaise, maxBid);
     }
     final pending = (_pending ?? minRaise).clamp(minRaise, max(minRaise, maxBid)).toInt();
+    final short = MediaQuery.sizeOf(context).height < BidLayout._shortScreen;
     return Column(children: [
       if (d['canRaise'] == true) ...[
         Row(children: [
           _StepButton(icon: Icons.remove, onTap: pending > minRaise ? () => setState(() => _pending = pending - 1) : null),
           Expanded(
             child: Column(children: [
-              Text('$pending', textAlign: TextAlign.center, style: AppText.headline(56)),
+              Text('$pending', textAlign: TextAlign.center, style: AppText.headline(short ? 40 : 56)),
               Text('ANSWERS', style: AppText.label(13)),
             ]),
           ),
           _StepButton(icon: Icons.add, onTap: pending < maxBid ? () => setState(() => _pending = pending + 1) : null),
         ]),
-        const SizedBox(height: 10),
+        SizedBox(height: short ? 6 : 10),
         BigButton(
           label: d['holder'] == null ? 'We can name $pending' : 'Raise to $pending',
           icon: Icons.trending_up_rounded,
@@ -512,7 +522,7 @@ class _BidControlsState extends State<BidControls> {
         ),
       ],
       if (d['canChallenge'] == true) ...[
-        const SizedBox(height: 10),
+        SizedBox(height: short ? 6 : 10),
         BigButton(
           label: 'Challenge - prove it!',
           icon: Icons.gavel_rounded,

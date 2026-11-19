@@ -528,7 +528,10 @@ class _TttLayoutState extends State<TttLayout> {
   }
 
   double _sizeBoard(BoxConstraints box) {
-    final fits = min(box.maxWidth - 24, max(240.0, box.maxHeight - 260));
+    // Room kept under the board: the turn line above it (~40), then the clock,
+    // "your go" and Pass (~150). It was 260, which left a small phone's grid
+    // well short of the screen's width.
+    final fits = min(box.maxWidth - 24, max(240.0, box.maxHeight - 200));
     final settling = typing ||
         MediaQuery.viewInsetsOf(context).bottom > 0 ||
         DateTime.now().difference(_keyboardAt) < const Duration(milliseconds: 1500);

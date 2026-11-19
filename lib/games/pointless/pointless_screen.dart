@@ -286,18 +286,23 @@ class PtLayout extends StatelessWidget {
   Widget build(BuildContext context) {
     final phase = '${data['phase']}';
     return Column(children: [
-      CommentaryBanner(
-        text: typing ? null : commentary,
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(16, 6, 16, 0),
-          child: Row(children: [
-            Text('UNDER THE RADAR', style: AppText.label(16, color: _studio)),
-            const Spacer(),
-            if (multiplier > 1) Text('x$multiplier POINTS', style: AppText.label(15, color: Palette.gold)),
-          ]),
+      // Typing: the title goes and the category shrinks, so the answer box and
+      // its suggestions fit above the keyboard on a small phone.
+      Collapse(
+        hidden: typing,
+        child: CommentaryBanner(
+          text: typing ? null : commentary,
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(16, 6, 16, 0),
+            child: Row(children: [
+              Text('UNDER THE RADAR', style: AppText.label(16, color: _studio)),
+              const Spacer(),
+              if (multiplier > 1) Text('x$multiplier POINTS', style: AppText.label(15, color: Palette.gold)),
+            ]),
+          ),
         ),
       ),
-      _CategoryCard(prompt: '${data['prompt'] ?? ''}', compact: phase != 'finished'),
+      _CategoryCard(prompt: '${data['prompt'] ?? ''}', compact: phase != 'finished', tight: typing),
       Expanded(
         child: switch (phase) {
           'answering' => _answering(),
@@ -534,20 +539,24 @@ class _ColumnState extends State<_Column> with SingleTickerProviderStateMixin {
 }
 
 class _CategoryCard extends StatelessWidget {
-  const _CategoryCard({required this.prompt, required this.compact});
+  const _CategoryCard({required this.prompt, required this.compact, this.tight = false});
   final String prompt;
   final bool compact;
+
+  /// Keyboard up: as small as it can be and still read.
+  final bool tight;
 
   @override
   Widget build(BuildContext context) => Container(
         width: double.infinity,
-        margin: const EdgeInsets.fromLTRB(16, 6, 16, 6),
-        padding: EdgeInsets.symmetric(horizontal: 14, vertical: compact ? 8 : 14),
+        margin: EdgeInsets.fromLTRB(16, tight ? 4 : 6, 16, tight ? 2 : 6),
+        padding: EdgeInsets.symmetric(horizontal: 14, vertical: tight ? 4 : (compact ? 8 : 14)),
         decoration: BoxDecoration(
           color: Colors.black.withValues(alpha: 0.35),
           borderRadius: BorderRadius.circular(16),
           border: Border.all(color: _studio, width: 2),
         ),
-        child: Text(prompt.toUpperCase(), textAlign: TextAlign.center, style: AppText.headline(compact ? 20 : 26)),
+        child: Text(prompt.toUpperCase(),
+            textAlign: TextAlign.center, style: AppText.headline(tight ? 15 : (compact ? 20 : 26))),
       );
 }
