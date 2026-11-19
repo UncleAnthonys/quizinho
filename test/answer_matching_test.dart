@@ -1,4 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:quizinho/data/models.dart';
 import 'package:quizinho/domain/player_index.dart';
 import 'package:quizinho/domain/text_normaliser.dart';
 
@@ -64,5 +65,21 @@ void main() {
     test('empty query returns nothing', () {
       expect(index.search('  '), isEmpty);
     });
+  });
+
+  test('clubs are found by the name people type (Schalke, Hertha, Leipzig)', () {
+    final index = PlayerIndex([
+      for (final c in const [
+        Club(id: 'Q32494', name: 'Schalke 04', fame: 5),
+        Club(id: 'h', name: 'Hertha BSC', fame: 4),
+        Club(id: 'l', name: 'RB Leipzig', fame: 5),
+        Club(id: 'k', name: '1. FC Köln', fame: 4),
+        Club(id: 'b', name: 'Bayer 04 Leverkusen', fame: 5),
+      ])
+        c.asAnswer,
+    ]);
+    for (final (typed, id) in [('Schalke', 'Q32494'), ('Hertha', 'h'), ('Leipzig', 'l'), ('Koln', 'k'), ('Leverkusen', 'b')]) {
+      expect(index.matchTyped(typed).map((p) => p.id), contains(id), reason: typed);
+    }
   });
 }
