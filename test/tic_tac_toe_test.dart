@@ -113,6 +113,28 @@ void main() {
       expect(two, greaterThan(10));
     });
 
+    test('categories at every difficulty (the game's own settings)', () async {
+      final conns = [...await repo.allClubConnections(), ...await repo.categoryClubPairs()];
+      int fame(String id) => repo.players.byId(id)?.fame ?? 0;
+      // (minFame, maxLevel, known answers) as the game uses them: Easy to Expert.
+      for (final (name, f, level, known) in [('easy', 5, 1, 3), ('medium', 4, 2, 2), ('hard', 4, 3, 1), ('expert', 2, 4, 0)]) {
+        final kinds = <String, int>{};
+        var none = 0;
+        for (var seed = 0; seed < 40; seed++) {
+          final g = generateTicTacToeGrid(conns,
+              random: Random(seed), minFame: f, maxLevel: level, minKnownAnswers: known, answerFame: fame)!;
+          final cats = [...g.rows, ...g.cols].where(isGridCategory).toList();
+          if (cats.isEmpty) none++;
+          for (final c in cats) {
+            kinds.update(c.id.split(':').first, (n) => n + 1, ifAbsent: () => 1);
+          }
+        }
+        // ignore: avoid_print
+        print('grid categories $name: clubs-only $none/40, $kinds');
+        expect(none, lessThanOrEqualTo(4), reason: '$name: $kinds');
+      }
+    });
+
     test('clubs only when there are no categories to use', () async {
       final g = generateTicTacToeGrid(await repo.allClubConnections(), random: Random(2), minFame: 4)!;
       expect([...g.rows, ...g.cols].where(isGridCategory), isEmpty);
