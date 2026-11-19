@@ -71,8 +71,21 @@ class Club {
   final List<String> aliases;
 
   /// As an answer entry, so the same type-or-say box can search clubs.
-  Player get asAnswer => Player(id: id, name: name, fame: fame, aliases: aliases, nationality: country);
+  Player get asAnswer => Player(id: id, name: name, fame: fame, aliases: [...aliases, ..._shortNames], nationality: country);
+
+  /// What people actually type for a club: its name without the numbers and
+  /// letters around it ("Schalke 04" → Schalke, "Hertha BSC" → Hertha,
+  /// "RB Leipzig" → Leipzig, "1. FSV Mainz 05" → Mainz). A player's name is
+  /// matched on its last word, which for "Schalke 04" was "04".
+  List<String> get _shortNames {
+    final words = name.split(' ').where((w) => !_clubAffix.hasMatch(w)).toList();
+    final short = words.join(' ');
+    return short.isEmpty || short == name ? const [] : [short];
+  }
 }
+
+/// Numbers and the abbreviations clubs carry ("04", "1.", "FC", "BSC", "VfL").
+final _clubAffix = RegExp(r'^(\d+\.?|[A-Z]{1,4}|VfB|VfL|TSG|TSV|SpVgg)$');
 
 class Player {
   const Player({

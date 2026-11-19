@@ -239,9 +239,11 @@ class _BiddingWarScreenState extends State<BiddingWarScreen>
         'done': c.completed == true,
         'winner': c.completed == true ? c.holder : c.challenger,
         'points': BiddingWarController.points * widget.round.multiplier,
+        // (Clubs for a club list - "Clubs David Beckham played for" - not players.)
         'full': [
           for (final p in [
-            for (final id in c.category.answerIds) if (players.byId(id) != null) players.byId(id)!,
+            for (final id in c.category.answerIds)
+              if ((c.category.answersAreClubs ? services.repo.clubIndex : players).byId(id) case final p?) p,
           ]..sort((a, b) => b.fame.compareTo(a.fame)))
             p.name,
         ],

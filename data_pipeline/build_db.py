@@ -518,6 +518,10 @@ def generate_grid_categories(clubs, players):
     Barcelona, Ferguson's players x Man United would be too easy."""
     members: dict[str, set[str]] = {}
     own: dict[str, set[str]] = {}  # clubs a category isn't paired with
+    # A teammate or manager category belongs to that star's or manager's
+    # time, whatever clubs the players went on to: Cantona's teammates who
+    # later joined Man City are still a 90s question, not a 2000s one.
+    era_of: dict[str, int] = {}
     cats = []
     for code, label in GRID_NATIONS.items():
         cid = f"nat:{code}"
@@ -531,6 +535,7 @@ def generate_grid_categories(clubs, players):
         cid = f"with:{star}"
         cats.append({"id": cid, "label": f"Club teammate of {label}", "kind": "teammate"})
         theirs = [(s["club"], y) for s in players[star]["spells"] if (y := _years(s))]
+        era_of[cid] = career_mask(players[star]["spells"])
         own[cid] = {c for c, _ in theirs}
         members[cid] = {
             pid for pid, p in players.items() if pid != star and any(
@@ -541,6 +546,9 @@ def generate_grid_categories(clubs, players):
         cid = f"mgr:{slug_id(m['name'])}"
         cats.append({"id": cid, "label": f"Managed by {m['short']}" + (" (club)" if m.get("national") else ""), "kind": "manager"})
         jobs = [(c, int(a[:4]), int(b[:4]) if b else dt.date.today().year) for c, a, b in m["spells"]]
+        era_of[cid] = 0
+        for _, a, b in jobs:
+            era_of[cid] |= era_mask(a, b)
         own[cid] = {c for c, _, _ in jobs}
         members[cid] = {
             pid for pid, p in players.items() if any(
@@ -573,6 +581,8 @@ def generate_grid_categories(clubs, players):
             eras = 0
             for pid in ids:
                 eras |= spells_mask([s for s in players[pid]["spells"] if s["club"] == c])
+            if era_of.get(cid):
+                eras = (eras & era_of[cid]) or era_of[cid]
             rosters.append({"category": cid, "club": c, "answers": sorted(ids), "eras": eras or 31})
     return cats, rosters
 
@@ -834,6 +844,24 @@ def add_pointless_scores(bidding: list[dict], players, clubs) -> None:
 CHECKOUT_MIN_PLAYERS = 40
 CHECKOUT_MIN_DARTS = 30
 CHECKOUT_MIN_KNOWN = 15
+# Abroad, only clubs a UK group follows closely enough to guess numbers for
+# are level 1: the rest (Villarreal, Sevilla, Schalke...) are for Hard and up.
+CHECKOUT_FOREIGN_GIANTS = {
+    "Q7156", "Q8682", "Q8701",  # Barcelona, Real Madrid, Atlético Madrid
+    "Q15789", "Q41420",  # Bayern Munich, Borussia Dortmund
+    "Q1422", "Q1543", "Q631",  # Juventus, AC Milan, Inter
+    "Q483020",  # Paris Saint-Germain
+}
+
+
+def checkout_level(cid: str, c) -> int:
+    """1 = British giants and the biggest clubs abroad; 2 = other British
+    clubs (and women's sides, as before); 3 = other clubs abroad."""
+    if c["women"]:
+        return 2
+    if c["country"] in ("GBR", "ENG", "SCO"):
+        return 1 if c["fame"] == 5 else 2
+    return 1 if cid in CHECKOUT_FOREIGN_GIANTS else 3
 
 
 def generate_checkouts(clubs, players) -> list[dict]:
@@ -860,7 +888,7 @@ def generate_checkouts(clubs, players) -> list[dict]:
         out.append({
             "id": f"501:{cid}", "club": cid, "prompt": f"League apps + goals for {c['name']}",
             "values": values, "no_stats": sorted(played.get(cid, set()) - set(values)),
-            "difficulty": 1 if c["fame"] == 5 and not c["women"] else 2, "eras": eras or 31, "women": c["women"],
+            "difficulty": checkout_level(cid, c), "eras": eras or 31, "women": c["women"],
         })
     return out
 

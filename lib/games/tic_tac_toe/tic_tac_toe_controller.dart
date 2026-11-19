@@ -142,6 +142,7 @@ TicTacToeGrid? generateTicTacToeGrid(
   int attempts = 300,
   bool distinct = true,
   Set<String> trophies = allTrophies,
+  Set<String> usedCategories = const {},
 }) {
   final clubs = <String, Club>{};
   final links = <String, Map<String, ClubConnection>>{};
@@ -245,7 +246,10 @@ TicTacToeGrid? generateTicTacToeGrid(
     final pool = poolAt(fame);
     final cats = [
       for (final id in pool)
-        if (isGridCategory(clubs[id]!) && (_kindOf(id) != 'cup' || trophies.contains(id.split(':')[1]))) id,
+        if (isGridCategory(clubs[id]!) &&
+            !usedCategories.contains(id) && // once a tournament ("Club teammate of Iniesta" twice)
+            (_kindOf(id) != 'cup' || trophies.contains(id.split(':')[1])))
+          id,
     ];
     final teams = [for (final id in pool) if (!isGridCategory(clubs[id]!)) id];
     if (cats.isEmpty || teams.length < 4) continue;

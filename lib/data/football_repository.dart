@@ -126,7 +126,8 @@ class ChallengeSource {
   Future<BiddingCategory?> pointless(Difficulty d, Set<String> used, {int eras = Era.allMask, int genders = 1}) =>
       bidding(d, used, eras: eras, genders: genders, where: (b) => b.answerIds.length >= 6 && b.scores.isNotEmpty);
 
-  /// Football 501 has 2 levels: the giants (1) and other big clubs (2).
+  /// Football 501 has 3 levels: British giants and the biggest clubs abroad
+  /// (1), other British clubs (2), other clubs abroad (3).
   Future<CheckoutCategory?> checkout(Difficulty d, Set<String> used, {int eras = Era.allMask, int genders = 1}) =>
       _fresh(
         'checkout',
@@ -134,7 +135,7 @@ class ChallengeSource {
         used,
         eras,
         (l, e, x) => repo.pickCheckout(
-            levels: l == null ? null : {for (final v in l) v > 2 ? 2 : v}, exclude: x, eras: e, genders: genders),
+            levels: l == null ? null : {for (final v in l) v > 3 ? 3 : v}, exclude: x, eras: e, genders: genders),
         (c) => c.id,
       );
 

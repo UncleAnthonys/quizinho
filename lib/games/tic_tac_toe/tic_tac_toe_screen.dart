@@ -74,7 +74,8 @@ class _TicTacToeScreenState extends State<TicTacToeScreen>
             answerFame: fame,
             avoid: fresh ? unseen : used,
             distinct: strict, // varied squares, unless nothing else fits
-            trophies: trophiesFor(_t.config.difficulty));
+            trophies: trophiesFor(_t.config.difficulty),
+            usedCategories: used);
     // Not enough in the chosen eras at this difficulty — widen rather than stall.
     var grid = make(inEras);
     if (grid == null) {
@@ -94,6 +95,10 @@ class _TicTacToeScreenState extends State<TicTacToeScreen>
       return;
     }
     _t.markUsed(_mode, grid.id);
+    // Its categories too, so a later grid this match doesn't repeat one.
+    for (final c in [...grid.rows, ...grid.cols]) {
+      if (isGridCategory(c)) _t.markUsed(_mode, c.id);
+    }
     history.add('ttt', grid.id);
     final c = TicTacToeController(
       grid: grid,
