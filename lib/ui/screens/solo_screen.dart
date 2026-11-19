@@ -39,7 +39,7 @@ String soloScoring(GameModeId m) => switch (m) {
 /// The rules for each game played alone (the party rules talk about teams).
 List<String> soloRules(GameModeId m) => switch (m) {
       GameModeId.clubConnections => [
-          'Two clubs appear. Name a player who played for both.',
+          'Two clubs appear. Name a player who has played for both.',
           '5 pairs. Quicker answers and rarer picks score more.',
         ],
       GameModeId.careerPath => [

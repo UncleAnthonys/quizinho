@@ -71,7 +71,7 @@ class _ClubConnectionsScreenState extends State<ClubConnectionsScreen>
         tournament: t,
         players: players,
         title: 'CLUB CONNECTIONS',
-        prompt: 'Name a player who played for both',
+        prompt: 'Name a player who has played for both',
         question: () => {
           'clubs': [c.current.clubA.name, c.current.clubB.name],
           'clock': c.lockedOut.isEmpty ? 'BUZZ IN' : 'STEAL IT',

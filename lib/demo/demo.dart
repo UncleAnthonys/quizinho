@@ -252,7 +252,7 @@ class DemoPilot {
           ? 'Question two.'
           : c is CareerPathController
               ? 'Guess the player from his clubs. First to buzz gets it.'
-              : 'Name a player who played for both clubs. First to buzz gets it.');
+              : 'Name a player who has played for both clubs. First to buzz gets it.');
     }
     if (c.phase != _lastPhase) _onPhase(c, t);
     _lastPhase = c.phase;

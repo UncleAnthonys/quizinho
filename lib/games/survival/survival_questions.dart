@@ -62,7 +62,7 @@ class SurvivalQuestions {
           kind: k,
           id: 'c:${c.id}',
           heading: 'CLUB CONNECTIONS',
-          prompt: 'Name a player who played for both',
+          prompt: 'Name a player who has played for both',
           lines: [c.clubA.name, c.clubB.name],
           answerIds: c.answerIds,
           difficulty: c.difficulty,

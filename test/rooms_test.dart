@@ -104,7 +104,7 @@ void main() {
         tournament: tournament,
         players: PlayerIndex(const [henry, fabregas, gallas]),
         title: 'CLUB CONNECTIONS',
-        prompt: 'Name a player who played for both',
+        prompt: 'Name a player who has played for both',
         question: () => {'clubs': [game.current.clubA.name, game.current.clubB.name]},
         answerIds: () => game.current.answerIds,
         reveal: () => ['Thierry Henry'],

@@ -660,7 +660,7 @@ def generate_bidding(clubs, players, connections, countries):
     # 1. Played for both clubs
     for c in connections:
         if clubs[c["a"]]["fame"] >= BID_MIN_CLUB_FAME and clubs[c["b"]]["fame"] >= BID_MIN_CLUB_FAME:
-            add(f"pair:{c['id']}", f"Players who played for both {clubs[c['a']]['name']} and {clubs[c['b']]['name']}",
+            add(f"pair:{c['id']}", f"Players who have played for both {clubs[c['a']]['name']} and {clubs[c['b']]['name']}",
                 "pair", c["answers"], {c["a"], c["b"]}, floor=c["difficulty"])  # no easier than the connection
 
     # 2. Nationality at a club ("Brazilians who played for Chelsea")
@@ -676,7 +676,7 @@ def generate_bidding(clubs, players, connections, countries):
         if country:
             # Medium only at clubs a UK group knows (Brazilians at Chelsea, not Colombians at Porto)
             familiar = clubs[cid]["country"] in ("GBR", "ENG") or cid in WELL_KNOWN
-            add(f"nat:{cid}:{nat}", f"Players from {country} who played for {clubs[cid]['name']}", "nationality", answers, {cid},
+            add(f"nat:{cid}:{nat}", f"Players from {country} who have played for {clubs[cid]['name']}", "nationality", answers, {cid},
                 floor=1 if familiar else 3)
     return out
 

@@ -805,7 +805,7 @@ void main() {
           _scores(),
           BidLayout(
             // Not the free Warm-Up Cup's question: a real category, its real count.
-            data: {...bid('bidding'), 'prompt': 'Players from Brazil who played for Barcelona', 'max': 33},
+            data: {...bid('bidding'), 'prompt': 'Players from Brazil who have played for Barcelona', 'max': 33},
             controls: BidControls(data: bid('bidding'), onRaise: (_) {}, onChallenge: () {}, onPass: () {}),
             answerBox: const SizedBox(),
           )),

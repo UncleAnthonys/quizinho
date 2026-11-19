@@ -3,10 +3,10 @@
 enum GameModeId {
   clubConnections(
     title: 'Club Connections',
-    tagline: 'Name a player who played for both clubs',
+    tagline: 'Name a player who has played for both clubs',
     playable: true,
     rules: [
-      'Two clubs appear. Hit your buzzer as soon as you know a player who played for both.',
+      'Two clubs appear. Hit your buzzer as soon as you know a player who has played for both.',
       'Get it right: +2. Get it wrong: you’re locked out and the others can steal.',
       'Name a rare pick - a player most people wouldn’t think of - for a bonus +1.',
     ],
