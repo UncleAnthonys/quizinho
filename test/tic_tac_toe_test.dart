@@ -113,7 +113,7 @@ void main() {
       expect(two, greaterThan(10));
     });
 
-    test('categories at every difficulty (the game's own settings)', () async {
+    test('categories at every difficulty (the game settings)', () async {
       final conns = [...await repo.allClubConnections(), ...await repo.categoryClubPairs()];
       int fame(String id) => repo.players.byId(id)?.fame ?? 0;
       // (minFame, maxLevel, known answers) as the game uses them: Easy to Expert.
