@@ -62,6 +62,20 @@ const _categoryKinds = {'with': 0.35, 'nat': 0.25, 'mgr': 0.20, 'cup': 0.20};
 /// "with" (Club teammate of), "nat", "mgr" (Managed by) or "cup" (trophy).
 String _kindOf(String id) => id.split(':').first;
 
+/// Every trophy: Champions League, FA Cup, World Cup, Europa League, Euros.
+const allTrophies = {'cl', 'fac', 'wc', 'uel', 'euro'};
+
+/// The trophies a difficulty uses, easiest to remember first. Euros winners
+/// are few (Spain won three of the last five), so their squares have about
+/// three answers; World Cup winners are a wider mix; Europa League squares
+/// have plenty of answers, but squad players few remember winning it.
+Set<String> trophiesFor(Difficulty d) => switch (d) {
+      Difficulty.easy => const {'cl', 'fac'},
+      Difficulty.medium => const {'cl', 'fac', 'wc'},
+      Difficulty.hard => const {'cl', 'fac', 'wc', 'uel'},
+      Difficulty.expert => allTrophies,
+    };
+
 /// Two categories that would mostly share their answers: a nation beside the
 /// Euros or World Cup (Spain and Euros winners: Silva, Fàbregas, Torres in
 /// both columns).
@@ -127,6 +141,7 @@ TicTacToeGrid? generateTicTacToeGrid(
   Set<String> avoid = const {},
   int attempts = 300,
   bool distinct = true,
+  Set<String> trophies = allTrophies,
 }) {
   final clubs = <String, Club>{};
   final links = <String, Map<String, ClubConnection>>{};
@@ -184,10 +199,13 @@ TicTacToeGrid? generateTicTacToeGrid(
     }
     final kinds = [for (final k in _categoryKinds.keys) if (byKind.containsKey(k)) k];
     if (kinds.isEmpty) return null;
-    var r = random.nextDouble() * kinds.fold<double>(0, (a, k) => a + _categoryKinds[k]!);
+    // Fewer trophies to choose from, a smaller share for trophies (20% with
+    // all five, 8% with two).
+    double share(String k) => k == 'cup' ? _categoryKinds[k]! * trophies.length / allTrophies.length : _categoryKinds[k]!;
+    var r = random.nextDouble() * kinds.fold<double>(0, (a, k) => a + share(k));
     var kind = kinds.last;
     for (final k in kinds) {
-      r -= _categoryKinds[k]!;
+      r -= share(k);
       if (r <= 0) {
         kind = k;
         break;
@@ -225,7 +243,10 @@ TicTacToeGrid? generateTicTacToeGrid(
   // only link to clubs), sometimes as the rows, sometimes the columns.
   for (var fame = minFame; fame >= 1; fame--) {
     final pool = poolAt(fame);
-    final cats = [for (final id in pool) if (isGridCategory(clubs[id]!)) id];
+    final cats = [
+      for (final id in pool)
+        if (isGridCategory(clubs[id]!) && (_kindOf(id) != 'cup' || trophies.contains(id.split(':')[1]))) id,
+    ];
     final teams = [for (final id in pool) if (!isGridCategory(clubs[id]!)) id];
     if (cats.isEmpty || teams.length < 4) continue;
     for (var i = 0; i < attempts ~/ 5; i++) {

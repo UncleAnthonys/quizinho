@@ -73,7 +73,8 @@ class _TicTacToeScreenState extends State<TicTacToeScreen>
             minKnownAnswers: strict ? known : 0,
             answerFame: fame,
             avoid: fresh ? unseen : used,
-            distinct: strict); // varied squares, unless nothing else fits
+            distinct: strict, // varied squares, unless nothing else fits
+            trophies: trophiesFor(_t.config.difficulty));
     // Not enough in the chosen eras at this difficulty — widen rather than stall.
     var grid = make(inEras);
     if (grid == null) {

@@ -117,14 +117,29 @@ void main() {
       final conns = [...await repo.allClubConnections(), ...await repo.categoryClubPairs()];
       int fame(String id) => repo.players.byId(id)?.fame ?? 0;
       // (minFame, maxLevel, known answers) as the game uses them: Easy to Expert.
-      for (final (name, f, level, known) in [('easy', 5, 1, 3), ('medium', 4, 2, 2), ('hard', 4, 3, 1), ('expert', 2, 4, 0)]) {
+      for (final (d, f, level, known) in [
+        (Difficulty.easy, 5, 1, 3),
+        (Difficulty.medium, 4, 2, 2),
+        (Difficulty.hard, 4, 3, 1),
+        (Difficulty.expert, 2, 4, 0),
+      ]) {
+        final name = d.name;
         final kinds = <String, int>{};
         var none = 0;
         for (var seed = 0; seed < 40; seed++) {
           final g = generateTicTacToeGrid(conns,
-              random: Random(seed), minFame: f, maxLevel: level, minKnownAnswers: known, answerFame: fame)!;
+              random: Random(seed),
+              minFame: f,
+              maxLevel: level,
+              minKnownAnswers: known,
+              answerFame: fame,
+              trophies: trophiesFor(d))!;
           final cats = [...g.rows, ...g.cols].where(isGridCategory).toList();
           if (cats.isEmpty) none++;
+          // Only this difficulty's trophies (Euros on Expert only).
+          for (final c in cats.where((c) => c.id.startsWith('cup:'))) {
+            expect(trophiesFor(d), contains(c.id.split(':')[1]), reason: '$name: ${c.id}');
+          }
           for (final c in cats) {
             kinds.update(c.id.split(':').first, (n) => n + 1, ifAbsent: () => 1);
           }

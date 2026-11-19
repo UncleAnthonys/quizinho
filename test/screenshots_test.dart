@@ -41,6 +41,7 @@ import 'package:quizinho/ui/widgets/logo.dart';
 import 'package:quizinho/ui/widgets/player_picker.dart';
 
 import 'package:quizinho/data/json_football_repository.dart';
+import 'package:quizinho/data/models.dart' show Difficulty;
 import 'package:quizinho/games/tic_tac_toe/tic_tac_toe_controller.dart';
 import 'fixtures.dart';
 
@@ -891,7 +892,13 @@ void main() {
     final out = <Map<String, Object?>>[];
     for (var i = 0; i < 40; i++) {
       final g = generateTicTacToeGrid(conns,
-          random: rnd, minFame: 4, maxLevel: 2, minKnownAnswers: 2, answerFame: fame, avoid: seen)!;
+          random: rnd,
+          minFame: 4,
+          maxLevel: 2,
+          minKnownAnswers: 2,
+          answerFame: fame,
+          avoid: seen,
+          trophies: trophiesFor(Difficulty.medium))!;
       seen.add(g.id);
       out.add({
         'rows': [for (final c in g.rows) c.name],
