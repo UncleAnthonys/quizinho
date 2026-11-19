@@ -2,7 +2,9 @@
 // host draws the same layout) to PNGs in docs/shots/, so they can be looked
 // at without a phone. Only runs in the "Screenshots" workflow (SHOTS=1):
 //   SHOTS=1 flutter test test/screenshots_test.dart --update-goldens
+import 'dart:convert';
 import 'dart:io';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -38,6 +40,8 @@ import 'package:quizinho/ui/widgets/common.dart';
 import 'package:quizinho/ui/widgets/logo.dart';
 import 'package:quizinho/ui/widgets/player_picker.dart';
 
+import 'package:quizinho/data/json_football_repository.dart';
+import 'package:quizinho/games/tic_tac_toe/tic_tac_toe_controller.dart';
 import 'fixtures.dart';
 
 final _shots = Platform.environment['SHOTS'] == '1';
@@ -874,5 +878,36 @@ void main() {
     ));
     await tester.pump(const Duration(seconds: 1));
     await expectLater(find.byType(MaterialApp), matchesGoldenFile('../docs/store/feature_graphic.png'));
+  }, skip: !_shots);
+
+  // 40 Medium grids from the real database and the game's own settings (as
+  // consecutive games: each avoids the ones before), for checking by eye.
+  test('Medium grids sample', () async {
+    final repo = parseFootballJson(File('assets/db/football.json').readAsStringSync());
+    int fame(String id) => repo.players.byId(id)?.fame ?? 0;
+    final conns = [...await repo.allClubConnections(), ...await repo.categoryClubPairs()];
+    final rnd = Random(20261119);
+    final seen = <String>{};
+    final out = <Map<String, Object?>>[];
+    for (var i = 0; i < 40; i++) {
+      final g = generateTicTacToeGrid(conns,
+          random: rnd, minFame: 4, maxLevel: 2, minKnownAnswers: 2, answerFame: fame, avoid: seen)!;
+      seen.add(g.id);
+      out.add({
+        'rows': [for (final c in g.rows) c.name],
+        'cols': [for (final c in g.cols) c.name],
+        'squares': [
+          for (final a in g.answers)
+            {
+              'count': a.length,
+              'top': [
+                for (final id in (a.toList()..sort((x, y) => fame(y).compareTo(fame(x)))).take(4))
+                  repo.players.byId(id)?.name ?? id,
+              ],
+            },
+        ],
+      });
+    }
+    File('docs/shots/grids_medium.json').writeAsStringSync(const JsonEncoder.withIndent(' ').convert(out));
   }, skip: !_shots);
 }
