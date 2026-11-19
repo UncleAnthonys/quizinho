@@ -18,6 +18,8 @@ Things to come back to before Quizinho goes live. Tick them off as they're done.
 - [ ] Payments profile (Little Fort Studios Ltd, company bank account)
 - [ ] In-app product `com.littlefortstudios.quizinho.fullgame`, £2.99 (needs a build uploaded first)
 - [ ] Store listing: "Quizinho: Football Party Quiz", text, icon, feature graphic, screenshots
+- [ ] Play full description: change the Club Connections line to "Club Connections – name a player who has played for both clubs" (wording now says "has/have played for")
+- [ ] Play screenshots: upload the latest set from docs/store (Bidding War now reads "Players from Brazil who have played for Barcelona"; Club Connections is Southampton + Bayern Munich; Career Path replaces the free kick)
 - [ ] Android build + signing in Codemagic (Claude)
 - [ ] Android manifest: strip the AD_ID permission (Play is told the app uses no advertising ID)
 
@@ -26,6 +28,7 @@ Things to come back to before Quizinho goes live. Tick them off as they're done.
 - [ ] App Store Small Business Program (15% instead of 30%)
 - [ ] In-app purchase `com.littlefortstudios.quizinho.fullgame`, non-consumable, £2.99, with a paywall review screenshot
 - [ ] Name "Quizinho: Football Party Quiz", subtitle, keywords, description, screenshots (iPhone 6.9", iPad 13")
+- [ ] Apple description: same "has played for both clubs" wording as Play
 - [ ] App Privacy answers (from Claude)
 - [ ] Age rating, category (Games → Trivia)
 
