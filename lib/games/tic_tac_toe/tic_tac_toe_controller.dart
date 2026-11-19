@@ -117,7 +117,11 @@ TicTacToeGrid? generateTicTacToeGrid(
   final clubs = <String, Club>{};
   final links = <String, Map<String, ClubConnection>>{};
   for (final c in connections) {
-    if (c.answerIds.isEmpty || c.difficulty > maxLevel) continue;
+    // Category squares all carry level 2 (it isn't worked out per square), so
+    // the level would shut them out of Easy altogether; the well-known-answers
+    // rule below is what keeps them fair there.
+    final levelled = !isGridCategory(c.clubA) || minKnownAnswers == 0;
+    if (c.answerIds.isEmpty || (levelled && c.difficulty > maxLevel)) continue;
     if (minKnownAnswers > 0 && answerFame != null) {
       final known = _home.contains(c.clubA.country) && _home.contains(c.clubB.country) ? 2 : 3;
       if (c.answerIds.where((id) => answerFame(id) >= known).length < minKnownAnswers) continue;
