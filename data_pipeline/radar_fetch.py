@@ -49,6 +49,12 @@ ARTICLES = [
     "2018 FIFA World Cup knockout stage",
     "Germany v England (2016)",
     "Northern Ireland 3–2 Spain (2006)",
+    # Football 501 by country: every international's caps and goals.
+    *[f"List of {c} international footballers" for c in (
+        "England", "Scotland", "Wales", "Northern Ireland", "Republic of Ireland", "Brazil", "Argentina", "France",
+        "Germany", "Spain", "Portugal", "Netherlands", "Italy", "England women's")],
+    "List of England international footballers (alphabetical)",
+    "List of England women's international footballers",
 ]
 
 
