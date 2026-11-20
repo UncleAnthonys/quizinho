@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 
 import '../../core/sound_service.dart';
@@ -725,8 +726,9 @@ class TttBoard extends StatelessWidget {
 
     Widget square(int i) => MissShake(
           trigger: missSq == i ? (miss['n'] as num?)?.toInt() : null,
-          // Just after the board's back in view (it waits for the keyboard).
-          delay: const Duration(milliseconds: 150),
+          // Once the board's back in view: in a browser it waits for the
+          // keyboard (KeyboardSettle), so just after; in the app, as before.
+          delay: Duration(milliseconds: kIsWeb ? 150 : 350),
           child: squareBody(i),
         );
 

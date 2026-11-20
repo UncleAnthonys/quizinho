@@ -371,7 +371,8 @@ class RuleText extends StatelessWidget {
 /// "typing now"; when it ends (an answer's gone in), [builder] still gets
 /// `folded: true` until the keyboard has finished sliding away, so what was
 /// folded (the Noughts & Crosses board) comes back in one go onto a still
-/// screen, not half-covered while the keyboard drops (browsers are slow).
+/// screen, not half-covered while the keyboard drops. Browsers only (they
+/// close the keyboard slowly); in the app it's a pass-through.
 class KeyboardSettle extends StatefulWidget {
   const KeyboardSettle({super.key, required this.active, required this.builder});
   final bool active;
@@ -393,7 +394,8 @@ class _KeyboardSettleState extends State<KeyboardSettle> {
   @override
   void didUpdateWidget(KeyboardSettle old) {
     super.didUpdateWidget(old);
-    if (old.active && !widget.active) {
+    // Browsers only: the app closes its keyboard smoothly already.
+    if (kIsWeb && old.active && !widget.active) {
       _held = true;
       _since
         ..reset()
