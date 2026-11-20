@@ -42,6 +42,13 @@ ARTICLES = [
     "2020–21 Manchester United F.C. season",
     "2022–23 Liverpool F.C. season",
     "Liverpool F.C. 7–0 Manchester United F.C.",
+    "UEFA Euro 2024 knockout stage",
+    "UEFA Euro 2004 Group B",
+    "UEFA Euro 2016 Group F",
+    "2002 FIFA World Cup Group F",
+    "2018 FIFA World Cup knockout stage",
+    "Germany v England (2016)",
+    "Northern Ireland 3–2 Spain (2006)",
 ]
 
 
