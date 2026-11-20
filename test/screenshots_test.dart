@@ -40,6 +40,7 @@ import 'package:quizinho/ui/widgets/common.dart';
 import 'package:quizinho/ui/widgets/logo.dart';
 import 'package:quizinho/ui/widgets/player_picker.dart';
 import 'package:quizinho/multiplayer/guest_screen.dart' show guestGamePreview;
+import 'package:quizinho/ui/match_flow.dart' show GameModeStyle;
 import 'package:quizinho/multiplayer/memory_room_link.dart';
 import 'package:quizinho/multiplayer/room.dart' show GuestRoom, RoomMember;
 
