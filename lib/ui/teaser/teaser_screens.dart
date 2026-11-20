@@ -202,8 +202,17 @@ class _TeaserBetweenGamesState extends State<TeaserBetweenGames>
   @override
   void didUpdateWidget(TeaserBetweenGames old) {
     super.didUpdateWidget(old);
-    if (widget.revealNow && !old.revealNow) _reveal();
-    if (widget.openNow && !old.openNow) _setOpen(true);
+    // After this frame: opening tells the summary screen, which is mid-build.
+    if (widget.revealNow && !old.revealNow) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) _reveal();
+      });
+    }
+    if (widget.openNow && !old.openNow) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) _setOpen(true);
+      });
+    }
   }
 
   void _reveal() {
