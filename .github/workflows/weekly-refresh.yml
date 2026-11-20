@@ -71,6 +71,7 @@ jobs:
           cp data_pipeline/seed/clubs.json "$RUNNER_TEMP/old_clubs.json"
           pip install --quiet espeakng-loader phonemizer
           bash scripts/ci_run.sh "Normalise" python3 data_pipeline/normalise.py ${{ inputs.accept_all == 'yes' && '--accept-all' || '' }}
+          bash scripts/ci_run.sh "Under the Radar lists" python3 data_pipeline/radar_build.py
           bash scripts/ci_run.sh "Database" python3 data_pipeline/build_db.py
           bash scripts/ci_run.sh "Voice vocabulary" python3 data_pipeline/voice_vocab.py
           bash scripts/ci_run.sh "Top 10" python3 data_pipeline/top10_build.py

@@ -82,7 +82,13 @@ void main() {
   test('bundled categories carry a score for every answer, some pointless', () {
     final repo = parseFootballJson(File('assets/db/football.json').readAsStringSync());
     var pointless = 0;
+    // Bidding War only (every answer well known): no scores, so never asked here.
+    const biddingOnly = {'clubs:pl-winning-clubs', 'clubs:english-ucl-finalists', 'clubs:pl-clubs-2026-27'};
+    for (final id in biddingOnly) {
+      expect(repo.bidding.firstWhere((b) => b.id == id).scores, isEmpty, reason: id);
+    }
     for (final b in repo.bidding) {
+      if (biddingOnly.contains(b.id)) continue;
       expect(b.scores.keys.toSet(), b.answerIds, reason: b.id);
       for (final s in b.scores.values) {
         expect(s, inInclusiveRange(0, 100));
@@ -90,5 +96,18 @@ void main() {
       if (b.scores.values.contains(0)) pointless++;
     }
     expect(pointless, greaterThan(repo.bidding.length ~/ 3));
+  });
+
+  // The big lists (radar_build.py): plenty to dig for at Easy and Medium.
+  test('Under the Radar has plenty of lists at every level, big ones included', () {
+    final repo = parseFootballJson(File('assets/db/football.json').readAsStringSync());
+    final radar = [for (final b in repo.bidding) if (b.answerIds.length >= 6 && b.scores.isNotEmpty) b];
+    final listsAt = {for (final l in [1, 2, 3]) l: radar.where((b) => b.difficulty == l && !b.id.startsWith('pair:')).length};
+    expect(listsAt[1], greaterThan(40));
+    expect(listsAt[2], greaterThan(100));
+    expect(radar.where((b) => b.answerIds.length >= 50).length, greaterThan(20));
+    final portsmouth = repo.bidding.firstWhere((b) => b.id == 'stat:pl-era-portsmouth');
+    expect(portsmouth.answerIds.length, greaterThan(80));
+    expect(portsmouth.scores.values.where((s) => s == 0), isNotEmpty);
   });
 }
