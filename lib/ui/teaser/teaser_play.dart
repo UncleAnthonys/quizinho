@@ -78,7 +78,8 @@ class TeaserPlay extends StatelessWidget {
     // Open: who's buzzing?
     final teams = [for (var i = 0; i < t.teamCount; i++) (t.teamName(i), t.config.teams[i].colorIndex)];
     return Column(mainAxisSize: MainAxisSize.min, children: [
-      if (c.lastMiss != null) _miss(),
+      // A miss shakes the question card red; only the host's overrule shows.
+      if (c.canOverrule) Padding(padding: const EdgeInsets.only(bottom: 10), child: _countIt()),
       if (c.clockDone)
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 10),
@@ -88,20 +89,6 @@ class TeaserPlay extends StatelessWidget {
       else
         TeaserTeams(teams: teams, locked: c.lockedOut, onPick: c.buzz),
     ]);
-  }
-
-  /// "✗ Gary Cahill — HOME have had their guess", with the host's overrule.
-  Widget _miss() {
-    final c = controller;
-    final team = c.lastWrongTeam;
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 10),
-      child: Column(mainAxisSize: MainAxisSize.min, children: [
-        Text('✗ ${c.lastMiss}${team == null ? '' : ' - ${t.teamName(team).toUpperCase()} HAVE HAD THEIR GUESS'}',
-            textAlign: TextAlign.center, style: AppText.label(14, color: Palette.danger)),
-        if (c.canOverrule) _countIt(),
-      ]),
-    );
   }
 
   /// "We missed Gary Cahill? Count it": small, for when our data is missing a

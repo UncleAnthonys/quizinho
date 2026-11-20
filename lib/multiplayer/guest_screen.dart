@@ -174,6 +174,10 @@ class _JoinScreenState extends State<JoinScreen> {
       ]);
 }
 
+/// A joined phone's game screen, for screenshots.
+@visibleForTesting
+Widget guestGamePreview(GuestRoom room, RoomMember me) => _GuestGame(room: room, me: me);
+
 /// The game as a joined phone sees it.
 class _GuestGame extends StatefulWidget {
   const _GuestGame({required this.room, required this.me});
@@ -350,32 +354,70 @@ class _GuestGameState extends State<_GuestGame> with SingleTickerProviderStateMi
         ]),
       );
 
-  /// The rules for the game about to start, read along with the main phone.
+  /// The rules for the game about to start, read along with the main phone:
+  /// the same sizes as its rules screen, and centred in the space below the
+  /// scores rather than bunched at the top.
   Widget _rules(Map<String, Object?> v) {
     final colour = Color((v['color'] as num?)?.toInt() ?? 0xFFFFCC29);
     final rules = [for (final r in asList(v['rules'])) '$r'];
-    return ListView(padding: const EdgeInsets.fromLTRB(20, 16, 20, 20), children: [
+    return Column(children: [
       _scores(v['teams'], round: '${widget.room.view['round'] ?? ''}'),
-      const SizedBox(height: 16),
-      Text('${v['title'] ?? ''}'.toUpperCase(), textAlign: TextAlign.center, style: AppText.headline(40, color: colour)),
-      if (v['double'] == true) Text('DOUBLE POINTS', textAlign: TextAlign.center, style: AppText.label(15, color: Palette.gold)),
-      Text('${v['tagline'] ?? ''}', textAlign: TextAlign.center, style: const TextStyle(color: Palette.muted, fontSize: 16)),
-      const SizedBox(height: 18),
-      for (final (i, r) in rules.indexed)
-        Padding(
-          padding: const EdgeInsets.only(bottom: 12),
-          child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            CircleAvatar(radius: 13, backgroundColor: colour, child: Text('${i + 1}', style: AppText.headline(15, color: Palette.pitchDeep))),
-            const SizedBox(width: 12),
-            Expanded(child: RuleText(r, style: const TextStyle(fontSize: 16, height: 1.4))),
-          ]),
+      Expanded(
+        child: LayoutBuilder(
+          builder: (context, box) => SingleChildScrollView(
+            padding: const EdgeInsets.fromLTRB(20, 20, 20, 20),
+            child: ConstrainedBox(
+              constraints: BoxConstraints(minHeight: box.maxHeight - 40),
+              child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+                Text('${v['title'] ?? ''}'.toUpperCase(),
+                    textAlign: TextAlign.center, style: AppText.headline(48, color: colour)),
+                Text('${v['tagline'] ?? ''}',
+                    textAlign: TextAlign.center, style: const TextStyle(color: Palette.muted, fontSize: 17)),
+                if (v['double'] == true) ...[
+                  const SizedBox(height: 12),
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+                    decoration: BoxDecoration(color: Palette.gold, borderRadius: BorderRadius.circular(10)),
+                    child: Text('WILDCARD · DOUBLE POINTS', style: AppText.headline(20, color: Palette.pitchDeep)),
+                  ),
+                ],
+                const SizedBox(height: 24),
+                for (final (i, r) in rules.indexed)
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 14),
+                    child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                      Container(
+                        width: 30,
+                        height: 30,
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(color: colour, shape: BoxShape.circle),
+                        child: Text('${i + 1}', style: AppText.headline(18, color: Palette.pitchDeep)),
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(child: RuleText(r)),
+                    ]),
+                  ),
+                if (v['who'] != null) ...[
+                  const SizedBox(height: 6),
+                  // As on the main phone: a plain line in a dark box, not a bold label.
+                  Container(
+                    padding: const EdgeInsets.all(14),
+                    decoration:
+                        BoxDecoration(color: Colors.black.withValues(alpha: 0.3), borderRadius: BorderRadius.circular(14)),
+                    child: Row(children: [
+                      const Icon(Icons.people_alt_rounded, color: Palette.gold),
+                      const SizedBox(width: 10),
+                      Expanded(child: Text('${v['who']}', style: const TextStyle(fontSize: 16, color: Palette.text))),
+                    ]),
+                  ),
+                ],
+                const SizedBox(height: 20),
+                Text('Kicking off on the main phone…', textAlign: TextAlign.center, style: AppText.label(13)),
+              ]),
+            ),
+          ),
         ),
-      if (v['who'] != null) ...[
-        const SizedBox(height: 4),
-        Text('${v['who']}', textAlign: TextAlign.center, style: AppText.label(14, color: Palette.text)),
-      ],
-      const SizedBox(height: 18),
-      Text('Kicking off on the main phone…', textAlign: TextAlign.center, style: AppText.label(13)),
+      ),
     ]);
   }
 
@@ -408,6 +450,7 @@ class _GuestGameState extends State<_GuestGame> with SingleTickerProviderStateMi
     final iAnswer = early || phase == 'answering' && answering['device'] == widget.room.device;
     final result = asMap(v['result']);
 
+    final teaser = v['mode'] == 'teaser';
     final miss = asMap(v['miss']);
     final question = MissShake(
       trigger: (miss['n'] as num?)?.toInt(),
@@ -433,11 +476,7 @@ class _GuestGameState extends State<_GuestGame> with SingleTickerProviderStateMi
       final buzzed = _buzzedOn == q;
       final teamName = me.team < asList(v['teams']).length ? '${asMap(asList(v['teams'])[me.team])['name'] ?? ''}' : '';
       // The host's own buzzer, filling the rest of the screen like it does there.
-      action = Padding(
-        padding: const EdgeInsets.all(12),
-        child: ConstrainedBox(
-          constraints: const BoxConstraints(minHeight: 180),
-          child: TeamBuzzer(
+      final buzzer = TeamBuzzer(
             name: faceOff.isEmpty ? teamName : '${me.name} · $teamName',
             colorIndex: colour,
             enabled: !buzzed,
@@ -461,9 +500,18 @@ class _GuestGameState extends State<_GuestGame> with SingleTickerProviderStateMi
                 }
               });
             },
-          ),
-        ),
-      );
+          );
+      // The teaser: a smaller buzzer under the question, like the main
+      // phone's team buttons. Other games: it fills the rest of the screen.
+      action = teaser
+          ? Padding(
+              padding: const EdgeInsets.fromLTRB(18, 14, 18, 16),
+              child: Align(alignment: Alignment.topCenter, child: SizedBox(height: 150, child: buzzer)),
+            )
+          : Padding(
+              padding: const EdgeInsets.all(12),
+              child: ConstrainedBox(constraints: const BoxConstraints(minHeight: 180), child: buzzer),
+            );
     } else if (phase == 'ready') {
       action = _status(faceOff.isEmpty ? 'GET READY…' : 'FACE-OFF: ${faceOff.values.join(' v ')}\nGet ready…');
     } else if (phase == 'answering') {
@@ -471,7 +519,7 @@ class _GuestGameState extends State<_GuestGame> with SingleTickerProviderStateMi
     } else if (phase == 'open' && faceOff.isNotEmpty && !inFaceOff) {
       action = _status('FACE-OFF: ${faceOff.values.join(' v ')}\nOnly they can buzz');
     } else if (phase == 'open') {
-      action = _status(v['mode'] == 'teaser' ? 'YOUR TEAM’S HAD ITS GUESS' : 'LOCKED OUT - WAIT FOR THE STEAL');
+      action = _status(teaser ? 'YOUR TEAM’S HAD ITS GUESS' : 'LOCKED OUT - WAIT FOR THE STEAL');
     } else if (result.isNotEmpty) {
       final scorer = (result['team'] as num?)?.toInt();
       final teamsV = asList(v['teams']);
@@ -520,6 +568,51 @@ class _GuestGameState extends State<_GuestGame> with SingleTickerProviderStateMi
       ]);
     }
 
+    final clock = ValueListenableBuilder<double>(
+      valueListenable: _left,
+      builder: (context, left, _) => TimerBar(fraction: _total == 0 ? 0 : left / _total, seconds: left),
+    );
+
+    // The teaser looks like the main phone's: HALF-TIME / THE TEASER, the
+    // clock, the question, then the buzzer. Typing an answer, the heading
+    // and question fold away so the name suggestions show.
+    if (teaser) {
+      final qv = asMap(v['question']);
+      final clockOn = phase == 'answering' || (phase == 'open' && qv['noClock'] != true);
+      return ValueListenableBuilder<bool>(
+        valueListenable: answerTyping,
+        builder: (context, typing, _) {
+          final folded = typing && iAnswer;
+          return CustomScrollView(slivers: [
+            SliverList(
+              delegate: SliverChildListDelegate([
+                Collapse(
+                  hidden: folded,
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(18, 14, 18, 10),
+                    child: Column(children: [
+                      if (qv['halfTime'] == true) Text('HALF-TIME', style: AppText.label(16, color: Palette.gold)),
+                      Text('THE TEASER', style: AppText.headline(44, color: Palette.gold)),
+                    ]),
+                  ),
+                ),
+                if (clockOn)
+                  Padding(
+                    padding: EdgeInsets.fromLTRB(18, folded ? 12 : 0, 18, 8),
+                    child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                      if (phase == 'answering') Text('ANSWER CLOCK', style: AppText.label(15)),
+                      clock,
+                    ]),
+                  ),
+                Collapse(hidden: folded, child: question),
+              ]),
+            ),
+            SliverFillRemaining(hasScrollBody: false, child: action),
+          ]);
+        },
+      );
+    }
+
     // Everything above scrolls if it must; the action (the buzzer, the answer
     // box) fills whatever's left of the screen.
     return CustomScrollView(slivers: [
@@ -553,10 +646,7 @@ class _GuestGameState extends State<_GuestGame> with SingleTickerProviderStateMi
                 padding: const EdgeInsets.only(bottom: 4),
                 child: Text(label, style: AppText.label(15)),
               ),
-            ValueListenableBuilder<double>(
-              valueListenable: _left,
-              builder: (context, left, _) => TimerBar(fraction: _total == 0 ? 0 : left / _total, seconds: left),
-            ),
+            clock,
           ]),
         ),
       ])),

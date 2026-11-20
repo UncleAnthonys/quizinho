@@ -41,15 +41,16 @@ class _RoundSummaryScreenState extends State<RoundSummaryScreen> {
   /// Full time, teaser unsolved: "Last chance" gives everyone this long to
   /// buzz (the clock waits while someone's answering), then out come the answers.
   static const lastChanceSeconds = 30;
-  int? _lastChance;
+  double? _lastChance;
   Timer? _lastChanceTimer;
 
   void _startLastChance() {
-    setState(() => _lastChance = lastChanceSeconds);
-    _lastChanceTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
+    setState(() => _lastChance = lastChanceSeconds.toDouble());
+    // Ticks often, so the bar runs down smoothly.
+    _lastChanceTimer = Timer.periodic(const Duration(milliseconds: 100), (timer) {
       if (!mounted) return;
       if (_teaserBusy) return; // someone's answering: wait for them
-      setState(() => _lastChance = _lastChance! - 1);
+      setState(() => _lastChance = _lastChance! - 0.1);
       if (_lastChance! <= 0) _revealTeaser();
     });
   }
@@ -115,12 +116,18 @@ class _RoundSummaryScreenState extends State<RoundSummaryScreen> {
             ),
           ]);
         }
-        return BigButton(
-          label: 'Reveal teaser answer · $left',
-          icon: Icons.visibility_rounded,
-          color: Palette.gold,
-          onPressed: _teaserBusy ? null : _revealTeaser,
-        );
+        return Column(mainAxisSize: MainAxisSize.min, children: [
+          Padding(
+            padding: const EdgeInsets.only(bottom: 12),
+            child: TimerBar(fraction: left / lastChanceSeconds, seconds: left.clamp(0, lastChanceSeconds).toDouble()),
+          ),
+          BigButton(
+            label: 'Reveal teaser answer',
+            icon: Icons.visibility_rounded,
+            color: Palette.gold,
+            onPressed: _teaserBusy ? null : _revealTeaser,
+          ),
+        ]);
       }
       return BigButton(
         label: 'Final whistle',

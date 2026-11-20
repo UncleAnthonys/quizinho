@@ -7,6 +7,7 @@ import 'package:flutter/foundation.dart';
 import '../domain/player_index.dart';
 import '../domain/tournament.dart';
 import '../games/buzz_race_controller.dart';
+import '../games/teaser/teaser_controller.dart';
 import 'room.dart';
 
 /// Runs a buzzer game (Club Connections, Career Path) across the room's phones,
@@ -245,7 +246,12 @@ class BuzzBridge extends ChangeNotifier {
         },
       if (c.phase == BuzzPhase.answering && remote != null) 'answers': answerIds().toList(),
       // A wrong answer just now: every phone shakes its question card.
-      if (c.lastEvent == GameEvent.wrong && c.lastMiss != null) 'miss': {'n': c.eventSerial, 'name': c.lastMiss},
+      // The teaser shakes on any miss, running out of time too (negative,
+      // so it never matches a buzz game's number).
+      if (c is TeaserController && c.missShake > 0)
+        'miss': {'n': -c.missShake, if (c.lastMiss != null) 'name': c.lastMiss}
+      else if (c.lastEvent == GameEvent.wrong && c.lastMiss != null)
+        'miss': {'n': c.eventSerial, 'name': c.lastMiss},
       if (resolved)
         'result': {
           'scored': o?.scored ?? false,

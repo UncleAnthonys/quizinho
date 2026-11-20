@@ -50,6 +50,7 @@ mixin TeaserRunner<W extends StatefulWidget> on State<W>, TickerProviderStateMix
           'prefix': teaser.prefix,
           'worth': c.worth,
           if (!halfTime || c.clockDone) 'noClock': true,
+          if (halfTime) 'halfTime': true,
           'clock': c.lockedOut.isEmpty ? 'BUZZ IN' : 'YOUR GUESS',
         },
         answerIds: () => {...teaser.answerIds, ...teaser.unsure},
@@ -74,6 +75,10 @@ mixin TeaserRunner<W extends StatefulWidget> on State<W>, TickerProviderStateMix
     teaserController?.dispose();
   }
 }
+
+/// The question card shakes red on a miss (wrong, out of time, passed).
+Widget _shaking(TeaserController c, Widget prompt) =>
+    MissShake(trigger: c.missShake == 0 ? null : Object.hash(c, c.missShake), child: prompt);
 
 /// Half-time: the teaser, full screen, with a 90-second clock worth 5.
 class TeaserHalfTimeScreen extends StatefulWidget {
@@ -119,15 +124,20 @@ class _TeaserHalfTimeScreenState extends State<TeaserHalfTimeScreen>
             padding: const EdgeInsets.fromLTRB(20, 12, 20, 16),
             child: Column(children: [
               const Align(alignment: Alignment.centerLeft, child: ExitMatchButton()),
-              if (!typing) ...[
-                Text('HALF-TIME', style: AppText.label(16, color: Palette.gold)),
-                Text('THE TEASER', style: AppText.headline(44, color: Palette.gold)),
-                const SizedBox(height: 10),
-                if (!done) TimerBar(fraction: c.halfTimeLeft / c.halfTimeSeconds, seconds: c.halfTimeLeft),
-                const SizedBox(height: 12),
-              ],
-              TeaserPrompt(question: c.teaser.question, prefix: c.teaser.prefix, halfTime: !c.clockDone && !done, compact: typing),
-              const SizedBox(height: 14),
+              // Typing: all of this folds away so the name suggestions show;
+              // tap out of the box and it's back.
+              Collapse(
+                hidden: typing,
+                child: Column(mainAxisSize: MainAxisSize.min, children: [
+                  Text('HALF-TIME', style: AppText.label(16, color: Palette.gold)),
+                  Text('THE TEASER', style: AppText.headline(44, color: Palette.gold)),
+                  const SizedBox(height: 10),
+                  if (!done) TimerBar(fraction: c.halfTimeLeft / c.halfTimeSeconds, seconds: c.halfTimeLeft),
+                  const SizedBox(height: 12),
+                  _shaking(c, TeaserPrompt(question: c.teaser.question, prefix: c.teaser.prefix, halfTime: !c.clockDone && !done)),
+                  const SizedBox(height: 14),
+                ]),
+              ),
               Expanded(
                 child: SingleChildScrollView(
                   child: TeaserPlay(
@@ -263,10 +273,17 @@ class _TeaserBetweenGamesState extends State<TeaserBetweenGames>
         border: Border.all(color: Palette.gold, width: 2),
       ),
       child: Column(mainAxisSize: MainAxisSize.min, children: [
-        if (c.phase != BuzzPhase.resolved) ...[
-          TeaserPrompt(question: c.teaser.question, prefix: c.teaser.prefix, compact: true),
-          const SizedBox(height: 12),
-        ],
+        if (c.phase != BuzzPhase.resolved)
+          ValueListenableBuilder<bool>(
+            valueListenable: answerTyping,
+            builder: (context, typing, _) => Collapse(
+              hidden: typing,
+              child: Padding(
+                padding: const EdgeInsets.only(bottom: 12),
+                child: _shaking(c, TeaserPrompt(question: c.teaser.question, prefix: c.teaser.prefix, compact: true)),
+              ),
+            ),
+          ),
         TeaserPlay(controller: c, remoteAnswerer: teaserBridge?.remote?.name),
         if (c.phase == BuzzPhase.open && !widget.openNow)
           TextButton(

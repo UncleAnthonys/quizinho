@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -454,11 +455,21 @@ class _ColumnState extends State<_Column> with SingleTickerProviderStateMixin {
   int _lastStep = 100;
   bool _done = false;
 
+  /// Hidden for a moment while the screen settles: the answer's just gone in,
+  /// so the keyboard is closing and the heading and category card are opening
+  /// back up, and the column was drawn short then stretched (two pieces).
+  bool _shown = false;
+  Timer? _settle;
+
   @override
   void initState() {
     super.initState();
     _drop.addListener(_tick);
-    _drop.forward().whenComplete(_landed);
+    _settle = Timer(const Duration(milliseconds: 320), () {
+      if (!mounted) return;
+      setState(() => _shown = true);
+      _drop.forward().whenComplete(_landed);
+    });
   }
 
   double get _value => 100 - (100 - _target) * Curves.easeOut.transform(_drop.value);
@@ -488,6 +499,7 @@ class _ColumnState extends State<_Column> with SingleTickerProviderStateMixin {
 
   @override
   void dispose() {
+    _settle?.cancel();
     _drop.dispose();
     super.dispose();
   }
@@ -498,7 +510,10 @@ class _ColumnState extends State<_Column> with SingleTickerProviderStateMixin {
     final v = a.valid ? _value : 100.0;
     final pointless = a.valid && _done && _target == 0;
     final colour = !a.valid ? Palette.danger : (pointless ? Palette.yellow : _studio);
-    return LayoutBuilder(builder: (context, box) {
+    return AnimatedOpacity(
+      opacity: _shown ? 1 : 0,
+      duration: const Duration(milliseconds: 150),
+      child: LayoutBuilder(builder: (context, box) {
       final h = max(60.0, box.maxHeight - 70);
       return Column(children: [
         Text(pointless ? 'NOBODY!' : '${v.round()}', style: AppText.headline(pointless ? 54 : 64, color: colour)),
@@ -534,7 +549,8 @@ class _ColumnState extends State<_Column> with SingleTickerProviderStateMixin {
             child: Text(a.label == 'Time up' ? 'OUT OF TIME' : 'NOT ON THE LIST', style: AppText.headline(20, color: Palette.danger)),
           ),
       ]);
-    });
+    }),
+    );
   }
 }
 

@@ -39,6 +39,9 @@ import 'package:quizinho/ui/teaser/teaser_widgets.dart';
 import 'package:quizinho/ui/widgets/common.dart';
 import 'package:quizinho/ui/widgets/logo.dart';
 import 'package:quizinho/ui/widgets/player_picker.dart';
+import 'package:quizinho/multiplayer/guest_screen.dart' show guestGamePreview;
+import 'package:quizinho/multiplayer/memory_room_link.dart';
+import 'package:quizinho/multiplayer/room.dart' show GuestRoom, RoomMember;
 
 import 'package:quizinho/data/json_football_repository.dart';
 import 'package:quizinho/data/models.dart' show Difficulty;
@@ -503,7 +506,8 @@ void main() {
 
   testWidgets('Pointless', (tester) async {
     await shot(tester, 'pt_answering', column(_scores(), PtLayout(data: pt('answering'), answerBox: Column(children: [_timer(), _picker()]))));
-    await shot(tester, 'pt_reveal', column(_scores(), PtLayout(data: pt('reveal'), answerBox: const SizedBox())));
+    await shot(tester, 'pt_reveal', column(_scores(), PtLayout(data: pt('reveal'), answerBox: const SizedBox())),
+        then: () => tester.pump(const Duration(seconds: 3)));
     await shot(tester, 'pt_finished', column(_scores(), PtLayout(data: pt('finished'), answerBox: const SizedBox())));
   }, skip: !_shots);
 
@@ -918,6 +922,56 @@ void main() {
       });
     }
     File('docs/shots/grids_medium.json').writeAsStringSync(const JsonEncoder.withIndent(' ').convert(out));
+  }, skip: !_shots);
+
+  // A joined phone: the rules, and the teaser laid out like the main phone's.
+  testWidgets('Joined phone', (tester) async {
+    const me = RoomMember(device: 'me', name: 'Alex', team: 0);
+    Widget phone(Map<String, Object?> view) => guestGamePreview(
+        GuestRoom(MemoryRoomLink(), 'ABCD', 'me')
+          ..teams = [TeamSetup(name: 'Home', colorIndex: 0, players: ['Alex']), TeamSetup(name: 'Away', colorIndex: 1)]
+          ..view = view,
+        me);
+    const mode = GameModeId.pointless;
+    await shot(
+        tester,
+        'guest_rules',
+        phone({
+          'kind': 'rules',
+          'title': mode.title,
+          'tagline': mode.tagline,
+          'rules': mode.rules,
+          'who': mode.whoPlays,
+          'color': mode.color.toARGB32(),
+          'round': '3/6',
+          'teams': _teams,
+        }));
+    Map<String, Object?> teaser(String phase) => {
+          'kind': 'buzz',
+          'mode': 'teaser',
+          'q': '3-T0',
+          'phase': phase,
+          'title': 'HALF-TIME TEASER',
+          'round': '3/6',
+          'teams': _teams,
+          'canBuzz': [0, 1],
+          'question': {
+            'teaser': 'played in El Clásico, the Manchester derby AND the North London derby',
+            'prefix': 'NAME A PLAYER WHO…',
+            'worth': 5,
+            'halfTime': true,
+            'clock': 'BUZZ IN',
+          },
+          if (phase == 'answering') 'answering': {'team': 0, 'name': 'Alex', 'device': 'me'},
+          if (phase == 'answering') 'answers': <String>[],
+          'left': phase == 'answering' ? 11 : 62,
+          'total': phase == 'answering' ? 15 : 90,
+        };
+    await shot(tester, 'guest_teaser', phone(teaser('open')));
+    await shot(tester, 'guest_teaser_answering', phone(teaser('answering')));
+    answerTyping.value = true;
+    await shot(tester, 'guest_teaser_typing', phone(teaser('answering')));
+    answerTyping.value = false;
   }, skip: !_shots);
 
   // Full time with the teaser unsolved: one last go, or straight to the answers.

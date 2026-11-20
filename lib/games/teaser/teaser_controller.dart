@@ -58,6 +58,10 @@ class TeaserController extends ChangeNotifier implements BuzzTarget {
 
   /// The last wrong answer and who gave it — the host can overrule it.
   int? lastWrongTeam;
+
+  /// Bumped by every miss (wrong, out of time, passed): the question card
+  /// shakes red, on every phone.
+  int missShake = 0;
   @override
   String? lastMiss;
 
@@ -239,6 +243,7 @@ class TeaserController extends ChangeNotifier implements BuzzTarget {
   }
 
   void _wrong({bool timeout = false}) {
+    missShake++;
     final team = answeringTeam;
     if (team != null) {
       state.lockedOut.add(team);
