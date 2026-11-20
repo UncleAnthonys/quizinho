@@ -83,7 +83,7 @@ void main() {
     final repo = parseFootballJson(File('assets/db/football.json').readAsStringSync());
     var pointless = 0;
     // Bidding War only (every answer well known): no scores, so never asked here.
-    const biddingOnly = {'clubs:pl-winning-clubs', 'clubs:english-ucl-finalists', 'clubs:pl-clubs-2026-27'};
+    const biddingOnly = {'clubs:pl-winning-clubs', 'clubs:pl-clubs-2026-27'};
     for (final id in biddingOnly) {
       expect(repo.bidding.firstWhere((b) => b.id == id).scores, isEmpty, reason: id);
     }

@@ -209,7 +209,7 @@
       "answers": ["Olympique de Marseille", "AC Milan", "Ajax", "Juventus", "Borussia Dortmund", "Real Madrid", "Manchester United", "Bayern Munich", "Porto", "Liverpool", "Barcelona", "Inter Milan", "Chelsea", "Manchester City", "Paris Saint-Germain"]
     },
     {
-      "id": "english-ucl-finalists", "radar": false,
+      "id": "english-ucl-finalists",
       "prompt": "English clubs that have played in a Champions League final",
       "answers_are": "clubs",
       "difficulty": 1, "eras": 30,
