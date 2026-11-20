@@ -408,9 +408,34 @@ void main() {
         ));
     services.settings.typeAnswers = true;
     await shot(tester, 'ttt_layout_answering', answering());
-    await shot(tester, 'ttt_layout_keyboard', answering(typing: true), size: const Size(390, 504));
-    await shot(tester, 'ttt_layout_keyboard_suggestions', answering(typing: true),
-        size: const Size(390, 504), then: () => tester.enterText(find.byType(TextField), 'Henry'));
+    // A stand-in for the phone's keyboard, so the shot shows the whole screen.
+    Widget withKeyboard(Widget game) => Column(children: [
+          Expanded(child: game),
+          Container(
+            height: 300,
+            color: const Color(0xFFD1D4DA),
+            padding: const EdgeInsets.fromLTRB(4, 10, 4, 30),
+            child: Column(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+              for (final row in ['QWERTYUIOP', 'ASDFGHJKL', 'ZXCVBNM'])
+                Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                  for (final k in row.split(''))
+                    Container(
+                      width: 32,
+                      height: 42,
+                      margin: const EdgeInsets.symmetric(horizontal: 3),
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(5)),
+                      child: Text(k, style: const TextStyle(fontSize: 18, color: Colors.black)),
+                    ),
+                ]),
+              Container(
+                  width: 200, height: 42, decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(5))),
+            ]),
+          ),
+        ]);
+    await shot(tester, 'ttt_layout_keyboard', withKeyboard(answering(typing: true)));
+    await shot(tester, 'ttt_layout_keyboard_suggestions', withKeyboard(answering(typing: true)),
+        then: () => tester.enterText(find.byType(TextField), 'Henry'));
     services.settings.typeAnswers = false;
   }, skip: !_shots);
 
