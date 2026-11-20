@@ -26,6 +26,22 @@ ARTICLES = [
     "England at the FIFA World Cup",
     "List of UEFA Champions League final penalty shoot-outs",
     "List of European Cup and UEFA Champions League winning managers",
+    # Starting XI: articles with the line-ups of the matches being added.
+    "2008 FA Cup final",
+    "2011 Football League Cup final",
+    "2013 Football League Cup final",
+    "2025 EFL Cup final",
+    "2026 EFL Cup final",
+    "UEFA Euro 2004 Group A",
+    "UEFA Euro 1996 Group A",
+    "UEFA Euro 2016 knockout stage",
+    "UEFA Euro 2020 knockout stage",
+    "2018 FIFA World Cup Group G",
+    "2017–18 UEFA Champions League knockout phase",
+    "2003–04 Arsenal F.C. season",
+    "2020–21 Manchester United F.C. season",
+    "2022–23 Liverpool F.C. season",
+    "Liverpool F.C. 7–0 Manchester United F.C.",
 ]
 
 
