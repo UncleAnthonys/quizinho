@@ -103,7 +103,7 @@ CREATE TABLE bidding_categories (
 CREATE TABLE bidding_answers (
   category_id TEXT NOT NULL REFERENCES bidding_categories(id),
   player_id TEXT NOT NULL,
-  score INTEGER NOT NULL DEFAULT 50
+  score INTEGER
 );
 CREATE INDEX idx_match_diff ON matches(difficulty);
 CREATE INDEX idx_bid_ans ON bidding_answers(category_id);
@@ -694,8 +694,9 @@ def generate_bidding(clubs, players, connections, countries):
 # Club-type words a name can be written with or without ("PFC CSKA Moscow").
 CLUB_WORDS = {"fc", "pfc", "afc", "cf", "sc", "fk", "sk", "ac", "as", "ss", "ssc", "cd", "ud", "sv", "rc", "rcd"}
 
-# Hand-made lists stay short enough to get through in a minute.
-CURATED_MAX_ANSWERS = 20
+# Lists can be long: Under the Radar is best with plenty of obscure right
+# answers, and Bidding War just asks how many a team can name.
+CURATED_MAX_ANSWERS = 250
 
 
 def load_curated_bidding(players, clubs, problems: Problems) -> list[dict]:
@@ -710,6 +711,10 @@ def load_curated_bidding(players, clubs, problems: Problems) -> list[dict]:
     if not path.exists():
         return []
     doc = json.loads(path.read_text(encoding="utf-8"))
+    # The big lists radar_build.py makes from the raw data, read the same way.
+    generated = SEED / "bidding_generated.json"
+    if generated.exists():
+        doc["categories"] = doc["categories"] + json.loads(generated.read_text(encoding="utf-8"))["categories"]
 
     def index(items) -> dict[str, str]:
         by_name: dict[str, str] = {}
@@ -780,7 +785,10 @@ def load_curated_bidding(players, clubs, problems: Problems) -> list[dict]:
             problems.error(f"curated bidding {c['id']}: {len(answers)} answers, need {BID_MIN_ANSWERS}-{CURATED_MAX_ANSWERS}")
         prefix = "clubs" if is_clubs else "stat"
         out.append({"id": f"{prefix}:{c['id']}", "prompt": c["prompt"], "kind": "curated", "answers": sorted(set(answers)),
-                    "difficulty": c["difficulty"], "eras": c["eras"], "record": record})
+                    "difficulty": c["difficulty"], "eras": c["eras"], "record": record,
+                    # "radar": false = Bidding War only: every answer's well known
+                    # ("Clubs that have won the Premier League"), nothing to dig for.
+                    "radar": c.get("radar", True)})
     return out
 
 
@@ -834,7 +842,8 @@ def pointless_scores(answers: list[str], table: dict, record: dict | None = None
 def add_pointless_scores(bidding: list[dict], players, clubs) -> None:
     for b in bidding:
         table = clubs if b["id"].startswith("clubs:") else players
-        b["scores"] = pointless_scores(b["answers"], table, b.get("record"))
+        # No scores = not an Under the Radar question (the app skips it).
+        b["scores"] = pointless_scores(b["answers"], table, b.get("record")) if b.get("radar", True) else {}
         b["women"] = all(table[a].get("women") for a in b["answers"])
 
 
@@ -945,7 +954,7 @@ def write_db(path: pathlib.Path, version: int, clubs, players, matches, connecti
         con.execute("INSERT INTO bidding_categories VALUES (?,?,?,?,?,?,?)",
                     (b["id"], b["prompt"], b["kind"], len(b["answers"]), b["difficulty"], b["eras"], int(b["women"])))
         con.executemany("INSERT INTO bidding_answers VALUES (?,?,?)",
-                        [(b["id"], pid, b["scores"][pid]) for pid in b["answers"]])
+                        [(b["id"], pid, b["scores"].get(pid)) for pid in b["answers"]])
     for c in checkouts:
         con.execute("INSERT INTO checkout_categories VALUES (?,?,?,?,?,?)",
                     (c["id"], c["prompt"], c["club"], c["difficulty"], c["eras"], int(c["women"])))
@@ -979,9 +988,10 @@ def write_json(path: pathlib.Path, version: int, clubs, players, matches, connec
         # grid categories: [id, label, kind]; rosters: [category, club, players, eras]
         "categories": [[c["id"], c["label"], c["kind"]] for c in grid[0]],
         "category_rosters": [[r["category"], r["club"], r["answers"], r["eras"]] for r in grid[1]],
-        # bidding: [id, prompt, difficulty, answers, eras, pointless scores, 1 if women's]
+        # bidding: [id, prompt, difficulty, answers, eras, pointless scores
+        # (null = not for Under the Radar), 1 if women's]
         "bidding": [[b["id"], b["prompt"], b["difficulty"], b["answers"], b["eras"],
-                     [b["scores"][a] for a in b["answers"]], int(b["women"])] for b in bidding],
+                     [b["scores"][a] for a in b["answers"]] if b["scores"] else None, int(b["women"])] for b in bidding],
         # 501: [id, prompt, difficulty, eras, 1 if women's, [[player, apps, goals]...], [played, no numbers]]
         "checkouts": [[c["id"], c["prompt"], c["difficulty"], c["eras"], int(c["women"]),
                        [[pid, a, g] for pid, (a, g) in sorted(c["values"].items())], c["no_stats"]] for c in checkouts],

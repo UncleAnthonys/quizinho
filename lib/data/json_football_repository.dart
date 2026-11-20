@@ -94,8 +94,9 @@ InMemoryFootballRepository parseFootballJson(String source) {
           difficulty: b[2] as int,
           answerIds: {for (final a in b[3] as List) a as String},
           eras: b[4] as int,
-          // [5] Pointless scores, aligned with the answers; [6] 1 = women's
-          scores: (b as List).length > 5
+          // [5] Pointless scores, aligned with the answers (null = not an
+          // Under the Radar question); [6] 1 = women's
+          scores: (b as List).length > 5 && b[5] is List
               ? {for (var i = 0; i < (b[3] as List).length; i++) b[3][i] as String: (b[5] as List)[i] as int}
               : const {},
           women: b.length > 6 && b[6] == 1,

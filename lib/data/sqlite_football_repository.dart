@@ -182,7 +182,11 @@ class SqliteFootballRepository implements FootballRepository {
       difficulty: r['difficulty'] as int,
       eras: r['eras'] as int,
       answerIds: {for (final a in answers) a['player_id'] as String},
-      scores: {for (final a in answers) a['player_id'] as String: a['score'] as int},
+      // No scores (NULL) = not an Under the Radar question.
+      scores: {
+        for (final a in answers)
+          if (a['score'] case final int score) a['player_id'] as String: score,
+      },
       women: r['women'] == 1,
     );
   }
