@@ -477,7 +477,7 @@ void main() {
       TeamSetup(name: 'Home', colorIndex: 0),
       TeamSetup(name: 'Away', colorIndex: 1),
     ]));
-    for (final (name, mode) in [('rules_under_the_radar', GameModeId.pointless), ('rules_noughts_crosses', GameModeId.ticTacToe)]) {
+    for (final (name, mode) in [('rules_under_the_radar', GameModeId.pointless), ('rules_noughts_crosses', GameModeId.ticTacToe), ('rules_501', GameModeId.checkout501)]) {
       await shot(tester, name, RoundIntroScreen(key: UniqueKey(), tournament: t, mode: mode, multiplier: 1));
     }
   }, skip: !_shots);
