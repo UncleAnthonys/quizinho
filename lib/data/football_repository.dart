@@ -121,10 +121,14 @@ class ChallengeSource {
       _fresh('match', d, used, eras, (l, e, x) => repo.pickMatch(levels: l, exclude: x, eras: e, genders: genders),
           (m) => m.id);
 
-  /// Pointless uses Bidding War's categories — ones with enough answers to
-  /// spread the scores (6+), and that carry scores.
+  /// Under the Radar uses Bidding War's categories with scores and plenty of
+  /// answers ([pointlessMinAnswers]): a short list is all well-known names,
+  /// with nothing obscure to dig for.
   Future<BiddingCategory?> pointless(Difficulty d, Set<String> used, {int eras = Era.allMask, int genders = 1}) =>
-      bidding(d, used, eras: eras, genders: genders, where: (b) => b.answerIds.length >= 6 && b.scores.isNotEmpty);
+      bidding(d, used,
+          eras: eras, genders: genders, where: (b) => b.answerIds.length >= pointlessMinAnswers && b.scores.isNotEmpty);
+
+  static const pointlessMinAnswers = 10;
 
   /// Football 501 has 3 levels: British giants and the biggest clubs abroad
   /// (1), other British clubs (2), other clubs abroad (3).

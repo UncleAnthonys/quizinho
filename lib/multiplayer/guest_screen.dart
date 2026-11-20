@@ -767,20 +767,24 @@ class _GuestGameState extends State<_GuestGame> with SingleTickerProviderStateMi
             clockAndBox(),
           ]);
         }
-        return Column(children: [
-          // Typing: the scores make way, so the suggestions show above the keyboard.
-          Collapse(hidden: answerTyping.value && stage == 'answer', child: scores),
-          Expanded(
-            child: TttLayout(
-              // At the end, each square shows how many answers it had.
-              data: board['missed'] != null ? {...board, 'counts': board['totals']} : board,
-              typing: answerTyping.value && stage == 'answer',
-              bottom: bottom,
-              onTap: mine && choosing ? (i) => widget.room.answer(q, 'choice:$i') : null,
-              onReveal: board['missed'] == null ? null : (i) => _squareAnswers(board, i),
+        // The board stays folded until the keyboard's fully gone (KeyboardSettle).
+        return KeyboardSettle(
+          active: answerTyping.value && stage == 'answer',
+          builder: (context, folded) => Column(children: [
+            // Typing: the scores make way, so the suggestions show above the keyboard.
+            Collapse(hidden: folded, child: scores),
+            Expanded(
+              child: TttLayout(
+                // At the end, each square shows how many answers it had.
+                data: board['missed'] != null ? {...board, 'counts': board['totals']} : board,
+                typing: folded,
+                bottom: bottom,
+                onTap: mine && choosing ? (i) => widget.room.answer(q, 'choice:$i') : null,
+                onReveal: board['missed'] == null ? null : (i) => _squareAnswers(board, i),
+              ),
             ),
-          ),
-        ]);
+          ]),
+        );
       case 'top10':
         return Column(children: [
           // Typing: the scores make way, so the suggestions show above the keyboard.

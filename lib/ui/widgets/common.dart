@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 
 import '../../core/theme.dart';
+import '../../core/web_keyboard.dart';
 import '../../domain/tournament.dart';
 
 /// Mown-stripe pitch with faint markings, behind every screen.
@@ -364,6 +365,68 @@ class RuleText extends StatelessWidget {
     if (at < text.length) spans.add(TextSpan(text: text.substring(at)));
     return Text.rich(TextSpan(style: style, children: spans));
   }
+}
+
+/// Holds a typing layout until the keyboard has really gone. [active] is
+/// "typing now"; when it ends (an answer's gone in), [builder] still gets
+/// `folded: true` until the keyboard has finished sliding away, so what was
+/// folded (the Noughts & Crosses board) comes back in one go onto a still
+/// screen, not half-covered while the keyboard drops (browsers are slow).
+class KeyboardSettle extends StatefulWidget {
+  const KeyboardSettle({super.key, required this.active, required this.builder});
+  final bool active;
+  final Widget Function(BuildContext context, bool folded) builder;
+
+  /// Always held at least this long, then until the keyboard reads 0.
+  static const minHold = Duration(milliseconds: 450);
+  static const maxHold = Duration(milliseconds: 1500);
+
+  @override
+  State<KeyboardSettle> createState() => _KeyboardSettleState();
+}
+
+class _KeyboardSettleState extends State<KeyboardSettle> {
+  bool _held = false;
+  Timer? _check;
+  final _since = Stopwatch();
+
+  @override
+  void didUpdateWidget(KeyboardSettle old) {
+    super.didUpdateWidget(old);
+    if (old.active && !widget.active) {
+      _held = true;
+      _since
+        ..reset()
+        ..start();
+      _schedule();
+    } else if (widget.active) {
+      _held = false;
+      _check?.cancel();
+    }
+  }
+
+  void _schedule() {
+    _check?.cancel();
+    _check = Timer(const Duration(milliseconds: 100), () {
+      if (!mounted || !_held) return;
+      final keyboard = keyboardInset.value + MediaQuery.viewInsetsOf(context).bottom;
+      final waited = _since.elapsed;
+      if ((keyboard == 0 && waited >= KeyboardSettle.minHold) || waited >= KeyboardSettle.maxHold) {
+        setState(() => _held = false);
+      } else {
+        _schedule();
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _check?.cancel();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) => widget.builder(context, widget.active || _held);
 }
 
 /// Part of a game screen that makes way for the keyboard. In a browser it

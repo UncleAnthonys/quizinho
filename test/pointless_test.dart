@@ -101,10 +101,10 @@ void main() {
   // The big lists (radar_build.py): plenty to dig for at Easy and Medium.
   test('Under the Radar has plenty of lists at every level, big ones included', () {
     final repo = parseFootballJson(File('assets/db/football.json').readAsStringSync());
-    final radar = [for (final b in repo.bidding) if (b.answerIds.length >= 6 && b.scores.isNotEmpty) b];
+    final radar = [for (final b in repo.bidding) if (b.answerIds.length >= 10 && b.scores.isNotEmpty) b];
     final listsAt = {for (final l in [1, 2, 3]) l: radar.where((b) => b.difficulty == l && !b.id.startsWith('pair:')).length};
     expect(listsAt[1], greaterThan(40));
-    expect(listsAt[2], greaterThan(100));
+    expect(listsAt[2], greaterThan(90));
     expect(radar.where((b) => b.answerIds.length >= 50).length, greaterThan(20));
     final portsmouth = repo.bidding.firstWhere((b) => b.id == 'stat:pl-era-portsmouth');
     expect(portsmouth.answerIds.length, greaterThan(80));

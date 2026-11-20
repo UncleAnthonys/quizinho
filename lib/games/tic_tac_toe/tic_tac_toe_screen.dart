@@ -201,7 +201,11 @@ class _TicTacToeScreenState extends State<TicTacToeScreen>
     if (c == null) return const LoadingRound();
     return ValueListenableBuilder<bool>(
       valueListenable: answerTyping,
-      builder: (context, typing, _) => _scaffold(c, typing && c.phase == TttPhase.answering),
+      // The board stays folded until the keyboard's fully gone (KeyboardSettle).
+      builder: (context, typing, _) => KeyboardSettle(
+        active: typing && c.phase == TttPhase.answering,
+        builder: (context, folded) => _scaffold(c, folded),
+      ),
     );
   }
 
@@ -513,7 +517,9 @@ class _TttLayoutState extends State<TttLayout> {
               Center(
                 child: SizedBox(
                   width: _sizeBoard(box),
-                  child: TttBoard(data: data, onTap: onTap, onReveal: onReveal),
+                  // While folded the board doesn't hear about a miss: the red
+                  // shake plays once it's back in view.
+                  child: TttBoard(data: typing ? ({...data}..remove('miss')) : data, onTap: onTap, onReveal: onReveal),
                 ),
               ),
               const SizedBox(height: 12),
@@ -719,8 +725,8 @@ class TttBoard extends StatelessWidget {
 
     Widget square(int i) => MissShake(
           trigger: missSq == i ? (miss['n'] as num?)?.toInt() : null,
-          // After the keyboard's closed and the board's back in view.
-          delay: const Duration(milliseconds: 350),
+          // Just after the board's back in view (it waits for the keyboard).
+          delay: const Duration(milliseconds: 150),
           child: squareBody(i),
         );
 
