@@ -902,6 +902,33 @@ def generate_checkouts(clubs, players) -> list[dict]:
     return out
 
 
+def load_generated_checkouts(players, problems: Problems) -> list[dict]:
+    """Football 501 by country (radar_build.py): caps + goals. A player the
+    career data lacks comes in as 'Name|new:1' and is added (no career), so
+    the list stays complete."""
+    path = SEED / "checkouts_generated.json"
+    if not path.exists():
+        return []
+    out = []
+    for c in json.loads(path.read_text(encoding="utf-8"))["categories"]:
+        values = {}
+        for raw, (caps, goals) in c["values"].items():
+            name, _, pin = raw.partition("|")
+            if pin.startswith("new"):
+                pid = "curated-" + norm(name).replace(" ", "-")
+                players.setdefault(pid, {"name": name, "nat": None, "pos": None, "fame": int(pin[4:] or 1) if ":" in pin else 1,
+                                         "aliases": [], "spells": [], "women": c["women"]})
+            elif pin in players:
+                pid = pin
+            else:
+                problems.error(f"{c['id']}: unknown player {raw}")
+                continue
+            values[pid] = [caps, goals]
+        out.append({"id": c["id"], "club": c["id"], "prompt": c["prompt"], "values": values, "no_stats": [],
+                    "difficulty": c["difficulty"], "eras": 31, "women": c["women"]})
+    return out
+
+
 def match_eras(m) -> int:
     year = int(m["date"][:4])
     return era_mask(year, year)
@@ -1042,7 +1069,7 @@ def main() -> int:
     countries = json.loads(countries_path.read_text(encoding="utf-8"))["countries"] if countries_path.exists() else {}
     bidding = generate_bidding(clubs, players, connections, countries) + curated
     add_pointless_scores(bidding, players, clubs)
-    checkouts = generate_checkouts(clubs, players)
+    checkouts = generate_checkouts(clubs, players) + load_generated_checkouts(players, problems)
     by_diff = {d: sum(1 for c in connections if c["difficulty"] == d) for d in (1, 2, 3, 4)}
     print(f"players={len(players)} clubs={len(clubs)} matches={len(matches)} "
           f"connections={len(connections)} {by_diff} careers={len(careers)} bidding={len(bidding)} "

@@ -51,7 +51,10 @@ class Data:
     def __init__(self):
         players = json.loads((SEED / "players.json").read_text(encoding="utf-8"))["players"]
         known = json.loads((SEED / "wiki_names.json").read_text(encoding="utf-8")).get("players", {})
-        self.by_qid = {p["wikidata"]: {**p, "name": known.get(p["id"], p["name"])} for p in players}
+        # Shown by the name people know ("Eni Aluko"); the data's full name
+        # ("Eniola Aluko") still matches, as an alias.
+        self.by_qid = {p["wikidata"]: {**p, "name": known.get(p["id"], p["name"]),
+                                       "aliases": [*p.get("aliases", []), p["name"]]} for p in players}
         self.by_id = {p["id"]: p for p in self.by_qid.values()}
         self.qids: dict[str, str] = {}
         self.pages: dict[str, str] = {}
@@ -63,19 +66,26 @@ class Data:
         self.match = feed_matcher(self.by_qid)
         clubs = json.loads((SEED / "clubs.json").read_text(encoding="utf-8"))["clubs"]
         self.club_name = {c[0]: c[1] for c in clubs}
+        womens_clubs = {c[0] for c in clubs if len(c) > 6 and c[6] == "w"}
+        # A women's player = most of her career at women's clubs.
+        self.women = {p["id"]: sum(c[0] in womens_clubs for c in p.get("career", [])) * 2 > len(p.get("career", []))
+                      for p in self.by_qid.values() if p.get("career")}
         # A link we have no id for: the one player of that name, if only one.
         self.by_name: dict[str, dict[str, dict]] = {}
         for p in self.by_qid.values():
             for nm in {p["name"], *p.get("aliases", [])}:
                 self.by_name.setdefault(fold(nm), {})[p["id"]] = p
 
-    def answer(self, title: str, shown: str | None = None) -> str:
-        """A Wikipedia link -> 'Name|id', or 'Name|new:1' when we lack them."""
+    def answer(self, title: str, shown: str | None = None, women: bool | None = None) -> str:
+        """A Wikipedia link -> 'Name|id', or 'Name|new:1' when we lack them.
+        [women]: only the men's or the women's game when matching by name."""
         t = plain(title)
         q = self.qids.get(t)
         p = self.by_qid.get(q) if q else None
         name = re.sub(r"\s*\(.*?\)$", "", t).strip()
         same = sorted(self.by_name.get(fold(name), {}).values(), key=lambda x: -x["fame"]) if not p else []
+        if women is not None:
+            same = [x for x in same if self.women.get(x["id"], False) == women]
         # One player of that name, or one far better known than the rest
         # (Luis Suárez the Uruguayan, not the 1960 Ballon d'Or winner).
         if len(same) == 1 or (len(same) > 1 and same[0]["fame"] == 5 and same[1]["fame"] <= 3):
@@ -566,11 +576,78 @@ def pl_managers(d: Data):
         as_of="Nov 2026")
 
 
+# Football 501 by country: caps + goals, for everyone above the list's own
+# cut-off (Wikipedia lists England players with 10+ caps, Brazil 20+...).
+NATIONS = [
+    ("eng", "England", "England caps + goals (10+ caps)", 10, 1, False),
+    ("sco", "Scotland", "Scotland caps + goals (10+ caps)", 10, 2, False),
+    ("wal", "Wales", "Wales caps + goals (25+ caps)", 25, 2, False),
+    ("nir", "Northern Ireland", "Northern Ireland caps + goals (10+ caps)", 10, 3, False),
+    ("bra", "Brazil", "Brazil caps + goals (20+ caps)", 20, 2, False),
+    ("arg", "Argentina", "Argentina caps + goals (20+ caps)", 20, 3, False),
+    ("ger", "Germany", "Germany caps + goals (20+ caps)", 20, 2, False),
+    ("ita", "Italy", "Italy caps + goals (20+ caps)", 20, 3, False),
+    ("por", "Portugal", "Portugal caps + goals (25+ caps)", 25, 2, False),
+    ("eng-w", "England women's", "Lionesses caps + goals (10+ caps)", 10, 2, True),
+]
+NATIONAL_OUT: list[dict] = []
+
+
+def nation_rows(page: str) -> list[tuple[str, int, int]]:
+    """(article, caps, goals) from the list's main table."""
+    def num(cell):
+        c = re.sub(r"<ref.*", "", strip_attr(cell))
+        c = re.sub(r"\{\{[^}]*\}\}", "", c)
+        m = re.search(r"\d+", c.replace(",", ""))
+        return int(m.group()) if m else None
+    for heads, cap, headers, rows in tables(page):
+        if len(rows) < 50:
+            continue
+        cols = [re.sub(r"\W", "", h).lower() for h in headers]
+        try:
+            pi = next(i for i, c in enumerate(cols) if c.startswith("player") or c == "name")
+            ci = next(i for i, c in enumerate(cols) if c.startswith("caps"))
+            gi = next(i for i, c in enumerate(cols) if c.startswith("goals"))
+        except StopIteration:
+            continue
+        out = []
+        for r in rows:
+            if max(pi, ci, gi) >= len(r):
+                continue
+            title, caps, goals = sortname_title(r[pi]), num(r[ci]), num(r[gi])
+            if title and caps is not None and goals is not None:
+                out.append((title, caps, goals))
+        return out
+    return []
+
+
+def nations(d: Data):
+    for code, country, prompt, at_least, level, women in NATIONS:
+        page = d.pages.get(f"List of {country} international footballers", "")
+        rows = [(t, c, g) for t, c, g in nation_rows(page) if c >= at_least]
+        if len(rows) < 40:
+            DROPPED.append(f"501 {country}: {len(rows)} players")
+            continue
+        values = {}
+        for title, caps, goals in rows:
+            values[d.answer(title, women=women)] = [caps, goals]
+        as_of = re.search(r"correct as of:?'*\s*([^,\n<]+)", page)
+        NATIONAL_OUT.append({"id": f"501:{code}", "prompt": prompt, "difficulty": level, "women": women,
+                             "source": f"Wikipedia: List of {country} international footballers",
+                             **({"as_of": as_of.group(1).strip()} if as_of else {}), "values": values})
+        new = sum(1 for a in values if "|new" in a)
+        print(f"  501 {country}: {len(values)} players ({new} not in the career data)")
+
+
 def main() -> int:
     d = Data()
-    for step in (feed_lists, hat_tricks, golden_boot, finals, squads, wc_tables, euro_scorers, careers, club_eras, pl_managers, cl_hat_tricks, rosters, final_sides):
+    for step in (feed_lists, hat_tricks, golden_boot, finals, squads, wc_tables, euro_scorers, careers, club_eras, pl_managers, cl_hat_tricks, rosters, final_sides, nations):
         print(step.__name__)
         step(d)
+    (SEED / "checkouts_generated.json").write_text(json.dumps({
+        "_about": "GENERATED by radar_build.py: Football 501 by country (caps + goals) from Wikipedia's lists of "
+                  "internationals. Keys are 'Name|player-id' or 'Name|new:1'.",
+        "categories": NATIONAL_OUT}, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
     (SEED / "bidding_generated.json").write_text(json.dumps({
         "_about": "GENERATED by radar_build.py from the raw Wikipedia / Premier League data and the career data. "
                   "Do not edit by hand: fix the source or the builder.",

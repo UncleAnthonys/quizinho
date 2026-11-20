@@ -51,7 +51,7 @@ List<String> soloRules(GameModeId m) => switch (m) {
           '3 categories. The rarer your answer, the more you score.',
         ],
       GameModeId.checkout501 => [
-          'Start on 501. Name a player: their league apps + goals for that club come off.',
+          'Start on 501. Name a player: their apps + goals for that club (or caps + goals for that country) come off.',
           'Over 180 is bust. Check out between 0 and −10 in as few darts as you can.',
         ],
       GameModeId.startingXi => [
