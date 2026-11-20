@@ -176,13 +176,13 @@ void main() {
     });
   });
 
-  test('bundled data has short hand-made categories, every answer real', () async {
+  test('bundled data has hand-made and built categories, every answer real', () async {
     final repo = parseFootballJson(File('assets/db/football.json').readAsStringSync());
     final curated = repo.bidding.where((b) => b.kind == BiddingKind.curated).toList();
     expect(curated.length, greaterThanOrEqualTo(25));
     for (final b in curated) {
-      // Short enough to get through in a minute.
-      expect(b.answerIds.length, inInclusiveRange(5, 20), reason: b.id);
+      // Short checked lists up to the big built ones (radar_build.py).
+      expect(b.answerIds.length, inInclusiveRange(5, 250), reason: b.id);
       final index = b.answersAreClubs ? repo.clubIndex : repo.players;
       for (final id in b.answerIds) {
         expect(index.byId(id), isNotNull, reason: '${b.id}: $id');
