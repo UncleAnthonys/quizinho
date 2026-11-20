@@ -8,10 +8,12 @@ from __future__ import annotations
 import gzip
 import json
 import pathlib
+import re
 
-from wiki_stats_fetch import wikitext
+from wiki_stats_fetch import club_qids, wikitext
 
 RAW = pathlib.Path(__file__).parent / "raw"
+LINK = re.compile(r"\[\[([^\]|#]+)")
 
 ARTICLES = [
     *[f"{y} FIFA World Cup squads" for y in (1990, 1994, 1998, 2002, 2006, 2010, 2014, 2018, 2022)],
@@ -29,10 +31,13 @@ ARTICLES = [
 
 def main() -> int:
     pages = wikitext(ARTICLES)
+    # Every linked article's Wikidata id, so players match the career data.
+    linked = sorted({m.strip().replace("_", " ") for t in pages.values() for m in LINK.findall(t) if ":" not in m})
+    qids = club_qids(linked)
     with gzip.open(RAW / "radar_wikitext.json.gz", "wt", encoding="utf-8") as f:
-        json.dump({"pages": pages}, f, ensure_ascii=False)
+        json.dump({"pages": pages, "qids": qids}, f, ensure_ascii=False)
     missing = [t for t in ARTICLES if t not in pages]
-    print(f"fetched {len(pages)} of {len(ARTICLES)} articles; missing: {missing}")
+    print(f"fetched {len(pages)} of {len(ARTICLES)} articles; {len(qids)} linked ids; missing: {missing}")
     return 0
 
 
