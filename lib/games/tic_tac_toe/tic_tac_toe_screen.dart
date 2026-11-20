@@ -205,7 +205,7 @@ class _TicTacToeScreenState extends State<TicTacToeScreen>
     );
   }
 
-  /// [typing]: keyboard is up — hide the board, keep the two clubs + answer box.
+  /// [typing]: keyboard is up — the scores fold away; the answer box is above the board.
   Widget _scaffold(TicTacToeController c, bool typing) {
     return Scaffold(
       resizeToAvoidBottomInset: true,
@@ -423,7 +423,7 @@ class TttLayout extends StatefulWidget {
   final int multiplier;
   final void Function(int square)? onReveal;
 
-  /// Keyboard up: the board gives way to the answer box.
+  /// Keyboard up (the board keeps its size; the keyboard covers its bottom).
   final bool typing;
   final void Function(int square)? onTap;
 
@@ -504,24 +504,31 @@ class _TttLayoutState extends State<TttLayout> {
         // screen (a phone browser, with its toolbars) it's drawn smaller
         // rather than pushing the answer box off the bottom.
         child: LayoutBuilder(
-          builder: (context, box) => ListView(controller: _scroll, padding: const EdgeInsets.fromLTRB(12, 4, 12, 16), children: [
-          Collapse(
-            hidden: typing,
-            child: Column(children: [
+          builder: (context, box) {
+            final board = Center(
+              child: SizedBox(
+                width: _sizeBoard(box),
+                child: TttBoard(data: data, onTap: onTap, onReveal: onReveal),
+              ),
+            );
+            return ListView(controller: _scroll, padding: const EdgeInsets.fromLTRB(12, 4, 12, 16), children: [
               banner,
               const SizedBox(height: 8),
-              Center(
-                child: SizedBox(
-                  width: _sizeBoard(box),
-                  child: TttBoard(data: data, onTap: onTap, onReveal: onReveal),
-                ),
-              ),
-              const SizedBox(height: 12),
-            ]),
-          ),
-          if (phase == 'finished' && data['solo'] != true) ...[_standings(colours), const SizedBox(height: 6)],
-          bottom,
-        ]),
+              // Answering: the answer box sits above the board, and the board
+              // never folds away or resizes. The keyboard just covers the
+              // bottom of it, and closing the keyboard uncovers it again.
+              if (phase == 'answering') ...[
+                bottom,
+                const SizedBox(height: 12),
+                board,
+              ] else ...[
+                board,
+                const SizedBox(height: 12),
+                if (phase == 'finished' && data['solo'] != true) ...[_standings(colours), const SizedBox(height: 6)],
+                bottom,
+              ],
+            ]);
+          },
         ),
       ),
     ]);

@@ -147,8 +147,9 @@ void main() {
     );
   });
 
-  Future<void> shot(WidgetTester tester, String name, Widget body, {Future<void> Function()? then}) async {
-    tester.view.physicalSize = const Size(390, 844);
+  Future<void> shot(WidgetTester tester, String name, Widget body,
+      {Future<void> Function()? then, Size size = const Size(390, 844)}) async {
+    tester.view.physicalSize = size;
     tester.view.devicePixelRatio = 1;
     addTearDown(tester.view.reset);
     await tester.pumpWidget(AppScope(
@@ -387,6 +388,29 @@ void main() {
     await shot(tester, 'answer_keyboard_chosen', answering(voice: _ShotVoice(services.settings)));
     await shot(tester, 'answer_keyboard_typing', answering(voice: _ShotVoice(services.settings), typing: true),
         then: () => tester.enterText(find.byType(TextField), 'Fabregas'));
+    services.settings.typeAnswers = false;
+  }, skip: !_shots);
+
+  // Noughts & Crosses while answering: the answer box above the board, which
+  // keeps its size. With the keyboard up (the screen above a ~340px keyboard)
+  // it just covers the bottom of the board.
+  testWidgets('Noughts answering layout', (tester) async {
+    Widget answering({bool typing = false}) => column(
+        typing ? const SizedBox.shrink() : _scores(extra: const ['1 ▢', '1 ▢']),
+        TttLayout(
+          data: ttt('answering'),
+          typing: typing,
+          bottom: Column(children: [
+            Text('ARSENAL  +  JUVENTUS', textAlign: TextAlign.center, style: AppText.headline(20, color: Palette.yellow)),
+            _timer(),
+            _picker(),
+          ]),
+        ));
+    services.settings.typeAnswers = true;
+    await shot(tester, 'ttt_layout_answering', answering());
+    await shot(tester, 'ttt_layout_keyboard', answering(typing: true), size: const Size(390, 504));
+    await shot(tester, 'ttt_layout_keyboard_suggestions', answering(typing: true),
+        size: const Size(390, 504), then: () => tester.enterText(find.byType(TextField), 'Henry'));
     services.settings.typeAnswers = false;
   }, skip: !_shots);
 
