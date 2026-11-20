@@ -506,7 +506,15 @@ class _GuestGameState extends State<_GuestGame> with SingleTickerProviderStateMi
       action = teaser
           ? Padding(
               padding: const EdgeInsets.fromLTRB(18, 14, 18, 16),
-              child: Align(alignment: Alignment.topCenter, child: SizedBox(height: 150, child: buzzer)),
+              child: Column(children: [
+                SizedBox(height: 150, child: buzzer),
+                // As under the main phone's buttons at half-time.
+                if (asMap(v['question'])['halfTime'] == true && asMap(v['question'])['noClock'] != true) ...[
+                  const SizedBox(height: 10),
+                  Text('It stays open between games until someone gets it',
+                      textAlign: TextAlign.center, style: AppText.label(12)),
+                ],
+              ]),
             )
           : Padding(
               padding: const EdgeInsets.all(12),
@@ -519,7 +527,14 @@ class _GuestGameState extends State<_GuestGame> with SingleTickerProviderStateMi
     } else if (phase == 'open' && faceOff.isNotEmpty && !inFaceOff) {
       action = _status('FACE-OFF: ${faceOff.values.join(' v ')}\nOnly they can buzz');
     } else if (phase == 'open') {
-      action = _status(teaser ? 'YOUR TEAM’S HAD ITS GUESS' : 'LOCKED OUT - WAIT FOR THE STEAL');
+      final asked = asMap(v['question']);
+      // Half-time clock's run out: nobody can buzz now (not "you've had your
+      // guess"), but it carries on between games, as the main phone says.
+      action = _status(teaser && asked['halfTime'] == true && asked['noClock'] == true
+          ? 'TIME! IT STAYS OPEN BETWEEN GAMES - FOR 3 POINTS'
+          : teaser
+              ? 'YOUR TEAM’S HAD ITS GUESS'
+              : 'LOCKED OUT - WAIT FOR THE STEAL');
     } else if (result.isNotEmpty) {
       final scorer = (result['team'] as num?)?.toInt();
       final teamsV = asList(v['teams']);

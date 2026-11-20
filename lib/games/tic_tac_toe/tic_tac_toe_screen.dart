@@ -679,7 +679,9 @@ class TttBoard extends StatelessWidget {
                       Text('$count', style: AppText.headline(30, color: Palette.yellow)),
                       Text(count == 1 ? 'ANSWER' : 'ANSWERS', style: AppText.label(11, color: Palette.yellow)),
                     ])
-                  : Icon(selected ? Icons.mic_rounded : Icons.add_rounded,
+                  // The square being answered: a question mark (a mic read
+                  // as "speak now" to teams who type).
+                  : Icon(selected ? Icons.question_mark_rounded : Icons.add_rounded,
                       color: (canChoose(i) && tap != null) || selected ? Palette.yellow : Palette.muted, size: 30))
               : Stack(children: [
                   Positioned.fill(
