@@ -210,7 +210,7 @@ void main() {
     final repo = parseFootballJson(File('assets/db/football.json').readAsStringSync());
     final b = await repo.pickBiddingCategory(levels: {1});
     expect(b, isNotNull);
-    expect(b!.answerIds.length, inInclusiveRange(5, 35));
+    expect(b!.answerIds.length, inInclusiveRange(5, 250)); // the big built lists too
     final index = b.answersAreClubs ? repo.clubIndex : repo.players; // club categories answer with clubs
     for (final id in b.answerIds) {
       expect(index.byId(id), isNotNull, reason: '${b.id}: $id');
