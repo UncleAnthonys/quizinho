@@ -541,12 +541,12 @@ class _GuestGameState extends State<_GuestGame> with SingleTickerProviderStateMi
           padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 4),
           child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             // Same label as the host's ("FINAL CHANCE", "NEXT CLUB IN").
-            // Buzzed here, the main phone hasn't confirmed it yet (the box is
-            // already up for the keyboard): not "BUZZ IN" over an answer box.
+            // Buzzed here, not yet confirmed by the main phone (the box is
+            // already up for the keyboard): no label - not "BUZZ IN" over an answer box.
             if ((phase == 'answering'
                     ? 'ANSWER CLOCK'
                     : early
-                        ? 'BUZZED - WAITING FOR THE MAIN PHONE'
+                        ? null
                         : asMap(v['question'])['clock'])
                 case final String label)
               Padding(
