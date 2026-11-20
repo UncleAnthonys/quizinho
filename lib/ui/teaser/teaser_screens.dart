@@ -162,7 +162,11 @@ class TeaserBetweenGames extends StatefulWidget {
     required this.onBusyChanged,
     required this.onResult,
     this.revealNow = false,
+    this.openNow = false,
   });
+
+  /// Full time's "Last chance": the panel opens for everyone to have a go.
+  final bool openNow;
 
   /// Solved, or everyone's guessed wrong (between games): the result sits
   /// under the table rather than in place of it.
@@ -199,6 +203,7 @@ class _TeaserBetweenGamesState extends State<TeaserBetweenGames>
   void didUpdateWidget(TeaserBetweenGames old) {
     super.didUpdateWidget(old);
     if (widget.revealNow && !old.revealNow) _reveal();
+    if (widget.openNow && !old.openNow) _setOpen(true);
   }
 
   void _reveal() {
@@ -254,7 +259,7 @@ class _TeaserBetweenGamesState extends State<TeaserBetweenGames>
           const SizedBox(height: 12),
         ],
         TeaserPlay(controller: c, remoteAnswerer: teaserBridge?.remote?.name),
-        if (c.phase == BuzzPhase.open)
+        if (c.phase == BuzzPhase.open && !widget.openNow)
           TextButton(
             onPressed: () => _setOpen(false),
             child: Text('NOT YET - KEEP THINKING', style: AppText.label(13)),

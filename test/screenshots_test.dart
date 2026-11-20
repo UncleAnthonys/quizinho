@@ -43,6 +43,8 @@ import 'package:quizinho/ui/widgets/player_picker.dart';
 import 'package:quizinho/data/json_football_repository.dart';
 import 'package:quizinho/data/models.dart' show Difficulty;
 import 'package:quizinho/games/tic_tac_toe/tic_tac_toe_controller.dart';
+import 'package:quizinho/ui/screens/round_summary_screen.dart';
+import 'package:quizinho/domain/warm_up_cup.dart';
 import 'fixtures.dart';
 
 final _shots = Platform.environment['SHOTS'] == '1';
@@ -916,5 +918,28 @@ void main() {
       });
     }
     File('docs/shots/grids_medium.json').writeAsStringSync(const JsonEncoder.withIndent(' ').convert(out));
+  }, skip: !_shots);
+
+  // Full time with the teaser unsolved: one last go, or straight to the answers.
+  testWidgets('Full time teaser', (tester) async {
+    await tester.runAsync(() => services.teasers);
+    Tournament finished() {
+      final t = Tournament(TournamentConfig(
+        teams: [TeamSetup(name: 'Home', colorIndex: 0), TeamSetup(name: 'Away', colorIndex: 1)],
+        rounds: 4,
+      ));
+      for (final (h, a) in const [(3, 1), (0, 3), (2, 2), (3, 0)]) {
+        t.recordRound(RoundResult(mode: GameModeId.clubConnections, points: {0: h, 1: a}));
+      }
+      t.teaser = TeaserState(WarmUpCup.teaser)..halfTimeDone = true;
+      return t;
+    }
+
+    await shot(tester, 'fulltime_teaser', RoundSummaryScreen(tournament: finished()));
+    await shot(tester, 'fulltime_teaser_last_chance', RoundSummaryScreen(tournament: finished()), then: () async {
+      await tester.tap(find.text('LAST CHANCE AT THE TEASER'));
+      await tester.pump(const Duration(seconds: 3));
+      await tester.pump(const Duration(milliseconds: 500));
+    });
   }, skip: !_shots);
 }

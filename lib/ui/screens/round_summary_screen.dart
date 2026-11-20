@@ -38,6 +38,27 @@ class _RoundSummaryScreenState extends State<RoundSummaryScreen> {
   int _hold = 0;
   Timer? _holdTimer;
 
+  /// Full time, teaser unsolved: "Last chance" gives everyone this long to
+  /// buzz (the clock waits while someone's answering), then out come the answers.
+  static const lastChanceSeconds = 30;
+  int? _lastChance;
+  Timer? _lastChanceTimer;
+
+  void _startLastChance() {
+    setState(() => _lastChance = lastChanceSeconds);
+    _lastChanceTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      if (!mounted) return;
+      if (_teaserBusy) return; // someone's answering: wait for them
+      setState(() => _lastChance = _lastChance! - 1);
+      if (_lastChance! <= 0) _revealTeaser();
+    });
+  }
+
+  void _revealTeaser() {
+    _lastChanceTimer?.cancel();
+    setState(() => _revealed = true);
+  }
+
   Tournament get t => widget.tournament;
 
   @override
@@ -61,6 +82,7 @@ class _RoundSummaryScreenState extends State<RoundSummaryScreen> {
   @override
   void dispose() {
     _holdTimer?.cancel();
+    _lastChanceTimer?.cancel();
     t.removeListener(_changed);
     super.dispose();
   }
@@ -75,15 +97,36 @@ class _RoundSummaryScreenState extends State<RoundSummaryScreen> {
       );
     }
     if (t.isFinished) {
-      // An unsolved teaser comes out before the final whistle.
-      final reveal = t.teaserOpen && !_revealed;
+      // An unsolved teaser: one last go for anyone who's been thinking all
+      // game, or straight to the answers - then the final whistle.
+      if (t.teaserOpen && !_revealed) {
+        final left = _lastChance;
+        if (left == null) {
+          return Column(mainAxisSize: MainAxisSize.min, children: [
+            BigButton(
+              label: 'Last chance at the teaser',
+              icon: Icons.psychology_alt_rounded,
+              color: Palette.gold,
+              onPressed: _teaserBusy ? null : _startLastChance,
+            ),
+            TextButton(
+              onPressed: _teaserBusy ? null : _revealTeaser,
+              child: Text('REVEAL TEASER ANSWER', style: AppText.label(14, color: Palette.text)),
+            ),
+          ]);
+        }
+        return BigButton(
+          label: 'Reveal teaser answer · $left',
+          icon: Icons.visibility_rounded,
+          color: Palette.gold,
+          onPressed: _teaserBusy ? null : _revealTeaser,
+        );
+      }
       return BigButton(
-        label: reveal ? 'Full time – the teaser' : 'Final whistle',
-        icon: reveal ? Icons.psychology_alt_rounded : Icons.emoji_events,
+        label: 'Final whistle',
+        icon: Icons.emoji_events,
         color: Palette.gold,
-        onPressed: _teaserBusy
-            ? null
-            : () => reveal ? setState(() => _revealed = true) : MatchFlow.toWinner(context, t),
+        onPressed: _teaserBusy ? null : () => MatchFlow.toWinner(context, t),
       );
     }
     return BigButton(
@@ -105,6 +148,7 @@ class _RoundSummaryScreenState extends State<RoundSummaryScreen> {
             key: _teaserKey,
             tournament: t,
             revealNow: _revealed,
+            openNow: _lastChance != null,
             onOpenChanged: (open) => setState(() => _teaserOpen = open),
             onBusyChanged: (busy) => setState(() => _teaserBusy = busy),
             onResult: () => setState(() {
