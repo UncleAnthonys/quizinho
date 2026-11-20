@@ -6,18 +6,18 @@
    "Liverpool"
   ],
   "cols": [
-   "Europa League winner",
+   "World Cup winner",
    "Tottenham Hotspur",
    "Managed by Flick (club)"
   ],
   "squares": [
    {
-    "count": 20,
+    "count": 5,
     "top": [
-     "Henrikh Mkhitaryan",
-     "Jadon Sancho",
-     "Jens Lehmann",
-     "Andreas Möller"
+     "Mats Hummels",
+     "Jürgen Kohler",
+     "Thomas Häßler",
+     "Karl-Heinz Riedle"
     ]
    },
    {
@@ -38,12 +38,12 @@
     ]
    },
    {
-    "count": 42,
+    "count": 18,
     "top": [
-     "James Rodríguez",
-     "Thibaut Courtois",
-     "Ronaldo",
-     "Eden Hazard"
+     "Ángel Di María",
+     "Iker Casillas",
+     "Kylian Mbappé",
+     "Mesut Özil"
     ]
    },
    {
@@ -63,12 +63,12 @@
     ]
    },
    {
-    "count": 54,
+    "count": 5,
     "top": [
-     "Steven Gerrard",
      "Fernando Torres",
-     "Jamie Carragher",
-     "Kevin Keegan"
+     "Xabi Alonso",
+     "Alexis Mac Allister",
+     "Karl-Heinz Riedle"
     ]
    },
    {
@@ -282,7 +282,7 @@
  {
   "rows": [
    "Liverpool",
-   "Champions League winner",
+   "Managed by Conte (club)",
    "Spain"
   ],
   "cols": [
@@ -319,30 +319,30 @@
     ]
    },
    {
-    "count": 16,
+    "count": 4,
     "top": [
-     "Toni Kroos",
-     "Dani Carvajal",
-     "Kai Havertz",
-     "Lucas Vázquez"
+     "Arturo Vidal",
+     "Son Heung-min",
+     "Lúcio",
+     "Miguel Gutiérrez"
     ]
    },
    {
-    "count": 30,
+    "count": 4,
     "top": [
-     "Erling Haaland",
-     "Ousmane Dembélé",
-     "Robert Lewandowski",
-     "Achraf Hakimi"
+     "Achraf Hakimi",
+     "Ciro Immobile",
+     "Ivan Perišić",
+     "Michy Batshuayi"
     ]
    },
    {
-    "count": 49,
+    "count": 9,
     "top": [
-     "Sergio Ramos",
-     "Ángel Di María",
-     "Dani Alves",
-     "David Beckham"
+     "Gianluigi Buffon",
+     "Achraf Hakimi",
+     "David Luiz",
+     "Khvicha Kvaratskhelia"
     ]
    },
    {
@@ -376,68 +376,68 @@
  },
  {
   "rows": [
-   "Everton",
-   "FA Cup winner",
+   "Arsenal",
+   "World Cup winner",
    "Club teammate of Agüero"
   ],
   "cols": [
    "AS Monaco",
    "Inter Milan",
-   "Valencia"
+   "Liverpool"
   ],
   "squares": [
    {
-    "count": 7,
-    "top": [
-     "James Rodríguez",
-     "Djibril Sidibé",
-     "Maarten Stekelenburg",
-     "Lacina Traoré"
-    ]
-   },
-   {
-    "count": 10,
-    "top": [
-     "Romelu Lukaku",
-     "Samuel Eto'o",
-     "Ashley Young",
-     "John Stones"
-    ]
-   },
-   {
-    "count": 6,
-    "top": [
-     "Shkodran Mustafi",
-     "André Gomes",
-     "Eliaquim Mangala",
-     "Manuel Fernandes"
-    ]
-   },
-   {
-    "count": 18,
+    "count": 12,
     "top": [
      "Cesc Fàbregas",
-     "George Weah",
      "Thierry Henry",
-     "Bernardo Silva"
-    ]
-   },
-   {
-    "count": 21,
-    "top": [
-     "Lukas Podolski",
-     "Mario Balotelli",
-     "Alexis Sánchez",
-     "Ashley Young"
+     "Emmanuel Adebayor",
+     "Pierre-Emerick Aubameyang"
     ]
    },
    {
     "count": 10,
     "top": [
-     "David Silva",
-     "Didier Deschamps",
-     "Juan Mata",
-     "Nicolás Otamendi"
+     "Lukas Podolski",
+     "Alexis Sánchez",
+     "Dennis Bergkamp",
+     "Henrikh Mkhitaryan"
+    ]
+   },
+   {
+    "count": 19,
+    "top": [
+     "Kolo Touré",
+     "Nicolas Anelka",
+     "Raheem Sterling",
+     "Alex Oxlade-Chamberlain"
+    ]
+   },
+   {
+    "count": 8,
+    "top": [
+     "Cesc Fàbregas",
+     "Kylian Mbappé",
+     "Paul Pogba",
+     "Fabien Barthez"
+    ]
+   },
+   {
+    "count": 30,
+    "top": [
+     "Andrea Pirlo",
+     "Lothar Matthäus",
+     "Ronaldo",
+     "Andreas Brehme"
+    ]
+   },
+   {
+    "count": 5,
+    "top": [
+     "Fernando Torres",
+     "Xabi Alonso",
+     "Alexis Mac Allister",
+     "Karl-Heinz Riedle"
     ]
    },
    {
@@ -459,12 +459,12 @@
     ]
    },
    {
-    "count": 14,
+    "count": 11,
     "top": [
-     "David Silva",
-     "Ferran Torres",
-     "Jordi Alba",
-     "Nicolás Otamendi"
+     "Fernando Torres",
+     "Mario Balotelli",
+     "James Milner",
+     "Kolo Touré"
     ]
    }
   ]
@@ -566,180 +566,322 @@
  },
  {
   "rows": [
-   "Barcelona",
-   "Juventus",
-   "Manchester City"
+   "Sweden",
+   "Aston Villa",
+   "Arsenal"
   ],
   "cols": [
-   "Real Madrid",
-   "Tottenham Hotspur",
-   "World Cup winner"
+   "Manchester City",
+   "Manchester United",
+   "Barcelona"
   ],
   "squares": [
    {
+    "count": 2,
+    "top": [
+     "Andreas Isaksson",
+     "John Guidetti"
+    ]
+   },
+   {
+    "count": 6,
+    "top": [
+     "Zlatan Ibrahimović",
+     "Henrik Larsson",
+     "Victor Lindelöf",
+     "Anthony Elanga"
+    ]
+   },
+   {
+    "count": 4,
+    "top": [
+     "Zlatan Ibrahimović",
+     "Henrik Larsson",
+     "Patrik Andersson",
+     "Roony Bardghji"
+    ]
+   },
+   {
     "count": 33,
     "top": [
-     "Ronaldo",
-     "Samuel Eto'o",
-     "Gheorghe Hagi",
-     "Luis Enrique"
+     "James Milner",
+     "Kyle Walker",
+     "Peter Schmeichel",
+     "David James"
     ]
    },
    {
-    "count": 13,
+    "count": 35,
     "top": [
-     "Gary Lineker",
-     "Kevin-Prince Boateng",
-     "Clément Lenglet",
-     "Edgar Davids"
+     "Marcus Rashford",
+     "Ashley Young",
+     "Jadon Sancho",
+     "Peter Schmeichel"
     ]
    },
    {
-    "count": 22,
+    "count": 6,
     "top": [
-     "Andrés Iniesta",
-     "Antoine Griezmann",
-     "Cesc Fàbregas",
-     "David Villa"
+     "Marcus Rashford",
+     "Pepe Reina",
+     "Philippe Coutinho",
+     "Adama Traoré"
     ]
    },
    {
-    "count": 15,
+    "count": 28,
     "top": [
-     "Ángel Di María",
-     "Cristiano Ronaldo",
-     "Zinedine Zidane",
-     "Álvaro Morata"
-    ]
-   },
-   {
-    "count": 10,
-    "top": [
-     "Fernando Llorente",
-     "Dejan Kulusevski",
-     "Edgar Davids",
-     "Randal Kolo Muani"
-    ]
-   },
-   {
-    "count": 44,
-    "top": [
-     "Alessandro Del Piero",
-     "Andrea Pirlo",
-     "Ángel Di María",
-     "Gianluigi Buffon"
-    ]
-   },
-   {
-    "count": 9,
-    "top": [
-     "Bernardo Silva",
+     "Bacary Sagna",
      "Emmanuel Adebayor",
-     "Mateo Kovačić",
+     "Kolo Touré",
      "Nicolas Anelka"
     ]
    },
    {
     "count": 21,
     "top": [
-     "Emmanuel Adebayor",
-     "Joe Hart",
-     "Kyle Walker",
-     "Omar Marmoush"
+     "Robin van Persie",
+     "Alexis Sánchez",
+     "Danny Welbeck",
+     "Henrikh Mkhitaryan"
     ]
    },
    {
-    "count": 6,
+    "count": 16,
     "top": [
-     "Jérôme Boateng",
-     "Jesús Navas",
-     "Julián Alvarez",
-     "Nicolás Otamendi"
+     "Cesc Fàbregas",
+     "Thierry Henry",
+     "Alexis Sánchez",
+     "Giovanni van Bronckhorst"
     ]
    }
   ]
  },
  {
   "rows": [
-   "Bayer 04 Leverkusen",
-   "Newcastle United",
-   "Manchester United"
+   "Atlético Madrid",
+   "Club teammate of Lampard",
+   "Managed by Zidane (club)"
   ],
   "cols": [
-   "Fulham",
-   "Club teammate of Vieira",
-   "Liverpool"
+   "Manchester United",
+   "Inter Milan",
+   "Paris Saint-Germain"
   ],
   "squares": [
    {
-    "count": 6,
+    "count": 8,
     "top": [
-     "André Schürrle",
-     "Dimitar Berbatov",
-     "Bernd Leno",
-     "Gábor Király"
+     "Diego Forlán",
+     "David de Gea",
+     "Memphis Depay",
+     "Radamel Falcao"
     ]
    },
    {
-    "count": 4,
+    "count": 17,
     "top": [
-     "Emerson",
-     "Lúcio",
-     "Robert Kovač",
-     "Giulio Donati"
+     "Diego Forlán",
+     "Diego Godín",
+     "Diego Simeone",
+     "Thiago Motta"
+    ]
+   },
+   {
+    "count": 10,
+    "top": [
+     "Thiago Motta",
+     "Cristian Rodríguez",
+     "Lee Kang-in",
+     "Lucas Hernandez"
     ]
    },
    {
     "count": 8,
     "top": [
-     "Emre Can",
-     "Andriy Voronin",
-     "Florian Wirtz",
-     "Jeremie Frimpong"
+     "Romelu Lukaku",
+     "Juan Mata",
+     "Michael Carrick",
+     "Rio Ferdinand"
     ]
    },
    {
-    "count": 28,
+    "count": 12,
     "top": [
-     "Aleksandar Mitrović",
-     "Andy Cole",
-     "Damien Duff",
-     "Louis Saha"
+     "Andrea Pirlo",
+     "Romelu Lukaku",
+     "Samuel Eto'o",
+     "Edin Džeko"
     ]
    },
    {
-    "count": 6,
+    "count": 9,
     "top": [
-     "James Milner",
-     "Craig Bellamy",
-     "Shay Given",
-     "Sol Campbell"
+     "David Luiz",
+     "Nicolas Anelka",
+     "Alex",
+     "Claude Makélélé"
     ]
    },
    {
-    "count": 30,
+    "count": 4,
     "top": [
-     "Alexander Isak",
-     "James Milner",
-     "Kevin Keegan",
-     "Michael Owen"
+     "Cristiano Ronaldo",
+     "Casemiro",
+     "Raphaël Varane",
+     "Sergio Reguilón"
     ]
    },
    {
-    "count": 21,
+    "count": 2,
     "top": [
-     "George Best",
-     "Chris Smalling",
-     "Dimitar Berbatov",
-     "Edwin van der Sar"
+     "Achraf Hakimi",
+     "Mateo Kovačić"
     ]
    },
    {
-    "count": 3,
+    "count": 5,
     "top": [
-     "Robin van Persie",
+     "Sergio Ramos",
+     "Achraf Hakimi",
+     "Keylor Navas",
+     "Marco Asensio"
+    ]
+   }
+  ]
+ },
+ {
+  "rows": [
+   "Tottenham Hotspur",
+   "Inter Milan",
+   "Chelsea"
+  ],
+  "cols": [
+   "Everton",
+   "Paris Saint-Germain",
+   "Managed by Guardiola"
+  ],
+  "squares": [
+   {
+    "count": 24,
+    "top": [
+     "Gary Lineker",
+     "Dele Alli",
+     "Richarlison",
+     "Aaron Lennon"
+    ]
+   },
+   {
+    "count": 9,
+    "top": [
+     "Giovani Lo Celso",
+     "Lucas Moura",
+     "Osvaldo Ardiles",
+     "Randal Kolo Muani"
+    ]
+   },
+   {
+    "count": 8,
+    "top": [
+     "Joe Hart",
+     "Kyle Walker",
+     "Eiður Guðjohnsen",
+     "Omar Marmoush"
+    ]
+   },
+   {
+    "count": 10,
+    "top": [
+     "Romelu Lukaku",
+     "Samuel Eto'o",
+     "Ashley Young",
+     "John Stones"
+    ]
+   },
+   {
+    "count": 12,
+    "top": [
      "Zlatan Ibrahimović",
-     "Carlos Tevez"
+     "Achraf Hakimi",
+     "Mauro Icardi",
+     "Thiago Motta"
+    ]
+   },
+   {
+    "count": 13,
+    "top": [
+     "Samuel Eto'o",
+     "Zlatan Ibrahimović",
+     "Alexis Sánchez",
+     "Arturo Vidal"
+    ]
+   },
+   {
+    "count": 22,
+    "top": [
+     "Romelu Lukaku",
+     "Samuel Eto'o",
+     "Asmir Begović",
+     "Kurt Zouma"
+    ]
+   },
+   {
+    "count": 11,
+    "top": [
+     "George Weah",
+     "David Luiz",
+     "Nicolas Anelka",
+     "Thiago Silva"
+    ]
+   },
+   {
+    "count": 16,
+    "top": [
+     "Arjen Robben",
+     "Cesc Fàbregas",
+     "Kevin De Bruyne",
+     "Samuel Eto'o"
+    ]
+   }
+  ]
+ },
+ {
+  "rows": [
+   "AS Roma",
+   "Manchester United",
+   "Real Madrid"
+  ],
+  "cols": [
+   "Liverpool",
+   "Managed by Mancini (club)",
+   "AC Milan"
+  ],
+  "squares": [
+   {
+    "count": 9,
+    "top": [
+     "Mohamed Salah",
+     "Alisson",
+     "Alberto Aquilani",
+     "Fabio Borini"
+    ]
+   },
+   {
+    "count": 23,
+    "top": [
+     "Edin Džeko",
+     "Adem Ljajić",
+     "Adriano",
+     "Aleksandar Kolarov"
+    ]
+   },
+   {
+    "count": 60,
+    "top": [
+     "Carlo Ancelotti",
+     "Bojan Krkić",
+     "Cafu",
+     "Fabio Capello"
     ]
    },
    {
@@ -750,46 +892,195 @@
      "Peter Beardsley",
      "Bill Gorman"
     ]
+   },
+   {
+    "count": 7,
+    "top": [
+     "Zlatan Ibrahimović",
+     "Carlos Tevez",
+     "Nemanja Vidić",
+     "Alex Telles"
+    ]
+   },
+   {
+    "count": 10,
+    "top": [
+     "David Beckham",
+     "Zlatan Ibrahimović",
+     "Diogo Dalot",
+     "Jaap Stam"
+    ]
+   },
+   {
+    "count": 13,
+    "top": [
+     "Xabi Alonso",
+     "Álvaro Arbeloa",
+     "Michael Owen",
+     "Nicolas Anelka"
+    ]
+   },
+   {
+    "count": 11,
+    "top": [
+     "Emmanuel Adebayor",
+     "Luís Figo",
+     "Mateo Kovačić",
+     "Robinho"
+    ]
+   },
+   {
+    "count": 21,
+    "top": [
+     "David Beckham",
+     "Kaká",
+     "Luka Modrić",
+     "Ronaldo"
+    ]
    }
   ]
  },
  {
   "rows": [
-   "Club teammate of Benzema",
-   "Manchester United",
-   "Portugal"
+   "Inter Milan",
+   "Borussia Dortmund",
+   "AC Milan"
   ],
   "cols": [
-   "Atlético Madrid",
-   "Barcelona",
-   "Manchester City"
+   "Chelsea",
+   "World Cup winner",
+   "Real Madrid"
   ],
   "squares": [
    {
-    "count": 7,
+    "count": 11,
+    "top": [
+     "Romelu Lukaku",
+     "Samuel Eto'o",
+     "Hernán Crespo",
+     "Mateo Kovačić"
+    ]
+   },
+   {
+    "count": 30,
+    "top": [
+     "Andrea Pirlo",
+     "Lothar Matthäus",
+     "Ronaldo",
+     "Andreas Brehme"
+    ]
+   },
+   {
+    "count": 17,
+    "top": [
+     "Ronaldo",
+     "Samuel Eto'o",
+     "Achraf Hakimi",
+     "Clarence Seedorf"
+    ]
+   },
+   {
+    "count": 9,
+    "top": [
+     "André Schürrle",
+     "Jadon Sancho",
+     "Pierre-Emerick Aubameyang",
+     "Christian Pulisic"
+    ]
+   },
+   {
+    "count": 5,
+    "top": [
+     "Mats Hummels",
+     "Jürgen Kohler",
+     "Thomas Häßler",
+     "Karl-Heinz Riedle"
+    ]
+   },
+   {
+    "count": 5,
+    "top": [
+     "Achraf Hakimi",
+     "Jude Bellingham",
+     "Christoph Metzelder",
+     "Nuri Şahin"
+    ]
+   },
+   {
+    "count": 32,
+    "top": [
+     "Andriy Shevchenko",
+     "Fernando Torres",
+     "George Weah",
+     "Olivier Giroud"
+    ]
+   },
+   {
+    "count": 19,
+    "top": [
+     "Andrea Pirlo",
+     "Fernando Torres",
+     "Olivier Giroud",
+     "Ronaldinho"
+    ]
+   },
+   {
+    "count": 21,
+    "top": [
+     "David Beckham",
+     "Kaká",
+     "Luka Modrić",
+     "Ronaldo"
+    ]
+   }
+  ]
+ },
+ {
+  "rows": [
+   "Real Madrid",
+   "Manchester United",
+   "Chelsea"
+  ],
+  "cols": [
+   "Club teammate of Buffon",
+   "Atlético Madrid",
+   "Brazil"
+  ],
+  "squares": [
+   {
+    "count": 13,
+    "top": [
+     "Ángel Di María",
+     "Cristiano Ronaldo",
+     "Kylian Mbappé",
+     "Álvaro Morata"
+    ]
+   },
+   {
+    "count": 32,
     "top": [
      "Thibaut Courtois",
      "Álvaro Morata",
      "Antonio Adán",
-     "Marcos Llorente"
+     "Bernd Schuster"
     ]
    },
    {
-    "count": 4,
+    "count": 27,
     "top": [
-     "Eric Abidal",
-     "Marcos Alonso",
-     "Miralem Pjanić",
-     "Marc Crosas"
+     "Kaká",
+     "Ronaldo",
+     "Casemiro",
+     "Marcelo"
     ]
    },
    {
-    "count": 4,
+    "count": 10,
     "top": [
-     "Emmanuel Adebayor",
-     "Mateo Kovačić",
-     "Brahim Díaz",
-     "Danilo"
+     "Ángel Di María",
+     "Cristiano Ronaldo",
+     "Edinson Cavani",
+     "Paul Pogba"
     ]
    },
    {
@@ -802,890 +1093,39 @@
     ]
    },
    {
-    "count": 10,
-    "top": [
-     "Gerard Piqué",
-     "Marcus Rashford",
-     "Zlatan Ibrahimović",
-     "Alexis Sánchez"
-    ]
-   },
-   {
-    "count": 37,
-    "top": [
-     "Peter Schmeichel",
-     "Carlos Tevez",
-     "Andy Cole",
-     "Denis Law"
-    ]
-   },
-   {
     "count": 12,
     "top": [
-     "João Félix",
-     "Maniche",
-     "Paulo Futre",
-     "Simão Sabrosa"
-    ]
-   },
-   {
-    "count": 11,
-    "top": [
-     "Deco",
-     "João Félix",
-     "Luís Figo",
-     "Ricardo Quaresma"
-    ]
-   },
-   {
-    "count": 5,
-    "top": [
-     "Bernardo Silva",
-     "João Cancelo",
-     "Rúben Dias",
-     "Rony Lopes"
-    ]
-   }
-  ]
- },
- {
-  "rows": [
-   "AS Roma",
-   "Borussia Dortmund",
-   "Manchester United"
-  ],
-  "cols": [
-   "Club teammate of Agüero",
-   "Liverpool",
-   "Juventus"
-  ],
-  "squares": [
-   {
-    "count": 6,
-    "top": [
-     "Edin Džeko",
-     "Aleksandar Kolarov",
-     "Maicon",
-     "Miralem Pjanić"
-    ]
-   },
-   {
-    "count": 9,
-    "top": [
-     "Mohamed Salah",
-     "Alisson",
-     "Alberto Aquilani",
-     "Fabio Borini"
-    ]
-   },
-   {
-    "count": 49,
-    "top": [
-     "Fabio Capello",
-     "Paulo Dybala",
-     "Wojciech Szczęsny",
-     "Zbigniew Boniek"
-    ]
-   },
-   {
-    "count": 3,
-    "top": [
-     "Ousmane Dembélé",
-     "İlkay Gündoğan",
-     "Felix Nmecha"
-    ]
-   },
-   {
-    "count": 6,
-    "top": [
-     "Alexander Isak",
-     "Emre Can",
-     "Nuri Şahin",
-     "Karl-Heinz Riedle"
-    ]
-   },
-   {
-    "count": 10,
-    "top": [
-     "Ciro Immobile",
-     "Emre Can",
-     "Andreas Möller",
-     "Jürgen Kohler"
-    ]
-   },
-   {
-    "count": 5,
-    "top": [
-     "Diego Forlán",
-     "Gerard Piqué",
-     "Carlos Tevez",
-     "David de Gea"
+     "Casemiro",
+     "Alex Telles",
+     "Anderson",
+     "Antony"
     ]
    },
    {
     "count": 13,
     "top": [
-     "Michael Owen",
-     "Paul Ince",
-     "Peter Beardsley",
-     "Bill Gorman"
+     "Álvaro Morata",
+     "Gonzalo Higuaín",
+     "Hernán Crespo",
+     "Nicolas Anelka"
     ]
    },
    {
-    "count": 8,
+    "count": 15,
     "top": [
-     "Ángel Di María",
-     "Cristiano Ronaldo",
-     "Paul Pogba",
-     "Zlatan Ibrahimović"
-    ]
-   }
-  ]
- },
- {
-  "rows": [
-   "Manchester United",
-   "Paris Saint-Germain",
-   "Real Madrid"
-  ],
-  "cols": [
-   "Portugal",
-   "Barcelona",
-   "Club teammate of Torres"
-  ],
-  "squares": [
-   {
-    "count": 6,
-    "top": [
-     "Cristiano Ronaldo",
-     "Bruno Fernandes",
-     "Nani",
-     "Diogo Dalot"
-    ]
-   },
-   {
-    "count": 10,
-    "top": [
-     "Gerard Piqué",
-     "Marcus Rashford",
-     "Zlatan Ibrahimović",
-     "Alexis Sánchez"
-    ]
-   },
-   {
-    "count": 3,
-    "top": [
-     "Romelu Lukaku",
-     "Juan Mata",
-     "Nemanja Matić"
-    ]
-   },
-   {
-    "count": 13,
-    "top": [
-     "Danilo Pereira",
-     "Gonçalo Guedes",
-     "Gonçalo Ramos",
-     "João Neves"
+     "Fernando Torres",
+     "Thibaut Courtois",
+     "Álvaro Morata",
+     "César Azpilicueta"
     ]
    },
    {
     "count": 17,
     "top": [
-     "Dani Alves",
-     "Lionel Messi",
-     "Neymar",
-     "Ousmane Dembélé"
-    ]
-   },
-   {
-    "count": 11,
-    "top": [
-     "David Luiz",
-     "Gianluigi Donnarumma",
-     "Nicolas Anelka",
-     "Alex"
-    ]
-   },
-   {
-    "count": 8,
-    "top": [
-     "Cristiano Ronaldo",
-     "Bernardo Silva",
-     "Fábio Coentrão",
-     "Luís Figo"
-    ]
-   },
-   {
-    "count": 33,
-    "top": [
-     "Ronaldo",
-     "Samuel Eto'o",
-     "Gheorghe Hagi",
-     "Luis Enrique"
-    ]
-   },
-   {
-    "count": 12,
-    "top": [
-     "Eden Hazard",
-     "Samuel Eto'o",
-     "Thibaut Courtois",
-     "Xabi Alonso"
-    ]
-   }
-  ]
- },
- {
-  "rows": [
-   "SS Lazio",
-   "Olympique de Marseille",
-   "Leeds United"
-  ],
-  "cols": [
-   "Champions League winner",
-   "West Ham United",
-   "Manchester United"
-  ],
-  "squares": [
-   {
-    "count": 22,
-    "top": [
-     "Alessandro Nesta",
-     "Michael Laudrup",
-     "Nani",
-     "Pedro"
-    ]
-   },
-   {
-    "count": 9,
-    "top": [
-     "Felipe Anderson",
-     "Lionel Scaloni",
-     "Paolo Di Canio",
-     "Thomas Hitzlsperger"
-    ]
-   },
-   {
-    "count": 7,
-    "top": [
-     "Nani",
-     "Jaap Stam",
-     "Juan Sebastián Verón",
-     "Karel Poborský"
-    ]
-   },
-   {
-    "count": 36,
-    "top": [
-     "Franck Ribéry",
-     "Mario Balotelli",
-     "Didier Drogba",
-     "César Azpilicueta"
-    ]
-   },
-   {
-    "count": 15,
-    "top": [
-     "Dimitri Payet",
-     "Patrice Evra",
-     "Samir Nasri",
-     "André Ayew"
-    ]
-   },
-   {
-    "count": 10,
-    "top": [
-     "Alexis Sánchez",
-     "Fabien Barthez",
-     "Patrice Evra",
-     "Eric Bailly"
-    ]
-   },
-   {
-    "count": 15,
-    "top": [
-     "James Milner",
-     "Rio Ferdinand",
-     "Harry Kewell",
-     "Ian Rush"
-    ]
-   },
-   {
-    "count": 21,
-    "top": [
-     "Rio Ferdinand",
-     "Robbie Keane",
-     "Hayden Foxe",
-     "Kalvin Phillips"
-    ]
-   },
-   {
-    "count": 27,
-    "top": [
-     "Eric Cantona",
-     "Rio Ferdinand",
-     "Alan Smith",
-     "Cameron Borthwick-Jackson"
-    ]
-   }
-  ]
- },
- {
-  "rows": [
-   "Barcelona",
-   "Arsenal",
-   "Newcastle United"
-  ],
-  "cols": [
-   "Ivory Coast",
-   "Club teammate of Kane",
-   "Chelsea"
-  ],
-  "squares": [
-   {
-    "count": 2,
-    "top": [
-     "Yaya Touré",
-     "Franck Kessié"
-    ]
-   },
-   {
-    "count": 5,
-    "top": [
-     "Clément Lenglet",
-     "Eiður Guðjohnsen",
-     "Giovani dos Santos",
-     "Paulinho"
-    ]
-   },
-   {
-    "count": 19,
-    "top": [
-     "Cesc Fàbregas",
-     "Samuel Eto'o",
-     "Deco",
-     "João Félix"
-    ]
-   },
-   {
-    "count": 4,
-    "top": [
-     "Kolo Touré",
-     "Emmanuel Eboué",
-     "Gervinho",
-     "Nicolas Pépé"
-    ]
-   },
-   {
-    "count": 4,
-    "top": [
-     "Emmanuel Adebayor",
-     "Serge Gnabry",
-     "William Gallas",
-     "David Bentley"
-    ]
-   },
-   {
-    "count": 36,
-    "top": [
-     "Olivier Giroud",
-     "Cesc Fàbregas",
-     "Kai Havertz",
-     "Danny Welbeck"
-    ]
-   },
-   {
-    "count": 3,
-    "top": [
-     "Cheick Tioté",
-     "Seydou Doumbia",
-     "Bazoumana Touré"
-    ]
-   },
-   {
-    "count": 11,
-    "top": [
-     "Danny Rose",
-     "Kieran Trippier",
-     "Louis Saha",
-     "Moussa Sissoko"
-    ]
-   },
-   {
-    "count": 22,
-    "top": [
-     "Celestine Babayaro",
-     "Damien Duff",
-     "Demba Ba",
-     "Geremi"
-    ]
-   }
-  ]
- },
- {
-  "rows": [
-   "Juventus",
-   "AS Roma",
-   "Manchester United"
-  ],
-  "cols": [
-   "Champions League winner",
-   "Borussia Dortmund",
-   "Serbia"
-  ],
-  "squares": [
-   {
-    "count": 66,
-    "top": [
-     "Thierry Henry",
-     "Alessandro Del Piero",
-     "Andrea Pirlo",
-     "Ángel Di María"
-    ]
-   },
-   {
-    "count": 10,
-    "top": [
-     "Ciro Immobile",
-     "Emre Can",
-     "Andreas Möller",
-     "Jürgen Kohler"
-    ]
-   },
-   {
-    "count": 4,
-    "top": [
-     "Dušan Vlahović",
-     "Filip Kostić",
-     "Miloš Krasić",
-     "Vladimir Jugović"
-    ]
-   },
-   {
-    "count": 39,
-    "top": [
-     "Pep Guardiola",
-     "Mohamed Salah",
-     "Carlo Ancelotti",
-     "Cafu"
-    ]
-   },
-   {
-    "count": 5,
-    "top": [
-     "Henrikh Mkhitaryan",
-     "Mats Hummels",
-     "Donyell Malen",
-     "Thomas Häßler"
-    ]
-   },
-   {
-    "count": 3,
-    "top": [
-     "Adem Ljajić",
-     "Aleksandar Kolarov",
-     "Nemanja Matić"
-    ]
-   },
-   {
-    "count": 61,
-    "top": [
-     "Gerard Piqué",
-     "Ángel Di María",
-     "Wayne Rooney",
-     "Cristiano Ronaldo"
-    ]
-   },
-   {
-    "count": 5,
-    "top": [
-     "Henrikh Mkhitaryan",
-     "Jadon Sancho",
-     "Shinji Kagawa",
-     "Adnan Januzaj"
-    ]
-   },
-   {
-    "count": 3,
-    "top": [
-     "Nemanja Vidić",
-     "Nemanja Matić",
-     "Zoran Tošić"
-    ]
-   }
-  ]
- },
- {
-  "rows": [
-   "Liverpool",
-   "Managed by Flick (club)",
-   "Netherlands"
-  ],
-  "cols": [
-   "Inter Milan",
-   "Paris Saint-Germain",
-   "Manchester United"
-  ],
-  "squares": [
-   {
-    "count": 8,
-    "top": [
-     "Mario Balotelli",
-     "Philippe Coutinho",
-     "Robbie Keane",
-     "Xherdan Shaqiri"
-    ]
-   },
-   {
-    "count": 7,
-    "top": [
-     "Nicolas Anelka",
-     "Bradley Barcola",
-     "Georginio Wijnaldum",
-     "Hugo Ekitike"
-    ]
-   },
-   {
-    "count": 13,
-    "top": [
-     "Michael Owen",
-     "Paul Ince",
-     "Peter Beardsley",
-     "Bill Gorman"
-    ]
-   },
-   {
-    "count": 3,
-    "top": [
-     "Benjamin Pavard",
-     "Ivan Perišić",
-     "Philippe Coutinho"
-    ]
-   },
-   {
-    "count": 6,
-    "top": [
-     "Ferran Torres",
-     "Eric Maxim Choupo-Moting",
-     "Kingsley Coman",
-     "Lucas Hernandez"
-    ]
-   },
-   {
-    "count": 2,
-    "top": [
-     "Marcus Rashford",
-     "Joshua Zirkzee"
-    ]
-   },
-   {
-    "count": 12,
-    "top": [
-     "Clarence Seedorf",
-     "Dennis Bergkamp",
-     "Wesley Sneijder",
-     "Davy Klaassen"
-    ]
-   },
-   {
-    "count": 5,
-    "top": [
-     "Georginio Wijnaldum",
-     "Gregory van der Wiel",
-     "Xavi Simons",
-     "Mitchel Bakker"
-    ]
-   },
-   {
-    "count": 14,
-    "top": [
-     "Robin van Persie",
-     "Edwin van der Sar",
-     "Memphis Depay",
-     "Ruud van Nistelrooy"
-    ]
-   }
-  ]
- },
- {
-  "rows": [
-   "Atlético Madrid",
-   "Club teammate of Bale",
-   "France"
-  ],
-  "cols": [
-   "Liverpool",
-   "Barcelona",
-   "Chelsea"
-  ],
-  "squares": [
-   {
-    "count": 7,
-    "top": [
-     "Fernando Torres",
-     "Luis Suárez",
-     "Maxi Rodríguez",
-     "Luis García"
-    ]
-   },
-   {
-    "count": 31,
-    "top": [
-     "Antoine Griezmann",
-     "David Villa",
-     "Luis Suárez",
-     "Sergio Agüero"
-    ]
-   },
-   {
-    "count": 15,
-    "top": [
-     "Fernando Torres",
-     "Thibaut Courtois",
-     "Álvaro Morata",
-     "César Azpilicueta"
-    ]
-   },
-   {
-    "count": 8,
-    "top": [
-     "Xabi Alonso",
-     "Álvaro Arbeloa",
-     "Robbie Keane",
-     "Adam Lallana"
-    ]
-   },
-   {
-    "count": 3,
-    "top": [
-     "Kevin-Prince Boateng",
-     "Eiður Guðjohnsen",
-     "Giovani dos Santos"
-    ]
-   },
-   {
-    "count": 8,
-    "top": [
-     "Eden Hazard",
-     "Thibaut Courtois",
-     "Álvaro Morata",
-     "Mateo Kovačić"
-    ]
-   },
-   {
-    "count": 18,
-    "top": [
-     "Nicolas Anelka",
-     "Bradley Barcola",
-     "Djibril Cissé",
-     "Hugo Ekitike"
-    ]
-   },
-   {
-    "count": 19,
-    "top": [
-     "Antoine Griezmann",
-     "Ousmane Dembélé",
-     "Thierry Henry",
-     "Eric Abidal"
-    ]
-   },
-   {
-    "count": 24,
-    "top": [
-     "Olivier Giroud",
-     "Didier Deschamps",
-     "Marcel Desailly",
-     "N'Golo Kanté"
-    ]
-   }
-  ]
- },
- {
-  "rows": [
-   "Arsenal",
-   "Club teammate of Kaká",
-   "Newcastle United"
-  ],
-  "cols": [
-   "Villarreal",
-   "Paris Saint-Germain",
-   "Tottenham Hotspur"
-  ],
-  "squares": [
-   {
-    "count": 9,
-    "top": [
-     "Santi Cazorla",
-     "Denis Suárez",
-     "Joel Campbell",
-     "Nicolas Pépé"
-    ]
-   },
-   {
-    "count": 5,
-    "top": [
-     "David Luiz",
-     "Nicolas Anelka",
-     "Lassana Diarra",
-     "Mikel Arteta"
-    ]
-   },
-   {
-    "count": 24,
-    "top": [
-     "Emmanuel Adebayor",
-     "Pat Jennings",
-     "Sol Campbell",
-     "William Gallas"
-    ]
-   },
-   {
-    "count": 8,
-    "top": [
      "Alexandre Pato",
-     "Denis Cheryshev",
-     "Raúl Albiol",
-     "Cristián Zapata"
-    ]
-   },
-   {
-    "count": 9,
-    "top": [
-     "Ángel Di María",
-     "Ronaldinho",
-     "Sergio Ramos",
-     "Leonardo Araújo"
-    ]
-   },
-   {
-    "count": 3,
-    "top": [
-     "Luka Modrić",
-     "Emmanuel Adebayor",
-     "Rafael van der Vaart"
-    ]
-   },
-   {
-    "count": 6,
-    "top": [
-     "Ayoze Pérez",
-     "Fabricio Coloccini",
-     "Giuseppe Rossi",
-     "Jon Dahl Tomasson"
-    ]
-   },
-   {
-    "count": 11,
-    "top": [
-     "Georginio Wijnaldum",
-     "Hatem Ben Arfa",
-     "Yohan Cabaye",
-     "David Ginola"
-    ]
-   },
-   {
-    "count": 32,
-    "top": [
-     "Danny Rose",
-     "Kieran Trippier",
-     "Louis Saha",
-     "Martin Dúbravka"
-    ]
-   }
-  ]
- },
- {
-  "rows": [
-   "Juventus",
-   "Arsenal",
-   "AS Roma"
-  ],
-  "cols": [
-   "Real Madrid",
-   "Club teammate of Van Dijk",
-   "Chelsea"
-  ],
-  "squares": [
-   {
-    "count": 15,
-    "top": [
-     "Ángel Di María",
-     "Cristiano Ronaldo",
-     "Zinedine Zidane",
-     "Álvaro Morata"
-    ]
-   },
-   {
-    "count": 5,
-    "top": [
-     "Federico Chiesa",
-     "Arthur Melo",
-     "Filip Kostić",
-     "Mario Lemina"
-    ]
-   },
-   {
-    "count": 12,
-    "top": [
-     "Álvaro Morata",
-     "Didier Deschamps",
-     "Gonzalo Higuaín",
-     "Nicolas Anelka"
-    ]
-   },
-   {
-    "count": 10,
-    "top": [
-     "Mesut Özil",
-     "Davor Šuker",
-     "Emmanuel Adebayor",
-     "Kepa Arrizabalaga"
-    ]
-   },
-   {
-    "count": 3,
-    "top": [
-     "Alex Oxlade-Chamberlain",
-     "Cédric Soares",
-     "Anthony Stokes"
-    ]
-   },
-   {
-    "count": 36,
-    "top": [
-     "Olivier Giroud",
-     "Cesc Fàbregas",
-     "Kai Havertz",
-     "Danny Welbeck"
-    ]
-   },
-   {
-    "count": 14,
-    "top": [
-     "Antonio Rüdiger",
-     "Antonio Cassano",
-     "Christian Panucci",
-     "Dean Huijsen"
-    ]
-   },
-   {
-    "count": 5,
-    "top": [
-     "Mohamed Salah",
-     "Alisson",
-     "Georginio Wijnaldum",
-     "Maarten Stekelenburg"
-    ]
-   },
-   {
-    "count": 11,
-    "top": [
-     "Mohamed Salah",
-     "Romelu Lukaku",
-     "Antonio Rüdiger",
-     "Ashley Cole"
+     "David Luiz",
+     "Oscar",
+     "Thiago Silva"
     ]
    }
   ]
@@ -1787,31 +1227,441 @@
  },
  {
   "rows": [
-   "Chelsea",
+   "Club teammate of Giggs",
    "Juventus",
-   "Inter Milan"
+   "Sweden"
   ],
   "cols": [
-   "Serbia",
-   "Managed by Ferguson (club)",
-   "AS Roma"
+   "Manchester City",
+   "Barcelona",
+   "Arsenal"
   ],
   "squares": [
    {
-    "count": 3,
+    "count": 7,
     "top": [
-     "Branislav Ivanović",
-     "Nemanja Matić",
-     "Đorđe Petrović"
+     "Carlos Tevez",
+     "Peter Schmeichel",
+     "Andy Cole",
+     "Owen Hargreaves"
+    ]
+   },
+   {
+    "count": 5,
+    "top": [
+     "Gerard Piqué",
+     "Henrik Larsson",
+     "Jordi Cruyff",
+     "Laurent Blanc"
+    ]
+   },
+   {
+    "count": 5,
+    "top": [
+     "Robin van Persie",
+     "Danny Welbeck",
+     "Andy Cole",
+     "Mikaël Silvestre"
     ]
    },
    {
     "count": 6,
     "top": [
-     "Danny Welbeck",
-     "Juan Sebastián Verón",
-     "Mark Hughes",
-     "Mal Donaghy"
+     "Carlos Tevez",
+     "Nicolas Anelka",
+     "Patrick Vieira",
+     "Danilo"
+    ]
+   },
+   {
+    "count": 15,
+    "top": [
+     "Dani Alves",
+     "Thierry Henry",
+     "Zlatan Ibrahimović",
+     "Arturo Vidal"
+    ]
+   },
+   {
+    "count": 12,
+    "top": [
+     "Thierry Henry",
+     "Aaron Ramsey",
+     "Nicklas Bendtner",
+     "Nicolas Anelka"
+    ]
+   },
+   {
+    "count": 2,
+    "top": [
+     "Andreas Isaksson",
+     "John Guidetti"
+    ]
+   },
+   {
+    "count": 4,
+    "top": [
+     "Zlatan Ibrahimović",
+     "Henrik Larsson",
+     "Patrik Andersson",
+     "Roony Bardghji"
+    ]
+   },
+   {
+    "count": 8,
+    "top": [
+     "Freddie Ljungberg",
+     "Kim Källström",
+     "Sebastian Larsson",
+     "Viktor Gyökeres"
+    ]
+   }
+  ]
+ },
+ {
+  "rows": [
+   "AS Monaco",
+   "Juventus",
+   "Queens Park Rangers"
+  ],
+  "cols": [
+   "Manchester City",
+   "Managed by Benítez",
+   "Club teammate of Raúl"
+  ],
+  "squares": [
+   {
+    "count": 10,
+    "top": [
+     "George Weah",
+     "Bernardo Silva",
+     "Emmanuel Adebayor",
+     "Yaya Touré"
+    ]
+   },
+   {
+    "count": 10,
+    "top": [
+     "James Rodríguez",
+     "Fábio Coentrão",
+     "Fernando Morientes",
+     "Islam Slimani"
+    ]
+   },
+   {
+    "count": 5,
+    "top": [
+     "Christian Panucci",
+     "Fernando Morientes",
+     "Javier Saviola",
+     "Mahamadou Diarra"
+    ]
+   },
+   {
+    "count": 6,
+    "top": [
+     "Carlos Tevez",
+     "Nicolas Anelka",
+     "Patrick Vieira",
+     "Danilo"
+    ]
+   },
+   {
+    "count": 7,
+    "top": [
+     "Cristiano Ronaldo",
+     "Gonzalo Higuaín",
+     "Alberto Aquilani",
+     "Danilo"
+    ]
+   },
+   {
+    "count": 10,
+    "top": [
+     "Cristiano Ronaldo",
+     "Zinedine Zidane",
+     "Benedikt Höwedes",
+     "Fabio Cannavaro"
+    ]
+   },
+   {
+    "count": 25,
+    "top": [
+     "Kyle Walker",
+     "David Seaman",
+     "Joey Barton",
+     "Richard Dunne"
+    ]
+   },
+   {
+    "count": 9,
+    "top": [
+     "Júlio César",
+     "Asmir Begović",
+     "Djibril Cissé",
+     "Eduardo Vargas"
+    ]
+   },
+   {
+    "count": 3,
+    "top": [
+     "Dani Parejo",
+     "Esteban Granero",
+     "Jordi López"
+    ]
+   }
+  ]
+ },
+ {
+  "rows": [
+   "Juventus",
+   "Liverpool",
+   "Tottenham Hotspur"
+  ],
+  "cols": [
+   "Borussia Dortmund",
+   "Club teammate of Benzema",
+   "Managed by Guardiola"
+  ],
+  "squares": [
+   {
+    "count": 10,
+    "top": [
+     "Ciro Immobile",
+     "Emre Can",
+     "Andreas Möller",
+     "Jürgen Kohler"
+    ]
+   },
+   {
+    "count": 10,
+    "top": [
+     "Ángel Di María",
+     "Cristiano Ronaldo",
+     "Álvaro Morata",
+     "Gonzalo Higuaín"
+    ]
+   },
+   {
+    "count": 11,
+    "top": [
+     "Dani Alves",
+     "Thierry Henry",
+     "Zlatan Ibrahimović",
+     "Arturo Vidal"
+    ]
+   },
+   {
+    "count": 6,
+    "top": [
+     "Alexander Isak",
+     "Emre Can",
+     "Nuri Şahin",
+     "Karl-Heinz Riedle"
+    ]
+   },
+   {
+    "count": 6,
+    "top": [
+     "Xabi Alonso",
+     "Álvaro Arbeloa",
+     "Fabinho",
+     "Jerzy Dudek"
+    ]
+   },
+   {
+    "count": 7,
+    "top": [
+     "Xabi Alonso",
+     "Javier Mascherano",
+     "Pepe Reina",
+     "Raheem Sterling"
+    ]
+   },
+   {
+    "count": 5,
+    "top": [
+     "Ivan Perišić",
+     "Kevin-Prince Boateng",
+     "Steven Pienaar",
+     "Lee Young-pyo"
+    ]
+   },
+   {
+    "count": 7,
+    "top": [
+     "Gareth Bale",
+     "Luka Modrić",
+     "Emmanuel Adebayor",
+     "Hugo Lloris"
+    ]
+   },
+   {
+    "count": 8,
+    "top": [
+     "Joe Hart",
+     "Kyle Walker",
+     "Eiður Guðjohnsen",
+     "Omar Marmoush"
+    ]
+   }
+  ]
+ },
+ {
+  "rows": [
+   "Atlético Madrid",
+   "Borussia Dortmund",
+   "AC Milan"
+  ],
+  "cols": [
+   "FA Cup winner",
+   "England",
+   "Barcelona"
+  ],
+  "squares": [
+   {
+    "count": 13,
+    "top": [
+     "Fernando Torres",
+     "Sergio Agüero",
+     "Thibaut Courtois",
+     "Álvaro Morata"
+    ]
+   },
+   {
+    "count": 2,
+    "top": [
+     "Conor Gallagher",
+     "Kieran Trippier"
+    ]
+   },
+   {
+    "count": 31,
+    "top": [
+     "Antoine Griezmann",
+     "David Villa",
+     "Luis Suárez",
+     "Sergio Agüero"
+    ]
+   },
+   {
+    "count": 8,
+    "top": [
+     "Erling Haaland",
+     "İlkay Gündoğan",
+     "Jens Lehmann",
+     "Pierre-Emerick Aubameyang"
+    ]
+   },
+   {
+    "count": 5,
+    "top": [
+     "Jadon Sancho",
+     "Jude Bellingham",
+     "Ethan Nwaneri",
+     "Jamie Gittens"
+    ]
+   },
+   {
+    "count": 9,
+    "top": [
+     "Ousmane Dembélé",
+     "Robert Lewandowski",
+     "İlkay Gündoğan",
+     "Kevin-Prince Boateng"
+    ]
+   },
+   {
+    "count": 29,
+    "top": [
+     "David Beckham",
+     "Fernando Torres",
+     "George Weah",
+     "Mario Balotelli"
+    ]
+   },
+   {
+    "count": 9,
+    "top": [
+     "David Beckham",
+     "Kyle Walker",
+     "Fikayo Tomori",
+     "Jimmy Greaves"
+    ]
+   },
+   {
+    "count": 23,
+    "top": [
+     "Ronaldinho",
+     "Ronaldo",
+     "Zlatan Ibrahimović",
+     "Bojan Krkić"
+    ]
+   }
+  ]
+ },
+ {
+  "rows": [
+   "Barcelona",
+   "Borussia Dortmund",
+   "Chelsea"
+  ],
+  "cols": [
+   "AS Roma",
+   "Managed by Ten Hag",
+   "Liverpool"
+  ],
+  "squares": [
+   {
+    "count": 11,
+    "top": [
+     "Pep Guardiola",
+     "Bojan Krkić",
+     "Pedro",
+     "Thomas Vermaelen"
+    ]
+   },
+   {
+    "count": 3,
+    "top": [
+     "Marcus Rashford",
+     "Frenkie de Jong",
+     "Sergiño Dest"
+    ]
+   },
+   {
+    "count": 11,
+    "top": [
+     "Luis Suárez",
+     "Javier Mascherano",
+     "Pepe Reina",
+     "Philippe Coutinho"
+    ]
+   },
+   {
+    "count": 5,
+    "top": [
+     "Henrikh Mkhitaryan",
+     "Mats Hummels",
+     "Donyell Malen",
+     "Thomas Häßler"
+    ]
+   },
+   {
+    "count": 3,
+    "top": [
+     "Jadon Sancho",
+     "Marcel Sabitzer",
+     "Sébastien Haller"
+    ]
+   },
+   {
+    "count": 6,
+    "top": [
+     "Alexander Isak",
+     "Emre Can",
+     "Nuri Şahin",
+     "Karl-Heinz Riedle"
     ]
    },
    {
@@ -1826,1690 +1676,51 @@
    {
     "count": 4,
     "top": [
-     "Dušan Vlahović",
-     "Filip Kostić",
-     "Miloš Krasić",
-     "Vladimir Jugović"
-    ]
-   },
-   {
-    "count": 5,
-    "top": [
-     "Cristiano Ronaldo",
-     "Paul Pogba",
-     "Carlos Tevez",
-     "Edwin van der Sar"
-    ]
-   },
-   {
-    "count": 49,
-    "top": [
-     "Fabio Capello",
-     "Paulo Dybala",
-     "Wojciech Szczęsny",
-     "Zbigniew Boniek"
-    ]
-   },
-   {
-    "count": 7,
-    "top": [
-     "Nemanja Vidić",
-     "Adem Ljajić",
-     "Aleksandar Kolarov",
-     "Dejan Stanković"
-    ]
-   },
-   {
-    "count": 7,
-    "top": [
-     "Diego Forlán",
-     "Ashley Young",
-     "Nemanja Vidić",
-     "Juan Sebastián Verón"
-    ]
-   },
-   {
-    "count": 67,
-    "top": [
-     "Romelu Lukaku",
-     "Edin Džeko",
-     "Gabriel Batistuta",
-     "Henrikh Mkhitaryan"
-    ]
-   }
-  ]
- },
- {
-  "rows": [
-   "Juventus",
-   "Manchester United",
-   "Borussia Dortmund"
-  ],
-  "cols": [
-   "Club teammate of Messi",
-   "Euros winner",
-   "Bayern Munich"
-  ],
-  "squares": [
-   {
-    "count": 12,
-    "top": [
-     "Ángel Di María",
-     "Dani Alves",
-     "Thierry Henry",
-     "Zlatan Ibrahimović"
-    ]
-   },
-   {
-    "count": 22,
-    "top": [
-     "Cristiano Ronaldo",
-     "Michel Platini",
-     "Thierry Henry",
-     "Zinedine Zidane"
-    ]
-   },
-   {
-    "count": 14,
-    "top": [
-     "Arturo Vidal",
-     "Emre Can",
-     "Mario Mandžukić",
-     "Douglas Costa"
-    ]
-   },
-   {
-    "count": 8,
-    "top": [
-     "Ángel Di María",
-     "Gerard Piqué",
-     "Zlatan Ibrahimović",
-     "Alexis Sánchez"
-    ]
-   },
-   {
-    "count": 9,
-    "top": [
-     "Cristiano Ronaldo",
-     "Gerard Piqué",
-     "Fabien Barthez",
-     "Juan Mata"
-    ]
-   },
-   {
-    "count": 8,
-    "top": [
-     "Bastian Schweinsteiger",
-     "Daley Blind",
-     "Joshua Zirkzee",
-     "Marcel Sabitzer"
-    ]
-   },
-   {
-    "count": 7,
-    "top": [
-     "Ousmane Dembélé",
-     "Achraf Hakimi",
-     "Kevin-Prince Boateng",
-     "Marc Bartra"
-    ]
-   },
-   {
-    "count": 9,
-    "top": [
-     "Ciro Immobile",
-     "Matthias Sammer",
-     "Mikel Merino",
-     "Raphaël Guerreiro"
-    ]
-   },
-   {
-    "count": 20,
-    "top": [
-     "Robert Lewandowski",
-     "Emre Can",
-     "Ivan Perišić",
-     "Mario Götze"
-    ]
-   }
-  ]
- },
- {
-  "rows": [
-   "Olympique de Marseille",
-   "Juventus",
-   "Tottenham Hotspur"
-  ],
-  "cols": [
-   "West Ham United",
-   "Chelsea",
-   "Ghana"
-  ],
-  "squares": [
-   {
-    "count": 15,
-    "top": [
-     "Dimitri Payet",
-     "Patrice Evra",
-     "Samir Nasri",
-     "André Ayew"
-    ]
-   },
-   {
-    "count": 16,
-    "top": [
-     "Didier Drogba",
-     "George Weah",
-     "César Azpilicueta",
-     "Didier Deschamps"
-    ]
-   },
-   {
-    "count": 4,
-    "top": [
-     "Abedi Pele",
-     "André Ayew",
-     "Jordan Ayew",
-     "Arthur Moses"
-    ]
-   },
-   {
-    "count": 9,
-    "top": [
-     "Carlos Tevez",
-     "Patrice Evra",
-     "Angelo Ogbonna",
-     "Antonio Nocerino"
-    ]
-   },
-   {
-    "count": 12,
-    "top": [
-     "Álvaro Morata",
-     "Didier Deschamps",
-     "Gonzalo Higuaín",
-     "Nicolas Anelka"
-    ]
-   },
-   {
-    "count": 2,
-    "top": [
-     "Kwadwo Asamoah",
-     "Stephen Appiah"
-    ]
-   },
-   {
-    "count": 42,
-    "top": [
-     "Robbie Keane",
-     "Michael Carrick",
-     "Joe Hart",
-     "Teddy Sheringham"
-    ]
-   },
-   {
-    "count": 40,
-    "top": [
-     "Timo Werner",
-     "Conor Gallagher",
-     "Dominic Solanke",
-     "Eiður Guðjohnsen"
-    ]
-   },
-   {
-    "count": 2,
-    "top": [
-     "Kevin-Prince Boateng",
-     "Mohammed Kudus"
-    ]
-   }
-  ]
- },
- {
-  "rows": [
-   "Club teammate of Gerrard",
-   "Newcastle United",
-   "Manchester City"
-  ],
-  "cols": [
-   "AC Milan",
-   "Chelsea",
-   "Leeds United"
-  ],
-  "squares": [
-   {
-    "count": 9,
-    "top": [
-     "Fernando Torres",
-     "Mario Balotelli",
-     "Divock Origi",
-     "Pepe Reina"
-    ]
-   },
-   {
-    "count": 12,
-    "top": [
-     "Fernando Torres",
-     "Jordan Henderson",
-     "Nicolas Anelka",
-     "Raheem Sterling"
-    ]
-   },
-   {
-    "count": 13,
-    "top": [
-     "Robbie Keane",
-     "El Hadji Diouf",
-     "Harry Kewell",
-     "Robbie Fowler"
-    ]
-   },
-   {
-    "count": 7,
-    "top": [
-     "Patrick Kluivert",
-     "Fabricio Coloccini",
-     "Jon Dahl Tomasson",
-     "Sandro Tonali"
-    ]
-   },
-   {
-    "count": 22,
-    "top": [
-     "Celestine Babayaro",
-     "Damien Duff",
-     "Demba Ba",
-     "Geremi"
-    ]
-   },
-   {
-    "count": 31,
-    "top": [
-     "James Milner",
-     "Alan Smith",
-     "Chris Wood",
-     "Gary Speed"
-    ]
-   },
-   {
-    "count": 9,
-    "top": [
-     "George Weah",
-     "Mario Balotelli",
-     "Gianluigi Donnarumma",
-     "Kyle Walker"
-    ]
-   },
-   {
-    "count": 31,
-    "top": [
-     "Frank Lampard",
-     "George Weah",
-     "Kevin De Bruyne",
-     "Cole Palmer"
-    ]
-   },
-   {
-    "count": 30,
-    "top": [
-     "James Milner",
-     "Kasper Schmeichel",
-     "Fabian Delph",
-     "Kalvin Phillips"
-    ]
-   }
-  ]
- },
- {
-  "rows": [
-   "Club teammate of Drogba",
-   "AS Roma",
-   "Arsenal"
-  ],
-  "cols": [
-   "Liverpool",
-   "Barcelona",
-   "Inter Milan"
-  ],
-  "squares": [
-   {
-    "count": 12,
-    "top": [
-     "Fernando Torres",
-     "Mohamed Salah",
-     "Nicolas Anelka",
-     "Albert Riera"
-    ]
-   },
-   {
-    "count": 8,
-    "top": [
-     "Cesc Fàbregas",
-     "Deco",
-     "Ricardo Quaresma",
-     "Andreas Christensen"
-    ]
-   },
-   {
-    "count": 8,
-    "top": [
-     "Romelu Lukaku",
-     "Hernán Crespo",
-     "Ricardo Quaresma",
-     "Wesley Sneijder"
-    ]
-   },
-   {
-    "count": 9,
-    "top": [
-     "Mohamed Salah",
-     "Alisson",
-     "Alberto Aquilani",
-     "Fabio Borini"
-    ]
-   },
-   {
-    "count": 11,
-    "top": [
-     "Pep Guardiola",
-     "Bojan Krkić",
-     "Pedro",
-     "Thomas Vermaelen"
-    ]
-   },
-   {
-    "count": 67,
-    "top": [
-     "Romelu Lukaku",
-     "Edin Džeko",
-     "Gabriel Batistuta",
-     "Henrikh Mkhitaryan"
+     "Hakim Ziyech",
+     "Jadon Sancho",
+     "Alejandro Garnacho",
+     "Mason Mount"
     ]
    },
    {
     "count": 19,
     "top": [
-     "Kolo Touré",
-     "Nicolas Anelka",
-     "Raheem Sterling",
-     "Alex Oxlade-Chamberlain"
-    ]
-   },
-   {
-    "count": 16,
-    "top": [
-     "Cesc Fàbregas",
-     "Thierry Henry",
-     "Alexis Sánchez",
-     "Giovanni van Bronckhorst"
-    ]
-   },
-   {
-    "count": 10,
-    "top": [
-     "Lukas Podolski",
-     "Alexis Sánchez",
-     "Dennis Bergkamp",
-     "Henrikh Mkhitaryan"
-    ]
-   }
-  ]
- },
- {
-  "rows": [
-   "Fulham",
-   "Olympique de Marseille",
-   "Chelsea"
-  ],
-  "cols": [
-   "Nigeria",
-   "Arsenal",
-   "Europa League winner"
-  ],
-  "squares": [
-   {
-    "count": 8,
-    "top": [
-     "Ademola Lookman",
-     "Alex Iwobi",
-     "Ola Aina",
-     "Dickson Etuhu"
-    ]
-   },
-   {
-    "count": 56,
-    "top": [
-     "Willian",
-     "Alex Iwobi",
-     "Andy Cole",
-     "Bernd Leno"
-    ]
-   },
-   {
-    "count": 12,
-    "top": [
-     "Chris Smalling",
-     "Edwin van der Sar",
-     "Willian",
-     "Ademola Lookman"
-    ]
-   },
-   {
-    "count": 4,
-    "top": [
-     "Joseph Yobo",
-     "Taye Taiwo",
-     "Wilson Oruma",
-     "Victor Agali"
-    ]
-   },
-   {
-    "count": 16,
-    "top": [
-     "Alexis Sánchez",
-     "Pierre-Emerick Aubameyang",
-     "Samir Nasri",
-     "Abou Diaby"
-    ]
-   },
-   {
-    "count": 16,
-    "top": [
-     "Adil Rami",
-     "César Azpilicueta",
-     "Emerson Palmieri",
-     "Gerónimo Rulli"
-    ]
-   },
-   {
-    "count": 4,
-    "top": [
-     "John Obi Mikel",
-     "Celestine Babayaro",
-     "Ola Aina",
-     "Victor Moses"
-    ]
-   },
-   {
-    "count": 36,
-    "top": [
-     "Olivier Giroud",
-     "Cesc Fàbregas",
-     "Kai Havertz",
-     "Danny Welbeck"
-    ]
-   },
-   {
-    "count": 59,
-    "top": [
-     "Olivier Giroud",
-     "Eden Hazard",
      "Fernando Torres",
-     "Frank Lampard"
-    ]
-   }
-  ]
- },
- {
-  "rows": [
-   "Liverpool",
-   "Club teammate of Kompany",
-   "AC Milan"
-  ],
-  "cols": [
-   "Bayern Munich",
-   "AS Roma",
-   "Paris Saint-Germain"
-  ],
-  "squares": [
-   {
-    "count": 12,
-    "top": [
-     "Sadio Mané",
-     "Xabi Alonso",
-     "Emre Can",
-     "Luis Díaz"
-    ]
-   },
-   {
-    "count": 9,
-    "top": [
-     "Mohamed Salah",
-     "Alisson",
-     "Alberto Aquilani",
-     "Fabio Borini"
-    ]
-   },
-   {
-    "count": 7,
-    "top": [
-     "Nicolas Anelka",
-     "Bradley Barcola",
-     "Georginio Wijnaldum",
-     "Hugo Ekitike"
-    ]
-   },
-   {
-    "count": 11,
-    "top": [
-     "Jérôme Boateng",
-     "Leroy Sané",
-     "Eric Maxim Choupo-Moting",
-     "Ivica Olić"
-    ]
-   },
-   {
-    "count": 7,
-    "top": [
-     "Edin Džeko",
-     "Aleksandar Kolarov",
-     "Alexis Saelemaekers",
-     "Maicon"
-    ]
-   },
-   {
-    "count": 3,
-    "top": [
-     "Eric Maxim Choupo-Moting",
-     "Juan Pablo Sorín",
-     "Danijel Ljuboja"
-    ]
-   },
-   {
-    "count": 8,
-    "top": [
-     "Mario Mandžukić",
-     "Mark van Bommel",
-     "Pepe Reina",
-     "Brian Laudrup"
-    ]
-   },
-   {
-    "count": 60,
-    "top": [
-     "Carlo Ancelotti",
-     "Bojan Krkić",
-     "Cafu",
-     "Fabio Capello"
-    ]
-   },
-   {
-    "count": 20,
-    "top": [
-     "David Beckham",
-     "George Weah",
-     "Ronaldinho",
-     "Zlatan Ibrahimović"
-    ]
-   }
-  ]
- },
- {
-  "rows": [
-   "Juventus",
-   "Liverpool",
-   "Manchester United"
-  ],
-  "cols": [
-   "Club teammate of Raúl",
-   "AC Milan",
-   "West Ham United"
-  ],
-  "squares": [
-   {
-    "count": 10,
-    "top": [
-     "Cristiano Ronaldo",
-     "Zinedine Zidane",
-     "Benedikt Höwedes",
-     "Fabio Cannavaro"
-    ]
-   },
-   {
-    "count": 48,
-    "top": [
-     "Roberto Baggio",
-     "Andrea Pirlo",
-     "Zlatan Ibrahimović",
-     "Álvaro Morata"
-    ]
-   },
-   {
-    "count": 9,
-    "top": [
-     "Carlos Tevez",
-     "Patrice Evra",
-     "Angelo Ogbonna",
-     "Antonio Nocerino"
-    ]
-   },
-   {
-    "count": 9,
-    "top": [
-     "Xabi Alonso",
-     "Álvaro Arbeloa",
-     "Michael Owen",
-     "Nicolas Anelka"
-    ]
-   },
-   {
-    "count": 9,
-    "top": [
-     "Fernando Torres",
-     "Mario Balotelli",
-     "Divock Origi",
-     "Pepe Reina"
-    ]
-   },
-   {
-    "count": 28,
-    "top": [
-     "Álvaro Arbeloa",
-     "Javier Mascherano",
-     "Robbie Keane",
-     "Andy Carroll"
-    ]
-   },
-   {
-    "count": 5,
-    "top": [
-     "Cristiano Ronaldo",
-     "David Beckham",
-     "Michael Owen",
-     "Ruud van Nistelrooy"
-    ]
-   },
-   {
-    "count": 10,
-    "top": [
-     "David Beckham",
-     "Zlatan Ibrahimović",
-     "Diogo Dalot",
-     "Jaap Stam"
-    ]
-   },
-   {
-    "count": 23,
-    "top": [
-     "Carlos Tevez",
-     "Javier Hernández",
-     "Michael Carrick",
-     "Patrice Evra"
-    ]
-   }
-  ]
- },
- {
-  "rows": [
-   "Barcelona",
-   "Paris Saint-Germain",
-   "Club teammate of De Bruyne"
-  ],
-  "cols": [
-   "Liverpool",
-   "Bayern Munich",
-   "Atlético Madrid"
-  ],
-  "squares": [
-   {
-    "count": 11,
-    "top": [
-     "Luis Suárez",
-     "Javier Mascherano",
-     "Pepe Reina",
-     "Philippe Coutinho"
-    ]
-   },
-   {
-    "count": 9,
-    "top": [
-     "Robert Lewandowski",
-     "Arturo Vidal",
-     "Mark van Bommel",
-     "Pepe Reina"
-    ]
-   },
-   {
-    "count": 31,
-    "top": [
-     "Antoine Griezmann",
-     "David Villa",
-     "Luis Suárez",
-     "Sergio Agüero"
-    ]
-   },
-   {
-    "count": 7,
-    "top": [
-     "Nicolas Anelka",
-     "Bradley Barcola",
-     "Georginio Wijnaldum",
-     "Hugo Ekitike"
-    ]
-   },
-   {
-    "count": 7,
-    "top": [
-     "Bixente Lizarazu",
-     "Eric Maxim Choupo-Moting",
-     "Juan Bernat",
-     "Kingsley Coman"
-    ]
-   },
-   {
-    "count": 10,
-    "top": [
-     "Thiago Motta",
-     "Cristian Rodríguez",
-     "Lee Kang-in",
-     "Lucas Hernandez"
-    ]
-   },
-   {
-    "count": 7,
-    "top": [
-     "Fernando Torres",
-     "Raheem Sterling",
-     "Christian Benteke",
-     "Daniel Sturridge"
-    ]
-   },
-   {
-    "count": 8,
-    "top": [
-     "Ivan Perišić",
-     "Leroy Sané",
-     "Ivica Olić",
-     "João Cancelo"
-    ]
-   },
-   {
-    "count": 7,
-    "top": [
-     "Fernando Torres",
-     "Sergio Agüero",
-     "Thibaut Courtois",
-     "César Azpilicueta"
-    ]
-   }
-  ]
- },
- {
-  "rows": [
-   "Managed by Klopp (club)",
-   "Tottenham Hotspur",
-   "Club teammate of Agüero"
-  ],
-  "cols": [
-   "Juventus",
-   "Arsenal",
-   "Chelsea"
-  ],
-  "squares": [
-   {
-    "count": 3,
-    "top": [
-     "Ciro Immobile",
-     "Emre Can",
-     "Arthur Melo"
-    ]
-   },
-   {
-    "count": 5,
-    "top": [
-     "Henrikh Mkhitaryan",
-     "Kolo Touré",
-     "Pierre-Emerick Aubameyang",
-     "Alex Oxlade-Chamberlain"
-    ]
-   },
-   {
-    "count": 5,
-    "top": [
      "Mohamed Salah",
      "Jordan Henderson",
-     "Pierre-Emerick Aubameyang",
-     "Daniel Sturridge"
-    ]
-   },
-   {
-    "count": 10,
-    "top": [
-     "Fernando Llorente",
-     "Dejan Kulusevski",
-     "Edgar Davids",
-     "Randal Kolo Muani"
-    ]
-   },
-   {
-    "count": 24,
-    "top": [
-     "Emmanuel Adebayor",
-     "Pat Jennings",
-     "Sol Campbell",
-     "William Gallas"
-    ]
-   },
-   {
-    "count": 40,
-    "top": [
-     "Timo Werner",
-     "Conor Gallagher",
-     "Dominic Solanke",
-     "Eiður Guðjohnsen"
-    ]
-   },
-   {
-    "count": 7,
-    "top": [
-     "Carlos Tevez",
-     "Christian Abbiati",
-     "Danilo",
-     "João Cancelo"
-    ]
-   },
-   {
-    "count": 13,
-    "top": [
-     "Bacary Sagna",
-     "Emmanuel Adebayor",
-     "Kolo Touré",
-     "Raheem Sterling"
-    ]
-   },
-   {
-    "count": 15,
-    "top": [
-     "Fernando Torres",
-     "Frank Lampard",
-     "Kevin De Bruyne",
-     "Cole Palmer"
+     "Nicolas Anelka"
     ]
    }
   ]
  },
  {
   "rows": [
-   "Ivory Coast",
-   "Arsenal",
-   "Manchester United"
+   "Atlético Madrid",
+   "Newcastle United",
+   "Juventus"
   ],
   "cols": [
-   "Tottenham Hotspur",
-   "Villarreal",
-   "Chelsea"
+   "Argentina",
+   "Club teammate of Lampard",
+   "Liverpool"
   ],
   "squares": [
-   {
-    "count": 2,
-    "top": [
-     "Didier Zokora",
-     "Serge Aurier"
-    ]
-   },
-   {
-    "count": 3,
-    "top": [
-     "Eric Bailly",
-     "Nicolas Pépé",
-     "Serge Aurier"
-    ]
-   },
-   {
-    "count": 4,
-    "top": [
-     "Didier Drogba",
-     "Salomon Kalou",
-     "David Datro Fofana",
-     "Jérémie Boga"
-    ]
-   },
-   {
-    "count": 24,
-    "top": [
-     "Emmanuel Adebayor",
-     "Pat Jennings",
-     "Sol Campbell",
-     "William Gallas"
-    ]
-   },
-   {
-    "count": 9,
-    "top": [
-     "Santi Cazorla",
-     "Denis Suárez",
-     "Joel Campbell",
-     "Nicolas Pépé"
-    ]
-   },
-   {
-    "count": 36,
-    "top": [
-     "Olivier Giroud",
-     "Cesc Fàbregas",
-     "Kai Havertz",
-     "Danny Welbeck"
-    ]
-   },
-   {
-    "count": 16,
-    "top": [
-     "Christian Eriksen",
-     "Dimitar Berbatov",
-     "Michael Carrick",
-     "Louis Saha"
-    ]
-   },
-   {
-    "count": 5,
-    "top": [
-     "Diego Forlán",
-     "Antonio Valencia",
-     "Eric Bailly",
-     "Giuseppe Rossi"
-    ]
-   },
-   {
-    "count": 28,
-    "top": [
-     "Romelu Lukaku",
-     "Danny Welbeck",
-     "Jadon Sancho",
-     "Juan Mata"
-    ]
-   }
-  ]
- },
- {
-  "rows": [
-   "Manchester United",
-   "Inter Milan",
-   "Real Madrid"
-  ],
-  "cols": [
-   "Bayern Munich",
-   "World Cup winner",
-   "Manchester City"
-  ],
-  "squares": [
-   {
-    "count": 8,
-    "top": [
-     "Bastian Schweinsteiger",
-     "Daley Blind",
-     "Joshua Zirkzee",
-     "Marcel Sabitzer"
-    ]
-   },
-   {
-    "count": 9,
-    "top": [
-     "Ángel Di María",
-     "Gerard Piqué",
-     "Paul Pogba",
-     "Bastian Schweinsteiger"
-    ]
-   },
    {
     "count": 37,
     "top": [
-     "Peter Schmeichel",
-     "Carlos Tevez",
-     "Andy Cole",
-     "Denis Law"
-    ]
-   },
-   {
-    "count": 14,
-    "top": [
-     "Lothar Matthäus",
-     "Lukas Podolski",
-     "Andreas Brehme",
-     "Arturo Vidal"
-    ]
-   },
-   {
-    "count": 30,
-    "top": [
-     "Andrea Pirlo",
-     "Lothar Matthäus",
-     "Ronaldo",
-     "Andreas Brehme"
-    ]
-   },
-   {
-    "count": 14,
-    "top": [
-     "Mario Balotelli",
-     "Edin Džeko",
-     "John Stones",
-     "Mateo Kovačić"
-    ]
-   },
-   {
-    "count": 9,
-    "top": [
-     "Arjen Robben",
-     "James Rodríguez",
-     "Toni Kroos",
-     "Xabi Alonso"
-    ]
-   },
-   {
-    "count": 18,
-    "top": [
-     "Ángel Di María",
-     "Iker Casillas",
-     "Kylian Mbappé",
-     "Mesut Özil"
-    ]
-   },
-   {
-    "count": 9,
-    "top": [
-     "Bernardo Silva",
-     "Emmanuel Adebayor",
-     "Mateo Kovačić",
-     "Nicolas Anelka"
-    ]
-   }
-  ]
- },
- {
-  "rows": [
-   "AS Roma",
-   "Bayern Munich",
-   "Arsenal"
-  ],
-  "cols": [
-   "Club teammate of Raúl",
-   "Managed by Benítez",
-   "Barcelona"
-  ],
-  "squares": [
-   {
-    "count": 9,
-    "top": [
-     "Antonio Cassano",
-     "Christian Panucci",
-     "Emerson",
-     "Fernando Gago"
-    ]
-   },
-   {
-    "count": 14,
-    "top": [
-     "Romelu Lukaku",
-     "Ashley Cole",
-     "Alberto Aquilani",
-     "Cristian Chivu"
-    ]
-   },
-   {
-    "count": 11,
-    "top": [
-     "Pep Guardiola",
-     "Bojan Krkić",
-     "Pedro",
-     "Thomas Vermaelen"
-    ]
-   },
-   {
-    "count": 6,
-    "top": [
-     "Arjen Robben",
-     "Manuel Neuer",
-     "Xabi Alonso",
-     "Zé Roberto"
-    ]
-   },
-   {
-    "count": 7,
-    "top": [
-     "James Rodríguez",
-     "Toni Kroos",
-     "Xabi Alonso",
-     "Pepe Reina"
-    ]
-   },
-   {
-    "count": 9,
-    "top": [
-     "Robert Lewandowski",
-     "Arturo Vidal",
-     "Mark van Bommel",
-     "Pepe Reina"
-    ]
-   },
-   {
-    "count": 5,
-    "top": [
-     "Davor Šuker",
-     "Nicolas Anelka",
-     "José Antonio Reyes",
-     "Júlio Baptista"
-    ]
-   },
-   {
-    "count": 10,
-    "top": [
-     "Ashley Cole",
-     "David Luiz",
-     "Martin Ødegaard",
-     "Petr Čech"
-    ]
-   },
-   {
-    "count": 16,
-    "top": [
-     "Cesc Fàbregas",
-     "Thierry Henry",
-     "Alexis Sánchez",
-     "Giovanni van Bronckhorst"
-    ]
-   }
-  ]
- },
- {
-  "rows": [
-   "Arsenal",
-   "Club teammate of Giggs",
-   "Managed by Guardiola"
-  ],
-  "cols": [
-   "AC Milan",
-   "Borussia Dortmund",
-   "Everton"
-  ],
-  "squares": [
-   {
-    "count": 9,
-    "top": [
-     "Olivier Giroud",
-     "Jens Lehmann",
-     "Patrick Vieira",
-     "Mathieu Flamini"
-    ]
-   },
-   {
-    "count": 7,
-    "top": [
-     "Henrikh Mkhitaryan",
-     "Jens Lehmann",
-     "Pierre-Emerick Aubameyang",
-     "Tomáš Rosický"
-    ]
-   },
-   {
-    "count": 31,
-    "top": [
-     "Shkodran Mustafi",
-     "Theo Walcott",
-     "Alex Iwobi",
-     "Philippe Senderos"
-    ]
-   },
-   {
-    "count": 4,
-    "top": [
-     "David Beckham",
-     "Jaap Stam",
-     "Jesper Blomqvist",
-     "Massimo Taibi"
-    ]
-   },
-   {
-    "count": 2,
-    "top": [
-     "Shinji Kagawa",
-     "Adnan Januzaj"
-    ]
-   },
-   {
-    "count": 14,
-    "top": [
-     "Wayne Rooney",
-     "Ashley Young",
-     "Marouane Fellaini",
-     "Darron Gibson"
-    ]
-   },
-   {
-    "count": 9,
-    "top": [
-     "Zlatan Ibrahimović",
-     "Bojan Krkić",
-     "Gianluigi Donnarumma",
-     "Kyle Walker"
-    ]
-   },
-   {
-    "count": 9,
-    "top": [
-     "Erling Haaland",
-     "Robert Lewandowski",
-     "İlkay Gündoğan",
-     "Mario Götze"
-    ]
-   },
-   {
-    "count": 6,
-    "top": [
-     "Samuel Eto'o",
-     "John Stones",
-     "Eliaquim Mangala",
-     "Fabian Delph"
-    ]
-   }
-  ]
- },
- {
-  "rows": [
-   "Sevilla",
-   "AS Roma",
-   "AC Milan"
-  ],
-  "cols": [
-   "Club teammate of Cristiano Ronaldo",
-   "Managed by Simeone",
-   "Arsenal"
-  ],
-  "squares": [
-   {
-    "count": 13,
-    "top": [
-     "Sergio Ramos",
-     "Denis Cheryshev",
-     "Isco",
-     "Javier Hernández"
-    ]
-   },
-   {
-    "count": 11,
-    "top": [
-     "César Azpilicueta",
-     "Clément Lenglet",
-     "José Antonio Reyes",
-     "Saúl"
-    ]
-   },
-   {
-    "count": 8,
-    "top": [
-     "Alexis Sánchez",
-     "Davor Šuker",
-     "Samir Nasri",
-     "Denis Suárez"
-    ]
-   },
-   {
-    "count": 11,
-    "top": [
-     "Paulo Dybala",
-     "Wojciech Szczęsny",
-     "Diego Llorente",
-     "Fernando Gago"
-    ]
-   },
-   {
-    "count": 4,
-    "top": [
-     "Alessio Cerci",
-     "Nahuel Molina",
-     "Nikola Kalinić",
-     "Mario Hermoso"
-    ]
-   },
-   {
-    "count": 9,
-    "top": [
-     "Ashley Cole",
-     "Henrikh Mkhitaryan",
-     "Thomas Vermaelen",
-     "Wojciech Szczęsny"
-    ]
-   },
-   {
-    "count": 14,
-    "top": [
-     "Kaká",
-     "Luka Modrić",
-     "Adrien Rabiot",
-     "Álvaro Morata"
-    ]
-   },
-   {
-    "count": 7,
-    "top": [
-     "Fernando Torres",
-     "Álvaro Morata",
-     "João Félix",
-     "Mario Mandžukić"
-    ]
-   },
-   {
-    "count": 9,
-    "top": [
-     "Olivier Giroud",
-     "Jens Lehmann",
-     "Patrick Vieira",
-     "Mathieu Flamini"
-    ]
-   }
-  ]
- },
- {
-  "rows": [
-   "Paris Saint-Germain",
-   "Tottenham Hotspur",
-   "Manchester City"
-  ],
-  "cols": [
-   "Chelsea",
-   "Managed by Zidane (club)",
-   "Club teammate of Roy Keane"
-  ],
-  "squares": [
-   {
-    "count": 11,
-    "top": [
-     "George Weah",
-     "David Luiz",
-     "Nicolas Anelka",
-     "Thiago Silva"
-    ]
-   },
-   {
-    "count": 5,
-    "top": [
-     "Sergio Ramos",
-     "Achraf Hakimi",
-     "Keylor Navas",
-     "Marco Asensio"
-    ]
-   },
-   {
-    "count": 2,
-    "top": [
-     "David Beckham",
-     "Gabriel Heinze"
-    ]
-   },
-   {
-    "count": 40,
-    "top": [
-     "Timo Werner",
-     "Conor Gallagher",
-     "Dominic Solanke",
-     "Eiður Guðjohnsen"
-    ]
-   },
-   {
-    "count": 3,
-    "top": [
-     "Gareth Bale",
-     "Luka Modrić",
-     "Sergio Reguilón"
-    ]
-   },
-   {
-    "count": 3,
-    "top": [
-     "Louis Saha",
-     "Teddy Sheringham",
-     "Steve Hodge"
-    ]
-   },
-   {
-    "count": 31,
-    "top": [
-     "Frank Lampard",
-     "George Weah",
-     "Kevin De Bruyne",
-     "Cole Palmer"
-    ]
-   },
-   {
-    "count": 3,
-    "top": [
-     "Mateo Kovačić",
-     "Brahim Díaz",
-     "Danilo"
-    ]
-   },
-   {
-    "count": 7,
-    "top": [
-     "Peter Schmeichel",
-     "Andy Cole",
-     "Andrei Kanchelskis",
-     "Neil Lennon"
-    ]
-   }
-  ]
- },
- {
-  "rows": [
-   "Aston Villa",
-   "SS Lazio",
-   "Bolton Wanderers"
-  ],
-  "cols": [
-   "Chelsea",
-   "France",
-   "Club teammate of Kompany"
-  ],
-  "squares": [
-   {
-    "count": 36,
-    "top": [
-     "John Terry",
-     "Emiliano Martínez",
-     "Gary Cahill",
-     "Jadon Sancho"
-    ]
-   },
-   {
-    "count": 15,
-    "top": [
-     "Clément Lenglet",
-     "Lucas Digne",
-     "Robert Pires",
-     "Aly Cissokho"
-    ]
-   },
-   {
-    "count": 12,
-    "top": [
-     "James Milner",
-     "Kyle Walker",
-     "Fabian Delph",
-     "Gareth Barry"
-    ]
-   },
-   {
-    "count": 8,
-    "top": [
-     "Hernán Crespo",
-     "Pedro",
-     "Gaël Kakuta",
-     "Juan Sebastián Verón"
-    ]
-   },
-   {
-    "count": 8,
-    "top": [
-     "Djibril Cissé",
-     "Louis Saha",
-     "Mattéo Guendouzi",
-     "Loum Tchaouna"
-    ]
-   },
-   {
-    "count": 5,
-    "top": [
-     "Aleksandar Kolarov",
-     "Juan Pablo Sorín",
-     "Felipe Caicedo",
-     "Javier Garrido"
-    ]
-   },
-   {
-    "count": 14,
-    "top": [
-     "Gary Cahill",
-     "Nicolas Anelka",
-     "Daniel Sturridge",
-     "Eiður Guðjohnsen"
-    ]
-   },
-   {
-    "count": 11,
-    "top": [
-     "Nicolas Anelka",
-     "Vincent Candela",
-     "Youri Djorkaeff",
-     "David Ngog"
-    ]
-   },
-   {
-    "count": 7,
-    "top": [
-     "Daniel Sturridge",
-     "Dedryck Boyata",
-     "Martin Petrov",
-     "Christian Wilhelmsson"
-    ]
-   }
-  ]
- },
- {
-  "rows": [
-   "Manchester City",
-   "Liverpool",
-   "Barcelona"
-  ],
-  "cols": [
-   "Club teammate of Shearer",
-   "Tottenham Hotspur",
-   "Managed by Ferguson (club)"
-  ],
-  "squares": [
-   {
-    "count": 15,
-    "top": [
-     "James Milner",
-     "Craig Bellamy",
-     "Shay Given",
-     "Dietmar Hamann"
-    ]
-   },
-   {
-    "count": 21,
-    "top": [
-     "Emmanuel Adebayor",
-     "Joe Hart",
-     "Kyle Walker",
-     "Omar Marmoush"
-    ]
-   },
-   {
-    "count": 8,
-    "top": [
-     "Carlos Tevez",
-     "Peter Schmeichel",
-     "Andy Cole",
-     "Owen Hargreaves"
-    ]
-   },
-   {
-    "count": 10,
-    "top": [
-     "James Milner",
-     "Michael Owen",
-     "Craig Bellamy",
-     "Ian Rush"
-    ]
-   },
-   {
-    "count": 22,
-    "top": [
-     "Robbie Keane",
-     "Andy Robertson",
-     "Brad Friedel",
-     "Christian Ziege"
-    ]
-   },
-   {
-    "count": 2,
-    "top": [
-     "Michael Owen",
-     "Paul Ince"
-    ]
-   },
-   {
-    "count": 3,
-    "top": [
-     "Patrick Kluivert",
-     "Richard Witschge",
-     "Patrik Andersson"
-    ]
-   },
-   {
-    "count": 13,
-    "top": [
-     "Gary Lineker",
-     "Kevin-Prince Boateng",
-     "Clément Lenglet",
-     "Edgar Davids"
-    ]
-   },
-   {
-    "count": 6,
-    "top": [
-     "Gerard Piqué",
-     "Henrik Larsson",
-     "Jordi Cruyff",
-     "Laurent Blanc"
-    ]
-   }
-  ]
- },
- {
-  "rows": [
-   "Club teammate of Pirlo",
-   "Atlético Madrid",
-   "Managed by Mourinho"
-  ],
-  "cols": [
-   "Liverpool",
-   "Paris Saint-Germain",
-   "Barcelona"
-  ],
-  "squares": [
-   {
-    "count": 2,
-    "top": [
-     "Nicolas Anelka",
-     "Robbie Keane"
-    ]
-   },
-   {
-    "count": 14,
-    "top": [
-     "David Beckham",
-     "Gianluigi Buffon",
-     "Ronaldinho",
-     "Zlatan Ibrahimović"
+     "Sergio Agüero",
+     "Diego Simeone",
+     "Julián Alvarez",
+     "Maxi Rodríguez"
     ]
    },
    {
     "count": 12,
     "top": [
      "David Villa",
-     "Ronaldinho",
-     "Ronaldo",
-     "Zlatan Ibrahimović"
+     "Fernando Torres",
+     "Sergio Agüero",
+     "Thibaut Courtois"
     ]
    },
    {
@@ -3522,6 +1733,178 @@
     ]
    },
    {
+    "count": 4,
+    "top": [
+     "Fabricio Coloccini",
+     "Jonás Gutiérrez",
+     "Federico Fernández",
+     "Christian Bassedas"
+    ]
+   },
+   {
+    "count": 10,
+    "top": [
+     "James Milner",
+     "Celestine Babayaro",
+     "Damien Duff",
+     "Demba Ba"
+    ]
+   },
+   {
+    "count": 30,
+    "top": [
+     "Alexander Isak",
+     "James Milner",
+     "Kevin Keegan",
+     "Michael Owen"
+    ]
+   },
+   {
+    "count": 13,
+    "top": [
+     "Ángel Di María",
+     "Carlos Tevez",
+     "Gonzalo Higuaín",
+     "Paulo Dybala"
+    ]
+   },
+   {
+    "count": 5,
+    "top": [
+     "Andrea Pirlo",
+     "Nicolas Anelka",
+     "Adrian Mutu",
+     "Paolo Di Canio"
+    ]
+   },
+   {
+    "count": 8,
+    "top": [
+     "Emre Can",
+     "Federico Chiesa",
+     "Nicolas Anelka",
+     "Alberto Aquilani"
+    ]
+   }
+  ]
+ },
+ {
+  "rows": [
+   "West Ham United",
+   "Club teammate of Salah",
+   "Bayern Munich"
+  ],
+  "cols": [
+   "Manchester City",
+   "Juventus",
+   "Tottenham Hotspur"
+  ],
+  "squares": [
+   {
+    "count": 30,
+    "top": [
+     "Frank Lampard",
+     "Carlos Tevez",
+     "Joe Hart",
+     "Samir Nasri"
+    ]
+   },
+   {
+    "count": 9,
+    "top": [
+     "Carlos Tevez",
+     "Patrice Evra",
+     "Angelo Ogbonna",
+     "Antonio Nocerino"
+    ]
+   },
+   {
+    "count": 42,
+    "top": [
+     "Robbie Keane",
+     "Michael Carrick",
+     "Joe Hart",
+     "Teddy Sheringham"
+    ]
+   },
+   {
+    "count": 5,
+    "top": [
+     "Edin Džeko",
+     "James Milner",
+     "Daniel Sturridge",
+     "Maicon"
+    ]
+   },
+   {
+    "count": 11,
+    "top": [
+     "Emre Can",
+     "Federico Chiesa",
+     "Wojciech Szczęsny",
+     "Arthur Melo"
+    ]
+   },
+   {
+    "count": 4,
+    "top": [
+     "Andy Robertson",
+     "Dominic Solanke",
+     "Federico Fazio",
+     "Iago Falque"
+    ]
+   },
+   {
+    "count": 9,
+    "top": [
+     "Jérôme Boateng",
+     "Leroy Sané",
+     "Daniel Van Buyten",
+     "João Cancelo"
+    ]
+   },
+   {
+    "count": 14,
+    "top": [
+     "Arturo Vidal",
+     "Emre Can",
+     "Mario Mandžukić",
+     "Douglas Costa"
+    ]
+   },
+   {
+    "count": 9,
+    "top": [
+     "Harry Kane",
+     "Ivan Perišić",
+     "Jürgen Klinsmann",
+     "Christian Ziege"
+    ]
+   }
+  ]
+ },
+ {
+  "rows": [
+   "Atlético Madrid",
+   "Newcastle United",
+   "Club teammate of Salah"
+  ],
+  "cols": [
+   "Manchester United",
+   "Paris Saint-Germain",
+   "Manchester City"
+  ],
+  "squares": [
+   {
+    "count": 8,
+    "top": [
+     "Diego Forlán",
+     "David de Gea",
+     "Memphis Depay",
+     "Radamel Falcao"
+    ]
+   },
+   {
     "count": 10,
     "top": [
      "Thiago Motta",
@@ -3531,116 +1914,30 @@
     ]
    },
    {
-    "count": 31,
-    "top": [
-     "Antoine Griezmann",
-     "David Villa",
-     "Luis Suárez",
-     "Sergio Agüero"
-    ]
-   },
-   {
-    "count": 13,
-    "top": [
-     "Fernando Torres",
-     "Mario Balotelli",
-     "Mohamed Salah",
-     "Xabi Alonso"
-    ]
-   },
-   {
-    "count": 19,
-    "top": [
-     "Ángel Di María",
-     "Sergio Ramos",
-     "Zlatan Ibrahimović",
-     "David Luiz"
-    ]
-   },
-   {
-    "count": 17,
-    "top": [
-     "Cesc Fàbregas",
-     "Marcus Rashford",
-     "Samuel Eto'o",
-     "Zlatan Ibrahimović"
-    ]
-   }
-  ]
- },
- {
-  "rows": [
-   "Villarreal",
-   "Fulham",
-   "Manchester City"
-  ],
-  "cols": [
-   "France",
-   "Newcastle United",
-   "Europa League winner"
-  ],
-  "squares": [
-   {
-    "count": 9,
-    "top": [
-     "Alphonse Areola",
-     "Robert Pires",
-     "Étienne Capoue",
-     "Francis Coquelin"
-    ]
-   },
-   {
     "count": 6,
     "top": [
-     "Ayoze Pérez",
-     "Fabricio Coloccini",
-     "Giuseppe Rossi",
-     "Jon Dahl Tomasson"
+     "Sergio Agüero",
+     "Julián Alvarez",
+     "Rodri",
+     "Martin Petrov"
     ]
    },
    {
-    "count": 37,
+    "count": 29,
     "top": [
-     "Diego Forlán",
-     "Raúl Albiol",
-     "Antonio Valencia",
-     "Diego Godín"
-    ]
-   },
-   {
-    "count": 18,
-    "top": [
-     "Alphonse Areola",
-     "Louis Saha",
-     "Layvin Kurzawa",
-     "Moussa Dembélé"
-    ]
-   },
-   {
-    "count": 28,
-    "top": [
-     "Aleksandar Mitrović",
+     "Michael Owen",
+     "Alan Smith",
      "Andy Cole",
-     "Damien Duff",
-     "Louis Saha"
+     "Giuseppe Rossi"
     ]
    },
    {
-    "count": 12,
+    "count": 11,
     "top": [
-     "Chris Smalling",
-     "Edwin van der Sar",
-     "Willian",
-     "Ademola Lookman"
-    ]
-   },
-   {
-    "count": 15,
-    "top": [
-     "Bacary Sagna",
-     "Nicolas Anelka",
-     "Patrick Vieira",
-     "Samir Nasri"
+     "Georginio Wijnaldum",
+     "Hatem Ben Arfa",
+     "Yohan Cabaye",
+     "David Ginola"
     ]
    },
    {
@@ -3653,71 +1950,448 @@
     ]
    },
    {
-    "count": 18,
+    "count": 3,
     "top": [
-     "Frank Lampard",
-     "Sergio Agüero",
-     "Fernandinho",
-     "Jesús Navas"
+     "Radamel Falcao",
+     "Giuseppe Rossi",
+     "Nemanja Matić"
+    ]
+   },
+   {
+    "count": 5,
+    "top": [
+     "Alessandro Florenzi",
+     "Georginio Wijnaldum",
+     "Hugo Ekitike",
+     "Leandro Paredes"
+    ]
+   },
+   {
+    "count": 5,
+    "top": [
+     "Edin Džeko",
+     "James Milner",
+     "Daniel Sturridge",
+     "Maicon"
     ]
    }
   ]
  },
  {
   "rows": [
-   "Paris Saint-Germain",
-   "AC Milan",
-   "World Cup winner"
+   "Newcastle United",
+   "Inter Milan",
+   "Valencia"
   ],
   "cols": [
-   "Bayern Munich",
-   "Juventus",
-   "Chelsea"
+   "Club teammate of Fàbregas",
+   "Everton",
+   "France"
   ],
   "squares": [
    {
-    "count": 7,
+    "count": 5,
     "top": [
-     "Bixente Lizarazu",
-     "Eric Maxim Choupo-Moting",
-     "Juan Bernat",
-     "Kingsley Coman"
+     "Islam Slimani",
+     "Loïc Rémy",
+     "Sol Campbell",
+     "Kenedy"
     ]
    },
    {
-    "count": 14,
+    "count": 27,
     "top": [
-     "Ángel Di María",
-     "Dani Alves",
-     "Gianluigi Buffon",
-     "Zlatan Ibrahimović"
+     "Anthony Gordon",
+     "Christian Atsu",
+     "Gary Speed",
+     "Louis Saha"
+    ]
+   },
+   {
+    "count": 27,
+    "top": [
+     "Florian Thauvin",
+     "Hatem Ben Arfa",
+     "Loïc Rémy",
+     "Louis Saha"
+    ]
+   },
+   {
+    "count": 13,
+    "top": [
+     "Alexis Sánchez",
+     "Dennis Bergkamp",
+     "Mateo Kovačić",
+     "Patrick Vieira"
+    ]
+   },
+   {
+    "count": 10,
+    "top": [
+     "Romelu Lukaku",
+     "Samuel Eto'o",
+     "Ashley Young",
+     "John Stones"
+    ]
+   },
+   {
+    "count": 20,
+    "top": [
+     "Benjamin Pavard",
+     "Patrick Vieira",
+     "Laurent Blanc",
+     "Marcus Thuram"
     ]
    },
    {
     "count": 11,
     "top": [
-     "George Weah",
+     "David Villa",
+     "Jordi Alba",
+     "Martín Montoya",
+     "Michy Batshuayi"
+    ]
+   },
+   {
+    "count": 6,
+    "top": [
+     "Shkodran Mustafi",
+     "André Gomes",
+     "Eliaquim Mangala",
+     "Manuel Fernandes"
+    ]
+   },
+   {
+    "count": 14,
+    "top": [
+     "Adil Rami",
+     "Didier Deschamps",
+     "Anthony Réveillère",
+     "Eliaquim Mangala"
+    ]
+   }
+  ]
+ },
+ {
+  "rows": [
+   "Barcelona",
+   "Valencia",
+   "Arsenal"
+  ],
+  "cols": [
+   "Club teammate of Zidane",
+   "Manchester City",
+   "Brazil"
+  ],
+  "squares": [
+   {
+    "count": 8,
+    "top": [
+     "Ronaldo",
+     "Thierry Henry",
+     "Luís Figo",
+     "Christophe Dugarry"
+    ]
+   },
+   {
+    "count": 16,
+    "top": [
+     "Sergio Agüero",
+     "Claudio Bravo",
+     "Ferran Torres",
+     "İlkay Gündoğan"
+    ]
+   },
+   {
+    "count": 33,
+    "top": [
+     "Dani Alves",
+     "Neymar",
+     "Ronaldinho",
+     "Ronaldo"
+    ]
+   },
+   {
+    "count": 6,
+    "top": [
+     "Didier Deschamps",
+     "Fernando Morientes",
+     "Roberto Soldado",
+     "César Sánchez"
+    ]
+   },
+   {
+    "count": 10,
+    "top": [
+     "David Silva",
+     "Ferran Torres",
+     "Nicolás Otamendi",
+     "Álvaro Negredo"
+    ]
+   },
+   {
+    "count": 24,
+    "top": [
+     "Leonardo Araújo",
+     "Romário",
+     "Marcelinho Carioca",
+     "Neto"
+    ]
+   },
+   {
+    "count": 3,
+    "top": [
+     "Thierry Henry",
+     "Júlio Baptista",
+     "Kaba Diawara"
+    ]
+   },
+   {
+    "count": 28,
+    "top": [
+     "Bacary Sagna",
+     "Emmanuel Adebayor",
+     "Kolo Touré",
+     "Nicolas Anelka"
+    ]
+   },
+   {
+    "count": 16,
+    "top": [
      "David Luiz",
-     "Nicolas Anelka",
-     "Thiago Silva"
+     "Willian",
+     "Bruno Guimarães",
+     "Denílson"
+    ]
+   }
+  ]
+ },
+ {
+  "rows": [
+   "Atlético Madrid",
+   "Manchester United",
+   "Tottenham Hotspur"
+  ],
+  "cols": [
+   "Juventus",
+   "Paris Saint-Germain",
+   "Club teammate of Lewandowski"
+  ],
+  "squares": [
+   {
+    "count": 12,
+    "top": [
+     "Álvaro Morata",
+     "Mario Mandžukić",
+     "Christian Abbiati",
+     "Christian Vieri"
+    ]
+   },
+   {
+    "count": 10,
+    "top": [
+     "Thiago Motta",
+     "Cristian Rodríguez",
+     "Lee Kang-in",
+     "Lucas Hernandez"
+    ]
+   },
+   {
+    "count": 4,
+    "top": [
+     "João Félix",
+     "Memphis Depay",
+     "Clément Lenglet",
+     "Lucas Hernandez"
     ]
    },
    {
     "count": 8,
     "top": [
-     "Mario Mandžukić",
-     "Mark van Bommel",
-     "Pepe Reina",
-     "Brian Laudrup"
+     "Ángel Di María",
+     "Cristiano Ronaldo",
+     "Paul Pogba",
+     "Zlatan Ibrahimović"
     ]
    },
    {
-    "count": 48,
+    "count": 8,
     "top": [
-     "Roberto Baggio",
-     "Andrea Pirlo",
-     "Zlatan Ibrahimović",
-     "Álvaro Morata"
+     "Ángel Di María",
+     "David Beckham",
+     "Edinson Cavani",
+     "Zlatan Ibrahimović"
+    ]
+   },
+   {
+    "count": 7,
+    "top": [
+     "Marcus Rashford",
+     "Bastian Schweinsteiger",
+     "Henrikh Mkhitaryan",
+     "Memphis Depay"
+    ]
+   },
+   {
+    "count": 10,
+    "top": [
+     "Fernando Llorente",
+     "Dejan Kulusevski",
+     "Edgar Davids",
+     "Randal Kolo Muani"
+    ]
+   },
+   {
+    "count": 9,
+    "top": [
+     "Giovani Lo Celso",
+     "Lucas Moura",
+     "Osvaldo Ardiles",
+     "Randal Kolo Muani"
+    ]
+   },
+   {
+    "count": 3,
+    "top": [
+     "Ivan Perišić",
+     "Clément Lenglet",
+     "Pierre-Emile Højbjerg"
+    ]
+   }
+  ]
+ },
+ {
+  "rows": [
+   "Chelsea",
+   "Tottenham Hotspur",
+   "AS Roma"
+  ],
+  "cols": [
+   "Club teammate of Henry",
+   "Real Madrid",
+   "Argentina"
+  ],
+  "squares": [
+   {
+    "count": 9,
+    "top": [
+     "Cesc Fàbregas",
+     "Samuel Eto'o",
+     "Ashley Cole",
+     "Deco"
+    ]
+   },
+   {
+    "count": 18,
+    "top": [
+     "Arjen Robben",
+     "Eden Hazard",
+     "Samuel Eto'o",
+     "Thibaut Courtois"
+    ]
+   },
+   {
+    "count": 11,
+    "top": [
+     "Emiliano Martínez",
+     "Gonzalo Higuaín",
+     "Hernán Crespo",
+     "Alejandro Garnacho"
+    ]
+   },
+   {
+    "count": 9,
+    "top": [
+     "Emmanuel Adebayor",
+     "Edgar Davids",
+     "Eiður Guðjohnsen",
+     "Giovani dos Santos"
+    ]
+   },
+   {
+    "count": 9,
+    "top": [
+     "Gareth Bale",
+     "Luka Modrić",
+     "Emmanuel Adebayor",
+     "Rafael van der Vaart"
+    ]
+   },
+   {
+    "count": 10,
+    "top": [
+     "Cristian Romero",
+     "Erik Lamela",
+     "Federico Fazio",
+     "Giovani Lo Celso"
+    ]
+   },
+   {
+    "count": 11,
+    "top": [
+     "Ashley Cole",
+     "Bojan Krkić",
+     "Pedro",
+     "Thomas Vermaelen"
+    ]
+   },
+   {
+    "count": 14,
+    "top": [
+     "Antonio Rüdiger",
+     "Antonio Cassano",
+     "Christian Panucci",
+     "Dean Huijsen"
+    ]
+   },
+   {
+    "count": 23,
+    "top": [
+     "Gabriel Batistuta",
+     "Paulo Dybala",
+     "Claudio Caniggia",
+     "Erik Lamela"
+    ]
+   }
+  ]
+ },
+ {
+  "rows": [
+   "France",
+   "Chelsea",
+   "Liverpool"
+  ],
+  "cols": [
+   "AC Milan",
+   "Real Madrid",
+   "Manchester United"
+  ],
+  "squares": [
+   {
+    "count": 22,
+    "top": [
+     "Olivier Giroud",
+     "Adil Rami",
+     "Adrien Rabiot",
+     "Marcel Desailly"
+    ]
+   },
+   {
+    "count": 20,
+    "top": [
+     "Karim Benzema",
+     "Kylian Mbappé",
+     "Zinedine Zidane",
+     "Eduardo Camavinga"
+    ]
+   },
+   {
+    "count": 15,
+    "top": [
+     "Paul Pogba",
+     "Eric Cantona",
+     "Fabien Barthez",
+     "Patrice Evra"
     ]
    },
    {
@@ -3730,21 +2404,175 @@
     ]
    },
    {
-    "count": 32,
+    "count": 18,
     "top": [
-     "Franz Beckenbauer",
-     "Gerd Müller",
-     "Lothar Matthäus",
-     "Manuel Neuer"
+     "Arjen Robben",
+     "Eden Hazard",
+     "Samuel Eto'o",
+     "Thibaut Courtois"
     ]
    },
    {
-    "count": 44,
+    "count": 28,
     "top": [
-     "Alessandro Del Piero",
-     "Andrea Pirlo",
+     "Romelu Lukaku",
+     "Danny Welbeck",
+     "Jadon Sancho",
+     "Juan Mata"
+    ]
+   },
+   {
+    "count": 9,
+    "top": [
+     "Fernando Torres",
+     "Mario Balotelli",
+     "Divock Origi",
+     "Pepe Reina"
+    ]
+   },
+   {
+    "count": 13,
+    "top": [
+     "Xabi Alonso",
+     "Álvaro Arbeloa",
+     "Michael Owen",
+     "Nicolas Anelka"
+    ]
+   },
+   {
+    "count": 13,
+    "top": [
+     "Michael Owen",
+     "Paul Ince",
+     "Peter Beardsley",
+     "Bill Gorman"
+    ]
+   }
+  ]
+ },
+ {
+  "rows": [
+   "Paris Saint-Germain",
+   "Manchester United",
+   "Club teammate of De Bruyne"
+  ],
+  "cols": [
+   "Real Madrid",
+   "Bayern Munich",
+   "Tottenham Hotspur"
+  ],
+  "squares": [
+   {
+    "count": 14,
+    "top": [
      "Ángel Di María",
-     "Gianluigi Buffon"
+     "David Beckham",
+     "Kylian Mbappé",
+     "Sergio Ramos"
+    ]
+   },
+   {
+    "count": 7,
+    "top": [
+     "Bixente Lizarazu",
+     "Eric Maxim Choupo-Moting",
+     "Juan Bernat",
+     "Kingsley Coman"
+    ]
+   },
+   {
+    "count": 9,
+    "top": [
+     "Giovani Lo Celso",
+     "Lucas Moura",
+     "Osvaldo Ardiles",
+     "Randal Kolo Muani"
+    ]
+   },
+   {
+    "count": 11,
+    "top": [
+     "Ángel Di María",
+     "Cristiano Ronaldo",
+     "David Beckham",
+     "Casemiro"
+    ]
+   },
+   {
+    "count": 8,
+    "top": [
+     "Bastian Schweinsteiger",
+     "Daley Blind",
+     "Joshua Zirkzee",
+     "Marcel Sabitzer"
+    ]
+   },
+   {
+    "count": 16,
+    "top": [
+     "Christian Eriksen",
+     "Dimitar Berbatov",
+     "Michael Carrick",
+     "Louis Saha"
+    ]
+   },
+   {
+    "count": 9,
+    "top": [
+     "Eden Hazard",
+     "Samuel Eto'o",
+     "Thibaut Courtois",
+     "Bernardo Silva"
+    ]
+   },
+   {
+    "count": 8,
+    "top": [
+     "Ivan Perišić",
+     "Leroy Sané",
+     "Ivica Olić",
+     "João Cancelo"
+    ]
+   },
+   {
+    "count": 5,
+    "top": [
+     "Ivan Perišić",
+     "Joe Hart",
+     "Kyle Walker",
+     "Sávio"
+    ]
+   }
+  ]
+ },
+ {
+  "rows": [
+   "Chelsea",
+   "Manchester City",
+   "Olympique de Marseille"
+  ],
+  "cols": [
+   "Managed by Van Gaal (club)",
+   "West Ham United",
+   "World Cup winner"
+  ],
+  "squares": [
+   {
+    "count": 7,
+    "top": [
+     "Arjen Robben",
+     "Juan Mata",
+     "Radamel Falcao",
+     "Boudewijn Zenden"
+    ]
+   },
+   {
+    "count": 35,
+    "top": [
+     "Frank Lampard",
+     "Scott Parker",
+     "Jimmy Greaves",
+     "Demba Ba"
     ]
    },
    {
@@ -3754,6 +2582,1192 @@
      "Fernando Torres",
      "Olivier Giroud",
      "Didier Deschamps"
+    ]
+   },
+   {
+    "count": 5,
+    "top": [
+     "Daniel Van Buyten",
+     "Martín Demichelis",
+     "Alfons Groenendijk",
+     "Geovanni"
+    ]
+   },
+   {
+    "count": 30,
+    "top": [
+     "Frank Lampard",
+     "Carlos Tevez",
+     "Joe Hart",
+     "Samir Nasri"
+    ]
+   },
+   {
+    "count": 6,
+    "top": [
+     "Jérôme Boateng",
+     "Jesús Navas",
+     "Julián Alvarez",
+     "Nicolás Otamendi"
+    ]
+   },
+   {
+    "count": 8,
+    "top": [
+     "Franck Ribéry",
+     "Boudewijn Zenden",
+     "Daniel Van Buyten",
+     "Alfonso Pérez"
+    ]
+   },
+   {
+    "count": 15,
+    "top": [
+     "Dimitri Payet",
+     "Patrice Evra",
+     "Samir Nasri",
+     "André Ayew"
+    ]
+   },
+   {
+    "count": 12,
+    "top": [
+     "Benjamin Pavard",
+     "Didier Deschamps",
+     "Fabien Barthez",
+     "Marcel Desailly"
+    ]
+   }
+  ]
+ },
+ {
+  "rows": [
+   "Aston Villa",
+   "Club teammate of Torres",
+   "Barcelona"
+  ],
+  "cols": [
+   "Inter Milan",
+   "Manchester United",
+   "Manchester City"
+  ],
+  "squares": [
+   {
+    "count": 5,
+    "top": [
+     "Ashley Young",
+     "Philippe Coutinho",
+     "Robbie Keane",
+     "Benito Carbone"
+    ]
+   },
+   {
+    "count": 35,
+    "top": [
+     "Marcus Rashford",
+     "Ashley Young",
+     "Jadon Sancho",
+     "Peter Schmeichel"
+    ]
+   },
+   {
+    "count": 33,
+    "top": [
+     "James Milner",
+     "Kyle Walker",
+     "Peter Schmeichel",
+     "David James"
+    ]
+   },
+   {
+    "count": 12,
+    "top": [
+     "Mario Balotelli",
+     "Romelu Lukaku",
+     "Samuel Eto'o",
+     "Diego Godín"
+    ]
+   },
+   {
+    "count": 3,
+    "top": [
+     "Romelu Lukaku",
+     "Juan Mata",
+     "Nemanja Matić"
+    ]
+   },
+   {
+    "count": 15,
+    "top": [
+     "Frank Lampard",
+     "Kevin De Bruyne",
+     "Mario Balotelli",
+     "Sergio Agüero"
+    ]
+   },
+   {
+    "count": 19,
+    "top": [
+     "Ronaldo",
+     "Samuel Eto'o",
+     "Zlatan Ibrahimović",
+     "Alexis Sánchez"
+    ]
+   },
+   {
+    "count": 10,
+    "top": [
+     "Gerard Piqué",
+     "Marcus Rashford",
+     "Zlatan Ibrahimović",
+     "Alexis Sánchez"
+    ]
+   },
+   {
+    "count": 16,
+    "top": [
+     "Sergio Agüero",
+     "Claudio Bravo",
+     "Ferran Torres",
+     "İlkay Gündoğan"
+    ]
+   }
+  ]
+ },
+ {
+  "rows": [
+   "Netherlands",
+   "Manchester City",
+   "Club teammate of Bale"
+  ],
+  "cols": [
+   "Everton",
+   "AS Roma",
+   "Valencia"
+  ],
+  "squares": [
+   {
+    "count": 9,
+    "top": [
+     "Davy Klaassen",
+     "John Heitinga",
+     "Maarten Stekelenburg",
+     "Andy van der Meyde"
+    ]
+   },
+   {
+    "count": 8,
+    "top": [
+     "Donyell Malen",
+     "Georginio Wijnaldum",
+     "Kevin Strootman",
+     "Maarten Stekelenburg"
+    ]
+   },
+   {
+    "count": 6,
+    "top": [
+     "Patrick Kluivert",
+     "Jasper Cillessen",
+     "Arnaut Danjuma",
+     "Faas Wilkes"
+    ]
+   },
+   {
+    "count": 52,
+    "top": [
+     "John Stones",
+     "Joleon Lescott",
+     "Richard Dunne",
+     "Eliaquim Mangala"
+    ]
+   },
+   {
+    "count": 5,
+    "top": [
+     "Edin Džeko",
+     "Aleksandar Kolarov",
+     "Maicon",
+     "Angeliño"
+    ]
+   },
+   {
+    "count": 10,
+    "top": [
+     "David Silva",
+     "Ferran Torres",
+     "Nicolás Otamendi",
+     "Álvaro Negredo"
+    ]
+   },
+   {
+    "count": 7,
+    "top": [
+     "James Rodríguez",
+     "Dele Alli",
+     "Aaron Lennon",
+     "Gylfi Sigurðsson"
+    ]
+   },
+   {
+    "count": 4,
+    "top": [
+     "Diego Llorente",
+     "Erik Lamela",
+     "Borja Mayoral",
+     "Iago Falque"
+    ]
+   },
+   {
+    "count": 6,
+    "top": [
+     "Denis Cheryshev",
+     "Isco",
+     "César Sánchez",
+     "Álvaro Medrán"
+    ]
+   }
+  ]
+ },
+ {
+  "rows": [
+   "Manchester City",
+   "Inter Milan",
+   "Chelsea"
+  ],
+  "cols": [
+   "Everton",
+   "Germany",
+   "Barcelona"
+  ],
+  "squares": [
+   {
+    "count": 52,
+    "top": [
+     "John Stones",
+     "Joleon Lescott",
+     "Richard Dunne",
+     "Eliaquim Mangala"
+    ]
+   },
+   {
+    "count": 12,
+    "top": [
+     "İlkay Gündoğan",
+     "Jérôme Boateng",
+     "Leroy Sané",
+     "Dietmar Hamann"
+    ]
+   },
+   {
+    "count": 16,
+    "top": [
+     "Sergio Agüero",
+     "Claudio Bravo",
+     "Ferran Torres",
+     "İlkay Gündoğan"
+    ]
+   },
+   {
+    "count": 10,
+    "top": [
+     "Romelu Lukaku",
+     "Samuel Eto'o",
+     "Ashley Young",
+     "John Stones"
+    ]
+   },
+   {
+    "count": 11,
+    "top": [
+     "Lothar Matthäus",
+     "Lukas Podolski",
+     "Andreas Brehme",
+     "Jürgen Klinsmann"
+    ]
+   },
+   {
+    "count": 19,
+    "top": [
+     "Ronaldo",
+     "Samuel Eto'o",
+     "Zlatan Ibrahimović",
+     "Alexis Sánchez"
+    ]
+   },
+   {
+    "count": 22,
+    "top": [
+     "Romelu Lukaku",
+     "Samuel Eto'o",
+     "Asmir Begović",
+     "Kurt Zouma"
+    ]
+   },
+   {
+    "count": 7,
+    "top": [
+     "André Schürrle",
+     "Antonio Rüdiger",
+     "Kai Havertz",
+     "Michael Ballack"
+    ]
+   },
+   {
+    "count": 19,
+    "top": [
+     "Cesc Fàbregas",
+     "Samuel Eto'o",
+     "Deco",
+     "João Félix"
+    ]
+   }
+  ]
+ },
+ {
+  "rows": [
+   "West Ham United",
+   "Club teammate of Modrić",
+   "France"
+  ],
+  "cols": [
+   "Juventus",
+   "Chelsea",
+   "Liverpool"
+  ],
+  "squares": [
+   {
+    "count": 9,
+    "top": [
+     "Carlos Tevez",
+     "Patrice Evra",
+     "Angelo Ogbonna",
+     "Antonio Nocerino"
+    ]
+   },
+   {
+    "count": 35,
+    "top": [
+     "Frank Lampard",
+     "Scott Parker",
+     "Jimmy Greaves",
+     "Demba Ba"
+    ]
+   },
+   {
+    "count": 28,
+    "top": [
+     "Álvaro Arbeloa",
+     "Javier Mascherano",
+     "Robbie Keane",
+     "Andy Carroll"
+    ]
+   },
+   {
+    "count": 10,
+    "top": [
+     "Ángel Di María",
+     "Cristiano Ronaldo",
+     "Adrien Rabiot",
+     "Álvaro Morata"
+    ]
+   },
+   {
+    "count": 17,
+    "top": [
+     "Eden Hazard",
+     "Thibaut Courtois",
+     "Álvaro Morata",
+     "Antonio Rüdiger"
+    ]
+   },
+   {
+    "count": 10,
+    "top": [
+     "Xabi Alonso",
+     "Álvaro Arbeloa",
+     "Dejan Lovren",
+     "Robbie Keane"
+    ]
+   },
+   {
+    "count": 23,
+    "top": [
+     "Michel Platini",
+     "Paul Pogba",
+     "Thierry Henry",
+     "Zinedine Zidane"
+    ]
+   },
+   {
+    "count": 24,
+    "top": [
+     "Olivier Giroud",
+     "Didier Deschamps",
+     "Marcel Desailly",
+     "N'Golo Kanté"
+    ]
+   },
+   {
+    "count": 18,
+    "top": [
+     "Nicolas Anelka",
+     "Bradley Barcola",
+     "Djibril Cissé",
+     "Hugo Ekitike"
+    ]
+   }
+  ]
+ },
+ {
+  "rows": [
+   "AS Monaco",
+   "Manchester United",
+   "Manchester City"
+  ],
+  "cols": [
+   "Italy",
+   "Club teammate of Modrić",
+   "Everton"
+  ],
+  "squares": [
+   {
+    "count": 10,
+    "top": [
+     "Christian Panucci",
+     "Christian Vieri",
+     "Morgan De Sanctis",
+     "Stephan El Shaarawy"
+    ]
+   },
+   {
+    "count": 11,
+    "top": [
+     "James Rodríguez",
+     "Kylian Mbappé",
+     "Emmanuel Adebayor",
+     "Fábio Coentrão"
+    ]
+   },
+   {
+    "count": 7,
+    "top": [
+     "James Rodríguez",
+     "Djibril Sidibé",
+     "Maarten Stekelenburg",
+     "Lacina Traoré"
+    ]
+   },
+   {
+    "count": 4,
+    "top": [
+     "Federico Macheda",
+     "Giuseppe Rossi",
+     "Matteo Darmian",
+     "Massimo Taibi"
+    ]
+   },
+   {
+    "count": 7,
+    "top": [
+     "Ángel Di María",
+     "Cristiano Ronaldo",
+     "Casemiro",
+     "Javier Hernández"
+    ]
+   },
+   {
+    "count": 33,
+    "top": [
+     "Romelu Lukaku",
+     "Wayne Rooney",
+     "Ashley Young",
+     "Marouane Fellaini"
+    ]
+   },
+   {
+    "count": 3,
+    "top": [
+     "Mario Balotelli",
+     "Gianluigi Donnarumma",
+     "Bernardo Corradi"
+    ]
+   },
+   {
+    "count": 6,
+    "top": [
+     "Emmanuel Adebayor",
+     "Kyle Walker",
+     "Mateo Kovačić",
+     "Brahim Díaz"
+    ]
+   },
+   {
+    "count": 52,
+    "top": [
+     "John Stones",
+     "Joleon Lescott",
+     "Richard Dunne",
+     "Eliaquim Mangala"
+    ]
+   }
+  ]
+ },
+ {
+  "rows": [
+   "Sunderland",
+   "Barcelona",
+   "Manchester United"
+  ],
+  "cols": [
+   "Liverpool",
+   "Italy",
+   "Everton"
+  ],
+  "squares": [
+   {
+    "count": 33,
+    "top": [
+     "Jordan Henderson",
+     "Boudewijn Zenden",
+     "Djibril Cissé",
+     "El Hadji Diouf"
+    ]
+   },
+   {
+    "count": 4,
+    "top": [
+     "Emanuele Giaccherini",
+     "Fabio Borini",
+     "Andrea Dossena",
+     "Vito Mannone"
+    ]
+   },
+   {
+    "count": 38,
+    "top": [
+     "Jordan Pickford",
+     "Steven Pienaar",
+     "Louis Saha",
+     "Darron Gibson"
+    ]
+   },
+   {
+    "count": 11,
+    "top": [
+     "Luis Suárez",
+     "Javier Mascherano",
+     "Pepe Reina",
+     "Philippe Coutinho"
+    ]
+   },
+   {
+    "count": 4,
+    "top": [
+     "Thiago Motta",
+     "Demetrio Albertini",
+     "Gianluca Zambrotta",
+     "Francesco Coco"
+    ]
+   },
+   {
+    "count": 9,
+    "top": [
+     "Gary Lineker",
+     "Samuel Eto'o",
+     "André Gomes",
+     "Anthony Gordon"
+    ]
+   },
+   {
+    "count": 13,
+    "top": [
+     "Michael Owen",
+     "Paul Ince",
+     "Peter Beardsley",
+     "Bill Gorman"
+    ]
+   },
+   {
+    "count": 4,
+    "top": [
+     "Federico Macheda",
+     "Giuseppe Rossi",
+     "Matteo Darmian",
+     "Massimo Taibi"
+    ]
+   },
+   {
+    "count": 33,
+    "top": [
+     "Romelu Lukaku",
+     "Wayne Rooney",
+     "Ashley Young",
+     "Marouane Fellaini"
+    ]
+   }
+  ]
+ },
+ {
+  "rows": [
+   "Liverpool",
+   "West Bromwich Albion",
+   "AS Monaco"
+  ],
+  "cols": [
+   "Club teammate of Drogba",
+   "Belgium",
+   "Fulham"
+  ],
+  "squares": [
+   {
+    "count": 12,
+    "top": [
+     "Fernando Torres",
+     "Mohamed Salah",
+     "Nicolas Anelka",
+     "Albert Riera"
+    ]
+   },
+   {
+    "count": 3,
+    "top": [
+     "Divock Origi",
+     "Christian Benteke",
+     "Simon Mignolet"
+    ]
+   },
+   {
+    "count": 24,
+    "top": [
+     "Harvey Elliott",
+     "Jari Litmanen",
+     "John Arne Riise",
+     "Ryan Babel"
+    ]
+   },
+   {
+    "count": 9,
+    "top": [
+     "Romelu Lukaku",
+     "Branislav Ivanović",
+     "Nicolas Anelka",
+     "Daniel Sturridge"
+    ]
+   },
+   {
+    "count": 5,
+    "top": [
+     "Romelu Lukaku",
+     "Nacer Chadli",
+     "Carl Hoefkens",
+     "Sébastien Pocognoli"
+    ]
+   },
+   {
+    "count": 19,
+    "top": [
+     "Bobby Robson",
+     "Junichi Inamoto",
+     "Zoltán Gera",
+     "Chris Baird"
+    ]
+   },
+   {
+    "count": 8,
+    "top": [
+     "Cesc Fàbregas",
+     "Ricardo Carvalho",
+     "Eiður Guðjohnsen",
+     "Philippe Christanval"
+    ]
+   },
+   {
+    "count": 7,
+    "top": [
+     "Nacer Chadli",
+     "Yannick Carrasco",
+     "Youri Tielemans",
+     "Enzo Scifo"
+    ]
+   },
+   {
+    "count": 17,
+    "top": [
+     "Dimitar Berbatov",
+     "Eiður Guðjohnsen",
+     "John Arne Riise",
+     "Maarten Stekelenburg"
+    ]
+   }
+  ]
+ },
+ {
+  "rows": [
+   "Manchester City",
+   "West Ham United",
+   "AC Milan"
+  ],
+  "cols": [
+   "Argentina",
+   "Liverpool",
+   "Club teammate of Bergkamp"
+  ],
+  "squares": [
+   {
+    "count": 12,
+    "top": [
+     "Sergio Agüero",
+     "Carlos Tevez",
+     "Julián Alvarez",
+     "Nicolás Otamendi"
+    ]
+   },
+   {
+    "count": 30,
+    "top": [
+     "Mario Balotelli",
+     "James Milner",
+     "Kolo Touré",
+     "Nicolas Anelka"
+    ]
+   },
+   {
+    "count": 10,
+    "top": [
+     "Kolo Touré",
+     "Nicolas Anelka",
+     "Patrick Vieira",
+     "David Seaman"
+    ]
+   },
+   {
+    "count": 9,
+    "top": [
+     "Carlos Tevez",
+     "Javier Mascherano",
+     "Lionel Scaloni",
+     "Pablo Zabaleta"
+    ]
+   },
+   {
+    "count": 28,
+    "top": [
+     "Álvaro Arbeloa",
+     "Javier Mascherano",
+     "Robbie Keane",
+     "Andy Carroll"
+    ]
+   },
+   {
+    "count": 13,
+    "top": [
+     "Davor Šuker",
+     "Freddie Ljungberg",
+     "Alex Song",
+     "Ian Wright"
+    ]
+   },
+   {
+    "count": 18,
+    "top": [
+     "Gonzalo Higuaín",
+     "Hernán Crespo",
+     "Fabricio Coloccini",
+     "Fernando Redondo"
+    ]
+   },
+   {
+    "count": 9,
+    "top": [
+     "Fernando Torres",
+     "Mario Balotelli",
+     "Divock Origi",
+     "Pepe Reina"
+    ]
+   },
+   {
+    "count": 12,
+    "top": [
+     "Marco van Basten",
+     "Clarence Seedorf",
+     "Frank Rijkaard",
+     "Jens Lehmann"
+    ]
+   }
+  ]
+ },
+ {
+  "rows": [
+   "Managed by Guardiola",
+   "Real Madrid",
+   "Portugal"
+  ],
+  "cols": [
+   "Manchester United",
+   "Atlético Madrid",
+   "Liverpool"
+  ],
+  "squares": [
+   {
+    "count": 5,
+    "top": [
+     "Gerard Piqué",
+     "Zlatan Ibrahimović",
+     "Alexis Sánchez",
+     "Bastian Schweinsteiger"
+    ]
+   },
+   {
+    "count": 5,
+    "top": [
+     "David Villa",
+     "Sergio Agüero",
+     "Julián Alvarez",
+     "Mario Mandžukić"
+    ]
+   },
+   {
+    "count": 7,
+    "top": [
+     "Xabi Alonso",
+     "Javier Mascherano",
+     "Pepe Reina",
+     "Raheem Sterling"
+    ]
+   },
+   {
+    "count": 11,
+    "top": [
+     "Ángel Di María",
+     "Cristiano Ronaldo",
+     "David Beckham",
+     "Casemiro"
+    ]
+   },
+   {
+    "count": 32,
+    "top": [
+     "Thibaut Courtois",
+     "Álvaro Morata",
+     "Antonio Adán",
+     "Bernd Schuster"
+    ]
+   },
+   {
+    "count": 13,
+    "top": [
+     "Xabi Alonso",
+     "Álvaro Arbeloa",
+     "Michael Owen",
+     "Nicolas Anelka"
+    ]
+   },
+   {
+    "count": 6,
+    "top": [
+     "Cristiano Ronaldo",
+     "Bruno Fernandes",
+     "Nani",
+     "Diogo Dalot"
+    ]
+   },
+   {
+    "count": 12,
+    "top": [
+     "João Félix",
+     "Maniche",
+     "Paulo Futre",
+     "Simão Sabrosa"
+    ]
+   },
+   {
+    "count": 6,
+    "top": [
+     "Diogo Jota",
+     "Raul Meireles",
+     "Abel Xavier",
+     "Fábio Carvalho"
+    ]
+   }
+  ]
+ },
+ {
+  "rows": [
+   "Manchester City",
+   "Atlético Madrid",
+   "Manchester United"
+  ],
+  "cols": [
+   "Club teammate of Maldini",
+   "Managed by Tuchel (club)",
+   "Barcelona"
+  ],
+  "squares": [
+   {
+    "count": 2,
+    "top": [
+     "George Weah",
+     "Patrick Vieira"
+    ]
+   },
+   {
+    "count": 3,
+    "top": [
+     "İlkay Gündoğan",
+     "Leroy Sané",
+     "Mateo Kovačić"
+    ]
+   },
+   {
+    "count": 16,
+    "top": [
+     "Sergio Agüero",
+     "Claudio Bravo",
+     "Ferran Torres",
+     "İlkay Gündoğan"
+    ]
+   },
+   {
+    "count": 10,
+    "top": [
+     "Christian Abbiati",
+     "Christian Vieri",
+     "Demetrio Albertini",
+     "Fabricio Coloccini"
+    ]
+   },
+   {
+    "count": 3,
+    "top": [
+     "César Azpilicueta",
+     "Conor Gallagher",
+     "Saúl"
+    ]
+   },
+   {
+    "count": 31,
+    "top": [
+     "Antoine Griezmann",
+     "David Villa",
+     "Luis Suárez",
+     "Sergio Agüero"
+    ]
+   },
+   {
+    "count": 5,
+    "top": [
+     "Jaap Stam",
+     "Matteo Darmian",
+     "Jesper Blomqvist",
+     "Ray Wilkins"
+    ]
+   },
+   {
+    "count": 10,
+    "top": [
+     "Ángel Di María",
+     "Edinson Cavani",
+     "Romelu Lukaku",
+     "Henrikh Mkhitaryan"
+    ]
+   },
+   {
+    "count": 10,
+    "top": [
+     "Gerard Piqué",
+     "Marcus Rashford",
+     "Zlatan Ibrahimović",
+     "Alexis Sánchez"
+    ]
+   }
+  ]
+ },
+ {
+  "rows": [
+   "Manchester United",
+   "Tottenham Hotspur",
+   "Club teammate of Zidane"
+  ],
+  "cols": [
+   "Arsenal",
+   "Inter Milan",
+   "Manchester City"
+  ],
+  "squares": [
+   {
+    "count": 21,
+    "top": [
+     "Robin van Persie",
+     "Alexis Sánchez",
+     "Danny Welbeck",
+     "Henrikh Mkhitaryan"
+    ]
+   },
+   {
+    "count": 15,
+    "top": [
+     "Diego Forlán",
+     "Romelu Lukaku",
+     "Zlatan Ibrahimović",
+     "Alexis Sánchez"
+    ]
+   },
+   {
+    "count": 37,
+    "top": [
+     "Peter Schmeichel",
+     "Carlos Tevez",
+     "Andy Cole",
+     "Denis Law"
+    ]
+   },
+   {
+    "count": 24,
+    "top": [
+     "Emmanuel Adebayor",
+     "Pat Jennings",
+     "Sol Campbell",
+     "William Gallas"
+    ]
+   },
+   {
+    "count": 10,
+    "top": [
+     "Christian Eriksen",
+     "Ivan Perišić",
+     "Jürgen Klinsmann",
+     "Robbie Keane"
+    ]
+   },
+   {
+    "count": 21,
+    "top": [
+     "Emmanuel Adebayor",
+     "Joe Hart",
+     "Kyle Walker",
+     "Omar Marmoush"
+    ]
+   },
+   {
+    "count": 3,
+    "top": [
+     "Thierry Henry",
+     "Júlio Baptista",
+     "Kaba Diawara"
+    ]
+   },
+   {
+    "count": 11,
+    "top": [
+     "Ronaldo",
+     "Luís Figo",
+     "Roberto Carlos",
+     "Angelo Peruzzi"
+    ]
+   },
+   {
+    "count": 4,
+    "top": [
+     "Robinho",
+     "Javi García",
+     "Steve McManaman",
+     "Laurent Charvet"
+    ]
+   }
+  ]
+ },
+ {
+  "rows": [
+   "Liverpool",
+   "Olympique de Marseille",
+   "Aston Villa"
+  ],
+  "cols": [
+   "Manchester United",
+   "Manchester City",
+   "Club teammate of Bergkamp"
+  ],
+  "squares": [
+   {
+    "count": 13,
+    "top": [
+     "Michael Owen",
+     "Paul Ince",
+     "Peter Beardsley",
+     "Bill Gorman"
+    ]
+   },
+   {
+    "count": 30,
+    "top": [
+     "Mario Balotelli",
+     "James Milner",
+     "Kolo Touré",
+     "Nicolas Anelka"
+    ]
+   },
+   {
+    "count": 4,
+    "top": [
+     "Kolo Touré",
+     "Nicolas Anelka",
+     "Jari Litmanen",
+     "Jermaine Pennant"
+    ]
+   },
+   {
+    "count": 10,
+    "top": [
+     "Alexis Sánchez",
+     "Fabien Barthez",
+     "Patrice Evra",
+     "Eric Bailly"
+    ]
+   },
+   {
+    "count": 14,
+    "top": [
+     "George Weah",
+     "Mario Balotelli",
+     "Samir Nasri",
+     "Benjamin Mendy"
+    ]
+   },
+   {
+    "count": 4,
+    "top": [
+     "Mathieu Flamini",
+     "Robert Pires",
+     "Sylvain Wiltord",
+     "Kaba Diawara"
+    ]
+   },
+   {
+    "count": 35,
+    "top": [
+     "Marcus Rashford",
+     "Ashley Young",
+     "Jadon Sancho",
+     "Peter Schmeichel"
+    ]
+   },
+   {
+    "count": 33,
+    "top": [
+     "James Milner",
+     "Kyle Walker",
+     "Peter Schmeichel",
+     "David James"
+    ]
+   },
+   {
+    "count": 6,
+    "top": [
+     "Philippe Senderos",
+     "Robert Pires",
+     "David Platt",
+     "Martin Keown"
     ]
    }
   ]
