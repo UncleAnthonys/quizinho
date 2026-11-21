@@ -981,6 +981,24 @@ void main() {
           'question': {'teaser': 'played in El Clásico, the Manchester derby AND the North London derby', 'prefix': 'NAME A PLAYER WHO…', 'worth': 3, 'noClock': true},
           'result': {'scored': false, 'reveal': ['Emmanuel Adebayor', 'Carlos Tevez']},
         }));
+    // Between games: the table, with the teaser for any phone to open.
+    final table = {
+      'kind': 'table',
+      'round': 3,
+      'of': 6,
+      'game': GameModeId.clubConnections.title,
+      'colour': GameModeId.clubConnections.color.toARGB32(),
+      'rows': [
+        {'name': 'Home', 'colour': 0, 'score': 8, 'plus': 3},
+        {'name': 'Away', 'colour': 1, 'score': 6, 'plus': 0},
+      ],
+      'teaser': {
+        ...teaser('open'),
+        'question': {'teaser': 'played in El Clásico, the Manchester derby AND the North London derby', 'prefix': 'NAME A PLAYER WHO…', 'worth': 3, 'noClock': true},
+      }..remove('left')..remove('total'),
+    };
+    await shot(tester, 'guest_table_teaser', phone(table));
+    await shot(tester, 'guest_table_teaser_open', phone(table), then: () => tester.tap(find.text('STILL UNSOLVED · TAP TO ANSWER')));
   }, skip: !_shots);
 
   // Full time with the teaser unsolved: one last go, or straight to the answers.

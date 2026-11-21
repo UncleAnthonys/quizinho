@@ -21,7 +21,7 @@ import '../games/top10/top10_screen.dart' show Top10Layout;
 import '../games/career_path/career_path_screen.dart' show CareerTrail;
 import '../games/club_connections/club_connections_screen.dart' show ClubsCard;
 import '../ui/screens/free_kick_screen.dart' show FreeKickMirror;
-import '../ui/teaser/teaser_widgets.dart' show TeaserPrompt, TeaserReveal;
+import '../ui/teaser/teaser_widgets.dart' show TeaserChip, TeaserPrompt, TeaserReveal;
 import '../ui/widgets/buzzer_pad.dart' show TeamBuzzer;
 import '../ui/widgets/common.dart';
 import '../ui/widgets/match_table.dart';
@@ -241,6 +241,9 @@ class _GuestGameState extends State<_GuestGame> with SingleTickerProviderStateMi
     final me = widget.me;
     final teams = widget.room.teams ?? const [];
     final colour = me.team < teams.length ? teams[me.team].colorIndex : 0;
+    // The teaser opened from the table closes when the table goes (a buzz
+    // puts the teaser on every phone; or it's the next game).
+    if (v['kind'] != 'table') _teaserOpenOn = null;
     Widget body() => switch (v['kind']) {
       'buzz' => _buzz(v, colour),
       'turn' => _turn(v, colour),
@@ -252,7 +255,7 @@ class _GuestGameState extends State<_GuestGame> with SingleTickerProviderStateMi
           scores: _scores(v['teams'], round: '${v['round'] ?? ''}'),
         ),
       'rules' => _rules(v),
-      'table' => _table(v),
+      'table' => _table(v, colour),
       'closed' => _center('FULL TIME', 'Thanks for playing!'),
       _ => _center('YOU’RE IN', 'Waiting for kick-off on the main phone…'),
     };
@@ -330,17 +333,49 @@ class _GuestGameState extends State<_GuestGame> with SingleTickerProviderStateMi
   }
 
   /// The table after a round, or full time: the main phone's own screen.
-  Widget _table(Map<String, Object?> v) {
+  Widget _table(Map<String, Object?> v, int colour) {
     final full = v['full'] == true;
+    // Between games, an unsolved teaser: any phone can open it and buzz, as
+    // on the main phone - in the few seconds before the next game too.
+    final teaser = asMap(v['teaser']);
+    final canBuzz = [for (final t in asList(teaser['canBuzz'])) (t as num).toInt()];
+    final key = '${v['round']}|${teaser['q']}';
+    final chip = teaser.isNotEmpty && canBuzz.contains(widget.me.team);
+    if (chip && _teaserOpenOn == key) {
+      return Column(children: [
+        Expanded(child: _buzz(teaser, colour)),
+        TextButton(
+          onPressed: () => setState(() => _teaserOpenOn = null),
+          child: Text('NOT YET - KEEP THINKING', style: AppText.label(13)),
+        ),
+        const SizedBox(height: 8),
+      ]);
+    }
+    if (chip && _holdFor != key) {
+      _holdFor = key;
+      _holdFrom = DateTime.now();
+    }
     return Padding(
       padding: const EdgeInsets.fromLTRB(20, 8, 20, 16),
       child: Column(children: [
         if (full) FullTimeHeader(data: v) else RoundTableHeader(data: v),
         Expanded(child: ListView(children: matchTableRows(v))),
+        if (chip) ...[
+          TeaserChip(onPressed: () => setState(() => _teaserOpenOn = key)),
+          _NextGameIn(from: _holdFrom!),
+        ],
         if (full) Text('Thanks for playing!', style: AppText.label(14)),
       ]),
     );
   }
+
+  /// The table's teaser, opened on this phone (which table: round and teaser).
+  String? _teaserOpenOn;
+
+  /// When this table's teaser first showed: the main phone's "Next
+  /// challenge in 5" started then.
+  String? _holdFor;
+  DateTime? _holdFrom;
 
   Widget _center(String title, String body, {Object? scores}) => Padding(
         padding: const EdgeInsets.all(20),
@@ -492,7 +527,9 @@ class _GuestGameState extends State<_GuestGame> with SingleTickerProviderStateMi
               // hasn't (asleep, lost signal), let them buzz again.
               Future.delayed(const Duration(seconds: 3), () {
                 if (!mounted || _buzzedOn != q) return;
-                final v = widget.room.view;
+                final now = widget.room.view;
+                // (Between games the teaser sits inside the table.)
+                final v = now['kind'] == 'table' ? asMap(now['teaser']) : now;
                 if ('${v['q']}' == q && v['phase'] == 'open') {
                   setState(() => _buzzedOn = null);
                   ScaffoldMessenger.maybeOf(context)?.showSnackBar(const SnackBar(
@@ -916,4 +953,46 @@ class _AppNudge extends StatelessWidget {
           ]),
         ),
       );
+}
+
+/// Under the table's teaser chip: the main phone's countdown to the next game.
+class _NextGameIn extends StatefulWidget {
+  const _NextGameIn({required this.from});
+  final DateTime from;
+  static const seconds = 5;
+
+  @override
+  State<_NextGameIn> createState() => _NextGameInState();
+}
+
+class _NextGameInState extends State<_NextGameIn> {
+  Timer? _timer;
+
+  int get _left => _NextGameIn.seconds - DateTime.now().difference(widget.from).inSeconds;
+
+  @override
+  void initState() {
+    super.initState();
+    if (_left > 0) {
+      _timer = Timer.periodic(const Duration(milliseconds: 250), (t) {
+        if (!mounted) return;
+        setState(() {});
+        if (_left <= 0) t.cancel();
+      });
+    }
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) => _left <= 0
+      ? const SizedBox.shrink()
+      : Padding(
+          padding: const EdgeInsets.only(top: 10),
+          child: Text('NEXT CHALLENGE IN $_left', style: AppText.label(13)),
+        );
 }

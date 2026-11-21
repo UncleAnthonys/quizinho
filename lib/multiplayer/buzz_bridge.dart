@@ -29,7 +29,18 @@ class BuzzBridge extends ChangeNotifier {
     required this.faceOff,
     required this.paused,
     this.multiplier = 1,
+    this.wrap,
   });
+
+  /// What the phones are shown instead of the question, or null for the
+  /// question itself (the teaser between games: the table, with it tucked in).
+  final Map<String, Object?>? Function(Map<String, Object?> view)? wrap;
+
+  /// [wrap] has changed its mind: send the phones what it says now.
+  void republish() {
+    _lastShape = null;
+    _publish();
+  }
 
   /// 2 on a wildcard round: points shown on the phones match the host.
   final int multiplier;
@@ -295,7 +306,7 @@ class BuzzBridge extends ChangeNotifier {
     } else {
       _sentLeft = null;
     }
-    room.show(v);
+    room.show(wrap?.call(v) ?? v);
   }
 
   @override

@@ -39,7 +39,7 @@ mixin TeaserRunner<W extends StatefulWidget> on State<W>, TickerProviderStateMix
     });
     final room = roomFor(t);
     if (room != null && s.isOpen) {
-      _makeBridge = () => teaserBridge = BuzzBridge(
+      teaserBridge = BuzzBridge(
         room: room,
         controller: c,
         tournament: t,
@@ -58,33 +58,21 @@ mixin TeaserRunner<W extends StatefulWidget> on State<W>, TickerProviderStateMix
         reveal: () => teaser.answerNames,
         faceOff: () => null,
         paused: () => false,
+        wrap: teaserPhonesView,
       )
         ..addListener(() {
           if (mounted) setState(() {});
         })
         ..start();
-      // Half-time puts it on the phones straight away; between games it
-      // waits until this phone opens the panel.
-      if (halfTime) startTeaserBridge();
     }
     setState(() => teaserController = c);
     startClock(c.advance);
   }
 
-  VoidCallback? _makeBridge;
-
-  /// Joined phones get the teaser (and their buzzers).
-  void startTeaserBridge() {
-    if (teaserBridge == null) _makeBridge?.call();
-  }
-
-  /// Joined phones go back to the table.
-  void stopTeaserBridge(Tournament t) {
-    if (teaserBridge == null) return;
-    teaserBridge!.dispose();
-    teaserBridge = null;
-    roomFor(t)?.showTable(MatchTable.round(t));
-  }
+  /// What joined phones show instead of the teaser, or null for the teaser
+  /// itself (half-time). Between games, until it's opened here: the table,
+  /// with the teaser tucked in for any phone to open and buzz on.
+  Map<String, Object?>? teaserPhonesView(Map<String, Object?> teaser) => null;
 
   /// Hook: the teaser moved on (buzzed, answered, solved, revealed).
   void onTeaserPhase(BuzzPhase phase) {}
@@ -253,19 +241,27 @@ class _TeaserBetweenGamesState extends State<TeaserBetweenGames>
 
   void _setOpen(bool open) {
     if (_open == open) return;
-    if (open) {
-      startTeaserBridge();
-    } else {
-      stopTeaserBridge(widget.tournament);
-    }
     setState(() => _open = open);
+    teaserBridge?.republish();
     widget.onOpenChanged(open);
+  }
+
+  @override
+  Map<String, Object?>? teaserPhonesView(Map<String, Object?> teaser) {
+    if (_open) return null;
+    final t = widget.tournament;
+    return {
+      'kind': 'table',
+      ...MatchTable.round(t),
+      // Full time has its own "Last chance", which opens it everywhere.
+      if (!t.isFinished && teaser['phase'] == 'open') 'teaser': teaser,
+    };
   }
 
   @override
   void onTeaserPhase(BuzzPhase phase) {
     widget.onBusyChanged(phase == BuzzPhase.answering);
-    // Solved or revealed: show it.
+    // A phone buzzed, or it's been solved/revealed: show it.
     if (phase != BuzzPhase.open) _setOpen(true);
     if (phase == BuzzPhase.resolved && !widget.revealNow) widget.onResult();
   }
