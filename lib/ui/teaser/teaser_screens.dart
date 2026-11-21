@@ -246,6 +246,19 @@ class _TeaserBetweenGamesState extends State<TeaserBetweenGames>
     widget.onOpenChanged(open);
   }
 
+  /// "Tap to answer" here. When only one team plays on this phone (everyone
+  /// else has joined on their own), it's theirs: straight to the answer box.
+  /// Otherwise it opens on every phone, each team with its buzzer.
+  void _tapToAnswer(TeaserController c) {
+    final onPhones = teaserBridge?.phoneTeams() ?? const <int>{};
+    final here = [
+      for (var i = 0; i < widget.tournament.teamCount; i++)
+        if (!onPhones.contains(i) && c.canBuzz(i)) i,
+    ];
+    _setOpen(true);
+    if (teaserBridge != null && here.length == 1) c.buzz(here.single);
+  }
+
   @override
   Map<String, Object?>? teaserPhonesView(Map<String, Object?> teaser) {
     if (_open) return null;
@@ -287,7 +300,7 @@ class _TeaserBetweenGamesState extends State<TeaserBetweenGames>
           TeaserPrompt(question: c.teaser.question, prefix: c.teaser.prefix, compact: true),
           if (!widget.tournament.isFinished) ...[
             const SizedBox(height: 12),
-            TeaserChip(onPressed: () => _setOpen(true)),
+            TeaserChip(onPressed: () => _tapToAnswer(c)),
           ],
         ]),
       );
