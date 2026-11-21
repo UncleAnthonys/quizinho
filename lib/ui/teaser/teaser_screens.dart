@@ -246,15 +246,20 @@ class _TeaserBetweenGamesState extends State<TeaserBetweenGames>
     widget.onOpenChanged(open);
   }
 
+  /// The teams playing on this phone (not every player on their own).
+  List<int> get _here {
+    final onPhones = teaserBridge?.phoneTeams() ?? const <int>{};
+    return [
+      for (var i = 0; i < widget.tournament.teamCount; i++)
+        if (!onPhones.contains(i)) i,
+    ];
+  }
+
   /// "Tap to answer" here. When only one team plays on this phone (everyone
   /// else has joined on their own), it's theirs: straight to the answer box.
   /// Otherwise it opens on every phone, each team with its buzzer.
   void _tapToAnswer(TeaserController c) {
-    final onPhones = teaserBridge?.phoneTeams() ?? const <int>{};
-    final here = [
-      for (var i = 0; i < widget.tournament.teamCount; i++)
-        if (!onPhones.contains(i) && c.canBuzz(i)) i,
-    ];
+    final here = _here.where(c.canBuzz).toList();
     _setOpen(true);
     if (teaserBridge != null && here.length == 1) c.buzz(here.single);
   }
@@ -298,10 +303,16 @@ class _TeaserBetweenGamesState extends State<TeaserBetweenGames>
         padding: const EdgeInsets.only(bottom: 12),
         child: Column(mainAxisSize: MainAxisSize.min, children: [
           TeaserPrompt(question: c.teaser.question, prefix: c.teaser.prefix, compact: true),
-          if (!widget.tournament.isFinished) ...[
-            const SizedBox(height: 12),
-            TeaserChip(onPressed: () => _tapToAnswer(c)),
-          ],
+          if (!widget.tournament.isFinished)
+            if (_here.any(c.canBuzz)) ...[
+              const SizedBox(height: 12),
+              TeaserChip(onPressed: () => _tapToAnswer(c)),
+            ] else if (_here.isNotEmpty) ...[
+              // The others answer on their own phones.
+              const SizedBox(height: 12),
+              Text(_here.length == 1 ? 'YOUR TEAM’S HAD ITS GUESS' : 'YOU’VE ALL HAD YOUR GUESS',
+                  style: AppText.label(13)),
+            ],
         ]),
       );
     }
