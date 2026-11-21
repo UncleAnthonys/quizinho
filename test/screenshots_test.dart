@@ -998,7 +998,6 @@ void main() {
       }..remove('left')..remove('total'),
     };
     await shot(tester, 'guest_table_teaser', phone(table));
-    await shot(tester, 'guest_table_teaser_open', phone(table), then: () => tester.tap(find.text('STILL UNSOLVED · TAP TO ANSWER')));
   }, skip: !_shots);
 
   // Full time with the teaser unsolved: one last go, or straight to the answers.
@@ -1016,6 +1015,16 @@ void main() {
       return t;
     }
 
+    // Between games (round 3 of 6): the question under the table.
+    final mid = Tournament(TournamentConfig(
+      teams: [TeamSetup(name: 'Home', colorIndex: 0), TeamSetup(name: 'Away', colorIndex: 1)],
+      rounds: 6,
+    ));
+    for (final (h, a) in const [(3, 1), (0, 3), (3, 0)]) {
+      mid.recordRound(RoundResult(mode: GameModeId.clubConnections, points: {0: h, 1: a}));
+    }
+    mid.teaser = TeaserState(WarmUpCup.teaser)..halfTimeDone = true;
+    await shot(tester, 'teaser_between_games_live', RoundSummaryScreen(tournament: mid));
     await shot(tester, 'fulltime_teaser', RoundSummaryScreen(tournament: finished()));
     await shot(tester, 'fulltime_teaser_last_chance', RoundSummaryScreen(tournament: finished()), then: () async {
       await tester.tap(find.text('LAST CHANCE AT THE TEASER'));

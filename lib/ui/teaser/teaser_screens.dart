@@ -278,11 +278,18 @@ class _TeaserBetweenGamesState extends State<TeaserBetweenGames>
     final c = teaserController;
     if (c == null) return const SizedBox.shrink();
     if (!_open) {
-      // Full time has its own "Last chance" button.
-      if (!c.state.isOpen || widget.tournament.isFinished) return const SizedBox.shrink();
+      if (!c.state.isOpen) return const SizedBox.shrink();
+      // The question stays in view under the table, so nobody opens it just
+      // to remind themselves; full time has its own "Last chance" button.
       return Padding(
         padding: const EdgeInsets.only(bottom: 12),
-        child: TeaserChip(onPressed: () => _setOpen(true)),
+        child: Column(mainAxisSize: MainAxisSize.min, children: [
+          TeaserPrompt(question: c.teaser.question, prefix: c.teaser.prefix, compact: true),
+          if (!widget.tournament.isFinished) ...[
+            const SizedBox(height: 12),
+            TeaserChip(onPressed: () => _setOpen(true)),
+          ],
+        ]),
       );
     }
     return Container(

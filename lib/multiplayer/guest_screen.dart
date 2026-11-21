@@ -335,22 +335,16 @@ class _GuestGameState extends State<_GuestGame> with SingleTickerProviderStateMi
   /// The table after a round, or full time: the main phone's own screen.
   Widget _table(Map<String, Object?> v, int colour) {
     final full = v['full'] == true;
-    // Between games, an unsolved teaser: any phone can open it and buzz, as
-    // on the main phone - in the few seconds before the next game too.
+    // Between games, an unsolved teaser: the question under the table, as on
+    // the main phone, and "tap to answer" buzzes in - in the few seconds
+    // before the next game too.
     final teaser = asMap(v['teaser']);
     final canBuzz = [for (final t in asList(teaser['canBuzz'])) (t as num).toInt()];
     final key = '${v['round']}|${teaser['q']}';
     final chip = teaser.isNotEmpty && canBuzz.contains(widget.me.team);
-    if (chip && _teaserOpenOn == key) {
-      return Column(children: [
-        Expanded(child: _buzz(teaser, colour)),
-        TextButton(
-          onPressed: () => setState(() => _teaserOpenOn = null),
-          child: Text('NOT YET - KEEP THINKING', style: AppText.label(13)),
-        ),
-        const SizedBox(height: 8),
-      ]);
-    }
+    // Buzzed: waiting on the main phone (or typing already).
+    if (chip && _teaserOpenOn == key) return _buzz(teaser, colour);
+    final asked = asMap(teaser['question']);
     if (chip && _holdFor != key) {
       _holdFor = key;
       _holdFrom = DateTime.now();
@@ -360,13 +354,53 @@ class _GuestGameState extends State<_GuestGame> with SingleTickerProviderStateMi
       child: Column(children: [
         if (full) FullTimeHeader(data: v) else RoundTableHeader(data: v),
         Expanded(child: ListView(children: matchTableRows(v))),
+        if (asked['teaser'] is String)
+          Padding(
+            padding: const EdgeInsets.only(bottom: 12),
+            child: TeaserPrompt(
+                question: asked['teaser']! as String,
+                prefix: '${asked['prefix'] ?? 'NAME A PLAYER WHO…'}',
+                compact: true),
+          ),
         if (chip) ...[
-          TeaserChip(onPressed: () => setState(() => _teaserOpenOn = key)),
+          TeaserChip(onPressed: () {
+            setState(() => _teaserOpenOn = key);
+            _buzzIn('${teaser['q']}');
+          }),
           _NextGameIn(from: _holdFrom!),
-        ],
+        ] else if (teaser.isNotEmpty)
+          Text('YOUR TEAM’S HAD ITS GUESS', style: AppText.label(13)),
         if (full) Text('Thanks for playing!', style: AppText.label(14)),
       ]),
     );
+  }
+
+  /// Typing rather than speaking: the answer box comes up with the buzz.
+  bool get _types {
+    final voice = AppScope.of(context).voice;
+    return kIsWeb && (voice == null || !voice.enabled || voice.preferTyping);
+  }
+
+  void _buzzIn(String q) {
+    AppScope.of(context).haptic(HapticStrength.heavy);
+    // A player who types: the keyboard comes up with the buzz, so
+    // it's already there when the answer box appears.
+    if (_types) primeKeyboard();
+    setState(() => _buzzedOn = q);
+    widget.room.buzz(q);
+    // The main phone should take it within a second; if it
+    // hasn't (asleep, lost signal), let them buzz again.
+    Future.delayed(const Duration(seconds: 3), () {
+      if (!mounted || _buzzedOn != q) return;
+      final now = widget.room.view;
+      // (Between games the teaser sits inside the table.)
+      final v = now['kind'] == 'table' ? asMap(now['teaser']) : now;
+      if ('${v['q']}' == q && v['phase'] == 'open') {
+        setState(() => _buzzedOn = null);
+        ScaffoldMessenger.maybeOf(context)?.showSnackBar(const SnackBar(
+            content: Text('The main phone didn’t get that - keep it open and buzz again')));
+      }
+    });
   }
 
   /// The table's teaser, opened on this phone (which table: round and teaser).
@@ -472,8 +506,7 @@ class _GuestGameState extends State<_GuestGame> with SingleTickerProviderStateMi
     // lifts, the only moment an iPhone lets the keyboard open. If someone
     // else was first, it goes again (and the main phone ignores an answer
     // from a phone that hasn't got the turn).
-    final voice = s.voice;
-    final types = kIsWeb && (voice == null || !voice.enabled || voice.preferTyping);
+    final types = _types;
     // Only while this buzz is still waiting for the main phone: once it's
     // answered (wrong, and the steal is on), this team can't buzz again and
     // the box goes, so the phone shows the game again.
@@ -516,27 +549,7 @@ class _GuestGameState extends State<_GuestGame> with SingleTickerProviderStateMi
             colorIndex: colour,
             enabled: !buzzed,
             locked: false,
-            onBuzz: () {
-              s.haptic(HapticStrength.heavy);
-              // A player who types: the keyboard comes up with the buzz, so
-              // it's already there when the answer box appears.
-              if (types) primeKeyboard();
-              setState(() => _buzzedOn = q);
-              widget.room.buzz(q);
-              // The main phone should take it within a second; if it
-              // hasn't (asleep, lost signal), let them buzz again.
-              Future.delayed(const Duration(seconds: 3), () {
-                if (!mounted || _buzzedOn != q) return;
-                final now = widget.room.view;
-                // (Between games the teaser sits inside the table.)
-                final v = now['kind'] == 'table' ? asMap(now['teaser']) : now;
-                if ('${v['q']}' == q && v['phase'] == 'open') {
-                  setState(() => _buzzedOn = null);
-                  ScaffoldMessenger.maybeOf(context)?.showSnackBar(const SnackBar(
-                      content: Text('The main phone didn’t get that - keep it open and buzz again')));
-                }
-              });
-            },
+            onBuzz: () => _buzzIn(q),
           );
       // The teaser: a smaller buzzer under the question, like the main
       // phone's team buttons. Other games: it fills the rest of the screen.
