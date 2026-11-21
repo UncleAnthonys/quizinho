@@ -9,6 +9,7 @@ import '../../games/teaser/teaser_controller.dart';
 import '../../multiplayer/buzz_bridge.dart';
 import '../match_flow.dart';
 import '../widgets/common.dart';
+import '../widgets/match_table.dart' show MatchTable;
 import '../widgets/player_picker.dart' show answerTyping;
 import 'teaser_play.dart';
 import 'teaser_widgets.dart';
@@ -38,7 +39,7 @@ mixin TeaserRunner<W extends StatefulWidget> on State<W>, TickerProviderStateMix
     });
     final room = roomFor(t);
     if (room != null && s.isOpen) {
-      teaserBridge = BuzzBridge(
+      _makeBridge = () => teaserBridge = BuzzBridge(
         room: room,
         controller: c,
         tournament: t,
@@ -62,9 +63,27 @@ mixin TeaserRunner<W extends StatefulWidget> on State<W>, TickerProviderStateMix
           if (mounted) setState(() {});
         })
         ..start();
+      // Half-time puts it on the phones straight away; between games it
+      // waits until this phone opens the panel.
+      if (halfTime) startTeaserBridge();
     }
     setState(() => teaserController = c);
     startClock(c.advance);
+  }
+
+  VoidCallback? _makeBridge;
+
+  /// Joined phones get the teaser (and their buzzers).
+  void startTeaserBridge() {
+    if (teaserBridge == null) _makeBridge?.call();
+  }
+
+  /// Joined phones go back to the table.
+  void stopTeaserBridge(Tournament t) {
+    if (teaserBridge == null) return;
+    teaserBridge!.dispose();
+    teaserBridge = null;
+    roomFor(t)?.showTable(MatchTable.round(t));
   }
 
   /// Hook: the teaser moved on (buzzed, answered, solved, revealed).
@@ -234,6 +253,11 @@ class _TeaserBetweenGamesState extends State<TeaserBetweenGames>
 
   void _setOpen(bool open) {
     if (_open == open) return;
+    if (open) {
+      startTeaserBridge();
+    } else {
+      stopTeaserBridge(widget.tournament);
+    }
     setState(() => _open = open);
     widget.onOpenChanged(open);
   }
@@ -241,7 +265,7 @@ class _TeaserBetweenGamesState extends State<TeaserBetweenGames>
   @override
   void onTeaserPhase(BuzzPhase phase) {
     widget.onBusyChanged(phase == BuzzPhase.answering);
-    // A phone buzzed, or it's been solved/revealed: show it.
+    // Solved or revealed: show it.
     if (phase != BuzzPhase.open) _setOpen(true);
     if (phase == BuzzPhase.resolved && !widget.revealNow) widget.onResult();
   }
@@ -258,7 +282,8 @@ class _TeaserBetweenGamesState extends State<TeaserBetweenGames>
     final c = teaserController;
     if (c == null) return const SizedBox.shrink();
     if (!_open) {
-      if (!c.state.isOpen) return const SizedBox.shrink();
+      // Full time has its own "Last chance" button.
+      if (!c.state.isOpen || widget.tournament.isFinished) return const SizedBox.shrink();
       return Padding(
         padding: const EdgeInsets.only(bottom: 12),
         child: TeaserChip(onPressed: () => _setOpen(true)),

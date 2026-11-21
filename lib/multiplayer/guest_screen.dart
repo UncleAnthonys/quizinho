@@ -21,7 +21,7 @@ import '../games/top10/top10_screen.dart' show Top10Layout;
 import '../games/career_path/career_path_screen.dart' show CareerTrail;
 import '../games/club_connections/club_connections_screen.dart' show ClubsCard;
 import '../ui/screens/free_kick_screen.dart' show FreeKickMirror;
-import '../ui/teaser/teaser_widgets.dart' show TeaserPrompt;
+import '../ui/teaser/teaser_widgets.dart' show TeaserPrompt, TeaserReveal;
 import '../ui/widgets/buzzer_pad.dart' show TeamBuzzer;
 import '../ui/widgets/common.dart';
 import '../ui/widgets/match_table.dart';
@@ -535,6 +535,17 @@ class _GuestGameState extends State<_GuestGame> with SingleTickerProviderStateMi
           : teaser
               ? 'YOUR TEAM’S HAD ITS GUESS'
               : 'LOCKED OUT - WAIT FOR THE STEAL');
+    } else if (teaser && result.isNotEmpty && result['scored'] != true) {
+      // Nobody got the teaser: the main phone's reveal - the question, then the answers.
+      final qv = asMap(v['question']);
+      action = Padding(
+        padding: const EdgeInsets.fromLTRB(16, 20, 16, 16),
+        child: TeaserReveal(
+          question: '${qv['teaser'] ?? ''}',
+          prefix: '${qv['prefix'] ?? 'NAME A PLAYER WHO…'}',
+          answers: [for (final n in asList(result['reveal'])) '$n'],
+        ),
+      );
     } else if (result.isNotEmpty) {
       final scorer = (result['team'] as num?)?.toInt();
       final teamsV = asList(v['teams']);
@@ -594,6 +605,8 @@ class _GuestGameState extends State<_GuestGame> with SingleTickerProviderStateMi
     if (teaser) {
       final qv = asMap(v['question']);
       final clockOn = phase == 'answering' || (phase == 'open' && qv['noClock'] != true);
+      // The reveal has its own heading and question card.
+      final revealed = result.isNotEmpty && result['scored'] != true;
       return ValueListenableBuilder<bool>(
         valueListenable: answerTyping,
         builder: (context, typing, _) {
@@ -601,16 +614,17 @@ class _GuestGameState extends State<_GuestGame> with SingleTickerProviderStateMi
           return CustomScrollView(slivers: [
             SliverList(
               delegate: SliverChildListDelegate([
-                Collapse(
-                  hidden: folded,
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(18, 14, 18, 10),
-                    child: Column(children: [
-                      if (qv['halfTime'] == true) Text('HALF-TIME', style: AppText.label(16, color: Palette.gold)),
-                      Text('THE TEASER', style: AppText.headline(44, color: Palette.gold)),
-                    ]),
+                if (!revealed)
+                  Collapse(
+                    hidden: folded,
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(18, 14, 18, 10),
+                      child: Column(children: [
+                        if (qv['halfTime'] == true) Text('HALF-TIME', style: AppText.label(16, color: Palette.gold)),
+                        Text('THE TEASER', style: AppText.headline(44, color: Palette.gold)),
+                      ]),
+                    ),
                   ),
-                ),
                 if (clockOn)
                   Padding(
                     padding: EdgeInsets.fromLTRB(18, folded ? 12 : 0, 18, 8),
@@ -619,7 +633,7 @@ class _GuestGameState extends State<_GuestGame> with SingleTickerProviderStateMi
                       clock,
                     ]),
                   ),
-                Collapse(hidden: folded, child: question),
+                if (!revealed) Collapse(hidden: folded, child: question),
               ]),
             ),
             SliverFillRemaining(hasScrollBody: false, child: action),
