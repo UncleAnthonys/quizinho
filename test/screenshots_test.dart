@@ -1024,7 +1024,10 @@ void main() {
       mid.recordRound(RoundResult(mode: GameModeId.clubConnections, points: {0: h, 1: a}));
     }
     mid.teaser = TeaserState(WarmUpCup.teaser)..halfTimeDone = true;
-    await shot(tester, 'teaser_between_games_live', RoundSummaryScreen(tournament: mid));
+    await shot(tester, 'teaser_between_games_live', RoundSummaryScreen(tournament: mid), then: () async {
+      await tester.runAsync(() => Future<void>.delayed(const Duration(milliseconds: 200)));
+      await tester.pump(const Duration(milliseconds: 500));
+    });
     await shot(tester, 'fulltime_teaser', RoundSummaryScreen(tournament: finished()));
     await shot(tester, 'fulltime_teaser_last_chance', RoundSummaryScreen(tournament: finished()), then: () async {
       await tester.tap(find.text('LAST CHANCE AT THE TEASER'));
