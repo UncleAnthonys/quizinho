@@ -136,7 +136,8 @@ class TeaserPlay extends StatelessWidget {
   Widget _revealed(BuildContext context) {
     final c = controller;
     return Column(mainAxisSize: MainAxisSize.min, children: [
-      TeaserReveal(question: c.teaser.question, answers: c.teaser.answerNames, showQuestion: showQuestion),
+      TeaserReveal(
+          question: c.teaser.question, prefix: c.teaser.prefix, answers: c.teaser.answerNames, showQuestion: showQuestion),
       // The last wrong guess, in case our data missed it: small, under the answer.
       if (c.lastMiss != null && c.canOverrule) ...[const SizedBox(height: 12), _countIt()],
     ]);

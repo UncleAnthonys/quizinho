@@ -179,8 +179,14 @@ class TeaserBuzzed extends StatelessWidget {
 /// Nobody got it (every team guessed wrong, or full time): the answers.
 class TeaserReveal extends StatelessWidget {
   const TeaserReveal(
-      {super.key, required this.question, required this.answers, this.headline = 'NOBODY GOT IT', this.showQuestion = true});
+      {super.key,
+      required this.question,
+      required this.answers,
+      this.prefix = 'NAME A PLAYER WHO…',
+      this.headline = 'NOBODY GOT IT',
+      this.showQuestion = true});
   final String question;
+  final String prefix;
 
   /// False where the question is already on screen (half-time).
   final bool showQuestion;
@@ -192,7 +198,7 @@ class TeaserReveal extends StatelessWidget {
         Text(headline, style: AppText.headline(34, color: Palette.gold)),
         const SizedBox(height: 10),
         if (showQuestion) ...[
-          TeaserPrompt(question: question, compact: true),
+          TeaserPrompt(question: question, prefix: prefix, compact: true),
           const SizedBox(height: 14),
         ],
         Text(answers.length == 1 ? 'THE ANSWER' : 'ANY OF THESE', style: AppText.label(14)),

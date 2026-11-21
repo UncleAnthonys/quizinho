@@ -973,6 +973,14 @@ void main() {
     answerTyping.value = true;
     await shot(tester, 'guest_teaser_typing', phone(teaser('answering')));
     answerTyping.value = false;
+    await shot(
+        tester,
+        'guest_teaser_reveal',
+        phone({
+          ...teaser('resolved'),
+          'question': {'teaser': 'played in El Clásico, the Manchester derby AND the North London derby', 'prefix': 'NAME A PLAYER WHO…', 'worth': 3, 'noClock': true},
+          'result': {'scored': false, 'reveal': ['Emmanuel Adebayor', 'Carlos Tevez']},
+        }));
   }, skip: !_shots);
 
   // Full time with the teaser unsolved: one last go, or straight to the answers.
