@@ -446,6 +446,10 @@ CAREER_EASY_REACH = 75
 CAREER_EASY_CLUBS = 4
 CAREER_EASY_SINCE = 1990
 CAREER_BRITISH_LIFT = 12
+# Hard and Expert need a spell in one of these (England's top clubs, Spain,
+# Germany); Celtic, Rangers and Hibs share England's country code.
+BIG_THREE = {"GBR", "ENG", "ESP", "GER"}
+SCOTTISH = {"Q19593", "Q19597", "Q192597"}
 CAREER_HARD_SCORE = 50
 CAREER_EXPERT_SCORE = 40
 
@@ -609,6 +613,7 @@ def slug_id(name: str) -> str:
 
 
 def generate_career_challenges(players, clubs):
+    career_levels = load("career_levels.json")["levels"]
     out = []
     for pid, p in players.items():
         distinct = {s["club"] for s in p["spells"]}
@@ -650,6 +655,14 @@ def generate_career_challenges(players, clubs):
             if diff >= 3 and not p.get("women"):
                 british = any(clubs[s["club"]]["country"] in ("GBR", "ENG", "SCO", "WAL") and memorable_spell(p, s["club"])
                               for s in p["spells"])
+                # A real spell in the Premier League, La Liga or the Bundesliga:
+                # a career all in Italy (Bonaventura) is remembered for one club,
+                # not the path.
+                big_three = any(clubs[sp["club"]]["country"] in BIG_THREE and clubs[sp["club"]]["fame"] >= 3
+                                and sp["club"] not in SCOTTISH and memorable_spell(p, sp["club"])
+                                for sp in p["spells"])
+                if not big_three:
+                    continue
                 score = (p.get("reach") or 0) + (CAREER_BRITISH_LIFT if british else 0)
                 if score >= CAREER_HARD_SCORE:
                     diff = 3
@@ -657,6 +670,7 @@ def generate_career_challenges(players, clubs):
                     diff = 4
                 else:
                     continue
+            diff = career_levels.get(pid, diff)
             out.append({"player": pid, "clues": len(p["spells"]), "difficulty": diff,
                         "eras": career_mask(p["spells"]) or 31})
     return out

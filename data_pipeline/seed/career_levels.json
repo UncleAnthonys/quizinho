@@ -1,0 +1,10 @@
+{
+  "_comment": "Career Path level by hand, over the generated one (1 Easy, 2 Medium, 3 Hard, 4 Expert). Reviewed in play.",
+  "levels": {
+    "edwin-van-der-sar": 2,
+    "franck-ribery": 2,
+    "nemanja-vidic": 2,
+    "kingsley-coman": 2,
+    "morgan-gibbs-white": 3
+  }
+}
