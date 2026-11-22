@@ -451,6 +451,13 @@ CAREER_BRITISH_LIFT = 18
 BIG_THREE = {"GBR", "ENG", "ESP", "GER"}
 SCOTTISH = {"Q19593", "Q19597", "Q192597"}
 CAREER_BIG_THREE_APPS = 50
+CAREER_MIN_CLUBS_HARD = 4
+# The biggest clubs in the world: a recent move to one makes a player Medium.
+GIANTS = {
+    "Q1130849", "Q18552", "Q18656", "Q9617", "Q9616", "Q50602", "Q18741",  # Liverpool, Man Utd, Arsenal, Chelsea, City, Spurs
+    "Q8682", "Q7156", "Q8701", "Q15789", "Q41420",  # Real, Barça, Atlético, Bayern, Dortmund
+    "Q1422", "Q1543", "Q631", "Q483020",  # Juventus, Milan, Inter, PSG
+}
 CAREER_HARD_SCORE = 56
 CAREER_EXPERT_SCORE = 48
 
@@ -653,6 +660,17 @@ def generate_career_challenges(players, clubs):
             # covered (Wikipedias), with a lift for a real spell in Britain -
             # Pennant or Rickie Lambert over a Hungarian journeyman.
             # (Women's football is covered less widely: its pool stays as it was.)
+            if diff >= 3 and not p.get("women"):
+                # Enough clues: four clubs or more (Tel's three is over too fast),
+                # and a career mostly in Europe (not Japan, then Marseille, then back).
+                europe = sum(1 for sp in p["spells"] if clubs[sp["club"]]["country"] in EUROPE)
+                # A recent big move to one of the giants (Eze, Palace to Arsenal;
+                # Mbeumo, Brentford to United): everyone's heard of it - Medium.
+                if any(sp["club"] in GIANTS and sp["end"] is None and (sp["start"] or 0) >= CURRENT_YEAR - 6
+                       and not sp["loan"] for sp in p["spells"]) and europe * 2 >= len(p["spells"]):
+                    diff = 2
+                elif len(distinct) < CAREER_MIN_CLUBS_HARD or europe * 2 < len(p["spells"]):
+                    continue
             if diff >= 3 and not p.get("women"):
                 british = any(clubs[s["club"]]["country"] in ("GBR", "ENG", "SCO", "WAL") and memorable_spell(p, s["club"])
                               for s in p["spells"])
