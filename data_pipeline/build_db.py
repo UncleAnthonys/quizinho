@@ -438,6 +438,11 @@ EUROPE = TOP5 | {
 DATA_STATUS = "wikidata" if "GENERATED" in (SEED / "players.json").read_text(encoding="utf-8")[:300] else "demo_unverified"
 CONNECTION_MIN_ANSWER_FAME = 2
 CAREER_MIN_FAME = 2
+# Career Path, Hard and Expert: Wikipedias covering the player, plus a lift for
+# a real spell in Britain. Below the Expert line, nobody would get them.
+CAREER_BRITISH_LIFT = 12
+CAREER_HARD_SCORE = 50
+CAREER_EXPERT_SCORE = 40
 
 
 def generate_connections(clubs, players):
@@ -620,6 +625,20 @@ def generate_career_challenges(players, clubs):
                 # UK group follows. A career away from Europe (Costa Rica,
                 # the J-League) isn't a career path at all.
                 elif europe * 2 >= len(p["spells"]) and known:
+                    diff = 4
+                else:
+                    continue
+            # Hard and Expert: still players people know. How widely they're
+            # covered (Wikipedias), with a lift for a real spell in Britain -
+            # Pennant or Rickie Lambert over a Hungarian journeyman.
+            # (Women's football is covered less widely: its pool stays as it was.)
+            if diff >= 3 and not p.get("women"):
+                british = any(clubs[s["club"]]["country"] in ("GBR", "ENG", "SCO", "WAL") and memorable_spell(p, s["club"])
+                              for s in p["spells"])
+                score = (p.get("reach") or 0) + (CAREER_BRITISH_LIFT if british else 0)
+                if score >= CAREER_HARD_SCORE:
+                    diff = 3
+                elif score >= CAREER_EXPERT_SCORE:
                     diff = 4
                 else:
                     continue
