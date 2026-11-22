@@ -289,12 +289,22 @@ class KickSource {
     _used.add(cat.id);
     final known = [
       for (final e in cat.values.entries)
-        if (_repo.players.byId(e.key) case final p? when p.fame >= 4 && e.value.$1 >= 40) (p, e.value.$1, e.value.$2),
+        if (_repo.players.byId(e.key) case final p? when p.fame >= 4 && e.value.$1 >= (_national(cat) ? 20 : 40))
+          (p, e.value.$1, e.value.$2),
     ];
     return known.isEmpty ? null : (cat, known);
   }
 
   String _clubOf(CheckoutCategory cat) => _up(cat.prompt.replaceFirst(RegExp(r'^League apps \+ goals for '), ''));
+
+  /// A national team's 501 ("England caps + goals"): caps, not league games.
+  bool _national(CheckoutCategory cat) => !cat.id.startsWith('501:Q');
+  String _country(CheckoutCategory cat) => _up(cat.prompt.split(' caps').first);
+
+  /// "LEAGUE GAMES FOR STOKE CITY" / "ENGLAND CAPS"; goals likewise.
+  String _stat(CheckoutCategory cat, {required bool goals}) => _national(cat)
+      ? '${_country(cat)} ${goals ? 'GOALS' : 'CAPS'}'
+      : '${goals ? 'LEAGUE GOALS' : 'LEAGUE GAMES'} FOR ${_clubOf(cat)}';
 
   Future<PenaltyKick?> _overUnder() async {
     final found = await _clubNumbers();
@@ -320,11 +330,11 @@ class KickSource {
     _history.add('pens', 'ou:${cat.id}:${player.id}:${goals ? 'g' : 'a'}');
     return PenaltyKick(
       kind: KickKind.overUnder,
-      ask: '${goals ? 'LEAGUE GOALS' : 'LEAGUE GAMES'} FOR ${_clubOf(cat)}',
+      ask: _stat(cat, goals: goals),
       lines: [_up(player.name), 'OVER OR UNDER $line?'],
       options: ['OVER $line', 'UNDER $line'],
       correctOption: real > line ? 0 : 1,
-      reveal: goals ? '$real GOALS' : '$real GAMES',
+      reveal: goals ? '$real GOALS' : (_national(cat) ? '$real CAPS' : '$real GAMES'),
     );
   }
 
@@ -345,12 +355,12 @@ class KickSource {
       _history.add('pens', key);
       return _either(
         goals ? KickKind.whoScoredMore : KickKind.whoPlayedMore,
-        goals ? 'MORE LEAGUE GOALS FOR ${_clubOf(cat)}' : 'MORE LEAGUE GAMES FOR ${_clubOf(cat)}',
+        'MORE ${_stat(cat, goals: goals)}',
         a.$1,
         va,
         b.$1,
         vb,
-        goals ? 'GOALS' : 'GAMES',
+        goals ? 'GOALS' : (_national(cat) ? 'CAPS' : 'GAMES'),
       );
     }
     return null;
