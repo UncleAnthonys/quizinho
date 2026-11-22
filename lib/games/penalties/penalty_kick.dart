@@ -356,7 +356,8 @@ class KickSource {
       final a = players[_random.nextInt(players.length)];
       final b = players[_random.nextInt(players.length)];
       final va = goals ? a.$3 : a.$2, vb = goals ? b.$3 : b.$2;
-      if (a.$1.id == b.$1.id || !_clearGap(va, vb, goals: goals) || (goals && va + vb < 5)) continue;
+      // Goals: at least one of them a real scorer (not 6 v 9).
+      if (a.$1.id == b.$1.id || !_clearGap(va, vb, goals: goals) || (goals && max(va, vb) < 10)) continue;
       final key = 'who:${goals ? 'g' : 'a'}:${cat.id}:${([a.$1.id, b.$1.id]..sort()).join(':')}';
       if (seen.containsKey(key)) continue;
       _history.add('pens', key);
@@ -380,7 +381,8 @@ class KickSource {
   Future<PenaltyKick?> _careerGoals() async {
     _withTotals ??= [
       for (final p in _repo.players.all)
-        if (p.fame >= 4 && p.leagueGoals != null && p.women == (genders == 2)) p,
+        // A proper career's worth of games (not a cameo, or someone who isn't really a footballer).
+        if (p.fame >= 4 && p.leagueGoals != null && (p.leagueApps ?? 0) >= 100 && p.women == (genders == 2)) p,
     ];
     final pool = _withTotals!;
     if (pool.length < 2) return null;
@@ -399,19 +401,13 @@ class KickSource {
 
   /// Two players to tap between; the reveal gives both numbers.
   PenaltyKick _either(KickKind kind, String ask, Player a, int va, Player b, int vb, String unit) {
-    // The surname, with its "van" or "del" (van Bronckhorst, del Bosque).
-    String short(Player p) {
-      final w = p.name.split(' ');
-      final n = w.length > 2 && w[w.length - 2].toLowerCase() == w[w.length - 2] ? w.sublist(w.length - 2) : [w.last];
-      return _up(n.join(' '));
-    }
-    // Same surname (the Nevilles): full names.
-    final full = short(a) == short(b);
-    final na = full ? _up(a.name) : short(a), nb = full ? _up(b.name) : short(b);
+    // Full names on the buttons (one per row): "Becker" for Alisson, "Bruyne"
+    // for De Bruyne - surnames go wrong too easily.
+    final na = _up(a.name), nb = _up(b.name);
     return PenaltyKick(
       kind: kind,
       ask: ask,
-      lines: [_up(a.name), 'OR', _up(b.name)],
+      lines: const [],
       options: [na, nb],
       correctOption: va > vb ? 0 : 1,
       reveal: '$na $va · $nb $vb $unit',

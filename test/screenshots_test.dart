@@ -1167,8 +1167,7 @@ void main() {
           ...kicking,
           'kick': {
             'ask': 'MORE LEAGUE GOALS IN THEIR CAREER',
-            'lines': ['JOHN TERRY', 'OR', 'TRENT ALEXANDER-ARNOLD'],
-            'options': ['TERRY', 'ALEXANDER-ARNOLD'],
+            'options': ['JOHN TERRY', 'TRENT ALEXANDER-ARNOLD'],
           },
         }, tap: true));
     await shot(

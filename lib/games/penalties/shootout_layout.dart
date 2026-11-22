@@ -167,7 +167,26 @@ class ShootoutLayout extends StatelessWidget {
         if (options.isNotEmpty) ...[
           if (clock != null) clock!,
           const SizedBox(height: 12),
-          if (onChoose != null)
+          // Two players: a full-width button each, so full names fit. Watching
+          // (not their kick): the same buttons, greyed, so everyone sees the choice.
+          if (options.length == 2 && !options.first.startsWith('OVER'))
+            Column(children: [
+              for (final (i, o) in options.indexed) ...[
+                if (i > 0) ...[
+                  const SizedBox(height: 8),
+                  Text('OR', style: AppText.label(14, color: Palette.muted)),
+                  const SizedBox(height: 8),
+                ],
+                BigButton(
+                  label: o,
+                  height: 72,
+                  color: i == 0 ? Palette.yellow : Palette.blueBright,
+                  textColor: i == 0 ? Palette.pitchDeep : Colors.white,
+                  onPressed: onChoose == null ? null : () => onChoose!(i),
+                ),
+              ],
+            ])
+          else
             Row(children: [
               for (final (i, o) in options.indexed) ...[
                 if (i > 0) const SizedBox(width: 12),
@@ -178,13 +197,12 @@ class ShootoutLayout extends StatelessWidget {
                     // Two: one each colour; three (a score): all alike, so none stands out.
                     color: i == 0 || options.length > 2 ? Palette.yellow : Palette.blueBright,
                     textColor: i == 0 || options.length > 2 ? Palette.pitchDeep : Colors.white,
-                    onPressed: () => onChoose!(i),
+                    onPressed: onChoose == null ? null : () => onChoose!(i),
                   ),
                 ),
               ],
-            ])
-          else if (answerBox != null)
-            answerBox!,
+            ]),
+          if (onChoose == null && answerBox != null) ...[const SizedBox(height: 10), answerBox!],
         ] else if (answerBox != null)
           answerBox!,
       ]),
