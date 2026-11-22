@@ -75,7 +75,10 @@ class _Top10ScreenState extends State<Top10Screen> with TickerProviderStateMixin
       _turnPlayer = phoneTurnPlayer(_t, c.currentTeam);
     }
     _syncPhones(c);
-    handleEvent(c.eventSerial, c.lastEvent, miss: c.misses.isEmpty ? null : c.misses.last);
+    handleEvent(c.eventSerial, c.lastEvent,
+        miss: c.misses.isEmpty ? null : c.misses.last,
+        clock: c.secondsLeft,
+        matchStart: widget.round.tournament.rounds.isEmpty);
     if (c.clockRunning) {
       final sec = c.secondsLeft.ceil();
       if (sec != _lastSecond) {

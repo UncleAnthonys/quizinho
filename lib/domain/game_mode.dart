@@ -30,7 +30,7 @@ enum GameModeId {
     rules: [
       'Name one player from the starting XI, then the bomb passes on.',
       'Wrong answer or time up: the bomb goes off and you lose a life.',
-      'Most named wins the round: +3. Last team left? Keep going until you’re ahead - level is a draw.',
+      'Most named wins the round: +3. Last team left? Keep going until you’re ahead - level is a draw, +1 each.',
     ],
     whoPlays: 'Teams take turns - on your own phone if you’ve joined, otherwise pass the phone to whoever is named.',
   ),

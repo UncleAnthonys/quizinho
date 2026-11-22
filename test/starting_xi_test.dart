@@ -78,6 +78,7 @@ void main() {
     c.continueAfterExplosion();
     expect(c.phase, BombPhase.finished);
     expect(c.bonusTeams, [0, 1]); // a draw
+    expect(c.result().points, {0: StartingXiController.drawPoints, 1: StartingXiController.drawPoints});
   });
 
   test('last team left goes ahead on names: wins it there and then', () {

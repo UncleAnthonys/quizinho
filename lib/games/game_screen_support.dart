@@ -6,6 +6,7 @@ import 'package:flutter/services.dart' show DeviceOrientation, SystemChrome;
 import 'package:flutter/widgets.dart';
 
 import '../core/app_services.dart';
+import '../core/commentary.dart' show PunditMoment;
 import '../core/sound_service.dart';
 import '../domain/tournament.dart';
 import '../multiplayer/room.dart' show HostRoom;
@@ -29,6 +30,8 @@ mixin GameScreenSupport<W extends StatefulWidget> on State<W>, TickerProviderSta
   String? commentaryText;
   Timer? _commentaryTimer;
   int _seenSerial = 0;
+  double? _clockSeen;
+  bool _firstSaid = false;
 
   AppServices get services => AppScope.read(context);
 
@@ -61,12 +64,18 @@ mixin GameScreenSupport<W extends StatefulWidget> on State<W>, TickerProviderSta
   }
 
   /// Call from the controller listener; reacts once per new event.
-  /// [clip]: a pundit line for the moment, after the sound effect.
-  void handleEvent(int serial, GameEvent? event, {String? miss, Clip? clip}) {
+  /// [moment]: a pundit line for the moment, in place of the usual one.
+  /// [clock]: seconds left on the go, every call (a right answer with 3 or
+  /// fewer left gets its own line). [matchStart]: no rounds played yet (the
+  /// match's first right answer gets its own line). [correctLine]: this
+  /// screen's own line for a right answer.
+  void handleEvent(int serial, GameEvent? event,
+      {String? miss, PunditMoment? moment, double? clock, bool matchStart = false, String? correctLine}) {
+    final clockBefore = _clockSeen;
+    _clockSeen = clock;
     if (event == null || serial == _seenSerial) return;
     _seenSerial = serial;
     final s = services;
-    if (clip != null) s.sound.playClip(clip, delay: const Duration(milliseconds: 700));
     // (A wrong answer shakes the question card - MissShake, in each game's
     // view - and a time-out is plain from the clock: no message.)
     switch (event) {
@@ -97,8 +106,16 @@ mixin GameScreenSupport<W extends StatefulWidget> on State<W>, TickerProviderSta
         s.sound.play(Sfx.whistle);
         s.sound.play(Sfx.cheer);
     }
-    if (clip != null) {
-      say(clip.line); // the pundit's line, in place of the usual one
+    final late = clockBefore != null && clockBefore > 0 && clockBefore <= 3;
+    if (moment != null) {
+      say(s.commentary.moment(moment));
+    } else if (event == GameEvent.correct && correctLine != null) {
+      say(correctLine);
+    } else if (event == GameEvent.correct && matchStart && !_firstSaid) {
+      _firstSaid = true;
+      say(s.commentary.first());
+    } else if (event == GameEvent.correct && late) {
+      say(s.commentary.late());
     } else if (event == GameEvent.buzz) {
       say(s.commentary.maybeBuzzLine());
     } else if (event != GameEvent.reveal) {

@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/services.dart' show AssetManifest, rootBundle;
 
 import 'app_settings.dart';
 import 'web_sfx.dart';
@@ -27,44 +26,6 @@ enum Sfx {
   const Sfx(this.file);
   final String file;
   String get asset => 'sounds/$file.wav';
-}
-
-/// Pundit lines for big moments. Placeholders until a voice actor records
-/// them: only TestFlight builds carry the files (see codemagic.yaml), so
-/// elsewhere playing one silently does nothing.
-enum Clip {
-  /// Kick-off: "I would love it if we beat them".
-  keegan('keegan'),
-
-  /// Nobody even tried an obvious one: "That is a bad one".
-  neville('neville'),
-
-  /// Final whistle: "We'll have a look, course we'll have a look".
-  mcmanaman('mcmanaman'),
-
-  /// Face-off, both missed an obvious one: "Leave the football before the football leaves you".
-  carragher('carragher'),
-
-  /// A team tried and missed an obvious one: "The game's gone".
-  gamesGone('games_gone'),
-
-  /// Same team wrong twice in a row: "It can't go on like this, can it? It can."
-  mccarthy('mccarthy');
-
-  const Clip(this.file);
-  final String file;
-
-  /// The line on screen with the clip (in the yellow commentary banner), and
-  /// on its own where the clip isn't bundled.
-  String get line => switch (this) {
-        Clip.keegan => 'I would love it if we beat them. LOVE it!',
-        Clip.neville => 'That is a bad one.',
-        Clip.mcmanaman => 'We’ll have a look, course we’ll have a look.',
-        Clip.carragher => 'Leave the football before the football leaves you… the football’s left him.',
-        Clip.gamesGone => 'The game’s gone.',
-        Clip.mccarthy => 'It can’t go on like this, can it? …It can.',
-      };
-  String get asset => 'clips/$file.m4a';
 }
 
 /// Fire-and-forget sound effects from bundled files (instant, offline).
@@ -135,72 +96,14 @@ class SoundService {
     }
   }
 
-  AudioPlayer? _clipPlayer;
-
-  /// How many pundit clips this build carries (0 = not a TestFlight build
-  /// with the clips unpacked).
-  Future<int> clipsInBuild() async {
-    try {
-      final manifest = await AssetManifest.loadFromAssetBundle(rootBundle);
-      return manifest.listAssets().where((a) => a.startsWith('assets/clips/') && a.endsWith('.m4a')).length;
-    } catch (_) {
-      return 0;
-    }
-  }
-
-  /// Settings → Test sounds: a whistle, then every pundit clip in turn.
-  Future<void> test() async {
-    play(Sfx.whistle);
-    await Future<void>.delayed(const Duration(milliseconds: 1200));
-    for (final c in Clip.values) {
-      _clipPlayed.clear();
-      _lastClip = null;
-      await _playClipNow(c);
-      await Future<void>.delayed(const Duration(milliseconds: 400));
-    }
-  }
-
-  /// True while a pundit clip plays: sound effects stay quiet under it.
-  bool _clipPlaying = false;
-  final Map<Clip, DateTime> _clipPlayed = {};
-  DateTime? _lastClip;
-
-  /// A pundit line, at most one at a time and not the same line twice in a
-  /// minute, so they stay a treat. Off with sound or commentary.
-  void playClip(Clip c, {Duration delay = Duration.zero}) {
-    if (!_settings.soundOn || !_settings.commentaryOn) return;
-    final now = DateTime.now();
-    final last = _clipPlayed[c];
-    if (last != null && now.difference(last) < const Duration(seconds: 60)) return;
-    if (_lastClip != null && now.difference(_lastClip!) < const Duration(seconds: 6)) return;
-    _clipPlayed[c] = now;
-    _lastClip = now;
-    unawaited(Future.delayed(delay, () => _playClipNow(c)));
-  }
-
-  /// Plays [c] and completes when it has finished (or failed).
-  Future<void> _playClipNow(Clip c) async {
-    if (!_settings.soundOn || !_settings.commentaryOn) return;
-    try {
-      final p = _clipPlayer ??= AudioPlayer()..setReleaseMode(ReleaseMode.stop);
-      await p.stop();
-      final done = p.onPlayerComplete.first;
-      _clipPlaying = true;
-      onPlay?.call(c.asset, 1);
-      await p.play(AssetSource(c.asset));
-      await done.timeout(const Duration(seconds: 12), onTimeout: () {});
-    } catch (e) {
-      debugPrint('Clip ${c.file} unavailable: $e');
-    } finally {
-      _clipPlaying = false;
-    }
-  }
+  /// Settings → Test sounds: the whistle.
+  void test() => play(Sfx.whistle);
 
   /// Told about every sound played (the demo video adds them back in later).
   static void Function(String asset, double volume)? onPlay;
 
   void play(Sfx s, {double volume = 1.0}) {
-    if (!_settings.soundOn || _clipPlaying) return;
+    if (!_settings.soundOn) return;
     onPlay?.call(s.asset, volume);
     if (_web?.play(s.file, volume) ?? false) return;
     final pool = _pools[s];

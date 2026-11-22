@@ -50,7 +50,6 @@ flutter:
     - assets/sounds/
     - assets/packs/
     - assets/voice/
-    - assets/clips/
 
   fonts:
     - family: BarlowCondensed

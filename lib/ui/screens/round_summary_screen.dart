@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
+import '../../core/app_services.dart';
 import '../../core/theme.dart';
 import '../../domain/tournament.dart';
 import '../match_flow.dart';
@@ -62,10 +63,26 @@ class _RoundSummaryScreenState extends State<RoundSummaryScreen> {
 
   Tournament get t => widget.tournament;
 
+  /// The pundit on the moment of the match (a late winner, a thrashing,
+  /// squeaky bum time), over the table's title for a few seconds.
+  String? _line;
+  Timer? _lineTimer;
+
   @override
   void initState() {
     super.initState();
     t.addListener(_changed);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      final s = AppScope.read(context);
+      if (!s.settings.commentaryOn) return;
+      final line = s.commentary.afterRound(t);
+      if (line == null) return;
+      setState(() => _line = line);
+      _lineTimer = Timer(const Duration(milliseconds: 3500), () {
+        if (mounted) setState(() => _line = null);
+      });
+    });
     if (t.teaserOpen && !t.isFinished) {
       _hold = 5;
       _holdTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
@@ -82,6 +99,7 @@ class _RoundSummaryScreenState extends State<RoundSummaryScreen> {
 
   @override
   void dispose() {
+    _lineTimer?.cancel();
     _holdTimer?.cancel();
     _lastChanceTimer?.cancel();
     t.removeListener(_changed);
@@ -174,7 +192,7 @@ class _RoundSummaryScreenState extends State<RoundSummaryScreen> {
               if (_teaserOpen && !_teaserResult)
                 Expanded(child: SingleChildScrollView(child: teaser))
               else ...[
-                RoundTableHeader(data: table),
+                RoundTableHeader(data: table, commentary: _line),
                 if (_teaserResult)
                   Expanded(child: ListView(children: [...rows, if (teaser != null) teaser]))
                 else ...[

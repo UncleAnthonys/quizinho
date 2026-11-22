@@ -156,7 +156,7 @@ class _TicTacToeScreenState extends State<TicTacToeScreen>
       _turnPlayer = phoneTurnPlayer(_t, c.currentTeam);
     }
     _syncPhones(c);
-    handleEvent(c.eventSerial, c.lastEvent);
+    handleEvent(c.eventSerial, c.lastEvent, clock: c.secondsLeft, matchStart: widget.round.tournament.rounds.isEmpty);
     if (c.clockRunning) {
       final sec = c.secondsLeft.ceil();
       if (sec != _lastSecond) {

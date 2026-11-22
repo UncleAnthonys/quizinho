@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../core/app_services.dart';
-import '../core/sound_service.dart';
+import '../core/commentary.dart' show PunditMoment;
 import '../core/theme.dart';
 import '../domain/game_mode.dart';
 import '../domain/tournament.dart';
@@ -684,16 +684,16 @@ class FaceOffTracker {
 /// an obvious answer missed (face-off pair → Carragher; a team tried and failed
 /// → "the game's gone"; nobody even buzzed → Neville), or a team's second
 /// wrong answer in a row (McCarthy).
-Clip? punditClip(BuzzRaceController c, {required bool faceOff}) {
+PunditMoment? punditMoment(BuzzRaceController c, {required bool faceOff}) {
   final e = c.lastEvent;
   final missedIt = c.phase == BuzzPhase.resolved && !(c.outcome?.scored ?? false) &&
       (e == GameEvent.nobodyGotIt || e == GameEvent.timeUp);
   if (missedIt && c.currentIsObvious) {
-    if (faceOff) return Clip.carragher;
-    return c.lockedOut.isNotEmpty ? Clip.gamesGone : Clip.neville;
+    if (faceOff) return PunditMoment.faceOffMiss;
+    return c.lockedOut.isNotEmpty ? PunditMoment.triedAndMissed : PunditMoment.nobodyTried;
   }
   final wrongNow = e == GameEvent.wrong || (e == GameEvent.timeUp && c.phase != BuzzPhase.resolved) || missedIt;
-  if (wrongNow && c.lastWrongStreak == 2) return Clip.mccarthy;
+  if (wrongNow && c.lastWrongStreak == 2) return PunditMoment.wrongAgain;
   return null;
 }
 

@@ -44,6 +44,12 @@ class StartingXiController extends ChangeNotifier {
   /// like every other game. Names still count towards Player of the Match.
   static const int winPoints = 3;
 
+  /// Level on names: a draw, a point each.
+  static const int drawPoints = 1;
+
+  /// What each team in [bonusTeams] gets: the win, or a point for a draw.
+  int get bonusPoints => bonusTeams.length > 1 ? drawPoints : winPoints;
+
   final Map<int, int> livesLeft = {};
   final Map<int, int> correctByTeam = {};
 
@@ -128,7 +134,7 @@ class StartingXiController extends ChangeNotifier {
   RoundResult result() {
     final pts = <int, int>{};
     for (var t = 0; t < teamCount; t++) {
-      pts[t] = bonusTeams.contains(t) ? winPoints : 0;
+      pts[t] = bonusTeams.contains(t) ? bonusPoints : 0;
     }
     return RoundResult(
       mode: GameModeId.startingXi,

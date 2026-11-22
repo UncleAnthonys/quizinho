@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../core/commentary.dart' show Commentary;
 import '../../core/theme.dart';
 import '../../domain/tournament.dart';
 import '../../games/buzz_game_view.dart' show LoadingRound;
@@ -29,7 +30,7 @@ mixin TeaserRunner<W extends StatefulWidget> on State<W>, TickerProviderStateMix
     if (!mounted || teaser == null) return;
     final c = TeaserController(tournament: t, teaser: teaser, halfTime: halfTime);
     c.addListener(() {
-      handleEvent(c.eventSerial, c.lastEvent, miss: null);
+      handleEvent(c.eventSerial, c.lastEvent, miss: null, correctLine: teaserCorrectLine);
       if (c.phase != _lastPhase) {
         _lastPhase = c.phase;
         MatchFlow.save(context, t);
@@ -73,6 +74,9 @@ mixin TeaserRunner<W extends StatefulWidget> on State<W>, TickerProviderStateMix
   /// itself (half-time). Between games, until it's opened here: the table,
   /// with the teaser tucked in for any phone to open and buzz on.
   Map<String, Object?>? teaserPhonesView(Map<String, Object?> teaser) => null;
+
+  /// This screen's line for the teaser being got (null: the usual ones).
+  String? get teaserCorrectLine => null;
 
   /// Hook: the teaser moved on (buzzed, answered, solved, revealed).
   void onTeaserPhase(BuzzPhase phase) {}
@@ -263,6 +267,10 @@ class _TeaserBetweenGamesState extends State<TeaserBetweenGames>
     _setOpen(true);
     if (teaserBridge != null && here.length == 1) c.buzz(here.single);
   }
+
+  // Got at full time's last chance.
+  @override
+  String? get teaserCorrectLine => widget.openNow ? Commentary.lastChance : null;
 
   @override
   Map<String, Object?>? teaserPhonesView(Map<String, Object?> teaser) {

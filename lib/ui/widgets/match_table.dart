@@ -64,15 +64,21 @@ class MatchTable {
 
 /// "Round 2 of 4 · Pointless · The table".
 class RoundTableHeader extends StatelessWidget {
-  const RoundTableHeader({super.key, required this.data});
+  const RoundTableHeader({super.key, required this.data, this.commentary});
   final Map<String, Object?> data;
+
+  /// The pundit's line, over the game's name for a few seconds.
+  final String? commentary;
 
   @override
   Widget build(BuildContext context) => Column(children: [
         Text('ROUND ${data['round']} OF ${data['of']}', style: AppText.label(16)),
-        Text('${data['game'] ?? ''}'.toUpperCase(),
-            textAlign: TextAlign.center,
-            style: AppText.headline(40, color: Color((data['colour'] as num?)?.toInt() ?? 0xFFFFCC29))),
+        CommentaryBanner(
+          text: commentary,
+          child: Text('${data['game'] ?? ''}'.toUpperCase(),
+              textAlign: TextAlign.center,
+              style: AppText.headline(40, color: Color((data['colour'] as num?)?.toInt() ?? 0xFFFFCC29))),
+        ),
         if (data['double'] == true) Text('DOUBLE POINTS', style: AppText.label(15, color: Palette.gold)),
         const SizedBox(height: 24),
         Text('THE TABLE', style: AppText.label(14)),

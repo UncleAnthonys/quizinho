@@ -1015,6 +1015,15 @@ void main() {
       return t;
     }
 
+    // Final round won by the team already ahead: the pundit over the game's name.
+    final allOver = Tournament(TournamentConfig(
+      teams: [TeamSetup(name: 'Home', colorIndex: 0), TeamSetup(name: 'Away', colorIndex: 1)],
+      rounds: 4,
+    ));
+    for (final (h, a) in const [(3, 0), (0, 3), (3, 0), (3, 0)]) {
+      allOver.recordRound(RoundResult(mode: GameModeId.clubConnections, points: {0: h, 1: a}));
+    }
+    await shot(tester, 'summary_commentary', RoundSummaryScreen(tournament: allOver));
     // Between games (round 3 of 6): the question under the table.
     final mid = Tournament(TournamentConfig(
       teams: [TeamSetup(name: 'Home', colorIndex: 0), TeamSetup(name: 'Away', colorIndex: 1)],

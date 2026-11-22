@@ -159,7 +159,7 @@ class _StartingXiScreenState extends State<StartingXiScreen>
     if (c.teamCount == 1 && c.phase == BombPhase.handover) scheduleMicrotask(c.startTurn);
     _syncPhones(c);
     _armHandover(c);
-    handleEvent(c.eventSerial, c.lastEvent);
+    handleEvent(c.eventSerial, c.lastEvent, clock: c.secondsLeft, matchStart: widget.round.tournament.rounds.isEmpty);
     if (c.phase == BombPhase.ticking) {
       final sec = c.secondsLeft.ceil();
       if (sec != _lastSecond) {
@@ -288,7 +288,7 @@ class _StartingXiScreenState extends State<StartingXiScreen>
       if (c.phase != BombPhase.finished && c.toWin != null) 'toWin': c.toWin,
       if (c.phase == BombPhase.finished && t.teamCount == 1) 'solo': c.result().solo ?? 0,
       'bonus': [for (final b in c.bonusTeams) {'name': t.teamName(b), 'color': t.config.teams[b].colorIndex}],
-      'bonusPts': StartingXiController.winPoints * widget.round.multiplier,
+      'bonusPts': c.bonusPoints * widget.round.multiplier,
     };
   }
 }

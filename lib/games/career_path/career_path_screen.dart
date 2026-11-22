@@ -59,7 +59,10 @@ class _CareerPathScreenState extends State<CareerPathScreen>
     c.addListener(() {
       _faces.sync(c);
       handleEvent(c.eventSerial, c.lastEvent,
-          miss: c.lastMiss, clip: punditClip(c, faceOff: _faces.current != null));
+          miss: c.lastMiss,
+          moment: punditMoment(c, faceOff: _faces.current != null),
+          clock: c.secondsLeft,
+          matchStart: t.rounds.isEmpty);
       if (mounted) setState(() {});
     });
     final room = roomFor(t);
