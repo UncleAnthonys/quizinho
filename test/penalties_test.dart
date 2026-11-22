@@ -41,7 +41,7 @@ void main() {
     expect(c.lastScored, isFalse);
   });
 
-  test('ends early when one team can't be caught', () {
+  test('ends early when one team can\'t be caught', () {
     final c = ShootoutController(teams: [0, 1]);
     // 3-0 after three each: team 1 can only reach 2.
     for (var i = 0; i < 3; i++) {
