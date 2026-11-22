@@ -148,10 +148,10 @@ class _BiddingWarScreenState extends State<BiddingWarScreen>
             'Talked the talk, walked the walk!',
             'They only went and did it!',
             'Big talk. Bigger performance.',
-            'He’s backed every word of it!',
-            'That’s why he’s on the big money.',
+            'They’ve backed every word of it!',
+            'That’s why they’re on the big money.',
             'The doubters have been silenced.',
-            'He’s delivered on the biggest stage.',
+            'They’ve delivered on the biggest stage.',
           ]));
         case BidEvent.failed:
           s.sound.play(Sfx.boom);
@@ -162,14 +162,14 @@ class _BiddingWarScreenState extends State<BiddingWarScreen>
             'All mouth, no trousers!',
             'Big talk… small delivery.',
             'All talk, no trousers.',
-            'He wrote cheques his football knowledge couldn’t cash.',
+            'They wrote cheques their football knowledge couldn’t cash.',
             'The confidence was extraordinary. The knowledge wasn’t.',
             'Someone’s been caught bluffing.',
-            'He’s bitten off more than he can chew.',
+            'They’ve bitten off more than they can chew.',
             'That’s an absolute bottle job.',
             'They’ve talked themselves into trouble.',
             'They were giving it the big one five minutes ago.',
-            'He believed his own hype.',
+            'They believed their own hype.',
             'That is a spectacular collapse.',
           ]));
         case null:

@@ -59,7 +59,7 @@ class _ShootoutScreenState extends State<ShootoutScreen>
   static const _kettle = 'Put the kettle on, we’re going to penalties.';
   static const _scored = ['Ice in the veins!', 'Top bins.', 'Sends the keeper the wrong way!', 'Never in doubt.'];
   static const _saved = ['The keeper’s guessed right.', 'Straight at the keeper.', 'Ballooned it over the bar!', 'Bottled it.'];
-  static const _winLines = ['Ice in the veins!', 'They’ll be singing about this one for years.', 'Cometh the hour, cometh the man.'];
+  static const _winLines = ['Ice in the veins!', 'They’ll be singing about this one for years.', 'Cometh the hour…'];
 
   @override
   void initState() {
