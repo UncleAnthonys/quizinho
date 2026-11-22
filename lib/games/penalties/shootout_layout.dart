@@ -175,8 +175,9 @@ class ShootoutLayout extends StatelessWidget {
                   child: BigButton(
                     label: o,
                     height: 72,
-                    color: i == 0 ? Palette.yellow : Palette.blueBright,
-                    textColor: i == 0 ? Palette.pitchDeep : Colors.white,
+                    // Two: one each colour; three (a score): all alike, so none stands out.
+                    color: i == 0 || options.length > 2 ? Palette.yellow : Palette.blueBright,
+                    textColor: i == 0 || options.length > 2 ? Palette.pitchDeep : Colors.white,
                     onPressed: () => onChoose!(i),
                   ),
                 ),
