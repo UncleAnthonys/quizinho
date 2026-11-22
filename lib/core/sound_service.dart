@@ -53,6 +53,17 @@ enum Clip {
 
   const Clip(this.file);
   final String file;
+
+  /// The line on screen with the clip (in the yellow commentary banner), and
+  /// on its own where the clip isn't bundled.
+  String get line => switch (this) {
+        Clip.keegan => 'I would love it if we beat them. LOVE it!',
+        Clip.neville => 'That is a bad one.',
+        Clip.mcmanaman => 'We’ll have a look, course we’ll have a look.',
+        Clip.carragher => 'Leave the football before the football leaves you… the football’s left him.',
+        Clip.gamesGone => 'The game’s gone.',
+        Clip.mccarthy => 'It can’t go on like this, can it? …It can.',
+      };
   String get asset => 'clips/$file.m4a';
 }
 

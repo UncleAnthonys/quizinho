@@ -73,12 +73,41 @@ class _StartingXiScreenState extends State<StartingXiScreen>
     if (roomFor(t) case final room?) _phones = TurnBridge(room, t)..start();
     setState(() => _c = c);
     _syncPhones(c);
+    _armHandover(c);
     if (t.teamCount == 1) scheduleMicrotask(c.startTurn); // solo: straight in
     startClock(c.advance);
   }
 
   /// Each player's turn on their own phone, when they've joined.
   TurnBridge? _phones;
+
+  /// Passing the phone round: the bomb starts by itself after a few seconds,
+  /// so "tap when ready" can't be sat on for free thinking time.
+  static const handoverSeconds = 5;
+  Timer? _handoverTimer;
+  int _handoverLeft = 0;
+
+  void _armHandover(StartingXiController c) {
+    if (c.phase != BombPhase.handover || c.teamCount == 1) {
+      _handoverTimer?.cancel();
+      _handoverTimer = null;
+      return;
+    }
+    if (_handoverTimer != null) return;
+    _handoverLeft = handoverSeconds;
+    _handoverTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      if (!mounted) {
+        timer.cancel();
+        return;
+      }
+      setState(() => _handoverLeft--);
+      if (_handoverLeft <= 0) {
+        timer.cancel();
+        _handoverTimer = null;
+        c.startTurn();
+      }
+    });
+  }
 
   void _syncPhones(StartingXiController c) {
     final p = _phones;
@@ -129,6 +158,7 @@ class _StartingXiScreenState extends State<StartingXiScreen>
     // Solo: nobody to pass to — the bomb's straight back with you.
     if (c.teamCount == 1 && c.phase == BombPhase.handover) scheduleMicrotask(c.startTurn);
     _syncPhones(c);
+    _armHandover(c);
     handleEvent(c.eventSerial, c.lastEvent);
     if (c.phase == BombPhase.ticking) {
       final sec = c.secondsLeft.ceil();
@@ -148,6 +178,7 @@ class _StartingXiScreenState extends State<StartingXiScreen>
 
   @override
   void dispose() {
+    _handoverTimer?.cancel();
     disposeGameSupport();
     _phones?.dispose();
     _c?.dispose();
@@ -188,6 +219,7 @@ class _StartingXiScreenState extends State<StartingXiScreen>
       typing: typing,
       left: c.secondsLeft,
       passing: !_hostIsOnePlayers,
+      startLabel: c.phase == BombPhase.handover && _handoverTimer != null ? 'TAP WHEN READY - STARTS IN $_handoverLeft' : null,
       multiplier: widget.round.multiplier,
       scores: Scoreboard(
         tournament: t,
