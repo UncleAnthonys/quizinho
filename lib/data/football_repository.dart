@@ -44,6 +44,9 @@ abstract class FootballRepository {
   /// clubB the club, answers the players who fit both.
   Future<List<ClubConnection>> categoryClubPairs({int eras = Era.allMask, int genders = 1});
 
+  /// Famous scores, score only (penalties).
+  Future<List<FamousScore>> famousScores();
+
   /// A specific challenge by id (the hand-picked Warm-Up Cup). Null if gone.
   Future<ClubConnection?> clubConnectionById(String id);
   Future<CareerPath?> careerPathById(String playerId);

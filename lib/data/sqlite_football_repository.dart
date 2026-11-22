@@ -247,6 +247,19 @@ class SqliteFootballRepository implements FootballRepository {
   }
 
   @override
+  Future<List<FamousScore>> famousScores() async => [
+        for (final r in await _db.rawQuery('SELECT id, competition, match_date, home, away, score FROM famous_scores'))
+          FamousScore(
+            id: r['id'] as String,
+            competition: r['competition'] as String,
+            date: r['match_date'] as String,
+            home: r['home'] as String,
+            away: r['away'] as String,
+            score: r['score'] as String,
+          ),
+      ];
+
+  @override
   Future<List<ClubConnection>> categoryClubPairs({int eras = Era.allMask, int genders = 1}) async {
     final (where, args) = _filter('club_id', null, const {}, eras,
         genders: genders, womenCol: '(SELECT women FROM clubs WHERE clubs.id = club_id)');

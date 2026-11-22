@@ -55,6 +55,9 @@ CREATE TABLE player_aliases (player_id TEXT NOT NULL REFERENCES players(id), ali
 -- whose every club's numbers are known; and the middle year of each career.
 CREATE TABLE player_totals (player_id TEXT NOT NULL REFERENCES players(id), apps INTEGER NOT NULL, goals INTEGER NOT NULL);
 CREATE TABLE player_years (player_id TEXT NOT NULL REFERENCES players(id), year INTEGER NOT NULL);
+-- Penalties: famous scores, score only (no line-up). Winner first for finals.
+CREATE TABLE famous_scores (id TEXT PRIMARY KEY, competition TEXT NOT NULL, match_date TEXT NOT NULL,
+  home TEXT NOT NULL, away TEXT NOT NULL, score TEXT NOT NULL);
 -- How a name may sound when spoken, spelt the English way (voice answers only).
 CREATE TABLE player_spoken (player_id TEXT NOT NULL REFERENCES players(id), spoken TEXT NOT NULL);
 CREATE TABLE career_spells (
@@ -1092,6 +1095,8 @@ def write_db(path: pathlib.Path, version: int, clubs, players, matches, connecti
         con.executemany("INSERT INTO checkout_answers VALUES (?,?,?,?)",
                         [(c["id"], pid, a, g) for pid, (a, g) in c["values"].items()]
                         + [(c["id"], pid, None, None) for pid in c["no_stats"]])
+    con.executemany("INSERT INTO famous_scores VALUES (?,?,?,?,?,?)",
+                    [(s["id"], s["competition"], s["date"], s["home"], s["away"], s["score"]) for s in famous_scores(matches)])
     con.commit()
     con.execute("VACUUM")
     con.close()
@@ -1160,8 +1165,34 @@ def write_json(path: pathlib.Path, version: int, clubs, players, matches, connec
              "xi": m["xi"]}
             for m in matches
         ],
+        # penalties' famous scores: [id, competition, date, home, away, score]
+        "scores": [[s["id"], s["competition"], s["date"], s["home"], s["away"], s["score"]] for s in famous_scores(matches)],
     }
     path.write_text(json.dumps(doc, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
+
+
+def famous_scores(matches) -> list[dict]:
+    """Penalties' "What was the score?": every Starting XI match (they're all
+    famous nights) plus seed/scores.json (finals and big scorelines that have
+    no line-up here) - each match once, however many line-ups it has."""
+    def key(date, home, away):
+        return date, frozenset(norm(t).split()[0] for t in (home, away))
+    out, seen = [], set()
+    for m in matches:
+        k = key(m["date"], m["home"], m["away"])
+        if k in seen:
+            continue
+        seen.add(k)
+        out.append({"id": f"score-{m['id']}", "competition": m["competition"], "date": m["date"],
+                    "home": m["home"], "away": m["away"], "score": m["score"]})
+    for sc in load("scores.json")["scores"]:
+        k = key(sc["date"], sc["home"], sc["away"])
+        # The same night already in (Man Utd or Manchester United, Spurs or Tottenham…).
+        if k in seen or any(d == sc["date"] and k[1] & teams for d, teams in seen):
+            continue
+        seen.add(k)
+        out.append(sc)
+    return out
 
 
 def add_spoken(players, problems: Problems) -> None:

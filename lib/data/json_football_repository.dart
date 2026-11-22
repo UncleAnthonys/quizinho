@@ -117,6 +117,17 @@ InMemoryFootballRepository parseFootballJson(String source) {
           noStats: {for (final id in c[6] as List) id as String},
         ),
     ],
+    scores: [
+      for (final s in (doc['scores'] as List?) ?? const [])
+        FamousScore(
+          id: s[0] as String,
+          competition: s[1] as String,
+          date: s[2] as String,
+          home: s[3] as String,
+          away: s[4] as String,
+          score: s[5] as String,
+        ),
+    ],
     matches: [
       for (final m in doc['matches'] as List)
         HistoricMatch(

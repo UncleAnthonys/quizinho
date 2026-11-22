@@ -402,12 +402,21 @@ class KickSource {
     );
   }
 
+  List<FamousScore>? _scores;
+
   /// "Liverpool v Barcelona, 2019: what was the score?" Three to pick from.
-  /// Only the famous matches (Easy): a score people might actually remember.
+  /// Every Starting XI night plus the big finals and scorelines: a score is
+  /// easier to remember than a line-up.
   Future<PenaltyKick?> _matchScore() async {
-    final m = await challenges.match(_level, _used, genders: genders);
-    if (m == null) return null;
+    if (genders == 2) return null; // (all men's results so far)
+    _scores ??= await _repo.famousScores();
+    final seen = _history.seenCounts('pens');
+    final fresh = [for (final s in _scores!) if (!_used.contains(s.id) && !seen.containsKey(s.id)) s];
+    final pool = fresh.isNotEmpty ? fresh : [for (final s in _scores!) if (!_used.contains(s.id)) s];
+    if (pool.isEmpty) return null;
+    final m = pool[_random.nextInt(pool.length)];
     _used.add(m.id);
+    _history.add('pens', m.id);
     // "3–3 (Liverpool won 3–2 on pens)": the score itself.
     final parts = m.score.split(' ').first.split(RegExp('[–-]'));
     final h = int.tryParse(parts.first), a = parts.length > 1 ? int.tryParse(parts[1]) : null;
