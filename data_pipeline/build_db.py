@@ -440,6 +440,11 @@ CONNECTION_MIN_ANSWER_FAME = 2
 CAREER_MIN_FAME = 2
 # Career Path, Hard and Expert: Wikipedias covering the player, plus a lift for
 # a real spell in Britain. Below the Expert line, nobody would get them.
+# Career Path, Easy: Wikipedias covering the player, clubs, and still playing
+# in or after this year.
+CAREER_EASY_REACH = 75
+CAREER_EASY_CLUBS = 4
+CAREER_EASY_SINCE = 1990
 CAREER_BRITISH_LIFT = 12
 CAREER_HARD_SCORE = 50
 CAREER_EXPERT_SCORE = 40
@@ -628,6 +633,16 @@ def generate_career_challenges(players, clubs):
                     diff = 4
                 else:
                     continue
+            # Easy: the biggest names, with a proper journey (4+ clubs) and a
+            # career people remember - not the old-era legends whose paths run
+            # through 1970s American sides. The rest of the old Easy is Medium.
+            if diff <= 2 and not p.get("women"):
+                years = [y for sp in p["spells"] for y in (sp["start"], sp["end"]) if y is not None]
+                if ((p.get("reach") or 0) >= CAREER_EASY_REACH and len(distinct) >= CAREER_EASY_CLUBS
+                        and years and max(years) >= CAREER_EASY_SINCE):
+                    diff = 1
+                elif diff == 1:
+                    diff = 2
             # Hard and Expert: still players people know. How widely they're
             # covered (Wikipedias), with a lift for a real spell in Britain -
             # Pennant or Rickie Lambert over a Hungarian journeyman.
