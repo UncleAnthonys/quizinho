@@ -1023,7 +1023,8 @@ void main() {
     for (final (h, a) in const [(3, 0), (0, 3), (3, 0), (3, 0)]) {
       allOver.recordRound(RoundResult(mode: GameModeId.clubConnections, points: {0: h, 1: a}));
     }
-    await shot(tester, 'summary_commentary', RoundSummaryScreen(tournament: allOver));
+    await shot(tester, 'summary_commentary', RoundSummaryScreen(tournament: allOver),
+        then: () => tester.pump(const Duration(milliseconds: 400)));
     // Between games (round 3 of 6): the question under the table.
     final mid = Tournament(TournamentConfig(
       teams: [TeamSetup(name: 'Home', colorIndex: 0), TeamSetup(name: 'Away', colorIndex: 1)],
