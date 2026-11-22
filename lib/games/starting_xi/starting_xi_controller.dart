@@ -94,7 +94,8 @@ class StartingXiController extends ChangeNotifier {
     namedBy[p.id] = currentTeam;
     correctByTeam[currentTeam] = correctByTeam[currentTeam]! + 1;
     _emit(GameEvent.correct);
-    if (isComplete) {
+    // The last team left has just gone ahead on names: they've won it.
+    if (isComplete || (teamCount > 1 && aliveTeams.length == 1 && _leads(currentTeam))) {
       _finish();
     } else {
       _advanceTeam();
@@ -111,8 +112,11 @@ class StartingXiController extends ChangeNotifier {
 
   void continueAfterExplosion() {
     if (phase != BombPhase.exploded) return;
-    // Solo: play on until your lives are gone; teams: until one's left.
-    if (aliveTeams.length <= (teamCount == 1 ? 0 : 1)) {
+    // Solo: play on until your lives are gone. Teams: the last one left
+    // wins if they're ahead on names; level or behind, they play on until
+    // they're ahead (or their lives run out: then most named wins, level is a draw).
+    final alive = aliveTeams;
+    if (alive.isEmpty || (teamCount > 1 && alive.length == 1 && _leads(alive.single))) {
       _finish();
       return;
     }
@@ -153,16 +157,24 @@ class StartingXiController extends ChangeNotifier {
     }
   }
 
+  /// More named than every other team.
+  bool _leads(int team) =>
+      correctByTeam.entries.every((e) => e.key == team || e.value < correctByTeam[team]!);
+
+  /// How many more the last team left needs to go ahead (null: not that stage).
+  int? get toWin {
+    final alive = aliveTeams;
+    if (teamCount < 2 || alive.length != 1) return null;
+    final t = alive.single;
+    final best = correctByTeam.entries.where((e) => e.key != t).fold<int>(0, (a, e) => e.value > a ? e.value : a);
+    return best - correctByTeam[t]! + 1;
+  }
+
   void _finish() {
     phase = BombPhase.finished;
-    final alive = aliveTeams;
-    if (!isComplete && alive.length == 1) {
-      bonusTeams = alive;
-    } else {
-      // XI completed (or everyone out): most players named wins the bonus.
-      final best = correctByTeam.values.fold<int>(0, (a, b) => a > b ? a : b);
-      bonusTeams = best == 0 ? const [] : [for (final e in correctByTeam.entries) if (e.value == best) e.key];
-    }
+    // Most players named wins the bonus; level on names is a draw (both get it).
+    final best = correctByTeam.values.fold<int>(0, (a, b) => a > b ? a : b);
+    bonusTeams = best == 0 ? const [] : [for (final e in correctByTeam.entries) if (e.value == best) e.key];
     _emit(GameEvent.complete);
     notifyListeners();
   }

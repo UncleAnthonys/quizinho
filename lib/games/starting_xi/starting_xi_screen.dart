@@ -285,6 +285,7 @@ class _StartingXiScreenState extends State<StartingXiScreen>
       'lost': t.teamName(lost),
       'out': c.livesLeft[lost]! <= 0,
       'complete': c.isComplete,
+      if (c.phase != BombPhase.finished && c.toWin != null) 'toWin': c.toWin,
       if (c.phase == BombPhase.finished && t.teamCount == 1) 'solo': c.result().solo ?? 0,
       'bonus': [for (final b in c.bonusTeams) {'name': t.teamName(b), 'color': t.config.teams[b].colorIndex}],
       'bonusPts': StartingXiController.winPoints * widget.round.multiplier,
@@ -419,6 +420,10 @@ class XiLayout extends StatelessWidget {
               if (data['who'] != null)
                 Text('${data['teamName'] ?? ''}'.toUpperCase(), style: AppText.label(18, color: Palette.onTeam(colour))),
               const SizedBox(height: 6),
+              // The last team left, level or behind: what they need.
+              if (data['toWin'] != null)
+                Text(_int(data['toWin']) == 1 ? 'NAME ONE MORE TO WIN IT' : 'NAME ${_int(data['toWin'])} MORE TO WIN IT',
+                    style: AppText.headline(24, color: Palette.onTeam(colour))),
               Text(startLabel ?? 'TAP WHEN READY - ${seconds}s ON THE CLOCK',
                   style: AppText.label(15, color: Palette.onTeam(colour))),
             ]),
@@ -466,7 +471,15 @@ class XiLayout extends StatelessWidget {
       padding: const EdgeInsets.all(16),
       child: Column(children: [
         Text(
-            data['complete'] == true ? 'FULL XI NAMED!' : (data['solo'] != null ? 'OUT OF LIVES' : 'LAST TEAM STANDING'),
+            data['complete'] == true
+                ? 'FULL XI NAMED!'
+                : data['solo'] != null
+                    ? 'OUT OF LIVES'
+                    : bonus.length > 1
+                        ? 'ALL SQUARE - A DRAW'
+                        : bonus.isEmpty
+                            ? 'NOBODY NAMED ANYONE'
+                            : 'LAST TEAM STANDING',
             style: AppText.headline(34, color: Palette.yellow)),
         const SizedBox(height: 8),
         if (data['solo'] != null) SoloScore(score: _int(data['solo'])),

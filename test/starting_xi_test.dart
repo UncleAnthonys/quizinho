@@ -62,6 +62,34 @@ void main() {
     expect(r.points[1], 0);
   });
 
+  test('last team left, level on names: plays on, and a miss is a draw', () {
+    final c = make(lives: 1)..startTurn();
+    c.submit(henry); // team 0: 1
+    c.startTurn();
+    c.submit(fabregas); // team 1: 1
+    c.startTurn();
+    c.pass(); // team 0 out, level 1-1
+    c.continueAfterExplosion();
+    expect(c.phase, BombPhase.handover); // team 1 plays on
+    expect(c.currentTeam, 1);
+    expect(c.toWin, 1);
+    c.startTurn();
+    c.pass(); // team 1 out too
+    c.continueAfterExplosion();
+    expect(c.phase, BombPhase.finished);
+    expect(c.bonusTeams, [0, 1]); // a draw
+  });
+
+  test('last team left goes ahead on names: wins it there and then', () {
+    final c = make(lives: 1)..startTurn();
+    c.submit(henry); // team 0: 1
+    c.startTurn();
+    c.pass(); // team 1 out (0 named)
+    c.continueAfterExplosion();
+    expect(c.phase, BombPhase.finished);
+    expect(c.bonusTeams, [0]);
+  });
+
   test('eliminated teams are skipped in the rotation', () {
     final c = make(teams: 3, lives: 1)..startTurn();
     c.pass(); // team 0 out
