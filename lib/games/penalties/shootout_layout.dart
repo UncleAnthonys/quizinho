@@ -271,7 +271,8 @@ class KickCard extends StatelessWidget {
       child: Column(children: [
         Text('${kick['ask'] ?? ''}', textAlign: TextAlign.center, style: AppText.label(13, color: Palette.gold)),
         const SizedBox(height: 6),
-        for (final l in lines)
+        // Typing: an XI keeps just the pitch, so the suggestions fit above the keyboard.
+        for (final l in compact && lineup.isNotEmpty ? const <String>[] : lines)
           Text(l,
               textAlign: TextAlign.center,
               style: l == 'AND' || l == 'WHO PLAYED FOR'
@@ -344,7 +345,7 @@ class _Pitch extends StatelessWidget {
                         border: s[1] == '?' ? Border.all(color: Palette.yellow, width: 2) : null,
                       ),
                       child: Column(children: [
-                        Text('${s[0]}', style: AppText.label(10)),
+                        if (!compact) Text('${s[0]}', style: AppText.label(10)),
                         FittedBox(
                           fit: BoxFit.scaleDown,
                           child: Text('${s[1]}',

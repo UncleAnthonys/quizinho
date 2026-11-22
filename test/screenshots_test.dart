@@ -1122,6 +1122,29 @@ void main() {
             ],
           },
         }, box: box));
+    // Typing: the pitch shrinks so the suggestions fit above the keyboard.
+    answerTyping.value = true;
+    await shot(
+        tester,
+        'pens_lineup_typing',
+        ShootoutLayout(
+          typing: true,
+          data: {
+            ...kicking,
+            'kick': {
+              'ask': 'LIVERPOOL V BARCELONA · 4–0 · 2019',
+              'lines': ['NAME LIVERPOOL’S MISSING PLAYER'],
+              'lineup': [
+                ['GK', 'ALISSON', 0],
+                ['RB', 'ALEXANDER-ARNOLD', 1], ['CB', 'MATIP', 1], ['CB', 'VAN DIJK', 1], ['LB', 'MILNER', 1],
+                ['CM', 'FABINHO', 2], ['CM', 'HENDERSON', 2], ['CM', '?', 2],
+                ['RW', 'SHAQIRI', 3], ['ST', 'ORIGI', 3], ['LW', 'MANÉ', 3],
+              ],
+            },
+          },
+          answerBox: box,
+        ));
+    answerTyping.value = false;
     await shot(
         tester,
         'pens_over_under',
