@@ -288,7 +288,12 @@ class KickCard extends StatelessWidget {
         border: Border.all(color: Palette.gold, width: 2),
       ),
       child: Column(children: [
-        Text('${kick['ask'] ?? ''}', textAlign: TextAlign.center, style: AppText.label(13, color: Palette.gold)),
+        // Just a question (the choice is on the buttons): it's the headline.
+        Text('${kick['ask'] ?? ''}',
+            textAlign: TextAlign.center,
+            style: lines.isEmpty && path.isEmpty && lineup.isEmpty
+                ? AppText.headline(compact ? 22 : 30, color: Palette.gold)
+                : AppText.label(13, color: Palette.gold)),
         const SizedBox(height: 6),
         // Typing: an XI keeps just the pitch, so the suggestions fit above the keyboard.
         for (final l in compact && lineup.isNotEmpty ? const <String>[] : lines)
