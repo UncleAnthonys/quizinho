@@ -445,13 +445,14 @@ CAREER_MIN_FAME = 2
 CAREER_EASY_REACH = 75
 CAREER_EASY_CLUBS = 4
 CAREER_EASY_SINCE = 1990
-CAREER_BRITISH_LIFT = 12
+CAREER_BRITISH_LIFT = 18
 # Hard and Expert need a spell in one of these (England's top clubs, Spain,
 # Germany); Celtic, Rangers and Hibs share England's country code.
 BIG_THREE = {"GBR", "ENG", "ESP", "GER"}
 SCOTTISH = {"Q19593", "Q19597", "Q192597"}
-CAREER_HARD_SCORE = 50
-CAREER_EXPERT_SCORE = 40
+CAREER_BIG_THREE_APPS = 50
+CAREER_HARD_SCORE = 56
+CAREER_EXPERT_SCORE = 48
 
 
 def generate_connections(clubs, players):
@@ -658,9 +659,16 @@ def generate_career_challenges(players, clubs):
                 # A real spell in the Premier League, La Liga or the Bundesliga:
                 # a career all in Italy (Bonaventura) is remembered for one club,
                 # not the path.
-                big_three = any(clubs[sp["club"]]["country"] in BIG_THREE and clubs[sp["club"]]["fame"] >= 3
-                                and sp["club"] not in SCOTTISH and memorable_spell(p, sp["club"])
-                                for sp in p["spells"])
+                # Counted in league games where we have them: a squad place with
+                # no games (Hein at Arsenal) or a youth contract isn't a spell.
+                big_three_clubs = {sp["club"] for sp in p["spells"]
+                                   if clubs[sp["club"]]["country"] in BIG_THREE and clubs[sp["club"]]["fame"] >= 3
+                                   and sp["club"] not in SCOTTISH}
+                stats = p.get("stats") or {}
+                if stats:
+                    big_three = sum(stats.get(c, [0])[0] for c in big_three_clubs) >= CAREER_BIG_THREE_APPS
+                else:
+                    big_three = any(memorable_spell(p, c) for c in big_three_clubs)
                 if not big_three:
                     continue
                 score = (p.get("reach") or 0) + (CAREER_BRITISH_LIFT if british else 0)
