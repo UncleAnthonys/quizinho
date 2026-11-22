@@ -61,7 +61,12 @@ class PlayerPicker extends StatefulWidget {
     this.showFlags = true,
     this.showPositions = true,
     this.rapid = false,
+    this.autofocus = true,
   });
+
+  /// False on a game's first turn: the screen shows the question big first,
+  /// and the keyboard waits for a tap on the box (after that it's straight up).
+  final bool autofocus;
 
   /// Rapid fire (Bidding War): keep going after each answer. The mic stays
   /// open and picks out every name in a run of speech ("Rooney Giggs
@@ -435,7 +440,7 @@ class _PlayerPickerState extends State<PlayerPicker> with SingleTickerProviderSt
         // Keyboard straight up when there's no mic, or the player types (in
         // the app; in a browser only when the buzz tap already opened it -
         // otherwise a browser only shows the keyboard after a tap on the box).
-        autofocus: !_voiceOn || (!_autoListen && (!kIsWeb || keyboardPrimed)),
+        autofocus: widget.autofocus && (!_voiceOn || (!_autoListen && (!kIsWeb || keyboardPrimed))),
         autocorrect: false,
         enableSuggestions: false,
         autofillHints: const <String>[], // stops Safari offering contacts

@@ -111,6 +111,7 @@ class TurnBridge {
     Set<String> answers = const {},
     bool clubs = false,
     bool rapid = false,
+    bool firstTurn = false,
     bool showFlags = true,
     bool showPositions = true,
     String hint = 'Say or type a name…',
@@ -150,6 +151,8 @@ class TurnBridge {
         'answers': answers.take(400).toList(),
         'clubs': clubs,
         'rapid': rapid,
+        // The game's first go: the phone shows the question before the keyboard.
+        if (firstTurn) 'first': true,
         'flags': showFlags,
         'positions': showPositions,
         'hint': hint,

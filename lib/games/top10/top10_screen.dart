@@ -104,6 +104,7 @@ class _Top10ScreenState extends State<Top10Screen> with TickerProviderStateMixin
     }
     p.show(
       key: '${_t.rounds.length}-top10-${c.turnSerial}',
+      firstTurn: c.turnSerial == 0 && _pickerKey == 0,
       team: c.currentTeam,
       name: _turnPlayer,
       stage: TurnStage.answer,
@@ -223,6 +224,8 @@ class _Top10ScreenState extends State<Top10Screen> with TickerProviderStateMixin
       ],
       PlayerPicker(
         key: ValueKey('top10-$_pickerKey-${c.turnSerial}'),
+        // First go: the question first, not the keyboard.
+        autofocus: c.turnSerial > 0 || _pickerKey > 0,
         index: services.repo.players,
         voice: services.voice,
         accent: colour == null ? _accent : Palette.team(colour),

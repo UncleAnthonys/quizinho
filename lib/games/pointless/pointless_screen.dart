@@ -77,6 +77,7 @@ class _PointlessScreenState extends State<PointlessScreen>
     final clubs = c.category.answersAreClubs;
     p.show(
       key: '${_t.rounds.length}-pt-${c.turn}-$_pickerKey',
+      firstTurn: c.turn == 0 && _pickerKey == 0,
       team: c.currentTeam,
       stage: TurnStage.answer,
       title: 'UNDER THE RADAR · ANSWER ${c.goNumber} OF ${c.answersPerTeam}',
@@ -225,6 +226,8 @@ class _PointlessScreenState extends State<PointlessScreen>
       else
         PlayerPicker(
           key: ValueKey('pt-${c.turn}-$_pickerKey'),
+          // First go: the question first, not the keyboard.
+          autofocus: c.turn > 0 || _pickerKey > 0,
           index: clubs ? services.repo.clubIndex : services.repo.players,
           voice: services.voice,
           accent: Palette.team(colour),

@@ -781,6 +781,7 @@ class _GuestGameState extends State<_GuestGame> with SingleTickerProviderStateMi
         accent: Palette.team(whoColour),
         hint: '${v['hint'] ?? 'Say or type a name…'}',
         rapid: v['rapid'] == true,
+        autofocus: v['first'] != true,
         showFlags: v['flags'] != false,
         showPositions: v['positions'] != false,
         isAnswer: (p) => ids.contains(p.id),

@@ -74,6 +74,7 @@ class _CheckoutScreenState extends State<CheckoutScreen>
     final team = c.currentTeam;
     p.show(
       key: '${_t.rounds.length}-co-${c.turn}-$_pickerKey',
+      firstTurn: c.turn == 0 && _pickerKey == 0,
       team: team,
       stage: TurnStage.answer,
       title: 'FOOTBALL 501 · DART ${c.dartNumber}/${c.maxTurns}',
@@ -258,6 +259,8 @@ class _CheckoutScreenState extends State<CheckoutScreen>
       else
         PlayerPicker(
           key: ValueKey('co-${c.turn}-$_pickerKey'),
+          // First dart: the board and the category first, not the keyboard.
+          autofocus: c.turn > 0 || _pickerKey > 0,
           index: services.repo.players,
           voice: services.voice,
           accent: Palette.team(colour),
