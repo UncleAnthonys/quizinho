@@ -1143,7 +1143,11 @@ void main() {
             },
           },
           answerBox: box,
-        ));
+        ),
+        then: () async {
+          await tester.enterText(find.byType(TextField), 'Wijn');
+          await tester.pump(const Duration(milliseconds: 500));
+        });
     answerTyping.value = false;
     await shot(
         tester,
