@@ -275,7 +275,7 @@ class KickCard extends StatelessWidget {
         for (final l in compact && lineup.isNotEmpty ? const <String>[] : lines)
           Text(l,
               textAlign: TextAlign.center,
-              style: l == 'AND' || l == 'WHO PLAYED FOR'
+              style: l == 'AND' || l == 'OR' || l == 'WHO PLAYED FOR'
                   ? AppText.label(15, color: Palette.muted)
                   : AppText.headline(compact ? 22 : 30)),
         // A career: the clubs in a few rows, so the answer box stays in view.

@@ -54,6 +54,9 @@ class ShootoutController extends ChangeNotifier {
   int eventSerial = 0;
 
   int get taker => alive[_turn % alive.length];
+
+  /// The first kick of a round (each team in it then takes one).
+  bool get roundStart => _turn % alive.length == 0;
   int goals(int team) => kicks[team]!.where((k) => k).length;
   bool get suddenDeath => kicks[taker]!.length >= kicksEach;
 

@@ -98,10 +98,16 @@ class Player {
     this.verified = false,
     this.women = false,
     this.spoken = const [],
+    this.leagueApps,
+    this.leagueGoals,
   });
 
   final String id;
   final String name;
+
+  /// League apps and goals over the whole career (null: not every club's known).
+  final int? leagueApps;
+  final int? leagueGoals;
   final List<String> aliases;
 
   /// How the name may sound, spelt the English way ("urdegord" for

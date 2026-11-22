@@ -14,6 +14,10 @@ enum KickKind {
   fromList,
   countryClub,
   overUnder,
+  whoPlayedMore,
+  whoScoredMore,
+  careerGoals,
+  matchScore,
 }
 
 /// One penalty: a quick question with a single answer to give (or, for
@@ -89,8 +93,20 @@ class KickSource {
 
   static const _level = Difficulty.easy;
 
-  /// The next penalty, or null if nothing at all can be made.
-  Future<PenaltyKick?> next() async {
+  /// Careers come from Easy and Medium: Easy alone is too few to go round
+  /// four kinds of kick (and Career Path itself) without repeats.
+  static const _careerLevel = Difficulty.medium;
+
+  /// The next penalty, or null if nothing at all can be made. [kind]: the
+  /// same kind as the round's first kick, so every team gets a like question
+  /// (one gets "Terry or Gerrard?", so does the other).
+  Future<PenaltyKick?> next({KickKind? kind}) async {
+    if (kind != null) {
+      for (var tries = 0; tries < 4; tries++) {
+        final k = await _make(kind);
+        if (k != null) return k;
+      }
+    }
     for (var tries = 0; tries < KickKind.values.length * 2; tries++) {
       if (_order.isEmpty) _order = [...KickKind.values]..shuffle(_random);
       final kind = _order.removeAt(0);
@@ -110,6 +126,10 @@ class KickSource {
         KickKind.fromList => _fromList(),
         KickKind.countryClub => _countryClub(),
         KickKind.overUnder => _overUnder(),
+        KickKind.whoPlayedMore => _whoMore(goals: false),
+        KickKind.whoScoredMore => _whoMore(goals: true),
+        KickKind.careerGoals => _careerGoals(),
+        KickKind.matchScore => _matchScore(),
       };
 
   String _up(String s) => s.toUpperCase();
@@ -141,7 +161,7 @@ class KickSource {
 
   Future<CareerPath?> _career() async {
     for (var i = 0; i < 6; i++) {
-      final p = await challenges.careerPath(_level, _used, genders: genders);
+      final p = await challenges.careerPath(_careerLevel, _used, genders: genders);
       if (p == null) return null;
       _used.add(p.id);
       if (_spells(p).length >= 3) return p;
@@ -262,36 +282,144 @@ class KickSource {
     );
   }
 
-  Future<PenaltyKick?> _overUnder() async {
+  /// A club's 501 numbers: players people know, with enough games to compare.
+  Future<(CheckoutCategory, List<(Player, int, int)>)?> _clubNumbers() async {
     final cat = await challenges.checkout(_level, _used, genders: genders);
     if (cat == null) return null;
     _used.add(cat.id);
-    final seen = _history.seenCounts('pens');
-    // A player people know, with enough games for a line to make sense.
     final known = [
       for (final e in cat.values.entries)
-        if ((_repo.players.byId(e.key)?.fame ?? 0) >= 4 && e.value.$1 >= 40 && !seen.containsKey('ou:${cat.id}:${e.key}'))
-          e,
+        if (_repo.players.byId(e.key) case final p? when p.fame >= 4 && e.value.$1 >= 40) (p, e.value.$1, e.value.$2),
     ];
-    if (known.isEmpty) return null;
-    final pick = known[_random.nextInt(known.length)];
-    final player = _repo.players.byId(pick.key)!;
-    final apps = pick.value.$1;
+    return known.isEmpty ? null : (cat, known);
+  }
+
+  String _clubOf(CheckoutCategory cat) => _up(cat.prompt.replaceFirst(RegExp(r'^League apps \+ goals for '), ''));
+
+  Future<PenaltyKick?> _overUnder() async {
+    final found = await _clubNumbers();
+    if (found == null) return null;
+    final (cat, players) = found;
+    final seen = _history.seenCounts('pens');
+    // Games, or goals (for someone who scored a few).
+    final goals = _random.nextBool();
+    final pool = [
+      for (final p in players)
+        if (!seen.containsKey('ou:${cat.id}:${p.$1.id}:${goals ? 'g' : 'a'}') && (!goals || p.$3 >= 10)) p,
+    ];
+    if (pool.isEmpty) return null;
+    final (player, apps, scored) = pool[_random.nextInt(pool.length)];
+    final real = goals ? scored : apps;
     // The line: 20-35% off the real number, rounded to a nice figure.
     final over = _random.nextBool();
     final f = over ? 0.65 + _random.nextDouble() * 0.15 : 1.2 + _random.nextDouble() * 0.15;
-    final step = apps >= 150 ? 25 : 10;
-    var line = ((apps * f) / step).round() * step;
-    if (line == apps) line += over ? -step : step;
-    _history.add('pens', 'ou:${cat.id}:${pick.key}');
-    final club = cat.prompt.replaceFirst(RegExp(r'^League apps \+ goals for '), '');
+    final step = real >= 150 ? 25 : (real >= 40 ? 10 : 5);
+    var line = ((real * f) / step).round() * step;
+    if (line == real) line += over ? -step : step;
+    if (line <= 0) return null;
+    _history.add('pens', 'ou:${cat.id}:${player.id}:${goals ? 'g' : 'a'}');
     return PenaltyKick(
       kind: KickKind.overUnder,
-      ask: 'LEAGUE GAMES FOR ${_up(club)}',
+      ask: '${goals ? 'LEAGUE GOALS' : 'LEAGUE GAMES'} FOR ${_clubOf(cat)}',
       lines: [_up(player.name), 'OVER OR UNDER $line?'],
       options: ['OVER $line', 'UNDER $line'],
-      correctOption: apps > line ? 0 : 1,
-      reveal: '$apps GAMES',
+      correctOption: real > line ? 0 : 1,
+      reveal: goals ? '$real GOALS' : '$real GAMES',
+    );
+  }
+
+  /// "Who played more league games for Man United: Scholes or Giggs?"
+  Future<PenaltyKick?> _whoMore({required bool goals}) async {
+    final found = await _clubNumbers();
+    if (found == null) return null;
+    final (cat, players) = found;
+    if (players.length < 2) return null;
+    final seen = _history.seenCounts('pens');
+    for (var i = 0; i < 12; i++) {
+      final a = players[_random.nextInt(players.length)];
+      final b = players[_random.nextInt(players.length)];
+      final va = goals ? a.$3 : a.$2, vb = goals ? b.$3 : b.$2;
+      if (a.$1.id == b.$1.id || va == vb || (goals && va + vb < 5)) continue;
+      final key = 'who:${goals ? 'g' : 'a'}:${cat.id}:${([a.$1.id, b.$1.id]..sort()).join(':')}';
+      if (seen.containsKey(key)) continue;
+      _history.add('pens', key);
+      return _either(
+        goals ? KickKind.whoScoredMore : KickKind.whoPlayedMore,
+        goals ? 'MORE LEAGUE GOALS FOR ${_clubOf(cat)}' : 'MORE LEAGUE GAMES FOR ${_clubOf(cat)}',
+        a.$1,
+        va,
+        b.$1,
+        vb,
+        goals ? 'GOALS' : 'GAMES',
+      );
+    }
+    return null;
+  }
+
+  List<Player>? _withTotals;
+
+  /// "More league goals in their career: Crouch or Defoe?" Any two players
+  /// people know - strikers or not.
+  Future<PenaltyKick?> _careerGoals() async {
+    _withTotals ??= [
+      for (final p in _repo.players.all)
+        if (p.fame >= 4 && p.leagueGoals != null && p.women == (genders == 2)) p,
+    ];
+    final pool = _withTotals!;
+    if (pool.length < 2) return null;
+    final seen = _history.seenCounts('pens');
+    for (var i = 0; i < 12; i++) {
+      final a = pool[_random.nextInt(pool.length)];
+      final b = pool[_random.nextInt(pool.length)];
+      if (a.id == b.id || a.leagueGoals == b.leagueGoals) continue;
+      final key = 'tot:${([a.id, b.id]..sort()).join(':')}';
+      if (seen.containsKey(key)) continue;
+      _history.add('pens', key);
+      return _either(KickKind.careerGoals, 'MORE LEAGUE GOALS IN THEIR CAREER', a, a.leagueGoals!, b, b.leagueGoals!, 'GOALS');
+    }
+    return null;
+  }
+
+  /// Two players to tap between; the reveal gives both numbers.
+  PenaltyKick _either(KickKind kind, String ask, Player a, int va, Player b, int vb, String unit) {
+    String short(Player p) => _up(p.name.split(' ').last);
+    // Same surname (the Nevilles): full names.
+    final full = short(a) == short(b);
+    final na = full ? _up(a.name) : short(a), nb = full ? _up(b.name) : short(b);
+    return PenaltyKick(
+      kind: kind,
+      ask: ask,
+      lines: [_up(a.name), 'OR', _up(b.name)],
+      options: [na, nb],
+      correctOption: va > vb ? 0 : 1,
+      reveal: '$na $va · $nb $vb $unit',
+    );
+  }
+
+  /// "Liverpool v Barcelona, 2019: what was the score?" Three to pick from.
+  Future<PenaltyKick?> _matchScore() async {
+    final m = await challenges.match(_level, _used, genders: genders);
+    if (m == null) return null;
+    _used.add(m.id);
+    // "3–3 (Liverpool won 3–2 on pens)": the score itself.
+    final parts = m.score.split(' ').first.split(RegExp('[–-]'));
+    final h = int.tryParse(parts.first), a = parts.length > 1 ? int.tryParse(parts[1]) : null;
+    if (h == null || a == null) return null;
+    final real = '$h–$a';
+    final others = <String>{
+      for (final (x, y) in [(h + 1, a), (h, a + 1), (h - 1, a), (h, a - 1), (a, h), (h + 1, a + 1)])
+        if (x >= 0 && y >= 0 && '$x–$y' != real) '$x–$y',
+    }.toList()
+      ..shuffle(_random);
+    if (others.length < 2) return null;
+    final options = [real, ...others.take(2)]..shuffle(_random);
+    return PenaltyKick(
+      kind: KickKind.matchScore,
+      ask: _up('${m.competition} · ${m.year}'),
+      lines: [_up('${m.home} v ${m.away}'), 'WHAT WAS THE SCORE?'],
+      options: options,
+      correctOption: options.indexOf(real),
+      reveal: _up(m.score),
     );
   }
 

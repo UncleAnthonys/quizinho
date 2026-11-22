@@ -41,6 +41,15 @@ void main() {
     expect(c.lastScored, isFalse);
   });
 
+  test('a round starts with the first team in it', () {
+    final c = ShootoutController(teams: [0, 1]);
+    expect(c.roundStart, isTrue);
+    kick(c, true);
+    expect(c.roundStart, isFalse);
+    kick(c, true);
+    expect(c.roundStart, isTrue);
+  });
+
   test('ends early when one team can\'t be caught', () {
     final c = ShootoutController(teams: [0, 1]);
     // 3-0 after three each: team 1 can only reach 2.

@@ -51,6 +51,8 @@ CREATE TABLE players (
   wikidata_id TEXT, women INTEGER NOT NULL DEFAULT 0
 );
 CREATE TABLE player_aliases (player_id TEXT NOT NULL REFERENCES players(id), alias TEXT NOT NULL);
+-- League apps and goals over a whole career, where every club's numbers are known (penalties).
+CREATE TABLE player_totals (player_id TEXT NOT NULL REFERENCES players(id), apps INTEGER NOT NULL, goals INTEGER NOT NULL);
 -- How a name may sound when spoken, spelt the English way (voice answers only).
 CREATE TABLE player_spoken (player_id TEXT NOT NULL REFERENCES players(id), spoken TEXT NOT NULL);
 CREATE TABLE career_spells (
@@ -1048,6 +1050,8 @@ def write_db(path: pathlib.Path, version: int, clubs, players, matches, connecti
         con.execute("INSERT INTO players VALUES (?,?,?,?,?,0,'demo_seed',NULL,?)",
                     (pid, p["name"], p["nat"], p["pos"], p["fame"], int(p.get("women", False))))
         con.executemany("INSERT INTO player_aliases VALUES (?,?)", [(pid, a) for a in p["aliases"]])
+        if (lt := league_totals(p)) is not None:
+            con.execute("INSERT INTO player_totals VALUES (?,?,?)", (pid, *lt))
         con.executemany("INSERT INTO player_spoken VALUES (?,?)", [(pid, s) for s in p.get("spoken", [])])
         con.executemany("INSERT INTO career_spells VALUES (?,?,?,?,?,?)",
                         [(pid, s["seq"], s["club"], s["start"], s["end"], int(s["loan"])) for s in p["spells"]])
@@ -1087,6 +1091,16 @@ def write_db(path: pathlib.Path, version: int, clubs, players, matches, connecti
     con.close()
 
 
+def league_totals(p) -> tuple[int, int] | None:
+    """League apps and goals over a whole career - only when every club in it
+    has numbers, so a total is never short."""
+    stats = p.get("stats") or {}
+    clubs = {s["club"] for s in p["spells"]}
+    if not clubs or not stats or any(c not in stats for c in clubs):
+        return None
+    return sum(a for a, _ in stats.values()), sum(g for _, g in stats.values())
+
+
 def write_json(path: pathlib.Path, version: int, clubs, players, matches, connections, careers, bidding, checkouts, grid):
     """Same content as the SQLite file, for the web build (no SQLite plugin in browsers)."""
     doc = {
@@ -1097,7 +1111,8 @@ def write_json(path: pathlib.Path, version: int, clubs, players, matches, connec
                   for cid, c in clubs.items()],
         "players": [
             {"id": pid, "name": p["name"], "nat": p["nat"], "pos": p["pos"], "fame": p["fame"], "aliases": p["aliases"],
-             **({"g": "w"} if p.get("women") else {}), **({"sp": p["spoken"]} if p.get("spoken") else {})}
+             **({"g": "w"} if p.get("women") else {}), **({"sp": p["spoken"]} if p.get("spoken") else {}),
+             **({"lt": list(lt)} if (lt := league_totals(p)) is not None else {})}
             for pid, p in players.items()
         ],
         "careers": [

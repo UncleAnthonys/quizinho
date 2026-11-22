@@ -39,6 +39,10 @@ class _ShootoutScreenState extends State<ShootoutScreen>
   PenaltyKick? _ready;
   bool _fetching = false;
 
+  /// This round's kind of kick: every team gets the same kind, so a pure guess
+  /// ("Terry or Gerrard?") is the same for everyone.
+  KickKind? _roundKind;
+
   /// Who's taking it (a named player, when the team has names).
   String? _player;
   int _lastSecond = -1;
@@ -91,7 +95,8 @@ class _ShootoutScreenState extends State<ShootoutScreen>
     _player = _t.nextTurnPlayer(c.taker);
     _ready = null;
     _fetching = true;
-    _source!.next().then((k) {
+    if (c.roundStart) _roundKind = null;
+    _source!.next(kind: _roundKind).then((k) {
       if (!mounted) return;
       _fetching = false;
       if (k == null) {
@@ -100,6 +105,7 @@ class _ShootoutScreenState extends State<ShootoutScreen>
         return;
       }
       _ready = k;
+      _roundKind ??= k.kind;
       _syncPhones();
       // On their own phone, or nobody's passing the phone: straight in.
       if (_phones?.phoneFor(c.taker, name: _player) != null) {
