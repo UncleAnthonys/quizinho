@@ -289,6 +289,7 @@ class Tournament extends ChangeNotifier {
         'turnIndex': {for (final e in _turnIndex.entries) '${e.key}': e.value},
         'holds': _holds,
         if (teaser != null) 'teaser': teaser!.toJson(),
+        if (penaltyWinner != null) 'pens': {'winner': penaltyWinner, 'goals': {for (final e in penaltyGoals.entries) '${e.key}': e.value}},
       };
 
   /// A match saved with [toJson]; null if it can't be read.
@@ -343,6 +344,12 @@ class Tournament extends ChangeNotifier {
       t._picks.addAll(counts(j['picks']));
       t._holds.addAll(counts(j['holds']));
       t.teaser = TeaserState.fromJson(j['teaser']);
+      if (j['pens'] case final Map pens) {
+        t.penaltyWinner = (pens['winner'] as num?)?.toInt();
+        t.penaltyGoals = {
+          for (final e in ((pens['goals'] as Map?) ?? const {}).entries) int.parse('${e.key}'): (e.value as num).toInt(),
+        };
+      }
       for (final e in counts(j['turnIndex']).entries) {
         t._turnIndex[int.parse(e.key)] = e.value;
       }
@@ -464,6 +471,24 @@ class Tournament extends ChangeNotifier {
       return c != 0 ? c : a.compareTo(b);
     });
     return idx;
+  }
+
+  /// A drawn match settled on penalties: the winner, and every team's goals.
+  int? penaltyWinner;
+  Map<int, int> penaltyGoals = {};
+
+  /// Level at the top at full time (penalties can settle it).
+  bool get drawn => teamCount > 1 && leaders.length > 1;
+
+  /// Who won the match: the leaders, or the penalty winner.
+  List<int> get champions => penaltyWinner != null ? [penaltyWinner!] : leaders;
+
+  /// "4–2": the winner's penalties first, then the best of the rest.
+  String? get penaltyScore {
+    final w = penaltyWinner;
+    if (w == null) return null;
+    final rest = [for (final e in penaltyGoals.entries) if (e.key != w) e.value];
+    return '${penaltyGoals[w] ?? 0}–${rest.isEmpty ? 0 : rest.reduce(max)}';
   }
 
   /// All teams sharing the top score (more than one = a draw).

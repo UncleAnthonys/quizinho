@@ -151,7 +151,8 @@ class _RoundSummaryScreenState extends State<RoundSummaryScreen> {
         label: 'Final whistle',
         icon: Icons.emoji_events,
         color: Palette.gold,
-        onPressed: _teaserBusy ? null : () => MatchFlow.toWinner(context, t),
+        // Level at the top: penalties, or call it a draw.
+        onPressed: _teaserBusy ? null : () => t.drawn ? MatchFlow.toPenalties(context, t) : MatchFlow.toWinner(context, t),
       );
     }
     return BigButton(

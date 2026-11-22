@@ -11,6 +11,7 @@ import '../games/career_path/career_path_screen.dart';
 import '../games/checkout_501/checkout_screen.dart';
 import '../games/club_connections/club_connections_screen.dart';
 import '../games/game_screen_support.dart';
+import '../games/penalties/shootout_screen.dart';
 import '../games/heads_up/heads_up_screen.dart';
 import '../games/pointless/pointless_screen.dart';
 import '../games/starting_xi/starting_xi_screen.dart';
@@ -150,6 +151,14 @@ abstract final class MatchFlow {
     t.teaser?.halfTimeDone = true;
     _save(AppScope.read(context), t);
     Navigator.of(context).pushReplacement(_route(_Guard(child: TeaserHalfTimeScreen(tournament: t))));
+  }
+
+  /// Full time, level at the top: penalties, or leave it as a draw.
+  static void toPenalties(BuildContext context, Tournament t) {
+    final nav = Navigator.of(context);
+    nav.pushReplacement(_route(_Guard(
+      child: Builder(builder: (context) => ShootoutScreen(tournament: t, onDone: () => toWinner(context, t))),
+    )));
   }
 
   static void toWinner(BuildContext context, Tournament t) {

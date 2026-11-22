@@ -14,6 +14,7 @@ import '../domain/tournament.dart';
 import '../games/bidding_war/bidding_war_screen.dart' show BidControls, BidLayout;
 import '../games/buzz_game_view.dart' show FaceOffIntro;
 import '../games/checkout_501/checkout_screen.dart' show CoLayout;
+import '../games/penalties/shootout_layout.dart' show ShootoutLayout;
 import '../games/pointless/pointless_screen.dart' show PtLayout;
 import '../games/starting_xi/starting_xi_screen.dart' show XiLayout;
 import '../games/tic_tac_toe/tic_tac_toe_screen.dart' show TttLayout, showSquareAnswers;
@@ -797,6 +798,15 @@ class _GuestGameState extends State<_GuestGame> with SingleTickerProviderStateMi
         ]);
 
     switch (v['game']) {
+      case 'pens':
+        final tap = asList(asMap(board['kick'])['options']).isNotEmpty;
+        return ShootoutLayout(
+          data: board,
+          typing: answerTyping.value && stage == 'answer',
+          clock: v['left'] != null ? clock() : null,
+          answerBox: board['phase'] == 'kicking' ? (tap ? (mine ? null : answerBox()) : clockAndBox()) : null,
+          onChoose: mine && stage == 'choose' ? (i) => widget.room.answer(q, 'choice:$i') : null,
+        );
       case 'xi':
         final seconds = (board['seconds'] as num?)?.toDouble() ?? 1;
         return ValueListenableBuilder<double>(

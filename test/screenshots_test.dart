@@ -49,6 +49,7 @@ import 'package:quizinho/data/models.dart' show Difficulty;
 import 'package:quizinho/games/tic_tac_toe/tic_tac_toe_controller.dart';
 import 'package:quizinho/ui/screens/round_summary_screen.dart';
 import 'package:quizinho/domain/warm_up_cup.dart';
+import 'package:quizinho/games/penalties/shootout_layout.dart';
 import 'fixtures.dart';
 
 final _shots = Platform.environment['SHOTS'] == '1';
@@ -1044,5 +1045,105 @@ void main() {
       await tester.pump(const Duration(seconds: 3));
       await tester.pump(const Duration(milliseconds: 500));
     });
+  }, skip: !_shots);
+
+  // Penalties: a drawn match at full time, the kicks, a save, the winner.
+  testWidgets('Penalties', (tester) async {
+    final teams = [
+      {'name': 'Home', 'color': 0, 'kicks': [true, false, true]},
+      {'name': 'Away', 'color': 1, 'kicks': [true, true]},
+    ];
+    Widget pens(Map<String, Object?> data, {Widget? box, bool tap = false}) => ShootoutLayout(
+          data: data,
+          answerBox: box,
+          clock: const TimerBar(fraction: 0.6, seconds: 9),
+          onPens: () {},
+          onDraw: () {},
+          onNext: () {},
+          onFinish: () {},
+          onChoose: tap ? (_) {} : null,
+          commentary: data['phase'] == 'choice' ? 'Put the kettle on, we’re going to penalties.' : null,
+        );
+    final box = Column(children: [
+      const TimerBar(fraction: 0.6, seconds: 9),
+      const SizedBox(height: 10),
+      PlayerPicker(index: services.repo.players, onPick: (_) {}, hint: 'Say or type a player…'),
+    ]);
+    await shot(
+        tester,
+        'pens_choice',
+        pens({
+          'phase': 'choice',
+          'level': [
+            {'name': 'Home', 'color': 0, 'score': 12},
+            {'name': 'Away', 'color': 1, 'score': 12},
+          ],
+        }));
+    final kicking = {
+      'phase': 'kicking',
+      'each': 5,
+      'teams': teams,
+      'taker': {'name': 'Away', 'color': 1, 'player': 'Sam'},
+      'label': 'KICK 3 OF 5',
+    };
+    await shot(
+        tester,
+        'pens_two_clubs',
+        pens({
+          ...kicking,
+          'kick': {
+            'ask': 'NAME A PLAYER WHO PLAYED FOR',
+            'lines': ['LEEDS UNITED', 'AND', 'MANCHESTER UNITED'],
+          },
+        }, box: box));
+    await shot(
+        tester,
+        'pens_missing_club',
+        pens({
+          ...kicking,
+          'kick': {
+            'ask': 'OUSMANE DEMBÉLÉ · NAME THE MISSING CLUB',
+            'path': ['STADE RENNAIS', 'BORUSSIA DORTMUND', '?', 'PARIS SAINT-GERMAIN'],
+          },
+        }, box: box));
+    await shot(
+        tester,
+        'pens_over_under',
+        pens({
+          ...kicking,
+          'kick': {
+            'ask': 'LEAGUE GAMES FOR STOKE CITY',
+            'lines': ['PETER CROUCH', 'OVER OR UNDER 175?'],
+            'options': ['OVER 175', 'UNDER 175'],
+          },
+        }, tap: true));
+    await shot(
+        tester,
+        'pens_saved',
+        pens({
+          'phase': 'result',
+          'each': 5,
+          'teams': [
+            {'name': 'Home', 'color': 0, 'kicks': [true, false, true]},
+            {'name': 'Away', 'color': 1, 'kicks': [true, true, false]},
+          ],
+          'taker': {'name': 'Away', 'color': 1},
+          'label': 'KICK 3 OF 5',
+          'scored': false,
+          'reveal': 'DAVID SEAMAN',
+        }));
+    await shot(
+        tester,
+        'pens_won',
+        pens({
+          'phase': 'finished',
+          'each': 5,
+          'teams': [
+            {'name': 'Home', 'color': 0, 'kicks': [true, false, true, true, true]},
+            {'name': 'Away', 'color': 1, 'kicks': [true, true, false, false]},
+          ],
+          'winner': {'name': 'Home', 'color': 0},
+          'pens': '4–2',
+        }));
   }, skip: !_shots);
 }

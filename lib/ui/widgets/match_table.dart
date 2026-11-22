@@ -45,8 +45,9 @@ class MatchTable {
     return {
       'full': true,
       'leaders': [
-        for (final l in t.leaders) {'name': t.teamName(l), 'colour': t.config.teams[l].colorIndex},
+        for (final l in t.champions) {'name': t.teamName(l), 'colour': t.config.teams[l].colorIndex},
       ],
+      if (t.penaltyScore case final pens?) 'pens': pens,
       if (potm)
         'potm': {
           'name': table.first.name,
@@ -142,6 +143,7 @@ class FullTimeHeader extends StatelessWidget {
       Text('FULL TIME', style: AppText.label(18)),
       const Icon(Icons.emoji_events_rounded, color: Palette.gold, size: 110),
       Text(leaders.length > 1 ? 'IT’S A DRAW' : 'CHAMPIONS', style: AppText.headline(30, color: Palette.gold)),
+      if (data['pens'] != null) Text('ON PENALTIES · ${data['pens']}', style: AppText.label(16, color: Palette.text)),
       const SizedBox(height: 6),
       Wrap(alignment: WrapAlignment.center, spacing: 8, runSpacing: 8, children: [
         for (final l in leaders) TeamChip(name: '${l['name']}', colorIndex: (l['colour'] as num?)?.toInt() ?? 0, size: 34),

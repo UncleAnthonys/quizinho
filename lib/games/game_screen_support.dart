@@ -68,9 +68,9 @@ mixin GameScreenSupport<W extends StatefulWidget> on State<W>, TickerProviderSta
   /// [clock]: seconds left on the go, every call (a right answer with 3 or
   /// fewer left gets its own line). [matchStart]: no rounds played yet (the
   /// match's first right answer gets its own line). [correctLine]: this
-  /// screen's own line for a right answer.
+  /// screen's own line for a right answer. [line]: this screen's own line, whatever happened.
   void handleEvent(int serial, GameEvent? event,
-      {String? miss, PunditMoment? moment, double? clock, bool matchStart = false, String? correctLine}) {
+      {String? miss, PunditMoment? moment, double? clock, bool matchStart = false, String? correctLine, String? line}) {
     final clockBefore = _clockSeen;
     _clockSeen = clock;
     if (event == null || serial == _seenSerial) return;
@@ -107,7 +107,9 @@ mixin GameScreenSupport<W extends StatefulWidget> on State<W>, TickerProviderSta
         s.sound.play(Sfx.cheer);
     }
     final late = clockBefore != null && clockBefore > 0 && clockBefore <= 3;
-    if (moment != null) {
+    if (line != null) {
+      say(line);
+    } else if (moment != null) {
       say(s.commentary.moment(moment));
     } else if (event == GameEvent.correct && correctLine != null) {
       say(correctLine);

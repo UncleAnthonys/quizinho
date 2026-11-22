@@ -21,7 +21,7 @@ class QuestionHistory {
   final Map<String, List<String>> _lists = {};
 
   /// Every kind of question that's remembered.
-  static const kinds = ['conn', 'career', 'match', 'bidding', 'checkout', 'ttt', 'headsup', 'teaser', 'top10'];
+  static const kinds = ['conn', 'career', 'match', 'bidding', 'checkout', 'ttt', 'headsup', 'teaser', 'top10', 'pens'];
 
   /// Enough to cycle through every Easy and Medium pool before forgetting.
   static const cap = 3000;
