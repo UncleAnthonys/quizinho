@@ -316,6 +316,8 @@ class _Chip extends StatelessWidget {
       );
 }
 
+int _side(String position) => position.startsWith('L') ? 0 : (position.startsWith('R') ? 2 : 1);
+
 /// A starting XI, attack at the top: position and surname, one "?".
 class _Pitch extends StatelessWidget {
   const _Pitch({required this.slots, this.compact = false});
@@ -329,7 +331,9 @@ class _Pitch extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(top: 6),
               child: Row(children: [
-                for (final s in slots.where((s) => _int(s[2]) == line))
+                // As in Starting XI: left-sided players on the left, right-sided on the right.
+                for (final side in const [0, 1, 2])
+                  for (final s in slots.where((s) => _int(s[2]) == line && _side('${s[0]}') == side))
                   Expanded(
                     child: Container(
                       margin: const EdgeInsets.symmetric(horizontal: 2),
