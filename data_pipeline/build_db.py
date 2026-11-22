@@ -427,6 +427,13 @@ CONNECTION_MIN_CLUB_FAME = 3
 # so a random Peruvian or youth-era Brazilian club never turns up on Medium.
 TOP5 = {"GBR", "ENG", "ESP", "ITA", "GER", "FRA", "MCO"}
 KNOWN_LEAGUES = TOP5 | {"NED", "POR", "SCO", "TUR", "BEL", "USA", "KSA"}
+# European leagues: an Expert career path is mostly played in Europe.
+EUROPE = TOP5 | {
+    "NED", "POR", "SCO", "WAL", "NIR", "IRL", "TUR", "BEL", "RUS", "SWE", "ROU", "POL", "SRB", "NOR", "AUT",
+    "DEN", "UKR", "SUI", "BUL", "GRE", "HUN", "CZE", "CRO", "SVN", "FIN", "LTU", "LVA", "EST", "CYP", "BLR",
+    "ISR", "BIH", "SVK", "ISL", "LUX", "KAZ", "GEO", "AZE", "ALB", "MKD", "MNE", "MDA", "ARM", "MLT", "FRO",
+    "AND", "SMR", "KOS", "GIB", "LIE",
+}
 # Generated from Wikidata by normalise.py, or the old hand-written demo seed.
 DATA_STATUS = "wikidata" if "GENERATED" in (SEED / "players.json").read_text(encoding="utf-8")[:300] else "demo_unverified"
 CONNECTION_MIN_ANSWER_FAME = 2
@@ -602,7 +609,20 @@ def generate_career_challenges(players, clubs):
             top5_clubs = {s["club"] for s in p["spells"] if clubs[s["club"]]["country"] in TOP5}
             known = sum(1 for s in p["spells"] if clubs[s["club"]]["country"] in KNOWN_LEAGUES)
             if len(top5_clubs) < 2 or known * 2 < len(p["spells"]):  # and most of the career
-                diff = 4
+                # A star with a real spell at a big European club stays at
+                # their level (Iniesta, Haaland, Maradona), whatever came after.
+                big_europe = any(clubs[s["club"]]["fame"] >= 4 and clubs[s["club"]]["country"] in KNOWN_LEAGUES
+                                 and memorable_spell(p, s["club"]) for s in p["spells"])
+                europe = sum(1 for s in p["spells"] if clubs[s["club"]]["country"] in EUROPE)
+                if p["fame"] >= 4 and big_europe:
+                    pass
+                # Expert: lesser-known, but mostly in Europe, and somewhere a
+                # UK group follows. A career away from Europe (Costa Rica,
+                # the J-League) isn't a career path at all.
+                elif europe * 2 >= len(p["spells"]) and known:
+                    diff = 4
+                else:
+                    continue
             out.append({"player": pid, "clues": len(p["spells"]), "difficulty": diff,
                         "eras": career_mask(p["spells"]) or 31})
     return out
