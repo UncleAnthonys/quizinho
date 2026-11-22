@@ -1130,6 +1130,10 @@ void main() {
           'taker': {'name': 'Away', 'color': 1},
           'label': 'KICK 3 OF 5',
           'scored': false,
+          'kick': {
+            'ask': 'ENGLAND V GERMANY · 1–1 · 1996',
+            'lines': ['WHO WAS ENGLAND’S KEEPER?'],
+          },
           'reveal': 'DAVID SEAMAN',
         }));
     await shot(

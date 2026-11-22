@@ -192,15 +192,26 @@ class ShootoutLayout extends StatelessWidget {
 
   Widget _result() {
     final scored = data['scored'] == true;
+    if (!scored) {
+      // A miss: the question shakes red, with the answer under it.
+      return Column(children: [
+        MissShake(trigger: (data['shake'] as num?)?.toInt(), child: KickCard(kick: _map(data['kick']))),
+        const SizedBox(height: 14),
+        Text('THE ANSWER', style: AppText.label(14)),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8),
+          child: Text('${data['reveal'] ?? ''}', textAlign: TextAlign.center, style: AppText.headline(30)),
+        ),
+        const Spacer(),
+        if (onNext != null) BigButton(label: 'Next kick', icon: Icons.arrow_forward, onPressed: onNext),
+      ]);
+    }
     return Column(children: [
       const Spacer(),
-      Icon(scored ? Icons.sports_soccer : Icons.back_hand_rounded, size: 80, color: scored ? Palette.green : Palette.muted),
-      FittedBox(
-        fit: BoxFit.scaleDown,
-        child: Text(scored ? 'SCORED!' : 'SAVED!', style: AppText.headline(80, color: scored ? Palette.green : Palette.danger)),
-      ),
+      const Icon(Icons.sports_soccer, size: 80, color: Palette.green),
+      FittedBox(fit: BoxFit.scaleDown, child: Text('SCORED!', style: AppText.headline(80, color: Palette.green))),
       const SizedBox(height: 8),
-      Text(scored ? 'RIGHT ANSWER' : 'THE ANSWER', style: AppText.label(14)),
+      Text('RIGHT ANSWER', style: AppText.label(14)),
       Padding(
         padding: const EdgeInsets.symmetric(horizontal: 8),
         child: Text('${data['reveal'] ?? ''}', textAlign: TextAlign.center, style: AppText.headline(30)),

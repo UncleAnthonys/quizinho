@@ -54,7 +54,7 @@ class _ShootoutScreenState extends State<ShootoutScreen>
 
   static const _kettle = 'Put the kettle on, we’re going to penalties.';
   static const _scored = ['Ice in the veins!', 'Top bins.', 'Sends the keeper the wrong way!', 'Never in doubt.'];
-  static const _saved = ['SAVED! The keeper’s guessed right.', 'Straight at the keeper.', 'Ballooned it over the bar!', 'Bottled it.'];
+  static const _saved = ['The keeper’s guessed right.', 'Straight at the keeper.', 'Ballooned it over the bar!', 'Bottled it.'];
   static const _winLines = ['Ice in the veins!', 'They’ll be singing about this one for years.', 'Cometh the hour, cometh the man.'];
 
   @override
@@ -192,9 +192,11 @@ class _ShootoutScreenState extends State<ShootoutScreen>
       ],
       'taker': {..._teamView(c.taker), if (_player != null) 'player': _player},
       'label': _label(c),
-      if (kick != null && c.phase == ShootoutPhase.kicking) 'kick': kick.toView(),
+      if (kick != null && (c.phase == ShootoutPhase.kicking || c.phase == ShootoutPhase.result)) 'kick': kick.toView(),
       if (c.phase == ShootoutPhase.result) ...{
         'scored': c.lastScored,
+        // A miss: the question shakes red (no "SAVED!").
+        if (c.lastScored == false) 'shake': Object.hash('pens', _t.rounds.length, _kickNo),
         'reveal': kick?.reveal,
       },
       if (c.phase == ShootoutPhase.finished) ...{
