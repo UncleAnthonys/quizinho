@@ -39,6 +39,7 @@ InMemoryFootballRepository parseFootballJson(String source) {
         women: p['g'] == 'w',
         leagueApps: (p['lt'] as List?)?[0] as int?,
         leagueGoals: (p['lt'] as List?)?[1] as int?,
+        careerYear: p['yr'] as int?,
       ),
   };
 

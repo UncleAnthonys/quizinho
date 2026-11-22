@@ -51,8 +51,10 @@ CREATE TABLE players (
   wikidata_id TEXT, women INTEGER NOT NULL DEFAULT 0
 );
 CREATE TABLE player_aliases (player_id TEXT NOT NULL REFERENCES players(id), alias TEXT NOT NULL);
--- League apps and goals over a whole career, where every club's numbers are known (penalties).
+-- Penalties: league apps and goals over a whole career, for well-known players
+-- whose every club's numbers are known; and the middle year of each career.
 CREATE TABLE player_totals (player_id TEXT NOT NULL REFERENCES players(id), apps INTEGER NOT NULL, goals INTEGER NOT NULL);
+CREATE TABLE player_years (player_id TEXT NOT NULL REFERENCES players(id), year INTEGER NOT NULL);
 -- How a name may sound when spoken, spelt the English way (voice answers only).
 CREATE TABLE player_spoken (player_id TEXT NOT NULL REFERENCES players(id), spoken TEXT NOT NULL);
 CREATE TABLE career_spells (
@@ -452,6 +454,8 @@ CAREER_BRITISH_LIFT = 18
 # Germany); Celtic, Rangers and Hibs share England's country code.
 BIG_THREE = {"GBR", "ENG", "ESP", "GER"}
 SCOTTISH = {"Q19593", "Q19597", "Q192597"}
+# Liverpool (both ids), Man United, Arsenal, Chelsea, Man City, Spurs.
+BIG_SIX = {"Q1130849", "Q18552", "Q18656", "Q9617", "Q9616", "Q50602", "Q18741"}
 CAREER_BIG_THREE_APPS = 50
 CAREER_MIN_CLUBS_HARD = 4
 # The biggest clubs in the world: a recent move to one makes a player Medium.
@@ -1050,8 +1054,10 @@ def write_db(path: pathlib.Path, version: int, clubs, players, matches, connecti
         con.execute("INSERT INTO players VALUES (?,?,?,?,?,0,'demo_seed',NULL,?)",
                     (pid, p["name"], p["nat"], p["pos"], p["fame"], int(p.get("women", False))))
         con.executemany("INSERT INTO player_aliases VALUES (?,?)", [(pid, a) for a in p["aliases"]])
-        if (lt := league_totals(p)) is not None:
+        if (lt := league_totals(p, clubs)) is not None:
             con.execute("INSERT INTO player_totals VALUES (?,?,?)", (pid, *lt))
+        if (y := career_year(p)) is not None:
+            con.execute("INSERT INTO player_years VALUES (?,?)", (pid, y))
         con.executemany("INSERT INTO player_spoken VALUES (?,?)", [(pid, s) for s in p.get("spoken", [])])
         con.executemany("INSERT INTO career_spells VALUES (?,?,?,?,?,?)",
                         [(pid, s["seq"], s["club"], s["start"], s["end"], int(s["loan"])) for s in p["spells"]])
@@ -1091,9 +1097,24 @@ def write_db(path: pathlib.Path, version: int, clubs, players, matches, connecti
     con.close()
 
 
-def league_totals(p) -> tuple[int, int] | None:
-    """League apps and goals over a whole career - only when every club in it
-    has numbers, so a total is never short."""
+def career_year(p) -> int | None:
+    """The middle of a career: who's from the same era (not Conte v Pogba)."""
+    years = [y for s in p["spells"] for y in (s["start"], s["end"] or CURRENT_YEAR) if y]
+    return (min(years) + max(years)) // 2 if years else None
+
+
+def league_totals(p, clubs) -> tuple[int, int] | None:
+    """League apps and goals over a whole career, for a player a UK group knows
+    (one of the biggest names, or a proper spell in England) - and only when
+    every club in it has numbers, so a total is never short."""
+    # Well-known: one of the biggest names, a known player with a real spell at
+    # a big English club, or anyone with one at the big six (Crouch, Defoe).
+    def spell_at(ok):
+        return any(ok(s["club"]) and memorable_spell(p, s["club"]) for s in p["spells"])
+    big_english = spell_at(lambda c: clubs[c]["country"] in ("GBR", "ENG") and c not in SCOTTISH and clubs[c]["fame"] >= 5)
+    known = p["fame"] >= 5 or (p["fame"] >= 4 and big_english) or (p["fame"] >= 3 and spell_at(lambda c: c in BIG_SIX))
+    if p.get("women") or not known:
+        return None
     stats = p.get("stats") or {}
     clubs = {s["club"] for s in p["spells"]}
     if not clubs or not stats or any(c not in stats for c in clubs):
@@ -1112,7 +1133,8 @@ def write_json(path: pathlib.Path, version: int, clubs, players, matches, connec
         "players": [
             {"id": pid, "name": p["name"], "nat": p["nat"], "pos": p["pos"], "fame": p["fame"], "aliases": p["aliases"],
              **({"g": "w"} if p.get("women") else {}), **({"sp": p["spoken"]} if p.get("spoken") else {}),
-             **({"lt": list(lt)} if (lt := league_totals(p)) is not None else {})}
+             **({"lt": list(lt)} if (lt := league_totals(p, clubs)) is not None else {}),
+             **({"yr": y} if (y := career_year(p)) is not None else {})}
             for pid, p in players.items()
         ],
         "careers": [

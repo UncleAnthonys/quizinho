@@ -9,8 +9,6 @@ enum KickKind {
   missingClub,
   lineupSpot,
   wholeCareer,
-  firstClub,
-  lastClub,
   fromList,
   countryClub,
   overUnder,
@@ -100,9 +98,16 @@ class KickSource {
   /// Pairings, lists and famous matches too: Easy alone is a few dozen.
   static const _wideLevel = Difficulty.medium;
 
-  /// Who played/scored more: far enough apart to be a fair call (not 243 v 242).
-  static bool _clearGap(int a, int b, {required bool goals}) =>
-      (a - b).abs() >= max(goals ? 3 : 10, (max(a, b) * 0.1).round());
+  /// Who played/scored more: a real call - not a coin toss (243 v 242), and
+  /// not a giveaway (Shearer 283 v Gerrard 125): within about a third.
+  static bool _clearGap(int a, int b, {required bool goals}) {
+    final gap = (a - b).abs(), top = max(a, b);
+    return gap >= max(goals ? 3 : 10, (top * 0.1).round()) && gap <= top * 0.35;
+  }
+
+  /// Played in the same era (not Conte v Pogba): careers' middles within 10 years.
+  static bool _sameEra(Player a, Player b) =>
+      a.careerYear != null && b.careerYear != null && (a.careerYear! - b.careerYear!).abs() <= 10;
 
   /// The next penalty, or null if nothing at all can be made. [kind]: the
   /// same kind as the round's first kick, so every team gets a like question
@@ -128,8 +133,6 @@ class KickSource {
         KickKind.missingClub => _missingClub(),
         KickKind.lineupSpot => _lineupSpot(),
         KickKind.wholeCareer => _wholeCareer(),
-        KickKind.firstClub => _endClub(first: true),
-        KickKind.lastClub => _endClub(first: false),
         KickKind.fromList => _fromList(),
         KickKind.countryClub => _countryClub(),
         KickKind.overUnder => _overUnder(),
@@ -206,24 +209,6 @@ class KickSource {
       path: [for (final s in _spells(p)) _up(s.club.name)],
       answers: {p.player.id},
       reveal: _up(p.player.name),
-    );
-  }
-
-  Future<PenaltyKick?> _endClub({required bool first}) async {
-    final p = await _career();
-    if (p == null) return null;
-    final spells = _spells(p);
-    final s = first ? spells.first : spells.last;
-    // A club people know: not Grenoble for Giroud, not Stuttgarter Kickers.
-    if (s.club.fame < 4) return null;
-    final now = !first && s.endYear == null;
-    return PenaltyKick(
-      kind: first ? KickKind.firstClub : KickKind.lastClub,
-      ask: first ? 'WHERE DID HE START HIS CAREER?' : (now ? 'WHO DOES HE PLAY FOR NOW?' : 'WHERE DID HE FINISH HIS CAREER?'),
-      lines: [_up(p.player.name)],
-      answers: {s.club.id},
-      clubs: true,
-      reveal: _up(s.club.name),
     );
   }
 
@@ -327,10 +312,10 @@ class KickSource {
     if (pool.isEmpty) return null;
     final (player, apps, scored) = pool[_random.nextInt(pool.length)];
     final real = goals ? scored : apps;
-    // The line: 20-35% off the real number, rounded to a nice figure.
+    // The line: close to the real number (8-15% off), so it's a proper call.
     final over = _random.nextBool();
-    final f = over ? 0.65 + _random.nextDouble() * 0.15 : 1.2 + _random.nextDouble() * 0.15;
-    final step = real >= 150 ? 25 : (real >= 40 ? 10 : 5);
+    final f = over ? 0.85 + _random.nextDouble() * 0.07 : 1.08 + _random.nextDouble() * 0.07;
+    final step = real >= 300 ? 25 : (real >= 100 ? 10 : 5);
     var line = ((real * f) / step).round() * step;
     if (line == real) line += over ? -step : step;
     if (line <= 0) return null;
@@ -352,12 +337,14 @@ class KickSource {
     final (cat, players) = found;
     if (players.length < 2) return null;
     final seen = _history.seenCounts('pens');
-    for (var i = 0; i < 12; i++) {
+    for (var i = 0; i < 40; i++) {
       final a = players[_random.nextInt(players.length)];
       final b = players[_random.nextInt(players.length)];
       final va = goals ? a.$3 : a.$2, vb = goals ? b.$3 : b.$2;
       // Goals: at least one of them a real scorer (not 6 v 9).
-      if (a.$1.id == b.$1.id || !_clearGap(va, vb, goals: goals) || (goals && max(va, vb) < 10)) continue;
+      if (a.$1.id == b.$1.id || !_clearGap(va, vb, goals: goals) || (goals && max(va, vb) < 10) || !_sameEra(a.$1, b.$1)) {
+        continue;
+      }
       final key = 'who:${goals ? 'g' : 'a'}:${cat.id}:${([a.$1.id, b.$1.id]..sort()).join(':')}';
       if (seen.containsKey(key)) continue;
       _history.add('pens', key);
@@ -382,15 +369,16 @@ class KickSource {
     _withTotals ??= [
       for (final p in _repo.players.all)
         // A proper career's worth of games (not a cameo, or someone who isn't really a footballer).
-        if (p.fame >= 4 && p.leagueGoals != null && (p.leagueApps ?? 0) >= 100 && p.women == (genders == 2)) p,
+        // (The database only has totals for players a UK group knows: Crouch, Defoe…)
+        if (p.leagueGoals != null && (p.leagueApps ?? 0) >= 100 && p.women == (genders == 2)) p,
     ];
     final pool = _withTotals!;
     if (pool.length < 2) return null;
     final seen = _history.seenCounts('pens');
-    for (var i = 0; i < 12; i++) {
+    for (var i = 0; i < 60; i++) {
       final a = pool[_random.nextInt(pool.length)];
       final b = pool[_random.nextInt(pool.length)];
-      if (a.id == b.id || !_clearGap(a.leagueGoals!, b.leagueGoals!, goals: true)) continue;
+      if (a.id == b.id || !_clearGap(a.leagueGoals!, b.leagueGoals!, goals: true) || !_sameEra(a, b)) continue;
       final key = 'tot:${([a.id, b.id]..sort()).join(':')}';
       if (seen.containsKey(key)) continue;
       _history.add('pens', key);
@@ -415,8 +403,9 @@ class KickSource {
   }
 
   /// "Liverpool v Barcelona, 2019: what was the score?" Three to pick from.
+  /// Only the famous matches (Easy): a score people might actually remember.
   Future<PenaltyKick?> _matchScore() async {
-    final m = await challenges.match(_wideLevel, _used, genders: genders);
+    final m = await challenges.match(_level, _used, genders: genders);
     if (m == null) return null;
     _used.add(m.id);
     // "3–3 (Liverpool won 3–2 on pens)": the score itself.

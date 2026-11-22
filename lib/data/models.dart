@@ -100,6 +100,7 @@ class Player {
     this.spoken = const [],
     this.leagueApps,
     this.leagueGoals,
+    this.careerYear,
   });
 
   final String id;
@@ -108,6 +109,9 @@ class Player {
   /// League apps and goals over the whole career (null: not every club's known).
   final int? leagueApps;
   final int? leagueGoals;
+
+  /// The middle year of the career: players of the same era to compare.
+  final int? careerYear;
   final List<String> aliases;
 
   /// How the name may sound, spelt the English way ("urdegord" for

@@ -84,6 +84,9 @@ class SqliteFootballRepository implements FootballRepository {
     for (final r in await db.rawQuery('SELECT player_id, apps, goals FROM player_totals')) {
       totals[r['player_id'] as String] = (r['apps'] as int, r['goals'] as int);
     }
+    final years = <String, int>{
+      for (final r in await db.rawQuery('SELECT player_id, year FROM player_years')) r['player_id'] as String: r['year'] as int,
+    };
     final playerList = <Player>[
       for (final r in await db.rawQuery('SELECT id, name, nationality, position, fame, verified, women FROM players'))
         Player(
@@ -98,6 +101,7 @@ class SqliteFootballRepository implements FootballRepository {
           spoken: spoken[r['id'] as String] ?? const [],
           leagueApps: totals[r['id'] as String]?.$1,
           leagueGoals: totals[r['id'] as String]?.$2,
+          careerYear: years[r['id'] as String],
         ),
     ];
 
