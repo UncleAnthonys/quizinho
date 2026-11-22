@@ -568,7 +568,6 @@ class _PlayerPickerState extends State<PlayerPicker> with SingleTickerProviderSt
         decoration: BoxDecoration(color: Palette.card, borderRadius: BorderRadius.circular(16)),
         child: Column(mainAxisSize: MainAxisSize.min, children: [
           Text('ROOM VOTE', style: AppText.label(15, color: Palette.gold)),
-          Text('Get the DVD out.', style: AppText.headline(18, color: Palette.gold)),
           const SizedBox(height: 6),
           Text('“$typed”', textAlign: TextAlign.center, style: AppText.headline(30)),
           const SizedBox(height: 6),
