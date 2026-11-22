@@ -97,6 +97,13 @@ class KickSource {
   /// four kinds of kick (and Career Path itself) without repeats.
   static const _careerLevel = Difficulty.medium;
 
+  /// Pairings, lists and famous matches too: Easy alone is a few dozen.
+  static const _wideLevel = Difficulty.medium;
+
+  /// Who played/scored more: far enough apart to be a fair call (not 243 v 242).
+  static bool _clearGap(int a, int b, {required bool goals}) =>
+      (a - b).abs() >= max(goals ? 3 : 10, (max(a, b) * 0.1).round());
+
   /// The next penalty, or null if nothing at all can be made. [kind]: the
   /// same kind as the round's first kick, so every team gets a like question
   /// (one gets "Terry or Gerrard?", so does the other).
@@ -135,7 +142,7 @@ class KickSource {
   String _up(String s) => s.toUpperCase();
 
   Future<PenaltyKick?> _twoClubs() async {
-    final c = await challenges.clubConnection(_level, _used, genders: genders);
+    final c = await challenges.clubConnection(_wideLevel, _used, genders: genders);
     if (c == null) return null;
     _used.add(c.id);
     return PenaltyKick(
@@ -222,7 +229,7 @@ class KickSource {
 
   /// The whole XI on the pitch, one name missing: no "which striker?".
   Future<PenaltyKick?> _lineupSpot() async {
-    final m = await challenges.match(_level, _used, genders: genders);
+    final m = await challenges.match(_wideLevel, _used, genders: genders);
     if (m == null) return null;
     _used.add(m.id);
     // The one to name: a well-known player (the best-known few, at random).
@@ -244,7 +251,7 @@ class KickSource {
   }
 
   Future<PenaltyKick?> _fromList() async {
-    final b = await challenges.bidding(_level, _used,
+    final b = await challenges.bidding(_wideLevel, _used,
         genders: genders, where: (b) => b.answerIds.length >= 5 && b.prompt.length <= 70);
     if (b == null) return null;
     _used.add(b.id);
@@ -349,7 +356,7 @@ class KickSource {
       final a = players[_random.nextInt(players.length)];
       final b = players[_random.nextInt(players.length)];
       final va = goals ? a.$3 : a.$2, vb = goals ? b.$3 : b.$2;
-      if (a.$1.id == b.$1.id || va == vb || (goals && va + vb < 5)) continue;
+      if (a.$1.id == b.$1.id || !_clearGap(va, vb, goals: goals) || (goals && va + vb < 5)) continue;
       final key = 'who:${goals ? 'g' : 'a'}:${cat.id}:${([a.$1.id, b.$1.id]..sort()).join(':')}';
       if (seen.containsKey(key)) continue;
       _history.add('pens', key);
@@ -381,7 +388,7 @@ class KickSource {
     for (var i = 0; i < 12; i++) {
       final a = pool[_random.nextInt(pool.length)];
       final b = pool[_random.nextInt(pool.length)];
-      if (a.id == b.id || a.leagueGoals == b.leagueGoals) continue;
+      if (a.id == b.id || !_clearGap(a.leagueGoals!, b.leagueGoals!, goals: true)) continue;
       final key = 'tot:${([a.id, b.id]..sort()).join(':')}';
       if (seen.containsKey(key)) continue;
       _history.add('pens', key);
@@ -392,7 +399,12 @@ class KickSource {
 
   /// Two players to tap between; the reveal gives both numbers.
   PenaltyKick _either(KickKind kind, String ask, Player a, int va, Player b, int vb, String unit) {
-    String short(Player p) => _up(p.name.split(' ').last);
+    // The surname, with its "van" or "del" (van Bronckhorst, del Bosque).
+    String short(Player p) {
+      final w = p.name.split(' ');
+      final n = w.length > 2 && w[w.length - 2].toLowerCase() == w[w.length - 2] ? w.sublist(w.length - 2) : [w.last];
+      return _up(n.join(' '));
+    }
     // Same surname (the Nevilles): full names.
     final full = short(a) == short(b);
     final na = full ? _up(a.name) : short(a), nb = full ? _up(b.name) : short(b);
@@ -408,7 +420,7 @@ class KickSource {
 
   /// "Liverpool v Barcelona, 2019: what was the score?" Three to pick from.
   Future<PenaltyKick?> _matchScore() async {
-    final m = await challenges.match(_level, _used, genders: genders);
+    final m = await challenges.match(_wideLevel, _used, genders: genders);
     if (m == null) return null;
     _used.add(m.id);
     // "3–3 (Liverpool won 3–2 on pens)": the score itself.
