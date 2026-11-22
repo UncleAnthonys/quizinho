@@ -6,7 +6,7 @@ import 'package:flutter/services.dart' show DeviceOrientation, SystemChrome;
 import 'package:flutter/widgets.dart';
 
 import '../core/app_services.dart';
-import '../core/commentary.dart' show PunditMoment;
+import '../core/commentary.dart' show Commentary, PunditMoment;
 import '../core/sound_service.dart';
 import '../domain/tournament.dart';
 import '../multiplayer/room.dart' show HostRoom;
@@ -32,6 +32,9 @@ mixin GameScreenSupport<W extends StatefulWidget> on State<W>, TickerProviderSta
   int _seenSerial = 0;
   double? _clockSeen;
   bool _firstSaid = false;
+
+  /// Right answers in a row on this screen (a miss resets it).
+  int _streak = 0;
 
   AppServices get services => AppScope.read(context);
 
@@ -107,6 +110,11 @@ mixin GameScreenSupport<W extends StatefulWidget> on State<W>, TickerProviderSta
         s.sound.play(Sfx.cheer);
     }
     final late = clockBefore != null && clockBefore > 0 && clockBefore <= 3;
+    if (event == GameEvent.correct) {
+      _streak++;
+    } else if (event == GameEvent.wrong || event == GameEvent.timeUp || event == GameEvent.nobodyGotIt) {
+      _streak = 0;
+    }
     if (line != null) {
       say(line);
     } else if (moment != null) {
@@ -118,6 +126,8 @@ mixin GameScreenSupport<W extends StatefulWidget> on State<W>, TickerProviderSta
       say(s.commentary.first());
     } else if (event == GameEvent.correct && late) {
       say(s.commentary.late());
+    } else if (event == GameEvent.correct && _streak > 0 && _streak % 3 == 0) {
+      say(Commentary.hatTrick);
     } else if (event == GameEvent.buzz) {
       say(s.commentary.maybeBuzzLine());
     } else if (event != GameEvent.reveal) {

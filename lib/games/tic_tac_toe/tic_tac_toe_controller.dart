@@ -338,6 +338,9 @@ class TicTacToeController extends ChangeNotifier {
   /// This turn's square is a steal.
   bool stealing = false;
 
+  /// The last square claimed was taken off the other side (commentary).
+  bool lastWasSteal = false;
+
   bool canSteal(int square) =>
       phase == TttPhase.choosing &&
       owner[square] != null &&
@@ -480,6 +483,7 @@ class TicTacToeController extends ChangeNotifier {
   bool get _solo => teamCount == 1;
 
   void _claim(int sq, String name) {
+    lastWasSteal = stealing;
     if (stealing) {
       stealsLeft[currentTeam]--;
       locked[sq] = true;

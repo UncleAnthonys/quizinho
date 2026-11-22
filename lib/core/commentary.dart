@@ -48,6 +48,7 @@ class Commentary {
       'Ice in the veins!',
       'Never in doubt.',
       'Top bins.',
+      'He knows ball.',
     ],
     GameEvent.deepCut: [
       'Where on earth did THAT come from?!',
@@ -58,11 +59,41 @@ class Commentary {
       'Unbelievable, Jeff!',
       'Proper cold Tuesday night in Stoke knowledge.',
       'Someone’s got a Panini sticker album at home.',
+      'The streets won’t forget.',
+      'Proper Barclays, that.',
+      'A cultured answer from a cultured player.',
+      'He’s got a frightening football brain.',
+      'Get him on Mastermind.',
+      'That’s some serious scouting knowledge.',
+      'Someone’s been on Transfermarkt.',
+      'That’s a Championship Manager answer.',
+      'He knows his 2006 Bolton squad, this lad.',
+      'That’s a proper pub-quiz player.',
+      'He’s been watching the reserves.',
+      'Not a name I expected to hear today.',
+      'Football heritage.',
+      'He’s done his homework, hasn’t he?',
+      'A player for the purists.',
+      'Proper Stoke away on a Tuesday night.',
+      'That’s one for the tactics nerds.',
+      'The data analysts are going wild.',
+      'The laptop managers won’t like that.',
+      'He’s watched every minute of the Intertoto Cup.',
     ],
     GameEvent.steal: [
       'Daylight robbery!',
       'Pinched it from under their noses!',
       'Smash and grab!',
+      'He’s absolutely mugged him off!',
+      'Snatched it from under their noses.',
+      'You’ve been robbed!',
+      'That’s daylight robbery.',
+      'He’s picked their pockets!',
+      'A proper smash and grab.',
+      'They’ve done him on the counter!',
+      'He’s punished a schoolboy error.',
+      'That’ll hurt in the dressing room.',
+      'They’ve thrown it away!',
     ],
     GameEvent.wrong: [
       'Oh dear. Oh dear oh dear.',
@@ -73,6 +104,8 @@ class Commentary {
       'VAR’s had a look… still wrong.',
       'He’s left his shooting boots in the car.',
       'Hairdryer treatment incoming.',
+      'The xG was high. The answer was miles off.',
+      'That’s not getting past VAR.',
     ],
     GameEvent.timeUp: [
       'Frozen like a rabbit in the headlights.',
@@ -95,6 +128,14 @@ class Commentary {
       'They’re out! Pack the kit bag.',
       'And that’s curtains for them.',
       'Early bath!',
+      'Mutual consent in the morning.',
+      'The board will be meeting tonight.',
+      'He’s lost the dressing room.',
+      'Thanks for coming.',
+      'The chairman’s not happy.',
+      'That’s the end of his tournament.',
+      'His head’s gone.',
+      'An early shower for that man.',
     ],
     GameEvent.complete: [
       'Full team sheet! Frame it.',
@@ -125,7 +166,23 @@ class Commentary {
   String moment(PunditMoment m) => _pick(_moments[m]!);
 
   /// A right answer with the clock nearly gone (3 seconds or less).
-  String late() => _pick(const ['AGÜEROOOOO!', 'Fergie time!']);
+  String late() => _pick(const [
+        'AGÜEROOOOO!',
+        'Fergie time!',
+        'WHERE HAS HE PULLED THAT FROM?!',
+        'He’s rescued it at the death!',
+        'Absolute scenes!',
+        'The composure of a serial winner.',
+        'Cometh the hour, cometh the nerd.',
+        'He’s turned up when it matters!',
+        'Ice in the veins.',
+        'He’s nicked it in Fergie time!',
+        'That’s a last-minute winner!',
+        'Build him a statue!',
+      ]);
+
+  /// Three right answers in a row.
+  static const hatTrick = 'He’s got his coaching badges, clearly.';
 
   /// The first right answer of the match.
   String first() => _pick(const ['Early doors!', 'Remember the name!']);

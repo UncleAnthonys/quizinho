@@ -12,6 +12,7 @@ import '../../multiplayer/turn_bridge.dart';
 import '../../ui/widgets/common.dart';
 import '../../ui/widgets/player_picker.dart';
 import '../buzz_game_view.dart' show LoadingRound, OutOfChallenges;
+import '../buzz_race_controller.dart' show GameEvent;
 import '../game_screen_support.dart';
 import 'tic_tac_toe_controller.dart';
 
@@ -156,7 +157,11 @@ class _TicTacToeScreenState extends State<TicTacToeScreen>
       _turnPlayer = phoneTurnPlayer(_t, c.currentTeam);
     }
     _syncPhones(c);
-    handleEvent(c.eventSerial, c.lastEvent, clock: c.secondsLeft, matchStart: widget.round.tournament.rounds.isEmpty);
+    handleEvent(c.eventSerial, c.lastEvent,
+        clock: c.secondsLeft,
+        matchStart: widget.round.tournament.rounds.isEmpty,
+        // A square taken off the other side: a steal line.
+        correctLine: c.lastEvent == GameEvent.correct && c.lastWasSteal ? services.commentary.lineFor(GameEvent.steal) : null);
     if (c.clockRunning) {
       final sec = c.secondsLeft.ceil();
       if (sec != _lastSecond) {

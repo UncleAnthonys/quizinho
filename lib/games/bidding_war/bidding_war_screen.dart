@@ -143,12 +143,35 @@ class _BiddingWarScreenState extends State<BiddingWarScreen>
           s.sound.play(Sfx.fanfare);
           s.sound.play(Sfx.cheer);
           s.haptic(HapticStrength.heavy);
-          say(_pick(const ['BID COMPLETED! Absolute scenes.', 'Talked the talk, walked the walk!', 'They only went and did it!']));
+          say(_pick(const [
+            'BID COMPLETED! Absolute scenes.',
+            'Talked the talk, walked the walk!',
+            'They only went and did it!',
+            'Big talk. Bigger performance.',
+            'He’s backed every word of it!',
+            'That’s why he’s on the big money.',
+            'The doubters have been silenced.',
+            'He’s delivered on the biggest stage.',
+          ]));
         case BidEvent.failed:
           s.sound.play(Sfx.boom);
           s.sound.play(Sfx.groan, volume: 0.8);
           s.haptic(HapticStrength.heavy);
-          say(_pick(const ['YOU BLUFFED AND GOT CAUGHT!', 'All mouth, no trousers!', 'Big talk… small delivery.']));
+          say(_pick(const [
+            'YOU BLUFFED AND GOT CAUGHT!',
+            'All mouth, no trousers!',
+            'Big talk… small delivery.',
+            'All talk, no trousers.',
+            'He wrote cheques his football knowledge couldn’t cash.',
+            'The confidence was extraordinary. The knowledge wasn’t.',
+            'Someone’s been caught bluffing.',
+            'He’s bitten off more than he can chew.',
+            'That’s an absolute bottle job.',
+            'They’ve talked themselves into trouble.',
+            'They were giving it the big one five minutes ago.',
+            'He believed his own hype.',
+            'That is a spectacular collapse.',
+          ]));
         case null:
           break;
       }
