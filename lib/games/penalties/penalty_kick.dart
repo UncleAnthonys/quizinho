@@ -24,6 +24,7 @@ class PenaltyKick {
     required this.ask,
     this.lines = const [],
     this.path = const [],
+    this.lineup = const [],
     this.answers = const {},
     this.clubs = false,
     required this.reveal,
@@ -41,6 +42,9 @@ class PenaltyKick {
 
   /// A career, club by club; "?" marks the club to name.
   final List<String> path;
+
+  /// A starting XI: [position, surname, line (0 GK - 3 attack)]; "?" for the one to name.
+  final List<List<Object>> lineup;
 
   /// Right answers (player ids, or club ids when [clubs]).
   final Set<String> answers;
@@ -61,6 +65,7 @@ class PenaltyKick {
         'ask': ask,
         if (lines.isNotEmpty) 'lines': lines,
         if (path.isNotEmpty) 'path': path,
+        if (lineup.isNotEmpty) 'lineup': lineup,
         if (options.isNotEmpty) 'options': options,
       };
 }
@@ -182,7 +187,8 @@ class KickSource {
     if (p == null) return null;
     final spells = _spells(p);
     final s = first ? spells.first : spells.last;
-    if (s.club.fame < 3) return null; // nobody knows his first club was Stuttgarter Kickers
+    // A club people know: not Grenoble for Giroud, not Stuttgarter Kickers.
+    if (s.club.fame < 4) return null;
     final now = !first && s.endYear == null;
     return PenaltyKick(
       kind: first ? KickKind.firstClub : KickKind.lastClub,
@@ -194,28 +200,26 @@ class KickSource {
     );
   }
 
+  /// The whole XI on the pitch, one name missing: no "which striker?".
   Future<PenaltyKick?> _lineupSpot() async {
     final m = await challenges.match(_level, _used, genders: genders);
     if (m == null) return null;
     _used.add(m.id);
-    final keepers = m.lineup.where((s) => s.position == 'GK').toList();
-    final strikers = m.lineup.where((s) => s.position == 'ST').toList();
-    final useKeeper = strikers.isEmpty || (keepers.isNotEmpty && _random.nextBool());
-    final slots = useKeeper ? keepers : strikers;
-    if (slots.isEmpty) return null;
-    final team = _up(m.targetTeam);
+    // The one to name: a well-known player (the best-known few, at random).
+    final ranked = [...m.lineup]
+      ..sort((a, b) => (_repo.players.byId(b.playerId)?.fame ?? 0).compareTo(_repo.players.byId(a.playerId)?.fame ?? 0));
+    if (ranked.isEmpty) return null;
+    final gap = ranked[_random.nextInt(min(4, ranked.length))];
+    String surname(String n) => n.split(' ').last.toUpperCase();
     return PenaltyKick(
       kind: KickKind.lineupSpot,
       ask: _up('${m.home} v ${m.away} · ${m.score} · ${m.year}'),
-      lines: [
-        useKeeper
-            ? 'WHO WAS $team’S KEEPER?'
-            : slots.length == 1
-                ? 'WHO WAS $team’S STRIKER?'
-                : 'NAME ONE OF $team’S STRIKERS',
+      lines: ['NAME ${_up(m.targetTeam)}’S MISSING PLAYER'],
+      lineup: [
+        for (final s in m.lineup) [s.position, s.playerId == gap.playerId ? '?' : surname(s.playerName), s.line],
       ],
-      answers: {for (final s in slots) s.playerId},
-      reveal: _up(slots.map((s) => s.playerName).join(' · ')),
+      answers: {gap.playerId},
+      reveal: _up(gap.playerName),
     );
   }
 

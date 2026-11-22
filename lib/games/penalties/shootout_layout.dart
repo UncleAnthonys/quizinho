@@ -259,6 +259,7 @@ class KickCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final lines = [for (final l in _list(kick['lines'])) '$l'];
     final path = [for (final p in _list(kick['path'])) '$p'];
+    final lineup = [for (final s in _list(kick['lineup'])) _list(s)];
     return Container(
       width: double.infinity,
       padding: EdgeInsets.all(compact ? 10 : 16),
@@ -276,23 +277,81 @@ class KickCard extends StatelessWidget {
               style: l == 'AND' || l == 'WHO PLAYED FOR'
                   ? AppText.label(15, color: Palette.muted)
                   : AppText.headline(compact ? 22 : 30)),
-        for (final p in path)
-          Container(
-            width: double.infinity,
-            margin: const EdgeInsets.only(top: 6),
-            padding: EdgeInsets.symmetric(vertical: compact ? 4 : 8),
-            decoration: BoxDecoration(
-              color: p == '?' ? Colors.transparent : Palette.card,
-              borderRadius: BorderRadius.circular(12),
-              border: p == '?' ? Border.all(color: Palette.yellow, width: 2) : null,
-            ),
-            child: Text(p,
-                textAlign: TextAlign.center,
-                style: AppText.headline(compact ? 17 : 21, color: p == '?' ? Palette.yellow : Palette.text)),
+        // A career: the clubs in a few rows, so the answer box stays in view.
+        if (path.isNotEmpty)
+          Wrap(
+            alignment: WrapAlignment.center,
+            crossAxisAlignment: WrapCrossAlignment.center,
+            spacing: 4,
+            runSpacing: 6,
+            children: [
+              for (final (i, p) in path.indexed) ...[
+                if (i > 0) const Icon(Icons.arrow_forward_rounded, size: 16, color: Palette.muted),
+                _Chip(text: p, gap: p == '?', compact: compact),
+              ],
+            ],
           ),
+        if (lineup.isNotEmpty) _Pitch(slots: lineup, compact: compact),
       ]),
     );
   }
+}
+
+/// One club (or the gap) in a career.
+class _Chip extends StatelessWidget {
+  const _Chip({required this.text, this.gap = false, this.compact = false});
+  final String text;
+  final bool gap;
+  final bool compact;
+
+  @override
+  Widget build(BuildContext context) => Container(
+        padding: EdgeInsets.symmetric(horizontal: gap ? 18 : 10, vertical: compact ? 3 : 6),
+        decoration: BoxDecoration(
+          color: gap ? Colors.transparent : Palette.card,
+          borderRadius: BorderRadius.circular(10),
+          border: gap ? Border.all(color: Palette.yellow, width: 2) : null,
+        ),
+        child: Text(text, style: AppText.headline(compact ? 15 : 18, color: gap ? Palette.yellow : Palette.text)),
+      );
+}
+
+/// A starting XI, attack at the top: position and surname, one "?".
+class _Pitch extends StatelessWidget {
+  const _Pitch({required this.slots, this.compact = false});
+  final List<List<Object?>> slots;
+  final bool compact;
+
+  @override
+  Widget build(BuildContext context) => Column(children: [
+        for (final line in [3, 2, 1, 0])
+          if (slots.any((s) => _int(s[2]) == line))
+            Padding(
+              padding: const EdgeInsets.only(top: 6),
+              child: Row(children: [
+                for (final s in slots.where((s) => _int(s[2]) == line))
+                  Expanded(
+                    child: Container(
+                      margin: const EdgeInsets.symmetric(horizontal: 2),
+                      padding: EdgeInsets.symmetric(vertical: compact ? 3 : 6),
+                      decoration: BoxDecoration(
+                        color: s[1] == '?' ? Colors.transparent : Palette.card,
+                        borderRadius: BorderRadius.circular(10),
+                        border: s[1] == '?' ? Border.all(color: Palette.yellow, width: 2) : null,
+                      ),
+                      child: Column(children: [
+                        Text('${s[0]}', style: AppText.label(10)),
+                        FittedBox(
+                          fit: BoxFit.scaleDown,
+                          child: Text('${s[1]}',
+                              style: AppText.headline(compact ? 14 : 16, color: s[1] == '?' ? Palette.yellow : Palette.text)),
+                        ),
+                      ]),
+                    ),
+                  ),
+              ]),
+            ),
+      ]);
 }
 
 /// Each team's kicks: green for a goal, red for a save, empty to come.

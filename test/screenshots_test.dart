@@ -1102,8 +1102,24 @@ void main() {
         pens({
           ...kicking,
           'kick': {
-            'ask': 'OUSMANE DEMBÉLÉ · NAME THE MISSING CLUB',
-            'path': ['STADE RENNAIS', 'BORUSSIA DORTMUND', '?', 'PARIS SAINT-GERMAIN'],
+            'ask': 'ÁNGEL DI MARÍA · NAME THE MISSING CLUB',
+            'path': ['ROSARIO CENTRAL', 'BENFICA', '?', 'MANCHESTER UNITED', 'PARIS SAINT-GERMAIN', 'JUVENTUS', 'BENFICA', 'ROSARIO CENTRAL'],
+          },
+        }, box: box));
+    await shot(
+        tester,
+        'pens_lineup',
+        pens({
+          ...kicking,
+          'kick': {
+            'ask': 'LIVERPOOL V BARCELONA · 4–0 · 2019',
+            'lines': ['NAME LIVERPOOL’S MISSING PLAYER'],
+            'lineup': [
+              ['GK', 'ALISSON', 0],
+              ['RB', 'ALEXANDER-ARNOLD', 1], ['CB', 'MATIP', 1], ['CB', 'VAN DIJK', 1], ['LB', 'MILNER', 1],
+              ['CM', 'FABINHO', 2], ['CM', 'HENDERSON', 2], ['CM', '?', 2],
+              ['RW', 'SHAQIRI', 3], ['ST', 'ORIGI', 3], ['LW', 'MANÉ', 3],
+            ],
           },
         }, box: box));
     await shot(
