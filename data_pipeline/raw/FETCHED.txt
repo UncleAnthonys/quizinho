@@ -5,3 +5,4 @@ extras 2026-11-13 02:57 UTC: players 42612->42631, infobox spells 26700, teams +
 extras 2026-11-13 14:21 UTC: players 42631->42631, infobox spells 26700, teams +0, took=439s
 extras 2026-11-16 13:23 UTC: players 42631->42634, infobox spells 26701, teams +3, took=542s
 extras 2026-11-17 03:42 UTC: players 42634->42634, infobox spells 262784, teams +2021, took=1373s
+extras 2026-11-23 15:39 UTC: players 42634->42638, infobox spells 262861, teams +10, took=1909s
