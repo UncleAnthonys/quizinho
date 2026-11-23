@@ -1,5 +1,5 @@
 {
-"_note": "Where Wikidata, the Wikipedia infobox and the Premier League line-ups disagree on a career, and what normalise.py did about it (see cross_check). Best-known players first. Counts: {'years_differ': 3115, 'infobox_only_added': 31744, 'wikidata_only_kept': 1682, 'wikidata_only_dropped': 4460, 'premier_league_only_added': 27}",
+"_note": "Where Wikidata, the Wikipedia infobox and the Premier League line-ups disagree on a career, and what normalise.py did about it (see cross_check). Best-known players first. Counts: {'years_differ': 3116, 'infobox_only_added': 31786, 'wikidata_only_kept': 1684, 'wikidata_only_dropped': 4457, 'premier_league_only_added': 27}",
 "anomalies": [
 {
 "player": "Diego Maradona",
@@ -8466,6 +8466,14 @@
 "detail": ""
 },
 {
+"player": "Altay Bayındır",
+"wikidata": "Q57415806",
+"sitelinks": 42,
+"kind": "infobox_only_added",
+"club": "RC Celta de Vigo",
+"detail": ""
+},
+{
 "player": "Marko Livaja",
 "wikidata": "Q591443",
 "sitelinks": 42,
@@ -14858,6 +14866,22 @@
 "detail": ""
 },
 {
+"player": "Bernard Parker",
+"wikidata": "Q215438",
+"sitelinks": 37,
+"kind": "infobox_only_added",
+"club": "TS Galaxy",
+"detail": ""
+},
+{
+"player": "Bernard Parker",
+"wikidata": "Q215438",
+"sitelinks": 37,
+"kind": "wikidata_only_dropped",
+"club": "TS Galaxy",
+"detail": "2022-2024"
+},
+{
 "player": "Kalu Uche",
 "wikidata": "Q215474",
 "sitelinks": 37,
@@ -15568,6 +15592,14 @@
 "kind": "wikidata_only_dropped",
 "club": "HŠK Concordia",
 "detail": "1938-1942"
+},
+{
+"player": "Stjepan Bobek",
+"wikidata": "Q374555",
+"sitelinks": 37,
+"kind": "wikidata_only_kept",
+"club": "Admira Wacker",
+"detail": "8 games on Wikidata"
 },
 {
 "player": "Nahuel Guzmán",
@@ -18175,6 +18207,14 @@
 "sitelinks": 36,
 "kind": "infobox_only_added",
 "club": "Chesterfield",
+"detail": ""
+},
+{
+"player": "Will Grigg",
+"wikidata": "Q5660741",
+"sitelinks": 36,
+"kind": "infobox_only_added",
+"club": "Forest Green Rovers",
 "detail": ""
 },
 {
@@ -23386,14 +23426,6 @@
 "detail": "2002-2003"
 },
 {
-"player": "Bruma",
-"wikidata": "Q1185419",
-"sitelinks": 33,
-"kind": "wikidata_only_dropped",
-"club": "Aris Thessaloniki",
-"detail": "2026-"
-},
-{
 "player": "Robin Risser",
 "wikidata": "Q124745247",
 "sitelinks": 33,
@@ -23967,38 +23999,6 @@
 "sitelinks": 33,
 "kind": "infobox_only_added",
 "club": "Montpellier Hérault Sport Club",
-"detail": ""
-},
-{
-"player": "Alexander Schlager",
-"wikidata": "Q20745286",
-"sitelinks": 33,
-"kind": "infobox_only_added",
-"club": "Floridsdorfer AC",
-"detail": ""
-},
-{
-"player": "Alexander Schlager",
-"wikidata": "Q20745286",
-"sitelinks": 33,
-"kind": "infobox_only_added",
-"club": "LASK Linz",
-"detail": ""
-},
-{
-"player": "Alexander Schlager",
-"wikidata": "Q20745286",
-"sitelinks": 33,
-"kind": "infobox_only_added",
-"club": "Red Bull Salzburg",
-"detail": ""
-},
-{
-"player": "Alexander Schlager",
-"wikidata": "Q20745286",
-"sitelinks": 33,
-"kind": "infobox_only_added",
-"club": "Werder Bremen",
 "detail": ""
 }
 ]

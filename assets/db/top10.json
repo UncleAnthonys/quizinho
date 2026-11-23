@@ -1,5 +1,5 @@
 {
-"_note": "Top 10 lists from Wikipedia record tables: 311 lists, 20 dropped. Built 2026-11-17.",
+"_note": "Top 10 lists from Wikipedia record tables: 309 lists, 22 dropped. Built 2026-11-23.",
 "dropped": [
 "pl-red-cards: 11 level on 10th",
 "pl-goals-us: only 8 rows",
@@ -10,6 +10,8 @@
 "pl-first-10-goals: a player we don't know: Mick Quinn",
 "pl-london-clubs: 29 level on 10th",
 "mufc-clean-sheets: row 6 names nobody we know: Alf Steward",
+"eng-captains: row 1 names nobody we know: Carol Thomas",
+"sco-caps: only 9 rows",
 "ballon-dor-2010: only 3 rows",
 "ballon-dor-2011: only 3 rows",
 "ballon-dor-2012: only 3 rows",
@@ -580,7 +582,7 @@
 5,
 "erling-haaland",
 "Erling Haaland",
-"120 missed"
+"121 missed"
 ],
 [
 6,
@@ -592,10 +594,10 @@
 7,
 "dominic-calvert-lewin",
 "Dominic Calvert-Lewin",
-"113 missed"
+"116 missed"
 ],
 [
-7,
+8,
 "danny-welbeck",
 "Danny Welbeck",
 "113 missed"
@@ -2914,7 +2916,7 @@
 4,
 "danny-welbeck",
 "Danny Welbeck",
-"155 apps"
+"156 apps"
 ],
 [
 5,
@@ -4671,14 +4673,14 @@
 ],
 [
 8,
-"stewart-downing",
-"Stewart Downing",
-"408 apps"
-],
-[
-8,
 "danny-welbeck",
 "Danny Welbeck",
+"409 apps"
+],
+[
+9,
+"stewart-downing",
+"Stewart Downing",
 "408 apps"
 ],
 [
@@ -4847,7 +4849,7 @@
 2,
 "alex-iwobi",
 "Alex Iwobi",
-"330 apps"
+"331 apps"
 ],
 [
 3,
@@ -8403,10 +8405,10 @@
 "244 apps"
 ],
 [
-6,
+5,
 "john-mcginn",
 "John McGinn",
-"243 apps"
+"244 apps"
 ],
 [
 7,
@@ -8826,7 +8828,7 @@
 5,
 "tyrick-mitchell",
 "Tyrick Mitchell",
-"217 apps"
+"218 apps"
 ],
 [
 6,
@@ -9081,7 +9083,13 @@
 9,
 "bobby-zamora",
 "Bobby Zamora",
-"20 goals"
+"20 goals",
+[
+[
+"rodrigo-muniz",
+"Rodrigo Muniz"
+]
+]
 ]
 ],
 "f": "club-scorers",
@@ -9134,7 +9142,7 @@
 7,
 "antonee-robinson",
 "Antonee Robinson",
-"167 apps"
+"168 apps"
 ],
 [
 8,
@@ -9146,13 +9154,13 @@
 9,
 "tom-cairney",
 "Tom Cairney",
-"160 apps"
+"161 apps"
 ],
 [
 9,
 "bernd-leno",
 "Bernd Leno",
-"160 apps"
+"161 apps"
 ]
 ],
 "f": "club-apps",
@@ -9566,7 +9574,7 @@
 7,
 "virgil-van-dijk",
 "Virgil van Dijk",
-"282 apps"
+"283 apps"
 ],
 [
 8,
@@ -9581,10 +9589,10 @@
 "266 apps"
 ],
 [
-10,
+9,
 "alisson-becker",
 "Alisson Becker",
-"265 apps"
+"266 apps"
 ]
 ],
 "f": "club-apps",
@@ -9726,7 +9734,7 @@
 10,
 "phil-foden",
 "Phil Foden",
-"233 apps"
+"234 apps"
 ]
 ],
 "f": "club-apps",
@@ -10057,7 +10065,7 @@
 6,
 "jacob-murphy",
 "Jacob Murphy",
-"227 apps"
+"228 apps"
 ],
 [
 7,
@@ -11037,13 +11045,13 @@
 1,
 "lewis-dunk",
 "Lewis Dunk",
-"308 apps"
+"309 apps"
 ],
 [
 2,
 "pascal-gross",
 "Pascal Groß",
-"257 apps"
+"258 apps"
 ],
 [
 3,
@@ -11354,16 +11362,16 @@
 "23 goals"
 ],
 [
-6,
+5,
 "justin-kluivert",
 "Justin Kluivert",
-"22 goals"
+"23 goals"
 ],
 [
 7,
 "evanilson",
 "Evanilson",
-"21 goals"
+"22 goals"
 ],
 [
 8,
@@ -11398,13 +11406,13 @@
 1,
 "adam-smith",
 "Adam Smith",
-"265 apps"
+"266 apps"
 ],
 [
 2,
 "lewis-cook",
 "Lewis Cook",
-"200 apps"
+"201 apps"
 ],
 [
 3,
@@ -11434,7 +11442,7 @@
 7,
 "ryan-christie",
 "Ryan Christie",
-"133 apps"
+"134 apps"
 ],
 [
 8,
@@ -11444,14 +11452,14 @@
 ],
 [
 9,
-"callum-wilson",
-"Callum Wilson",
-"126 apps"
-],
-[
-9,
 "marcus-tavernier",
 "Marcus Tavernier",
+"127 apps"
+],
+[
+10,
+"callum-wilson",
+"Callum Wilson",
 "126 apps"
 ]
 ],
@@ -13055,7 +13063,7 @@
 {
 "id": "intl-caps",
 "q": "Most international caps (men)",
-"d": 2,
+"d": 3,
 "asof": "Nov 2026",
 "src": "List of men's footballers with 100 or more international caps",
 "e": [
@@ -13115,9 +13123,9 @@
 ],
 [
 10,
-"sergio-ramos",
-"Sergio Ramos",
-"180 caps"
+"maynor-figueroa",
+"Maynor Figueroa",
+"181 caps"
 ]
 ],
 "c": "classic"
@@ -14631,82 +14639,6 @@
 "c": "classic"
 },
 {
-"id": "eng-captains",
-"q": "Most games as England captain",
-"d": 2,
-"asof": "Nov 2026",
-"src": "List of England national football team captains",
-"e": [
-[
-1,
-"harry-kane",
-"Harry Kane",
-"99 as captain"
-],
-[
-2,
-"billy-wright",
-"Billy Wright",
-"90 as captain"
-],
-[
-2,
-"bobby-moore",
-"Bobby Moore",
-"90 as captain"
-],
-[
-4,
-"bryan-robson",
-"Bryan Robson",
-"65 as captain"
-],
-[
-5,
-"david-beckham",
-"David Beckham",
-"59 as captain"
-],
-[
-6,
-"steven-gerrard",
-"Steven Gerrard",
-"38 as captain"
-],
-[
-7,
-"alan-shearer",
-"Alan Shearer",
-"34 as captain"
-],
-[
-7,
-"john-terry",
-"John Terry",
-"34 as captain"
-],
-[
-9,
-"kevin-keegan",
-"Kevin Keegan",
-"31 as captain"
-],
-[
-10,
-"emlyn-hughes",
-"Emlyn Hughes",
-"23 as captain",
-[
-[
-"wayne-rooney",
-"Wayne Rooney"
-]
-]
-]
-],
-"c": "nations"
-},
-{
 "id": "ucl-assists",
 "q": "Most Champions League assists",
 "d": 1,
@@ -15109,77 +15041,6 @@
 "c": "classic"
 },
 {
-"id": "sco-caps",
-"q": "Most Scotland caps",
-"d": 3,
-"asof": "Nov 2026",
-"src": "Scotland national football team records and statistics",
-"e": [
-[
-1,
-"kenny-dalglish",
-"Kenny Dalglish",
-"102 caps"
-],
-[
-1,
-"andy-robertson",
-"Andy Robertson",
-"102 caps"
-],
-[
-3,
-"john-mcginn",
-"John McGinn",
-"94 caps"
-],
-[
-4,
-"jim-leighton",
-"Jim Leighton",
-"91 caps"
-],
-[
-5,
-"craig-gordon",
-"Craig Gordon",
-"84 caps"
-],
-[
-6,
-"darren-fletcher",
-"Darren Fletcher",
-"80 caps"
-],
-[
-7,
-"alex-mcleish",
-"Alex McLeish",
-"77 caps"
-],
-[
-8,
-"paul-mcstay",
-"Paul McStay",
-"76 caps"
-],
-[
-9,
-"ryan-christie",
-"Ryan Christie",
-"75 caps"
-],
-[
-10,
-"scott-mctominay",
-"Scott McTominay",
-"74 caps"
-]
-],
-"f": "home-nations",
-"c": "nations"
-},
-{
 "id": "sco-goals",
 "q": "Scotland's all-time top scorers",
 "d": 3,
@@ -15279,7 +15140,7 @@
 4,
 "ben-davies",
 "Ben Davies",
-"105 caps"
+"106 caps"
 ],
 [
 5,
@@ -15442,10 +15303,10 @@
 "95 caps"
 ],
 [
-6,
+5,
 "josh-magennis",
 "Josh Magennis",
-"93 caps"
+"95 caps"
 ],
 [
 7,
