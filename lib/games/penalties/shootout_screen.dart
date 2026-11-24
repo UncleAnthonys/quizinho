@@ -66,7 +66,6 @@ class _ShootoutScreenState extends State<ShootoutScreen>
     'Nobody deserves to lose like that.',
     'Heartbreak for one, delirium for the other.',
     'They’ll be singing about this one for years.',
-    'Cometh the hour…',
   ];
 
   @override
