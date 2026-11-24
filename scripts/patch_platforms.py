@@ -121,6 +121,28 @@ def patch_android_signing() -> None:
     s = s.replace(debug, 'signingConfig = signingConfigs.getByName(if (System.getenv("CM_KEYSTORE_PATH") != null) "upload" else "debug")', 1)
     gradle.write_text(s, encoding="utf-8")
     print("patched", gradle.relative_to(ROOT), "(release signing)")
+    patch_android_lint()
+
+
+def patch_android_lint() -> None:
+    """Release builds run Android lint over every plugin, and lint itself
+    crashes on in_app_purchase's Java (a bug in lint, not in the code), which
+    fails the whole build. The checks only report; switch them off."""
+    root_gradle = ROOT / "android" / "build.gradle.kts"
+    if not root_gradle.exists():
+        print("no android/build.gradle.kts, skipping lint")
+        return
+    s = root_gradle.read_text(encoding="utf-8")
+    if "lintVital" in s:
+        return
+    s += '''
+// Quizinho: release builds skip lint (it crashes on a plugin; see patch_platforms.py).
+subprojects {
+    tasks.matching { it.name.startsWith("lintVital") }.configureEach { enabled = false }
+}
+'''
+    root_gradle.write_text(s, encoding="utf-8")
+    print("patched", root_gradle.relative_to(ROOT), "(no release lint)")
 
 
 def patch_web() -> None:
