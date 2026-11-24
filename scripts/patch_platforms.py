@@ -75,6 +75,11 @@ def patch_android() -> None:
         return
     s = manifest.read_text(encoding="utf-8")
     s = re.sub(r'android:label="[^"]*"', f'android:label="{DISPLAY_NAME}"', s, count=1)
+    # The internet: joining on phones, the weekly data, purchases. Flutter only
+    # adds it to debug builds, so release builds had none.
+    for perm in ('android.permission.INTERNET', 'android.permission.ACCESS_NETWORK_STATE'):
+        if perm not in s:
+            s = s.replace('<application', f'<uses-permission android:name="{perm}"/>\n    <application', 1)
     # Microphone + speech recogniser (voice answers)
     if 'android.permission.RECORD_AUDIO' not in s:
         s = s.replace('<application', '<uses-permission android:name="android.permission.RECORD_AUDIO"/>\n    <application', 1)

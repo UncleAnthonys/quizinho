@@ -4,6 +4,8 @@ import android.Manifest
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
@@ -78,6 +80,15 @@ class QuizinhoSpeechPlugin : FlutterPlugin, MethodChannel.MethodCallHandler, Eve
         Build.VERSION.SDK_INT < 23 ||
             context.checkSelfPermission(Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED
 
+    /** Connected to a working internet (Wi-Fi or data). */
+    private fun online(): Boolean = try {
+        val cm = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val caps = cm.getNetworkCapabilities(cm.activeNetwork)
+        caps != null && caps.hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED)
+    } catch (e: Exception) {
+        false
+    }
+
     private fun onDeviceAvailable(): Boolean =
         Build.VERSION.SDK_INT >= 33 && SpeechRecognizer.isOnDeviceRecognitionAvailable(context)
 
@@ -87,8 +98,8 @@ class QuizinhoSpeechPlugin : FlutterPlugin, MethodChannel.MethodCallHandler, Eve
             "prepareModel" -> result.success("ready") // nothing to build on Android
             "status" -> result.success(
                 mapOf(
-                    "recogniser" to if (onDeviceAvailable()) "Google on-device" else "system",
-                    "name boost" to if (onDeviceAvailable()) "answers biased (Android 13+)" else "none (no on-device speech)",
+                    "recogniser" to if (online()) "Google online" else if (onDeviceAvailable()) "Google on-device (offline)" else "system",
+                    "name boost" to if (!online() && onDeviceAvailable()) "answers biased (Android 13+)" else "none (online)",
                 )
             )
             "listen" -> {
@@ -101,7 +112,11 @@ class QuizinhoSpeechPlugin : FlutterPlugin, MethodChannel.MethodCallHandler, Eve
                 val onDevice = when (mode) {
                     "server", "serverSearch" -> false
                     "device" -> onDeviceAvailable()
-                    else -> hints.isNotEmpty() && onDeviceAvailable()
+                    // Games: Google's online recogniser whenever there's
+                    // internet - on a real phone (Galaxy A13) it got 84% of
+                    // hard names where on-device misheard and hung. On-device
+                    // (with the answers' names) only when offline.
+                    else -> !online() && hints.isNotEmpty() && onDeviceAvailable()
                 }
                 result.success(listen(hints, pauseMs, onDevice = onDevice, search = mode == "serverSearch", maxMs = maxMs))
             }
