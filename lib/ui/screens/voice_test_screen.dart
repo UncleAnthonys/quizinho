@@ -55,7 +55,9 @@ class _Result {
 }
 
 class _VoiceTestScreenState extends State<VoiceTestScreen> {
-  final _random = Random();
+  /// Android: the same names every run (a fixed list), so the ways of
+  /// listening - and runs on different days - are compared like for like.
+  late final Random _random = _android ? Random(2026) : Random();
   final List<_Result> _results = [];
   final List<Player> _queue = [];
   List<Player> _pool = const [];
@@ -72,7 +74,13 @@ class _VoiceTestScreenState extends State<VoiceTestScreen> {
   /// Android: compare the ways of listening. Online is what phones without
   /// on-device speech get; on-device (with the answer's name) is newer phones.
   static const _modes = {'server': 'Online', 'serverSearch': 'Online (search)', 'device': 'On-device'};
-  String _mode = 'server';
+
+  /// 'compare' (each name said three times, once each way) or one of [_modes].
+  String _mode = 'compare';
+
+  /// Compare: which of the three takes of this name is next.
+  int _take = 0;
+  String get _modeNow => _mode == 'compare' ? _modes.keys.elementAt(_take) : _mode;
   bool get _android => !kIsWeb && defaultTargetPlatform == TargetPlatform.android;
 
   late AppServices _s;
@@ -134,7 +142,7 @@ class _VoiceTestScreenState extends State<VoiceTestScreen> {
       _live = '';
       _last = null;
     });
-    final mode = _android ? _mode : '';
+    final mode = _android ? _modeNow : '';
     if (_android) _s.voice?.androidMode = mode;
     final started = await _s.voice?.listen(
       // On-device: given the answer's name first, as in a game.
@@ -162,6 +170,15 @@ class _VoiceTestScreenState extends State<VoiceTestScreen> {
   void _next() {
     _s.voice?.stop();
     setState(() {
+      // Compare: the same name again the next way, then the next name.
+      if (_android && _mode == 'compare' && _take < _modes.length - 1) {
+        _take++;
+        _live = '';
+        _last = null;
+        _listening = false;
+        return;
+      }
+      _take = 0;
       _index++;
       _live = '';
       _last = null;
@@ -237,13 +254,23 @@ class _VoiceTestScreenState extends State<VoiceTestScreen> {
             Text('LISTEN USING', style: AppText.label(12, color: Palette.yellow)),
             const SizedBox(height: 6),
             Wrap(spacing: 8, children: [
-              for (final e in _modes.entries)
+              for (final e in {'compare': 'Compare all 3', ..._modes}.entries)
                 ChoiceChip(
                   label: Text(e.value),
                   selected: _mode == e.key,
-                  onSelected: _listening ? null : (_) => setState(() => _mode = e.key),
+                  onSelected: _listening
+                      ? null
+                      : (_) => setState(() {
+                            _mode = e.key;
+                            _take = 0;
+                          }),
                 ),
             ]),
+            if (_mode == 'compare') ...[
+              const SizedBox(height: 6),
+              Text('Say each name three times - once for each way of listening: now ${_modes[_modeNow]} '
+                  '(${_take + 1} of 3)', style: AppText.label(13, color: Palette.text)),
+            ],
           ],
           const SizedBox(height: 8),
           Text('Name ${_index + 1}${_index < _testSize ? ' of $_testSize' : ' (bonus round)'}'
