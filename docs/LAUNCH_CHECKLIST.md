@@ -13,15 +13,15 @@ Things to come back to before Quizinho goes live. Tick them off as they're done.
 ## Google Play Console
 - [ ] Re-check every App content answer before submitting
 - [ ] App access ("Full game unlock (promo code)"): create a promo code for the £2.99 product (Monetise → Promo codes) and put it in place of `[CODE]`
-- [ ] Data safety form (answers from Claude, matching the privacy policy)
-- [ ] Trader status declared (company address + quizinho@littlefortstudios.com)
-- [ ] Payments profile (Little Fort Studios Ltd, company bank account)
+- [x] Data safety form (answers from Claude, matching the privacy policy)
+- [x] Trader status declared (company address + quizinho@littlefortstudios.com)
+- [x] Payments profile (Little Fort Studios Ltd, company bank account)
 - [ ] In-app product `com.littlefortstudios.quizinho.fullgame`, £2.99 (needs a build uploaded first)
 - [ ] Store listing: "Quizinho: Football Party Quiz", text, icon, feature graphic, screenshots
 - [ ] Play full description: change the Club Connections line to "Club Connections – name a player who has played for both clubs" (wording now says "has/have played for")
 - [ ] Play screenshots: upload the latest set from docs/store (Bidding War now reads "Players from Brazil who have played for Barcelona"; Club Connections is Southampton + Bayern Munich; Career Path replaces the free kick)
-- [ ] Android build + signing in Codemagic (Claude)
-- [ ] Android manifest: strip the AD_ID permission (Play is told the app uses no advertising ID)
+- [x] Android build + signing in Codemagic (Claude)
+- [x] Android manifest: strip the AD_ID permission (Play is told the app uses no advertising ID)
 
 ## App Store Connect
 - [ ] Paid Applications Agreement, bank and tax (W-8BEN-E)

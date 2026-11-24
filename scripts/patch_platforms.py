@@ -81,6 +81,12 @@ def patch_android() -> None:
     if 'android.speech.RecognitionService' not in s:
         q = '    <queries>\n        <intent>\n            <action android:name="android.speech.RecognitionService" />\n        </intent>\n'
         s = s.replace('    <queries>\n', q, 1) if '    <queries>\n' in s else s.replace('</manifest>', q + '    </queries>\n</manifest>', 1)
+    # No advertising ID (Play is told the app doesn't use one): strip it even
+    # if a library asks for it.
+    if 'com.google.android.gms.permission.AD_ID' not in s:
+        if 'xmlns:tools=' not in s:
+            s = s.replace('<manifest ', '<manifest xmlns:tools="http://schemas.android.com/tools" ', 1)
+        s = s.replace('<application', '<uses-permission android:name="com.google.android.gms.permission.AD_ID" tools:node="remove"/>\n    <application', 1)
     # Orientation is controlled from Dart (portrait, plus landscape in buzzer games).
     s = s.replace('            android:screenOrientation="portrait"\n', '')
     manifest.write_text(s, encoding="utf-8")
