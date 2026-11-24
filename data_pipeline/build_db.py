@@ -1172,19 +1172,12 @@ def write_json(path: pathlib.Path, version: int, clubs, players, matches, connec
 
 
 def famous_scores(matches) -> list[dict]:
-    """Penalties' "What was the score?": every Starting XI match (they're all
-    famous nights) plus seed/scores.json (finals and big scorelines that have
-    no line-up here) - each match once, however many line-ups it has."""
+    """Penalties' "What was the score?": seed/scores.json only - finals and
+    nights people remember. (Not every Starting XI match: plenty of those are
+    line-ups people know but scores they don't.) Each match once."""
     def key(date, home, away):
         return date, frozenset(norm(t).split()[0] for t in (home, away))
     out, seen = [], set()
-    for m in matches:
-        k = key(m["date"], m["home"], m["away"])
-        if k in seen:
-            continue
-        seen.add(k)
-        out.append({"id": f"score-{m['id']}", "competition": m["competition"], "date": m["date"],
-                    "home": m["home"], "away": m["away"], "score": m["score"]})
     for sc in load("scores.json")["scores"]:
         k = key(sc["date"], sc["home"], sc["away"])
         # The same night already in (Man Utd or Manchester United, Spurs or Tottenham…).

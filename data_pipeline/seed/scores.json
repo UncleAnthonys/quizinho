@@ -1,1145 +1,1273 @@
 {
- "_comment": "Famous scores for the penalties 'What was the score?' kick (score only, no line-ups). Winner first for finals; home first otherwise. Finals: two sources each. League/European nights: well-documented results, no sources listed yet.",
- "scores": [
-  {
-   "competition": "World Cup final",
-   "date": "1990-07-08",
-   "home": "West Germany",
-   "away": "Argentina",
-   "score": "1–0",
-   "sources": [
-    "https://en.wikipedia.org/wiki/List_of_FIFA_World_Cup_finals",
-    "https://www.dazn.com/en-US/news/soccer/who-has-won-a-world-cup-list-of-every-winner-and-runner-up-scores-and-goal-scorers-of-each-final/i3s5h880k8i11hhotunuvwzvv"
-   ],
-   "id": "score-1990-07-08-west-germany"
-  },
-  {
-   "competition": "World Cup final",
-   "date": "1994-07-17",
-   "home": "Brazil",
-   "away": "Italy",
-   "score": "0–0 (Brazil won 3–2 on pens)",
-   "sources": [
-    "https://en.wikipedia.org/wiki/List_of_FIFA_World_Cup_finals",
-    "https://www.dazn.com/en-US/news/soccer/who-has-won-a-world-cup-list-of-every-winner-and-runner-up-scores-and-goal-scorers-of-each-final/i3s5h880k8i11hhotunuvwzvv"
-   ],
-   "id": "score-1994-07-17-brazil"
-  },
-  {
-   "competition": "World Cup final",
-   "date": "1998-07-12",
-   "home": "France",
-   "away": "Brazil",
-   "score": "3–0",
-   "sources": [
-    "https://en.wikipedia.org/wiki/List_of_FIFA_World_Cup_finals",
-    "https://www.dazn.com/en-US/news/soccer/who-has-won-a-world-cup-list-of-every-winner-and-runner-up-scores-and-goal-scorers-of-each-final/i3s5h880k8i11hhotunuvwzvv"
-   ],
-   "id": "score-1998-07-12-france"
-  },
-  {
-   "competition": "World Cup final",
-   "date": "2002-06-30",
-   "home": "Brazil",
-   "away": "Germany",
-   "score": "2–0",
-   "sources": [
-    "https://en.wikipedia.org/wiki/List_of_FIFA_World_Cup_finals",
-    "https://www.dazn.com/en-US/news/soccer/who-has-won-a-world-cup-list-of-every-winner-and-runner-up-scores-and-goal-scorers-of-each-final/i3s5h880k8i11hhotunuvwzvv"
-   ],
-   "id": "score-2002-06-30-brazil"
-  },
-  {
-   "competition": "World Cup final",
-   "date": "2006-07-09",
-   "home": "Italy",
-   "away": "France",
-   "score": "1–1 (Italy won 5–3 on pens)",
-   "sources": [
-    "https://en.wikipedia.org/wiki/List_of_FIFA_World_Cup_finals",
-    "https://www.dazn.com/en-US/news/soccer/who-has-won-a-world-cup-list-of-every-winner-and-runner-up-scores-and-goal-scorers-of-each-final/i3s5h880k8i11hhotunuvwzvv"
-   ],
-   "id": "score-2006-07-09-italy"
-  },
-  {
-   "competition": "World Cup final",
-   "date": "2010-07-11",
-   "home": "Spain",
-   "away": "Netherlands",
-   "score": "1–0 (aet)",
-   "sources": [
-    "https://en.wikipedia.org/wiki/List_of_FIFA_World_Cup_finals",
-    "https://www.dazn.com/en-US/news/soccer/who-has-won-a-world-cup-list-of-every-winner-and-runner-up-scores-and-goal-scorers-of-each-final/i3s5h880k8i11hhotunuvwzvv"
-   ],
-   "id": "score-2010-07-11-spain"
-  },
-  {
-   "competition": "World Cup final",
-   "date": "2014-07-13",
-   "home": "Germany",
-   "away": "Argentina",
-   "score": "1–0 (aet)",
-   "sources": [
-    "https://en.wikipedia.org/wiki/List_of_FIFA_World_Cup_finals",
-    "https://www.dazn.com/en-US/news/soccer/who-has-won-a-world-cup-list-of-every-winner-and-runner-up-scores-and-goal-scorers-of-each-final/i3s5h880k8i11hhotunuvwzvv"
-   ],
-   "id": "score-2014-07-13-germany"
-  },
-  {
-   "competition": "World Cup final",
-   "date": "2018-07-15",
-   "home": "France",
-   "away": "Croatia",
-   "score": "4–2",
-   "sources": [
-    "https://en.wikipedia.org/wiki/List_of_FIFA_World_Cup_finals",
-    "https://www.dazn.com/en-US/news/soccer/who-has-won-a-world-cup-list-of-every-winner-and-runner-up-scores-and-goal-scorers-of-each-final/i3s5h880k8i11hhotunuvwzvv"
-   ],
-   "id": "score-2018-07-15-france"
-  },
-  {
-   "competition": "World Cup final",
-   "date": "2022-12-18",
-   "home": "Argentina",
-   "away": "France",
-   "score": "3–3 (Argentina won 4–2 on pens)",
-   "sources": [
-    "https://en.wikipedia.org/wiki/List_of_FIFA_World_Cup_finals",
-    "https://www.dazn.com/en-US/news/soccer/who-has-won-a-world-cup-list-of-every-winner-and-runner-up-scores-and-goal-scorers-of-each-final/i3s5h880k8i11hhotunuvwzvv"
-   ],
-   "id": "score-2022-12-18-argentina"
-  },
-  {
-   "competition": "World Cup final",
-   "date": "2026-07-19",
-   "home": "Spain",
-   "away": "Argentina",
-   "score": "1–0 (aet)",
-   "sources": [
-    "https://www.cbsnews.com/news/2026-fifa-world-cup-final-spain-argentina-sunday/",
-    "https://www.espn.com/soccer/story/_/id/49402253/"
-   ],
-   "id": "score-2026-07-19-spain"
-  },
-  {
-   "competition": "Euro final",
-   "date": "1996-06-30",
-   "home": "Germany",
-   "away": "Czech Republic",
-   "score": "2–1 (golden goal)",
-   "sources": [
-    "https://www.uefa.com/uefaeuro/history/news/0259-0e5e039dd8b6-ac24fc62a240-1000--all-the-euro-finals-scorers-line-ups-venues/",
-    "https://wikiwand.com/en/articles/List_of_UEFA_European_Championship_finals"
-   ],
-   "id": "score-1996-06-30-germany"
-  },
-  {
-   "competition": "Euro final",
-   "date": "2000-07-02",
-   "home": "France",
-   "away": "Italy",
-   "score": "2–1 (golden goal)",
-   "sources": [
-    "https://www.uefa.com/uefaeuro/history/news/0259-0e5e039dd8b6-ac24fc62a240-1000--all-the-euro-finals-scorers-line-ups-venues/",
-    "https://wikiwand.com/en/articles/List_of_UEFA_European_Championship_finals"
-   ],
-   "id": "score-2000-07-02-france"
-  },
-  {
-   "competition": "Euro final",
-   "date": "2004-07-04",
-   "home": "Greece",
-   "away": "Portugal",
-   "score": "1–0",
-   "sources": [
-    "https://www.uefa.com/uefaeuro/history/news/0259-0e5e039dd8b6-ac24fc62a240-1000--all-the-euro-finals-scorers-line-ups-venues/",
-    "https://wikiwand.com/en/articles/List_of_UEFA_European_Championship_finals"
-   ],
-   "id": "score-2004-07-04-greece"
-  },
-  {
-   "competition": "Euro final",
-   "date": "2008-06-29",
-   "home": "Spain",
-   "away": "Germany",
-   "score": "1–0",
-   "sources": [
-    "https://www.uefa.com/uefaeuro/history/news/0259-0e5e039dd8b6-ac24fc62a240-1000--all-the-euro-finals-scorers-line-ups-venues/",
-    "https://wikiwand.com/en/articles/List_of_UEFA_European_Championship_finals"
-   ],
-   "id": "score-2008-06-29-spain"
-  },
-  {
-   "competition": "Euro final",
-   "date": "2012-07-01",
-   "home": "Spain",
-   "away": "Italy",
-   "score": "4–0",
-   "sources": [
-    "https://www.uefa.com/uefaeuro/history/news/0259-0e5e039dd8b6-ac24fc62a240-1000--all-the-euro-finals-scorers-line-ups-venues/",
-    "https://wikiwand.com/en/articles/List_of_UEFA_European_Championship_finals"
-   ],
-   "id": "score-2012-07-01-spain"
-  },
-  {
-   "competition": "Euro final",
-   "date": "2016-07-10",
-   "home": "Portugal",
-   "away": "France",
-   "score": "1–0 (aet)",
-   "sources": [
-    "https://www.uefa.com/uefaeuro/history/news/0259-0e5e039dd8b6-ac24fc62a240-1000--all-the-euro-finals-scorers-line-ups-venues/",
-    "https://wikiwand.com/en/articles/List_of_UEFA_European_Championship_finals"
-   ],
-   "id": "score-2016-07-10-portugal"
-  },
-  {
-   "competition": "Euro final",
-   "date": "2021-07-11",
-   "home": "Italy",
-   "away": "England",
-   "score": "1–1 (Italy won 3–2 on pens)",
-   "sources": [
-    "https://www.uefa.com/uefaeuro/history/news/0259-0e5e039dd8b6-ac24fc62a240-1000--all-the-euro-finals-scorers-line-ups-venues/",
-    "https://wikiwand.com/en/articles/List_of_UEFA_European_Championship_finals"
-   ],
-   "id": "score-2021-07-11-italy"
-  },
-  {
-   "competition": "Euro final",
-   "date": "2024-07-14",
-   "home": "Spain",
-   "away": "England",
-   "score": "2–1",
-   "sources": [
-    "https://www.uefa.com/uefaeuro/history/news/0259-0e5e039dd8b6-ac24fc62a240-1000--all-the-euro-finals-scorers-line-ups-venues/",
-    "https://wikiwand.com/en/articles/List_of_UEFA_European_Championship_finals"
-   ],
-   "id": "score-2024-07-14-spain"
-  },
-  {
-   "competition": "Champions League final",
-   "date": "1999-05-26",
-   "home": "Manchester United",
-   "away": "Bayern Munich",
-   "score": "2–1",
-   "sources": [
-    "https://rsssf.org/ec/ec1stats.html",
-    "https://wiki.krisyotam.com/content/wikipedia_en_all_nopic_2026-03/European_cup_finals"
-   ],
-   "id": "score-1999-05-26-manchester-united"
-  },
-  {
-   "competition": "Champions League final",
-   "date": "2000-05-24",
-   "home": "Real Madrid",
-   "away": "Valencia",
-   "score": "3–0",
-   "sources": [
-    "https://rsssf.org/ec/ec1stats.html",
-    "https://wiki.krisyotam.com/content/wikipedia_en_all_nopic_2026-03/European_cup_finals"
-   ],
-   "id": "score-2000-05-24-real-madrid"
-  },
-  {
-   "competition": "Champions League final",
-   "date": "2001-05-23",
-   "home": "Bayern Munich",
-   "away": "Valencia",
-   "score": "1–1 (Bayern won 5–4 on pens)",
-   "sources": [
-    "https://rsssf.org/ec/ec1stats.html",
-    "https://wiki.krisyotam.com/content/wikipedia_en_all_nopic_2026-03/European_cup_finals"
-   ],
-   "id": "score-2001-05-23-bayern-munich"
-  },
-  {
-   "competition": "Champions League final",
-   "date": "2002-05-15",
-   "home": "Real Madrid",
-   "away": "Bayer Leverkusen",
-   "score": "2–1",
-   "sources": [
-    "https://rsssf.org/ec/ec1stats.html",
-    "https://wiki.krisyotam.com/content/wikipedia_en_all_nopic_2026-03/European_cup_finals"
-   ],
-   "id": "score-2002-05-15-real-madrid"
-  },
-  {
-   "competition": "Champions League final",
-   "date": "2003-05-28",
-   "home": "AC Milan",
-   "away": "Juventus",
-   "score": "0–0 (Milan won 3–2 on pens)",
-   "sources": [
-    "https://rsssf.org/ec/ec1stats.html",
-    "https://wiki.krisyotam.com/content/wikipedia_en_all_nopic_2026-03/European_cup_finals"
-   ],
-   "id": "score-2003-05-28-ac-milan"
-  },
-  {
-   "competition": "Champions League final",
-   "date": "2004-05-26",
-   "home": "Porto",
-   "away": "Monaco",
-   "score": "3–0",
-   "sources": [
-    "https://rsssf.org/ec/ec1stats.html",
-    "https://wiki.krisyotam.com/content/wikipedia_en_all_nopic_2026-03/European_cup_finals"
-   ],
-   "id": "score-2004-05-26-porto"
-  },
-  {
-   "competition": "Champions League final",
-   "date": "2005-05-25",
-   "home": "Liverpool",
-   "away": "AC Milan",
-   "score": "3–3 (Liverpool won 3–2 on pens)",
-   "sources": [
-    "https://rsssf.org/ec/ec1stats.html",
-    "https://wiki.krisyotam.com/content/wikipedia_en_all_nopic_2026-03/European_cup_finals"
-   ],
-   "id": "score-2005-05-25-liverpool"
-  },
-  {
-   "competition": "Champions League final",
-   "date": "2006-05-17",
-   "home": "Barcelona",
-   "away": "Arsenal",
-   "score": "2–1",
-   "sources": [
-    "https://rsssf.org/ec/ec1stats.html",
-    "https://wiki.krisyotam.com/content/wikipedia_en_all_nopic_2026-03/European_cup_finals"
-   ],
-   "id": "score-2006-05-17-barcelona"
-  },
-  {
-   "competition": "Champions League final",
-   "date": "2007-05-23",
-   "home": "AC Milan",
-   "away": "Liverpool",
-   "score": "2–1",
-   "sources": [
-    "https://rsssf.org/ec/ec1stats.html",
-    "https://wiki.krisyotam.com/content/wikipedia_en_all_nopic_2026-03/European_cup_finals"
-   ],
-   "id": "score-2007-05-23-ac-milan"
-  },
-  {
-   "competition": "Champions League final",
-   "date": "2008-05-21",
-   "home": "Manchester United",
-   "away": "Chelsea",
-   "score": "1–1 (United won 6–5 on pens)",
-   "sources": [
-    "https://rsssf.org/ec/ec1stats.html",
-    "https://wiki.krisyotam.com/content/wikipedia_en_all_nopic_2026-03/European_cup_finals"
-   ],
-   "id": "score-2008-05-21-manchester-united"
-  },
-  {
-   "competition": "Champions League final",
-   "date": "2009-05-27",
-   "home": "Barcelona",
-   "away": "Manchester United",
-   "score": "2–0",
-   "sources": [
-    "https://rsssf.org/ec/ec1stats.html",
-    "https://wiki.krisyotam.com/content/wikipedia_en_all_nopic_2026-03/European_cup_finals"
-   ],
-   "id": "score-2009-05-27-barcelona"
-  },
-  {
-   "competition": "Champions League final",
-   "date": "2010-05-22",
-   "home": "Inter Milan",
-   "away": "Bayern Munich",
-   "score": "2–0",
-   "sources": [
-    "https://rsssf.org/ec/ec1stats.html",
-    "https://wiki.krisyotam.com/content/wikipedia_en_all_nopic_2026-03/European_cup_finals"
-   ],
-   "id": "score-2010-05-22-inter-milan"
-  },
-  {
-   "competition": "Champions League final",
-   "date": "2011-05-28",
-   "home": "Barcelona",
-   "away": "Manchester United",
-   "score": "3–1",
-   "sources": [
-    "https://rsssf.org/ec/ec1stats.html",
-    "https://wiki.krisyotam.com/content/wikipedia_en_all_nopic_2026-03/European_cup_finals"
-   ],
-   "id": "score-2011-05-28-barcelona"
-  },
-  {
-   "competition": "Champions League final",
-   "date": "2012-05-19",
-   "home": "Chelsea",
-   "away": "Bayern Munich",
-   "score": "1–1 (Chelsea won 4–3 on pens)",
-   "sources": [
-    "https://rsssf.org/ec/ec1stats.html",
-    "https://wiki.krisyotam.com/content/wikipedia_en_all_nopic_2026-03/European_cup_finals"
-   ],
-   "id": "score-2012-05-19-chelsea"
-  },
-  {
-   "competition": "Champions League final",
-   "date": "2013-05-25",
-   "home": "Bayern Munich",
-   "away": "Borussia Dortmund",
-   "score": "2–1",
-   "sources": [
-    "https://rsssf.org/ec/ec1stats.html",
-    "https://wiki.krisyotam.com/content/wikipedia_en_all_nopic_2026-03/European_cup_finals"
-   ],
-   "id": "score-2013-05-25-bayern-munich"
-  },
-  {
-   "competition": "Champions League final",
-   "date": "2014-05-24",
-   "home": "Real Madrid",
-   "away": "Atlético Madrid",
-   "score": "4–1 (aet)",
-   "sources": [
-    "https://rsssf.org/ec/ec1stats.html",
-    "https://wiki.krisyotam.com/content/wikipedia_en_all_nopic_2026-03/European_cup_finals"
-   ],
-   "id": "score-2014-05-24-real-madrid"
-  },
-  {
-   "competition": "Champions League final",
-   "date": "2015-06-06",
-   "home": "Barcelona",
-   "away": "Juventus",
-   "score": "3–1",
-   "sources": [
-    "https://rsssf.org/ec/ec1stats.html",
-    "https://wiki.krisyotam.com/content/wikipedia_en_all_nopic_2026-03/European_cup_finals"
-   ],
-   "id": "score-2015-06-06-barcelona"
-  },
-  {
-   "competition": "Champions League final",
-   "date": "2016-05-28",
-   "home": "Real Madrid",
-   "away": "Atlético Madrid",
-   "score": "1–1 (Real won 5–3 on pens)",
-   "sources": [
-    "https://rsssf.org/ec/ec1stats.html",
-    "https://wiki.krisyotam.com/content/wikipedia_en_all_nopic_2026-03/European_cup_finals"
-   ],
-   "id": "score-2016-05-28-real-madrid"
-  },
-  {
-   "competition": "Champions League final",
-   "date": "2017-06-03",
-   "home": "Real Madrid",
-   "away": "Juventus",
-   "score": "4–1",
-   "sources": [
-    "https://rsssf.org/ec/ec1stats.html",
-    "https://wiki.krisyotam.com/content/wikipedia_en_all_nopic_2026-03/European_cup_finals"
-   ],
-   "id": "score-2017-06-03-real-madrid"
-  },
-  {
-   "competition": "Champions League final",
-   "date": "2018-05-26",
-   "home": "Real Madrid",
-   "away": "Liverpool",
-   "score": "3–1",
-   "sources": [
-    "https://rsssf.org/ec/ec1stats.html",
-    "https://wiki.krisyotam.com/content/wikipedia_en_all_nopic_2026-03/European_cup_finals"
-   ],
-   "id": "score-2018-05-26-real-madrid"
-  },
-  {
-   "competition": "Champions League final",
-   "date": "2019-06-01",
-   "home": "Liverpool",
-   "away": "Tottenham",
-   "score": "2–0",
-   "sources": [
-    "https://rsssf.org/ec/ec1stats.html",
-    "https://wiki.krisyotam.com/content/wikipedia_en_all_nopic_2026-03/European_cup_finals"
-   ],
-   "id": "score-2019-06-01-liverpool"
-  },
-  {
-   "competition": "Champions League final",
-   "date": "2020-08-23",
-   "home": "Bayern Munich",
-   "away": "Paris Saint-Germain",
-   "score": "1–0",
-   "sources": [
-    "https://rsssf.org/ec/ec1stats.html",
-    "https://wiki.krisyotam.com/content/wikipedia_en_all_nopic_2026-03/European_cup_finals"
-   ],
-   "id": "score-2020-08-23-bayern-munich"
-  },
-  {
-   "competition": "Champions League final",
-   "date": "2021-05-29",
-   "home": "Chelsea",
-   "away": "Manchester City",
-   "score": "1–0",
-   "sources": [
-    "https://rsssf.org/ec/ec1stats.html",
-    "https://wiki.krisyotam.com/content/wikipedia_en_all_nopic_2026-03/European_cup_finals"
-   ],
-   "id": "score-2021-05-29-chelsea"
-  },
-  {
-   "competition": "Champions League final",
-   "date": "2022-05-28",
-   "home": "Real Madrid",
-   "away": "Liverpool",
-   "score": "1–0",
-   "sources": [
-    "https://rsssf.org/ec/ec1stats.html",
-    "https://wiki.krisyotam.com/content/wikipedia_en_all_nopic_2026-03/European_cup_finals"
-   ],
-   "id": "score-2022-05-28-real-madrid"
-  },
-  {
-   "competition": "Champions League final",
-   "date": "2023-06-10",
-   "home": "Manchester City",
-   "away": "Inter Milan",
-   "score": "1–0",
-   "sources": [
-    "https://rsssf.org/ec/ec1stats.html",
-    "https://wiki.krisyotam.com/content/wikipedia_en_all_nopic_2026-03/European_cup_finals"
-   ],
-   "id": "score-2023-06-10-manchester-city"
-  },
-  {
-   "competition": "Champions League final",
-   "date": "2024-06-01",
-   "home": "Real Madrid",
-   "away": "Borussia Dortmund",
-   "score": "2–0",
-   "sources": [
-    "https://rsssf.org/ec/ec1stats.html",
-    "https://wiki.krisyotam.com/content/wikipedia_en_all_nopic_2026-03/European_cup_finals"
-   ],
-   "id": "score-2024-06-01-real-madrid"
-  },
-  {
-   "competition": "Champions League final",
-   "date": "2025-05-31",
-   "home": "Paris Saint-Germain",
-   "away": "Inter Milan",
-   "score": "5–0",
-   "sources": [
-    "https://rsssf.org/ec/ec1stats.html",
-    "https://wiki.krisyotam.com/content/wikipedia_en_all_nopic_2026-03/European_cup_finals"
-   ],
-   "id": "score-2025-05-31-paris-saint-germain"
-  },
-  {
-   "competition": "Champions League final",
-   "date": "2026-05-30",
-   "home": "Paris Saint-Germain",
-   "away": "Arsenal",
-   "score": "1–1 (PSG won 4–3 on pens)",
-   "sources": [
-    "https://www.uefa.com/uefachampionsleague/news/02a5-20c02e59f219-15e92acdc717-1000--paris-retain-champions-league-holders-edge-arsenal-on-penalties/",
-    "https://newsonair.gov.in/uefa-champions-league-paris-saint-germain-beat-arsenal-4-3-on-penalty-shootout-in-final/"
-   ],
-   "id": "score-2026-05-30-paris-saint-germain"
-  },
-  {
-   "competition": "FA Cup final",
-   "date": "1994-05-14",
-   "home": "Manchester United",
-   "away": "Chelsea",
-   "score": "4–0",
-   "sources": [
-    "https://www.nbcsports.com/soccer/news/fa-cup-history-list-of-fa-cup-winners-finals-and-who-has-won-the-most-fa-cups",
-    "https://en.wikipedia.org/wiki/List_of_FA_Cup_finals"
-   ],
-   "id": "score-1994-05-14-manchester-united"
-  },
-  {
-   "competition": "FA Cup final",
-   "date": "1995-05-20",
-   "home": "Everton",
-   "away": "Manchester United",
-   "score": "1–0",
-   "sources": [
-    "https://www.nbcsports.com/soccer/news/fa-cup-history-list-of-fa-cup-winners-finals-and-who-has-won-the-most-fa-cups",
-    "https://en.wikipedia.org/wiki/List_of_FA_Cup_finals"
-   ],
-   "id": "score-1995-05-20-everton"
-  },
-  {
-   "competition": "FA Cup final",
-   "date": "1996-05-11",
-   "home": "Manchester United",
-   "away": "Liverpool",
-   "score": "1–0",
-   "sources": [
-    "https://www.nbcsports.com/soccer/news/fa-cup-history-list-of-fa-cup-winners-finals-and-who-has-won-the-most-fa-cups",
-    "https://en.wikipedia.org/wiki/List_of_FA_Cup_finals"
-   ],
-   "id": "score-1996-05-11-manchester-united"
-  },
-  {
-   "competition": "FA Cup final",
-   "date": "1997-05-17",
-   "home": "Chelsea",
-   "away": "Middlesbrough",
-   "score": "2–0",
-   "sources": [
-    "https://www.nbcsports.com/soccer/news/fa-cup-history-list-of-fa-cup-winners-finals-and-who-has-won-the-most-fa-cups",
-    "https://en.wikipedia.org/wiki/List_of_FA_Cup_finals"
-   ],
-   "id": "score-1997-05-17-chelsea"
-  },
-  {
-   "competition": "FA Cup final",
-   "date": "1998-05-16",
-   "home": "Arsenal",
-   "away": "Newcastle United",
-   "score": "2–0",
-   "sources": [
-    "https://www.nbcsports.com/soccer/news/fa-cup-history-list-of-fa-cup-winners-finals-and-who-has-won-the-most-fa-cups",
-    "https://en.wikipedia.org/wiki/List_of_FA_Cup_finals"
-   ],
-   "id": "score-1998-05-16-arsenal"
-  },
-  {
-   "competition": "FA Cup final",
-   "date": "1999-05-22",
-   "home": "Manchester United",
-   "away": "Newcastle United",
-   "score": "2–0",
-   "sources": [
-    "https://www.nbcsports.com/soccer/news/fa-cup-history-list-of-fa-cup-winners-finals-and-who-has-won-the-most-fa-cups",
-    "https://en.wikipedia.org/wiki/List_of_FA_Cup_finals"
-   ],
-   "id": "score-1999-05-22-manchester-united"
-  },
-  {
-   "competition": "FA Cup final",
-   "date": "2000-05-20",
-   "home": "Chelsea",
-   "away": "Aston Villa",
-   "score": "1–0",
-   "sources": [
-    "https://www.nbcsports.com/soccer/news/fa-cup-history-list-of-fa-cup-winners-finals-and-who-has-won-the-most-fa-cups",
-    "https://en.wikipedia.org/wiki/List_of_FA_Cup_finals"
-   ],
-   "id": "score-2000-05-20-chelsea"
-  },
-  {
-   "competition": "FA Cup final",
-   "date": "2001-05-12",
-   "home": "Liverpool",
-   "away": "Arsenal",
-   "score": "2–1",
-   "sources": [
-    "https://www.nbcsports.com/soccer/news/fa-cup-history-list-of-fa-cup-winners-finals-and-who-has-won-the-most-fa-cups",
-    "https://en.wikipedia.org/wiki/List_of_FA_Cup_finals"
-   ],
-   "id": "score-2001-05-12-liverpool"
-  },
-  {
-   "competition": "FA Cup final",
-   "date": "2002-05-04",
-   "home": "Arsenal",
-   "away": "Chelsea",
-   "score": "2–0",
-   "sources": [
-    "https://www.nbcsports.com/soccer/news/fa-cup-history-list-of-fa-cup-winners-finals-and-who-has-won-the-most-fa-cups",
-    "https://en.wikipedia.org/wiki/List_of_FA_Cup_finals"
-   ],
-   "id": "score-2002-05-04-arsenal"
-  },
-  {
-   "competition": "FA Cup final",
-   "date": "2004-05-22",
-   "home": "Manchester United",
-   "away": "Millwall",
-   "score": "3–0",
-   "sources": [
-    "https://www.nbcsports.com/soccer/news/fa-cup-history-list-of-fa-cup-winners-finals-and-who-has-won-the-most-fa-cups",
-    "https://en.wikipedia.org/wiki/List_of_FA_Cup_finals"
-   ],
-   "id": "score-2004-05-22-manchester-united"
-  },
-  {
-   "competition": "FA Cup final",
-   "date": "2005-05-21",
-   "home": "Arsenal",
-   "away": "Manchester United",
-   "score": "0–0 (Arsenal won 5–4 on pens)",
-   "sources": [
-    "https://www.nbcsports.com/soccer/news/fa-cup-history-list-of-fa-cup-winners-finals-and-who-has-won-the-most-fa-cups",
-    "https://en.wikipedia.org/wiki/List_of_FA_Cup_finals"
-   ],
-   "id": "score-2005-05-21-arsenal"
-  },
-  {
-   "competition": "FA Cup final",
-   "date": "2006-05-13",
-   "home": "Liverpool",
-   "away": "West Ham United",
-   "score": "3–3 (Liverpool won 3–1 on pens)",
-   "sources": [
-    "https://www.nbcsports.com/soccer/news/fa-cup-history-list-of-fa-cup-winners-finals-and-who-has-won-the-most-fa-cups",
-    "https://en.wikipedia.org/wiki/List_of_FA_Cup_finals"
-   ],
-   "id": "score-2006-05-13-liverpool"
-  },
-  {
-   "competition": "FA Cup final",
-   "date": "2007-05-19",
-   "home": "Chelsea",
-   "away": "Manchester United",
-   "score": "1–0 (aet)",
-   "sources": [
-    "https://www.nbcsports.com/soccer/news/fa-cup-history-list-of-fa-cup-winners-finals-and-who-has-won-the-most-fa-cups",
-    "https://en.wikipedia.org/wiki/List_of_FA_Cup_finals"
-   ],
-   "id": "score-2007-05-19-chelsea"
-  },
-  {
-   "competition": "FA Cup final",
-   "date": "2008-05-17",
-   "home": "Portsmouth",
-   "away": "Cardiff City",
-   "score": "1–0",
-   "sources": [
-    "https://www.nbcsports.com/soccer/news/fa-cup-history-list-of-fa-cup-winners-finals-and-who-has-won-the-most-fa-cups",
-    "https://en.wikipedia.org/wiki/List_of_FA_Cup_finals"
-   ],
-   "id": "score-2008-05-17-portsmouth"
-  },
-  {
-   "competition": "FA Cup final",
-   "date": "2009-05-30",
-   "home": "Chelsea",
-   "away": "Everton",
-   "score": "2–1",
-   "sources": [
-    "https://www.nbcsports.com/soccer/news/fa-cup-history-list-of-fa-cup-winners-finals-and-who-has-won-the-most-fa-cups",
-    "https://en.wikipedia.org/wiki/List_of_FA_Cup_finals"
-   ],
-   "id": "score-2009-05-30-chelsea"
-  },
-  {
-   "competition": "FA Cup final",
-   "date": "2011-05-14",
-   "home": "Manchester City",
-   "away": "Stoke City",
-   "score": "1–0",
-   "sources": [
-    "https://www.nbcsports.com/soccer/news/fa-cup-history-list-of-fa-cup-winners-finals-and-who-has-won-the-most-fa-cups",
-    "https://en.wikipedia.org/wiki/List_of_FA_Cup_finals"
-   ],
-   "id": "score-2011-05-14-manchester-city"
-  },
-  {
-   "competition": "FA Cup final",
-   "date": "2012-05-05",
-   "home": "Chelsea",
-   "away": "Liverpool",
-   "score": "2–1",
-   "sources": [
-    "https://www.nbcsports.com/soccer/news/fa-cup-history-list-of-fa-cup-winners-finals-and-who-has-won-the-most-fa-cups",
-    "https://en.wikipedia.org/wiki/List_of_FA_Cup_finals"
-   ],
-   "id": "score-2012-05-05-chelsea"
-  },
-  {
-   "competition": "FA Cup final",
-   "date": "2013-05-11",
-   "home": "Wigan Athletic",
-   "away": "Manchester City",
-   "score": "1–0",
-   "sources": [
-    "https://www.nbcsports.com/soccer/news/fa-cup-history-list-of-fa-cup-winners-finals-and-who-has-won-the-most-fa-cups",
-    "https://en.wikipedia.org/wiki/List_of_FA_Cup_finals"
-   ],
-   "id": "score-2013-05-11-wigan-athletic"
-  },
-  {
-   "competition": "FA Cup final",
-   "date": "2014-05-17",
-   "home": "Arsenal",
-   "away": "Hull City",
-   "score": "3–2 (aet)",
-   "sources": [
-    "https://www.nbcsports.com/soccer/news/fa-cup-history-list-of-fa-cup-winners-finals-and-who-has-won-the-most-fa-cups",
-    "https://en.wikipedia.org/wiki/List_of_FA_Cup_finals"
-   ],
-   "id": "score-2014-05-17-arsenal"
-  },
-  {
-   "competition": "FA Cup final",
-   "date": "2015-05-30",
-   "home": "Arsenal",
-   "away": "Aston Villa",
-   "score": "4–0",
-   "sources": [
-    "https://www.nbcsports.com/soccer/news/fa-cup-history-list-of-fa-cup-winners-finals-and-who-has-won-the-most-fa-cups",
-    "https://en.wikipedia.org/wiki/List_of_FA_Cup_finals"
-   ],
-   "id": "score-2015-05-30-arsenal"
-  },
-  {
-   "competition": "FA Cup final",
-   "date": "2016-05-21",
-   "home": "Manchester United",
-   "away": "Crystal Palace",
-   "score": "2–1 (aet)",
-   "sources": [
-    "https://www.nbcsports.com/soccer/news/fa-cup-history-list-of-fa-cup-winners-finals-and-who-has-won-the-most-fa-cups",
-    "https://en.wikipedia.org/wiki/List_of_FA_Cup_finals"
-   ],
-   "id": "score-2016-05-21-manchester-united"
-  },
-  {
-   "competition": "FA Cup final",
-   "date": "2017-05-27",
-   "home": "Arsenal",
-   "away": "Chelsea",
-   "score": "2–1",
-   "sources": [
-    "https://www.nbcsports.com/soccer/news/fa-cup-history-list-of-fa-cup-winners-finals-and-who-has-won-the-most-fa-cups",
-    "https://en.wikipedia.org/wiki/List_of_FA_Cup_finals"
-   ],
-   "id": "score-2017-05-27-arsenal"
-  },
-  {
-   "competition": "FA Cup final",
-   "date": "2018-05-19",
-   "home": "Chelsea",
-   "away": "Manchester United",
-   "score": "1–0",
-   "sources": [
-    "https://www.nbcsports.com/soccer/news/fa-cup-history-list-of-fa-cup-winners-finals-and-who-has-won-the-most-fa-cups",
-    "https://en.wikipedia.org/wiki/List_of_FA_Cup_finals"
-   ],
-   "id": "score-2018-05-19-chelsea"
-  },
-  {
-   "competition": "FA Cup final",
-   "date": "2019-05-18",
-   "home": "Manchester City",
-   "away": "Watford",
-   "score": "6–0",
-   "sources": [
-    "https://www.nbcsports.com/soccer/news/fa-cup-history-list-of-fa-cup-winners-finals-and-who-has-won-the-most-fa-cups",
-    "https://en.wikipedia.org/wiki/List_of_FA_Cup_finals"
-   ],
-   "id": "score-2019-05-18-manchester-city"
-  },
-  {
-   "competition": "FA Cup final",
-   "date": "2020-08-01",
-   "home": "Arsenal",
-   "away": "Chelsea",
-   "score": "2–1",
-   "sources": [
-    "https://www.nbcsports.com/soccer/news/fa-cup-history-list-of-fa-cup-winners-finals-and-who-has-won-the-most-fa-cups",
-    "https://en.wikipedia.org/wiki/List_of_FA_Cup_finals"
-   ],
-   "id": "score-2020-08-01-arsenal"
-  },
-  {
-   "competition": "FA Cup final",
-   "date": "2021-05-15",
-   "home": "Leicester City",
-   "away": "Chelsea",
-   "score": "1–0",
-   "sources": [
-    "https://www.nbcsports.com/soccer/news/fa-cup-history-list-of-fa-cup-winners-finals-and-who-has-won-the-most-fa-cups",
-    "https://en.wikipedia.org/wiki/List_of_FA_Cup_finals"
-   ],
-   "id": "score-2021-05-15-leicester-city"
-  },
-  {
-   "competition": "FA Cup final",
-   "date": "2022-05-14",
-   "home": "Liverpool",
-   "away": "Chelsea",
-   "score": "0–0 (Liverpool won 6–5 on pens)",
-   "sources": [
-    "https://www.nbcsports.com/soccer/news/fa-cup-history-list-of-fa-cup-winners-finals-and-who-has-won-the-most-fa-cups",
-    "https://en.wikipedia.org/wiki/List_of_FA_Cup_finals"
-   ],
-   "id": "score-2022-05-14-liverpool"
-  },
-  {
-   "competition": "FA Cup final",
-   "date": "2023-06-03",
-   "home": "Manchester City",
-   "away": "Manchester United",
-   "score": "2–1",
-   "sources": [
-    "https://www.nbcsports.com/soccer/news/fa-cup-history-list-of-fa-cup-winners-finals-and-who-has-won-the-most-fa-cups",
-    "https://en.wikipedia.org/wiki/List_of_FA_Cup_finals"
-   ],
-   "id": "score-2023-06-03-manchester-city"
-  },
-  {
-   "competition": "FA Cup final",
-   "date": "2024-05-25",
-   "home": "Manchester United",
-   "away": "Manchester City",
-   "score": "2–1",
-   "sources": [
-    "https://www.nbcsports.com/soccer/news/fa-cup-history-list-of-fa-cup-winners-finals-and-who-has-won-the-most-fa-cups",
-    "https://en.wikipedia.org/wiki/List_of_FA_Cup_finals"
-   ],
-   "id": "score-2024-05-25-manchester-united"
-  },
-  {
-   "competition": "FA Cup final",
-   "date": "2025-05-17",
-   "home": "Crystal Palace",
-   "away": "Manchester City",
-   "score": "1–0",
-   "sources": [
-    "https://www.nbcsports.com/soccer/news/fa-cup-history-list-of-fa-cup-winners-finals-and-who-has-won-the-most-fa-cups",
-    "https://en.wikipedia.org/wiki/List_of_FA_Cup_finals"
-   ],
-   "id": "score-2025-05-17-crystal-palace"
-  },
-  {
-   "competition": "FA Cup final",
-   "date": "2026-05-16",
-   "home": "Manchester City",
-   "away": "Chelsea",
-   "score": "1–0",
-   "sources": [
-    "https://www.thefa.com/news/2026/may/16/emirates-fa-cup-final-chelsea-v-manchester-city-report-20261605",
-    "https://www.foxsports.com/articles/soccer/manchester-city-wins-the-fa-cup-after-beating-chelsea-10-in-the-final"
-   ],
-   "id": "score-2026-05-16-manchester-city"
-  },
-  {
-   "competition": "Premier League",
-   "date": "1995-03-04",
-   "home": "Manchester United",
-   "away": "Ipswich Town",
-   "score": "9–0",
-   "sources": [],
-   "id": "score-1995-03-04-manchester-united"
-  },
-  {
-   "competition": "Premier League",
-   "date": "1996-10-20",
-   "home": "Newcastle United",
-   "away": "Manchester United",
-   "score": "5–0",
-   "sources": [],
-   "id": "score-1996-10-20-newcastle-united"
-  },
-  {
-   "competition": "Premier League",
-   "date": "2004-11-13",
-   "home": "Tottenham",
-   "away": "Arsenal",
-   "score": "4–5",
-   "sources": [],
-   "id": "score-2004-11-13-tottenham"
-  },
-  {
-   "competition": "Premier League",
-   "date": "2005-05-11",
-   "home": "Arsenal",
-   "away": "Everton",
-   "score": "7–0",
-   "sources": [],
-   "id": "score-2005-05-11-arsenal"
-  },
-  {
-   "competition": "Premier League",
-   "date": "2009-04-21",
-   "home": "Liverpool",
-   "away": "Arsenal",
-   "score": "4–4",
-   "sources": [],
-   "id": "score-2009-04-21-liverpool"
-  },
-  {
-   "competition": "Premier League",
-   "date": "2009-09-20",
-   "home": "Manchester United",
-   "away": "Manchester City",
-   "score": "4–3",
-   "sources": [],
-   "id": "score-2009-09-20-manchester-united"
-  },
-  {
-   "competition": "Premier League",
-   "date": "2009-11-22",
-   "home": "Tottenham",
-   "away": "Wigan Athletic",
-   "score": "9–1",
-   "sources": [],
-   "id": "score-2009-11-22-tottenham"
-  },
-  {
-   "competition": "Premier League",
-   "date": "2010-05-09",
-   "home": "Chelsea",
-   "away": "Wigan Athletic",
-   "score": "8–0",
-   "sources": [],
-   "id": "score-2010-05-09-chelsea"
-  },
-  {
-   "competition": "Premier League",
-   "date": "2011-08-28",
-   "home": "Manchester United",
-   "away": "Arsenal",
-   "score": "8–2",
-   "sources": [],
-   "id": "score-2011-08-28-manchester-united"
-  },
-  {
-   "competition": "Premier League",
-   "date": "2011-10-23",
-   "home": "Manchester United",
-   "away": "Manchester City",
-   "score": "1–6",
-   "sources": [],
-   "id": "score-2011-10-23-manchester-united"
-  },
-  {
-   "competition": "Premier League",
-   "date": "2014-03-22",
-   "home": "Chelsea",
-   "away": "Arsenal",
-   "score": "6–0",
-   "sources": [],
-   "id": "score-2014-03-22-chelsea"
-  },
-  {
-   "competition": "Premier League",
-   "date": "2014-09-21",
-   "home": "Leicester City",
-   "away": "Manchester United",
-   "score": "5–3",
-   "sources": [],
-   "id": "score-2014-09-21-leicester-city"
-  },
-  {
-   "competition": "Premier League",
-   "date": "2019-02-10",
-   "home": "Manchester City",
-   "away": "Chelsea",
-   "score": "6–0",
-   "sources": [],
-   "id": "score-2019-02-10-manchester-city"
-  },
-  {
-   "competition": "Premier League",
-   "date": "2019-10-25",
-   "home": "Southampton",
-   "away": "Leicester City",
-   "score": "0–9",
-   "sources": [],
-   "id": "score-2019-10-25-southampton"
-  },
-  {
-   "competition": "Premier League",
-   "date": "2020-10-04",
-   "home": "Aston Villa",
-   "away": "Liverpool",
-   "score": "7–2",
-   "sources": [],
-   "id": "score-2020-10-04-aston-villa"
-  },
-  {
-   "competition": "Premier League",
-   "date": "2020-10-04",
-   "home": "Manchester United",
-   "away": "Tottenham",
-   "score": "1–6",
-   "sources": [],
-   "id": "score-2020-10-04-manchester-united"
-  },
-  {
-   "competition": "Premier League",
-   "date": "2021-02-02",
-   "home": "Manchester United",
-   "away": "Southampton",
-   "score": "9–0",
-   "sources": [],
-   "id": "score-2021-02-02-manchester-united"
-  },
-  {
-   "competition": "Premier League",
-   "date": "2021-10-24",
-   "home": "Manchester United",
-   "away": "Liverpool",
-   "score": "0–5",
-   "sources": [],
-   "id": "score-2021-10-24-manchester-united"
-  },
-  {
-   "competition": "Premier League",
-   "date": "2022-10-02",
-   "home": "Manchester City",
-   "away": "Manchester United",
-   "score": "6–3",
-   "sources": [],
-   "id": "score-2022-10-02-manchester-city"
-  },
-  {
-   "competition": "World Cup",
-   "date": "2014-06-13",
-   "home": "Spain",
-   "away": "Netherlands",
-   "score": "1–5",
-   "sources": [],
-   "id": "score-2014-06-13-spain"
-  },
-  {
-   "competition": "Euro 2016",
-   "date": "2016-06-27",
-   "home": "England",
-   "away": "Iceland",
-   "score": "1–2",
-   "sources": [],
-   "id": "score-2016-06-27-england"
-  },
-  {
-   "competition": "Champions League",
-   "date": "2017-03-08",
-   "home": "Barcelona",
-   "away": "Paris Saint-Germain",
-   "score": "6–1",
-   "sources": [],
-   "id": "score-2017-03-08-barcelona"
-  },
-  {
-   "competition": "Champions League",
-   "date": "2018-04-10",
-   "home": "Roma",
-   "away": "Barcelona",
-   "score": "3–0",
-   "sources": [],
-   "id": "score-2018-04-10-roma"
-  },
-  {
-   "competition": "Champions League semi-final",
-   "date": "2019-05-08",
-   "home": "Ajax",
-   "away": "Tottenham",
-   "score": "2–3",
-   "sources": [],
-   "id": "score-2019-05-08-ajax"
-  }
- ]
+  "_comment": "Famous scores for the penalties 'What was the score?' kick (score only, no line-ups). Winner first for finals; home first otherwise. Finals: two sources each. League/European nights: well-documented results, no sources listed yet. Starting XI matches are no longer added automatically: only the famous ones, listed here.",
+  "scores": [
+    {
+      "competition": "World Cup final",
+      "date": "1990-07-08",
+      "home": "West Germany",
+      "away": "Argentina",
+      "score": "1–0",
+      "sources": [
+        "https://en.wikipedia.org/wiki/List_of_FIFA_World_Cup_finals",
+        "https://www.dazn.com/en-US/news/soccer/who-has-won-a-world-cup-list-of-every-winner-and-runner-up-scores-and-goal-scorers-of-each-final/i3s5h880k8i11hhotunuvwzvv"
+      ],
+      "id": "score-1990-07-08-west-germany"
+    },
+    {
+      "competition": "World Cup final",
+      "date": "1994-07-17",
+      "home": "Brazil",
+      "away": "Italy",
+      "score": "0–0 (Brazil won 3–2 on pens)",
+      "sources": [
+        "https://en.wikipedia.org/wiki/List_of_FIFA_World_Cup_finals",
+        "https://www.dazn.com/en-US/news/soccer/who-has-won-a-world-cup-list-of-every-winner-and-runner-up-scores-and-goal-scorers-of-each-final/i3s5h880k8i11hhotunuvwzvv"
+      ],
+      "id": "score-1994-07-17-brazil"
+    },
+    {
+      "competition": "World Cup final",
+      "date": "1998-07-12",
+      "home": "France",
+      "away": "Brazil",
+      "score": "3–0",
+      "sources": [
+        "https://en.wikipedia.org/wiki/List_of_FIFA_World_Cup_finals",
+        "https://www.dazn.com/en-US/news/soccer/who-has-won-a-world-cup-list-of-every-winner-and-runner-up-scores-and-goal-scorers-of-each-final/i3s5h880k8i11hhotunuvwzvv"
+      ],
+      "id": "score-1998-07-12-france"
+    },
+    {
+      "competition": "World Cup final",
+      "date": "2002-06-30",
+      "home": "Brazil",
+      "away": "Germany",
+      "score": "2–0",
+      "sources": [
+        "https://en.wikipedia.org/wiki/List_of_FIFA_World_Cup_finals",
+        "https://www.dazn.com/en-US/news/soccer/who-has-won-a-world-cup-list-of-every-winner-and-runner-up-scores-and-goal-scorers-of-each-final/i3s5h880k8i11hhotunuvwzvv"
+      ],
+      "id": "score-2002-06-30-brazil"
+    },
+    {
+      "competition": "World Cup final",
+      "date": "2006-07-09",
+      "home": "Italy",
+      "away": "France",
+      "score": "1–1 (Italy won 5–3 on pens)",
+      "sources": [
+        "https://en.wikipedia.org/wiki/List_of_FIFA_World_Cup_finals",
+        "https://www.dazn.com/en-US/news/soccer/who-has-won-a-world-cup-list-of-every-winner-and-runner-up-scores-and-goal-scorers-of-each-final/i3s5h880k8i11hhotunuvwzvv"
+      ],
+      "id": "score-2006-07-09-italy"
+    },
+    {
+      "competition": "World Cup final",
+      "date": "2010-07-11",
+      "home": "Spain",
+      "away": "Netherlands",
+      "score": "1–0 (aet)",
+      "sources": [
+        "https://en.wikipedia.org/wiki/List_of_FIFA_World_Cup_finals",
+        "https://www.dazn.com/en-US/news/soccer/who-has-won-a-world-cup-list-of-every-winner-and-runner-up-scores-and-goal-scorers-of-each-final/i3s5h880k8i11hhotunuvwzvv"
+      ],
+      "id": "score-2010-07-11-spain"
+    },
+    {
+      "competition": "World Cup final",
+      "date": "2014-07-13",
+      "home": "Germany",
+      "away": "Argentina",
+      "score": "1–0 (aet)",
+      "sources": [
+        "https://en.wikipedia.org/wiki/List_of_FIFA_World_Cup_finals",
+        "https://www.dazn.com/en-US/news/soccer/who-has-won-a-world-cup-list-of-every-winner-and-runner-up-scores-and-goal-scorers-of-each-final/i3s5h880k8i11hhotunuvwzvv"
+      ],
+      "id": "score-2014-07-13-germany"
+    },
+    {
+      "competition": "World Cup final",
+      "date": "2018-07-15",
+      "home": "France",
+      "away": "Croatia",
+      "score": "4–2",
+      "sources": [
+        "https://en.wikipedia.org/wiki/List_of_FIFA_World_Cup_finals",
+        "https://www.dazn.com/en-US/news/soccer/who-has-won-a-world-cup-list-of-every-winner-and-runner-up-scores-and-goal-scorers-of-each-final/i3s5h880k8i11hhotunuvwzvv"
+      ],
+      "id": "score-2018-07-15-france"
+    },
+    {
+      "competition": "World Cup final",
+      "date": "2022-12-18",
+      "home": "Argentina",
+      "away": "France",
+      "score": "3–3 (Argentina won 4–2 on pens)",
+      "sources": [
+        "https://en.wikipedia.org/wiki/List_of_FIFA_World_Cup_finals",
+        "https://www.dazn.com/en-US/news/soccer/who-has-won-a-world-cup-list-of-every-winner-and-runner-up-scores-and-goal-scorers-of-each-final/i3s5h880k8i11hhotunuvwzvv"
+      ],
+      "id": "score-2022-12-18-argentina"
+    },
+    {
+      "competition": "World Cup final",
+      "date": "2026-07-19",
+      "home": "Spain",
+      "away": "Argentina",
+      "score": "1–0 (aet)",
+      "sources": [
+        "https://www.cbsnews.com/news/2026-fifa-world-cup-final-spain-argentina-sunday/",
+        "https://www.espn.com/soccer/story/_/id/49402253/"
+      ],
+      "id": "score-2026-07-19-spain"
+    },
+    {
+      "competition": "Euro final",
+      "date": "1996-06-30",
+      "home": "Germany",
+      "away": "Czech Republic",
+      "score": "2–1 (golden goal)",
+      "sources": [
+        "https://www.uefa.com/uefaeuro/history/news/0259-0e5e039dd8b6-ac24fc62a240-1000--all-the-euro-finals-scorers-line-ups-venues/",
+        "https://wikiwand.com/en/articles/List_of_UEFA_European_Championship_finals"
+      ],
+      "id": "score-1996-06-30-germany"
+    },
+    {
+      "competition": "Euro final",
+      "date": "2000-07-02",
+      "home": "France",
+      "away": "Italy",
+      "score": "2–1 (golden goal)",
+      "sources": [
+        "https://www.uefa.com/uefaeuro/history/news/0259-0e5e039dd8b6-ac24fc62a240-1000--all-the-euro-finals-scorers-line-ups-venues/",
+        "https://wikiwand.com/en/articles/List_of_UEFA_European_Championship_finals"
+      ],
+      "id": "score-2000-07-02-france"
+    },
+    {
+      "competition": "Euro final",
+      "date": "2004-07-04",
+      "home": "Greece",
+      "away": "Portugal",
+      "score": "1–0",
+      "sources": [
+        "https://www.uefa.com/uefaeuro/history/news/0259-0e5e039dd8b6-ac24fc62a240-1000--all-the-euro-finals-scorers-line-ups-venues/",
+        "https://wikiwand.com/en/articles/List_of_UEFA_European_Championship_finals"
+      ],
+      "id": "score-2004-07-04-greece"
+    },
+    {
+      "competition": "Euro final",
+      "date": "2008-06-29",
+      "home": "Spain",
+      "away": "Germany",
+      "score": "1–0",
+      "sources": [
+        "https://www.uefa.com/uefaeuro/history/news/0259-0e5e039dd8b6-ac24fc62a240-1000--all-the-euro-finals-scorers-line-ups-venues/",
+        "https://wikiwand.com/en/articles/List_of_UEFA_European_Championship_finals"
+      ],
+      "id": "score-2008-06-29-spain"
+    },
+    {
+      "competition": "Euro final",
+      "date": "2012-07-01",
+      "home": "Spain",
+      "away": "Italy",
+      "score": "4–0",
+      "sources": [
+        "https://www.uefa.com/uefaeuro/history/news/0259-0e5e039dd8b6-ac24fc62a240-1000--all-the-euro-finals-scorers-line-ups-venues/",
+        "https://wikiwand.com/en/articles/List_of_UEFA_European_Championship_finals"
+      ],
+      "id": "score-2012-07-01-spain"
+    },
+    {
+      "competition": "Euro final",
+      "date": "2016-07-10",
+      "home": "Portugal",
+      "away": "France",
+      "score": "1–0 (aet)",
+      "sources": [
+        "https://www.uefa.com/uefaeuro/history/news/0259-0e5e039dd8b6-ac24fc62a240-1000--all-the-euro-finals-scorers-line-ups-venues/",
+        "https://wikiwand.com/en/articles/List_of_UEFA_European_Championship_finals"
+      ],
+      "id": "score-2016-07-10-portugal"
+    },
+    {
+      "competition": "Euro final",
+      "date": "2021-07-11",
+      "home": "Italy",
+      "away": "England",
+      "score": "1–1 (Italy won 3–2 on pens)",
+      "sources": [
+        "https://www.uefa.com/uefaeuro/history/news/0259-0e5e039dd8b6-ac24fc62a240-1000--all-the-euro-finals-scorers-line-ups-venues/",
+        "https://wikiwand.com/en/articles/List_of_UEFA_European_Championship_finals"
+      ],
+      "id": "score-2021-07-11-italy"
+    },
+    {
+      "competition": "Euro final",
+      "date": "2024-07-14",
+      "home": "Spain",
+      "away": "England",
+      "score": "2–1",
+      "sources": [
+        "https://www.uefa.com/uefaeuro/history/news/0259-0e5e039dd8b6-ac24fc62a240-1000--all-the-euro-finals-scorers-line-ups-venues/",
+        "https://wikiwand.com/en/articles/List_of_UEFA_European_Championship_finals"
+      ],
+      "id": "score-2024-07-14-spain"
+    },
+    {
+      "competition": "Champions League final",
+      "date": "1999-05-26",
+      "home": "Manchester United",
+      "away": "Bayern Munich",
+      "score": "2–1",
+      "sources": [
+        "https://rsssf.org/ec/ec1stats.html",
+        "https://wiki.krisyotam.com/content/wikipedia_en_all_nopic_2026-03/European_cup_finals"
+      ],
+      "id": "score-1999-05-26-manchester-united"
+    },
+    {
+      "competition": "Champions League final",
+      "date": "2000-05-24",
+      "home": "Real Madrid",
+      "away": "Valencia",
+      "score": "3–0",
+      "sources": [
+        "https://rsssf.org/ec/ec1stats.html",
+        "https://wiki.krisyotam.com/content/wikipedia_en_all_nopic_2026-03/European_cup_finals"
+      ],
+      "id": "score-2000-05-24-real-madrid"
+    },
+    {
+      "competition": "Champions League final",
+      "date": "2001-05-23",
+      "home": "Bayern Munich",
+      "away": "Valencia",
+      "score": "1–1 (Bayern won 5–4 on pens)",
+      "sources": [
+        "https://rsssf.org/ec/ec1stats.html",
+        "https://wiki.krisyotam.com/content/wikipedia_en_all_nopic_2026-03/European_cup_finals"
+      ],
+      "id": "score-2001-05-23-bayern-munich"
+    },
+    {
+      "competition": "Champions League final",
+      "date": "2002-05-15",
+      "home": "Real Madrid",
+      "away": "Bayer Leverkusen",
+      "score": "2–1",
+      "sources": [
+        "https://rsssf.org/ec/ec1stats.html",
+        "https://wiki.krisyotam.com/content/wikipedia_en_all_nopic_2026-03/European_cup_finals"
+      ],
+      "id": "score-2002-05-15-real-madrid"
+    },
+    {
+      "competition": "Champions League final",
+      "date": "2003-05-28",
+      "home": "AC Milan",
+      "away": "Juventus",
+      "score": "0–0 (Milan won 3–2 on pens)",
+      "sources": [
+        "https://rsssf.org/ec/ec1stats.html",
+        "https://wiki.krisyotam.com/content/wikipedia_en_all_nopic_2026-03/European_cup_finals"
+      ],
+      "id": "score-2003-05-28-ac-milan"
+    },
+    {
+      "competition": "Champions League final",
+      "date": "2004-05-26",
+      "home": "Porto",
+      "away": "Monaco",
+      "score": "3–0",
+      "sources": [
+        "https://rsssf.org/ec/ec1stats.html",
+        "https://wiki.krisyotam.com/content/wikipedia_en_all_nopic_2026-03/European_cup_finals"
+      ],
+      "id": "score-2004-05-26-porto"
+    },
+    {
+      "competition": "Champions League final",
+      "date": "2005-05-25",
+      "home": "Liverpool",
+      "away": "AC Milan",
+      "score": "3–3 (Liverpool won 3–2 on pens)",
+      "sources": [
+        "https://rsssf.org/ec/ec1stats.html",
+        "https://wiki.krisyotam.com/content/wikipedia_en_all_nopic_2026-03/European_cup_finals"
+      ],
+      "id": "score-2005-05-25-liverpool"
+    },
+    {
+      "competition": "Champions League final",
+      "date": "2006-05-17",
+      "home": "Barcelona",
+      "away": "Arsenal",
+      "score": "2–1",
+      "sources": [
+        "https://rsssf.org/ec/ec1stats.html",
+        "https://wiki.krisyotam.com/content/wikipedia_en_all_nopic_2026-03/European_cup_finals"
+      ],
+      "id": "score-2006-05-17-barcelona"
+    },
+    {
+      "competition": "Champions League final",
+      "date": "2007-05-23",
+      "home": "AC Milan",
+      "away": "Liverpool",
+      "score": "2–1",
+      "sources": [
+        "https://rsssf.org/ec/ec1stats.html",
+        "https://wiki.krisyotam.com/content/wikipedia_en_all_nopic_2026-03/European_cup_finals"
+      ],
+      "id": "score-2007-05-23-ac-milan"
+    },
+    {
+      "competition": "Champions League final",
+      "date": "2008-05-21",
+      "home": "Manchester United",
+      "away": "Chelsea",
+      "score": "1–1 (United won 6–5 on pens)",
+      "sources": [
+        "https://rsssf.org/ec/ec1stats.html",
+        "https://wiki.krisyotam.com/content/wikipedia_en_all_nopic_2026-03/European_cup_finals"
+      ],
+      "id": "score-2008-05-21-manchester-united"
+    },
+    {
+      "competition": "Champions League final",
+      "date": "2009-05-27",
+      "home": "Barcelona",
+      "away": "Manchester United",
+      "score": "2–0",
+      "sources": [
+        "https://rsssf.org/ec/ec1stats.html",
+        "https://wiki.krisyotam.com/content/wikipedia_en_all_nopic_2026-03/European_cup_finals"
+      ],
+      "id": "score-2009-05-27-barcelona"
+    },
+    {
+      "competition": "Champions League final",
+      "date": "2010-05-22",
+      "home": "Inter Milan",
+      "away": "Bayern Munich",
+      "score": "2–0",
+      "sources": [
+        "https://rsssf.org/ec/ec1stats.html",
+        "https://wiki.krisyotam.com/content/wikipedia_en_all_nopic_2026-03/European_cup_finals"
+      ],
+      "id": "score-2010-05-22-inter-milan"
+    },
+    {
+      "competition": "Champions League final",
+      "date": "2011-05-28",
+      "home": "Barcelona",
+      "away": "Manchester United",
+      "score": "3–1",
+      "sources": [
+        "https://rsssf.org/ec/ec1stats.html",
+        "https://wiki.krisyotam.com/content/wikipedia_en_all_nopic_2026-03/European_cup_finals"
+      ],
+      "id": "score-2011-05-28-barcelona"
+    },
+    {
+      "competition": "Champions League final",
+      "date": "2012-05-19",
+      "home": "Chelsea",
+      "away": "Bayern Munich",
+      "score": "1–1 (Chelsea won 4–3 on pens)",
+      "sources": [
+        "https://rsssf.org/ec/ec1stats.html",
+        "https://wiki.krisyotam.com/content/wikipedia_en_all_nopic_2026-03/European_cup_finals"
+      ],
+      "id": "score-2012-05-19-chelsea"
+    },
+    {
+      "competition": "Champions League final",
+      "date": "2013-05-25",
+      "home": "Bayern Munich",
+      "away": "Borussia Dortmund",
+      "score": "2–1",
+      "sources": [
+        "https://rsssf.org/ec/ec1stats.html",
+        "https://wiki.krisyotam.com/content/wikipedia_en_all_nopic_2026-03/European_cup_finals"
+      ],
+      "id": "score-2013-05-25-bayern-munich"
+    },
+    {
+      "competition": "Champions League final",
+      "date": "2014-05-24",
+      "home": "Real Madrid",
+      "away": "Atlético Madrid",
+      "score": "4–1 (aet)",
+      "sources": [
+        "https://rsssf.org/ec/ec1stats.html",
+        "https://wiki.krisyotam.com/content/wikipedia_en_all_nopic_2026-03/European_cup_finals"
+      ],
+      "id": "score-2014-05-24-real-madrid"
+    },
+    {
+      "competition": "Champions League final",
+      "date": "2015-06-06",
+      "home": "Barcelona",
+      "away": "Juventus",
+      "score": "3–1",
+      "sources": [
+        "https://rsssf.org/ec/ec1stats.html",
+        "https://wiki.krisyotam.com/content/wikipedia_en_all_nopic_2026-03/European_cup_finals"
+      ],
+      "id": "score-2015-06-06-barcelona"
+    },
+    {
+      "competition": "Champions League final",
+      "date": "2016-05-28",
+      "home": "Real Madrid",
+      "away": "Atlético Madrid",
+      "score": "1–1 (Real won 5–3 on pens)",
+      "sources": [
+        "https://rsssf.org/ec/ec1stats.html",
+        "https://wiki.krisyotam.com/content/wikipedia_en_all_nopic_2026-03/European_cup_finals"
+      ],
+      "id": "score-2016-05-28-real-madrid"
+    },
+    {
+      "competition": "Champions League final",
+      "date": "2017-06-03",
+      "home": "Real Madrid",
+      "away": "Juventus",
+      "score": "4–1",
+      "sources": [
+        "https://rsssf.org/ec/ec1stats.html",
+        "https://wiki.krisyotam.com/content/wikipedia_en_all_nopic_2026-03/European_cup_finals"
+      ],
+      "id": "score-2017-06-03-real-madrid"
+    },
+    {
+      "competition": "Champions League final",
+      "date": "2018-05-26",
+      "home": "Real Madrid",
+      "away": "Liverpool",
+      "score": "3–1",
+      "sources": [
+        "https://rsssf.org/ec/ec1stats.html",
+        "https://wiki.krisyotam.com/content/wikipedia_en_all_nopic_2026-03/European_cup_finals"
+      ],
+      "id": "score-2018-05-26-real-madrid"
+    },
+    {
+      "competition": "Champions League final",
+      "date": "2019-06-01",
+      "home": "Liverpool",
+      "away": "Tottenham",
+      "score": "2–0",
+      "sources": [
+        "https://rsssf.org/ec/ec1stats.html",
+        "https://wiki.krisyotam.com/content/wikipedia_en_all_nopic_2026-03/European_cup_finals"
+      ],
+      "id": "score-2019-06-01-liverpool"
+    },
+    {
+      "competition": "Champions League final",
+      "date": "2020-08-23",
+      "home": "Bayern Munich",
+      "away": "Paris Saint-Germain",
+      "score": "1–0",
+      "sources": [
+        "https://rsssf.org/ec/ec1stats.html",
+        "https://wiki.krisyotam.com/content/wikipedia_en_all_nopic_2026-03/European_cup_finals"
+      ],
+      "id": "score-2020-08-23-bayern-munich"
+    },
+    {
+      "competition": "Champions League final",
+      "date": "2021-05-29",
+      "home": "Chelsea",
+      "away": "Manchester City",
+      "score": "1–0",
+      "sources": [
+        "https://rsssf.org/ec/ec1stats.html",
+        "https://wiki.krisyotam.com/content/wikipedia_en_all_nopic_2026-03/European_cup_finals"
+      ],
+      "id": "score-2021-05-29-chelsea"
+    },
+    {
+      "competition": "Champions League final",
+      "date": "2022-05-28",
+      "home": "Real Madrid",
+      "away": "Liverpool",
+      "score": "1–0",
+      "sources": [
+        "https://rsssf.org/ec/ec1stats.html",
+        "https://wiki.krisyotam.com/content/wikipedia_en_all_nopic_2026-03/European_cup_finals"
+      ],
+      "id": "score-2022-05-28-real-madrid"
+    },
+    {
+      "competition": "Champions League final",
+      "date": "2023-06-10",
+      "home": "Manchester City",
+      "away": "Inter Milan",
+      "score": "1–0",
+      "sources": [
+        "https://rsssf.org/ec/ec1stats.html",
+        "https://wiki.krisyotam.com/content/wikipedia_en_all_nopic_2026-03/European_cup_finals"
+      ],
+      "id": "score-2023-06-10-manchester-city"
+    },
+    {
+      "competition": "Champions League final",
+      "date": "2024-06-01",
+      "home": "Real Madrid",
+      "away": "Borussia Dortmund",
+      "score": "2–0",
+      "sources": [
+        "https://rsssf.org/ec/ec1stats.html",
+        "https://wiki.krisyotam.com/content/wikipedia_en_all_nopic_2026-03/European_cup_finals"
+      ],
+      "id": "score-2024-06-01-real-madrid"
+    },
+    {
+      "competition": "Champions League final",
+      "date": "2025-05-31",
+      "home": "Paris Saint-Germain",
+      "away": "Inter Milan",
+      "score": "5–0",
+      "sources": [
+        "https://rsssf.org/ec/ec1stats.html",
+        "https://wiki.krisyotam.com/content/wikipedia_en_all_nopic_2026-03/European_cup_finals"
+      ],
+      "id": "score-2025-05-31-paris-saint-germain"
+    },
+    {
+      "competition": "Champions League final",
+      "date": "2026-05-30",
+      "home": "Paris Saint-Germain",
+      "away": "Arsenal",
+      "score": "1–1 (PSG won 4–3 on pens)",
+      "sources": [
+        "https://www.uefa.com/uefachampionsleague/news/02a5-20c02e59f219-15e92acdc717-1000--paris-retain-champions-league-holders-edge-arsenal-on-penalties/",
+        "https://newsonair.gov.in/uefa-champions-league-paris-saint-germain-beat-arsenal-4-3-on-penalty-shootout-in-final/"
+      ],
+      "id": "score-2026-05-30-paris-saint-germain"
+    },
+    {
+      "competition": "FA Cup final",
+      "date": "1994-05-14",
+      "home": "Manchester United",
+      "away": "Chelsea",
+      "score": "4–0",
+      "sources": [
+        "https://www.nbcsports.com/soccer/news/fa-cup-history-list-of-fa-cup-winners-finals-and-who-has-won-the-most-fa-cups",
+        "https://en.wikipedia.org/wiki/List_of_FA_Cup_finals"
+      ],
+      "id": "score-1994-05-14-manchester-united"
+    },
+    {
+      "competition": "FA Cup final",
+      "date": "1995-05-20",
+      "home": "Everton",
+      "away": "Manchester United",
+      "score": "1–0",
+      "sources": [
+        "https://www.nbcsports.com/soccer/news/fa-cup-history-list-of-fa-cup-winners-finals-and-who-has-won-the-most-fa-cups",
+        "https://en.wikipedia.org/wiki/List_of_FA_Cup_finals"
+      ],
+      "id": "score-1995-05-20-everton"
+    },
+    {
+      "competition": "FA Cup final",
+      "date": "1996-05-11",
+      "home": "Manchester United",
+      "away": "Liverpool",
+      "score": "1–0",
+      "sources": [
+        "https://www.nbcsports.com/soccer/news/fa-cup-history-list-of-fa-cup-winners-finals-and-who-has-won-the-most-fa-cups",
+        "https://en.wikipedia.org/wiki/List_of_FA_Cup_finals"
+      ],
+      "id": "score-1996-05-11-manchester-united"
+    },
+    {
+      "competition": "FA Cup final",
+      "date": "1997-05-17",
+      "home": "Chelsea",
+      "away": "Middlesbrough",
+      "score": "2–0",
+      "sources": [
+        "https://www.nbcsports.com/soccer/news/fa-cup-history-list-of-fa-cup-winners-finals-and-who-has-won-the-most-fa-cups",
+        "https://en.wikipedia.org/wiki/List_of_FA_Cup_finals"
+      ],
+      "id": "score-1997-05-17-chelsea"
+    },
+    {
+      "competition": "FA Cup final",
+      "date": "1998-05-16",
+      "home": "Arsenal",
+      "away": "Newcastle United",
+      "score": "2–0",
+      "sources": [
+        "https://www.nbcsports.com/soccer/news/fa-cup-history-list-of-fa-cup-winners-finals-and-who-has-won-the-most-fa-cups",
+        "https://en.wikipedia.org/wiki/List_of_FA_Cup_finals"
+      ],
+      "id": "score-1998-05-16-arsenal"
+    },
+    {
+      "competition": "FA Cup final",
+      "date": "1999-05-22",
+      "home": "Manchester United",
+      "away": "Newcastle United",
+      "score": "2–0",
+      "sources": [
+        "https://www.nbcsports.com/soccer/news/fa-cup-history-list-of-fa-cup-winners-finals-and-who-has-won-the-most-fa-cups",
+        "https://en.wikipedia.org/wiki/List_of_FA_Cup_finals"
+      ],
+      "id": "score-1999-05-22-manchester-united"
+    },
+    {
+      "competition": "FA Cup final",
+      "date": "2000-05-20",
+      "home": "Chelsea",
+      "away": "Aston Villa",
+      "score": "1–0",
+      "sources": [
+        "https://www.nbcsports.com/soccer/news/fa-cup-history-list-of-fa-cup-winners-finals-and-who-has-won-the-most-fa-cups",
+        "https://en.wikipedia.org/wiki/List_of_FA_Cup_finals"
+      ],
+      "id": "score-2000-05-20-chelsea"
+    },
+    {
+      "competition": "FA Cup final",
+      "date": "2001-05-12",
+      "home": "Liverpool",
+      "away": "Arsenal",
+      "score": "2–1",
+      "sources": [
+        "https://www.nbcsports.com/soccer/news/fa-cup-history-list-of-fa-cup-winners-finals-and-who-has-won-the-most-fa-cups",
+        "https://en.wikipedia.org/wiki/List_of_FA_Cup_finals"
+      ],
+      "id": "score-2001-05-12-liverpool"
+    },
+    {
+      "competition": "FA Cup final",
+      "date": "2002-05-04",
+      "home": "Arsenal",
+      "away": "Chelsea",
+      "score": "2–0",
+      "sources": [
+        "https://www.nbcsports.com/soccer/news/fa-cup-history-list-of-fa-cup-winners-finals-and-who-has-won-the-most-fa-cups",
+        "https://en.wikipedia.org/wiki/List_of_FA_Cup_finals"
+      ],
+      "id": "score-2002-05-04-arsenal"
+    },
+    {
+      "competition": "FA Cup final",
+      "date": "2004-05-22",
+      "home": "Manchester United",
+      "away": "Millwall",
+      "score": "3–0",
+      "sources": [
+        "https://www.nbcsports.com/soccer/news/fa-cup-history-list-of-fa-cup-winners-finals-and-who-has-won-the-most-fa-cups",
+        "https://en.wikipedia.org/wiki/List_of_FA_Cup_finals"
+      ],
+      "id": "score-2004-05-22-manchester-united"
+    },
+    {
+      "competition": "FA Cup final",
+      "date": "2005-05-21",
+      "home": "Arsenal",
+      "away": "Manchester United",
+      "score": "0–0 (Arsenal won 5–4 on pens)",
+      "sources": [
+        "https://www.nbcsports.com/soccer/news/fa-cup-history-list-of-fa-cup-winners-finals-and-who-has-won-the-most-fa-cups",
+        "https://en.wikipedia.org/wiki/List_of_FA_Cup_finals"
+      ],
+      "id": "score-2005-05-21-arsenal"
+    },
+    {
+      "competition": "FA Cup final",
+      "date": "2006-05-13",
+      "home": "Liverpool",
+      "away": "West Ham United",
+      "score": "3–3 (Liverpool won 3–1 on pens)",
+      "sources": [
+        "https://www.nbcsports.com/soccer/news/fa-cup-history-list-of-fa-cup-winners-finals-and-who-has-won-the-most-fa-cups",
+        "https://en.wikipedia.org/wiki/List_of_FA_Cup_finals"
+      ],
+      "id": "score-2006-05-13-liverpool"
+    },
+    {
+      "competition": "FA Cup final",
+      "date": "2007-05-19",
+      "home": "Chelsea",
+      "away": "Manchester United",
+      "score": "1–0 (aet)",
+      "sources": [
+        "https://www.nbcsports.com/soccer/news/fa-cup-history-list-of-fa-cup-winners-finals-and-who-has-won-the-most-fa-cups",
+        "https://en.wikipedia.org/wiki/List_of_FA_Cup_finals"
+      ],
+      "id": "score-2007-05-19-chelsea"
+    },
+    {
+      "competition": "FA Cup final",
+      "date": "2008-05-17",
+      "home": "Portsmouth",
+      "away": "Cardiff City",
+      "score": "1–0",
+      "sources": [
+        "https://www.nbcsports.com/soccer/news/fa-cup-history-list-of-fa-cup-winners-finals-and-who-has-won-the-most-fa-cups",
+        "https://en.wikipedia.org/wiki/List_of_FA_Cup_finals"
+      ],
+      "id": "score-2008-05-17-portsmouth"
+    },
+    {
+      "competition": "FA Cup final",
+      "date": "2009-05-30",
+      "home": "Chelsea",
+      "away": "Everton",
+      "score": "2–1",
+      "sources": [
+        "https://www.nbcsports.com/soccer/news/fa-cup-history-list-of-fa-cup-winners-finals-and-who-has-won-the-most-fa-cups",
+        "https://en.wikipedia.org/wiki/List_of_FA_Cup_finals"
+      ],
+      "id": "score-2009-05-30-chelsea"
+    },
+    {
+      "competition": "FA Cup final",
+      "date": "2011-05-14",
+      "home": "Manchester City",
+      "away": "Stoke City",
+      "score": "1–0",
+      "sources": [
+        "https://www.nbcsports.com/soccer/news/fa-cup-history-list-of-fa-cup-winners-finals-and-who-has-won-the-most-fa-cups",
+        "https://en.wikipedia.org/wiki/List_of_FA_Cup_finals"
+      ],
+      "id": "score-2011-05-14-manchester-city"
+    },
+    {
+      "competition": "FA Cup final",
+      "date": "2012-05-05",
+      "home": "Chelsea",
+      "away": "Liverpool",
+      "score": "2–1",
+      "sources": [
+        "https://www.nbcsports.com/soccer/news/fa-cup-history-list-of-fa-cup-winners-finals-and-who-has-won-the-most-fa-cups",
+        "https://en.wikipedia.org/wiki/List_of_FA_Cup_finals"
+      ],
+      "id": "score-2012-05-05-chelsea"
+    },
+    {
+      "competition": "FA Cup final",
+      "date": "2013-05-11",
+      "home": "Wigan Athletic",
+      "away": "Manchester City",
+      "score": "1–0",
+      "sources": [
+        "https://www.nbcsports.com/soccer/news/fa-cup-history-list-of-fa-cup-winners-finals-and-who-has-won-the-most-fa-cups",
+        "https://en.wikipedia.org/wiki/List_of_FA_Cup_finals"
+      ],
+      "id": "score-2013-05-11-wigan-athletic"
+    },
+    {
+      "competition": "FA Cup final",
+      "date": "2014-05-17",
+      "home": "Arsenal",
+      "away": "Hull City",
+      "score": "3–2 (aet)",
+      "sources": [
+        "https://www.nbcsports.com/soccer/news/fa-cup-history-list-of-fa-cup-winners-finals-and-who-has-won-the-most-fa-cups",
+        "https://en.wikipedia.org/wiki/List_of_FA_Cup_finals"
+      ],
+      "id": "score-2014-05-17-arsenal"
+    },
+    {
+      "competition": "FA Cup final",
+      "date": "2015-05-30",
+      "home": "Arsenal",
+      "away": "Aston Villa",
+      "score": "4–0",
+      "sources": [
+        "https://www.nbcsports.com/soccer/news/fa-cup-history-list-of-fa-cup-winners-finals-and-who-has-won-the-most-fa-cups",
+        "https://en.wikipedia.org/wiki/List_of_FA_Cup_finals"
+      ],
+      "id": "score-2015-05-30-arsenal"
+    },
+    {
+      "competition": "FA Cup final",
+      "date": "2016-05-21",
+      "home": "Manchester United",
+      "away": "Crystal Palace",
+      "score": "2–1 (aet)",
+      "sources": [
+        "https://www.nbcsports.com/soccer/news/fa-cup-history-list-of-fa-cup-winners-finals-and-who-has-won-the-most-fa-cups",
+        "https://en.wikipedia.org/wiki/List_of_FA_Cup_finals"
+      ],
+      "id": "score-2016-05-21-manchester-united"
+    },
+    {
+      "competition": "FA Cup final",
+      "date": "2017-05-27",
+      "home": "Arsenal",
+      "away": "Chelsea",
+      "score": "2–1",
+      "sources": [
+        "https://www.nbcsports.com/soccer/news/fa-cup-history-list-of-fa-cup-winners-finals-and-who-has-won-the-most-fa-cups",
+        "https://en.wikipedia.org/wiki/List_of_FA_Cup_finals"
+      ],
+      "id": "score-2017-05-27-arsenal"
+    },
+    {
+      "competition": "FA Cup final",
+      "date": "2018-05-19",
+      "home": "Chelsea",
+      "away": "Manchester United",
+      "score": "1–0",
+      "sources": [
+        "https://www.nbcsports.com/soccer/news/fa-cup-history-list-of-fa-cup-winners-finals-and-who-has-won-the-most-fa-cups",
+        "https://en.wikipedia.org/wiki/List_of_FA_Cup_finals"
+      ],
+      "id": "score-2018-05-19-chelsea"
+    },
+    {
+      "competition": "FA Cup final",
+      "date": "2019-05-18",
+      "home": "Manchester City",
+      "away": "Watford",
+      "score": "6–0",
+      "sources": [
+        "https://www.nbcsports.com/soccer/news/fa-cup-history-list-of-fa-cup-winners-finals-and-who-has-won-the-most-fa-cups",
+        "https://en.wikipedia.org/wiki/List_of_FA_Cup_finals"
+      ],
+      "id": "score-2019-05-18-manchester-city"
+    },
+    {
+      "competition": "FA Cup final",
+      "date": "2020-08-01",
+      "home": "Arsenal",
+      "away": "Chelsea",
+      "score": "2–1",
+      "sources": [
+        "https://www.nbcsports.com/soccer/news/fa-cup-history-list-of-fa-cup-winners-finals-and-who-has-won-the-most-fa-cups",
+        "https://en.wikipedia.org/wiki/List_of_FA_Cup_finals"
+      ],
+      "id": "score-2020-08-01-arsenal"
+    },
+    {
+      "competition": "FA Cup final",
+      "date": "2021-05-15",
+      "home": "Leicester City",
+      "away": "Chelsea",
+      "score": "1–0",
+      "sources": [
+        "https://www.nbcsports.com/soccer/news/fa-cup-history-list-of-fa-cup-winners-finals-and-who-has-won-the-most-fa-cups",
+        "https://en.wikipedia.org/wiki/List_of_FA_Cup_finals"
+      ],
+      "id": "score-2021-05-15-leicester-city"
+    },
+    {
+      "competition": "FA Cup final",
+      "date": "2022-05-14",
+      "home": "Liverpool",
+      "away": "Chelsea",
+      "score": "0–0 (Liverpool won 6–5 on pens)",
+      "sources": [
+        "https://www.nbcsports.com/soccer/news/fa-cup-history-list-of-fa-cup-winners-finals-and-who-has-won-the-most-fa-cups",
+        "https://en.wikipedia.org/wiki/List_of_FA_Cup_finals"
+      ],
+      "id": "score-2022-05-14-liverpool"
+    },
+    {
+      "competition": "FA Cup final",
+      "date": "2023-06-03",
+      "home": "Manchester City",
+      "away": "Manchester United",
+      "score": "2–1",
+      "sources": [
+        "https://www.nbcsports.com/soccer/news/fa-cup-history-list-of-fa-cup-winners-finals-and-who-has-won-the-most-fa-cups",
+        "https://en.wikipedia.org/wiki/List_of_FA_Cup_finals"
+      ],
+      "id": "score-2023-06-03-manchester-city"
+    },
+    {
+      "competition": "FA Cup final",
+      "date": "2024-05-25",
+      "home": "Manchester United",
+      "away": "Manchester City",
+      "score": "2–1",
+      "sources": [
+        "https://www.nbcsports.com/soccer/news/fa-cup-history-list-of-fa-cup-winners-finals-and-who-has-won-the-most-fa-cups",
+        "https://en.wikipedia.org/wiki/List_of_FA_Cup_finals"
+      ],
+      "id": "score-2024-05-25-manchester-united"
+    },
+    {
+      "competition": "FA Cup final",
+      "date": "2025-05-17",
+      "home": "Crystal Palace",
+      "away": "Manchester City",
+      "score": "1–0",
+      "sources": [
+        "https://www.nbcsports.com/soccer/news/fa-cup-history-list-of-fa-cup-winners-finals-and-who-has-won-the-most-fa-cups",
+        "https://en.wikipedia.org/wiki/List_of_FA_Cup_finals"
+      ],
+      "id": "score-2025-05-17-crystal-palace"
+    },
+    {
+      "competition": "FA Cup final",
+      "date": "2026-05-16",
+      "home": "Manchester City",
+      "away": "Chelsea",
+      "score": "1–0",
+      "sources": [
+        "https://www.thefa.com/news/2026/may/16/emirates-fa-cup-final-chelsea-v-manchester-city-report-20261605",
+        "https://www.foxsports.com/articles/soccer/manchester-city-wins-the-fa-cup-after-beating-chelsea-10-in-the-final"
+      ],
+      "id": "score-2026-05-16-manchester-city"
+    },
+    {
+      "competition": "Premier League",
+      "date": "1995-03-04",
+      "home": "Manchester United",
+      "away": "Ipswich Town",
+      "score": "9–0",
+      "sources": [],
+      "id": "score-1995-03-04-manchester-united"
+    },
+    {
+      "competition": "Premier League",
+      "date": "1996-10-20",
+      "home": "Newcastle United",
+      "away": "Manchester United",
+      "score": "5–0",
+      "sources": [],
+      "id": "score-1996-10-20-newcastle-united"
+    },
+    {
+      "competition": "Premier League",
+      "date": "2004-11-13",
+      "home": "Tottenham",
+      "away": "Arsenal",
+      "score": "4–5",
+      "sources": [],
+      "id": "score-2004-11-13-tottenham"
+    },
+    {
+      "competition": "Premier League",
+      "date": "2005-05-11",
+      "home": "Arsenal",
+      "away": "Everton",
+      "score": "7–0",
+      "sources": [],
+      "id": "score-2005-05-11-arsenal"
+    },
+    {
+      "competition": "Premier League",
+      "date": "2009-04-21",
+      "home": "Liverpool",
+      "away": "Arsenal",
+      "score": "4–4",
+      "sources": [],
+      "id": "score-2009-04-21-liverpool"
+    },
+    {
+      "competition": "Premier League",
+      "date": "2009-09-20",
+      "home": "Manchester United",
+      "away": "Manchester City",
+      "score": "4–3",
+      "sources": [],
+      "id": "score-2009-09-20-manchester-united"
+    },
+    {
+      "competition": "Premier League",
+      "date": "2009-11-22",
+      "home": "Tottenham",
+      "away": "Wigan Athletic",
+      "score": "9–1",
+      "sources": [],
+      "id": "score-2009-11-22-tottenham"
+    },
+    {
+      "competition": "Premier League",
+      "date": "2010-05-09",
+      "home": "Chelsea",
+      "away": "Wigan Athletic",
+      "score": "8–0",
+      "sources": [],
+      "id": "score-2010-05-09-chelsea"
+    },
+    {
+      "competition": "Premier League",
+      "date": "2011-08-28",
+      "home": "Manchester United",
+      "away": "Arsenal",
+      "score": "8–2",
+      "sources": [],
+      "id": "score-2011-08-28-manchester-united"
+    },
+    {
+      "competition": "Premier League",
+      "date": "2011-10-23",
+      "home": "Manchester United",
+      "away": "Manchester City",
+      "score": "1–6",
+      "sources": [],
+      "id": "score-2011-10-23-manchester-united"
+    },
+    {
+      "competition": "Premier League",
+      "date": "2014-03-22",
+      "home": "Chelsea",
+      "away": "Arsenal",
+      "score": "6–0",
+      "sources": [],
+      "id": "score-2014-03-22-chelsea"
+    },
+    {
+      "competition": "Premier League",
+      "date": "2014-09-21",
+      "home": "Leicester City",
+      "away": "Manchester United",
+      "score": "5–3",
+      "sources": [],
+      "id": "score-2014-09-21-leicester-city"
+    },
+    {
+      "competition": "Premier League",
+      "date": "2019-02-10",
+      "home": "Manchester City",
+      "away": "Chelsea",
+      "score": "6–0",
+      "sources": [],
+      "id": "score-2019-02-10-manchester-city"
+    },
+    {
+      "competition": "Premier League",
+      "date": "2019-10-25",
+      "home": "Southampton",
+      "away": "Leicester City",
+      "score": "0–9",
+      "sources": [],
+      "id": "score-2019-10-25-southampton"
+    },
+    {
+      "competition": "Premier League",
+      "date": "2020-10-04",
+      "home": "Aston Villa",
+      "away": "Liverpool",
+      "score": "7–2",
+      "sources": [],
+      "id": "score-2020-10-04-aston-villa"
+    },
+    {
+      "competition": "Premier League",
+      "date": "2020-10-04",
+      "home": "Manchester United",
+      "away": "Tottenham",
+      "score": "1–6",
+      "sources": [],
+      "id": "score-2020-10-04-manchester-united"
+    },
+    {
+      "competition": "Premier League",
+      "date": "2021-02-02",
+      "home": "Manchester United",
+      "away": "Southampton",
+      "score": "9–0",
+      "sources": [],
+      "id": "score-2021-02-02-manchester-united"
+    },
+    {
+      "competition": "Premier League",
+      "date": "2021-10-24",
+      "home": "Manchester United",
+      "away": "Liverpool",
+      "score": "0–5",
+      "sources": [],
+      "id": "score-2021-10-24-manchester-united"
+    },
+    {
+      "competition": "Premier League",
+      "date": "2022-10-02",
+      "home": "Manchester City",
+      "away": "Manchester United",
+      "score": "6–3",
+      "sources": [],
+      "id": "score-2022-10-02-manchester-city"
+    },
+    {
+      "competition": "World Cup",
+      "date": "2014-06-13",
+      "home": "Spain",
+      "away": "Netherlands",
+      "score": "1–5",
+      "sources": [],
+      "id": "score-2014-06-13-spain"
+    },
+    {
+      "competition": "Euro 2016",
+      "date": "2016-06-27",
+      "home": "England",
+      "away": "Iceland",
+      "score": "1–2",
+      "sources": [],
+      "id": "score-2016-06-27-england"
+    },
+    {
+      "competition": "Champions League",
+      "date": "2017-03-08",
+      "home": "Barcelona",
+      "away": "Paris Saint-Germain",
+      "score": "6–1",
+      "sources": [],
+      "id": "score-2017-03-08-barcelona"
+    },
+    {
+      "competition": "Champions League",
+      "date": "2018-04-10",
+      "home": "Roma",
+      "away": "Barcelona",
+      "score": "3–0",
+      "sources": [],
+      "id": "score-2018-04-10-roma"
+    },
+    {
+      "competition": "Champions League semi-final",
+      "date": "2019-05-08",
+      "home": "Ajax",
+      "away": "Tottenham",
+      "score": "2–3",
+      "sources": [],
+      "id": "score-2019-05-08-ajax"
+    },
+    {
+      "competition": "World Cup semi-final",
+      "date": "2014-07-08",
+      "home": "Brazil",
+      "away": "Germany",
+      "score": "1–7",
+      "id": "score-2014-07-08-brazil"
+    },
+    {
+      "competition": "Premier League",
+      "date": "2011-02-05",
+      "home": "Newcastle United",
+      "away": "Arsenal",
+      "score": "4–4",
+      "id": "score-2011-02-05-newcastle-united"
+    },
+    {
+      "competition": "Premier League",
+      "date": "2016-05-02",
+      "home": "Chelsea",
+      "away": "Tottenham",
+      "score": "2–2",
+      "id": "score-2016-05-02-chelsea"
+    },
+    {
+      "competition": "Premier League",
+      "date": "2008-10-29",
+      "home": "Arsenal",
+      "away": "Tottenham",
+      "score": "4–4",
+      "id": "score-2008-10-29-arsenal"
+    },
+    {
+      "competition": "Premier League",
+      "date": "2022-08-13",
+      "home": "Brentford",
+      "away": "Manchester United",
+      "score": "4–0",
+      "id": "score-2022-08-13-brentford"
+    },
+    {
+      "competition": "World Cup quarter-final",
+      "date": "1986-06-22",
+      "home": "Argentina",
+      "away": "England",
+      "score": "2–1",
+      "id": "score-1986-06-22-argentina"
+    },
+    {
+      "competition": "World Cup final",
+      "date": "1966-07-30",
+      "home": "England",
+      "away": "West Germany",
+      "score": "4–2 (aet)",
+      "id": "score-1966-07-30-england"
+    },
+    {
+      "competition": "FA Cup final",
+      "date": "1988-05-14",
+      "home": "Wimbledon",
+      "away": "Liverpool",
+      "score": "1–0",
+      "id": "score-1988-05-14-wimbledon"
+    },
+    {
+      "competition": "Champions League",
+      "date": "2004-04-07",
+      "home": "Deportivo La Coruña",
+      "away": "AC Milan",
+      "score": "4–0",
+      "id": "score-2004-04-07-deportivo-la-coru-a"
+    },
+    {
+      "competition": "Premier League",
+      "date": "2014-04-27",
+      "home": "Liverpool",
+      "away": "Chelsea",
+      "score": "0–2",
+      "id": "score-2014-04-27-liverpool"
+    },
+    {
+      "competition": "Premier League",
+      "date": "1995-05-14",
+      "home": "Liverpool",
+      "away": "Blackburn Rovers",
+      "score": "2–1",
+      "id": "score-1995-05-14-liverpool"
+    },
+    {
+      "competition": "League Cup final",
+      "date": "2011-02-27",
+      "home": "Arsenal",
+      "away": "Birmingham City",
+      "score": "1–2",
+      "id": "score-2011-02-27-arsenal"
+    },
+    {
+      "competition": "League Cup final",
+      "date": "2013-02-24",
+      "home": "Bradford City",
+      "away": "Swansea City",
+      "score": "0–5",
+      "id": "score-2013-02-24-bradford-city"
+    },
+    {
+      "competition": "Champions League",
+      "date": "2004-02-25",
+      "home": "Porto",
+      "away": "Manchester United",
+      "score": "2–1",
+      "id": "score-2004-02-25-porto"
+    },
+    {
+      "competition": "Premier League",
+      "date": "2012-05-13",
+      "home": "Manchester City",
+      "away": "QPR",
+      "score": "3–2",
+      "id": "score-2012-05-13-manchester-city"
+    },
+    {
+      "competition": "Premier League",
+      "date": "1996-04-03",
+      "home": "Liverpool",
+      "away": "Newcastle United",
+      "score": "4–3",
+      "id": "score-1996-04-03-liverpool"
+    }
+  ]
 }

@@ -429,13 +429,9 @@ class KickSource {
     final h = int.tryParse(parts.first), a = parts.length > 1 ? int.tryParse(parts[1]) : null;
     if (h == null || a == null) return null;
     final real = '$h–$a';
-    final others = <String>{
-      for (final (x, y) in [(h + 1, a), (h, a + 1), (h - 1, a), (h, a - 1), (a, h), (h + 1, a + 1)])
-        if (x >= 0 && y >= 0 && '$x–$y' != real) '$x–$y',
-    }.toList()
-      ..shuffle(_random);
+    final others = _wrongScores(h, a);
     if (others.length < 2) return null;
-    final options = [real, ...others.take(2)]..shuffle(_random);
+    final options = [real, ...others]..shuffle(_random);
     return PenaltyKick(
       kind: KickKind.matchScore,
       ask: _up('${m.competition} · ${m.year}'),
@@ -444,6 +440,28 @@ class KickSource {
       correctOption: options.indexOf(real),
       reveal: _up(m.score),
     );
+  }
+
+  /// Two wrong scores far enough from the real one that roughly remembering
+  /// the game is enough (not 3–0 v 4–0 v 3–1): one with the same result but
+  /// a different scoreline, one with a different result.
+  List<String> _wrongScores(int h, int a) {
+    int sign(int x) => x.sign;
+    final top = max(4, max(h, a) + 2);
+    final all = [
+      for (var x = 0; x <= top; x++)
+        for (var y = 0; y <= top; y++)
+          // At least two goals different, and not a silly total next to it.
+          if ((x - h).abs() + (y - a).abs() >= 2 && ((x + y) - (h + a)).abs() <= 3) (x, y),
+    ]..shuffle(_random);
+    final same = [for (final s in all) if (sign(s.$1 - s.$2) == sign(h - a)) s];
+    final other = [for (final s in all) if (sign(s.$1 - s.$2) != sign(h - a)) s];
+    final picks = [if (same.isNotEmpty) same.first, if (other.isNotEmpty) other.first];
+    for (final s in all) {
+      if (picks.length >= 2) break;
+      if (!picks.contains(s)) picks.add(s);
+    }
+    return [for (final (x, y) in picks.take(2)) '$x–$y'];
   }
 
   /// A few of the best-known answers, for the reveal.
