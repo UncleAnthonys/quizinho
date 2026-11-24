@@ -899,7 +899,7 @@ void main() {
     await tester.runAsync(() async => joinRoom.dispose());
     await storeShot(
       tester,
-      'phone_4_noughts',
+      'phone_5_noughts',
       'NOUGHTS & CROSSES,\nFOOTBALL STYLE',
       // Mid-answer, mic on and hearing it: shows off voice answers too.
       column(
@@ -923,7 +923,7 @@ void main() {
     services.settings.typeAnswers = true;
     await storeShot(
       tester,
-      'phone_5_xi',
+      'phone_6_xi',
       'NAME THE XI BEFORE\nTHE BOMB GOES OFF',
       XiLayout(
         data: {
@@ -951,7 +951,7 @@ void main() {
     final career = CareerPathController(teamCount: 2, questions: [zlatanPath()])..revealed = 3;
     await storeShot(
       tester,
-      'phone_6_career',
+      'phone_4_career',
       'GUESS THE PLAYER\nFROM THEIR CLUBS',
       BuzzGameView(
         round: RoundContext(tournament: t, multiplier: 1, onComplete: (_) {}),
