@@ -119,14 +119,17 @@ class BuzzBridge extends ChangeNotifier {
   }
 
   /// How long to wait for an earlier phone tap: the slowest phone that
-  /// could buzz, plus a margin. Before any are measured, half a second.
+  /// could buzz, plus a margin. Before any are measured, most of a second -
+  /// a phone's buzz can take that long to cross (the database is in the US),
+  /// and a window that closes before it lands hands the main phone a buzz it
+  /// didn't win.
   Duration _waitForPhones() {
     final ds = [
       for (final m in room.members.values)
         if (room.online(m.device) && controller.couldBuzz(m.team)) ...?_delays[m.device],
     ];
-    final ms = ds.isEmpty ? 500 : ds.reduce(max) + 120;
-    return Duration(milliseconds: ms.clamp(150, 800));
+    final ms = ds.isEmpty ? 900 : ds.reduce(max) + 250;
+    return Duration(milliseconds: ms.clamp(400, 1500));
   }
 
   /// Joined phones that could still buzz this question.

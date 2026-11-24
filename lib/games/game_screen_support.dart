@@ -138,6 +138,7 @@ mixin GameScreenSupport<W extends StatefulWidget> on State<W>, TickerProviderSta
   void say(String? line) {
     if (line == null || !services.settings.commentaryOn) return;
     _commentaryTimer?.cancel();
+    unawaited(services.room?.say(line));
     setState(() => commentaryText = line);
     _commentaryTimer = Timer(const Duration(milliseconds: 2600), () {
       if (mounted) setState(() => commentaryText = null);

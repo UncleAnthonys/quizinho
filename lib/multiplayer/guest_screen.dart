@@ -275,7 +275,12 @@ class _GuestGameState extends State<_GuestGame> with SingleTickerProviderStateMi
             // (No name/game-code strip: the screen's for the game.)
             child: Column(children: [if (_AppNudge.shows) const _AppNudge()]),
           ),
-          Expanded(child: body()),
+          Expanded(
+            child: Stack(children: [
+              Positioned.fill(child: body()),
+              Positioned(top: 4, left: 0, right: 0, child: _PhoneLine(line: widget.room.line)),
+            ]),
+          ),
         ]),
       ),
     );
@@ -1019,4 +1024,48 @@ class _NextGameInState extends State<_NextGameIn> {
           padding: const EdgeInsets.only(top: 10),
           child: Text('NEXT CHALLENGE IN $_left', style: AppText.label(13)),
         );
+}
+
+/// The pundit's line from the main phone, over the top of the screen for as
+/// long as the main phone shows it.
+class _PhoneLine extends StatefulWidget {
+  const _PhoneLine({required this.line});
+  final ValueNotifier<Map<String, Object?>?> line;
+
+  @override
+  State<_PhoneLine> createState() => _PhoneLineState();
+}
+
+class _PhoneLineState extends State<_PhoneLine> {
+  String? _text;
+  Timer? _timer;
+
+  @override
+  void initState() {
+    super.initState();
+    widget.line.addListener(_said);
+  }
+
+  void _said() {
+    final m = widget.line.value;
+    final t = m?['t'];
+    if (t is! String || t.isEmpty) return;
+    _timer?.cancel();
+    setState(() => _text = t);
+    _timer = Timer(Duration(milliseconds: (m?['ms'] as num?)?.toInt() ?? 2600), () {
+      if (mounted) setState(() => _text = null);
+    });
+  }
+
+  @override
+  void dispose() {
+    widget.line.removeListener(_said);
+    _timer?.cancel();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) => IgnorePointer(
+        child: CommentaryBanner(text: _text, child: const SizedBox(height: 40, width: double.infinity)),
+      );
 }

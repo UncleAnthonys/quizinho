@@ -141,6 +141,13 @@ class HostRoom extends ChangeNotifier {
     // Keeps this phone's clock lined up with the database's (and phones see
     // the room's still alive).
     unawaited(serverClock.stamp(() => link.putRead('$_root/host/at', serverTime)));
+    // A few more straight away: the quickest round trip sets the clock best,
+    // and the first is often slow (the connection's still opening).
+    for (var i = 1; i <= 4; i++) {
+      Timer(Duration(milliseconds: 1500 * i), () {
+        if (_tick != null) unawaited(serverClock.stamp(() => link.putRead('$_root/host/at', serverTime)));
+      });
+    }
     _tick ??= Timer.periodic(const Duration(seconds: 30), (_) {
       unawaited(serverClock.stamp(() => link.putRead('$_root/host/at', serverTime)));
     });
@@ -214,14 +221,34 @@ class HostRoom extends ChangeNotifier {
   }
 
   /// Puts [view] on every phone (skipped when nothing changed).
-  Future<void> show(Map<String, Object?> view) async {
+  /// One at a time and in order: two saves in flight can land either way
+  /// round, and the phones would be left on the older view (the plain table
+  /// over the one with the teaser on it). A view overtaken while it waits
+  /// isn't sent at all.
+  Future<void> show(Map<String, Object?> view) {
     final json = jsonEncode(view);
-    if (json == _lastView) return;
+    if (json == _lastView) return _viewSaved;
     _lastView = json;
+    return _viewSaved = _viewSaved.then((_) async {
+      if (_lastView != json) return;
+      try {
+        await link.put('$_root/view', view);
+      } catch (e) {
+        debugPrint('Room view not sent: $e');
+      }
+    });
+  }
+
+  Future<void> _viewSaved = Future.value();
+
+  int _lineCount = 0;
+
+  /// The pundit's line, shown on every phone for [ms] as it is here.
+  Future<void> say(String line, {int ms = 2600}) async {
     try {
-      await link.put('$_root/view', view);
+      await link.put('$_root/line', {'t': line, 'n': ++_lineCount, 'ms': ms});
     } catch (e) {
-      debugPrint('Room view not sent: $e');
+      debugPrint('Room line not sent: $e');
     }
   }
 
@@ -331,6 +358,11 @@ class GuestRoom extends ChangeNotifier {
 
   /// What the host is showing now.
   Map<String, Object?> view = const {};
+
+  /// The pundit's latest line, as the main phone says it ({t, n, ms}). Not
+  /// the one already there on joining: only lines said from then on.
+  final ValueNotifier<Map<String, Object?>?> line = ValueNotifier(null);
+  bool _lineSeen = false;
   final List<StreamSubscription<Object?>> _subs = [];
 
   RoomMember? get me => members[device];
@@ -344,6 +376,13 @@ class GuestRoom extends ChangeNotifier {
     _beat ??= Timer.periodic(heartbeat, (_) {
       if (me case final m?) claim(m.team, m.name);
     });
+    // Line the clock up properly early (the quickest round trip wins), so
+    // buzzes are timed fairly from the first question.
+    for (var i = 1; i <= 4; i++) {
+      Timer(Duration(milliseconds: 1500 * i), () {
+        if (_beat != null && me case final m?) claim(m.team, m.name);
+      });
+    }
     if (history case final h?) {
       _subs.add(link.watch('$_root/asked').listen((v) {
         for (final e in asMap(v).entries) {
@@ -376,6 +415,10 @@ class GuestRoom extends ChangeNotifier {
     _subs.add(link.watch('$_root/members').listen((v) {
       members = _members(v);
       notifyListeners();
+    }));
+    _subs.add(link.watch('$_root/line').listen((v) {
+      if (_lineSeen) line.value = asMap(v);
+      _lineSeen = true;
     }));
     _subs.add(link.watch('$_root/view').listen((v) {
       view = asMap(v);

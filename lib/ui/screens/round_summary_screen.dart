@@ -78,6 +78,7 @@ class _RoundSummaryScreenState extends State<RoundSummaryScreen> {
       if (!s.settings.commentaryOn) return;
       final line = s.commentary.afterRound(t);
       if (line == null) return;
+      unawaited(s.room?.say(line, ms: 3500));
       setState(() => _line = line);
       _lineTimer = Timer(const Duration(milliseconds: 3500), () {
         if (mounted) setState(() => _line = null);
