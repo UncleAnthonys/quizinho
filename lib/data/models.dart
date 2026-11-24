@@ -401,24 +401,3 @@ class HistoricMatch {
   }
 }
 
-/// A famous result, score only (penalties' "What was the score?").
-class FamousScore {
-  const FamousScore({
-    required this.id,
-    required this.competition,
-    required this.date,
-    required this.home,
-    required this.away,
-    required this.score,
-  });
-  final String id;
-  final String competition;
-  final String date;
-  final String home;
-  final String away;
-
-  /// "4–2", "1–1 (Italy won 5–3 on pens)": [home]'s goals first.
-  final String score;
-
-  int get year => int.tryParse(date.split('-').first) ?? 0;
-}

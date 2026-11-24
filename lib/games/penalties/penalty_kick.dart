@@ -15,7 +15,6 @@ enum KickKind {
   whoPlayedMore,
   whoScoredMore,
   careerGoals,
-  matchScore,
 }
 
 /// One penalty: a quick question with a single answer to give (or, for
@@ -145,7 +144,6 @@ class KickSource {
         KickKind.whoPlayedMore => _whoMore(goals: false),
         KickKind.whoScoredMore => _whoMore(goals: true),
         KickKind.careerGoals => _careerGoals(),
-        KickKind.matchScore => _matchScore(),
       };
 
   String _up(String s) => s.toUpperCase();
@@ -407,61 +405,6 @@ class KickSource {
       correctOption: va > vb ? 0 : 1,
       reveal: '$na $va · $nb $vb $unit',
     );
-  }
-
-  List<FamousScore>? _scores;
-
-  /// "Liverpool v Barcelona, 2019: what was the score?" Three to pick from.
-  /// Every Starting XI night plus the big finals and scorelines: a score is
-  /// easier to remember than a line-up.
-  Future<PenaltyKick?> _matchScore() async {
-    if (genders == 2) return null; // (all men's results so far)
-    _scores ??= [for (final s in await _repo.famousScores()) if (_inEras(s.year == 0 ? null : s.year)) s];
-    final seen = _history.seenCounts('pens');
-    final fresh = [for (final s in _scores!) if (!_used.contains(s.id) && !seen.containsKey(s.id)) s];
-    final pool = fresh.isNotEmpty ? fresh : [for (final s in _scores!) if (!_used.contains(s.id)) s];
-    if (pool.isEmpty) return null;
-    final m = pool[_random.nextInt(pool.length)];
-    _used.add(m.id);
-    _history.add('pens', m.id);
-    // "3–3 (Liverpool won 3–2 on pens)": the score itself.
-    final parts = m.score.split(' ').first.split(RegExp('[–-]'));
-    final h = int.tryParse(parts.first), a = parts.length > 1 ? int.tryParse(parts[1]) : null;
-    if (h == null || a == null) return null;
-    final real = '$h–$a';
-    final others = _wrongScores(h, a);
-    if (others.length < 2) return null;
-    final options = [real, ...others]..shuffle(_random);
-    return PenaltyKick(
-      kind: KickKind.matchScore,
-      ask: _up('${m.competition} · ${m.year}'),
-      lines: [_up('${m.home} v ${m.away}'), 'WHAT WAS THE SCORE?'],
-      options: options,
-      correctOption: options.indexOf(real),
-      reveal: _up(m.score),
-    );
-  }
-
-  /// Two wrong scores far enough from the real one that roughly remembering
-  /// the game is enough (not 3–0 v 4–0 v 3–1): one with the same result but
-  /// a different scoreline, one with a different result.
-  List<String> _wrongScores(int h, int a) {
-    int sign(int x) => x.sign;
-    final top = max(3, max(h, a) + 1);
-    final all = [
-      for (var x = 0; x <= top; x++)
-        for (var y = 0; y <= top; y++)
-          // At least two goals different, and not a silly total next to it.
-          if ((x - h).abs() + (y - a).abs() >= 2 && ((x + y) - (h + a)).abs() <= 2) (x, y),
-    ]..shuffle(_random);
-    final same = [for (final s in all) if (sign(s.$1 - s.$2) == sign(h - a)) s];
-    final other = [for (final s in all) if (sign(s.$1 - s.$2) != sign(h - a)) s];
-    final picks = [if (same.isNotEmpty) same.first, if (other.isNotEmpty) other.first];
-    for (final s in all) {
-      if (picks.length >= 2) break;
-      if (!picks.contains(s)) picks.add(s);
-    }
-    return [for (final (x, y) in picks.take(2)) '$x–$y'];
   }
 
   /// A few of the best-known answers, for the reveal.

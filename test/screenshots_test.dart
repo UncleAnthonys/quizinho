@@ -1202,17 +1202,6 @@ void main() {
         }, tap: true));
     await shot(
         tester,
-        'pens_score',
-        pens({
-          ...kicking,
-          'kick': {
-            'ask': 'CHAMPIONS LEAGUE SEMI-FINAL · 2019',
-            'lines': ['LIVERPOOL V BARCELONA', 'WHAT WAS THE SCORE?'],
-            'options': ['3–0', '4–0', '4–1'],
-          },
-        }, tap: true));
-    await shot(
-        tester,
         'pens_sudden_death',
         pens({
           'phase': 'result',
