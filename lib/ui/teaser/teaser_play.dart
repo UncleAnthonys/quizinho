@@ -92,10 +92,7 @@ class TeaserPlay extends StatelessWidget {
               textAlign: TextAlign.center, style: AppText.headline(22, color: Palette.gold)),
         )
       else
-        if (onPhones.length >= teams.length)
-          Text('BUZZ ON YOUR PHONES', style: AppText.headline(22, color: Palette.gold))
-        else
-          TeaserTeams(teams: teams, locked: c.lockedOut, onPick: c.buzz, hidden: onPhones),
+        TeaserTeams(teams: teams, locked: c.lockedOut, onPick: c.buzz, hidden: onPhones),
     ]);
   }
 

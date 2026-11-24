@@ -108,7 +108,6 @@ class Commentary {
       'That’s not getting past VAR.',
     ],
     GameEvent.timeUp: [
-      'Frozen like a rabbit in the headlights.',
       'Bottled it.',
       'Caught in two minds.',
       'The moment’s gone.',
