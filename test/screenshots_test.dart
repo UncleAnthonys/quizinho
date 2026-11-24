@@ -47,7 +47,7 @@ import 'package:quizinho/multiplayer/memory_room_link.dart';
 import 'package:quizinho/multiplayer/room.dart' show GuestRoom, HostRoom, RoomMember;
 
 import 'package:quizinho/data/json_football_repository.dart';
-import 'package:quizinho/data/models.dart' show Difficulty;
+import 'package:quizinho/data/models.dart' show Difficulty, Player;
 import 'package:quizinho/games/tic_tac_toe/tic_tac_toe_controller.dart';
 import 'package:quizinho/ui/screens/round_summary_screen.dart';
 import 'package:quizinho/domain/warm_up_cup.dart';
