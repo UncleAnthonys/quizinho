@@ -242,7 +242,7 @@ void main() {
   Widget column(Widget scores, Widget layout) => Column(children: [scores, Expanded(child: layout)]);
 
   const lineup = [
-    {'p': 'GK', 'n': 'David Seaman', 'i': 'seaman'},
+    {'p': 'GK', 'n': 'Jens Lehmann', 'i': 'lehmann'}, // (Seaman had left by 2004)
     {'p': 'RB', 'n': 'Lauren', 'i': 'lauren'},
     {'p': 'CB', 'n': 'Sol Campbell', 'i': 'campbell'},
     {'p': 'CB', 'n': 'Kolo Touré', 'i': 'toure'},
@@ -915,8 +915,20 @@ void main() {
         data: xi('ticking'),
         scores: _scores(extra: const ['♥♥♥  2 named', '♥♥  1 named']),
         left: 12,
-        answerBox: _picker(),
+        // Typing a starter, the list of names popping up under the box.
+        answerBox: PlayerPicker(
+          key: UniqueKey(),
+          index: PlayerIndex(const [
+            ...allPlayers,
+            Player(id: 'bergkamp', name: 'Dennis Bergkamp', fame: 5),
+            Player(id: 'bergwijn', name: 'Steven Bergwijn', fame: 3),
+            Player(id: 'berbatov', name: 'Dimitar Berbatov', fame: 5),
+          ]),
+          onPick: (_) {},
+          onPass: () {},
+        ),
       ),
+      then: () => tester.enterText(find.byType(TextField), 'Dennis Bergkam'),
     );
     // Not one of the free Warm-Up Cup's careers (Yaya Touré, Crouch, Keane).
     final career = CareerPathController(teamCount: 2, questions: [zlatanPath()])..revealed = 3;
