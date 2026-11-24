@@ -744,7 +744,7 @@ void main() {
   // Store listing: phone screenshots (a caption over a real screen) and the
   // Play feature graphic. Written to docs/store/.
   Future<void> storeShot(WidgetTester tester, String name, String caption, Widget screen,
-      {bool wrap = true, Future<void> Function()? then}) async {
+      {bool wrap = true, Future<void> Function()? then, String? sub}) async {
     // 1080 x 1920 (9:16), drawn at 3x.
     tester.view.physicalSize = const Size(1080, 1920);
     tester.view.devicePixelRatio = 3;
@@ -776,9 +776,18 @@ void main() {
                   child: Center(
                     child: FittedBox(
                       fit: BoxFit.scaleDown,
-                      child: Text(caption,
-                          textAlign: TextAlign.center,
-                          style: AppText.headline(31, color: Palette.yellow).copyWith(height: 1.02)),
+                      child: Column(mainAxisSize: MainAxisSize.min, children: [
+                        Text(caption,
+                            textAlign: TextAlign.center,
+                            style: AppText.headline(31, color: Palette.yellow).copyWith(height: 1.02)),
+                        // A smaller second line in white, so it backs up the headline
+                        // instead of competing with it.
+                        if (sub != null)
+                          Padding(
+                            padding: const EdgeInsets.only(top: 6),
+                            child: Text(sub, textAlign: TextAlign.center, style: AppText.label(17, color: Palette.text)),
+                          ),
+                      ]),
                     ),
                   ),
                 ),
@@ -830,7 +839,7 @@ void main() {
       TeamSetup(name: 'Home', colorIndex: 0, players: ['Gav', 'Sam']),
       TeamSetup(name: 'Away', colorIndex: 1, players: ['Alex', 'Jo']),
     ]));
-    await storeShot(tester, 'phone_1_home', 'THE FOOTBALL PARTY GAME.\nNO WI-FI NEEDED.', const HomeScreen(), wrap: false);
+    await storeShot(tester, 'phone_1_home', 'THE FOOTBALL\nPARTY GAME', const HomeScreen(), wrap: false, sub: 'NO WI-FI NEEDED');
 
     final t = Tournament(TournamentConfig(teams: [
       TeamSetup(name: 'Home', colorIndex: 0),
