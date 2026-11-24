@@ -209,8 +209,8 @@ class Commentary {
 
   /// After a round, on the table: the moment of the match, if there is one.
   /// Final round: won by the team already ahead, or by a team that wasn't
-  /// and it's won them the match. Otherwise a thrashing, or one round left
-  /// with it tight at the top.
+  /// and it's won them the match. Otherwise a thrashing, the bottom team
+  /// winning, or one round left with it tight at the top.
   String? afterRound(Tournament t) {
     if (t.rounds.isEmpty || t.teamCount < 2) return null;
     final pts = t.rounds.last.points;
@@ -220,6 +220,7 @@ class Commentary {
     final best = got.reduce(max);
     final roundWinners = [for (var i = 0; i < n; i++) if (got[i] == best) i];
     final w = best > 0 && roundWinners.length == 1 ? roundWinners.single : null;
+    bool behindAll(List<int> v, int team) => [for (var i = 0; i < n; i++) if (i != team) v[i]].every((x) => x > v[team]);
     bool aheadOfAll(List<int> v, int team) => [for (var i = 0; i < n; i++) if (i != team) v[i]].every((x) => x < v[team]);
     if (w != null && t.isFinished) {
       if (aheadOfAll(before, w)) return 'They think it’s all over… it is now!';
@@ -228,6 +229,7 @@ class Commentary {
     if (w != null) {
       final second = [for (var i = 0; i < n; i++) if (i != w) got[i]].reduce(max);
       if (best - second >= thrashing) return 'Your boys took a hell of a beating!';
+      if (behindAll(before, w)) return _pick(underdogLines);
     }
     if (t.rounds.length == t.totalRounds - 1) {
       final sorted = [...t.scores]..sort((a, b) => b.compareTo(a));
@@ -240,6 +242,14 @@ class Commentary {
   static const thrashing = 6;
 
   String _pick(List<String> l) => l[_random.nextInt(l.length)];
+
+  /// The bottom team wins a round.
+  static const underdogLines = [
+    'The comeback starts here?',
+    'Somebody’s woken up!',
+    'Don’t write them off just yet!',
+    'Rock bottom, but they’re not lying down!',
+  ];
 
   static const winnerLines = [
     'Champions! Get the open-top bus booked.',
