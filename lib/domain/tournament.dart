@@ -438,7 +438,7 @@ class Tournament extends ChangeNotifier {
     if (config.warmUp) return WarmUpCup.games[min(rounds.length, WarmUpCup.games.length - 1)];
     var segs = wheelSegments;
     if (rounds.isEmpty && segs.length > 1) segs = segs.where((m) => m != GameModeId.wildcard).toList();
-    final options = segs.length > 1 ? segs.where((m) => m != _lastGame).toList() : segs;
+    final options = _fresh(segs);
     final pick = options[_random.nextInt(options.length)];
     if (pick != GameModeId.wildcard) _lastGame = pick;
     return pick;
@@ -447,9 +447,20 @@ class Tournament extends ChangeNotifier {
   /// The real game behind a wildcard.
   GameModeId resolveWildcard() {
     final games = config.enabledGames.isEmpty ? GameModeId.concreteGames : config.enabledGames;
-    final pick = games[_random.nextInt(games.length)];
+    final options = _fresh(games);
+    final pick = options[_random.nextInt(options.length)];
     _lastGame = pick;
     return pick;
+  }
+
+  /// [games] not played yet this match (the wildcard always stays in); once
+  /// they've all been played, anything but the last one.
+  List<GameModeId> _fresh(List<GameModeId> games) {
+    final played = {for (final r in rounds) r.mode, if (_lastGame != null) _lastGame!};
+    final unplayed = [for (final m in games) if (m == GameModeId.wildcard || !played.contains(m)) m];
+    if (unplayed.any((m) => m != GameModeId.wildcard)) return unplayed;
+    final notLast = [for (final m in games) if (m != _lastGame) m];
+    return notLast.isEmpty ? games : notLast;
   }
 
   void recordRound(RoundResult result, {int multiplier = 1}) {

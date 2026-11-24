@@ -460,7 +460,7 @@ def main() -> None:
         everyone = sorted(set().union(*scored.values()))
         b = careers_b(players, everyone)
         label = {
-            "cl": "a European Cup or Champions League final", "wc": "a World Cup final",
+            "cl": "a Champions League final (or the old European Cup)", "wc": "a World Cup final",
             "uel": "a UEFA Cup or Europa League final", "euro": "a European Championship final",
             "fac": "an FA Cup final", "lc": "a League Cup final",
         }

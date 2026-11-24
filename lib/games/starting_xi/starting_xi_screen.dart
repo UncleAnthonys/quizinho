@@ -199,9 +199,18 @@ class _StartingXiScreenState extends State<StartingXiScreen>
 
   @override
   Widget build(BuildContext context) =>
-      ValueListenableBuilder<bool>(valueListenable: answerTyping, builder: (context, typing, _) => _build(typing));
+      ValueListenableBuilder<bool>(
+        valueListenable: answerTyping,
+        // The pitch stays folded until the keyboard has fully gone
+        // (KeyboardSettle): coming back while it slides away looked jerky.
+        builder: (context, typing, _) => KeyboardSettle(
+          active: typing && _c?.phase == BombPhase.ticking,
+          builder: (context, folded) => _build(folded),
+        ),
+      );
 
-  /// [typingNow]: an answer is being typed — keyboard up, so the pitch gives way.
+  /// [typingNow]: an answer is being typed (or the keyboard is still going
+  /// away after one) — so the pitch gives way.
   Widget _build(bool typingNow) {
     final t = widget.round.tournament;
     if (_empty) {
@@ -212,7 +221,7 @@ class _StartingXiScreenState extends State<StartingXiScreen>
     }
     final c = _c;
     if (c == null) return const LoadingRound();
-    final typing = typingNow && c.phase == BombPhase.ticking;
+    final typing = typingNow;
     final colour = t.config.teams[c.currentTeam].colorIndex;
     return XiLayout(
       data: _view(c),

@@ -60,6 +60,19 @@ void main() {
     }
   });
 
+  test('no game comes up twice while there are others not played yet', () {
+    for (var seed = 0; seed < 50; seed++) {
+      final t = Tournament(config(), random: Random(seed));
+      final seen = <GameModeId>{};
+      for (var i = 0; i < 4; i++) {
+        var game = t.spin();
+        if (game == GameModeId.wildcard) game = t.resolveWildcard();
+        expect(seen.add(game), isTrue, reason: 'seed $seed: $game twice');
+        t.recordRound(RoundResult.empty(game, t.teamCount));
+      }
+    }
+  });
+
   test('the Warm-Up Cup is three fixed rounds, same order for everyone', () {
     final t = Tournament(config(teams: 3).asWarmUp(), random: Random(7));
     expect(t.totalRounds, 3);
