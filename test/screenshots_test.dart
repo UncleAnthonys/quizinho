@@ -862,7 +862,7 @@ void main() {
     await storeShot(
       tester,
       'phone_2_buzz',
-      'BUZZ IN FIRST.\nNAME THE PLAYER.',
+      'NAME A PLAYER WHO\nPLAYED FOR BOTH',
       BuzzGameView(
         round: RoundContext(tournament: t, multiplier: 1, onComplete: (_) {}),
         controller: ClubConnectionsController(teamCount: 2, questions: [arsenalBarca()]),
@@ -873,7 +873,7 @@ void main() {
         onFinished: () {},
       ),
       wrap: false,
-      sub: 'NO DEAD ENDS. EVERY PAIR HAS A PLAYER.',
+      sub: 'EVERY PAIR HAS AN ANSWER. BUZZ IN FIRST.',
     );
     services.settings.typeAnswers = false; // the mic, for the noughts shot
     // Friends join from the QR code: three phones in, one still to come.
