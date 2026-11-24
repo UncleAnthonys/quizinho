@@ -57,3 +57,40 @@ workflows:
       app_store_connect:
         auth: integration
         submit_to_testflight: true
+
+  # Android → an app bundle (.aab) to upload to Play Console by hand
+  # (Test and release → Testing → Internal testing). Start it from "Start new
+  # build" in Codemagic, or push a tag starting "android-".
+  # Needs the upload key in Codemagic: Teams → Code signing identities →
+  # Android keystores, reference name exactly "quizinho_upload".
+  android-release:
+    name: Android → Play (app bundle)
+    max_build_duration: 45
+    instance_type: linux_x2
+    environment:
+      android_signing:
+        - quizinho_upload
+      flutter: stable
+    triggering:
+      events:
+        - tag
+      tag_patterns:
+        - pattern: android-*
+          include: true
+    scripts:
+      - name: Platform folders (if missing)
+        script: bash scripts/bootstrap_platforms.sh
+      - name: Get packages
+        script: flutter pub get
+      - name: Analyze and test
+        script: |
+          flutter analyze --no-fatal-infos
+          flutter test
+      - name: Build app bundle
+        script: |
+          # Play needs a bigger version code every upload: Codemagic's build
+          # counter does that.
+          flutter build appbundle --release --build-number=$((100 + BUILD_NUMBER))
+    artifacts:
+      - build/app/outputs/bundle/release/*.aab
+

@@ -85,6 +85,42 @@ def patch_android() -> None:
     s = s.replace('            android:screenOrientation="portrait"\n', '')
     manifest.write_text(s, encoding="utf-8")
     print("patched", manifest.relative_to(ROOT))
+    patch_android_signing()
+
+
+# Release builds signed with the Play upload key when Codemagic provides it
+# (android_signing: quizinho_upload sets CM_KEYSTORE_PATH etc.); otherwise
+# the debug key, so CI's debug builds and local runs work as before.
+SIGNING = '''    signingConfigs {
+        create("upload") {
+            val ks = System.getenv("CM_KEYSTORE_PATH")
+            if (ks != null) {
+                storeFile = file(ks)
+                storePassword = System.getenv("CM_KEYSTORE_PASSWORD")
+                keyAlias = System.getenv("CM_KEY_ALIAS")
+                keyPassword = System.getenv("CM_KEY_PASSWORD")
+            }
+        }
+    }
+
+'''
+
+
+def patch_android_signing() -> None:
+    gradle = ROOT / "android" / "app" / "build.gradle.kts"
+    if not gradle.exists():
+        print("no android/app/build.gradle.kts, skipping signing")
+        return
+    s = gradle.read_text(encoding="utf-8")
+    if 'create("upload")' in s:
+        return
+    debug = 'signingConfig = signingConfigs.getByName("debug")'
+    if s.count(debug) != 1 or s.count("    buildTypes {") != 1:
+        raise SystemExit("build.gradle.kts doesn't look like Flutter's template: can't add release signing")
+    s = s.replace("    buildTypes {", SIGNING + "    buildTypes {", 1)
+    s = s.replace(debug, 'signingConfig = signingConfigs.getByName(if (System.getenv("CM_KEYSTORE_PATH") != null) "upload" else "debug")', 1)
+    gradle.write_text(s, encoding="utf-8")
+    print("patched", gradle.relative_to(ROOT), "(release signing)")
 
 
 def patch_web() -> None:
