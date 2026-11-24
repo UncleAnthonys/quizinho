@@ -15,11 +15,11 @@ Future<void> showRoomSheet(BuildContext context, HostRoom room, List<TeamSetup> 
       context: context,
       isScrollControlled: true,
       backgroundColor: Palette.pitch,
-      builder: (_) => SafeArea(child: _RoomSheet(room: room, teams: teams)),
+      builder: (_) => SafeArea(child: RoomSheet(room: room, teams: teams)),
     );
 
-class _RoomSheet extends StatelessWidget {
-  const _RoomSheet({required this.room, required this.teams});
+class RoomSheet extends StatelessWidget {
+  const RoomSheet({required this.room, required this.teams});
   final HostRoom room;
   final List<TeamSetup> teams;
 

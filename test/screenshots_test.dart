@@ -42,8 +42,9 @@ import 'package:quizinho/ui/widgets/match_table.dart';
 import 'package:quizinho/ui/widgets/player_picker.dart';
 import 'package:quizinho/multiplayer/guest_screen.dart' show guestGamePreview;
 import 'package:quizinho/ui/match_flow.dart' show GameModeStyle;
+import 'package:quizinho/multiplayer/host_lobby.dart' show RoomSheet;
 import 'package:quizinho/multiplayer/memory_room_link.dart';
-import 'package:quizinho/multiplayer/room.dart' show GuestRoom, RoomMember;
+import 'package:quizinho/multiplayer/room.dart' show GuestRoom, HostRoom, RoomMember;
 
 import 'package:quizinho/data/json_football_repository.dart';
 import 'package:quizinho/data/models.dart' show Difficulty;
@@ -773,9 +774,12 @@ void main() {
                 child: SizedBox(
                   height: 92,
                   child: Center(
-                    child: Text(caption,
-                        textAlign: TextAlign.center,
-                        style: AppText.headline(31, color: Palette.yellow).copyWith(height: 1.02)),
+                    child: FittedBox(
+                      fit: BoxFit.scaleDown,
+                      child: Text(caption,
+                          textAlign: TextAlign.center,
+                          style: AppText.headline(31, color: Palette.yellow).copyWith(height: 1.02)),
+                    ),
                   ),
                 ),
               ),
@@ -826,7 +830,7 @@ void main() {
       TeamSetup(name: 'Home', colorIndex: 0, players: ['Gav', 'Sam']),
       TeamSetup(name: 'Away', colorIndex: 1, players: ['Alex', 'Jo']),
     ]));
-    await storeShot(tester, 'phone_1_home', 'THE FOOTBALL\nPARTY GAME', const HomeScreen(), wrap: false);
+    await storeShot(tester, 'phone_1_home', 'THE FOOTBALL PARTY GAME.\nNO WI-FI NEEDED.', const HomeScreen(), wrap: false);
 
     final t = Tournament(TournamentConfig(teams: [
       TeamSetup(name: 'Home', colorIndex: 0),
@@ -847,25 +851,34 @@ void main() {
       ),
       wrap: false,
     );
+    // Friends join from the QR code: three phones in, one still to come.
+    final joinTeams = [
+      TeamSetup(name: 'Home', colorIndex: 0, players: ['Gav', 'Sam']),
+      TeamSetup(name: 'Away', colorIndex: 1, players: ['Alex', 'Jo']),
+    ];
+    final joinRoom = (await tester.runAsync(() async {
+      final link = MemoryRoomLink();
+      final host = await HostRoom.open(link, joinTeams);
+      for (final (device, team, name) in [('g', 0, 'Gav'), ('s', 0, 'Sam'), ('a', 1, 'Alex')]) {
+        final g = GuestRoom(link, host.code, device)..start();
+        await g.claim(team, name);
+      }
+      await Future<void>.delayed(const Duration(milliseconds: 200));
+      return host;
+    }))!;
     await storeShot(
       tester,
-      'phone_3_noughts',
+      'phone_3_join',
+      'FRIENDS JOIN ON THEIR OWN PHONES.\nNO DOWNLOAD NEEDED.',
+      Center(child: RoomSheet(room: joinRoom, teams: joinTeams)),
+    );
+    await tester.runAsync(() async => joinRoom.dispose());
+    await storeShot(
+      tester,
+      'phone_4_noughts',
       'NOUGHTS & CROSSES,\nFOOTBALL STYLE',
       column(_scores(extra: const ['1 ▢', '1 ▢']),
           TttLayout(data: ttt('choosing'), onTap: (_) {}, bottom: const Text('Tap an empty square…', textAlign: TextAlign.center))),
-    );
-    await storeShot(
-      tester,
-      'phone_4_bidding',
-      'HOW MANY CAN\nYOU NAME? PROVE IT.',
-      column(
-          _scores(),
-          BidLayout(
-            // Not the free Warm-Up Cup's question: a real category, its real count.
-            data: {...bid('bidding'), 'prompt': 'Players from Brazil who have played for Barcelona', 'max': 33},
-            controls: BidControls(data: bid('bidding'), onRaise: (_) {}, onChallenge: () {}, onPass: () {}),
-            answerBox: const SizedBox(),
-          )),
     );
     await storeShot(
       tester,
@@ -898,7 +911,19 @@ void main() {
       ),
       wrap: false,
     );
-    await storeShot(tester, 'phone_7_setup', 'TEAMS, FACE-OFFS AND\nEVERYONE\'S OWN PHONE', const SetupScreen(), wrap: false);
+    await storeShot(
+      tester,
+      'phone_7_bidding',
+      'HOW MANY CAN\nYOU NAME? PROVE IT.',
+      column(
+          _scores(),
+          BidLayout(
+            // Not the free Warm-Up Cup's question: a real category, its real count.
+            data: {...bid('bidding'), 'prompt': 'Players from Brazil who have played for Barcelona', 'max': 33},
+            controls: BidControls(data: bid('bidding'), onRaise: (_) {}, onChallenge: () {}, onPass: () {}),
+            answerBox: const SizedBox(),
+          )),
+    );
     services.settings.recordSolo('cup', 'medium', 412);
     await storeShot(tester, 'phone_8_solo', 'OR PLAY SOLO AND\nBEAT YOUR BEST', const SoloScreen(), wrap: false);
   }, skip: !_shots);
