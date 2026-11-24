@@ -447,12 +447,12 @@ class KickSource {
   /// a different scoreline, one with a different result.
   List<String> _wrongScores(int h, int a) {
     int sign(int x) => x.sign;
-    final top = max(4, max(h, a) + 2);
+    final top = max(3, max(h, a) + 1);
     final all = [
       for (var x = 0; x <= top; x++)
         for (var y = 0; y <= top; y++)
           // At least two goals different, and not a silly total next to it.
-          if ((x - h).abs() + (y - a).abs() >= 2 && ((x + y) - (h + a)).abs() <= 3) (x, y),
+          if ((x - h).abs() + (y - a).abs() >= 2 && ((x + y) - (h + a)).abs() <= 2) (x, y),
     ]..shuffle(_random);
     final same = [for (final s in all) if (sign(s.$1 - s.$2) == sign(h - a)) s];
     final other = [for (final s in all) if (sign(s.$1 - s.$2) != sign(h - a)) s];
