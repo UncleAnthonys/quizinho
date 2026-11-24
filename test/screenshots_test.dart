@@ -897,9 +897,15 @@ void main() {
       column(
           _scores(extra: const ['1 ▢', '1 ▢']),
           TttLayout(
-            data: ttt('answering'),
+            // Clubs, a country, a manager and a trophy: the mix the real grids use.
+            data: {
+              ...ttt('answering'),
+              'rows': ['Arsenal', 'Chelsea', 'Managed by Mourinho'],
+              'cols': ['Barcelona', 'Brazil', 'World Cup winner'],
+              'claimed': ['Thierry Henry', null, null, null, 'Willian', null, null, null, null],
+            },
             bottom: Column(children: [
-              Text('ARSENAL  +  JUVENTUS', textAlign: TextAlign.center, style: AppText.headline(20, color: Palette.yellow)),
+              Text('ARSENAL  +  WORLD CUP WINNER', textAlign: TextAlign.center, style: AppText.headline(20, color: Palette.yellow)),
               _timer(),
               _picker(voice: _ShotVoice(services.settings, heard: 'patrick vieira')),
             ]),
