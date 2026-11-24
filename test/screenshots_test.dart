@@ -453,6 +453,24 @@ void main() {
     await shot(tester, 'cc_answering', view(answering, null));
     await shot(tester, 'cc_answering_typing', view(answering, null),
         then: () => tester.enterText(find.byType(TextField), 'Desa'));
+    // Score strips with three and five teams and a long "extra": every box the same height.
+    await shot(
+        tester,
+        'score_strip_teams',
+        Column(children: [
+          ScoreStrip(
+            round: '3/4',
+            highlightTeam: 0,
+            teams: const [('Home', 0, 4), ('Away', 1, 7), ('Ultras', 2, 2)],
+            extra: (i) => const ['♥♥  4 named', '♥  2 named', '♥  2 named'][i],
+          ),
+          ScoreStrip(
+            round: '3/4',
+            highlightTeam: 3,
+            teams: const [('Home', 0, 4), ('Away', 1, 7), ('Ultras', 2, 2), ('Barmy Army', 3, 9), ('Kop', 4, 1)],
+            extra: (i) => const ['♥♥♥  4 named', '♥  2 named', '♥  2 named', '♥♥  10 named', '1 ▢'][i],
+          ),
+        ]));
     // Career Path typing: the clubs squeeze up so the names under the box show.
     final careerTyping = CareerPathController(teamCount: 2, questions: [zlatanPath()])
       ..revealed = 7
