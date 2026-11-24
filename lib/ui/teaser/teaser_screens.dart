@@ -155,6 +155,7 @@ class _TeaserHalfTimeScreenState extends State<TeaserHalfTimeScreen>
                     controller: c,
                     remoteAnswerer: teaserBridge?.remote?.name,
                     showQuestion: false,
+                    onPhones: teaserBridge?.phoneTeams() ?? const {},
                   ),
                 ),
               ),
@@ -344,7 +345,7 @@ class _TeaserBetweenGamesState extends State<TeaserBetweenGames>
               ),
             ),
           ),
-        TeaserPlay(controller: c, remoteAnswerer: teaserBridge?.remote?.name),
+        TeaserPlay(controller: c, remoteAnswerer: teaserBridge?.remote?.name, onPhones: teaserBridge?.phoneTeams() ?? const {}),
         if (c.phase == BuzzPhase.open && !widget.openNow)
           TextButton(
             onPressed: () => _setOpen(false),

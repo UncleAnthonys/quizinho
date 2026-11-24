@@ -12,8 +12,13 @@ import 'teaser_widgets.dart';
 /// The working part of the teaser, used at half-time and between games:
 /// team buzzers, the answer box, the host's calls, and the result.
 class TeaserPlay extends StatelessWidget {
-  const TeaserPlay({super.key, required this.controller, this.remoteAnswerer, this.showQuestion = true});
+  const TeaserPlay(
+      {super.key, required this.controller, this.remoteAnswerer, this.showQuestion = true, this.onPhones = const {}});
   final TeaserController controller;
+
+  /// Teams buzzing on their own phones (every player joined): their buzzer
+  /// isn't on this phone, like the other buzzer games.
+  final Set<int> onPhones;
 
   /// False where the question is already on screen above (half-time).
   final bool showQuestion;
@@ -87,7 +92,10 @@ class TeaserPlay extends StatelessWidget {
               textAlign: TextAlign.center, style: AppText.headline(22, color: Palette.gold)),
         )
       else
-        TeaserTeams(teams: teams, locked: c.lockedOut, onPick: c.buzz),
+        if (onPhones.length >= teams.length)
+          Text('BUZZ ON YOUR PHONES', style: AppText.headline(22, color: Palette.gold))
+        else
+          TeaserTeams(teams: teams, locked: c.lockedOut, onPick: c.buzz, hidden: onPhones),
     ]);
   }
 

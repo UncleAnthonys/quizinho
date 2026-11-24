@@ -46,11 +46,14 @@ class TeaserPrompt extends StatelessWidget {
 
 /// Who's buzzing in. Each team gets one guess: a wrong one locks them out.
 class TeaserTeams extends StatelessWidget {
-  const TeaserTeams({super.key, required this.teams, this.locked = const {}, this.onPick});
+  const TeaserTeams({super.key, required this.teams, this.locked = const {}, this.onPick, this.hidden = const {}});
 
   /// (name, colour index).
   final List<(String, int)> teams;
   final Set<int> locked;
+
+  /// Teams buzzing on their own phones: no button for them here.
+  final Set<int> hidden;
   final ValueChanged<int>? onPick;
 
   @override
@@ -59,6 +62,7 @@ class TeaserTeams extends StatelessWidget {
         const SizedBox(height: 10),
         Wrap(spacing: 10, runSpacing: 10, alignment: WrapAlignment.center, children: [
           for (final (i, (name, color)) in teams.indexed)
+            if (!hidden.contains(i))
             Opacity(
               opacity: locked.contains(i) ? 0.35 : 1,
               child: Material(
