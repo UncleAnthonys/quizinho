@@ -43,8 +43,10 @@ class Commentary {
 
   static const Map<GameEvent, List<String>> _lines = {
     GameEvent.correct: [
-      'Lovely stuff.',
       'Textbook. Absolutely textbook.',
+      'Clinical.',
+      'Cool as you like.',
+      'No messing about.',
       'Ice in the veins!',
       'Never in doubt.',
       'Top bins.',
@@ -96,10 +98,8 @@ class Commentary {
       'They’ve thrown it away!',
     ],
     GameEvent.wrong: [
-      'Oh dear. Oh dear oh dear.',
       'That’s nowhere near.',
       'Not even in the same postcode.',
-      'Swing and a miss.',
       'That’s gone straight into Row Z.',
       'VAR’s had a look… still wrong.',
       'Someone’s left their shooting boots in the car.',
@@ -109,14 +109,23 @@ class Commentary {
     ],
     GameEvent.timeUp: [
       'Frozen like a rabbit in the headlights.',
-      'The clock waits for no one.',
       'Bottled it.',
+      'Caught in two minds.',
+      'The moment’s gone.',
+      'Dithered on the ball.',
       'Like a keeper rooted to the line.',
       'Buffering… buffering…',
     ],
     GameEvent.nobodyGotIt: [
-      'Nobody? Not one of you?',
-      'Tumbleweed.',
+      'Nobody fancied that one, then.',
+      'Absolute silence in the stands.',
+      'They’ve all gone missing.',
+      'Nobody wanted the ball there.',
+      'Not one of them stepped up.',
+      'The fans are heading for the exits.',
+      'A collective bottle job.',
+      'Hide-and-seek champions, the lot of them.',
+      'Nobody? I’m speechless.',
       'I’ve seen better from the Sunday league.',
     ],
     GameEvent.explode: [
@@ -143,11 +152,20 @@ class Commentary {
     ],
   };
 
+  /// What's left to say for each moment: every line gets its turn before
+  /// any comes round again (and never the same one twice in a row).
+  final Map<GameEvent, List<int>> _bag = {};
+
   String? lineFor(GameEvent e) {
     final options = _lines[e];
     if (options == null || options.isEmpty) return null;
-    var i = _random.nextInt(options.length);
-    if (options.length > 1 && i == _last[e]) i = (i + 1) % options.length;
+    final bag = _bag.putIfAbsent(e, () => []);
+    if (bag.isEmpty) {
+      bag.addAll(List.generate(options.length, (i) => i)..shuffle(_random));
+      // A fresh round doesn't start with the line that ended the last one.
+      if (bag.length > 1 && bag.last == _last[e]) bag.insert(0, bag.removeLast());
+    }
+    final i = bag.removeLast();
     _last[e] = i;
     return options[i];
   }
