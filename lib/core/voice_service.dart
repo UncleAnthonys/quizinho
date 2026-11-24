@@ -135,6 +135,10 @@ class VoiceService {
   /// [hints] are names worth listening for (the right answers): in Chrome,
   /// where supported, the recogniser leans towards them.
   /// Returns false if voice isn't available, so the caller can fall back.
+  /// Android only, for the voice test: how to listen ("auto" in games;
+  /// "server", "serverSearch" or "device" to compare them).
+  String androidMode = 'auto';
+
   Future<bool> listen({
     required void Function(String words) onWords,
     required void Function(List<String> alternatives) onDone,
@@ -177,7 +181,7 @@ class VoiceService {
       try {
         // The answers' names: Android leans towards them (iOS already has
         // every player's name in its model; this helps it too).
-        return await n.listen(contextual: hints.take(100).toList());
+        return await n.listen(contextual: hints.take(100).toList(), mode: androidMode);
       } catch (e) {
         debugPrint('Speech listen failed: $e');
         await _nativeSub?.cancel();

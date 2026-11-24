@@ -49,11 +49,13 @@ class QuizinhoSpeech {
     Duration pause = const Duration(seconds: 2),
     Duration max = const Duration(seconds: 30),
     List<String> contextual = const [],
+    String mode = 'auto',
   }) async =>
       await _methods.invokeMethod<bool>('listen', {
         'pauseMs': pause.inMilliseconds,
         'maxMs': max.inMilliseconds,
         'contextual': contextual,
+        'mode': mode,
       }) ??
       false;
 

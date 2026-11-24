@@ -39,8 +39,11 @@ const _tunedTestIds = [
 ];
 
 class _Result {
-  _Result(this.player, this.heard, this.matched, this.unhinted);
+  _Result(this.player, this.heard, this.matched, this.unhinted, {this.mode = ''});
   final Player player;
+
+  /// Android: which way it listened (see [_modes]); '' elsewhere.
+  final String mode;
   final List<String> heard;
 
   /// What it counted as in a game where this player is the right answer.
@@ -65,6 +68,12 @@ class _VoiceTestScreenState extends State<VoiceTestScreen> {
   String _live = '';
   _Result? _last;
   String _model = '';
+
+  /// Android: compare the ways of listening. Online is what phones without
+  /// on-device speech get; on-device (with the answer's name) is newer phones.
+  static const _modes = {'server': 'Online', 'serverSearch': 'Online (search)', 'device': 'On-device'};
+  String _mode = 'server';
+  bool get _android => !kIsWeb && defaultTargetPlatform == TargetPlatform.android;
 
   late AppServices _s;
   bool _ready = false;
@@ -125,7 +134,11 @@ class _VoiceTestScreenState extends State<VoiceTestScreen> {
       _live = '';
       _last = null;
     });
+    final mode = _android ? _mode : '';
+    if (_android) _s.voice?.androidMode = mode;
     final started = await _s.voice?.listen(
+      // On-device: given the answer's name first, as in a game.
+      hints: mode == 'device' ? [target.name, target.name.split(' ').last] : const [],
       onWords: (w) => setState(() => _live = w),
       onDone: (alts) {
         if (!mounted) return;
@@ -134,7 +147,7 @@ class _VoiceTestScreenState extends State<VoiceTestScreen> {
         final unhinted = alts.isEmpty ? null : players.resolveSpoken(alts);
         setState(() {
           _listening = false;
-          _last = _Result(target, alts, matched, unhinted);
+          _last = _Result(target, alts, matched, unhinted, mode: mode);
           _results.add(_last!);
         });
       },
@@ -161,8 +174,13 @@ class _VoiceTestScreenState extends State<VoiceTestScreen> {
     final good = _results.where((r) => r.ok).length;
     final b = StringBuffer('Quizinho voice test (random untuned names) - $platform - $good/${_results.length} recognised\n');
     if (_model.isNotEmpty) b.writeln(_model);
+    // Android: the score for each way of listening.
+    for (final m in _modes.keys) {
+      final rs = _results.where((r) => r.mode == m).toList();
+      if (rs.isNotEmpty) b.writeln('${_modes[m]}: ${rs.where((r) => r.ok).length}/${rs.length}');
+    }
     for (final r in _results) {
-      b.writeln('${r.ok ? 'OK  ' : 'MISS'} ${r.player.name} [${r.player.id}, ${r.player.nationality ?? '?'}] | heard: '
+      b.writeln('${r.ok ? 'OK  ' : 'MISS'}${r.mode.isEmpty ? '' : ' [${_modes[r.mode]}]'} ${r.player.name} [${r.player.id}, ${r.player.nationality ?? '?'}] | heard: '
           '${r.heard.isEmpty ? '(nothing)' : r.heard.join(' / ')} | as answer: ${r.matched?.name ?? '-'}'
           ' | no hint: ${r.unhinted?.name ?? '-'}');
     }
@@ -180,6 +198,7 @@ class _VoiceTestScreenState extends State<VoiceTestScreen> {
   @override
   void dispose() {
     _s.voice?.stop();
+    _s.voice?.androidMode = 'auto'; // games always choose for themselves
     super.dispose();
   }
 
@@ -212,6 +231,19 @@ class _VoiceTestScreenState extends State<VoiceTestScreen> {
           if (_model.isNotEmpty) ...[
             const SizedBox(height: 8),
             Text(_model, style: AppText.label(13, color: Palette.muted)),
+          ],
+          if (_android) ...[
+            const SizedBox(height: 10),
+            Text('LISTEN USING', style: AppText.label(12, color: Palette.yellow)),
+            const SizedBox(height: 6),
+            Wrap(spacing: 8, children: [
+              for (final e in _modes.entries)
+                ChoiceChip(
+                  label: Text(e.value),
+                  selected: _mode == e.key,
+                  onSelected: _listening ? null : (_) => setState(() => _mode = e.key),
+                ),
+            ]),
           ],
           const SizedBox(height: 8),
           Text('Name ${_index + 1}${_index < _testSize ? ' of $_testSize' : ' (bonus round)'}'

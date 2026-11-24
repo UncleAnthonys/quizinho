@@ -73,7 +73,15 @@ class QuizinhoSpeechPlugin : FlutterPlugin, MethodChannel.MethodCallHandler, Eve
             "listen" -> {
                 val hints = call.argument<List<String>>("contextual") ?: emptyList()
                 val pauseMs = call.argument<Int>("pauseMs") ?: 2000
-                result.success(listen(hints, pauseMs, onDevice = hints.isNotEmpty() && onDeviceAvailable()))
+                // Voice test only: force one way of listening to compare them.
+                // "auto" (games): on-device with the answers when the phone has it.
+                val mode = call.argument<String>("mode") ?: "auto"
+                val onDevice = when (mode) {
+                    "server", "serverSearch" -> false
+                    "device" -> onDeviceAvailable()
+                    else -> hints.isNotEmpty() && onDeviceAvailable()
+                }
+                result.success(listen(hints, pauseMs, onDevice = onDevice, search = mode == "serverSearch"))
             }
             "stop" -> {
                 recognizer?.stopListening()
@@ -98,7 +106,7 @@ class QuizinhoSpeechPlugin : FlutterPlugin, MethodChannel.MethodCallHandler, Eve
         sink?.success(mapOf("type" to "final", "alts" to alternatives))
     }
 
-    private fun listen(hints: List<String>, pauseMs: Int, onDevice: Boolean): Boolean {
+    private fun listen(hints: List<String>, pauseMs: Int, onDevice: Boolean, search: Boolean = false): Boolean {
         destroy()
         finished = false
         val r = try {
@@ -129,14 +137,19 @@ class QuizinhoSpeechPlugin : FlutterPlugin, MethodChannel.MethodCallHandler, Eve
                 // On-device speech not downloaded for English: try the normal one.
                 if (onDevice && (error == SpeechRecognizer.ERROR_LANGUAGE_NOT_SUPPORTED ||
                         error == SpeechRecognizer.ERROR_LANGUAGE_UNAVAILABLE)) {
-                    listen(hints, pauseMs, onDevice = false)
+                    listen(hints, pauseMs, onDevice = false, search = search)
                     return
                 }
                 emitFinal(emptyList())
             }
         })
         val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).apply {
-            putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
+            // Web search mode is tuned for search queries, which are full of
+            // names - maybe better at footballers on the online recogniser.
+            putExtra(
+                RecognizerIntent.EXTRA_LANGUAGE_MODEL,
+                if (search) RecognizerIntent.LANGUAGE_MODEL_WEB_SEARCH else RecognizerIntent.LANGUAGE_MODEL_FREE_FORM,
+            )
             putExtra(RecognizerIntent.EXTRA_LANGUAGE, "en-GB")
             putExtra(RecognizerIntent.EXTRA_PARTIAL_RESULTS, true)
             putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 5)
