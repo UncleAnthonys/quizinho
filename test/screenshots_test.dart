@@ -860,6 +860,7 @@ void main() {
       ),
       wrap: false,
     );
+    services.settings.typeAnswers = false; // the mic, for the noughts shot
     // Friends join from the QR code: three phones in, one still to come.
     final joinTeams = [
       TeamSetup(name: 'Home', colorIndex: 0, players: ['Gav', 'Sam']),
@@ -886,9 +887,20 @@ void main() {
       tester,
       'phone_4_noughts',
       'NOUGHTS & CROSSES,\nFOOTBALL STYLE',
-      column(_scores(extra: const ['1 ▢', '1 ▢']),
-          TttLayout(data: ttt('choosing'), onTap: (_) {}, bottom: const Text('Tap an empty square…', textAlign: TextAlign.center))),
+      // Mid-answer, mic on and hearing it: shows off voice answers too.
+      column(
+          _scores(extra: const ['1 ▢', '1 ▢']),
+          TttLayout(
+            data: ttt('answering'),
+            bottom: Column(children: [
+              Text('ARSENAL  +  JUVENTUS', textAlign: TextAlign.center, style: AppText.headline(20, color: Palette.yellow)),
+              _timer(),
+              _picker(voice: _ShotVoice(services.settings, heard: 'patrick vieira')),
+            ]),
+          )),
+      sub: 'SAY YOUR ANSWER OUT LOUD',
     );
+    services.settings.typeAnswers = true;
     await storeShot(
       tester,
       'phone_5_xi',
