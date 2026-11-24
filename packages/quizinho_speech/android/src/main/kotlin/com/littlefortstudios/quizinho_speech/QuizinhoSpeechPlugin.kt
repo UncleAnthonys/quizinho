@@ -6,6 +6,8 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.speech.RecognitionListener
 import android.speech.RecognizerIntent
 import android.speech.SpeechRecognizer
@@ -32,6 +34,25 @@ class QuizinhoSpeechPlugin : FlutterPlugin, MethodChannel.MethodCallHandler, Eve
     private var sink: EventChannel.EventSink? = null
     private var recognizer: SpeechRecognizer? = null
     private var finished = false
+
+    // Some recognisers (on-device ones on some Samsungs) hear the words but
+    // never say they're done, so listening never ends. A watchdog: when the
+    // words stop changing for the pause, or the time's up, stop listening
+    // and, if no final answer comes, use the last words heard.
+    private val handler = Handler(Looper.getMainLooper())
+    private var lastPartial = ""
+    private var pauseMsNow = 2000L
+    private val silence = Runnable { wrapUp() }
+    private val giveUp = Runnable { if (!finished) emitFinal(if (lastPartial.isBlank()) emptyList() else listOf(lastPartial)) }
+
+    private fun wrapUp() {
+        if (finished) return
+        try {
+            recognizer?.stopListening()
+        } catch (e: Exception) {}
+        handler.removeCallbacks(giveUp)
+        handler.postDelayed(giveUp, 1500)
+    }
 
     override fun onAttachedToEngine(binding: FlutterPlugin.FlutterPluginBinding) {
         context = binding.applicationContext
@@ -73,6 +94,7 @@ class QuizinhoSpeechPlugin : FlutterPlugin, MethodChannel.MethodCallHandler, Eve
             "listen" -> {
                 val hints = call.argument<List<String>>("contextual") ?: emptyList()
                 val pauseMs = call.argument<Int>("pauseMs") ?: 2000
+                val maxMs = call.argument<Int>("maxMs") ?: 30000
                 // Voice test only: force one way of listening to compare them.
                 // "auto" (games): on-device with the answers when the phone has it.
                 val mode = call.argument<String>("mode") ?: "auto"
@@ -81,7 +103,7 @@ class QuizinhoSpeechPlugin : FlutterPlugin, MethodChannel.MethodCallHandler, Eve
                     "device" -> onDeviceAvailable()
                     else -> hints.isNotEmpty() && onDeviceAvailable()
                 }
-                result.success(listen(hints, pauseMs, onDevice = onDevice, search = mode == "serverSearch"))
+                result.success(listen(hints, pauseMs, onDevice = onDevice, search = mode == "serverSearch", maxMs = maxMs))
             }
             "stop" -> {
                 recognizer?.stopListening()
@@ -96,6 +118,7 @@ class QuizinhoSpeechPlugin : FlutterPlugin, MethodChannel.MethodCallHandler, Eve
     }
 
     private fun destroy() {
+        handler.removeCallbacksAndMessages(null)
         recognizer?.destroy()
         recognizer = null
     }
@@ -103,12 +126,16 @@ class QuizinhoSpeechPlugin : FlutterPlugin, MethodChannel.MethodCallHandler, Eve
     private fun emitFinal(alternatives: List<String>) {
         if (finished) return
         finished = true
+        handler.removeCallbacksAndMessages(null)
         sink?.success(mapOf("type" to "final", "alts" to alternatives))
     }
 
-    private fun listen(hints: List<String>, pauseMs: Int, onDevice: Boolean, search: Boolean = false): Boolean {
+    private fun listen(hints: List<String>, pauseMs: Int, onDevice: Boolean, search: Boolean = false, maxMs: Int = 30000): Boolean {
         destroy()
         finished = false
+        lastPartial = ""
+        pauseMsNow = pauseMs.toLong()
+        handler.postDelayed({ wrapUp() }, maxMs.toLong())
         val r = try {
             if (onDevice && Build.VERSION.SDK_INT >= 31) SpeechRecognizer.createOnDeviceSpeechRecognizer(context)
             else SpeechRecognizer.createSpeechRecognizer(context)
@@ -126,21 +153,28 @@ class QuizinhoSpeechPlugin : FlutterPlugin, MethodChannel.MethodCallHandler, Eve
 
             override fun onPartialResults(partialResults: Bundle?) {
                 val text = partialResults?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)?.firstOrNull() ?: return
-                if (!finished) sink?.success(mapOf("type" to "partial", "text" to text))
+                if (finished) return
+                if (text.isNotBlank() && text != lastPartial) {
+                    lastPartial = text
+                    handler.removeCallbacks(silence)
+                    handler.postDelayed(silence, pauseMsNow + 500)
+                }
+                sink?.success(mapOf("type" to "partial", "text" to text))
             }
 
             override fun onResults(results: Bundle?) {
-                emitFinal(results?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)?.toList() ?: emptyList())
+                val alts = results?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)?.toList().orEmpty()
+                emitFinal(if (alts.isEmpty() && lastPartial.isNotBlank()) listOf(lastPartial) else alts)
             }
 
             override fun onError(error: Int) {
                 // On-device speech not downloaded for English: try the normal one.
                 if (onDevice && (error == SpeechRecognizer.ERROR_LANGUAGE_NOT_SUPPORTED ||
                         error == SpeechRecognizer.ERROR_LANGUAGE_UNAVAILABLE)) {
-                    listen(hints, pauseMs, onDevice = false, search = search)
+                    listen(hints, pauseMs, onDevice = false, search = search, maxMs = maxMs)
                     return
                 }
-                emitFinal(emptyList())
+                emitFinal(if (lastPartial.isBlank()) emptyList() else listOf(lastPartial))
             }
         })
         val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).apply {
