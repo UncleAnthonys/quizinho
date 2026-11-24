@@ -163,11 +163,14 @@ class ScoreStrip extends StatelessWidget {
           borderRadius: BorderRadius.circular(14),
           border: Border.all(color: Palette.line),
         ),
-        child: Row(children: [
-          if (showExit) const ExitMatchButton() else const SizedBox(width: 8),
+        // Every team's box the same height (a long "extra" no longer makes
+        // one taller), however many teams there are.
+        child: IntrinsicHeight(
+            child: Row(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+          if (showExit) const Center(child: ExitMatchButton()) else const SizedBox(width: 8),
           Padding(
             padding: const EdgeInsets.only(right: 8),
-            child: Column(mainAxisSize: MainAxisSize.min, children: [
+            child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
               Text('RD', style: AppText.label(11)),
               Text(round, style: AppText.headline(18)),
             ]),
@@ -185,17 +188,19 @@ class ScoreStrip extends StatelessWidget {
                   borderRadius: BorderRadius.circular(10),
                   border: Border(left: BorderSide(color: Palette.team(colour), width: 5)),
                 ),
-                child: Column(mainAxisSize: MainAxisSize.min, children: [
+                child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
                   FittedBox(
                     fit: BoxFit.scaleDown,
                     child: Text(name.toUpperCase(), style: AppText.label(13, color: Palette.text)),
                   ),
                   Text('$score', style: AppText.headline(26)),
-                  if (extra != null) Text(extra!(i), style: AppText.label(11)),
+                  // One line, shrunk to fit a narrow box (four or more teams).
+                  if (extra != null)
+                    FittedBox(fit: BoxFit.scaleDown, child: Text(extra!(i), maxLines: 1, style: AppText.label(11))),
                 ]),
               ),
             ),
-        ]),
+        ])),
       );
 }
 
