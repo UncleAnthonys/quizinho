@@ -46,7 +46,7 @@ class QuizinhoSpeech {
       Map<String, Object?>.from(await _methods.invokeMethod<Map>('status') ?? const {});
 
   Future<bool> listen({
-    Duration pause = const Duration(seconds: 2),
+    Duration pause = const Duration(milliseconds: 1500),
     Duration max = const Duration(seconds: 30),
     List<String> contextual = const [],
     String mode = 'auto',

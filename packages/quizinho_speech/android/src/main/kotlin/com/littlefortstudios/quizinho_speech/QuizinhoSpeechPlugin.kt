@@ -172,7 +172,7 @@ class QuizinhoSpeechPlugin : FlutterPlugin, MethodChannel.MethodCallHandler, Eve
                 if (text.isNotBlank() && text != lastPartial) {
                     lastPartial = text
                     handler.removeCallbacks(silence)
-                    handler.postDelayed(silence, pauseMsNow + 500)
+                    handler.postDelayed(silence, pauseMsNow)
                 }
                 sink?.success(mapOf("type" to "partial", "text" to text))
             }
