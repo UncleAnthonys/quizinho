@@ -272,6 +272,8 @@ class CommentaryBanner extends StatelessWidget {
                     // A long line wraps onto two rather than shrinking to fit
                     // one; it may stand taller than what it covers.
                     child: OverflowBox(
+                      minWidth: 0,
+                      minHeight: 0,
                       maxHeight: double.infinity,
                       child: Container(
                         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),

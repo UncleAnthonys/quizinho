@@ -74,12 +74,13 @@ class RoundTableHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Column(children: [
         Text('ROUND ${data['round']} OF ${data['of']}', style: AppText.label(16)),
-        CommentaryBanner(
+        // Full width, so the line isn't squeezed into the game name's width.
+        SizedBox(width: double.infinity, child: CommentaryBanner(
           text: commentary,
           child: Text('${data['game'] ?? ''}'.toUpperCase(),
               textAlign: TextAlign.center,
               style: AppText.headline(40, color: Color((data['colour'] as num?)?.toInt() ?? 0xFFFFCC29))),
-        ),
+        )),
         if (data['double'] == true) Text('DOUBLE POINTS', style: AppText.label(15, color: Palette.gold)),
         const SizedBox(height: 24),
         Text('THE TABLE', style: AppText.label(14)),
