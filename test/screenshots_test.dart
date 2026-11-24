@@ -805,8 +805,8 @@ void main() {
 
   testWidgets('Store screenshots', (tester) async {
     await services.settings.saveConfig(TournamentConfig(teams: [
-      TeamSetup(name: 'Home', colorIndex: 0, players: ['Alex', 'Sam']),
-      TeamSetup(name: 'Away', colorIndex: 1, players: ['Gav', 'Jo']),
+      TeamSetup(name: 'Home', colorIndex: 0, players: ['Gav', 'Sam']),
+      TeamSetup(name: 'Away', colorIndex: 1, players: ['Alex', 'Jo']),
     ]));
     await storeShot(tester, 'phone_1_home', 'THE FOOTBALL\nPARTY GAME', const HomeScreen(), wrap: false);
 
