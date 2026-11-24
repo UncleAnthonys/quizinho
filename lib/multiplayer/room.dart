@@ -380,7 +380,8 @@ class GuestRoom extends ChangeNotifier {
     // buzzes are timed fairly from the first question.
     for (var i = 1; i <= 4; i++) {
       Timer(Duration(milliseconds: 1500 * i), () {
-        if (_beat != null && me case final m?) claim(m.team, m.name);
+        if (_beat == null) return;
+        if (me case final m?) claim(m.team, m.name);
       });
     }
     if (history case final h?) {
