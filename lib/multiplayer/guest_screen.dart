@@ -327,7 +327,7 @@ class _GuestGameState extends State<_GuestGame> with SingleTickerProviderStateMi
     if (spells.isEmpty) return const SizedBox.shrink();
     final worth = (q['worth'] as num?)?.toInt();
     return Column(children: [
-      if (worth != null)
+      if (worth != null && !answerTyping.value)
         Text('WORTH $worth ${worth == 1 ? 'POINT' : 'POINTS'}', style: AppText.headline(compact ? 18 : 24, color: Palette.gold)),
       CareerTrail(
         spells: spells,

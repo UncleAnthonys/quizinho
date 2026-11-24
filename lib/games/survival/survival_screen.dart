@@ -100,9 +100,17 @@ class _SurvivalScreenState extends State<SurvivalScreen>
     );
   }
 
-  Widget _play(SurvivalController c) {
+  /// Typing: the header folds away and the question shrinks, so the answer
+  /// box and its names sit above a phone's keyboard (browsers don't make room).
+  Widget _play(SurvivalController c) => ValueListenableBuilder<bool>(
+        valueListenable: answerTyping,
+        builder: (context, typing, _) => _playing(c, typing && c.phase == SurvivalPhase.asking),
+      );
+
+  Widget _playing(SurvivalController c, bool typing) {
     final q = c.current;
     return Column(children: [
+      Collapse(hidden: typing, child: Column(children: [
       Padding(
         padding: const EdgeInsets.fromLTRB(4, 4, 16, 0),
         child: Row(children: [
@@ -133,11 +141,12 @@ class _SurvivalScreenState extends State<SurvivalScreen>
         ]),
       ),
       const SizedBox(height: 8),
+      ])),
       Expanded(
         child: q == null || c.phase == SurvivalPhase.loading
             ? const Center(child: CircularProgressIndicator(color: Palette.yellow))
             : ListView(padding: const EdgeInsets.fromLTRB(16, 4, 16, 24), children: [
-                _QuestionCard(q: q),
+                _QuestionCard(q: q, compact: typing),
                 const SizedBox(height: 12),
                 if (c.phase == SurvivalPhase.asking) ...[
                   TimerBar(fraction: c.fraction, seconds: c.secondsLeft),
@@ -185,12 +194,37 @@ class _Chip extends StatelessWidget {
 }
 
 class _QuestionCard extends StatelessWidget {
-  const _QuestionCard({required this.q});
+  const _QuestionCard({required this.q, this.compact = false});
   final SurvivalQuestion q;
+  final bool compact;
 
   @override
   Widget build(BuildContext context) {
     final career = q.kind == SurvivalKind.career;
+    if (compact) {
+      // One tight block: a career as one line of clubs, a pairing on one line.
+      return Container(
+        width: double.infinity,
+        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+        decoration: BoxDecoration(
+          color: Colors.black.withValues(alpha: 0.3),
+          borderRadius: BorderRadius.circular(14),
+          border: Border.all(color: Palette.line),
+        ),
+        child: Column(children: [
+          Text(q.prompt, textAlign: TextAlign.center, maxLines: 1, overflow: TextOverflow.ellipsis,
+              style: AppText.label(12, color: Palette.text)),
+          if (q.lines.isNotEmpty)
+            Text(
+              career ? q.lines.join('  ›  ') : q.lines.join(' · ').toUpperCase(),
+              textAlign: TextAlign.center,
+              maxLines: 3,
+              overflow: TextOverflow.ellipsis,
+              style: AppText.headline(career ? 15 : 18),
+            ),
+        ]),
+      );
+    }
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 14),

@@ -6,6 +6,7 @@ import '../../domain/game_mode.dart';
 import '../../domain/tournament.dart';
 import '../../domain/warm_up_cup.dart';
 import '../../multiplayer/buzz_bridge.dart';
+import '../../ui/widgets/player_picker.dart' show answerTyping;
 import '../buzz_game_view.dart';
 import '../buzz_race_controller.dart';
 import '../game_screen_support.dart';
@@ -141,7 +142,7 @@ class _CareerPathScreenState extends State<CareerPathScreen>
       awaitingFaceOff: _faces.awaitingReady,
       onFaceOffReady: () => setState(_faces.ready),
       question: (compact) => Column(children: [
-        if (!resolved)
+        if (!resolved && !answerTyping.value)
           Text(
             'WORTH ${c.pointsAvailable * widget.round.multiplier} ${c.pointsAvailable * widget.round.multiplier == 1 ? 'POINT' : 'POINTS'}',
             style: AppText.headline(compact ? 18 : 24, color: Palette.gold),
@@ -177,14 +178,23 @@ class CareerTrail extends StatelessWidget {
   /// Every club revealed so far stays on screen — earlier clubs jog the
   /// memory. More than four clubs switch to two columns (read left to right,
   /// numbered) so rows stay big instead of shrinking to nothing.
+  /// Typing an answer: the clubs squeeze into a strip this tall, so the
+  /// answer box and its list of names stay clear of a phone's keyboard.
+  static const typingHeight = 100.0;
+
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) => ValueListenableBuilder<bool>(
+        valueListenable: answerTyping,
+        builder: (context, typing, _) => _trail(typing ? typingHeight : maxHeight, typing),
+      );
+
+  Widget _trail(double maxHeight, bool typing) {
     final visible = spells.take(shown).toList();
     return LayoutBuilder(builder: (context, box) {
-      final cols = visible.length > 4 && box.maxWidth >= 300 ? 2 : 1;
+      final cols = (visible.length > 4 || typing && visible.length > 3) && box.maxWidth >= 300 ? 2 : 1;
       final rows = (visible.length / cols).ceil();
       const gap = 6.0;
-      final rowH = ((maxHeight - gap * (rows - 1)) / rows).clamp(30.0, 64.0);
+      final rowH = ((maxHeight - gap * (rows - 1)) / rows).clamp(typing ? 22.0 : 30.0, 64.0);
       return Padding(
         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 4),
         child: Column(children: [

@@ -124,7 +124,11 @@ class BuzzGameView extends StatelessWidget {
             // out), so the answer box is never rebuilt and the keyboard stays up.
             child: Column(children: [
               ConstrainedBox(
-                constraints: BoxConstraints(maxHeight: MediaQuery.sizeOf(context).height * 0.3),
+                // Typing: smaller still, so the names under the answer box
+                // aren't hidden by the keyboard (phone browsers don't make
+                // room for it).
+                constraints: BoxConstraints(
+                    maxHeight: MediaQuery.sizeOf(context).height * (answerTyping.value ? 0.2 : 0.3)),
                 child: SingleChildScrollView(child: _shaking(question(true))),
               ),
               Padding(

@@ -453,6 +453,27 @@ void main() {
     await shot(tester, 'cc_answering', view(answering, null));
     await shot(tester, 'cc_answering_typing', view(answering, null),
         then: () => tester.enterText(find.byType(TextField), 'Desa'));
+    // Career Path typing: the clubs squeeze up so the names under the box show.
+    final careerTyping = CareerPathController(teamCount: 2, questions: [zlatanPath()])
+      ..revealed = 7
+      ..buzz(0);
+    await shot(
+        tester,
+        'career_answering_typing',
+        BuzzGameView(
+          round: round,
+          controller: careerTyping,
+          question: (compact) => CareerTrail(
+              spells: careerTyping.current.spells,
+              shown: careerTyping.revealed,
+              highlight: careerTyping.revealed - 1,
+              maxHeight: compact ? 190 : 250),
+          resolvedDetail: const SizedBox(),
+          timerLabel: 'NEXT CLUB IN',
+          commentary: null,
+          onFinished: () {},
+        ),
+        then: () => tester.enterText(find.byType(TextField), 'Zla'));
     services.settings.typeAnswers = false;
     await shot(
       tester,
