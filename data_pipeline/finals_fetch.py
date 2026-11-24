@@ -24,7 +24,7 @@ def final_titles() -> dict[str, list[str]]:
     return {
         "cl": [f"{y} European Cup final" if y < 1993 else f"{y} UEFA Champions League final" for y in range(1956, 2027)],
         "uel": [f"{y} UEFA Cup final" if y < 2010 else f"{y} UEFA Europa League final" for y in range(1972, 2027)],
-        "wc": [f"{y} FIFA World Cup final" for y in (1930, 1934, 1938, *range(1950, 2023, 4))],
+        "wc": [f"{y} FIFA World Cup final" for y in (1930, 1934, 1938, *range(1950, 2027, 4))],
         "euro": ["1960 European Nations' Cup final", "1964 European Nations' Cup final",
                  *(f"UEFA Euro {y} final" for y in range(1968, 2025, 4))],
         "fac": [f"{y} FA Cup final" for y in range(1946, 2027)],
