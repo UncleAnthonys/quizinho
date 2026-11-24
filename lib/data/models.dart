@@ -48,6 +48,17 @@ enum Era {
 
   static int maskOf(Iterable<Era> eras) => eras.fold(0, (m, e) => m | e.bit);
   static Set<Era> fromMask(int mask) => {for (final e in values) if (mask & e.bit != 0) e};
+
+  /// The era a year falls in (the same splits as the database).
+  static Era ofYear(int y) => y < 1992
+      ? classic
+      : y < 2000
+          ? nineties
+          : y < 2010
+              ? noughties
+              : y < 2020
+                  ? tens
+                  : twenties;
 }
 
 class Club {

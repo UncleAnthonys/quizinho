@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
 import '../../core/theme.dart';
@@ -53,9 +55,13 @@ class ShootoutLayout extends StatelessWidget {
         Collapse(
           hidden: typing,
           child: Column(children: [
-            CommentaryBanner(
-              text: commentary,
-              child: Text('PENALTIES', style: AppText.headline(40, color: Palette.yellow)),
+            // Full width: a long line isn't squeezed into the title's width.
+            SizedBox(
+              width: double.infinity,
+              child: CommentaryBanner(
+                text: commentary,
+                child: Center(child: Text('PENALTIES', style: AppText.headline(40, color: Palette.yellow))),
+              ),
             ),
             const SizedBox(height: 6),
             _Tracker(data: data),
@@ -102,7 +108,7 @@ class ShootoutLayout extends StatelessWidget {
         ]),
         const SizedBox(height: 18),
         if (commentary != null)
-          CommentaryBanner(text: commentary, child: const SizedBox(height: 26))
+          CommentaryBanner(text: commentary, child: const SizedBox(height: 26, width: double.infinity))
         else
           const SizedBox(height: 26),
         const Spacer(),
@@ -258,7 +264,7 @@ class ShootoutLayout extends StatelessWidget {
         ),
         Text('ON PENALTIES · ${data['pens'] ?? ''}', style: AppText.headline(34)),
         const SizedBox(height: 12),
-        if (commentary != null) CommentaryBanner(text: commentary, child: const SizedBox(height: 26)),
+        if (commentary != null) CommentaryBanner(text: commentary, child: const SizedBox(height: 26, width: double.infinity)),
         const SizedBox(height: 18),
         _Tracker(data: data),
         const Spacer(),
@@ -393,7 +399,14 @@ class _Tracker extends StatelessWidget {
     final each = _int(data['each']);
     final teams = _list(data['teams']).map(_map).toList();
     final longest = teams.fold<int>(each, (a, t) => _list(t['kicks']).length > a ? _list(t['kicks']).length : a);
-    return Column(children: [
+    // Deep into sudden death the dots shrink to fit, then the earliest kicks
+    // drop off (the same ones for every team, so the rows still line up).
+    return LayoutBuilder(builder: (context, box) {
+      final room = box.maxWidth - 90;
+      final size = (room / longest - 6).clamp(18.0, 26.0);
+      final fits = max(1, (room / (size + 6)).floor());
+      final from = max(0, longest - fits);
+      return Column(children: [
       for (final t in teams)
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 3),
@@ -404,21 +417,26 @@ class _Tracker extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                   style: AppText.headline(20, color: Palette.team(_int(t['color'])))),
             ),
-            for (var i = 0; i < longest; i++)
+            for (var i = from; i < longest; i++)
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 3),
-                child: _Dot(scored: i < _list(t['kicks']).length ? _list(t['kicks'])[i] == true : null, out: t['out'] == true),
+                child: _Dot(
+                    scored: i < _list(t['kicks']).length ? _list(t['kicks'])[i] == true : null,
+                    out: t['out'] == true,
+                    size: size),
               ),
           ]),
         ),
-    ]);
+      ]);
+    });
   }
 }
 
 class _Dot extends StatelessWidget {
-  const _Dot({required this.scored, this.out = false});
+  const _Dot({required this.scored, this.out = false, this.size = 26});
   final bool? scored;
   final bool out;
+  final double size;
 
   @override
   Widget build(BuildContext context) {
@@ -426,14 +444,14 @@ class _Dot extends StatelessWidget {
     return Opacity(
       opacity: out && s == null ? 0.3 : 1,
       child: Container(
-        width: 26,
-        height: 26,
+        width: size,
+        height: size,
         decoration: BoxDecoration(
           shape: BoxShape.circle,
           color: s == null ? Colors.transparent : (s ? Palette.green : Palette.danger),
           border: Border.all(color: s == null ? Palette.line : Colors.transparent, width: 2),
         ),
-        child: s == null ? null : Icon(s ? Icons.check_rounded : Icons.close_rounded, size: 17, color: Colors.white),
+        child: s == null ? null : Icon(s ? Icons.check_rounded : Icons.close_rounded, size: size * 0.65, color: Colors.white),
       ),
     );
   }

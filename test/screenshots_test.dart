@@ -1062,7 +1062,7 @@ void main() {
       {'name': 'Home', 'color': 0, 'kicks': [true, false, true]},
       {'name': 'Away', 'color': 1, 'kicks': [true, true]},
     ];
-    Widget pens(Map<String, Object?> data, {Widget? box, bool tap = false}) => ShootoutLayout(
+    Widget pens(Map<String, Object?> data, {Widget? box, bool tap = false, String? line}) => ShootoutLayout(
           data: data,
           answerBox: box,
           clock: const TimerBar(fraction: 0.6, seconds: 9),
@@ -1071,7 +1071,7 @@ void main() {
           onNext: () {},
           onFinish: () {},
           onChoose: tap ? (_) {} : null,
-          commentary: data['phase'] == 'choice' ? 'Put the kettle on, we’re going to penalties.' : null,
+          commentary: line ?? (data['phase'] == 'choice' ? 'Put the kettle on, we’re going to penalties.' : null),
         );
     final box = Column(children: [
       const TimerBar(fraction: 0.6, seconds: 9),
@@ -1190,6 +1190,25 @@ void main() {
             'options': ['3–0', '4–0', '4–1'],
           },
         }, tap: true));
+    await shot(
+        tester,
+        'pens_sudden_death',
+        pens({
+          'phase': 'result',
+          'each': 5,
+          'teams': [
+            {'name': 'Home', 'color': 0, 'kicks': [true, false, false, true, true, false, true, true, false, true, true, true]},
+            {'name': 'Away', 'color': 1, 'kicks': [true, true, false, false, true, false, true, true, false, true, true, false]},
+          ],
+          'taker': {'name': 'Away', 'color': 1},
+          'label': 'SUDDEN DEATH',
+          'scored': false,
+          'kick': {
+            'ask': 'NAME A PLAYER WHO PLAYED FOR',
+            'lines': ['SAMPDORIA', 'AND', 'SOUTHAMPTON'],
+          },
+          'reveal': 'MAYA YOSHIDA · GRAZIANO PELLÈ',
+        }, line: 'Like a keeper rooted to the line.'));
     await shot(
         tester,
         'pens_saved',

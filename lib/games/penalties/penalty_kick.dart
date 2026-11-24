@@ -77,10 +77,16 @@ class PenaltyKick {
 /// row are alike. Remembers what's been asked like every game does: a pairing,
 /// career, line-up or list used here counts as seen for its own game too.
 class KickSource {
-  KickSource(this.challenges, {Random? random, this.genders = 1}) : _random = random ?? Random();
+  KickSource(this.challenges, {Random? random, this.genders = 1, this.eras = Era.allMask}) : _random = random ?? Random();
   final ChallengeSource challenges;
   final Random _random;
   final int genders;
+
+  /// The group's chosen eras: every kick comes from them, like every game.
+  final int eras;
+
+  /// [year] is in the chosen eras.
+  bool _inEras(int? year) => year == null || eras & Era.ofYear(year).bit != 0;
 
   FootballRepository get _repo => challenges.repo;
   QuestionHistory get _history => challenges.history;
@@ -145,7 +151,7 @@ class KickSource {
   String _up(String s) => s.toUpperCase();
 
   Future<PenaltyKick?> _twoClubs() async {
-    final c = await challenges.clubConnection(_wideLevel, _used, genders: genders);
+    final c = await challenges.clubConnection(_wideLevel, _used, eras: eras, genders: genders);
     if (c == null) return null;
     _used.add(c.id);
     return PenaltyKick(
@@ -171,7 +177,7 @@ class KickSource {
 
   Future<CareerPath?> _career() async {
     for (var i = 0; i < 6; i++) {
-      final p = await challenges.careerPath(_careerLevel, _used, genders: genders);
+      final p = await challenges.careerPath(_careerLevel, _used, eras: eras, genders: genders);
       if (p == null) return null;
       _used.add(p.id);
       if (_spells(p).length >= 3) return p;
@@ -214,7 +220,7 @@ class KickSource {
 
   /// The whole XI on the pitch, one name missing: no "which striker?".
   Future<PenaltyKick?> _lineupSpot() async {
-    final m = await challenges.match(_wideLevel, _used, genders: genders);
+    final m = await challenges.match(_wideLevel, _used, eras: eras, genders: genders);
     if (m == null) return null;
     _used.add(m.id);
     // The one to name: a well-known player (the best-known few, at random).
@@ -237,6 +243,7 @@ class KickSource {
 
   Future<PenaltyKick?> _fromList() async {
     final b = await challenges.bidding(_wideLevel, _used,
+        eras: eras,
         genders: genders, where: (b) => b.answerIds.length >= 5 && b.prompt.length <= 70);
     if (b == null) return null;
     _used.add(b.id);
@@ -254,7 +261,7 @@ class KickSource {
 
   Future<PenaltyKick?> _countryClub() async {
     _grid ??= [
-      for (final c in await _repo.categoryClubPairs(genders: genders))
+      for (final c in await _repo.categoryClubPairs(eras: eras, genders: genders))
         if (c.clubA.id.startsWith('nat:') && c.clubB.fame >= 4 && c.answerIds.length >= 3) c,
     ];
     final seen = _history.seenCounts('pens');
@@ -276,12 +283,12 @@ class KickSource {
 
   /// A club's 501 numbers: players people know, with enough games to compare.
   Future<(CheckoutCategory, List<(Player, int, int)>)?> _clubNumbers() async {
-    final cat = await challenges.checkout(_level, _used, genders: genders);
+    final cat = await challenges.checkout(_level, _used, eras: eras, genders: genders);
     if (cat == null) return null;
     _used.add(cat.id);
     final known = [
       for (final e in cat.values.entries)
-        if (_repo.players.byId(e.key) case final p? when p.fame >= 4 && e.value.$1 >= (_national(cat) ? 20 : 40))
+        if (_repo.players.byId(e.key) case final p? when p.fame >= 4 && e.value.$1 >= (_national(cat) ? 20 : 40) && _inEras(p.careerYear))
           (p, e.value.$1, e.value.$2),
     ];
     return known.isEmpty ? null : (cat, known);
@@ -370,7 +377,7 @@ class KickSource {
       for (final p in _repo.players.all)
         // A proper career's worth of games (not a cameo, or someone who isn't really a footballer).
         // (The database only has totals for players a UK group knows: Crouch, Defoe…)
-        if (p.leagueGoals != null && (p.leagueApps ?? 0) >= 100 && p.women == (genders == 2)) p,
+        if (p.leagueGoals != null && (p.leagueApps ?? 0) >= 100 && p.women == (genders == 2) && _inEras(p.careerYear)) p,
     ];
     final pool = _withTotals!;
     if (pool.length < 2) return null;
@@ -409,7 +416,7 @@ class KickSource {
   /// easier to remember than a line-up.
   Future<PenaltyKick?> _matchScore() async {
     if (genders == 2) return null; // (all men's results so far)
-    _scores ??= await _repo.famousScores();
+    _scores ??= [for (final s in await _repo.famousScores()) if (_inEras(s.year == 0 ? null : s.year)) s];
     final seen = _history.seenCounts('pens');
     final fresh = [for (final s in _scores!) if (!_used.contains(s.id) && !seen.containsKey(s.id)) s];
     final pool = fresh.isNotEmpty ? fresh : [for (final s in _scores!) if (!_used.contains(s.id)) s];

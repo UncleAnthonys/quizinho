@@ -83,7 +83,7 @@ class _ShootoutScreenState extends State<ShootoutScreen>
 
   void _goToPens() {
     final c = ShootoutController(teams: _t.leaders, kickSeconds: max(15, _t.config.answerSeconds));
-    _source = KickSource(services.challenges, random: _random, genders: _t.config.genderMask);
+    _source = KickSource(services.challenges, random: _random, genders: _t.config.genderMask, eras: _t.config.eraMask);
     c.addListener(() => _onChange(c));
     setState(() => _c = c);
     _prepare(c);
