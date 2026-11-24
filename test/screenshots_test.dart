@@ -78,6 +78,12 @@ Future<void> _loadFonts() async {
     'Inter_700Bold.ttf',
     'Inter_800ExtraBold.ttf',
   ]);
+  // ♥ and ▢ (lives, squares): the game fonts lack them and the renderer has
+  // no system fallback, so they came out as boxes.
+  final dejavu = File('/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf');
+  if (dejavu.existsSync()) {
+    await (FontLoader('QuizinhoSymbols')..addFont(Future.value(ByteData.sublistView(dejavu.readAsBytesSync())))).load();
+  }
   final root = Platform.environment['FLUTTER_ROOT'];
   if (root != null) {
     final icons = File('$root/bin/cache/artifacts/material_fonts/MaterialIcons-Regular.otf');

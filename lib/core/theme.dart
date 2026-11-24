@@ -45,11 +45,16 @@ abstract final class AppText {
   static const display = 'BarlowCondensed';
   static const body = 'Inter';
 
+  /// For symbols the game's fonts don't have (♥, ▢): the phone's own fonts
+  /// cover them anyway; this names one for the screenshot renderer, which
+  /// has no system fonts to fall back on.
+  static const symbols = ['QuizinhoSymbols'];
+
   static TextStyle headline(double size, {Color color = Palette.text, FontWeight weight = FontWeight.w900}) =>
-      TextStyle(fontFamily: display, fontSize: size, fontWeight: weight, color: color, height: 1.0, letterSpacing: 0.5);
+      TextStyle(fontFamily: display, fontFamilyFallback: symbols, fontSize: size, fontWeight: weight, color: color, height: 1.0, letterSpacing: 0.5);
 
   static TextStyle label(double size, {Color color = Palette.muted}) => TextStyle(
-      fontFamily: display, fontSize: size, fontWeight: FontWeight.w700, color: color, letterSpacing: 1.6);
+      fontFamily: display, fontFamilyFallback: symbols, fontSize: size, fontWeight: FontWeight.w700, color: color, letterSpacing: 1.6);
 }
 
 ThemeData buildTheme() {
