@@ -873,6 +873,7 @@ void main() {
         onFinished: () {},
       ),
       wrap: false,
+      sub: 'NO DEAD ENDS. EVERY PAIR HAS A PLAYER.',
     );
     services.settings.typeAnswers = false; // the mic, for the noughts shot
     // Friends join from the QR code: three phones in, one still to come.
@@ -981,7 +982,7 @@ void main() {
           )),
     );
     services.settings.recordSolo('cup', 'medium', 412);
-    await storeShot(tester, 'phone_8_solo', 'OR PLAY SOLO AND\nBEAT YOUR BEST', const SoloScreen(), wrap: false);
+    await storeShot(tester, 'phone_8_solo', 'OR PLAY SOLO AND\nBEAT YOUR BEST', const SoloScreen(), wrap: false, sub: 'NO ADS. EVER.');
   }, skip: !_shots);
 
   testWidgets('Store feature graphic', (tester) async {
