@@ -48,7 +48,7 @@ abstract final class AppText {
   /// For symbols the game's fonts don't have (♥, ▢): the phone's own fonts
   /// cover them anyway; this names one for the screenshot renderer, which
   /// has no system fonts to fall back on.
-  static const symbols = ['QuizinhoSymbols'];
+  static const symbols = ['QuizinhoSymbols', 'QuizinhoEmoji'];
 
   static TextStyle headline(double size, {Color color = Palette.text, FontWeight weight = FontWeight.w900}) =>
       TextStyle(fontFamily: display, fontFamilyFallback: symbols, fontSize: size, fontWeight: weight, color: color, height: 1.0, letterSpacing: 0.5);

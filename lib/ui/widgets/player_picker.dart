@@ -540,7 +540,9 @@ class _PlayerPickerState extends State<PlayerPicker> with SingleTickerProviderSt
                   if (widget.showFlags) if (nationalityLabel(r.player.nationality) case final flag?)
                     Padding(
                       padding: const EdgeInsets.only(left: 8),
-                      child: Text(flag, style: TextStyle(fontSize: flagFor(r.player.nationality) != null ? 26 : 14)),
+                      child: Text(flag,
+                          style: TextStyle(
+                              fontSize: flagFor(r.player.nationality) != null ? 26 : 14, fontFamilyFallback: AppText.symbols)),
                     ),
                 ]),
               ),

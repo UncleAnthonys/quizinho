@@ -84,6 +84,14 @@ Future<void> _loadFonts() async {
   if (dejavu.existsSync()) {
     await (FontLoader('QuizinhoSymbols')..addFont(Future.value(ByteData.sublistView(dejavu.readAsBytesSync())))).load();
   }
+  // Flags (the names list shows each player's country).
+  for (final path in ['/usr/share/fonts/truetype/noto/NotoColorEmoji.ttf', '/usr/share/fonts/noto/NotoColorEmoji.ttf']) {
+    final emoji = File(path);
+    if (emoji.existsSync()) {
+      await (FontLoader('QuizinhoEmoji')..addFont(Future.value(ByteData.sublistView(emoji.readAsBytesSync())))).load();
+      break;
+    }
+  }
   final root = Platform.environment['FLUTTER_ROOT'];
   if (root != null) {
     final icons = File('$root/bin/cache/artifacts/material_fonts/MaterialIcons-Regular.otf');
@@ -918,17 +926,20 @@ void main() {
       'phone_5_xi',
       'NAME THE XI BEFORE\nTHE BOMB GOES OFF',
       XiLayout(
-        data: xi('ticking'),
-        scores: _scores(extra: const ['♥♥♥  2 named', '♥♥  1 named']),
+        data: {
+          ...xi('ticking'),
+          'named': {'henry': 0, 'vieira': 1, 'cole': 0, 'lehmann': 1},
+        },
+        scores: _scores(extra: const ['♥♥♥  2 named', '♥♥  2 named']),
         left: 12,
         // Typing a starter, the list of names popping up under the box.
         answerBox: PlayerPicker(
           key: UniqueKey(),
           index: PlayerIndex(const [
             ...allPlayers,
-            Player(id: 'bergkamp', name: 'Dennis Bergkamp', fame: 5),
-            Player(id: 'bergwijn', name: 'Steven Bergwijn', fame: 3),
-            Player(id: 'berbatov', name: 'Dimitar Berbatov', fame: 5),
+            Player(id: 'bergkamp', name: 'Dennis Bergkamp', fame: 5, nationality: 'NED', position: 'FW'),
+            Player(id: 'bergwijn', name: 'Steven Bergwijn', fame: 3, nationality: 'NED', position: 'FW'),
+            Player(id: 'berbatov', name: 'Dimitar Berbatov', fame: 5, nationality: 'BUL', position: 'FW'),
           ]),
           onPick: (_) {},
           onPass: () {},
