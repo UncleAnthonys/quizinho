@@ -75,7 +75,21 @@ class TeaserBank {
 
   final List<Teaser> teasers;
   final Map<String, Teaser> _byId;
-  Teaser? byId(String id) => _byId[id];
+  Teaser? byId(String id) => _byId[id] ?? _byId[_reworded(id)];
+
+  /// Questions whose wording changed (a saved match or the history may hold
+  /// the old one): old phrase → new.
+  static const _rewordings = [
+    ('a European Cup or Champions League final', 'a Champions League final (or the old European Cup)'),
+  ];
+
+  static String _reworded(String id) {
+    var out = id;
+    for (final (from, to) in _rewordings) {
+      out = out.replaceAll(from, to);
+    }
+    return out;
+  }
 }
 
 /// Picks the teaser for a tournament. Properly random, and per phone:

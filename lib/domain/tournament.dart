@@ -238,6 +238,14 @@ class Tournament extends ChangeNotifier {
   /// Between games: still there to be had, for 3.
   bool get teaserOpen => teaser != null && teaser!.halfTimeDone && teaser!.isOpen;
 
+  /// The teaser can't be found any more (the bank's changed since kick-off):
+  /// carry on without one rather than show an empty teaser.
+  void dropTeaser() {
+    if (teaser == null) return;
+    teaser = null;
+    notifyListeners();
+  }
+
   /// A team got the teaser.
   void awardTeaser(int team, int points, String answer) {
     final s = teaser;

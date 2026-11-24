@@ -36,6 +36,13 @@ Tournament _match({int teams = 2}) {
 }
 
 void main() {
+  test('a saved match finds its teaser after a rewording', () async {
+    final bank = TeaserBank.parse(File('assets/db/teasers.json').readAsStringSync());
+    final now = bank.teasers.firstWhere((t) => t.question.contains('(or the old European Cup)'));
+    final old = now.question.replaceAll('a Champions League final (or the old European Cup)', 'a European Cup or Champions League final');
+    expect(bank.byId(old)?.question, now.question);
+  });
+
   group('Teaser controller', () {
     test('half-time: right answer is worth 5 and solves it', () {
       final t = _match();

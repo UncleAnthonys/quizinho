@@ -217,6 +217,13 @@ class _TeaserBetweenGamesState extends State<TeaserBetweenGames>
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       await startTeaser(widget.tournament, halfTime: false);
+      // Gone from the bank since kick-off: no teaser, so no empty "last
+      // chance" either.
+      if (mounted && teaserController == null && widget.tournament.teaser != null) {
+        widget.tournament.dropTeaser();
+        MatchFlow.save(context, widget.tournament);
+        return;
+      }
       if (widget.revealNow) _reveal();
     });
   }
