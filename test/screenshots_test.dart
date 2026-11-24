@@ -38,6 +38,7 @@ import 'package:quizinho/ui/screens/solo_screen.dart';
 import 'package:quizinho/ui/teaser/teaser_widgets.dart';
 import 'package:quizinho/ui/widgets/common.dart';
 import 'package:quizinho/ui/widgets/logo.dart';
+import 'package:quizinho/ui/widgets/match_table.dart';
 import 'package:quizinho/ui/widgets/player_picker.dart';
 import 'package:quizinho/multiplayer/guest_screen.dart' show guestGamePreview;
 import 'package:quizinho/ui/match_flow.dart' show GameModeStyle;
@@ -439,6 +440,14 @@ void main() {
     await shot(tester, 'cc_title', view(ClubConnectionsController(teamCount: 2, questions: [arsenalBarca()]), null));
     await shot(tester, 'cc_commentary',
         view(ClubConnectionsController(teamCount: 2, questions: [arsenalBarca()]), 'Not even in the same postcode.'));
+    await shot(
+        tester,
+        'table_commentary',
+        Column(children: [
+          RoundTableHeader(
+              data: const {'round': 6, 'of': 6, 'game': 'Penalties', 'colour': 0xFFFFCC29},
+              commentary: 'They think it’s all over… it is now!'),
+        ]));
     services.settings.typeAnswers = true;
     final answering = ClubConnectionsController(teamCount: 2, questions: [arsenalBarca()])..buzz(0);
     await shot(tester, 'cc_answering', view(answering, null));

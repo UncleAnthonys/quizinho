@@ -269,17 +269,27 @@ class CommentaryBanner extends StatelessWidget {
                 : Padding(
                     key: ValueKey(text),
                     padding: const EdgeInsets.symmetric(horizontal: 12),
-                    child: Center(
+                    // A long line wraps onto two rather than shrinking to fit
+                    // one; it may stand taller than what it covers.
+                    child: OverflowBox(
+                      maxHeight: double.infinity,
                       child: Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 3),
+                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
                         decoration: BoxDecoration(color: Palette.gold, borderRadius: BorderRadius.circular(8)),
-                        child: FittedBox(
-                          fit: BoxFit.scaleDown,
-                          child: Row(mainAxisSize: MainAxisSize.min, children: [
-                            const Icon(Icons.mic_external_on, color: Palette.pitchDeep, size: 16),
-                            const SizedBox(width: 6),
-                            Text(text, maxLines: 1, style: AppText.headline(17, color: Palette.pitchDeep, weight: FontWeight.w800)),
+                        child: Text.rich(
+                          TextSpan(children: [
+                            const WidgetSpan(
+                              alignment: PlaceholderAlignment.middle,
+                              child: Padding(
+                                padding: EdgeInsets.only(right: 6),
+                                child: Icon(Icons.mic_external_on, color: Palette.pitchDeep, size: 16),
+                              ),
+                            ),
+                            TextSpan(text: text),
                           ]),
+                          maxLines: 2,
+                          textAlign: TextAlign.center,
+                          style: AppText.headline(17, color: Palette.pitchDeep, weight: FontWeight.w800),
                         ),
                       ),
                     ),
