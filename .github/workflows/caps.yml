@@ -1,0 +1,39 @@
+# Football 501 by country: every capped player (1 cap up) with caps and goals, from each
+# player's infobox -> data_pipeline/raw/national_caps.json.gz, for radar_build.py.
+# Run from the Actions tab.
+name: Fetch national team caps
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: fetch-data
+  cancel-in-progress: false
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Fetch national team caps
+        working-directory: data_pipeline
+        run: bash ../scripts/ci_run.sh "Caps" python3 caps_fetch.py
+      - name: Commit
+        run: |
+          git config user.name "quizinho-data-bot"
+          git config user.email "quizinho-data-bot@users.noreply.github.com"
+          git add data_pipeline/raw/national_caps.json.gz
+          if git diff --cached --quiet; then
+            echo "No changes."
+          else
+            git commit -m "Data: national team caps from Wikipedia"
+            git pull --rebase origin main
+            git push
+          fi
