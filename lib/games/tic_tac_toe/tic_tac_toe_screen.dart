@@ -610,7 +610,7 @@ class TttBoard extends StatelessWidget {
         'teams': [for (var i = 0; i < t.teamCount; i++) t.teamName(i)],
         'squares': [for (var i = 0; i < t.teamCount; i++) c.squaresOf(i)],
         if (c.missName != null && c.missSquare != null)
-          'miss': {'n': c.missSerial, 'name': c.missName, 'sq': c.missSquare},
+          'miss': {'n': Object.hash(c, c.missSerial), 'name': c.missName, 'sq': c.missSquare},
       };
 
   static List<T?> _list<T>(Object? v) => v is List ? [for (final x in v) x is T ? x : null] : const [];

@@ -68,6 +68,9 @@ class SurvivalController extends ChangeNotifier {
   /// Bumped on every right/wrong so the screen plays a sound once.
   int eventSerial = 0;
 
+  /// Wrong answers so far (not passes or time-outs): the card shakes red.
+  int wrongSerial = 0;
+
   /// The climb: easy questions first, expert from 20 right answers.
   static Difficulty difficultyFor(int score) => score < 5
       ? Difficulty.easy
@@ -125,6 +128,7 @@ class SurvivalController extends ChangeNotifier {
       eventSerial++;
       notifyListeners();
     } else {
+      wrongSerial++;
       _miss();
     }
   }

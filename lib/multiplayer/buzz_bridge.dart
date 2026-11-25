@@ -264,8 +264,8 @@ class BuzzBridge extends ChangeNotifier {
       // so it never matches a buzz game's number).
       if (c is TeaserController && c.missShake > 0)
         'miss': {'n': -c.missShake, if (c.lastMiss != null) 'name': c.lastMiss}
-      else if (c.lastEvent == GameEvent.wrong && c.lastMiss != null)
-        'miss': {'n': c.eventSerial, 'name': c.lastMiss},
+      else if (c is BuzzRaceController && c.wrongSerial > 0)
+        'miss': {'n': Object.hash(c, c.wrongSerial), if (c.lastMiss != null) 'name': c.lastMiss},
       if (resolved)
         'result': {
           'scored': o?.scored ?? false,

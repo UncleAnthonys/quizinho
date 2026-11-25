@@ -146,7 +146,10 @@ class _SurvivalScreenState extends State<SurvivalScreen>
         child: q == null || c.phase == SurvivalPhase.loading
             ? const Center(child: CircularProgressIndicator(color: Palette.yellow))
             : ListView(padding: const EdgeInsets.fromLTRB(16, 4, 16, 24), children: [
-                _QuestionCard(q: q, compact: typing),
+                MissShake(
+                  trigger: c.wrongSerial == 0 ? null : Object.hash(c, c.wrongSerial),
+                  child: _QuestionCard(q: q, compact: typing),
+                ),
                 const SizedBox(height: 12),
                 if (c.phase == SurvivalPhase.asking) ...[
                   TimerBar(fraction: c.fraction, seconds: c.secondsLeft),

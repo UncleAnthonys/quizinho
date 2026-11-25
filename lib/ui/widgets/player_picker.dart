@@ -155,9 +155,23 @@ class _PlayerPickerState extends State<PlayerPicker> with SingleTickerProviderSt
     if (_autoListen) _listen();
   }
 
+  /// Solo: a tap anywhere else puts the box away (keyboard down, mic off),
+  /// the whole question back in view - the XI, the Top 10 so far - for
+  /// ideas. ANSWER brings it back, with whatever was typed.
+  void _close() {
+    if (widget.gateFor == null || _gated || _voting) return;
+    widget.voice?.stop();
+    _focus.unfocus();
+    setState(() {
+      _openedFor = null;
+      _listening = false;
+      _voiceNote = null;
+    });
+  }
+
   /// The mic starts by itself unless this player last chose the keyboard.
   bool get _autoListen => _voiceOn && !(widget.voice?.preferTyping ?? false);
-  bool get _keepListening => mounted && _voiceOn && !_picked && !_typing && !_voting;
+  bool get _keepListening => mounted && _voiceOn && !_picked && !_typing && !_voting && !_gated;
 
   @override
   void initState() {
@@ -448,6 +462,10 @@ class _PlayerPickerState extends State<PlayerPicker> with SingleTickerProviderSt
     final typed = _controller.text.trim();
     if (_voting) return _vote(typed);
     if (_gated) return _answerButton();
+    return TapRegion(onTapOutside: (_) => _close(), child: _box(typed));
+  }
+
+  Widget _box(String typed) {
     return Column(mainAxisSize: MainAxisSize.min, children: [
       AnimatedBuilder(
         animation: _wiggle,

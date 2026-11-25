@@ -269,7 +269,7 @@ abstract class BuzzRaceController<Q> extends ChangeNotifier implements BuzzTarge
 
   /// Answering team gives up — same as a wrong answer.
   void pass() {
-    if (phase == BuzzPhase.answering) _wrong();
+    if (phase == BuzzPhase.answering) _wrong(passed: true);
   }
 
   /// Skip a question nobody can get (no penalty).
@@ -323,7 +323,12 @@ abstract class BuzzRaceController<Q> extends ChangeNotifier implements BuzzTarge
     _resolve(o, e);
   }
 
-  void _wrong({bool timeout = false}) {
+  /// Wrong answers named so far (not time-outs or passes): the question
+  /// shakes red for each - including the one that ends the question.
+  int wrongSerial = 0;
+
+  void _wrong({bool timeout = false, bool passed = false}) {
+    if (!timeout && !passed) wrongSerial++;
     final team = answeringTeam;
     if (team != null) {
       lockedOut.add(team);

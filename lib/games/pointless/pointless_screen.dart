@@ -198,6 +198,9 @@ class _PointlessScreenState extends State<PointlessScreen>
       'go': c.goNumber,
       'per': c.answersPerTeam,
       if (_t.teamCount == 1) 'alone': true,
+      // A wrong name (not a give-up): the category shakes red.
+      if (c.lastEvent == PtEvent.wrong && c.answers.isNotEmpty && c.answers.last.label != 'Gave up')
+        'miss': Object.hash(c, c.eventSerial),
       if (finished && _t.teamCount == 1) 'solo': c.result().solo ?? 0,
       if (finished) ...{
         'tie': c.winners.length > 1,
@@ -307,7 +310,10 @@ class PtLayout extends StatelessWidget {
           ),
         ),
       ),
-      _CategoryCard(prompt: '${data['prompt'] ?? ''}', compact: phase != 'finished', tight: typing),
+      MissShake(
+        trigger: (data['miss'] as num?)?.toInt(),
+        child: _CategoryCard(prompt: '${data['prompt'] ?? ''}', compact: phase != 'finished', tight: typing),
+      ),
       Expanded(
         child: switch (phase) {
           'answering' => _answering(),

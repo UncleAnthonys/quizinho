@@ -67,6 +67,9 @@ class StartingXiController extends ChangeNotifier {
   GameEvent? lastEvent;
   int eventSerial = 0;
 
+  /// Wrong names so far (not time-outs): the title shakes red for each.
+  int wrongSerial = 0;
+
   bool get isComplete => namedBy.length >= match.lineup.length;
   List<int> get aliveTeams => [for (var t = 0; t < teamCount; t++) if (livesLeft[t]! > 0) t];
   double get fractionLeft => turnSeconds == 0 ? 0 : (secondsLeft / turnSeconds).clamp(0.0, 1.0);
@@ -94,6 +97,7 @@ class StartingXiController extends ChangeNotifier {
     if (namedBy.containsKey(p.id)) return SubmitResult.alreadyNamed;
     final inXi = match.lineup.any((s) => s.playerId == p.id);
     if (!inXi) {
+      wrongSerial++;
       _explode();
       return SubmitResult.wrong;
     }

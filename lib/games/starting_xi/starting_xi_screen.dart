@@ -295,6 +295,7 @@ class _StartingXiScreenState extends State<StartingXiScreen>
       'lost': t.teamName(lost),
       'out': c.livesLeft[lost]! <= 0,
       'complete': c.isComplete,
+      if (c.wrongSerial > 0) 'miss': Object.hash(c, c.wrongSerial),
       if (c.phase != BombPhase.finished && c.toWin != null) 'toWin': c.toWin,
       if (c.phase == BombPhase.finished && t.teamCount == 1) 'solo': c.result().solo ?? 0,
       'bonus': [for (final b in c.bonusTeams) {'name': t.teamName(b), 'color': t.config.teams[b].colorIndex}],
@@ -376,9 +377,12 @@ class XiLayout extends StatelessWidget {
                       if (multiplier > 1) Text('x$multiplier POINTS', style: AppText.label(15, color: Palette.gold)),
                     ]),
                   ),
-                  FittedBox(
-                    fit: BoxFit.scaleDown,
-                    child: Text('NAME ${'${data['target'] ?? ''}'.toUpperCase()}’S XI', style: AppText.headline(30)),
+                  MissShake(
+                    trigger: (data['miss'] as num?)?.toInt(),
+                    child: FittedBox(
+                      fit: BoxFit.scaleDown,
+                      child: Text('NAME ${'${data['target'] ?? ''}'.toUpperCase()}’S XI', style: AppText.headline(30)),
+                    ),
                   ),
                   Text('${data['match'] ?? ''}', textAlign: TextAlign.center, style: const TextStyle(color: Palette.muted, fontSize: 13)),
                   Text('${data['title'] ?? ''}', style: AppText.label(13)),

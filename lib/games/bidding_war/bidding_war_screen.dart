@@ -243,7 +243,7 @@ class _BiddingWarScreenState extends State<BiddingWarScreen>
     return {
       'phase': c.phase.name,
       'prompt': c.category.prompt,
-      if (c.lastEvent == BidEvent.wrong && c.lastWrong != null) 'miss': {'n': c.eventSerial, 'name': c.lastWrong},
+      if (c.lastEvent == BidEvent.wrong && c.lastWrong != null) 'miss': {'n': Object.hash(c, c.eventSerial), 'name': c.lastWrong},
       'teams': [for (var i = 0; i < _t.teamCount; i++) {'name': _t.teamName(i), 'color': _t.config.teams[i].colorIndex}],
       'team': c.currentTeam,
       if (c.holder != null) 'holder': c.holder,

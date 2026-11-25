@@ -212,6 +212,9 @@ class _CheckoutScreenState extends State<CheckoutScreen>
       'dart': c.dartNumber,
       'maxDarts': c.maxTurns,
       'checkedOut': c.checkedOut.isNotEmpty,
+      // A wrong name (not a pass): the category shakes red.
+      if (c.lastThrow case final th? when th.outcome == CoOutcome.wrong && th.label != 'Passed')
+        'miss': Object.hash(c, c.throws.length),
       if (c.phase == CoPhase.finished && _t.teamCount == 1) 'solo': c.soloScore,
       if (last != null)
         'last': {
@@ -321,7 +324,10 @@ class CoLayout extends StatelessWidget {
           ]),
         ),
       ),
-      _CategoryCard(prompt: '${data['prompt'] ?? ''}', compact: typing),
+      MissShake(
+        trigger: (data['miss'] as num?)?.toInt(),
+        child: _CategoryCard(prompt: '${data['prompt'] ?? ''}', compact: typing),
+      ),
       Collapse(hidden: typing, child: _board(phase)),
       Expanded(
         child: switch (phase) {
