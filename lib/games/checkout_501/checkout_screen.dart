@@ -259,6 +259,7 @@ class _CheckoutScreenState extends State<CheckoutScreen>
       else
         PlayerPicker(
           key: ValueKey('co-${c.turn}-$_pickerKey'),
+          gateFor: _t.teamCount == 1 ? c : null, // solo: see the category first
           // First dart: the board and the category first, not the keyboard.
           autofocus: c.turn > 0 || _pickerKey > 0,
           index: services.repo.players,

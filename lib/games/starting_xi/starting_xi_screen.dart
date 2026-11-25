@@ -242,6 +242,7 @@ class _StartingXiScreenState extends State<StartingXiScreen>
           ? OnTheirPhone(name: _turnPlayer ?? t.teamName(c.currentTeam))
           : PlayerPicker(
               key: ValueKey('xi-$_turn'),
+              gateFor: c.teamCount == 1 ? c : null, // solo: see the XI first
               index: services.repo.players,
               voice: services.voice,
               accent: Palette.team(colour),

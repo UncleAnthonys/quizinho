@@ -226,6 +226,7 @@ class _PointlessScreenState extends State<PointlessScreen>
       else
         PlayerPicker(
           key: ValueKey('pt-${c.turn}-$_pickerKey'),
+          gateFor: _t.teamCount == 1 ? c : null, // solo: see the category first
           // First go: the question first, not the keyboard.
           autofocus: c.turn > 0 || _pickerKey > 0,
           index: clubs ? services.repo.clubIndex : services.repo.players,

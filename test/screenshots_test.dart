@@ -946,6 +946,17 @@ void main() {
           )),
       sub: 'SAY YOUR ANSWER OUT LOUD',
     );
+    // Solo XI: the lineup in full, an ANSWER button where the box goes.
+    await shot(
+      tester,
+      'xi_solo_answer',
+      XiLayout(
+        data: {...xi('ticking'), 'named': {'henry': 0, 'lehmann': 0}},
+        scores: const Text(''),
+        left: 9,
+        answerBox: PlayerPicker(key: UniqueKey(), gateFor: 'xi-shot', index: PlayerIndex(allPlayers), onPick: (_) {}, onPass: () {}),
+      ),
+    );
     services.settings.typeAnswers = true;
     await storeShot(
       tester,

@@ -62,7 +62,15 @@ class PlayerPicker extends StatefulWidget {
     this.showPositions = true,
     this.rapid = false,
     this.autofocus = true,
+    this.gateFor,
   });
+
+  /// Solo: the question shows first, with a big ANSWER button in place of
+  /// the box - no keyboard, no mic - until the player taps it. The value
+  /// names the question (any object): once opened for it, later boxes for
+  /// the same question (the next name in an XI, a Top 10) come straight up.
+  /// Null = no button (team games: the buzz or the turn already did that).
+  final Object? gateFor;
 
   /// False on a game's first turn: the screen shows the question big first,
   /// and the keyboard waits for a tap on the box (after that it's straight up).
@@ -137,6 +145,16 @@ class _PlayerPickerState extends State<PlayerPicker> with SingleTickerProviderSt
 
   bool get _voiceOn => widget.voice?.enabled ?? false;
 
+  /// The question last opened with the ANSWER button, app-wide.
+  static Object? _openedFor;
+  bool get _gated => widget.gateFor != null && widget.gateFor != _openedFor;
+
+  void _open() {
+    primeKeyboardIfTyping(widget.voice); // a browser opens the keyboard only from a tap
+    setState(() => _openedFor = widget.gateFor);
+    if (_autoListen) _listen();
+  }
+
   /// The mic starts by itself unless this player last chose the keyboard.
   bool get _autoListen => _voiceOn && !(widget.voice?.preferTyping ?? false);
   bool get _keepListening => mounted && _voiceOn && !_picked && !_typing && !_voting;
@@ -147,7 +165,9 @@ class _PlayerPickerState extends State<PlayerPicker> with SingleTickerProviderSt
     answerNudge.addListener(_onNudge);
     _onNudge(); // one sent just before this box was built
     _focus.addListener(_onFocus);
-    if (_autoListen) {
+    if (_gated) {
+      // The mic waits for the ANSWER button.
+    } else if (_autoListen) {
       WidgetsBinding.instance.addPostFrameCallback((_) => _listen());
     } else if (_voiceOn) {
       _typing = true; // chose the keyboard last time: the mic waits for a tap
@@ -427,6 +447,7 @@ class _PlayerPickerState extends State<PlayerPicker> with SingleTickerProviderSt
   Widget build(BuildContext context) {
     final typed = _controller.text.trim();
     if (_voting) return _vote(typed);
+    if (_gated) return _answerButton();
     return Column(mainAxisSize: MainAxisSize.min, children: [
       AnimatedBuilder(
         animation: _wiggle,
@@ -440,7 +461,7 @@ class _PlayerPickerState extends State<PlayerPicker> with SingleTickerProviderSt
         // Keyboard straight up when there's no mic, or the player types (in
         // the app; in a browser only when the buzz tap already opened it -
         // otherwise a browser only shows the keyboard after a tap on the box).
-        autofocus: widget.autofocus && (!_voiceOn || (!_autoListen && (!kIsWeb || keyboardPrimed))),
+        autofocus: (widget.autofocus || widget.gateFor != null) && (!_voiceOn || (!_autoListen && (!kIsWeb || keyboardPrimed))),
         autocorrect: false,
         enableSuggestions: false,
         autofillHints: const <String>[], // stops Safari offering contacts
@@ -564,6 +585,29 @@ class _PlayerPickerState extends State<PlayerPicker> with SingleTickerProviderSt
       ]),
     ]);
   }
+
+  /// Solo, before answering: one big button, the question stays in view.
+  Widget _answerButton() => Column(mainAxisSize: MainAxisSize.min, children: [
+        SizedBox(
+          width: double.infinity,
+          height: 64,
+          child: FilledButton.icon(
+            onPressed: _open,
+            icon: Icon(_autoListen ? Icons.mic_rounded : Icons.keyboard_rounded, size: 28),
+            label: Text('ANSWER', style: AppText.headline(26, color: Palette.pitchDeep, weight: FontWeight.w900)),
+            style: FilledButton.styleFrom(
+              backgroundColor: widget.accent,
+              foregroundColor: Palette.pitchDeep,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
+            ),
+          ),
+        ),
+        if (widget.onPass != null)
+          TextButton(
+            onPressed: widget.onPass,
+            child: Text('PASS', style: AppText.label(15, color: Palette.danger)),
+          ),
+      ]);
 
   Widget _vote(String typed) => Container(
         padding: const EdgeInsets.all(16),

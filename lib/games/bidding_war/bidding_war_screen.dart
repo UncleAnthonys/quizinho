@@ -301,6 +301,7 @@ class _BiddingWarScreenState extends State<BiddingWarScreen>
   Widget _picker(BiddingWarController c, int colour) {
     return PlayerPicker(
       key: ValueKey('bid-$_pickerKey'),
+      gateFor: _t.teamCount == 1 ? c : null, // solo: see the category first
       // Club categories ("Clubs that have won the Premier League") search clubs.
       index: c.category.answersAreClubs ? services.repo.clubIndex : services.repo.players,
       voice: services.voice,

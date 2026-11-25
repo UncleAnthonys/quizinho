@@ -227,6 +227,7 @@ class _Top10ScreenState extends State<Top10Screen> with TickerProviderStateMixin
       ],
       PlayerPicker(
         key: ValueKey('top10-$_pickerKey-${c.turnSerial}'),
+        gateFor: _solo ? c : null, // solo: see the question first
         // First go: the question first, not the keyboard.
         autofocus: c.turnSerial > 0 || _pickerKey > 0,
         index: services.repo.players,

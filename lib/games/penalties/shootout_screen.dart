@@ -271,6 +271,7 @@ class _ShootoutScreenState extends State<ShootoutScreen>
         else
           PlayerPicker(
             key: ValueKey('pens-$_kickNo'),
+            gateFor: _t.teamCount == 1 ? (c, _kickNo) : null, // solo: see the kick first
             index: k.clubs ? services.repo.clubIndex : services.repo.players,
             voice: services.voice,
             accent: Palette.team(colour),
