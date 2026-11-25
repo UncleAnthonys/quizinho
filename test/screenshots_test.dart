@@ -489,8 +489,10 @@ void main() {
       ..buzz(0)
       ..submit(lampard);
     await shot(tester, 'hattrick_one_in', view(c));
+    // Alex buzzes: the clubs drop to one row over the answer box.
+    c.buzz(1);
+    await shot(tester, 'hattrick_answering', view(c));
     c
-      ..buzz(1)
       ..submit(torres)
       ..buzz(2)
       ..submit(weah);

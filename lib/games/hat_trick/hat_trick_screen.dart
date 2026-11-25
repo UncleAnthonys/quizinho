@@ -271,42 +271,53 @@ class HatTrickPickView {
   final int points;
 }
 
-/// The three clubs, and under them every answer so far: who, which of the
-/// three clubs (ticks), and the points.
+/// Each club's colour on the card; an answer's dots light up in it.
+const hatTrickColours = [Color(0xFFFFCC29), Color(0xFF4C8BFF), Color(0xFFFF6FD8)];
+
+/// The three clubs in a triangle, each in its own colour, and under them every
+/// answer so far: who, a dot per club (lit in its colour if he played there),
+/// and the points. [compact] (the answer box is up, or table mode): the clubs
+/// in one row.
 class HatTrickCard extends StatelessWidget {
   const HatTrickCard({super.key, required this.clubs, this.picks = const [], this.compact = false});
   final List<String> clubs;
   final List<HatTrickPickView> picks;
-
-  /// Table mode, or the answer box is up: smaller.
   final bool compact;
 
   @override
   Widget build(BuildContext context) {
-    final size = compact ? 26.0 : 38.0;
+    final tiles = [for (final (i, c) in clubs.indexed) _ClubTile(name: c, colour: hatTrickColours[i], compact: compact)];
     return Padding(
       padding: const EdgeInsets.fromLTRB(16, 6, 16, 8),
       child: Container(
         width: double.infinity,
-        padding: EdgeInsets.symmetric(vertical: compact ? 8 : 14, horizontal: 12),
+        padding: EdgeInsets.all(compact ? 8 : 12),
         decoration: BoxDecoration(
           color: Colors.black.withValues(alpha: 0.3),
           borderRadius: BorderRadius.circular(20),
           border: Border.all(color: Palette.line),
         ),
         child: Column(mainAxisSize: MainAxisSize.min, children: [
-          for (final (i, club) in clubs.indexed) ...[
-            if (i > 0)
-              Icon(Icons.add_rounded, color: Palette.yellow, size: compact ? 18 : 26),
-            FittedBox(
-              fit: BoxFit.scaleDown,
-              child: Row(mainAxisSize: MainAxisSize.min, children: [
-                _Number(i + 1, size: size * 0.55),
-                const SizedBox(width: 8),
-                Text(club.toUpperCase(), style: AppText.headline(size)),
+          if (compact)
+            Row(children: [
+              for (final (i, t) in tiles.indexed) ...[
+                if (i > 0) const SizedBox(width: 6),
+                Expanded(child: t),
+              ],
+            ])
+          else
+            CustomPaint(
+              painter: _TrianglePainter(),
+              child: Column(children: [
+                Row(children: [const Spacer(), Expanded(flex: 4, child: tiles[0]), const Spacer()]),
+                const SizedBox(height: 10),
+                Row(children: [
+                  Expanded(child: tiles[1]),
+                  const SizedBox(width: 44),
+                  Expanded(child: tiles[2]),
+                ]),
               ]),
             ),
-          ],
           if (picks.isNotEmpty) ...[
             SizedBox(height: compact ? 6 : 10),
             const Divider(color: Palette.line, height: 1),
@@ -319,25 +330,77 @@ class HatTrickCard extends StatelessWidget {
   }
 }
 
-class _Number extends StatelessWidget {
-  const _Number(this.n, {required this.size, this.lit});
-  final int n;
-  final double size;
-
-  /// Null: just the number; true/false: a tick for one of the clubs.
-  final bool? lit;
+/// A club on the card: its name on a dark tile edged in its colour.
+class _ClubTile extends StatelessWidget {
+  const _ClubTile({required this.name, required this.colour, required this.compact});
+  final String name;
+  final Color colour;
+  final bool compact;
 
   @override
-  Widget build(BuildContext context) {
-    final colour = switch (lit) { true => Palette.green, false => Palette.card, null => Palette.yellow };
-    return Container(
-      width: size,
-      height: size,
-      alignment: Alignment.center,
-      decoration: BoxDecoration(color: colour, shape: BoxShape.circle),
-      child: Text('$n', style: AppText.headline(size * 0.62, color: lit == false ? Palette.muted : Palette.pitchDeep)),
-    );
+  Widget build(BuildContext context) => Container(
+        height: compact ? 46 : 68,
+        padding: const EdgeInsets.symmetric(horizontal: 8),
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+          color: Palette.pitchDeep,
+          borderRadius: BorderRadius.circular(14),
+          border: Border.all(color: colour, width: 2.5),
+          boxShadow: [BoxShadow(color: colour.withValues(alpha: 0.35), blurRadius: 14)],
+        ),
+        child: FittedBox(
+          fit: BoxFit.scaleDown,
+          child: Text(
+            // Long names on two lines ("MANCHESTER / CITY") rather than tiny.
+            name.toUpperCase().replaceFirst(' ', name.length > 12 ? '\n' : ' '),
+            textAlign: TextAlign.center,
+            style: AppText.headline(compact ? 20 : 28, color: Palette.text).copyWith(height: 1.0),
+          ),
+        ),
+      );
+}
+
+/// The lines joining the three clubs, and a ball in the middle.
+class _TrianglePainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    final top = Offset(size.width / 2, 34);
+    final left = Offset(size.width * 0.25, size.height - 34);
+    final right = Offset(size.width * 0.75, size.height - 34);
+    final line = Paint()
+      ..color = Palette.line
+      ..strokeWidth = 3
+      ..style = PaintingStyle.stroke;
+    canvas.drawPath(Path()..moveTo(top.dx, top.dy)..lineTo(left.dx, left.dy)..lineTo(right.dx, right.dy)..close(), line);
+    final centre = Offset(size.width / 2, (top.dy + left.dy * 2) / 3 + 6);
+    canvas.drawCircle(centre, 13, Paint()..color = Palette.text);
+    canvas.drawCircle(centre, 13, Paint()..color = Palette.pitchDeep..style = PaintingStyle.stroke..strokeWidth = 2);
+    canvas.drawCircle(centre, 4.5, Paint()..color = Palette.pitchDeep);
   }
+
+  @override
+  bool shouldRepaint(_TrianglePainter old) => false;
+}
+
+/// A dot per club: lit in the club's colour if the player was there.
+class _Dot extends StatelessWidget {
+  const _Dot({required this.colour, required this.lit, required this.size});
+  final Color colour;
+  final bool lit;
+  final double size;
+
+  @override
+  Widget build(BuildContext context) => Container(
+        width: size,
+        height: size,
+        margin: const EdgeInsets.only(left: 5),
+        decoration: BoxDecoration(
+          color: lit ? colour : Colors.transparent,
+          shape: BoxShape.circle,
+          border: Border.all(color: lit ? colour : Palette.muted.withValues(alpha: 0.5), width: 2),
+          boxShadow: lit ? [BoxShadow(color: colour.withValues(alpha: 0.6), blurRadius: 8)] : null,
+        ),
+      );
 }
 
 class _PickRow extends StatelessWidget {
@@ -357,13 +420,9 @@ class _PickRow extends StatelessWidget {
             child: Text(pick.player,
                 maxLines: 1, overflow: TextOverflow.ellipsis, style: AppText.headline(compact ? 18 : 22)),
           ),
-          for (final (i, h) in pick.hits.indexed)
-            Padding(
-              padding: const EdgeInsets.only(left: 4),
-              child: _Number(i + 1, size: compact ? 18 : 22, lit: h),
-            ),
+          for (final (i, h) in pick.hits.indexed) _Dot(colour: hatTrickColours[i], lit: h, size: compact ? 14 : 18),
           SizedBox(
-            width: compact ? 34 : 42,
+            width: compact ? 36 : 44,
             child: Text('+${pick.points}',
                 textAlign: TextAlign.right,
                 style: AppText.headline(compact ? 18 : 22, color: pick.points == 0 ? Palette.danger : Palette.yellow)),
