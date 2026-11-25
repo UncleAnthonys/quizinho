@@ -27,11 +27,15 @@ RAW = pathlib.Path(__file__).parent / "raw"
 # Country -> (categories of its capped players, its senior team articles).
 # Germany counts West Germany caps, as the DFB does.
 TEAMS = {
-    **{c: ([f"{c} international footballers"], [f"{c} national football team"]) for c in (
+    # (Wikipedia now files the men as "England men's international footballers".)
+    **{c: ([f"{c} men's international footballers", f"{c} international footballers"],
+           [f"{c} national football team", f"{c} men's national football team"]) for c in (
         "England", "Scotland", "Wales", "Northern Ireland", "Republic of Ireland", "Brazil", "Argentina",
         "France", "Spain", "Portugal", "Netherlands", "Italy")},
-    "Germany": (["Germany international footballers", "West Germany international footballers"],
-                ["Germany national football team", "West Germany national football team"]),
+    "Germany": (["Germany men's international footballers", "Germany international footballers",
+                 "West Germany men's international footballers", "West Germany international footballers"],
+                ["Germany national football team", "West Germany national football team",
+                 "Germany men's national football team", "West Germany men's national football team"]),
     "England women's": (["England women's international footballers"], ["England women's national football team"]),
 }
 
@@ -80,6 +84,9 @@ def main() -> int:
             if v:
                 got[t] = list(v)
         out[country] = got
+        if not got and pages:  # show what the infobox looks like, to fix the reading
+            t, text = next(iter(pages.items()))
+            print(f"  {t}: " + " / ".join(re.findall(r"\|\s*national[^\n]{0,120}", text)[:6]) or text[:400])
         print(f"{country}: {len(titles)} in the category, {len(got)} with caps; "
               f"{sum(1 for c, _ in got.values() if c < 10)} under 10 caps")
     qids = club_qids(sorted({t for g in out.values() for t in g}))
