@@ -73,14 +73,17 @@ class _VoiceTestScreenState extends State<VoiceTestScreen> {
 
   /// Android: compare the ways of listening. Online is what phones without
   /// on-device speech get; on-device (with the answer's name) is newer phones.
-  static const _modes = {'server': 'Online', 'serverSearch': 'Online (search)', 'device': 'On-device'};
+  static const _modes = {'server': 'Online', 'serverSearch': 'Online (search)', 'offline': 'Offline', 'device': 'On-device'};
 
   /// 'compare' (each name said three times, once each way) or one of [_modes].
   String _mode = 'compare';
 
   /// Compare: which of the three takes of this name is next.
   int _take = 0;
-  String get _modeNow => _mode == 'compare' ? _modes.keys.elementAt(_take) : _mode;
+  /// Compare: the two online ways, the same name each (the others are tested
+  /// on their own: Offline in airplane mode).
+  static const _compared = ['server', 'serverSearch'];
+  String get _modeNow => _mode == 'compare' ? _compared[_take] : _mode;
   bool get _android => !kIsWeb && defaultTargetPlatform == TargetPlatform.android;
 
   late AppServices _s;
@@ -171,7 +174,7 @@ class _VoiceTestScreenState extends State<VoiceTestScreen> {
     _s.voice?.stop();
     setState(() {
       // Compare: the same name again the next way, then the next name.
-      if (_android && _mode == 'compare' && _take < _modes.length - 1) {
+      if (_android && _mode == 'compare' && _take < _compared.length - 1) {
         _take++;
         _live = '';
         _last = null;
@@ -254,7 +257,7 @@ class _VoiceTestScreenState extends State<VoiceTestScreen> {
             Text('LISTEN USING', style: AppText.label(12, color: Palette.yellow)),
             const SizedBox(height: 6),
             Wrap(spacing: 8, children: [
-              for (final e in {'compare': 'Compare all 3', ..._modes}.entries)
+              for (final e in {'compare': 'Compare online', ..._modes}.entries)
                 ChoiceChip(
                   label: Text(e.value),
                   selected: _mode == e.key,
@@ -268,8 +271,8 @@ class _VoiceTestScreenState extends State<VoiceTestScreen> {
             ]),
             if (_mode == 'compare') ...[
               const SizedBox(height: 6),
-              Text('Say each name three times - once for each way of listening: now ${_modes[_modeNow]} '
-                  '(${_take + 1} of 3)', style: AppText.label(13, color: Palette.text)),
+              Text('Say each name twice - once for each way of listening: now ${_modes[_modeNow]} '
+                  '(${_take + 1} of 2)', style: AppText.label(13, color: Palette.text)),
             ],
           ],
           const SizedBox(height: 8),

@@ -98,8 +98,8 @@ class QuizinhoSpeechPlugin : FlutterPlugin, MethodChannel.MethodCallHandler, Eve
             "prepareModel" -> result.success("ready") // nothing to build on Android
             "status" -> result.success(
                 mapOf(
-                    "recogniser" to if (online()) "Google online" else if (onDeviceAvailable()) "Google on-device (offline)" else "system",
-                    "name boost" to if (!online() && onDeviceAvailable()) "answers biased (Android 13+)" else "none (online)",
+                    "recogniser" to if (online()) "Google online (search mode)" else "Google offline (downloaded language)",
+                    "name boost" to "none",
                 )
             )
             "listen" -> {
@@ -109,16 +109,15 @@ class QuizinhoSpeechPlugin : FlutterPlugin, MethodChannel.MethodCallHandler, Eve
                 // Voice test only: force one way of listening to compare them.
                 // "auto" (games): on-device with the answers when the phone has it.
                 val mode = call.argument<String>("mode") ?: "auto"
-                val onDevice = when (mode) {
-                    "server", "serverSearch" -> false
-                    "device" -> onDeviceAvailable()
-                    // Games: Google's online recogniser whenever there's
-                    // internet - on a real phone (Galaxy A13) it got 84% of
-                    // hard names where on-device misheard and hung. On-device
-                    // (with the answers' names) only when offline.
-                    else -> !online() && hints.isNotEmpty() && onDeviceAvailable()
-                }
-                result.success(listen(hints, pauseMs, onDevice = onDevice, search = mode == "serverSearch", maxMs = maxMs))
+                // Games ("auto"): Google's recogniser in web search mode when
+                // online - on a Galaxy A13 it got 76/84 hard names (vs 74/86
+                // free-form; on-device heard nothing at all). Offline: the same
+                // recogniser on the phone's downloaded language pack.
+                val isOnline = online()
+                val onDevice = mode == "device" && onDeviceAvailable()
+                val search = mode == "serverSearch" || (mode == "auto" && isOnline)
+                val offline = mode == "offline" || (mode == "auto" && !isOnline)
+                result.success(listen(hints, pauseMs, onDevice = onDevice, search = search, maxMs = maxMs, preferOffline = offline))
             }
             "stop" -> {
                 recognizer?.stopListening()
@@ -145,7 +144,7 @@ class QuizinhoSpeechPlugin : FlutterPlugin, MethodChannel.MethodCallHandler, Eve
         sink?.success(mapOf("type" to "final", "alts" to alternatives))
     }
 
-    private fun listen(hints: List<String>, pauseMs: Int, onDevice: Boolean, search: Boolean = false, maxMs: Int = 30000): Boolean {
+    private fun listen(hints: List<String>, pauseMs: Int, onDevice: Boolean, search: Boolean = false, maxMs: Int = 30000, preferOffline: Boolean = false): Boolean {
         destroy()
         finished = false
         lastPartial = ""
@@ -186,7 +185,7 @@ class QuizinhoSpeechPlugin : FlutterPlugin, MethodChannel.MethodCallHandler, Eve
                 // On-device speech not downloaded for English: try the normal one.
                 if (onDevice && (error == SpeechRecognizer.ERROR_LANGUAGE_NOT_SUPPORTED ||
                         error == SpeechRecognizer.ERROR_LANGUAGE_UNAVAILABLE)) {
-                    listen(hints, pauseMs, onDevice = false, search = search, maxMs = maxMs)
+                    listen(hints, pauseMs, onDevice = false, search = search, maxMs = maxMs, preferOffline = preferOffline)
                     return
                 }
                 emitFinal(if (lastPartial.isBlank()) emptyList() else listOf(lastPartial))
@@ -201,6 +200,7 @@ class QuizinhoSpeechPlugin : FlutterPlugin, MethodChannel.MethodCallHandler, Eve
             )
             putExtra(RecognizerIntent.EXTRA_LANGUAGE, "en-GB")
             putExtra(RecognizerIntent.EXTRA_PARTIAL_RESULTS, true)
+            if (preferOffline) putExtra(RecognizerIntent.EXTRA_PREFER_OFFLINE, true)
             putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 5)
             putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_COMPLETE_SILENCE_LENGTH_MILLIS, pauseMs.toLong())
             if (Build.VERSION.SDK_INT >= 33 && hints.isNotEmpty()) {
