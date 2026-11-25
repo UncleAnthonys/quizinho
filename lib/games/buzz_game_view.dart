@@ -127,9 +127,12 @@ class BuzzGameView extends StatelessWidget {
                 // Typing: smaller still, so the names under the answer box
                 // aren't hidden by the keyboard (phone browsers don't make
                 // room for it).
+                // Solo: full size until the box is tapped (no buzzer, so the
+                // answer box is there from the start).
                 constraints: BoxConstraints(
-                    maxHeight: MediaQuery.sizeOf(context).height * (answerTyping.value ? 0.2 : 0.3)),
-                child: SingleChildScrollView(child: _shaking(question(true))),
+                    maxHeight: MediaQuery.sizeOf(context).height *
+                        (answerTyping.value ? 0.2 : (solo ? 0.5 : 0.3))),
+                child: SingleChildScrollView(child: _shaking(question(!solo || answerTyping.value))),
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(16, 4, 16, 0),
@@ -338,6 +341,9 @@ class BuzzGameView extends StatelessWidget {
             key: ValueKey('solo-${c.questionIndex}'),
             index: services.repo.players,
             voice: services.voice,
+            // The question shows big first; the keyboard comes up (and it
+            // shrinks) when the box is tapped.
+            autofocus: false,
             onPick: c.submitSolo,
             isAnswer: c.isRightAnswer,
             onPass: c.giveUp,

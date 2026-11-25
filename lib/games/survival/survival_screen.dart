@@ -153,6 +153,7 @@ class _SurvivalScreenState extends State<SurvivalScreen>
                   const SizedBox(height: 12),
                   PlayerPicker(
                     key: ValueKey('survival-${q.id}'),
+                    autofocus: false, // the question big first; tap the box to type
                     index: services.repo.players,
                     voice: services.voice,
                     onPick: c.submit,
