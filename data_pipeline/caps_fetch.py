@@ -39,7 +39,7 @@ TEAMS = {
     "England women's": (["England women's international footballers"], ["England women's national football team"]),
 }
 
-TEAM = re.compile(r"\|\s*nationalteam(\d+)\s*=\s*((?:\[\[[^\]]*\]\]|\{\{[^}]*\}\}|[^|\n])*)")
+TEAM = re.compile(r"\|\s*national_?team(\d+)\s*=\s*((?:\[\[[^\]]*\]\]|\{\{[^}]*\}\}|[^|\n])*)")
 LINK = re.compile(r"\[\[([^\]|#]+)")
 
 
@@ -64,8 +64,8 @@ def caps_for(text: str, teams: list[str]) -> tuple[int, int] | None:
         link = LINK.search(val)
         if not link or link.group(1).strip().replace("_", " ").lower() not in want:
             continue
-        c = number((re.search(rf"\|\s*nationalcaps{n}\s*=\s*([^|\n]*)", text) or [None, ""])[1])
-        g = number((re.search(rf"\|\s*nationalgoals{n}\s*=\s*([^|\n]*)", text) or [None, ""])[1])
+        c = number((re.search(rf"\|\s*national_?caps{n}\s*=\s*([^|\n]*)", text) or [None, ""])[1])
+        g = number((re.search(rf"\|\s*national_?goals{n}\s*=\s*([^|\n]*)", text) or [None, ""])[1])
         if c:
             caps += c
             goals += g or 0
