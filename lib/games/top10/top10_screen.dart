@@ -261,7 +261,9 @@ class Top10Layout extends StatelessWidget {
         'prompt': c.list.prompt,
         'asof': c.list.asOf,
         // A wrong name just now: the heading shakes on every phone.
-        if (c.lastEvent == GameEvent.wrong && c.misses.isNotEmpty) 'miss': {'n': c.eventSerial, 'name': c.misses.last},
+        // (The last life's wrong name ends the game - it shakes too.)
+        if ((c.lastEvent == GameEvent.wrong || c.lastEvent == GameEvent.nobodyGotIt) && c.misses.isNotEmpty)
+          'miss': {'n': c.eventSerial, 'name': c.misses.last},
         'finished': c.finished,
         if (t.teamCount == 1) 'solo': true,
         'teams': [for (var i = 0; i < t.teamCount; i++) t.teamName(i)],
