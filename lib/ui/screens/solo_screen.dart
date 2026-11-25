@@ -22,6 +22,7 @@ const soloGames = [
   GameModeId.startingXi,
   GameModeId.ticTacToe,
   GameModeId.top10,
+  GameModeId.hatTrick,
 ];
 
 /// How each game is scored when you play it alone — all out of 100.
@@ -33,6 +34,7 @@ String soloScoring(GameModeId m) => switch (m) {
       GameModeId.startingXi => 'Name as much of the XI as you can. 3 lives.',
       GameModeId.ticTacToe => 'Fill all nine squares in 3 minutes. Faster, with lives to spare, scores more.',
       GameModeId.top10 => 'Name as many of the ten as you can. 3 lives; 10 for each one.',
+      GameModeId.hatTrick => '5 sets of three clubs. A point per club your player played for; all three scores most.',
       _ => '',
     };
 
@@ -66,6 +68,11 @@ List<String> soloRules(GameModeId m) => switch (m) {
       GameModeId.top10 => [
           'Name as many of the ten as you can. Each one is worth 10.',
           'A wrong name costs a life. 3 lives.',
+        ],
+      GameModeId.hatTrick => [
+          'Three clubs appear. Name one player: a point for each of the three he played for.',
+          'All three is a HAT-TRICK - full marks. There’s always at least one.',
+          '5 sets. Hold out for the hat-trick, but don’t let the clock run out.',
         ],
       _ => [soloScoring(m)],
     };

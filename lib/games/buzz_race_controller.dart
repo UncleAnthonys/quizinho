@@ -348,6 +348,30 @@ abstract class BuzzRaceController<Q> extends ChangeNotifier implements BuzzTarge
     notifyListeners();
   }
 
+  /// Hat-Trick: every team gets one answer a question, and every answer
+  /// scores something ([points], maybe 0). The answering team's go is over -
+  /// locked out - and the others carry on with the clock where it was, or,
+  /// once everyone's had a go, the question ends.
+  @protected
+  void endTurn(GameEvent e, {int points = 0}) {
+    final team = answeringTeam;
+    if (team != null) {
+      lockedOut.add(team);
+      roundPoints[team] = (roundPoints[team] ?? 0) + points;
+    }
+    answeringTeam = null;
+    if (lockedOut.length >= teamCount) {
+      _resolve(const BuzzOutcome(), e);
+      return;
+    }
+    phase = BuzzPhase.open;
+    secondsLeft = _pausedOpen.$1;
+    phaseSeconds = _pausedOpen.$2;
+    onReopen();
+    emit(e);
+    notifyListeners();
+  }
+
   void _resolve(BuzzOutcome o, GameEvent e) {
     outcome = o;
     phase = BuzzPhase.resolved;

@@ -202,6 +202,34 @@ class SqliteFootballRepository implements FootballRepository {
   }
 
   @override
+  Future<HatTrickSet?> pickHatTrick({Set<int>? levels, Set<String> exclude = const {}, int eras = Era.allMask}) async {
+    final (where, args) = _filter('id', levels, exclude, eras);
+    final rows = await _db.rawQuery(
+        'SELECT id, club_a, club_b, club_c, difficulty, eras FROM hat_tricks $where ORDER BY RANDOM() LIMIT 1', args);
+    if (rows.isEmpty) return null;
+    final r = rows.first;
+    final ids = [r['club_a'] as String, r['club_b'] as String, r['club_c'] as String];
+    // Every men's player at any of the three, and which ones.
+    final spells = await _db.rawQuery(
+        'SELECT DISTINCT s.player_id, s.club_id FROM career_spells s JOIN players p ON p.id = s.player_id '
+        'WHERE s.club_id IN (?, ?, ?) AND p.women = 0',
+        ids);
+    final played = <String, int>{};
+    for (final s in spells) {
+      final i = ids.indexOf(s['club_id'] as String);
+      final pid = s['player_id'] as String;
+      played[pid] = (played[pid] ?? 0) | (1 << i);
+    }
+    return HatTrickSet(
+      id: r['id'] as String,
+      clubs: [for (final id in ids) _club(id)],
+      played: played,
+      difficulty: r['difficulty'] as int,
+      eras: r['eras'] as int,
+    );
+  }
+
+  @override
   Future<CheckoutCategory?> pickCheckout(
       {Set<int>? levels, Set<String> exclude = const {}, int eras = Era.allMask, int genders = 1}) async {
     final (where, args) = _filter('id', levels, exclude, eras, genders: genders, womenCol: 'women');

@@ -21,6 +21,7 @@ import '../games/tic_tac_toe/tic_tac_toe_screen.dart' show TttLayout, showSquare
 import '../games/top10/top10_screen.dart' show Top10Layout;
 import '../games/career_path/career_path_screen.dart' show CareerTrail;
 import '../games/club_connections/club_connections_screen.dart' show ClubsCard;
+import '../games/hat_trick/hat_trick_screen.dart' show HatTrickCard, HatTrickPickView;
 import '../ui/screens/free_kick_screen.dart' show FreeKickMirror;
 import '../ui/teaser/teaser_widgets.dart' show TeaserChip, TeaserPrompt, TeaserReveal;
 import '../ui/widgets/buzzer_pad.dart' show TeamBuzzer;
@@ -314,6 +315,25 @@ class _GuestGameState extends State<_GuestGame> with SingleTickerProviderStateMi
     }
     final clubs = asList(q['clubs']);
     if (clubs.length == 2) return ClubsCard(a: '${clubs[0]}', b: '${clubs[1]}', compact: compact);
+    if (clubs.length == 3) {
+      final teamsV = asList(v['teams']);
+      return HatTrickCard(
+        clubs: [for (final c in clubs) '$c'],
+        compact: compact,
+        picks: [
+          for (final p in asList(q['picks']))
+            if (asMap(p) case final m)
+              if ((m['team'] as num?)?.toInt() case final t? when t < teamsV.length)
+                HatTrickPickView(
+                  team: '${asMap(teamsV[t])['name'] ?? ''}',
+                  colorIndex: (asMap(teamsV[t])['color'] as num?)?.toInt() ?? 0,
+                  player: '${m['player'] ?? ''}',
+                  hits: [for (final h in asList(m['hits'])) h == true],
+                  points: (m['points'] as num?)?.toInt() ?? 0,
+                ),
+        ],
+      );
+    }
     final spells = [
       for (final sp in asList(q['spells']))
         if (asMap(sp) case final m)
@@ -619,6 +639,18 @@ class _GuestGameState extends State<_GuestGame> with SingleTickerProviderStateMi
           prefix: '${qv['prefix'] ?? 'NAME A PLAYER WHO…'}',
           answers: [for (final n in asList(result['reveal'])) '$n'],
         ),
+      );
+    } else if (result.isNotEmpty && asList(asMap(v['question'])['clubs']).length == 3) {
+      // Hat-Trick: everyone's answer is on the card; under it, the hat-tricks.
+      action = Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(children: [
+          Text('THE HAT-TRICK ANSWERS', style: AppText.label(13, color: Palette.gold)),
+          const SizedBox(height: 8),
+          Wrap(alignment: WrapAlignment.center, spacing: 6, runSpacing: 6, children: [
+            for (final n in asList(result['reveal'])) Chip(label: Text('$n'), backgroundColor: Palette.card),
+          ]),
+        ]),
       );
     } else if (result.isNotEmpty) {
       final scorer = (result['team'] as num?)?.toInt();

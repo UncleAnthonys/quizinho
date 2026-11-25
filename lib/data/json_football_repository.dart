@@ -43,6 +43,19 @@ InMemoryFootballRepository parseFootballJson(String source) {
       ),
   };
 
+  // Hat-Trick: every men's player at each club the sets use.
+  final rosters = <String, List<String>>{
+    for (final e in ((doc['hat_trick_rosters'] as Map?) ?? const {}).entries)
+      e.key as String: [for (final id in e.value as List) id as String],
+  };
+  // Who played where is filled in when a set is picked (InMemoryFootballRepository).
+  HatTrickSet hatTrick(List h) => HatTrickSet(
+      id: h[0] as String,
+      clubs: [club(h[1] as String), club(h[2] as String), club(h[3] as String)],
+      played: const {},
+      difficulty: h[4] as int,
+      eras: h[5] as int);
+
   final labels = {for (final c in (doc['categories'] as List?) ?? const []) c[0] as String: c[1] as String};
   return InMemoryFootballRepository(
     players: players.values.toList(),
@@ -105,6 +118,8 @@ InMemoryFootballRepository parseFootballJson(String source) {
           women: b.length > 6 && b[6] == 1,
         ),
     ],
+    hatTricks: [for (final h in (doc['hat_tricks'] as List?) ?? const []) hatTrick(h as List)],
+    clubRosters: rosters,
     checkouts: [
       for (final c in (doc['checkouts'] as List?) ?? const [])
         CheckoutCategory(

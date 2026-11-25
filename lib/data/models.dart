@@ -270,6 +270,43 @@ class CheckoutCategory {
   final bool women;
 }
 
+/// Hat-Trick: three clubs. A named player scores a point for each one he
+/// played for; all three is a hat-trick. Men's football.
+class HatTrickSet {
+  const HatTrickSet({
+    required this.id,
+    required this.clubs,
+    required this.played,
+    required this.difficulty,
+    this.eras = Era.allMask,
+  });
+  final String id;
+
+  /// Always three.
+  final List<Club> clubs;
+
+  /// Player id -> which of [clubs] he played for (bit 0, 1, 2). Only players
+  /// at one of them at least.
+  final Map<String, int> played;
+  final int difficulty;
+  final int eras;
+
+  /// Which of the three clubs (by index) [playerId] played for.
+  List<bool> clubsOf(String playerId) {
+    final m = played[playerId] ?? 0;
+    return [for (var i = 0; i < 3; i++) m & (1 << i) != 0];
+  }
+
+  /// How many of the three (0-3).
+  int hits(String playerId) => clubsOf(playerId).where((x) => x).length;
+
+  /// Everyone who played for all three.
+  List<String> get heroes => [for (final e in played.entries) if (e.value == 7) e.key];
+
+  /// Everyone who played for exactly two.
+  List<String> get twos => [for (final e in played.entries) if (hits(e.key) == 2) e.key];
+}
+
 /// Men's football, women's, or both — bit flags like eras (1 men, 2 women).
 enum FootballGender {
   men(1, "Men's"),

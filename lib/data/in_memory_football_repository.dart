@@ -14,6 +14,8 @@ class InMemoryFootballRepository implements FootballRepository {
     this.matches = const [],
     this.bidding = const [],
     this.checkouts = const [],
+    this.hatTricks = const [],
+    this.clubRosters = const {},
     List<Club> clubs = const [],
     Random? random,
     this.dataStatus = 'test',
@@ -32,6 +34,12 @@ class InMemoryFootballRepository implements FootballRepository {
   final List<HistoricMatch> matches;
   final List<BiddingCategory> bidding;
   final List<CheckoutCategory> checkouts;
+  final List<HatTrickSet> hatTricks;
+
+  /// Club id -> every player who played there: fills in a Hat-Trick set's
+  /// [HatTrickSet.played] when it's picked (the web data). Sets that come
+  /// with it already (tests) are used as they are.
+  final Map<String, List<String>> clubRosters;
   final List<Club> _clubs;
   final Random _random;
 
@@ -91,6 +99,19 @@ class InMemoryFootballRepository implements FootballRepository {
   Future<CheckoutCategory?> pickCheckout(
           {Set<int>? levels, Set<String> exclude = const {}, int eras = Era.allMask, int genders = 1}) async =>
       _pick(checkouts, (c) => c.id, (c) => c.difficulty, (c) => c.eras, levels, exclude, eras, (c) => c.women, genders);
+
+  @override
+  Future<HatTrickSet?> pickHatTrick({Set<int>? levels, Set<String> exclude = const {}, int eras = Era.allMask}) async {
+    final h = _pick(hatTricks, (h) => h.id, (h) => h.difficulty, (h) => h.eras, levels, exclude, eras, (h) => false, 1);
+    if (h == null || h.played.isNotEmpty) return h;
+    final played = <String, int>{};
+    for (final (i, c) in h.clubs.indexed) {
+      for (final pid in clubRosters[c.id] ?? const <String>[]) {
+        played[pid] = (played[pid] ?? 0) | (1 << i);
+      }
+    }
+    return HatTrickSet(id: h.id, clubs: h.clubs, played: played, difficulty: h.difficulty, eras: h.eras);
+  }
 
   @override
   Future<List<ClubConnection>> allClubConnections({int eras = Era.allMask, int genders = 1}) async =>

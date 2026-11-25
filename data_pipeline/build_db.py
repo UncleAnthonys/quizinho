@@ -26,6 +26,7 @@ import itertools
 import json
 import math
 import pathlib
+import random
 import re
 import sqlite3
 import sys
@@ -121,6 +122,13 @@ CREATE TABLE checkout_answers (
   apps INTEGER, goals INTEGER  -- NULL = played there, but no numbers on record
 );
 CREATE INDEX idx_co_ans ON checkout_answers(category_id);
+-- Hat-Trick: three clubs; a named player scores a point per club he played
+-- for (looked up in career_spells, by club).
+CREATE TABLE hat_tricks (
+  id TEXT PRIMARY KEY, club_a TEXT NOT NULL, club_b TEXT NOT NULL, club_c TEXT NOT NULL,
+  difficulty INTEGER NOT NULL, eras INTEGER NOT NULL
+);
+CREATE INDEX idx_spell_club ON career_spells(club_id);
 """
 
 POSITIONS = {"GK", "RB", "CB", "LB", "RWB", "LWB", "DM", "CM", "AM", "RM", "LM", "RW", "LW", "ST"}
@@ -488,6 +496,96 @@ def generate_connections(clubs, players):
         out.append({"id": f"{a}|{b}", "a": a, "b": b, "answers": sorted(shared), "best": best,
                     "difficulty": diff, "eras": eras or 31})
     return out
+
+
+# ---- Hat-Trick -------------------------------------------------------------
+# Three clubs; name a player - a point for each of them he played for, and a
+# hat-trick for all three. Every set has someone who played for all three, a
+# few at most (so it's still a find), and no giveaways: every two of the clubs
+# share other players too, so an odd pairing doesn't point straight at the one
+# player who links them. Difficulty by how many 2-pointers there are.
+HAT_TRICK_MAX_HEROES = 5
+HAT_TRICK_PER_LEVEL = 700
+HAT_TRICK_CLUB_CAP = 30  # times one club appears in a level (keeps the mix wide)
+# Every set has a British club; the others from leagues people follow (South
+# America only on hard).
+HAT_TRICK_LEAGUES = TOP5 | {"POR", "NED", "TUR"}
+HAT_TRICK_HARD_LEAGUES = HAT_TRICK_LEAGUES | {"BRA", "ARG"}
+
+
+def generate_hat_tricks(clubs, players):
+    """[{id, clubs: [a, b, c], difficulty, eras}] - men's clubs and players."""
+    ok = {cid for cid, c in clubs.items() if not c["women"] and c["fame"] >= CONNECTION_MIN_CLUB_FAME}
+    own = {}
+    for pid, p in players.items():
+        if p.get("women"):
+            continue
+        cs = sorted({s["club"] for s in p["spells"] if s["club"] in ok})
+        if len(cs) >= 2:
+            own[pid] = cs
+    pairs: dict[tuple, set] = {}
+    trips: dict[tuple, set] = {}
+    for pid, cs in own.items():
+        for a, b in itertools.combinations(cs, 2):
+            pairs.setdefault((a, b), set()).add(pid)
+        for t in itertools.combinations(cs, 3):
+            trips.setdefault(t, set()).add(pid)
+    levels: dict[int, list] = {1: [], 2: [], 3: []}
+    for t, heroes in trips.items():
+        if len(heroes) > HAT_TRICK_MAX_HEROES:
+            continue
+        best = max(players[h]["fame"] for h in heroes)
+        others = [pairs[x] - heroes for x in itertools.combinations(t, 2)]
+        if min(len(o) for o in others) < 2:
+            continue  # a giveaway: two of the clubs share (almost) nobody else
+        two = len(set().union(*others))
+        fames = [clubs[c]["fame"] for c in t]
+        countries = [clubs[c]["country"] for c in t]
+        if not any(k in ("GBR", "ENG", "SCO") for k in countries):
+            continue
+        common = all(k in HAT_TRICK_LEAGUES for k in countries)
+        if common and best >= 4 and two >= 20 and min(fames) >= 4:
+            level = 1
+        elif common and best >= 4 and two >= 8 and sorted(fames)[1] >= 4:
+            level = 2
+        elif all(k in HAT_TRICK_HARD_LEAGUES for k in countries) and best >= 3 and two >= 4 and max(fames) >= 4:
+            level = 3
+        else:
+            continue
+        eras = 0
+        for h in heroes:
+            eras |= spells_mask([s for s in players[h]["spells"] if s["club"] in t])
+        levels[level].append({"id": "|".join(t), "clubs": list(t), "difficulty": level, "eras": eras or 31})
+    rng = random.Random(2026)
+    out = []
+    for level, sets in levels.items():
+        rng.shuffle(sets)
+        used: dict[str, int] = {}
+        kept = 0
+        for h in sets:
+            if kept >= HAT_TRICK_PER_LEVEL:
+                break
+            if any(used.get(c, 0) >= HAT_TRICK_CLUB_CAP for c in h["clubs"]):
+                continue
+            for c in h["clubs"]:
+                used[c] = used.get(c, 0) + 1
+            out.append(h)
+            kept += 1
+    return out
+
+
+def hat_trick_rosters(hat_tricks, players) -> dict[str, list[str]]:
+    """Every men's player at each club the sets use (for the web build, which
+    has no career table): a point for each club a named player was at."""
+    want = {c for h in hat_tricks for c in h["clubs"]}
+    out: dict[str, set] = {c: set() for c in want}
+    for pid, p in players.items():
+        if p.get("women"):
+            continue
+        for s in p["spells"]:
+            if s["club"] in want:
+                out[s["club"]].add(pid)
+    return {c: sorted(v) for c, v in sorted(out.items())}
 
 
 # ---- grid categories -----------------------------------------------------
@@ -1041,7 +1139,8 @@ def match_eras(m) -> int:
     return era_mask(year, year)
 
 
-def write_db(path: pathlib.Path, version: int, clubs, players, matches, connections, careers, bidding, checkouts, grid):
+def write_db(path: pathlib.Path, version: int, clubs, players, matches, connections, careers, bidding, checkouts, grid,
+             hat_tricks):
     if path.exists():
         path.unlink()
     con = sqlite3.connect(path)
@@ -1099,6 +1198,8 @@ def write_db(path: pathlib.Path, version: int, clubs, players, matches, connecti
         con.executemany("INSERT INTO checkout_answers VALUES (?,?,?,?)",
                         [(c["id"], pid, a, g) for pid, (a, g) in c["values"].items()]
                         + [(c["id"], pid, None, None) for pid in c["no_stats"]])
+    con.executemany("INSERT INTO hat_tricks VALUES (?,?,?,?,?,?)",
+                    [(h["id"], *h["clubs"], h["difficulty"], h["eras"]) for h in hat_tricks])
     con.commit()
     con.execute("VACUUM")
     con.close()
@@ -1129,7 +1230,8 @@ def league_totals(p, clubs) -> tuple[int, int] | None:
     return sum(a for a, _ in stats.values()), sum(g for _, g in stats.values())
 
 
-def write_json(path: pathlib.Path, version: int, clubs, players, matches, connections, careers, bidding, checkouts, grid):
+def write_json(path: pathlib.Path, version: int, clubs, players, matches, connections, careers, bidding, checkouts, grid,
+               hat_tricks):
     """Same content as the SQLite file, for the web build (no SQLite plugin in browsers)."""
     doc = {
         "db_version": version,
@@ -1160,6 +1262,10 @@ def write_json(path: pathlib.Path, version: int, clubs, players, matches, connec
         # 501: [id, prompt, difficulty, eras, 1 if women's, [[player, apps, goals]...], [played, no numbers]]
         "checkouts": [[c["id"], c["prompt"], c["difficulty"], c["eras"], int(c["women"]),
                        [[pid, a, g] for pid, (a, g) in sorted(c["values"].items())], c["no_stats"]] for c in checkouts],
+        # Hat-Trick: [id, club, club, club, difficulty, eras]; and every men's
+        # player at those clubs (the web has no career table to look them up).
+        "hat_tricks": [[h["id"], *h["clubs"], h["difficulty"], h["eras"]] for h in hat_tricks],
+        "hat_trick_rosters": hat_trick_rosters(hat_tricks, players),
         "matches": [
             {"id": m["id"], "title": m["title"], "competition": m["competition"], "date": m["date"],
              "home": m["home"], "away": m["away"], "score": m["score"], "target": m["target"],
@@ -1209,6 +1315,7 @@ def main() -> int:
     bidding = generate_bidding(clubs, players, connections, countries) + curated
     add_pointless_scores(bidding, players, clubs)
     checkouts = generate_checkouts(clubs, players) + load_generated_checkouts(players, problems)
+    hat_tricks = generate_hat_tricks(clubs, players)
     by_diff = {d: sum(1 for c in connections if c["difficulty"] == d) for d in (1, 2, 3, 4)}
     print(f"players={len(players)} clubs={len(clubs)} matches={len(matches)} "
           f"connections={len(connections)} {by_diff} careers={len(careers)} bidding={len(bidding)} "
@@ -1218,8 +1325,11 @@ def main() -> int:
         return 0
 
     ASSETS.mkdir(parents=True, exist_ok=True)
-    write_db(ASSETS / "football.db", args.version, clubs, players, matches, connections, careers, bidding, checkouts, grid)
-    write_json(ASSETS / "football.json", args.version, clubs, players, matches, connections, careers, bidding, checkouts, grid)
+    print(f"hat_tricks={len(hat_tricks)} { {d: sum(1 for h in hat_tricks if h['difficulty'] == d) for d in (1, 2, 3)} }")
+    write_db(ASSETS / "football.db", args.version, clubs, players, matches, connections, careers, bidding, checkouts, grid,
+             hat_tricks)
+    write_json(ASSETS / "football.json", args.version, clubs, players, matches, connections, careers, bidding, checkouts, grid,
+               hat_tricks)
     (ASSETS / "football_db_version.txt").write_text(str(args.version), encoding="utf-8")
     print("wrote", ASSETS / "football.db", "version", args.version)
     return 0

@@ -33,7 +33,12 @@ class BuzzGameView extends StatelessWidget {
     this.onFaceOffReady,
     this.remoteAnswerer,
     this.phoneTeams = const {},
+    this.resolvedHeader,
   });
+
+  /// In place of "+2 Thierry Henry" / "NOBODY GOT IT" when the question ends
+  /// (Hat-Trick: every team answered, and scored something).
+  final Widget? resolvedHeader;
 
   /// Teams whose players buzz on their own phones (in a face-off: the named
   /// player's phone has joined) — their buzzer isn't on this screen.
@@ -450,7 +455,9 @@ class BuzzGameView extends StatelessWidget {
             child: SingleChildScrollView(
           padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
           child: Column(children: [
-            if (o != null && o.scored) ...[
+            if (resolvedHeader case final header?)
+              header
+            else if (o != null && o.scored) ...[
               TeamChip(
                 name: faceOff == null ? t.teamName(o.team!) : '${faceOff!.nameFor(o.team!)} · ${t.teamName(o.team!)}',
                 colorIndex: t.config.teams[o.team!].colorIndex,

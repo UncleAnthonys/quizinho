@@ -22,6 +22,8 @@ import 'package:quizinho/games/checkout_501/checkout_screen.dart';
 import 'package:quizinho/games/buzz_game_view.dart';
 import 'package:quizinho/games/club_connections/club_connections_controller.dart';
 import 'package:quizinho/games/club_connections/club_connections_screen.dart';
+import 'package:quizinho/games/hat_trick/hat_trick_controller.dart';
+import 'package:quizinho/games/hat_trick/hat_trick_screen.dart';
 import 'package:quizinho/games/career_path/career_path_controller.dart';
 import 'package:quizinho/games/career_path/career_path_screen.dart';
 import 'package:quizinho/games/game_screen_support.dart';
@@ -47,7 +49,7 @@ import 'package:quizinho/multiplayer/memory_room_link.dart';
 import 'package:quizinho/multiplayer/room.dart' show GuestRoom, HostRoom, RoomMember;
 
 import 'package:quizinho/data/json_football_repository.dart';
-import 'package:quizinho/data/models.dart' show CareerPath, CareerSpell, Club, Difficulty, Player;
+import 'package:quizinho/data/models.dart' show CareerPath, CareerSpell, Club, Difficulty, HatTrickSet, Player;
 import 'package:quizinho/games/tic_tac_toe/tic_tac_toe_controller.dart';
 import 'package:quizinho/ui/screens/round_summary_screen.dart';
 import 'package:quizinho/domain/warm_up_cup.dart';
@@ -433,6 +435,81 @@ void main() {
             await tester.pump(const Duration(seconds: 1));
           });
     }
+  }, skip: !_shots);
+
+  // Hat-Trick: three clubs, every team's answer under them as it goes in.
+  testWidgets('Hat-Trick', (tester) async {
+    final t = Tournament(TournamentConfig(teams: [
+      TeamSetup(name: 'Gav', colorIndex: 0),
+      TeamSetup(name: 'Alex', colorIndex: 1),
+      TeamSetup(name: 'Sam', colorIndex: 2),
+    ]));
+    final round = RoundContext(tournament: t, multiplier: 1, onComplete: (_) {});
+    const set = HatTrickSet(
+      id: 'milan|city|chelsea',
+      clubs: [
+        Club(id: 'milan', name: 'AC Milan', fame: 5),
+        Club(id: 'city', name: 'Manchester City', fame: 5),
+        Club(id: 'chelsea', name: 'Chelsea', fame: 5),
+      ],
+      played: {'weah': 7, 'lampard': 6, 'torres': 5, 'kane': 0},
+      difficulty: 1,
+    );
+    const lampard = Player(id: 'lampard', name: 'Frank Lampard', fame: 5);
+    const weah = Player(id: 'weah', name: 'George Weah', fame: 5);
+    const torres = Player(id: 'torres', name: 'Fernando Torres', fame: 5);
+    Widget view(HatTrickController c, {Widget? header}) => BuzzGameView(
+          round: round,
+          controller: c,
+          question: (compact) => HatTrickCard(
+            clubs: [for (final club in set.clubs) club.name],
+            compact: compact,
+            picks: [
+              for (final e in c.picks.entries)
+                HatTrickPickView(
+                  team: t.teamName(e.key),
+                  colorIndex: t.config.teams[e.key].colorIndex,
+                  player: e.value.player.name,
+                  hits: e.value.clubs,
+                  points: e.value.points,
+                ),
+            ],
+          ),
+          resolvedHeader: header,
+          resolvedDetail: Column(children: [
+            Text('THE HAT-TRICK ANSWER', style: AppText.label(13, color: Palette.gold)),
+            const SizedBox(height: 6),
+            const Chip(label: Text('George Weah')),
+          ]),
+          timerLabel: 'YOUR GO',
+          commentary: null,
+          onFinished: () {},
+        );
+    final c = HatTrickController(teamCount: 3, questions: [set])
+      ..buzz(0)
+      ..submit(lampard);
+    await shot(tester, 'hattrick_one_in', view(c));
+    c
+      ..buzz(1)
+      ..submit(torres)
+      ..buzz(2)
+      ..submit(weah);
+    await shot(tester, 'hattrick_all_in',
+        view(c, header: Text('HAT-TRICK!', style: AppText.headline(34, color: Palette.yellow))));
+    final soloT = Tournament(TournamentConfig(teams: [TeamSetup(name: 'You', colorIndex: 0)]));
+    await shot(
+        tester,
+        'hattrick_solo',
+        BuzzGameView(
+          round: RoundContext(tournament: soloT, multiplier: 1, onComplete: (_) {}),
+          controller: HatTrickController(teamCount: 1, questions: [set]),
+          question: (compact) =>
+              HatTrickCard(clubs: [for (final club in set.clubs) club.name], compact: compact),
+          resolvedDetail: const SizedBox(),
+          timerLabel: 'CLOCK',
+          commentary: null,
+          onFinished: () {},
+        ));
   }, skip: !_shots);
 
   // The pundit's line in place of the game's title, and the answering

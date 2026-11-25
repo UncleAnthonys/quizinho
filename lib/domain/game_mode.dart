@@ -99,6 +99,18 @@ enum GameModeId {
     ],
     whoPlays: 'The named player guesses; their teammates describe. Other teams keep quiet!',
   ),
+  hatTrick(
+    title: 'Hat-Trick',
+    tagline: 'Three clubs. Find the player who played for all three',
+    playable: true,
+    rules: [
+      'Three clubs appear. Buzz in and name a player: 1 point for each of the three he played for.',
+      'All three is a HAT-TRICK: 3 points, plus a bonus point. There’s always at least one.',
+      'Every team gets one answer. Lock in a 2-pointer early, or hold out for the hat-trick - but don’t let the clock run out.',
+      'Once a player’s been named, he’s gone.',
+    ],
+    whoPlays: 'Each team buzzes in once per set - confer, but be quick.',
+  ),
   top10(
     title: 'Top 10',
     tagline: 'Name as many of the ten as you can',
@@ -130,7 +142,8 @@ enum GameModeId {
   final String whoPlays;
 
   /// Has women's questions. Line-ups and Heads Up packs are men's only so far.
-  bool get hasWomensGame => this != GameModeId.startingXi && this != GameModeId.headsUp && this != GameModeId.top10;
+  bool get hasWomensGame =>
+      this != GameModeId.startingXi && this != GameModeId.headsUp && this != GameModeId.top10 && this != GameModeId.hatTrick;
 
   /// Real games (not the wildcard wrapper) available today.
   static List<GameModeId> get concreteGames =>

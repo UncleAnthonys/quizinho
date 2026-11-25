@@ -37,6 +37,9 @@ abstract class FootballRepository {
   Future<CheckoutCategory?> pickCheckout(
       {Set<int>? levels, Set<String> exclude = const {}, int eras = Era.allMask, int genders = 1});
 
+  /// Hat-Trick sets are men's football only.
+  Future<HatTrickSet?> pickHatTrick({Set<int>? levels, Set<String> exclude = const {}, int eras = Era.allMask});
+
   /// Every club pairing with its answers (for grid games like Tic-Tac-Toe).
   Future<List<ClubConnection>> allClubConnections({int eras = Era.allMask, int genders = 1});
 
@@ -141,6 +144,16 @@ class ChallengeSource {
         (l, e, x) => repo.pickCheckout(
             levels: l == null ? null : {for (final v in l) v > 3 ? 3 : v}, exclude: x, eras: e, genders: genders),
         (c) => c.id,
+      );
+
+  /// Hat-Trick has 3 levels; expert plays hard.
+  Future<HatTrickSet?> hatTrick(Difficulty d, Set<String> used, {int eras = Era.allMask}) => _fresh(
+        'hattrick',
+        d,
+        used,
+        eras,
+        (l, e, x) => repo.pickHatTrick(levels: l == null ? null : {for (final v in l) v > 3 ? 3 : v}, exclude: x, eras: e),
+        (h) => h.id,
       );
 
   /// Bidding War has 3 levels; expert plays hard. [where] narrows the
