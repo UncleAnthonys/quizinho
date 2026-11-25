@@ -271,11 +271,9 @@ class HatTrickPickView {
   final int points;
 }
 
-/// Each club's edge colour on the card.
-const hatTrickColours = [Color(0xFFFFCC29), Color(0xFF4C8BFF), Color(0xFFFF6FD8)];
-
-/// What to do, the three clubs in a triangle, and under them every answer so
-/// far: who, which of the clubs he played for, and the points. [compact] (the answer box is up, or table mode): the clubs
+/// What to do, the three clubs side by side, and under them every answer so
+/// far: who, which of the clubs he played for, and the points. [compact]
+/// (the answer box is up, or table mode): smaller, no instructions. [compact] (the answer box is up, or table mode): the clubs
 /// in one row.
 class HatTrickCard extends StatelessWidget {
   const HatTrickCard({super.key, required this.clubs, this.picks = const [], this.compact = false});
@@ -285,7 +283,7 @@ class HatTrickCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final tiles = [for (final (i, c) in clubs.indexed) _ClubTile(name: c, colour: hatTrickColours[i], compact: compact)];
+    final tiles = [for (final c in clubs) _ClubTile(name: c, compact: compact)];
     return Padding(
       padding: const EdgeInsets.fromLTRB(16, 6, 16, 8),
       child: Container(
@@ -306,26 +304,12 @@ class HatTrickCard extends StatelessWidget {
             Text('1 point for each club he played for', style: AppText.label(13)),
             const SizedBox(height: 10),
           ],
-          if (compact)
-            Row(children: [
-              for (final (i, t) in tiles.indexed) ...[
-                if (i > 0) const SizedBox(width: 6),
-                Expanded(child: t),
-              ],
-            ])
-          else
-            CustomPaint(
-              painter: _TrianglePainter(),
-              child: Column(children: [
-                Row(children: [const Spacer(), Expanded(flex: 4, child: tiles[0]), const Spacer()]),
-                const SizedBox(height: 18),
-                Row(children: [
-                  Expanded(child: tiles[1]),
-                  const SizedBox(width: 52),
-                  Expanded(child: tiles[2]),
-                ]),
-              ]),
-            ),
+          Row(children: [
+            for (final (i, t) in tiles.indexed) ...[
+              if (i > 0) SizedBox(width: compact ? 6 : 8),
+              Expanded(child: t),
+            ],
+          ]),
           if (picks.isNotEmpty) ...[
             SizedBox(height: compact ? 6 : 10),
             const Divider(color: Palette.line, height: 1),
@@ -338,23 +322,22 @@ class HatTrickCard extends StatelessWidget {
   }
 }
 
-/// A club on the card: its name on a dark tile edged in its colour.
+/// A club on the card: its name on a dark tile edged in yellow.
 class _ClubTile extends StatelessWidget {
-  const _ClubTile({required this.name, required this.colour, required this.compact});
+  const _ClubTile({required this.name, required this.compact});
   final String name;
-  final Color colour;
   final bool compact;
 
   @override
   Widget build(BuildContext context) => Container(
-        height: compact ? 46 : 68,
+        height: compact ? 46 : 84,
         padding: const EdgeInsets.symmetric(horizontal: 8),
         alignment: Alignment.center,
         decoration: BoxDecoration(
           color: Palette.pitchDeep,
           borderRadius: BorderRadius.circular(14),
-          border: Border.all(color: colour, width: 2.5),
-          boxShadow: [BoxShadow(color: colour.withValues(alpha: 0.35), blurRadius: 14)],
+          border: Border.all(color: Palette.yellow, width: 2.5),
+          boxShadow: [BoxShadow(color: Palette.yellow.withValues(alpha: 0.25), blurRadius: 12)],
         ),
         child: FittedBox(
           fit: BoxFit.scaleDown,
@@ -362,32 +345,10 @@ class _ClubTile extends StatelessWidget {
             // Long names on two lines ("MANCHESTER / CITY") rather than tiny.
             name.toUpperCase().replaceFirst(' ', name.length > 12 ? '\n' : ' '),
             textAlign: TextAlign.center,
-            style: AppText.headline(compact ? 20 : 28, color: Palette.text).copyWith(height: 1.0),
+            style: AppText.headline(compact ? 20 : 26, color: Palette.text).copyWith(height: 1.0),
           ),
         ),
       );
-}
-
-/// The lines joining the three clubs, and a ball in the middle.
-class _TrianglePainter extends CustomPainter {
-  @override
-  void paint(Canvas canvas, Size size) {
-    final top = Offset(size.width / 2, 34);
-    final left = Offset(size.width * 0.25, size.height - 34);
-    final right = Offset(size.width * 0.75, size.height - 34);
-    final line = Paint()
-      ..color = Palette.line
-      ..strokeWidth = 3
-      ..style = PaintingStyle.stroke;
-    canvas.drawPath(Path()..moveTo(top.dx, top.dy)..lineTo(left.dx, left.dy)..lineTo(right.dx, right.dy)..close(), line);
-    final centre = Offset(size.width / 2, (top.dy + left.dy * 2) / 3 + 6);
-    canvas.drawCircle(centre, 13, Paint()..color = Palette.text);
-    canvas.drawCircle(centre, 13, Paint()..color = Palette.pitchDeep..style = PaintingStyle.stroke..strokeWidth = 2);
-    canvas.drawCircle(centre, 4.5, Paint()..color = Palette.pitchDeep);
-  }
-
-  @override
-  bool shouldRepaint(_TrianglePainter old) => false;
 }
 
 /// One answer: the team, the player, which of the clubs he played for (in
