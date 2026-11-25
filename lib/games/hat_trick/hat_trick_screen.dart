@@ -204,6 +204,7 @@ class _HatTrickScreenState extends State<HatTrickScreen>
       controller: c,
       commentary: commentaryText,
       timerLabel: c.lockedOut.isEmpty ? 'BUZZ IN' : 'YOUR GO',
+      lockedLabel: 'ANSWERED',
       onFinished: () => widget.round.onComplete(c.result()),
       remoteAnswerer: _bridge?.remote?.name,
       phoneTeams: _bridge?.phoneTeams() ?? const {},

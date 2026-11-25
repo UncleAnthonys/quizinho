@@ -13,6 +13,7 @@ class BuzzerPad extends StatelessWidget {
     this.lockedOut = const {},
     this.faceOff,
     this.onPhone = const {},
+    this.lockedLabel = 'LOCKED OUT',
   });
 
   /// Teams buzzing on their own phones: no buzzer here.
@@ -25,6 +26,9 @@ class BuzzerPad extends StatelessWidget {
   final bool Function(int team) canBuzz;
   final void Function(int team) onBuzz;
   final Set<int> lockedOut;
+
+  /// On a locked-out buzzer ("ANSWERED" in Hat-Trick, where it isn't a miss).
+  final String lockedLabel;
 
   @override
   Widget build(BuildContext context) {
@@ -52,6 +56,7 @@ class BuzzerPad extends StatelessWidget {
                       colorIndex: tournament.config.teams[team].colorIndex,
                       enabled: canBuzz(team) && !onPhone.contains(team),
                       locked: lockedOut.contains(team),
+                      lockedLabel: lockedLabel,
                       onPhone: onPhone.contains(team),
                       onBuzz: () => onBuzz(team),
                     ),
@@ -75,7 +80,10 @@ class TeamBuzzer extends StatefulWidget {
     required this.onBuzz,
     this.quarterTurns = 0,
     this.onPhone = false,
+    this.lockedLabel = 'LOCKED OUT',
   });
+
+  final String lockedLabel;
 
   /// This team buzzes on their own phone(s), not here.
   final bool onPhone;
@@ -132,7 +140,7 @@ class TeamBuzzerState extends State<TeamBuzzer> {
               Icon(widget.locked ? Icons.lock : (widget.onPhone ? Icons.phone_iphone_rounded : Icons.touch_app),
                   color: active ? on : Palette.muted, size: 34),
               const SizedBox(height: 4),
-              Text(widget.locked ? 'LOCKED OUT' : (widget.onPhone ? 'ON PHONE' : 'BUZZ'),
+              Text(widget.locked ? widget.lockedLabel : (widget.onPhone ? 'ON PHONE' : 'BUZZ'),
                   style: AppText.headline(34, color: active ? on : Palette.muted)),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8),

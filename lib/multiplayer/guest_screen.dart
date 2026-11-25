@@ -628,7 +628,9 @@ class _GuestGameState extends State<_GuestGame> with SingleTickerProviderStateMi
           ? 'TIME! IT STAYS OPEN BETWEEN GAMES - FOR 3 POINTS'
           : teaser
               ? 'YOUR TEAM’S HAD ITS GUESS'
-              : 'LOCKED OUT - WAIT FOR THE STEAL');
+              : asList(asked['clubs']).length == 3
+                  ? 'YOUR TEAM’S HAD ITS GO'
+                  : 'LOCKED OUT - WAIT FOR THE STEAL');
     } else if (teaser && result.isNotEmpty && result['scored'] != true) {
       // Nobody got the teaser: the main phone's reveal - the question, then the answers.
       final qv = asMap(v['question']);

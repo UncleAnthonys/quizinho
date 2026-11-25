@@ -34,7 +34,11 @@ class BuzzGameView extends StatelessWidget {
     this.remoteAnswerer,
     this.phoneTeams = const {},
     this.resolvedHeader,
+    this.lockedLabel = 'LOCKED OUT',
   });
+
+  /// On the buzzer of a team that's had its go.
+  final String lockedLabel;
 
   /// In place of "+2 Thierry Henry" / "NOBODY GOT IT" when the question ends
   /// (Hat-Trick: every team answered, and scored something).
@@ -246,6 +250,7 @@ class BuzzGameView extends StatelessWidget {
                     colorIndex: t.config.teams[team].colorIndex,
                     enabled: c.canBuzz(team) && !awaitingFaceOff && !phoneTeams.contains(team),
                     locked: c.lockedOut.contains(team),
+                    lockedLabel: lockedLabel,
                     onPhone: phoneTeams.contains(team),
                     onBuzz: () {
                       primeKeyboardIfTyping(services.voice);
@@ -409,6 +414,7 @@ class BuzzGameView extends StatelessWidget {
                   c.buzz(team);
                 },
                 lockedOut: c.lockedOut,
+                lockedLabel: lockedLabel,
                 faceOff: faceOff,
                 onPhone: phoneTeams,
               ),
