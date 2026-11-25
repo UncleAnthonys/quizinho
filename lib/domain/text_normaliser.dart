@@ -133,3 +133,25 @@ String _wordSkeleton(String word) {
   }
   return out.toString();
 }
+
+/// Words that belong to the surname that follows them.
+const _particles = {
+  'mac', 'mc', 'di', 'de', 'da', 'do', 'dos', 'das', 'del', 'della', 'van', 'von', 'der', 'den',
+  'ter', 'ten', 'le', 'la', 'el', 'al', 'ben', 'bin', 'st', 'st.',
+};
+
+/// A name split into first names and surname, keeping the surname's own
+/// little words: "Virgil van Dijk" -> ("Virgil", "van Dijk"), "Ángel Di
+/// María" -> ("Ángel", "Di María"), "Richarlison" -> ("", "Richarlison").
+(String, String) splitName(String name) {
+  final words = name.trim().split(RegExp(r'\s+'));
+  if (words.length < 2) return ('', name.trim());
+  var start = words.length - 1;
+  while (start > 1 && _particles.contains(words[start - 1].toLowerCase())) {
+    start--;
+  }
+  return (words.sublist(0, start).join(' '), words.sublist(start).join(' '));
+}
+
+/// The surname as shown on a board: "van Dijk", not "Dijk".
+String surnameOf(String name) => splitName(name).$2;

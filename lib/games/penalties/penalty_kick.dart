@@ -2,6 +2,7 @@ import 'dart:math';
 
 import '../../data/football_repository.dart';
 import '../../data/models.dart';
+import '../../domain/text_normaliser.dart';
 
 /// The kinds of question a penalty can be: one quick question, one go.
 enum KickKind {
@@ -226,7 +227,7 @@ class KickSource {
       ..sort((a, b) => (_repo.players.byId(b.playerId)?.fame ?? 0).compareTo(_repo.players.byId(a.playerId)?.fame ?? 0));
     if (ranked.isEmpty) return null;
     final gap = ranked[_random.nextInt(min(4, ranked.length))];
-    String surname(String n) => n.split(' ').last.toUpperCase();
+    String surname(String n) => surnameOf(n).toUpperCase();
     return PenaltyKick(
       kind: KickKind.lineupSpot,
       ask: _up('${m.home} v ${m.away} · ${m.score} · ${m.year}'),

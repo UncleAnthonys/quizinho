@@ -7,6 +7,7 @@ import '../../core/sound_service.dart';
 import '../../core/theme.dart';
 import '../../data/models.dart';
 import '../../domain/game_mode.dart';
+import '../../domain/text_normaliser.dart';
 import '../../domain/tournament.dart';
 import '../../multiplayer/turn_bridge.dart';
 import '../../ui/widgets/common.dart';
@@ -763,21 +764,9 @@ class _ClaimName extends StatelessWidget {
   final String name;
   final Color color;
 
-  /// Words that belong to the surname that follows them.
-  static const _particles = {
-    'mac', 'mc', 'di', 'de', 'da', 'do', 'dos', 'das', 'del', 'della', 'van', 'von', 'der', 'den',
-    'ter', 'ten', 'le', 'la', 'el', 'al', 'ben', 'bin', 'st', 'st.',
-  };
-
   @override
   Widget build(BuildContext context) {
-    final words = name.trim().split(RegExp(r'\s+'));
-    var start = words.length - 1;
-    while (start > 1 && _particles.contains(words[start - 1].toLowerCase())) {
-      start--;
-    }
-    final first = words.length > 1 ? words.sublist(0, start).join(' ') : '';
-    final surname = words.sublist(words.length > 1 ? start : 0).join(' ');
+    final (first, surname) = splitName(name);
     return Column(mainAxisSize: MainAxisSize.min, children: [
       if (first.isNotEmpty) Text(first.toUpperCase(), style: AppText.label(11, color: color)),
       Text(surname.toUpperCase(), style: AppText.headline(18, color: color)),

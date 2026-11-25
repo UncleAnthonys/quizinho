@@ -7,6 +7,7 @@ import '../../core/sound_service.dart';
 import '../../core/theme.dart';
 import '../../data/models.dart';
 import '../../domain/game_mode.dart';
+import '../../domain/text_normaliser.dart';
 import '../../domain/tournament.dart';
 import '../../multiplayer/turn_bridge.dart';
 import '../../ui/widgets/common.dart';
@@ -395,7 +396,7 @@ class XiLayout extends StatelessWidget {
                   child: Text(
                     named.isEmpty
                         ? 'Nobody named yet'
-                        : 'Named: ${[for (final s in lineup) if (named.containsKey(s.playerId)) s.playerName.split(' ').last].join(', ')}',
+                        : 'Named: ${[for (final s in lineup) if (named.containsKey(s.playerId)) surnameOf(s.playerName)].join(', ')}',
                     style: AppText.label(14, color: Palette.text),
                   ),
                 )
@@ -559,7 +560,7 @@ class _Slot extends StatelessWidget {
     final shown = team != null || revealAll;
     final colourIndex = team == null || team! >= colours.length ? null : colours[team!];
     final colour = colourIndex == null ? null : Palette.team(colourIndex);
-    final surname = slot.playerName.split(' ').last;
+    final surname = surnameOf(slot.playerName);
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 2),
       child: AnimatedContainer(

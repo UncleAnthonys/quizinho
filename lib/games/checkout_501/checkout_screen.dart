@@ -6,6 +6,7 @@ import '../../core/app_services.dart';
 import '../../core/sound_service.dart';
 import '../../core/theme.dart';
 import '../../domain/game_mode.dart';
+import '../../domain/text_normaliser.dart';
 import '../../domain/tournament.dart';
 import '../../multiplayer/turn_bridge.dart';
 import '../../ui/widgets/common.dart';
@@ -193,7 +194,7 @@ class _CheckoutScreenState extends State<CheckoutScreen>
     String short(CoThrow t) => switch (t.outcome) {
           CoOutcome.timeUp => 'Time',
           CoOutcome.wrong when t.label == 'Passed' => 'Pass',
-          _ => t.label.split(' ').last,
+          _ => surnameOf(t.label),
         };
     final last = c.lastThrow;
     return {
