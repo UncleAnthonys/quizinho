@@ -87,7 +87,7 @@ class BuzzGameView extends StatelessWidget {
     // rebuilt the answer box, which closed the keyboard again (typing loop bug).
     // Solo: no buzzer — the answer box is open for the whole clock.
     final solo = t.teamCount == 1;
-    final answeringUpright = c.phase == BuzzPhase.answering || (solo && c.phase == BuzzPhase.open);
+    final answeringUpright = c.phase == BuzzPhase.answering || (solo && c.phase == BuzzPhase.open && c.soloAnswering);
     if (answeringUpright && remoteAnswerer != null) {
       return Scaffold(
         body: PitchBackground(
@@ -127,12 +127,9 @@ class BuzzGameView extends StatelessWidget {
                 // Typing: smaller still, so the names under the answer box
                 // aren't hidden by the keyboard (phone browsers don't make
                 // room for it).
-                // Solo: full size until the box is tapped (no buzzer, so the
-                // answer box is there from the start).
                 constraints: BoxConstraints(
-                    maxHeight: MediaQuery.sizeOf(context).height *
-                        (answerTyping.value ? 0.2 : (solo ? 0.5 : 0.3))),
-                child: SingleChildScrollView(child: _shaking(question(!solo || answerTyping.value))),
+                    maxHeight: MediaQuery.sizeOf(context).height * (answerTyping.value ? 0.2 : 0.3)),
+                child: SingleChildScrollView(child: _shaking(question(true))),
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(16, 4, 16, 0),
@@ -333,17 +330,39 @@ class BuzzGameView extends StatelessWidget {
   Widget _bottom(BuildContext context, AppServices services) {
     final c = controller;
     final t = round.tournament;
+    if (c.phase == BuzzPhase.open && t.teamCount == 1 && !c.soloAnswering) {
+      // Solo: one big Answer button under the full-size question, like the
+      // buzzers in a match. The clock's already running.
+      return Padding(
+        padding: const EdgeInsets.fromLTRB(16, 6, 16, 8),
+        child: Column(children: [
+          Expanded(
+            child: TeamBuzzer(
+              name: 'ANSWER',
+              colorIndex: t.config.teams.first.colorIndex,
+              enabled: true,
+              locked: false,
+              onBuzz: () {
+                primeKeyboardIfTyping(services.voice);
+                c.startSoloAnswer();
+              },
+            ),
+          ),
+          TextButton(
+            onPressed: c.giveUp,
+            child: Text('NO IDEA - SKIP', style: AppText.label(13)),
+          ),
+        ]),
+      );
+    }
     if (c.phase == BuzzPhase.open && t.teamCount == 1) {
-        // Solo: straight to the answer box; the clock runs while you think.
+        // Solo, after tapping Answer: the answer box (keyboard or mic).
         return SingleChildScrollView(
           padding: const EdgeInsets.fromLTRB(16, 6, 16, 16),
           child: PlayerPicker(
             key: ValueKey('solo-${c.questionIndex}'),
             index: services.repo.players,
             voice: services.voice,
-            // The question shows big first; the keyboard comes up (and it
-            // shrinks) when the box is tapped.
-            autofocus: false,
             onPick: c.submitSolo,
             isAnswer: c.isRightAnswer,
             onPass: c.giveUp,

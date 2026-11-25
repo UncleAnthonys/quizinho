@@ -142,7 +142,18 @@ abstract class BuzzRaceController<Q> extends ChangeNotifier implements BuzzTarge
   // ---- shared flow ---------------------------------------------------------
 
   @protected
+  /// Solo: the player has tapped "Answer" (the question shows full size
+  /// until then, like a buzzer game; the clock runs either way).
+  bool soloAnswering = false;
+
+  void startSoloAnswer() {
+    if (teamCount != 1 || phase != BuzzPhase.open || soloAnswering) return;
+    soloAnswering = true;
+    notifyListeners();
+  }
+
   void startQuestion() {
+    soloAnswering = false;
     phase = BuzzPhase.open;
     answeringTeam = null;
     lockedOut.clear();
