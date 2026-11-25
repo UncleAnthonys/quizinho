@@ -963,13 +963,20 @@ CHECKOUT_FOREIGN_GIANTS = {
 }
 
 
+# British clubs whose players are harder to name: hard (3), not medium.
+CHECKOUT_HARD_BRITISH = {
+    "Q19444", "Q19470", "Q19477", "Q18729",  # Birmingham, Derby, Hull, Reading
+    "Q18750", "Q18721", "Q18661", "Q18744",  # Wigan, Norwich, Middlesbrough, West Brom
+}
+
+
 def checkout_level(cid: str, c) -> int:
     """1 = British giants and the biggest clubs abroad; 2 = other British
     clubs (and women's sides, as before); 3 = other clubs abroad."""
     if c["women"]:
         return 2
     if c["country"] in ("GBR", "ENG", "SCO"):
-        return 1 if c["fame"] == 5 else 2
+        return 1 if c["fame"] == 5 else 3 if cid in CHECKOUT_HARD_BRITISH else 2
     return 1 if cid in CHECKOUT_FOREIGN_GIANTS else 3
 
 
