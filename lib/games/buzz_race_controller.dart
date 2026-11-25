@@ -141,7 +141,6 @@ abstract class BuzzRaceController<Q> extends ChangeNotifier implements BuzzTarge
 
   // ---- shared flow ---------------------------------------------------------
 
-  @protected
   /// Solo: the player has tapped "Answer" (the question shows full size
   /// until then, like a buzzer game; the clock runs either way).
   bool soloAnswering = false;
@@ -152,6 +151,7 @@ abstract class BuzzRaceController<Q> extends ChangeNotifier implements BuzzTarge
     notifyListeners();
   }
 
+  @protected
   void startQuestion() {
     soloAnswering = false;
     phase = BuzzPhase.open;
