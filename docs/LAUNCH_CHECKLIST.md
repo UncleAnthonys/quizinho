@@ -4,7 +4,7 @@ Things to come back to before Quizinho goes live. Tick them off as they're done.
 
 ## When quizinho.app is bought
 - [ ] DNS records added; GitHub Pages switched to quizinho.app (base href `/`)
-- [ ] Join link / QR code: `joinPageUrl` in `lib/multiplayer/rooms_config.dart`
+- [x] Join link / QR code: `joinPageUrl` in `lib/multiplayer/rooms_config.dart`
 - [ ] Privacy policy URL → https://quizinho.app/privacy/ in Play Console (App content → Privacy policy) and App Store Connect (App Privacy)
 - [ ] Support URL → https://quizinho.app/support/ in both stores
 - [ ] Play Data safety → Delete data URL → https://quizinho.app/privacy/#delete

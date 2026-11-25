@@ -4,6 +4,6 @@
 const roomsDatabaseUrl = 'https://quizinho-8022c-default-rtdb.europe-west1.firebasedatabase.app';
 
 /// Where a phone without the app joins: the web build, with ?join=CODE.
-const joinPageUrl = 'https://uncleanthonys.github.io/quizinho/';
+const joinPageUrl = 'https://quizinho.app/';
 
 bool get roomsEnabled => roomsDatabaseUrl.isNotEmpty;

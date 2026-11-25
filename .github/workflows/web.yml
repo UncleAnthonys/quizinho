@@ -1,6 +1,6 @@
 # Builds the browser version and publishes it to GitHub Pages on every push to main.
 # One-time setup: repo Settings → Pages → Source: "GitHub Actions".
-# The game then lives at https://<your-username>.github.io/<repo-name>/
+# The game lives at https://quizinho.app/ (custom domain set in Settings → Pages).
 name: Web preview
 
 on:
@@ -30,7 +30,7 @@ jobs:
         run: bash scripts/bootstrap_platforms.sh
       - run: flutter pub get
       - name: Build web
-        run: bash scripts/ci_run.sh "Web build" flutter build web --release --base-href "/${{ github.event.repository.name }}/"
+        run: bash scripts/ci_run.sh "Web build" flutter build web --release --base-href "/"
       - name: Privacy policy and support pages
         run: cp -r site/. build/web/
       - uses: actions/upload-pages-artifact@v3
