@@ -239,8 +239,10 @@ class _QuestionCard extends StatelessWidget {
         for (final l in q.lines)
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 2),
-            child: career
-                ? Text(l, textAlign: TextAlign.center, style: AppText.headline(22))
+            // Careers and categories wrap onto lines (a category is a sentence);
+            // a pair of clubs stays on one big line each.
+            child: career || q.kind == SurvivalKind.category
+                ? Text(career ? l : l.toUpperCase(), textAlign: TextAlign.center, style: AppText.headline(career ? 22 : 26))
                 : FittedBox(
                     fit: BoxFit.scaleDown,
                     child: Text(l.toUpperCase(), style: AppText.headline(q.kind == SurvivalKind.connection ? 38 : 22)),

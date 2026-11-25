@@ -104,7 +104,9 @@ class SurvivalQuestions {
           kind: k,
           id: 'b:${b.id}',
           heading: 'NAME ONE',
-          prompt: b.prompt,
+          // "Name one" over the list, like the other questions' instructions.
+          prompt: 'Name one',
+          lines: [b.prompt],
           answerIds: b.answerIds,
           difficulty: b.difficulty,
           showFlags: !b.hidesFlags,
