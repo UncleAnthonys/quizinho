@@ -271,12 +271,11 @@ class HatTrickPickView {
   final int points;
 }
 
-/// Each club's colour on the card; an answer's dots light up in it.
+/// Each club's edge colour on the card.
 const hatTrickColours = [Color(0xFFFFCC29), Color(0xFF4C8BFF), Color(0xFFFF6FD8)];
 
-/// The three clubs in a triangle, each in its own colour, and under them every
-/// answer so far: who, a dot per club (lit in its colour if he played there),
-/// and the points. [compact] (the answer box is up, or table mode): the clubs
+/// What to do, the three clubs in a triangle, and under them every answer so
+/// far: who, which of the clubs he played for, and the points. [compact] (the answer box is up, or table mode): the clubs
 /// in one row.
 class HatTrickCard extends StatelessWidget {
   const HatTrickCard({super.key, required this.clubs, this.picks = const [], this.compact = false});
@@ -298,6 +297,15 @@ class HatTrickCard extends StatelessWidget {
           border: Border.all(color: Palette.line),
         ),
         child: Column(mainAxisSize: MainAxisSize.min, children: [
+          if (!compact) ...[
+            FittedBox(
+              fit: BoxFit.scaleDown,
+              child: Text('NAME A PLAYER WHO PLAYED FOR ALL THREE',
+                  style: AppText.headline(20, color: Palette.yellow)),
+            ),
+            Text('1 point for each club he played for', style: AppText.label(13)),
+            const SizedBox(height: 10),
+          ],
           if (compact)
             Row(children: [
               for (final (i, t) in tiles.indexed) ...[
@@ -322,7 +330,7 @@ class HatTrickCard extends StatelessWidget {
             SizedBox(height: compact ? 6 : 10),
             const Divider(color: Palette.line, height: 1),
             SizedBox(height: compact ? 4 : 8),
-            for (final p in picks) _PickRow(pick: p, compact: compact),
+            for (final p in picks) _PickRow(pick: p, clubs: clubs, compact: compact),
           ],
         ]),
       ),
@@ -382,51 +390,44 @@ class _TrianglePainter extends CustomPainter {
   bool shouldRepaint(_TrianglePainter old) => false;
 }
 
-/// A dot per club: lit in the club's colour if the player was there.
-class _Dot extends StatelessWidget {
-  const _Dot({required this.colour, required this.lit, required this.size});
-  final Color colour;
-  final bool lit;
-  final double size;
-
-  @override
-  Widget build(BuildContext context) => Container(
-        width: size,
-        height: size,
-        margin: const EdgeInsets.only(left: 5),
-        decoration: BoxDecoration(
-          color: lit ? colour : Colors.transparent,
-          shape: BoxShape.circle,
-          border: Border.all(color: lit ? colour : Palette.muted.withValues(alpha: 0.5), width: 2),
-          boxShadow: lit ? [BoxShadow(color: colour.withValues(alpha: 0.6), blurRadius: 8)] : null,
-        ),
-      );
-}
-
+/// One answer: the team, the player, which of the clubs he played for (in
+/// words), and the points.
 class _PickRow extends StatelessWidget {
-  const _PickRow({required this.pick, required this.compact});
+  const _PickRow({required this.pick, required this.clubs, required this.compact});
   final HatTrickPickView pick;
+  final List<String> clubs;
   final bool compact;
 
   @override
-  Widget build(BuildContext context) => Padding(
-        padding: const EdgeInsets.symmetric(vertical: 3),
-        child: Row(children: [
-          if (pick.team.isNotEmpty) ...[
-            TeamChip(name: pick.team, colorIndex: pick.colorIndex, size: compact ? 12 : 14),
-            const SizedBox(width: 8),
-          ],
-          Expanded(
-            child: Text(pick.player,
+  Widget build(BuildContext context) {
+    final played = [for (final (i, h) in pick.hits.indexed) if (h && i < clubs.length) clubs[i]];
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 3),
+      child: Row(children: [
+        if (pick.team.isNotEmpty) ...[
+          TeamChip(name: pick.team, colorIndex: pick.colorIndex, size: compact ? 12 : 14),
+          const SizedBox(width: 8),
+        ],
+        Expanded(
+          child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisSize: MainAxisSize.min, children: [
+            Text(pick.player,
                 maxLines: 1, overflow: TextOverflow.ellipsis, style: AppText.headline(compact ? 18 : 22)),
-          ),
-          for (final (i, h) in pick.hits.indexed) _Dot(colour: hatTrickColours[i], lit: h, size: compact ? 14 : 18),
-          SizedBox(
-            width: compact ? 36 : 44,
-            child: Text('+${pick.points}',
-                textAlign: TextAlign.right,
-                style: AppText.headline(compact ? 18 : 22, color: pick.points == 0 ? Palette.danger : Palette.yellow)),
-          ),
-        ]),
-      );
+            Text(
+              played.isEmpty
+                  ? 'None of them'
+                  : played.length == 3
+                      ? 'All three - HAT-TRICK!'
+                      : played.join(', '),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: AppText.label(compact ? 11 : 13,
+                  color: played.isEmpty ? Palette.danger : (played.length == 3 ? Palette.gold : Palette.green)),
+            ),
+          ]),
+        ),
+        Text('+${pick.points}',
+            style: AppText.headline(compact ? 20 : 26, color: pick.points == 0 ? Palette.danger : Palette.yellow)),
+      ]),
+    );
+  }
 }
