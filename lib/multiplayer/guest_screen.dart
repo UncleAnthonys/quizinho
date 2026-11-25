@@ -257,7 +257,7 @@ class _GuestGameState extends State<_GuestGame> with SingleTickerProviderStateMi
         ),
       'rules' => _rules(v),
       'table' => _table(v, colour),
-      'closed' => _center('FULL TIME', 'Thanks for playing!'),
+      'closed' => _center('FULL TIME', 'Thanks for playing!', action: _homeButton()),
       _ => _center('YOU’RE IN', 'Waiting for kick-off on the main phone…'),
     };
     // Typing: the keyboard slides over the page, so lift everything above it
@@ -377,6 +377,7 @@ class _GuestGameState extends State<_GuestGame> with SingleTickerProviderStateMi
         ] else if (teaser.isNotEmpty)
           Text('YOUR TEAM’S HAD ITS GUESS', style: AppText.label(13)),
         if (full) Text('Thanks for playing!', style: AppText.label(14)),
+        if (full) _homeButton(),
       ]),
     );
   }
@@ -417,7 +418,23 @@ class _GuestGameState extends State<_GuestGame> with SingleTickerProviderStateMi
   String? _holdFor;
   DateTime? _holdFrom;
 
-  Widget _center(String title, String body, {Object? scores}) => Padding(
+  /// Full time, in the app: a way back to the home screen (an iPhone has no
+  /// back button, and few know the swipe). A browser has no home to go to.
+  Widget _homeButton() => kIsWeb
+      ? const SizedBox.shrink()
+      : Padding(
+          padding: const EdgeInsets.only(top: 12),
+          child: SizedBox(
+            width: double.infinity,
+            height: 56,
+            child: FilledButton(
+              onPressed: () => Navigator.of(context).popUntil((r) => r.isFirst),
+              child: Text('BACK TO HOME', style: AppText.headline(22, color: Palette.pitchDeep)),
+            ),
+          ),
+        );
+
+  Widget _center(String title, String body, {Object? scores, Widget? action}) => Padding(
         padding: const EdgeInsets.all(20),
         child: Column(children: [
           if (scores != null) _scores(scores, round: '${widget.room.view['round'] ?? ''}'),
@@ -426,6 +443,7 @@ class _GuestGameState extends State<_GuestGame> with SingleTickerProviderStateMi
           const SizedBox(height: 8),
           Text(body, textAlign: TextAlign.center, style: AppText.label(16, color: Palette.text)),
           const Spacer(),
+          if (action != null) action,
         ]),
       );
 
