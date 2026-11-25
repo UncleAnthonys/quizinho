@@ -32,6 +32,22 @@ void main() {
     expect(index.resolveSpoken(['david louise'], isAnswer: answerIs('david-luiz'))?.id, 'david-luiz');
   });
 
+  test('Watford 501: "Richarlison" heard as "richardson" is not taken as Kevin Richardson', () {
+    final idx = PlayerIndex(const [
+      Player(id: 'richarlison', name: 'Richarlison', fame: 4),
+      Player(id: 'kevin-richardson', name: 'Kevin Richardson', fame: 1),
+    ]);
+    bool both(Player p) => true;
+    // Both right answers: a lone surname that sounds like the other one = tap.
+    expect(idx.resolveSpoken(['richardson'], isAnswer: both), isNull);
+    // The recogniser's next guess has it right.
+    expect(idx.resolveSpoken(['richardson', 'richarlison'], isAnswer: both)?.id, 'richarlison');
+    // Kevin Richardson already used: "richardson" can't land on him again.
+    expect(idx.resolveSpoken(['richardson', 'richarlison'], isAnswer: (p) => p.id == 'richarlison')?.id, 'richarlison');
+    // His full name said outright still counts.
+    expect(idx.resolveSpoken(['kevin richardson'], isAnswer: both)?.id, 'kevin-richardson');
+  });
+
   test('misheard surnames of the right answer still resolve', () {
     expect(index.resolveSpoken(['van dyke'], isAnswer: answerIs('virgil-van-dijk'))?.id, 'virgil-van-dijk');
     expect(index.resolveSpoken(['kanty'], isAnswer: answerIs('ngolo-kante'))?.id, 'ngolo-kante');

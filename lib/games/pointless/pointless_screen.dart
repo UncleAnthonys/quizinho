@@ -237,7 +237,7 @@ class _PointlessScreenState extends State<PointlessScreen>
           accent: Palette.team(colour),
           hint: clubs ? 'Say or type a club…' : 'Say or type a name…',
           onPick: c.submit,
-          isAnswer: (p) => c.category.answerIds.contains(p.id),
+          isAnswer: (p) => !c.answers.any((a) => a.id == p.id) && c.category.answerIds.contains(p.id), // given = not again
           showFlags: !c.category.hidesFlags,
           showPositions: !c.category.hidesPositions,
           onPass: c.giveUp,

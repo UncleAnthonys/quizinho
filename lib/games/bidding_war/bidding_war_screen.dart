@@ -308,7 +308,7 @@ class _BiddingWarScreenState extends State<BiddingWarScreen>
       accent: Palette.team(colour),
       hint: c.category.answersAreClubs ? 'Say or type a club…' : 'Say or type a name…',
       onPick: c.submit,
-      isAnswer: (p) => c.category.answerIds.contains(p.id),
+      isAnswer: (p) => !c.alreadyNamed(p.id) && c.category.answerIds.contains(p.id), // named = not again
       showFlags: !c.category.hidesFlags,
       showPositions: !c.category.hidesPositions,
       rapid: true, // the box stays open: name them one after another

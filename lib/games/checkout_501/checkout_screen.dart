@@ -270,7 +270,9 @@ class _CheckoutScreenState extends State<CheckoutScreen>
           accent: Palette.team(colour),
           hint: 'Say or type a player…',
           onPick: c.submit,
-          isAnswer: (p) => c.category.values.containsKey(p.id) || c.category.noStats.contains(p.id),
+          // Already used = not an answer any more, so voice looks past him
+          // ("Richarlison" heard as Kevin Richardson, already gone).
+          isAnswer: (p) => !c.used.contains(p.id) && (c.category.values.containsKey(p.id) || c.category.noStats.contains(p.id)),
           onPass: c.pass,
         ),
     ]);

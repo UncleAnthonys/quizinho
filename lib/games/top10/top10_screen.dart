@@ -235,7 +235,7 @@ class _Top10ScreenState extends State<Top10Screen> with TickerProviderStateMixin
         accent: colour == null ? _accent : Palette.team(colour),
         hint: 'Name one of the ten…',
         onPick: (p) => _submit(c, p),
-        isAnswer: (p) => c.list.indexOf(p.id) != null,
+        isAnswer: (p) => !c.foundIds.contains(p.id) && c.list.indexOf(p.id) != null, // found = not again
         onPass: _solo ? null : c.pass,
       ),
       if (!typing && _solo)

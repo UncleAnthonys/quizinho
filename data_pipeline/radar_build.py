@@ -576,19 +576,25 @@ def pl_managers(d: Data):
         as_of="Nov 2026")
 
 
-# Football 501 by country: caps + goals, for everyone above the list's own
-# cut-off (Wikipedia lists England players with 10+ caps, Brazil 20+...).
+# Football 501 by country: caps + goals for EVERY capped player, 1 cap up.
+# Wikipedia's lists stop at a cut-off (Portugal 25+ caps), so the rest come
+# from each player's infobox (caps_fetch.py -> raw/national_caps.json.gz);
+# a list's own numbers win where it has the player.
 NATIONS = [
-    ("eng", "England", "England caps + goals (10+ caps)", 10, 1, False),
-    ("sco", "Scotland", "Scotland caps + goals (10+ caps)", 10, 2, False),
-    ("wal", "Wales", "Wales caps + goals (25+ caps)", 25, 2, False),
-    ("nir", "Northern Ireland", "Northern Ireland caps + goals (10+ caps)", 10, 3, False),
-    ("bra", "Brazil", "Brazil caps + goals (20+ caps)", 20, 2, False),
-    ("arg", "Argentina", "Argentina caps + goals (20+ caps)", 20, 3, False),
-    ("ger", "Germany", "Germany caps + goals (20+ caps)", 20, 2, False),
-    ("ita", "Italy", "Italy caps + goals (20+ caps)", 20, 3, False),
-    ("por", "Portugal", "Portugal caps + goals (25+ caps)", 25, 2, False),
-    ("eng-w", "England women's", "Lionesses caps + goals (10+ caps)", 10, 2, True),
+    ("eng", "England", "England caps + goals", 1, False),
+    ("sco", "Scotland", "Scotland caps + goals", 2, False),
+    ("wal", "Wales", "Wales caps + goals", 2, False),
+    ("nir", "Northern Ireland", "Northern Ireland caps + goals", 3, False),
+    ("irl", "Republic of Ireland", "Republic of Ireland caps + goals", 2, False),
+    ("bra", "Brazil", "Brazil caps + goals", 2, False),
+    ("arg", "Argentina", "Argentina caps + goals", 3, False),
+    ("ger", "Germany", "Germany caps + goals (West Germany counts)", 2, False),
+    ("ita", "Italy", "Italy caps + goals", 3, False),
+    ("por", "Portugal", "Portugal caps + goals", 2, False),
+    ("fra", "France", "France caps + goals", 2, False),
+    ("esp", "Spain", "Spain caps + goals", 2, False),
+    ("ned", "Netherlands", "Netherlands caps + goals", 2, False),
+    ("eng-w", "England women's", "Lionesses caps + goals", 2, True),
 ]
 NATIONAL_OUT: list[dict] = []
 
@@ -622,15 +628,22 @@ def nation_rows(page: str) -> list[tuple[str, int, int]]:
 
 
 def nations(d: Data):
-    for code, country, prompt, at_least, level, women in NATIONS:
+    caps = json.load(gzip.open(RAW / "national_caps.json.gz", "rt", encoding="utf-8"))
+    d.qids.update(caps.get("qids", {}))
+    for code, country, prompt, level, women in NATIONS:
         page = d.pages.get(f"List of {country} international footballers", "")
-        rows = [(t, c, g) for t, c, g in nation_rows(page) if c >= at_least]
-        if len(rows) < 40:
-            DROPPED.append(f"501 {country}: {len(rows)} players")
+        listed = {plain(t): (c, g) for t, c, g in nation_rows(page)}
+        # Everyone in the infoboxes; the list's numbers where it has him.
+        rows = {**{plain(t): tuple(v) for t, v in caps["teams"].get(country, {}).items()}, **listed}
+        low = sum(1 for c, _ in rows.values() if c < 10)
+        # Every player, or it's unplayable: with nobody under 25, you can't
+        # finish from 14 or less. So no list without its 1-cap players.
+        if len(rows) < 100 or low < 20:
+            DROPPED.append(f"501 {country}: {len(rows)} players, {low} under 10 caps")
             continue
         values = {}
-        for title, caps, goals in rows:
-            values[d.answer(title, women=women)] = [caps, goals]
+        for title, (c, g) in rows.items():
+            values[d.answer(title, women=women)] = [c, g]
         as_of = re.search(r"correct as of:?'*\s*([^,\n<]+)", page)
         NATIONAL_OUT.append({"id": f"501:{code}", "prompt": prompt, "difficulty": level, "women": women,
                              "source": f"Wikipedia: List of {country} international footballers",

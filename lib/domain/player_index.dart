@@ -232,7 +232,15 @@ class PlayerIndex {
       final others = ranked.where((m) => !m.answer).toList();
       // Someone else's full name said outright beats a loose sound-alike of the answer.
       final saidSomeoneElse = others.any((m) => m.base >= 100) && !answers.any((m) => m.exact);
-      if (answers.length == 1 && !saidSomeoneElse) return answers.first.player;
+      if (answers.length == 1 && !saidSomeoneElse) {
+        final a = answers.first;
+        // Only a surname heard ("richardson"), and it also sounds like another
+        // right answer (Richarlison): the recogniser may have swapped the
+        // name for a commoner word - try its other guesses, else they tap.
+        final rival = a.base < 100 && hits.any((m) => m.answer && m.player.id != a.player.id && m.base >= 37);
+        if (!rival) return a.player;
+        continue;
+      }
       if (answers.length > 1 || others.isEmpty) continue;
       final top = others.first;
       // Further down the recogniser's list, a wrong answer needs a full name

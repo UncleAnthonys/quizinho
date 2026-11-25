@@ -55,6 +55,7 @@ class BiddingWarController extends ChangeNotifier {
   /// Accepted answers in order: player names (or "Room vote" entries).
   final List<String> named = [];
   final Set<String> _namedIds = {};
+  bool alreadyNamed(String id) => _namedIds.contains(id);
 
   bool? completed;
 
