@@ -206,10 +206,17 @@ class BuzzBridge extends ChangeNotifier {
       for (var t = 0; t < tournament.teamCount; t++)
         if (f != null
             ? f.players[t] != null && room.memberFor(t, f.players[t]!) != null
-            : tournament.config.teams[t].players.isNotEmpty &&
-                tournament.config.teams[t].players.every((n) => room.memberFor(t, n) != null))
+            : _allOnPhones(t))
           t,
     };
+  }
+
+  /// Every named player on [t] has joined on a phone - or the team was set
+  /// up with no player names (just "Gav") and someone joined for it.
+  bool _allOnPhones(int t) {
+    final names = tournament.config.teams[t].players;
+    if (names.isEmpty) return room.members.values.any((m) => m.team == t);
+    return names.every((n) => room.memberFor(t, n) != null);
   }
 
   /// A team buzzed on the host phone: they answer there, not on a phone.
