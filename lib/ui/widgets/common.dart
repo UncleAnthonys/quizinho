@@ -501,8 +501,11 @@ class _MissShakeState extends State<MissShake> with SingleTickerProviderStateMix
 
   /// The last wrong answer shaken, app-wide: a wrong answer often swaps the
   /// screen's layout (answering -> steal), so the card showing it is a new
-  /// one - it must still play, but only once.
+  /// one - it must still play, but only once. Only for a moment, though:
+  /// games count their wrong answers from 1, so a later game (or a later
+  /// wrong answer with the same number) must shake again.
   static int? _played;
+  static DateTime _playedAt = DateTime(2000);
 
   @override
   void initState() {
@@ -518,8 +521,11 @@ class _MissShakeState extends State<MissShake> with SingleTickerProviderStateMix
 
   void _maybePlay() {
     final t = widget.trigger;
-    if (t == null || t == _played) return;
+    if (t == null) return;
+    final now = DateTime.now();
+    if (t == _played && now.difference(_playedAt) < const Duration(seconds: 2)) return;
     _played = t;
+    _playedAt = now;
     _wait?.cancel();
     if (widget.delay == Duration.zero) {
       _a.forward(from: 0);
