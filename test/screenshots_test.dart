@@ -482,6 +482,7 @@ void main() {
             const Chip(label: Text('George Weah')),
           ]),
           timerLabel: 'YOUR GO',
+          lockedLabel: 'ANSWERED',
           commentary: null,
           onFinished: () {},
         );

@@ -310,10 +310,10 @@ class HatTrickCard extends StatelessWidget {
               painter: _TrianglePainter(),
               child: Column(children: [
                 Row(children: [const Spacer(), Expanded(flex: 4, child: tiles[0]), const Spacer()]),
-                const SizedBox(height: 10),
+                const SizedBox(height: 18),
                 Row(children: [
                   Expanded(child: tiles[1]),
-                  const SizedBox(width: 44),
+                  const SizedBox(width: 52),
                   Expanded(child: tiles[2]),
                 ]),
               ]),
