@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
 import '../../core/theme.dart';
@@ -194,7 +196,10 @@ class CareerTrail extends StatelessWidget {
       final cols = (visible.length > 4 || typing && visible.length > 3) && box.maxWidth >= 300 ? 2 : 1;
       final rows = (visible.length / cols).ceil();
       const gap = 6.0;
-      final rowH = ((maxHeight - gap * (rows - 1)) / rows).clamp(typing ? 22.0 : 30.0, 64.0);
+      // Typing with lots of clubs: a little taller than the strip, so no
+      // row gets crushed below a readable 26.
+      final room = typing ? max(maxHeight, rows * 26.0 + gap * (rows - 1)) : maxHeight;
+      final rowH = ((room - gap * (rows - 1)) / rows).clamp(26.0, 64.0);
       return Padding(
         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 4),
         child: Column(children: [
@@ -239,14 +244,15 @@ class CareerTrail extends StatelessWidget {
     ]);
     return AnimatedContainer(
       duration: const Duration(milliseconds: 300),
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
+      padding: EdgeInsets.symmetric(horizontal: 10, vertical: compact ? 1 : 3),
       decoration: BoxDecoration(
         color: newest ? Palette.cardHigh : Colors.black.withValues(alpha: 0.3),
         borderRadius: BorderRadius.circular(12),
         border: Border.all(color: newest ? Palette.yellow : Palette.line, width: newest ? 2 : 1),
       ),
       child: Row(children: [
-        Text('${idx + 1}', style: AppText.headline(18, color: Palette.yellow)),
+        // The number shrinks with a short row rather than being cut off.
+        FittedBox(fit: BoxFit.scaleDown, child: Text('${idx + 1}', style: AppText.headline(18, color: Palette.yellow))),
         const SizedBox(width: 8),
         Expanded(
           child: compact

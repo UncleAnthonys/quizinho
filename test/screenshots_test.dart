@@ -47,7 +47,7 @@ import 'package:quizinho/multiplayer/memory_room_link.dart';
 import 'package:quizinho/multiplayer/room.dart' show GuestRoom, HostRoom, RoomMember;
 
 import 'package:quizinho/data/json_football_repository.dart';
-import 'package:quizinho/data/models.dart' show Difficulty, Player;
+import 'package:quizinho/data/models.dart' show CareerPath, CareerSpell, Club, Difficulty, Player;
 import 'package:quizinho/games/tic_tac_toe/tic_tac_toe_controller.dart';
 import 'package:quizinho/ui/screens/round_summary_screen.dart';
 import 'package:quizinho/domain/warm_up_cup.dart';
@@ -501,8 +501,19 @@ void main() {
           ),
         ]));
     // Career Path typing: the clubs squeeze up so the names under the box show.
-    final careerTyping = CareerPathController(teamCount: 2, questions: [zlatanPath()])
-      ..revealed = 7
+    // Zlatan's real eight clubs: the most a trail has to squeeze up.
+    const zlatanFull = CareerPath(player: zlatan, difficulty: 1, spells: [
+      CareerSpell(club: Club(id: 'malmo', name: 'Malmö FF', fame: 3), startYear: 1999, endYear: 2001),
+      CareerSpell(club: ajax, startYear: 2001, endYear: 2004),
+      CareerSpell(club: juventus, startYear: 2004, endYear: 2006),
+      CareerSpell(club: inter, startYear: 2006, endYear: 2009),
+      CareerSpell(club: barcelona, startYear: 2009, endYear: 2011),
+      CareerSpell(club: Club(id: 'milan', name: 'AC Milan', fame: 5), startYear: 2010, endYear: 2012),
+      CareerSpell(club: Club(id: 'psg', name: 'Paris Saint-Germain', fame: 5), startYear: 2012, endYear: 2016),
+      CareerSpell(club: Club(id: 'manutd', name: 'Manchester United', fame: 5), startYear: 2016, endYear: 2018),
+    ]);
+    final careerTyping = CareerPathController(teamCount: 2, questions: [zlatanFull])
+      ..revealed = 8
       ..buzz(0);
     await shot(
         tester,
