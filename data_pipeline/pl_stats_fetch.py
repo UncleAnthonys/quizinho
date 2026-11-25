@@ -24,7 +24,9 @@ HEADERS = {"Origin": "https://www.premierleague.com", "Referer": "https://www.pr
            "User-Agent": "Mozilla/5.0 (QuizinhoDataPipeline; football party game)", "Accept": "application/json"}
 
 # stat -> how deep to go (deep ones feed nationality / position lists).
-STATS = {"goals": 1500, "goal_assist": 800, "appearances": 800, "own_goals": 100, "red_card": 100,
+# appearances and goals: everyone (Football 501 by nationality needs the
+# one-game players too, or low finishes are impossible).
+STATS = {"goals": 10000, "goal_assist": 800, "appearances": 10000, "own_goals": 100, "red_card": 100,
          "yellow_card": 100, "att_hd_goal": 300, "att_freekick_goal": 100, "att_obox_goal": 300,
          "att_pen_goal": 100, "clean_sheet": 600,
          # Since 2006-07; an unknown name just comes back empty.
