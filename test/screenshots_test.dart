@@ -453,6 +453,20 @@ void main() {
           onFinished: () {},
         );
     await shot(tester, 'cc_title', view(ClubConnectionsController(teamCount: 2, questions: [arsenalBarca()]), null));
+    // Solo: the full-size question and one Answer button.
+    final soloT = Tournament(TournamentConfig(teams: [TeamSetup(name: 'You', colorIndex: 0)]));
+    await shot(
+        tester,
+        'cc_solo',
+        BuzzGameView(
+          round: RoundContext(tournament: soloT, multiplier: 1, onComplete: (_) {}),
+          controller: ClubConnectionsController(teamCount: 1, questions: [arsenalBarca()]),
+          question: (compact) => ClubsCard(a: 'AC Milan', b: 'Chelsea', compact: compact),
+          resolvedDetail: const SizedBox(),
+          timerLabel: 'CLOCK',
+          commentary: null,
+          onFinished: () {},
+        ));
     await shot(tester, 'cc_commentary',
         view(ClubConnectionsController(teamCount: 2, questions: [arsenalBarca()]), 'Not even in the same postcode.'));
     await shot(
