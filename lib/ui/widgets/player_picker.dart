@@ -213,6 +213,7 @@ class _PlayerPickerState extends State<PlayerPicker> with SingleTickerProviderSt
   void dispose() {
     answerNudge.removeListener(_onNudge);
     _nudgeTimer?.cancel();
+    _partialTimer?.cancel();
     _wiggle.dispose();
     // The box closed (time up, pass, or a wrong pick) after speech that
     // matched nobody: save it with the right answers — usually there's no
@@ -277,14 +278,13 @@ class _PlayerPickerState extends State<PlayerPicker> with SingleTickerProviderSt
       onWords: (words) {
         if (!_keepListening || words.trim().isEmpty) return;
         if (words != _heardWords) setState(() => _heardWords = words);
-        if (widget.rapid) {
-          _scanRapid(words, partial: true);
-          return;
-        }
-        if (_voiceNote != 'Hearing you…') setState(() => _voiceNote = 'Hearing you…');
-        // Names are checked as the words arrive — a clear match goes straight in.
-        final p = widget.index.resolveSpoken([words], partial: true, isAnswer: widget.isAnswer);
-        if (p != null) _pick(p, spoken: true);
+        if (_voiceNote != 'Hearing you…' && !widget.rapid) setState(() => _voiceNote = 'Hearing you…');
+        // Names are checked as the words arrive - but at most every half
+        // second, on the newest words: each check runs through every player,
+        // and on an old phone checking every word as it came in froze the
+        // screen (clock and all). The full check still runs at the pause.
+        _partialWords = words;
+        _partialTimer ??= Timer(const Duration(milliseconds: 500), _checkPartial);
       },
       onDone: _heard,
     );
@@ -294,6 +294,23 @@ class _PlayerPickerState extends State<PlayerPicker> with SingleTickerProviderSt
         _voiceNote = 'Mic not available - type the name';
       });
     }
+  }
+
+  String? _partialWords;
+  String? _partialChecked;
+  Timer? _partialTimer;
+
+  void _checkPartial() {
+    _partialTimer = null;
+    final words = _partialWords;
+    if (words == null || words == _partialChecked || !_keepListening) return;
+    _partialChecked = words;
+    if (widget.rapid) {
+      _scanRapid(words, partial: true);
+      return;
+    }
+    final p = widget.index.resolveSpoken([words], partial: true, isAnswer: widget.isAnswer);
+    if (p != null) _pick(p, spoken: true);
   }
 
   /// After a pause: offer real player names only (never the raw transcript,
@@ -358,6 +375,10 @@ class _PlayerPickerState extends State<PlayerPicker> with SingleTickerProviderSt
   }
 
   void _heard(List<String> alternatives) {
+    _partialTimer?.cancel(); // the full answer is here: no half-heard check after it
+    _partialTimer = null;
+    _partialWords = null;
+    _partialChecked = null;
     if (!mounted || _picked) return;
     if (widget.rapid) {
       if (alternatives.isNotEmpty) _scanRapid(alternatives.first, partial: false);

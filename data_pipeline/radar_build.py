@@ -652,9 +652,44 @@ def nations(d: Data):
         print(f"  501 {country}: {len(values)} players ({new} not in the career data)")
 
 
+# Football 501 by nationality: Premier League apps + goals, every player of
+# that nationality who's played in it (one game up), from the PL's own feed.
+PL_NATIONS = [  # (code, the feed's demonym, shown as, difficulty)
+    ("eng", "English", "English", 1), ("fra", "French", "French", 2), ("sco", "Scottish", "Scottish", 2),
+    ("irl", "Irish", "Irish", 2), ("esp", "Spanish", "Spanish", 2), ("ned", "Dutch", "Dutch", 2),
+    ("bra", "Brazilian", "Brazilian", 2), ("wal", "Welsh", "Welsh", 2), ("por", "Portugese", "Portuguese", 2),
+    ("ita", "Italian", "Italian", 2), ("ger", "German", "German", 2), ("swe", "Swedish", "Swedish", 3),
+    ("nor", "Norwegian", "Norwegian", 3), ("nir", "Northern Irish", "Northern Irish", 3),
+    ("bel", "Belgian", "Belgian", 3), ("jam", "Jamaican", "Jamaican", 3), ("nga", "Nigerian", "Nigerian", 3),
+    ("usa", "American", "American", 3), ("aus", "Australian", "Australian", 3),
+]
+
+
+def pl_nations(d: Data):
+    goals = {o["owner"]["playerId"]: int(o["value"]) for o in d.feed.get("goals", [])}
+    rows: dict[str, list] = {}
+    for o in d.feed.get("appearances", []):
+        demonym = (o["owner"].get("nationalTeam") or {}).get("demonym")
+        rows.setdefault(demonym, []).append(o)
+    for code, demonym, shown, level in PL_NATIONS:
+        values = {}
+        for o in rows.get(demonym, []):
+            apps = int(o["value"])
+            if apps > 0:
+                values[d.feed_answer(o["owner"])] = [apps, goals.get(o["owner"]["playerId"], 0)]
+        low = sum(1 for a, _ in values.values() if a < 10)
+        if len(values) < 50 or low < 5:
+            DROPPED.append(f"501 PL {shown}: {len(values)} players, {low} under 10 apps")
+            continue
+        NATIONAL_OUT.append({"id": f"501:pl-{code}", "prompt": f"Premier League apps + goals: {shown} players",
+                             "difficulty": level, "women": False, "source": "premierleague.com stats",
+                             "as_of": "Nov 2026", "values": values})
+        print(f"  501 PL {shown}: {len(values)} players")
+
+
 def main() -> int:
     d = Data()
-    for step in (feed_lists, hat_tricks, golden_boot, finals, squads, wc_tables, euro_scorers, careers, club_eras, pl_managers, cl_hat_tricks, rosters, final_sides, nations):
+    for step in (feed_lists, hat_tricks, golden_boot, finals, squads, wc_tables, euro_scorers, careers, club_eras, pl_managers, cl_hat_tricks, rosters, final_sides, nations, pl_nations):
         print(step.__name__)
         step(d)
     (SEED / "checkouts_generated.json").write_text(json.dumps({
