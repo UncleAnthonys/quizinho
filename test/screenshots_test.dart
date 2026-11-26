@@ -498,7 +498,15 @@ void main() {
       ..buzz(2)
       ..submit(weah);
     await shot(tester, 'hattrick_all_in',
-        view(c, header: Text('HAT-TRICK!', style: AppText.headline(34, color: Palette.yellow))));
+        view(c,
+            header: Column(children: [
+              Text('HAT-TRICK!', style: AppText.headline(56, color: Palette.gold)),
+              Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                const TeamChip(name: 'Sam', colorIndex: 2),
+                const SizedBox(width: 8),
+                Text('George Weah', style: AppText.headline(26)),
+              ]),
+            ])));
     final soloT = Tournament(TournamentConfig(teams: [TeamSetup(name: 'You', colorIndex: 0)]));
     await shot(
         tester,
