@@ -70,9 +70,9 @@ List<String> soloRules(GameModeId m) => switch (m) {
           'A wrong name costs a life. 3 lives.',
         ],
       GameModeId.hatTrick => [
-          'Three clubs appear. Name one player: a point for each of the three he played for.',
+          'Three clubs appear. Name one player: 1 point for each club he played for.',
           'All three is a HAT-TRICK - full marks. There’s always at least one.',
-          '5 sets. Hold out for the hat-trick, but don’t let the clock run out.',
+          '5 sets. Lock in your points, or hold out for the hat-trick before the clock runs out.',
         ],
       _ => [soloScoring(m)],
     };

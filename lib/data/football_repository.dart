@@ -147,13 +147,16 @@ class ChallengeSource {
       );
 
   /// Hat-Trick has 3 levels; expert plays hard.
-  Future<HatTrickSet?> hatTrick(Difficulty d, Set<String> used, {int eras = Era.allMask}) => _fresh(
+  /// [record]: false to look at a few before choosing (then record the one
+  /// played with `history.add('hattrick', id)`).
+  Future<HatTrickSet?> hatTrick(Difficulty d, Set<String> used, {int eras = Era.allMask, bool record = true}) => _fresh(
         'hattrick',
         d,
         used,
         eras,
         (l, e, x) => repo.pickHatTrick(levels: l == null ? null : {for (final v in l) v > 3 ? 3 : v}, exclude: x, eras: e),
         (h) => h.id,
+        record: record,
       );
 
   /// Bidding War has 3 levels; expert plays hard. [where] narrows the

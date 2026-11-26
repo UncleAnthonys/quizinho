@@ -580,6 +580,13 @@ class _GuestGameState extends State<_GuestGame> with SingleTickerProviderStateMi
           voice: s.voice,
           accent: Palette.team(colour),
           isAnswer: (p) => ids.contains(p.id),
+          // Hat-Trick: a player already named is gone - pick another.
+          canPick: (p) {
+            final taken = {for (final id in asList(asMap(v['question'])['taken'])) '$id'};
+            if (!taken.contains(p.id)) return true;
+            nudgeAnswer('${p.name} has gone - name someone else');
+            return false;
+          },
           onPick: (p) => widget.room.answer(q, p.id),
           onPass: () => widget.room.pass(q),
         ),
@@ -643,10 +650,34 @@ class _GuestGameState extends State<_GuestGame> with SingleTickerProviderStateMi
         ),
       );
     } else if (result.isNotEmpty && asList(asMap(v['question'])['clubs']).length == 3) {
-      // Hat-Trick: everyone's answer is on the card; under it, the hat-tricks.
+      // Hat-Trick: everyone's answer is on the card; under it, who got the
+      // hat-trick (as big as the main phone has it), then the hat-tricks.
+      final teamsV = asList(v['teams']);
+      final heroes = [
+        for (final p in asList(asMap(v['question'])['picks']))
+          if (asMap(p) case final m when asList(m['hits']).where((h) => h == true).length == 3)
+            if ((m['team'] as num?)?.toInt() case final t? when t < teamsV.length)
+              (asMap(teamsV[t]), '${m['player'] ?? ''}'),
+      ];
       action = Padding(
         padding: const EdgeInsets.all(16),
         child: Column(children: [
+          if (heroes.isNotEmpty) ...[
+            Text('HAT-TRICK!', style: AppText.headline(52, color: Palette.gold)),
+            for (final (team, player) in heroes)
+              Padding(
+                padding: const EdgeInsets.only(top: 4),
+                child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                  TeamChip(name: '${team['name'] ?? ''}', colorIndex: (team['color'] as num?)?.toInt() ?? 0),
+                  const SizedBox(width: 8),
+                  Flexible(child: Text(player, style: AppText.headline(24))),
+                ]),
+              ),
+            const SizedBox(height: 12),
+          ] else ...[
+            Text('NO HAT-TRICK THIS TIME', style: AppText.headline(28, color: Palette.yellow)),
+            const SizedBox(height: 12),
+          ],
           Text('THE HAT-TRICK ANSWERS', style: AppText.label(13, color: Palette.gold)),
           const SizedBox(height: 8),
           Wrap(alignment: WrapAlignment.center, spacing: 6, runSpacing: 6, children: [

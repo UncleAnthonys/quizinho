@@ -63,7 +63,13 @@ class PlayerPicker extends StatefulWidget {
     this.rapid = false,
     this.autofocus = true,
     this.gateFor,
+    this.canPick,
   });
+
+  /// False for a player who can't be picked right now (Hat-Trick: already
+  /// named): the box stays open for another go. The caller says why
+  /// ([nudgeAnswer]).
+  final bool Function(Player)? canPick;
 
   /// Solo: the question shows first, with a big ANSWER button in place of
   /// the box - no keyboard, no mic - until the player taps it. The value
@@ -242,6 +248,14 @@ class _PlayerPickerState extends State<PlayerPicker> with SingleTickerProviderSt
 
   void _pick(Player p, {bool spoken = false}) {
     if (_picked) return;
+    if (widget.canPick?.call(p) == false) {
+      _controller.clear();
+      setState(() {
+        _results = const [];
+        _typedNote = null;
+      });
+      return;
+    }
     // Said it, wasn't understood, then picked the right answer by hand:
     // remember what was heard so it counts next time.
     if (!spoken && _missedSpeech.isNotEmpty && (widget.isAnswer?.call(p) ?? false)) {

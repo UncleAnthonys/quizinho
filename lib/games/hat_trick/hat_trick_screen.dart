@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 
 import '../../core/theme.dart';
+import '../../data/football_repository.dart' show ChallengeSource;
 import '../../data/models.dart';
 import '../../domain/game_mode.dart';
 import '../../domain/tournament.dart';
@@ -114,24 +115,11 @@ class _HatTrickScreenState extends State<HatTrickScreen>
     final t = widget.round.tournament;
     final source = services.challenges;
     final qs = <HatTrickSet>[];
-    // No club twice in a match (set ids are the three club ids): back-to-back
-    // Juventus + Forest sets were near enough the same question.
-    final rejected = <String>{};
     for (var i = 0; i < t.config.questionsPerRound; i++) {
-      HatTrickSet? q;
-      for (var tries = 0; tries < 30 && q == null; tries++) {
-        final used = t.usedIds(_mode);
-        final p = await source.hatTrick(t.config.difficulty, {...used, ...rejected}, eras: t.config.eraMask);
-        if (p == null) break;
-        final seen = {for (final id in used) ...id.split('|')};
-        if (p.clubs.any((c) => seen.contains(c.id))) {
-          rejected.add(p.id);
-        } else {
-          q = p;
-        }
-      }
+      final q = await _deal(source, t);
       if (q == null) break;
       t.markUsed(_mode, q.id);
+      source.history.add('hattrick', q.id);
       qs.add(q);
     }
     if (!mounted) return;
@@ -191,6 +179,8 @@ class _HatTrickScreenState extends State<HatTrickScreen>
               },
           ],
           'clock': c.lockedOut.isEmpty ? 'BUZZ IN' : 'YOUR GO',
+          // Named already: the phones' answer boxes turn them away too.
+          'taken': [for (final p in c.picks.values) p.player.id],
         },
         // Voice on the phones leans towards players with two or three.
         answerIds: () => {
@@ -209,6 +199,54 @@ class _HatTrickScreenState extends State<HatTrickScreen>
     }
     setState(() => _c = c);
     startClock(c.advance);
+  }
+
+  /// How many fresh sets to look at before dealing one.
+  static const _candidates = 8;
+
+  /// How far back (sets this phone has had) a shared club still counts.
+  static const _memory = 30;
+
+  /// The next set: of a few fresh ones, the least like what's been played
+  /// lately - so Chelsea, City or the same pair of clubs don't keep coming
+  /// round, without dropping any sets. Set ids are the three club ids. Never
+  /// a club that's already been in this match (back-to-back Juventus +
+  /// Forest sets were the same question).
+  Future<HatTrickSet?> _deal(ChallengeSource source, Tournament t) async {
+    final used = t.usedIds(_mode);
+    final inMatch = {for (final id in used) ...id.split('|')};
+    final history = source.history.order('hattrick');
+    final recent = [
+      for (final id in history.reversed.take(_memory)) id.split('|').toSet(),
+    ];
+    double penalty(HatTrickSet s) {
+      var p = 0.0;
+      for (final (age, clubs) in recent.indexed) {
+        final shared = s.clubs.where((c) => clubs.contains(c.id)).length;
+        if (shared == 0) continue;
+        p += (shared >= 2 ? 10 : 1) * (1 - age / _memory);
+      }
+      return p;
+    }
+
+    final seen = <String>{};
+    HatTrickSet? best, any;
+    var bestScore = double.infinity;
+    for (var tries = 0; tries < _candidates * 4 && seen.length < _candidates; tries++) {
+      final s = await source.hatTrick(t.config.difficulty, {...used, ...seen}, eras: t.config.eraMask, record: false);
+      if (s == null) break;
+      seen.add(s.id);
+      any ??= s;
+      if (s.clubs.any((c) => inMatch.contains(c.id))) continue;
+      final score = penalty(s);
+      if (score < bestScore) {
+        best = s;
+        bestScore = score;
+        if (score == 0) break; // nothing in common with anything recent
+      }
+    }
+    // Only sets with a club from this match left: better that than none.
+    return best ?? any;
   }
 
   /// The answer that's just gone in (the team that most recently had a go).
@@ -279,6 +317,11 @@ class _HatTrickScreenState extends State<HatTrickScreen>
       commentary: commentaryText,
       timerLabel: c.lockedOut.isEmpty ? 'BUZZ IN' : 'YOUR GO',
       lockedLabel: 'ANSWERED',
+      canPick: (p) {
+        if (!c.isTaken(p.id)) return true;
+        nudgeAnswer('${p.name} has gone - name someone else');
+        return false;
+      },
       onFinished: () => widget.round.onComplete(c.result()),
       remoteAnswerer: _bridge?.remote?.name,
       phoneTeams: _bridge?.phoneTeams() ?? const {},

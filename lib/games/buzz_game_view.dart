@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../core/app_services.dart';
 import '../core/commentary.dart' show PunditMoment;
 import '../core/theme.dart';
+import '../data/models.dart' show Player;
 import '../domain/game_mode.dart';
 import '../domain/tournament.dart';
 import '../ui/widgets/buzzer_pad.dart';
@@ -35,7 +36,11 @@ class BuzzGameView extends StatelessWidget {
     this.phoneTeams = const {},
     this.resolvedHeader,
     this.lockedLabel = 'LOCKED OUT',
+    this.canPick,
   });
+
+  /// See [PlayerPicker.canPick].
+  final bool Function(Player)? canPick;
 
   /// On the buzzer of a team that's had its go.
   final String lockedLabel;
@@ -375,6 +380,7 @@ class BuzzGameView extends StatelessWidget {
             voice: services.voice,
             onPick: c.submitSolo,
             isAnswer: c.isRightAnswer,
+            canPick: canPick,
             onPass: c.giveUp,
           ),
         );
@@ -446,6 +452,7 @@ class BuzzGameView extends StatelessWidget {
               accent: Palette.team(colour),
               onPick: c.submit,
               isAnswer: c.isRightAnswer,
+              canPick: canPick,
               onPass: c.pass,
               onDisputed: allowDispute ? (_, allowed) => c.submitDisputed(allowed: allowed) : null,
             ),
