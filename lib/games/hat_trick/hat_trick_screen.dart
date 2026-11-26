@@ -41,6 +41,8 @@ class _HatTrickScreenState extends State<HatTrickScreen>
     'Someone’s been playing too much Football Manager.',
     'Hat-trick! Frame it.',
     'The anorak strikes again.',
+    'Someone’s been on Transfermarkt.',
+    'Three out of three. Different gravy.',
   ];
   static const _twoLines = [
     'Two out of three ain’t bad.',
@@ -57,6 +59,8 @@ class _HatTrickScreenState extends State<HatTrickScreen>
     'Scraped a point there.',
     'That’s a squad player answer.',
     'Points on the board… just about.',
+    'A tap-in’s still a goal.',
+    'The bare minimum. Literally.',
   ];
   static const _zeroLines = [
     'Never played for any of them!',
@@ -66,6 +70,7 @@ class _HatTrickScreenState extends State<HatTrickScreen>
     'He’s never been near any of them.',
     'You’ve just named a random footballer, haven’t you?',
     'Confidently wrong!',
+    'Not even in the same postcode.',
   ];
 
   /// Buzzed, then the answer clock ran out.
@@ -77,6 +82,7 @@ class _HatTrickScreenState extends State<HatTrickScreen>
     'Greedy! Should’ve banked the two.',
     'That’s what happens when you wait for the perfect pass.',
     'Brain buffering…',
+    'The transfer window’s slammed shut!',
   ];
 
   /// The set's clock ran out with nobody buzzing.
@@ -86,7 +92,16 @@ class _HatTrickScreenState extends State<HatTrickScreen>
     'Not a single shout - shocking.',
   ];
 
-  String _pick(List<String> lines) => lines[_rng.nextInt(lines.length)];
+  /// A random line - never the same one twice in a row.
+  String _pick(List<String> lines) {
+    var line = lines[_rng.nextInt(lines.length)];
+    if (line == _lastLine && lines.length > 1) {
+      line = lines[(lines.indexOf(line) + 1 + _rng.nextInt(lines.length - 1)) % lines.length];
+    }
+    return _lastLine = line;
+  }
+
+  String? _lastLine;
 
   @override
   void initState() {
