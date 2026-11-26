@@ -10,6 +10,7 @@ import '../core/hinted_speech.dart';
 import '../core/web_keyboard.dart';
 import '../core/theme.dart';
 import '../data/models.dart';
+import '../domain/player_index.dart';
 import '../domain/tournament.dart';
 import '../games/bidding_war/bidding_war_screen.dart' show BidControls, BidLayout;
 import '../games/buzz_game_view.dart' show FaceOffIntro;
@@ -404,6 +405,28 @@ class _GuestGameState extends State<_GuestGame> with SingleTickerProviderStateMi
     );
   }
 
+  /// Hat-Trick: the answer box also knows everyone at the set's three clubs
+  /// (built once per set, from this phone's own copy of the club lists).
+  PlayerIndex _answerIndex(Map<String, Object?> v) {
+    final s = AppScope.of(context);
+    final ids = [for (final c in asList(asMap(v['question'])['clubIds'])) '$c'];
+    if (ids.isEmpty) return s.repo.players;
+    final key = ids.join('|');
+    if (key != _hatKey) {
+      _hatKey = key;
+      _hatIndex = null;
+      s.hatTrickRosters.then((r) {
+        if (!mounted || _hatKey != key) return;
+        final extras = r.extrasFor(ids);
+        if (extras.isNotEmpty) setState(() => _hatIndex = PlayerIndex.extended(s.repo.players, extras));
+      });
+    }
+    return _hatIndex ?? s.repo.players;
+  }
+
+  String? _hatKey;
+  PlayerIndex? _hatIndex;
+
   /// Typing rather than speaking: the answer box comes up with the buzz.
   bool get _types {
     final voice = AppScope.of(context).voice;
@@ -578,7 +601,7 @@ class _GuestGameState extends State<_GuestGame> with SingleTickerProviderStateMi
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: PlayerPicker(
           key: ValueKey('guest-$q'),
-          index: s.repo.players,
+          index: _answerIndex(v),
           voice: s.voice,
           accent: Palette.team(colour),
           isAnswer: (p) => ids.contains(p.id),

@@ -5,6 +5,7 @@ import '../core/commentary.dart' show PunditMoment;
 import '../core/theme.dart';
 import '../data/models.dart' show Player;
 import '../domain/game_mode.dart';
+import '../domain/player_index.dart';
 import '../domain/tournament.dart';
 import '../ui/widgets/buzzer_pad.dart';
 import '../ui/widgets/common.dart';
@@ -37,7 +38,12 @@ class BuzzGameView extends StatelessWidget {
     this.resolvedHeader,
     this.lockedLabel = 'LOCKED OUT',
     this.canPick,
+    this.answerIndex,
   });
+
+  /// Names the answer box searches, if not the main list (Hat-Trick: plus
+  /// everyone at the set's clubs).
+  final PlayerIndex? answerIndex;
 
   /// See [PlayerPicker.canPick].
   final bool Function(Player)? canPick;
@@ -376,7 +382,7 @@ class BuzzGameView extends StatelessWidget {
           padding: const EdgeInsets.fromLTRB(16, 6, 16, 16),
           child: PlayerPicker(
             key: ValueKey('solo-${c.questionIndex}'),
-            index: services.repo.players,
+            index: answerIndex ?? services.repo.players,
             voice: services.voice,
             onPick: c.submitSolo,
             isAnswer: c.isRightAnswer,
@@ -447,7 +453,7 @@ class BuzzGameView extends StatelessWidget {
             const SizedBox(height: 10),
             PlayerPicker(
               key: ValueKey('pick-${c.questionIndex}-$team-${c.lockedOut.length}'),
-              index: services.repo.players,
+              index: answerIndex ?? services.repo.players,
               voice: services.voice,
               accent: Palette.team(colour),
               onPick: c.submit,

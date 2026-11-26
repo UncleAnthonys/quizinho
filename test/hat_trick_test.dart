@@ -1,7 +1,9 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:quizinho/data/hat_trick_rosters.dart';
 import 'package:quizinho/data/in_memory_football_repository.dart';
 import 'package:quizinho/data/models.dart';
 import 'package:quizinho/games/buzz_race_controller.dart';
+import 'package:quizinho/domain/player_index.dart';
 import 'package:quizinho/games/hat_trick/hat_trick_controller.dart';
 
 const _milan = Club(id: 'milan', name: 'AC Milan', fame: 5);
@@ -102,5 +104,19 @@ void main() {
     expect(h.hits('lampard'), 2);
     expect(h.clubsOf('lampard'), [false, true, true]);
     expect(h.heroes, ['weah']);
+  });
+
+  test('club lists: a player only Wikipedia knows at a club scores, and the answer box finds him', () {
+    final rosters = HatTrickRosters.parse('''{
+      "extras": [["x:Q1", "Christian Roberts"]],
+      "clubs": {"milan": [["weah"], []], "city": [[], []], "chelsea": [["lampard"], ["x:Q1"]]}
+    }''');
+    final (set, extras) = rosters.fill(_set);
+    expect(set.hits('x:Q1'), 1);
+    expect(set.hits('weah'), 3, reason: 'still known from the career data');
+    expect(extras.map((p) => p.name), ['Christian Roberts']);
+    final index = PlayerIndex.extended(PlayerIndex(const [_weah]), extras);
+    expect(index.search('Christian Rob').first.player.id, 'x:Q1');
+    expect(index.byId('weah'), isNotNull);
   });
 }

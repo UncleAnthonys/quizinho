@@ -22,6 +22,7 @@ from __future__ import annotations
 
 import argparse
 import datetime as dt
+import gzip
 import itertools
 import json
 import math
@@ -37,6 +38,7 @@ import spoken  # noqa: E402 — sibling module (run as data_pipeline/build_db.py
 
 ROOT = pathlib.Path(__file__).resolve().parent
 SEED = ROOT / "seed"
+RAW = ROOT / "raw"
 ASSETS = ROOT.parent / "assets" / "db"
 
 SCHEMA = """
@@ -586,18 +588,46 @@ def generate_hat_tricks(clubs, players):
     return out
 
 
-def hat_trick_rosters(hat_tricks, players) -> dict[str, list[str]]:
-    """Every men's player at each club the sets use (for the web build, which
-    has no career table): a point for each club a named player was at."""
+def hat_trick_rosters(hat_tricks, players) -> dict:
+    """Everyone who played for each club the sets use - a point for each club
+    a named player was at. The career data's players, plus everyone else in
+    the club's Wikipedia players category (raw/club_rosters.json.gz, from
+    club_rosters_fetch.py): "Christian Roberts" at Swindon is a real answer.
+    Those extra names are Hat-Trick's alone - they never join the main player
+    list (it's what voice and search run through). Written to
+    assets/db/hat_trick_rosters.json, loaded when Hat-Trick is played:
+
+      {"extras": [[id, name]...], "clubs": {club: [[player ids], [extra ids]]}}
+
+    An extra's id is "x:" + its Wikidata id (or article title), the same in
+    every build, so a joined phone's answer means the same player on the host.
+    """
     want = {c for h in hat_tricks for c in h["clubs"]}
-    out: dict[str, set] = {c: set() for c in want}
+    ids: dict[str, set] = {c: set() for c in want}
     for pid, p in players.items():
         if p.get("women"):
             continue
         for s in p["spells"]:
             if s["club"] in want:
-                out[s["club"]].add(pid)
-    return {c: sorted(v) for c, v in sorted(out.items())}
+                ids[s["club"]].add(pid)
+    extra_ids: dict[str, set] = {c: set() for c in want}
+    names: dict[str, str] = {}
+    path = RAW / "club_rosters.json.gz"
+    if path.exists():
+        seed = json.loads((SEED / "players.json").read_text(encoding="utf-8"))["players"]
+        by_qid = {s["wikidata"]: s["id"] for s in seed
+                  if s.get("wikidata") and s["id"] in players and not players[s["id"]].get("women")}
+        fetched = json.load(gzip.open(path, "rt", encoding="utf-8"))["clubs"]
+        for club in want:
+            for title, qid in fetched.get(club, []):
+                if qid and qid in by_qid:
+                    ids[club].add(by_qid[qid])
+                    continue
+                xid = f"x:{qid or title}"
+                names.setdefault(xid, re.sub(r"\s*\(.*?\)\s*$", "", title).strip())
+                extra_ids[club].add(xid)
+    return {"extras": [[x, n] for x, n in sorted(names.items())],
+            "clubs": {c: [sorted(ids[c]), sorted(extra_ids[c])] for c in sorted(want)}}
 
 
 # ---- grid categories -----------------------------------------------------
@@ -1274,10 +1304,9 @@ def write_json(path: pathlib.Path, version: int, clubs, players, matches, connec
         # 501: [id, prompt, difficulty, eras, 1 if women's, [[player, apps, goals]...], [played, no numbers]]
         "checkouts": [[c["id"], c["prompt"], c["difficulty"], c["eras"], int(c["women"]),
                        [[pid, a, g] for pid, (a, g) in sorted(c["values"].items())], c["no_stats"]] for c in checkouts],
-        # Hat-Trick: [id, club, club, club, difficulty, eras]; and every men's
-        # player at those clubs (the web has no career table to look them up).
+        # Hat-Trick: [id, club, club, club, difficulty, eras].
+        # (Who played where: assets/db/hat_trick_rosters.json, loaded with the game.)
         "hat_tricks": [[h["id"], *h["clubs"], h["difficulty"], h["eras"]] for h in hat_tricks],
-        "hat_trick_rosters": hat_trick_rosters(hat_tricks, players),
         "matches": [
             {"id": m["id"], "title": m["title"], "competition": m["competition"], "date": m["date"],
              "home": m["home"], "away": m["away"], "score": m["score"], "target": m["target"],
@@ -1342,6 +1371,11 @@ def main() -> int:
              hat_tricks)
     write_json(ASSETS / "football.json", args.version, clubs, players, matches, connections, careers, bidding, checkouts, grid,
                hat_tricks)
+    rosters = hat_trick_rosters(hat_tricks, players)
+    (ASSETS / "hat_trick_rosters.json").write_text(json.dumps(rosters, ensure_ascii=False, separators=(",", ":")),
+                                                     encoding="utf-8")
+    print(f"hat-trick rosters: {sum(len(v[0]) for v in rosters['clubs'].values())} known + "
+          f"{len(rosters['extras'])} extra players")
     (ASSETS / "football_db_version.txt").write_text(str(args.version), encoding="utf-8")
     print("wrote", ASSETS / "football.db", "version", args.version)
     return 0

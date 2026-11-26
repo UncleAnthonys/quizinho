@@ -28,7 +28,21 @@ class PlayerMatch {
 /// always judged by stable player IDs, never by the text itself.
 class PlayerIndex {
   PlayerIndex(Iterable<Player> players) {
-    for (final p in players) {
+    players.forEach(_add);
+  }
+
+  /// [base] plus [extra] players, without re-indexing [base] (Hat-Trick: the
+  /// main list plus everyone who played for the set's three clubs).
+  PlayerIndex.extended(PlayerIndex base, Iterable<Player> extra) {
+    _entries.addAll(base._entries);
+    _byId.addAll(base._byId);
+    for (final p in extra) {
+      if (!_byId.containsKey(p.id)) _add(p);
+    }
+  }
+
+  void _add(Player p) {
+    {
       final keys = <String>{};
       void add(String raw) {
         final k = normaliseName(raw);

@@ -6,6 +6,7 @@ import '../../core/theme.dart';
 import '../../data/football_repository.dart' show ChallengeSource;
 import '../../data/models.dart';
 import '../../domain/game_mode.dart';
+import '../../domain/player_index.dart';
 import '../../domain/tournament.dart';
 import '../../multiplayer/buzz_bridge.dart';
 import '../../ui/widgets/common.dart';
@@ -122,6 +123,16 @@ class _HatTrickScreenState extends State<HatTrickScreen>
       source.history.add('hattrick', q.id);
       qs.add(q);
     }
+    // Everyone at the sets' clubs - Christian Roberts at Swindon - scores, and
+    // the answer box knows them (this game only; the main list stays as it is).
+    final rosters = await services.hatTrickRosters;
+    final extras = <Player>[];
+    for (final (i, q) in qs.indexed) {
+      final (full, more) = rosters.fill(q);
+      qs[i] = full;
+      extras.addAll(more);
+    }
+    _players = extras.isEmpty ? services.repo.players : PlayerIndex.extended(services.repo.players, extras);
     if (!mounted) return;
     if (qs.isEmpty) {
       setState(() => _empty = true);
@@ -159,7 +170,7 @@ class _HatTrickScreenState extends State<HatTrickScreen>
     });
     final room = roomFor(t);
     if (room != null) {
-      final players = services.repo.players;
+      final players = _players;
       _bridge = BuzzBridge(
         room: room,
         controller: c,
@@ -169,6 +180,8 @@ class _HatTrickScreenState extends State<HatTrickScreen>
         prompt: 'Name a player - a point for each club he played for',
         question: () => {
           'clubs': [for (final club in c.current.clubs) club.name],
+          // So a joined phone's answer box knows everyone at them too.
+          'clubIds': [for (final club in c.current.clubs) club.id],
           'picks': [
             for (final e in c.picks.entries)
               {
@@ -261,19 +274,22 @@ class _HatTrickScreenState extends State<HatTrickScreen>
   }
 
   List<Player> _heroes(HatTrickController c) {
-    final players = services.repo.players;
+    final players = _players;
     return [for (final id in c.current.heroes) if (players.byId(id) case final p?) p]
       ..sort((a, b) => b.fame.compareTo(a.fame));
   }
 
   List<Player> _twos(HatTrickController c) {
-    final players = services.repo.players;
+    final players = _players;
     return [for (final id in c.current.twos) if (players.byId(id) case final p?) p]
       ..sort((a, b) => b.fame.compareTo(a.fame));
   }
 
   BuzzBridge? _bridge;
   int _lastQuestion = 0;
+
+  /// The main player list plus everyone at this round's clubs.
+  late PlayerIndex _players;
 
   @override
   void dispose() {
@@ -319,6 +335,7 @@ class _HatTrickScreenState extends State<HatTrickScreen>
       commentary: commentaryText,
       timerLabel: c.lockedOut.isEmpty ? 'BUZZ IN' : 'YOUR GO',
       lockedLabel: 'ANSWERED',
+      answerIndex: _players,
       canPick: (p) {
         if (!c.isTaken(p.id)) return true;
         nudgeAnswer('${p.name} has gone - name someone else');
