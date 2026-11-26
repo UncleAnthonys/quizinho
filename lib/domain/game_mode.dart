@@ -101,7 +101,7 @@ enum GameModeId {
   ),
   hatTrick(
     title: 'Hat-Trick',
-    tagline: 'Three clubs. Find the player who played for all three',
+    tagline: 'Three clubs. Name a player who played for all three',
     playable: true,
     rules: [
       'Three clubs appear. Buzz in and name a player: 1 point for each of the three he played for.',
