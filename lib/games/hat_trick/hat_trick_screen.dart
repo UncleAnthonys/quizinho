@@ -181,6 +181,8 @@ class _HatTrickScreenState extends State<HatTrickScreen>
           'clock': c.lockedOut.isEmpty ? 'BUZZ IN' : 'YOUR GO',
           // Named already: the phones' answer boxes turn them away too.
           'taken': [for (final p in c.picks.values) p.player.id],
+          // The set's over: the phones list the 2-club players too, like here.
+          if (c.phase == BuzzPhase.resolved) 'twos': [for (final p in _twos(c)) p.name],
         },
         // Voice on the phones leans towards players with two or three.
         answerIds: () => {

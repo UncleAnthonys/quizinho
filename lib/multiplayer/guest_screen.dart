@@ -320,7 +320,9 @@ class _GuestGameState extends State<_GuestGame> with SingleTickerProviderStateMi
       return HatTrickCard(
         clubs: [for (final c in clubs) '$c'],
         compact: compact,
-        picks: [
+        // Answering: just the clubs, so the list of names under the answer
+        // box isn't pushed behind the keyboard.
+        picks: compact ? const [] : [
           for (final p in asList(q['picks']))
             if (asMap(p) case final m)
               if ((m['team'] as num?)?.toInt() case final t? when t < teamsV.length)
@@ -681,8 +683,17 @@ class _GuestGameState extends State<_GuestGame> with SingleTickerProviderStateMi
           Text('THE HAT-TRICK ANSWERS', style: AppText.label(13, color: Palette.gold)),
           const SizedBox(height: 8),
           Wrap(alignment: WrapAlignment.center, spacing: 6, runSpacing: 6, children: [
-            for (final n in asList(result['reveal'])) Chip(label: Text('$n'), backgroundColor: Palette.card),
+            for (final n in asList(result['reveal'])) Chip(label: Text('$n'), backgroundColor: Palette.cardHigh),
           ]),
+          // As on the main phone: everyone who played for two of them.
+          if (asList(asMap(v['question'])['twos']) case final twos when twos.isNotEmpty) ...[
+            const SizedBox(height: 14),
+            Text('${twos.length} PLAYED FOR TWO OF THEM', style: AppText.label(13)),
+            const SizedBox(height: 8),
+            Wrap(alignment: WrapAlignment.center, spacing: 6, runSpacing: 6, children: [
+              for (final n in twos) Chip(label: Text('$n'), backgroundColor: Palette.card),
+            ]),
+          ],
         ]),
       );
     } else if (result.isNotEmpty) {
@@ -785,7 +796,11 @@ class _GuestGameState extends State<_GuestGame> with SingleTickerProviderStateMi
     // box) fills whatever's left of the screen.
     return CustomScrollView(slivers: [
       SliverList(delegate: SliverChildListDelegate([
-      _scores(v['teams'], round: '${v['round'] ?? ''}', highlight: (answering['team'] as num?)?.toInt()),
+      // Typing an answer: the scores fold away so the names under the box fit.
+      Collapse(
+        hidden: iAnswer && answerTyping.value,
+        child: _scores(v['teams'], round: '${v['round'] ?? ''}', highlight: (answering['team'] as num?)?.toInt()),
+      ),
       Padding(
         padding: const EdgeInsets.fromLTRB(18, 8, 18, 0),
         child: Row(children: [
