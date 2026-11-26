@@ -138,9 +138,14 @@ mixin GameScreenSupport<W extends StatefulWidget> on State<W>, TickerProviderSta
   void say(String? line) {
     if (line == null || !services.settings.commentaryOn) return;
     _commentaryTimer?.cancel();
-    unawaited(services.room?.say(line));
+    // Long enough to read after looking at the answer: 5 s, more for a
+    // longer line, 8 s at most (it only covers the game's name). The next
+    // line still replaces it at once.
+    final words = line.trim().split(RegExp(r'\s+')).length;
+    final ms = (4000 + 300 * words).clamp(5000, 8000);
+    unawaited(services.room?.say(line, ms: ms));
     setState(() => commentaryText = line);
-    _commentaryTimer = Timer(const Duration(milliseconds: 2600), () {
+    _commentaryTimer = Timer(Duration(milliseconds: ms), () {
       if (mounted) setState(() => commentaryText = null);
     });
   }
