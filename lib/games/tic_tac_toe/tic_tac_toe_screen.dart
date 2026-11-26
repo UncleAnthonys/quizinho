@@ -146,11 +146,16 @@ class _TicTacToeScreenState extends State<TicTacToeScreen>
       total: c.clockRunning ? c.phaseSeconds.toDouble() : null,
       index: services.repo.players,
       answers: sq == null ? const {} : c.grid.answers[sq],
+      showFlags: sq == null || !_nationSquare(c, sq),
       onPick: (pl) => _submit(c, pl),
       onPass: c.pass,
       onChoose: c.choose,
     );
   }
+
+  /// The square's row or column is a country.
+  bool _nationSquare(TicTacToeController c, int sq) =>
+      c.grid.rows[sq ~/ 3].id.startsWith('nat:') || c.grid.cols[sq % 3].id.startsWith('nat:');
 
   void _onChange(TicTacToeController c) {
     if (c.turnSerial != _turnFor) {
@@ -337,6 +342,9 @@ class _TicTacToeScreenState extends State<TicTacToeScreen>
           accent: Palette.team(colour),
           onPick: (p) => _submit(c, p),
           isAnswer: (p) => c.selected != null && c.grid.answers[c.selected!].contains(p.id),
+          // A country header ("Brazil + Barcelona"): every right answer would
+          // carry its flag.
+          showFlags: !_nationSquare(c, sq),
           onPass: c.pass,
           onDisputed: (_, allowed) => c.submitDisputed(allowed: allowed),
         ),

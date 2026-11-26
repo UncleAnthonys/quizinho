@@ -29,6 +29,8 @@ class PenaltyKick {
     this.lineup = const [],
     this.answers = const {},
     this.clubs = false,
+    this.hidesFlags = false,
+    this.hidesPositions = false,
     required this.reveal,
     this.options = const [],
     this.correctOption,
@@ -51,6 +53,13 @@ class PenaltyKick {
   /// Right answers (player ids, or club ids when [clubs]).
   final Set<String> answers;
   final bool clubs;
+
+  /// The answer box's flags would give it away ("Name a player from Belgium
+  /// who played for RB Leipzig" - every right answer has a Belgian flag).
+  final bool hidesFlags;
+
+  /// Likewise positions ("Goalkeepers who...").
+  final bool hidesPositions;
 
   /// Shown after the kick: the answer ("DAVID SEAMAN", "BARCELONA").
   final String reveal;
@@ -252,6 +261,8 @@ class KickSource {
       lines: [_up(b.prompt)],
       answers: b.answerIds,
       clubs: b.answersAreClubs,
+      hidesFlags: b.hidesFlags,
+      hidesPositions: b.hidesPositions,
       reveal: _names(b.answerIds, clubs: b.answersAreClubs),
     );
   }
@@ -276,6 +287,7 @@ class KickSource {
       ask: 'NAME A PLAYER FROM',
       lines: [_up(country), 'WHO PLAYED FOR', _up(c.clubB.name)],
       answers: c.answerIds,
+      hidesFlags: true,
       reveal: _names(c.answerIds),
     );
   }
