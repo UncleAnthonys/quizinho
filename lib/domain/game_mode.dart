@@ -105,8 +105,8 @@ enum GameModeId {
     playable: true,
     rules: [
       'Three clubs appear. Buzz in and name a player: 1 point for each of the three he played for.',
-      'All three is a HAT-TRICK: 3 points, plus a bonus point. There’s always at least one.',
-      'Every team gets one answer. Lock in a 2-pointer early, or hold out for the hat-trick - but don’t let the clock run out.',
+      'All three is a HAT-TRICK: 4 points. There’s always at least one.',
+      'One answer per team: lock in your points early, or hold out for the hat-trick.',
       'Once a player’s been named, he’s gone.',
     ],
     whoPlays: 'Each team buzzes in once per set - confer, but be quick.',
