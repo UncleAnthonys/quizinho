@@ -104,8 +104,8 @@ enum GameModeId {
     tagline: 'Three clubs. Name a player who played for all three',
     playable: true,
     rules: [
-      'Three clubs appear. Buzz in and name a player: 1 point for each of the three he played for.',
-      'All three is a HAT-TRICK: 4 points. There’s always at least one.',
+      'Three clubs appear. Buzz in and name a player: +1 for each of the three he played for.',
+      'All three is a HAT-TRICK: +4. There’s always at least one.',
       'One answer per team: lock in your points early, or hold out for the hat-trick.',
       'Once a player’s been named, he’s gone.',
     ],
