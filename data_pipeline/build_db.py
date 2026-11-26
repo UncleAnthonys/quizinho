@@ -506,7 +506,10 @@ def generate_connections(clubs, players):
 # player who links them. Difficulty by how many 2-pointers there are.
 HAT_TRICK_MAX_HEROES = 5
 HAT_TRICK_PER_LEVEL = 700
-HAT_TRICK_CLUB_CAP = 30  # times one club appears in a level (keeps the mix wide)
+# Times one club appears in a level, and one pair of clubs: Chelsea or City
+# in one set in six, City + Barcelona six times, felt like the same question.
+HAT_TRICK_CLUB_CAP = 15
+HAT_TRICK_PAIR_CAP = 2
 # Sets a hat-trick player can be the answer to, per level: one well-travelled
 # player (Douglas Luiz: Juventus, Forest, Villa...) mustn't be behind a run of
 # near-identical sets.
@@ -566,6 +569,7 @@ def generate_hat_tricks(clubs, players):
     for level, sets in levels.items():
         rng.shuffle(sets)
         used: dict[str, int] = {}
+        pair_sets: dict[tuple, int] = {}
         hero_sets: dict[str, int] = {}
         kept = 0
         for h in sets:
@@ -575,6 +579,11 @@ def generate_hat_tricks(clubs, players):
                 continue
             if any(hero_sets.get(p, 0) >= HAT_TRICK_HERO_CAP for p in h["heroes"]):
                 continue
+            pairs_here = list(itertools.combinations(sorted(h["clubs"]), 2))
+            if any(pair_sets.get(x, 0) >= HAT_TRICK_PAIR_CAP for x in pairs_here):
+                continue
+            for x in pairs_here:
+                pair_sets[x] = pair_sets.get(x, 0) + 1
             for c in h["clubs"]:
                 used[c] = used.get(c, 0) + 1
             for p in h["heroes"]:
