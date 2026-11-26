@@ -1,0 +1,39 @@
+# Hat-Trick: every player in each club's Wikipedia players category
+# -> data_pipeline/raw/club_rosters.json.gz, for build_db.py.
+# Run from the Actions tab.
+name: Fetch club rosters
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: fetch-data
+  cancel-in-progress: false
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Fetch club rosters
+        working-directory: data_pipeline
+        run: bash ../scripts/ci_run.sh "Rosters" python3 club_rosters_fetch.py
+      - name: Commit
+        run: |
+          git config user.name "quizinho-data-bot"
+          git config user.email "quizinho-data-bot@users.noreply.github.com"
+          git add data_pipeline/raw/club_rosters.json.gz
+          if git diff --cached --quiet; then
+            echo "No changes."
+          else
+            git commit -m "Data: club rosters from Wikipedia"
+            git pull --rebase origin main
+            git push
+          fi
