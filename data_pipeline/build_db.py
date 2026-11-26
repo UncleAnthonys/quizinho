@@ -507,6 +507,10 @@ def generate_connections(clubs, players):
 HAT_TRICK_MAX_HEROES = 5
 HAT_TRICK_PER_LEVEL = 700
 HAT_TRICK_CLUB_CAP = 30  # times one club appears in a level (keeps the mix wide)
+# Sets a hat-trick player can be the answer to, per level: one well-travelled
+# player (Douglas Luiz: Juventus, Forest, Villa...) mustn't be behind a run of
+# near-identical sets.
+HAT_TRICK_HERO_CAP = 2
 # Every set has a British club; the others from leagues people follow (South
 # America only on hard).
 HAT_TRICK_LEAGUES = TOP5 | {"POR", "NED", "TUR"}
@@ -555,20 +559,26 @@ def generate_hat_tricks(clubs, players):
         eras = 0
         for h in heroes:
             eras |= spells_mask([s for s in players[h]["spells"] if s["club"] in t])
-        levels[level].append({"id": "|".join(t), "clubs": list(t), "difficulty": level, "eras": eras or 31})
+        levels[level].append({"id": "|".join(t), "clubs": list(t), "difficulty": level, "eras": eras or 31,
+                              "heroes": sorted(heroes)})
     rng = random.Random(2026)
     out = []
     for level, sets in levels.items():
         rng.shuffle(sets)
         used: dict[str, int] = {}
+        hero_sets: dict[str, int] = {}
         kept = 0
         for h in sets:
             if kept >= HAT_TRICK_PER_LEVEL:
                 break
             if any(used.get(c, 0) >= HAT_TRICK_CLUB_CAP for c in h["clubs"]):
                 continue
+            if any(hero_sets.get(p, 0) >= HAT_TRICK_HERO_CAP for p in h["heroes"]):
+                continue
             for c in h["clubs"]:
                 used[c] = used.get(c, 0) + 1
+            for p in h["heroes"]:
+                hero_sets[p] = hero_sets.get(p, 0) + 1
             out.append(h)
             kept += 1
     return out

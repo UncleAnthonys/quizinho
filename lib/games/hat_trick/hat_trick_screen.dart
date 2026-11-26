@@ -60,8 +60,22 @@ class _HatTrickScreenState extends State<HatTrickScreen>
     final t = widget.round.tournament;
     final source = services.challenges;
     final qs = <HatTrickSet>[];
+    // No club twice in a match (set ids are the three club ids): back-to-back
+    // Juventus + Forest sets were near enough the same question.
+    final rejected = <String>{};
     for (var i = 0; i < t.config.questionsPerRound; i++) {
-      final q = await source.hatTrick(t.config.difficulty, t.usedIds(_mode), eras: t.config.eraMask);
+      HatTrickSet? q;
+      for (var tries = 0; tries < 30 && q == null; tries++) {
+        final used = t.usedIds(_mode);
+        final p = await source.hatTrick(t.config.difficulty, {...used, ...rejected}, eras: t.config.eraMask);
+        if (p == null) break;
+        final seen = {for (final id in used) ...id.split('|')};
+        if (p.clubs.any((c) => seen.contains(c.id))) {
+          rejected.add(p.id);
+        } else {
+          q = p;
+        }
+      }
       if (q == null) break;
       t.markUsed(_mode, q.id);
       qs.add(q);
