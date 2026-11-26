@@ -33,18 +33,57 @@ class _HatTrickScreenState extends State<HatTrickScreen>
 
   static const _hatTrickLines = [
     'HAT-TRICK! All three!',
-    'He’s only gone and found the hat-trick!',
+    'They’ve only gone and found the hat-trick!',
     'Match ball for that one!',
     'All three clubs - take a bow!',
+    'Get the match ball signed!',
+    'That’s a hat-trick - somebody’s done their homework.',
+    'Someone’s been playing too much Football Manager.',
+    'Hat-trick! Frame it.',
+    'The anorak strikes again.',
   ];
   static const _twoLines = [
     'Two out of three ain’t bad.',
     'Two clubs - a decent shout.',
-    'So close to the hat-trick!',
+    'Two from three. Solid, not spectacular.',
+    'Played the safe one there.',
+    'Bottled the hat-trick? Two’ll do.',
+    'Two - but the hat-trick was right there!',
+    'Banked the two. Sensible. Boring, but sensible.',
+  ];
+  static const _oneLines = [
+    'One club. It’s a start.',
+    'Just the one - better than nothing.',
+    'Scraped a point there.',
+    'That’s a squad player answer.',
+    'Points on the board… just about.',
   ];
   static const _zeroLines = [
     'Never played for any of them!',
     'Not even one of the three!',
+    'Did you even read the clubs?',
+    'Zero. Nil. Nothing.',
+    'He’s never been near any of them.',
+    'You’ve just named a random footballer, haven’t you?',
+    'Confidently wrong!',
+  ];
+
+  /// Buzzed, then the answer clock ran out.
+  static const _timeoutLines = [
+    'Froze on the line!',
+    'Too long on the ball!',
+    'The clock’s beaten you.',
+    'Held out for the hat-trick… and got nothing.',
+    'Greedy! Should’ve banked the two.',
+    'That’s what happens when you wait for the perfect pass.',
+    'Brain buffering…',
+  ];
+
+  /// The set's clock ran out with nobody buzzing.
+  static const _nobodyLines = [
+    'Nobody fancied that one?',
+    'Tumbleweed.',
+    'Not a single shout - shocking.',
   ];
 
   String _pick(List<String> lines) => lines[_rng.nextInt(lines.length)];
@@ -100,7 +139,13 @@ class _HatTrickScreenState extends State<HatTrickScreen>
           line: switch (e) {
             GameEvent.deepCut => _pick(_hatTrickLines),
             GameEvent.correct when pick?.hits == 2 => _pick(_twoLines),
+            GameEvent.correct => _pick(_oneLines),
             GameEvent.wrong => _pick(_zeroLines),
+            // A team's answer clock ran out (others still to go, or the last).
+            GameEvent.timeUp when c.phase != BuzzPhase.resolved => _pick(_timeoutLines),
+            GameEvent.nobodyGotIt when c.lastMiss == 'Time ran out' => _pick(_timeoutLines),
+            // The set's clock ran out before anyone buzzed.
+            GameEvent.timeUp when c.picks.isEmpty && c.lockedOut.isEmpty => _pick(_nobodyLines),
             _ => null,
           });
       if (c.questionIndex != _lastQuestion) {
