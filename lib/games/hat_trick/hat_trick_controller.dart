@@ -28,13 +28,14 @@ class HatTrickController extends BuzzRaceController<HatTrickSet> {
     required super.questions,
     int answerSeconds = 15,
     this.openSeconds = 45,
-    this.minReopenSeconds = 10,
+    this.minReopenSeconds = 0,
   }) : super(mode: GameModeId.hatTrick, answerSeconds: answerSeconds);
 
   /// The clock for the whole set: long enough to hold out for three.
   final double openSeconds;
 
-  /// After a team's go, the others get at least this long.
+  /// After a team's go, the others get at least this long. 0: the clock
+  /// carries on from where it stopped at the buzz (7 left -> 7 left).
   final double minReopenSeconds;
 
   static const int hatTrickBonus = 1;
@@ -69,7 +70,9 @@ class HatTrickController extends BuzzRaceController<HatTrickSet> {
   }
 
   @override
-  void onReopen() => setTimer(max(secondsLeft, minReopenSeconds));
+  void onReopen() {
+    if (secondsLeft < minReopenSeconds) setTimer(minReopenSeconds);
+  }
 
   /// Played for at least one of the three, and not named yet - voice leans
   /// towards these.

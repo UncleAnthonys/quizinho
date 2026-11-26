@@ -68,6 +68,16 @@ void main() {
     expect(c.roundPoints, {0: 2, 1: 0});
   });
 
+  test('after a go, the clock carries on from where it stopped at the buzz', () {
+    final c = HatTrickController(teamCount: 2, questions: [_set], openSeconds: 45);
+    c.advance(const Duration(seconds: 38)); // 7 left
+    c.buzz(0);
+    c.advance(const Duration(seconds: 12)); // answering (15 s to answer)
+    expect(c.phase, BuzzPhase.answering);
+    c.submit(_torres);
+    expect(c.secondsLeft, closeTo(7, 0.01));
+  });
+
   test('solo: a hat-trick is full marks for the set', () {
     final c = HatTrickController(teamCount: 1, questions: [_set]);
     c.submitSolo(_weah);
