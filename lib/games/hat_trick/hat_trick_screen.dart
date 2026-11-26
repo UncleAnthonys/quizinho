@@ -229,9 +229,21 @@ class _HatTrickScreenState extends State<HatTrickScreen>
         else if (t.teamCount == 1) ...[
           Text('+${c.lastSolo}', style: AppText.headline(64, color: Palette.yellow)),
           if (c.picks[0]?.hatTrick ?? false) Text('HAT-TRICK!', style: AppText.headline(30, color: Palette.gold)),
+        ] else if (c.picks.values.any((p) => p.hatTrick)) ...[
+          // Who got it, big: it's the moment of the game.
+          Text('HAT-TRICK!', style: AppText.headline(56, color: Palette.gold)),
+          for (final e in c.picks.entries)
+            if (e.value.hatTrick)
+              Padding(
+                padding: const EdgeInsets.only(top: 4),
+                child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                  TeamChip(name: t.teamName(e.key), colorIndex: t.config.teams[e.key].colorIndex),
+                  const SizedBox(width: 8),
+                  Flexible(child: Text(e.value.player.name, style: AppText.headline(26))),
+                ]),
+              ),
         ] else
-          Text(c.picks.values.any((p) => p.hatTrick) ? 'HAT-TRICK!' : 'ALL ANSWERS IN',
-              style: AppText.headline(34, color: Palette.yellow)),
+          Text('NO HAT-TRICK THIS TIME', style: AppText.headline(30, color: Palette.yellow)),
       ]),
       resolvedDetail: Column(children: [
         Text(
@@ -312,10 +324,10 @@ class HatTrickCard extends StatelessWidget {
           if (!compact) ...[
             FittedBox(
               fit: BoxFit.scaleDown,
-              child: Text('NAME A PLAYER WHO PLAYED FOR ALL THREE',
+              child: Text('1 POINT FOR EACH CLUB HE PLAYED FOR',
                   style: AppText.headline(20, color: Palette.yellow)),
             ),
-            Text('1 point for each club he played for', style: AppText.label(13)),
+            Text('All three = HAT-TRICK, 4 points', style: AppText.label(13, color: Palette.text)),
             const SizedBox(height: 10),
           ],
           Row(children: [
@@ -376,6 +388,7 @@ class _PickRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final played = [for (final (i, h) in pick.hits.indexed) if (h && i < clubs.length) clubs[i]];
+    if (played.length == 3) return _hatTrickRow();
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 3),
       child: Row(children: [
@@ -405,4 +418,35 @@ class _PickRow extends StatelessWidget {
       ]),
     );
   }
+
+  /// All three: the row turns gold - it can't be missed.
+  Widget _hatTrickRow() => Container(
+        margin: const EdgeInsets.symmetric(vertical: 4),
+        padding: EdgeInsets.symmetric(horizontal: 10, vertical: compact ? 4 : 8),
+        decoration: BoxDecoration(
+          color: Palette.gold,
+          borderRadius: BorderRadius.circular(14),
+          boxShadow: [BoxShadow(color: Palette.gold.withValues(alpha: 0.5), blurRadius: 16)],
+        ),
+        child: Row(children: [
+          if (pick.team.isNotEmpty) ...[
+            TeamChip(name: pick.team, colorIndex: pick.colorIndex, size: compact ? 12 : 14),
+            const SizedBox(width: 8),
+          ],
+          Expanded(
+            child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisSize: MainAxisSize.min, children: [
+              Text(pick.player,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: AppText.headline(compact ? 18 : 22, color: Palette.pitchDeep)),
+              Row(children: [
+                Icon(Icons.sports_soccer, size: compact ? 13 : 16, color: Palette.pitchDeep),
+                const SizedBox(width: 4),
+                Text('HAT-TRICK!', style: AppText.headline(compact ? 14 : 18, color: Palette.pitchDeep)),
+              ]),
+            ]),
+          ),
+          Text('+${pick.points}', style: AppText.headline(compact ? 22 : 30, color: Palette.pitchDeep)),
+        ]),
+      );
 }
