@@ -26,6 +26,18 @@ class TiltDetector {
   static const double _trigger = 6.5;
   static const double _neutral = 3.5;
 
+  /// Readings are smoothed (a jolt bringing the phone back up looked like
+  /// another nod and scored a card nobody had seen); the phone must then be
+  /// held upright this long before the next tilt counts...
+  static const _settle = Duration(milliseconds: 350);
+
+  /// ...and a new card can't be scored this soon after the last one.
+  static const _cooldown = Duration(milliseconds: 1000);
+  static const double _smoothing = 0.25; // share of each new reading
+  double? _z;
+  DateTime? _uprightSince;
+  DateTime _lastGesture = DateTime(2000);
+
   StreamSubscription<AccelerometerEvent>? _sub;
   bool _armed = false; // must start from upright
   bool enabled = false;
@@ -60,20 +72,35 @@ class TiltDetector {
         onQuarterTurns?.call(turns);
       }
     }
+    final z = _z = _z == null ? e.z : _z! + (e.z - _z!) * _smoothing;
     if (!enabled) {
       _armed = false;
+      _uprightSince = null;
       return;
     }
+    final now = DateTime.now();
     if (!_armed) {
-      if (e.z.abs() < _neutral) _armed = true;
+      if (z.abs() < _neutral) {
+        _uprightSince ??= now;
+        if (now.difference(_uprightSince!) >= _settle) _armed = true;
+      } else {
+        _uprightSince = null;
+      }
       return;
     }
-    if (e.z < -_trigger) {
-      _armed = false;
+    if (now.difference(_lastGesture) < _cooldown) return;
+    if (z < -_trigger) {
+      _gesture(now);
       onCorrect();
-    } else if (e.z > _trigger) {
-      _armed = false;
+    } else if (z > _trigger) {
+      _gesture(now);
       onPass();
     }
+  }
+
+  void _gesture(DateTime now) {
+    _armed = false;
+    _uprightSince = null;
+    _lastGesture = now;
   }
 }
